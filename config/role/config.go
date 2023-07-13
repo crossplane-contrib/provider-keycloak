@@ -12,7 +12,8 @@ func Configure(p *config.Provider) {
 			Type: "Role",
 		}
 		r.References["client_id"] = config.Reference{
-			Type: "provider-keycloak/apis/openidclient/v1alpha1.Client",
+	        p.AddResourceConfigurator("keycloak_group_memberships", func(r *config.Resource) {
+			Type: "github.com/corewire/provider-keycloak/apis/openidclient/v1alpha1.Client",
 		}
 	})
 }
