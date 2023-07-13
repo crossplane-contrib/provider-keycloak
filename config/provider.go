@@ -10,12 +10,17 @@ import (
 
 	ujconfig "github.com/upbound/upjet/pkg/config"
 
-	"github.com/upbound/upjet-provider-template/config/null"
+	"github.com/corewire/config/group"
+	"github.com/corewire/config/openidclient"
+	"github.com/corewire/config/realm"
+	"github.com/corewire/config/role"
+	"github.com/corewire/config/mapper"
 )
 
 const (
-	resourcePrefix = "template"
-	modulePath     = "github.com/upbound/upjet-provider-template"
+	resourcePrefix = "keycloak"
+	modulePath     = "github.com/corewire"
+	rootGroup      = "keycloak.crossplane.io"
 )
 
 //go:embed schema.json
@@ -28,14 +33,16 @@ var providerMetadata string
 func GetProvider() *ujconfig.Provider {
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
 		ujconfig.WithIncludeList(ExternalNameConfigured()),
-		ujconfig.WithFeaturesPackage("internal/features"),
-		ujconfig.WithDefaultResourceOptions(
-			ExternalNameConfigurations(),
-		))
+		ujconfig.WithDefaultResourceOptions(ExternalNameConfigurations()),
+		ujconfig.WithRootGroup(rootGroup))
 
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
-		null.Configure,
+		realm.Configure,
+		group.Configure,
+		role.Configure,
+		openidclient.Configure,
+		mapper.Configure,
 	} {
 		configure(pc)
 	}

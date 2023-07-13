@@ -3,7 +3,7 @@ set -aeuo pipefail
 
 echo "Running setup.sh"
 echo "Creating cloud credential secret..."
-${KUBECTL} -n upbound-system create secret generic provider-secret --from-literal=credentials="${UPTEST_CLOUD_CREDENTIALS}" --dry-run=client -o yaml | ${KUBECTL} apply -f -
+${KUBECTL} -n upbound-system create secret generic provider-secret --from-literal=credentials="{\"token\":\"${UPTEST_CLOUD_CREDENTIALS}\"}" --dry-run=client -o yaml | ${KUBECTL} apply -f -
 
 echo "Waiting until provider is healthy..."
 ${KUBECTL} wait provider.pkg --all --for condition=Healthy --timeout 5m
@@ -13,7 +13,7 @@ ${KUBECTL} -n upbound-system wait --for=condition=Available deployment --all --t
 
 echo "Creating a default provider config..."
 cat <<EOF | ${KUBECTL} apply -f -
-apiVersion: template.upbound.io/v1beta1
+apiVersion: keycloak.crossplane.io/v1beta1
 kind: ProviderConfig
 metadata:
   name: default

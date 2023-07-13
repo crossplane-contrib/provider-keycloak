@@ -17,7 +17,7 @@ git grep -l 'Template' -- ${REPLACE_FILES} | xargs sed -i.bak "s/Template/${PROV
 # We need to be careful while replacing "template" keyword in go.mod as it could tamper
 # some imported packages under require section.
 sed -i.bak "s|upbound/upjet-provider-template|${ORGANIZATION_NAME}/provider-${PROVIDER_NAME_LOWER}|g" go.mod
-sed -i.bak "s|PROJECT_REPO ?= github.com/upbound/|PROJECT_REPO ?= github.com/${ORGANIZATION_NAME}/|g" Makefile
+sed -i.bak "s|PROJECT_REPO := github.com/upbound/|PROJECT_REPO := github.com/${ORGANIZATION_NAME}/|g" Makefile
 
 # Clean up the .bak files created by sed
 git clean -fd
@@ -29,5 +29,3 @@ git mv "cluster/images/upjet-provider-template" "cluster/images/provider-${PROVI
 # the following error probably due to some optimizations in go generate with v1.17:
 # generate: open /Users/hasanturken/Workspace/crossplane-contrib/upjet-provider-template/apis/null/v1alpha1/zz_generated.deepcopy.go: no such file or directory
 rm -rf apis/null
-# remove the sample directory which was a configuration in the template
-rm -rf config/null
