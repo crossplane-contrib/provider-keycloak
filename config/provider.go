@@ -19,7 +19,7 @@ import (
 
 const (
 	resourcePrefix = "keycloak"
-	modulePath     = "github.com/corewire"
+	modulePath     = "github.com/corewire/provider-keycloak"
 	rootGroup      = "keycloak.crossplane.io"
 )
 
