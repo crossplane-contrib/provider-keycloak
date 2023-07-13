@@ -1,0 +1,10 @@
+apiVersion: null.keycloak.crossplane.io/v1alpha1
+kind: Resource
+metadata:
+  name: example
+spec:
+  forProvider:
+    triggers:
+      example-trigger: example-value
+  providerConfigRef:
+    name: default
