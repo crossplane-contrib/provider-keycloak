@@ -25,7 +25,7 @@ func Configure(p *config.Provider) {
 			Type: "Group",
 		}
 		r.References["role_ids"] = config.Reference{
-			Type: "github.com/corewire/apis/role/v1alpha1.Role",
+			Type: "github.com/corewire/provider-keycloak/apis/role/v1alpha1.Role",
 		}
 	})
 }

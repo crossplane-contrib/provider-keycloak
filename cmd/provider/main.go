@@ -24,12 +24,12 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	"github.com/corewire/apis"
-	"github.com/corewire/apis/v1alpha1"
-	"github.com/corewire/config"
-	"github.com/corewire/internal/clients"
-	"github.com/corewire/internal/controller"
-	"github.com/corewire/internal/features"
+	"github.com/corewire/provider-keycloak/apis"
+	"github.com/corewire/provider-keycloak/apis/v1alpha1"
+	"github.com/corewire/provider-keycloak/config"
+	"github.com/corewire/provider-keycloak/internal/clients"
+	"github.com/corewire/provider-keycloak/internal/controller"
+	"github.com/corewire/provider-keycloak/internal/features"
 )
 
 func main() {
@@ -50,7 +50,7 @@ func main() {
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 
 	zl := zap.New(zap.UseDevMode(*debug))
-	log := logging.NewLogrLogger(zl.WithName("github.com/corewire"))
+	log := logging.NewLogrLogger(zl.WithName("github.com/corewire/provider-keycloak"))
 	if *debug {
 		// The controller-runtime runs with a no-op logger by default. It is
 		// *very* verbose even at info level, so we only provide it a real

@@ -10,11 +10,11 @@ import (
 
 	ujconfig "github.com/upbound/upjet/pkg/config"
 
-	"github.com/corewire/config/group"
-	"github.com/corewire/config/openidclient"
-	"github.com/corewire/config/realm"
-	"github.com/corewire/config/role"
-	"github.com/corewire/config/mapper"
+	"github.com/corewire/provider-keycloak/config/group"
+	"github.com/corewire/provider-keycloak/config/openidclient"
+	"github.com/corewire/provider-keycloak/config/realm"
+	"github.com/corewire/provider-keycloak/config/role"
+	"github.com/corewire/provider-keycloak/config/mapper"
 )
 
 const (

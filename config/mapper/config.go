@@ -12,11 +12,11 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "client"
 
 		r.References["client_id"] = config.Reference{
-			Type: "github.com/corewire/apis/openidclient/v1alpha1.Client",
+			Type: "github.com/corewire/provider-keycloak/apis/openidclient/v1alpha1.Client",
 		}
 
 		r.References["role_id"] = config.Reference{
-			Type: "github.com/corewire/apis/role/v1alpha1.Role",
+			Type: "github.com/corewire/provider-keycloak/apis/role/v1alpha1.Role",
 		}
 	})
 }
