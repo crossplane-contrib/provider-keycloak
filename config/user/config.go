@@ -1,4 +1,4 @@
-package role
+package user
 
 import "github.com/upbound/upjet/pkg/config"
 
