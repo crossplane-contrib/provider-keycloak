@@ -15,6 +15,7 @@ import (
 	"github.com/corewire/provider-keycloak/config/realm"
 	"github.com/corewire/provider-keycloak/config/role"
 	"github.com/corewire/provider-keycloak/config/mapper"
+	"github.com/corewire/provider-keycloak/config/user"
 )
 
 const (
@@ -43,6 +44,7 @@ func GetProvider() *ujconfig.Provider {
 		role.Configure,
 		openidclient.Configure,
 		mapper.Configure,
+		user.Configure,
 	} {
 		configure(pc)
 	}
