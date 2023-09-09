@@ -19,6 +19,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_generic_protocol_mapper": config.IdentifierFromProvider,
 	"keycloak_generic_role_mapper":     config.IdentifierFromProvider,
 	"keycloak_user":                    config.IdentifierFromProvider,
+	
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

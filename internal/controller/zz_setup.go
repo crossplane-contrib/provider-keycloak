@@ -18,6 +18,7 @@ import (
 	providerconfig "github.com/corewire/provider-keycloak/internal/controller/providerconfig"
 	realm "github.com/corewire/provider-keycloak/internal/controller/realm/realm"
 	role "github.com/corewire/provider-keycloak/internal/controller/role/role"
+	user "github.com/corewire/provider-keycloak/internal/controller/user/user"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
@@ -33,6 +34,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		providerconfig.Setup,
 		realm.Setup,
 		role.Setup,
+		user.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err

@@ -15,6 +15,7 @@ import (
 	v1alpha1openidclient "github.com/corewire/provider-keycloak/apis/openidclient/v1alpha1"
 	v1alpha1realm "github.com/corewire/provider-keycloak/apis/realm/v1alpha1"
 	v1alpha1role "github.com/corewire/provider-keycloak/apis/role/v1alpha1"
+	v1alpha1user "github.com/corewire/provider-keycloak/apis/user/v1alpha1"
 	v1alpha1apis "github.com/corewire/provider-keycloak/apis/v1alpha1"
 	v1beta1 "github.com/corewire/provider-keycloak/apis/v1beta1"
 )
@@ -27,6 +28,7 @@ func init() {
 		v1alpha1openidclient.SchemeBuilder.AddToScheme,
 		v1alpha1realm.SchemeBuilder.AddToScheme,
 		v1alpha1role.SchemeBuilder.AddToScheme,
+		v1alpha1user.SchemeBuilder.AddToScheme,
 		v1alpha1apis.SchemeBuilder.AddToScheme,
 		v1beta1.SchemeBuilder.AddToScheme,
 	)
