@@ -1,0 +1,54 @@
+# Roles Custom Resource Examples
+
+# Example 1: Using groupId and roleIds to assign roles in a Development Realm
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: dev-group-roles
+spec:
+  forProvider:
+    realmId: "development"
+    groupId: "dev-group-id"  # Directly specify the Group ID.
+    roleIds:  # Directly specify the Role IDs.
+      - "developer-role-id"
+      - "tester-role-id"
+  providerConfigRef:
+    name: default
+
+# Example 2: Using groupIdRef and roleIdsRefs to assign roles in a Production Realm
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: prod-admin-roles
+spec:
+  forProvider:
+    realmId: "production"
+    groupIdRef:  # Use a reference to populate groupId.
+      name: "admin-group"
+      policy:
+        resolution: "Required"
+    roleIdsRefs:  # Use references to populate roleIds.
+      - name: "admin-role"
+        policy:
+          resolution: "Required"
+      - name: "super-admin-role"
+        policy:
+          resolution: "Required"
+  providerConfigRef:
+    name: default
+
+# Example 3: Using groupId and roleIdsRefs to assign roles in a Staging Realm
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: staging-group-roles
+spec:
+  forProvider:
+    realmId: "staging"
+    groupId: "staging-group-id"  # Directly specify the Group ID.
+    roleIdsRefs:  # Use references to populate roleIds.
+      - name: "staging-role"
+        policy:
+          resolution: "Required"
+  providerConfigRef:
+    name: default

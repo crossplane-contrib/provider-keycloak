@@ -1,0 +1,64 @@
+---
+# Example 1: Public Client for a Web Application
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: web-app-public-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    accessType: public  # Public access type for web applications
+    clientId: web-app-public
+    realmId: my-realm  # Replace with your realm ID
+    standardFlowEnabled: true  # Enable standard OAuth2 flow
+    validRedirectUris:
+      - "http://localhost:3000/callback"
+
+---
+# Example 2: Confidential Client for a Backend Service
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: backend-service-confidential-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    accessType: confidential  # Confidential access type for backend services
+    clientId: backend-service-confidential
+    realmId: my-realm  # Replace with your realm ID
+    serviceAccountsEnabled: true  # Enable service accounts for machine-to-machine communication
+    clientSecretSecretRef:
+      key: client-secret
+      name: backend-service-secret
+      namespace: my-namespace  # Replace with your namespace
+
+---
+# Example 3: Bearer-Only Client for Resource Servers
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: resource-server-bearer-only-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    accessType: bearer-only  # Bearer-only access type for resource servers
+    clientId: resource-server-bearer-only
+    realmId: my-realm  # Replace with your realm ID
+
+---
+# Example 4: Client for Mobile Application
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: mobile-app-public-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    accessType: public  # Public access type suitable for mobile applications
+    clientId: mobile-app-public
+    realmId: my-realm  # Replace with your realm ID
+    standardFlowEnabled: true  # Enable standard OAuth2 flow
+    pkceCodeChallengeMethod: S256  # Use PKCE with S256 method for enhanced security
+    validRedirectUris:
+      - "myapp://callback"  # Replace with your mobile app's custom URI scheme
+

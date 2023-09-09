@@ -1,0 +1,44 @@
+# This YAML file contains examples for the Group CRD in Keycloak managed by Crossplane.
+
+# Example 1: Basic Group Creation
+# This example demonstrates how to create a basic Group with minimal configuration.
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: basic-group
+spec:
+  forProvider:
+    name: "BasicGroupName"  # The name of the group in Keycloak
+    realmId: "example-realm"  # The realm where this group belongs
+  deletionPolicy: "Delete"  # The policy for deleting the group; can be "Delete" or "Orphan"
+
+---
+# Example 2: Group with Attributes
+# This example shows how to create a Group with additional attributes.
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: group-with-attributes
+spec:
+  forProvider:
+    name: "GroupWithAttributes"  # The name of the group in Keycloak
+    realmId: "example-realm"  # The realm where this group belongs
+    attributes:  # Additional attributes for the group
+      attribute1: "value1"
+      attribute2: "value2"
+  deletionPolicy: "Delete"  # The policy for deleting the group; can be "Delete" or "Orphan"
+
+---
+# Example 3: Group with Parent ID
+# This example shows how to create a Group that is a child of another Group.
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: child-group
+spec:
+  forProvider:
+    name: "ChildGroup"  # The name of the group in Keycloak
+    realmId: "example-realm"  # The realm where this group belongs
+    parentId: "parent-group-id"  # The ID of the parent group
+  deletionPolicy: "Delete"  # The policy for deleting the group; can be "Delete" or "Orphan"
+

@@ -1,0 +1,54 @@
+# This is a YAML file containing multiple Memberships custom resources.
+# Each Memberships custom resource is separated by '---'.
+
+# Basic Memberships Example
+# This example demonstrates a basic use-case where groupId, members, and realmId are directly provided.
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: basic-memberships  # Name of the custom resource
+spec:
+  forProvider:
+    groupId: "group-1"  # Directly specifying the groupId
+    members:
+      - "member-1"  # List of members
+      - "member-2"
+    realmId: "realm-1"  # Directly specifying the realmId
+
+# Memberships with groupIdRef Example
+# This example demonstrates how to use a reference to a Group to populate groupId.
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: memberships-with-groupidref  # Name of the custom resource
+spec:
+  forProvider:
+    groupIdRef:  # Using a reference to populate groupId
+      name: "group-reference"  # Name of the referenced Group
+      policy:
+        resolution: "Required"  # Reference resolution is required
+    members:
+      - "member-1"  # List of members
+      - "member-2"
+    realmId: "realm-1"  # Directly specifying the realmId
+
+# Memberships with groupIdSelector Example
+# This example demonstrates how to use a selector to populate groupId.
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: memberships-with-groupidselector  # Name of the custom resource
+spec:
+  forProvider:
+    groupIdSelector:  # Using a selector to populate groupId
+      matchLabels:  # Matching labels to select the Group
+        key: "value"
+      policy:
+        resolution: "Required"  # Reference resolution is required
+    members:
+      - "member-1"  # List of members
+      - "member-2"
+    realmId: "realm-1"  # Directly specifying the realmId

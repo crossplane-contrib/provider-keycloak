@@ -1,0 +1,67 @@
+---
+# Example 1: Basic User
+# This is a basic user with the minimum required fields.
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: basic-user
+spec:
+  forProvider:
+    realmId: "example-realm"  # The realm to which this user belongs
+    username: "basicuser"     # The username for this user
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the provider configuration
+
+---
+# Example 2: User with Email and Name
+# This user has additional fields like email, first name, and last name.
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: john-doe
+spec:
+  forProvider:
+    realmId: "example-realm"
+    username: "johndoe"
+    email: "john.doe@example.com"  # Email address for the user
+    firstName: "John"              # First name of the user
+    lastName: "Doe"                # Last name of the user
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+# Example 3: User with Federated Identity
+# This user has federated identity linked with a GitHub account.
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: federated-user
+spec:
+  forProvider:
+    realmId: "example-realm"
+    username: "federateduser"
+    federatedIdentity:
+      - identityProvider: "github"  # Identity provider (e.g., GitHub)
+        userId: "123456"            # User ID on the identity provider
+        userName: "federateduser"   # Username on the identity provider
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+# Example 4: User with Initial Password
+# This user has an initial password set, which is temporary.
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: user-with-password
+spec:
+  forProvider:
+    realmId: "example-realm"
+    username: "userwithpassword"
+    initialPassword:
+      - valueSecretRef:
+          key: "password"                 # Key in the secret containing the password
+          name: "initial-password-secret" # Secret containing the initial password
+        temporary: true                   # Indicates the password is temporary
+  providerConfigRef:
+    name: "keycloak-provider-config"

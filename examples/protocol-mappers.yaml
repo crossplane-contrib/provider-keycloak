@@ -1,0 +1,139 @@
+# Combined Examples for ProtocolMapper CRD
+
+# Example 1: OpenID Connect User Attribute Mapper
+# This example maps a user attribute 'department' to a claim in the OpenID Connect token.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: openid-user-attribute-mapper
+spec:
+  forProvider:
+    clientId: my-openid-client
+    realmId: my-realm
+    protocol: openid-connect
+    protocolMapper: oidc-usermodel-attribute-mapper
+    name: department-mapper
+    config:
+      "user.attribute": "department"
+      "claim.name": "department"
+      "id.token.claim": "true"
+      "access.token.claim": "true"
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Example 2: SAML User Property Mapper
+# This example maps a user property 'email' to an attribute in the SAML assertion.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: saml-user-property-mapper
+spec:
+  forProvider:
+    clientId: my-saml-client
+    realmId: my-realm
+    protocol: saml
+    protocolMapper: saml-user-property-mapper
+    name: email-mapper
+    config:
+      "property": "email"
+      "friendly.name": "email"
+      "attribute.name": "email"
+      "attribute.nameformat": "Basic"
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Example 3: OpenID Connect Role Mapper
+# This example maps user roles to a claim in the OpenID Connect token.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: openid-role-mapper
+spec:
+  forProvider:
+    clientId: another-openid-client
+    realmId: another-realm
+    protocol: openid-connect
+    protocolMapper: oidc-usermodel-realm-role-mapper
+    name: role-mapper
+    config:
+      "claim.name": "roles"
+      "multivalued": "true"
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Example 4: OpenID Connect Full Name Mapper
+# This example maps the full name of the user into an OpenID Connect token.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: openid-full-name-mapper
+spec:
+  forProvider:
+    clientId: my-openid-client
+    realmId: my-realm
+    protocol: openid-connect
+    protocolMapper: oidc-full-name-mapper
+    name: full-name-mapper
+    config:
+      "id.token.claim": "true"
+      "access.token.claim": "true"
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Example 5: SAML Hardcoded Attribute Mapper
+# This example adds a hardcoded attribute in a SAML assertion.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: saml-hardcoded-attribute-mapper
+spec:
+  forProvider:
+    clientId: my-saml-client
+    realmId: my-realm
+    protocol: saml
+    protocolMapper: saml-hardcoded-attribute-mapper
+    name: hardcoded-attribute-mapper
+    config:
+      "attribute.value": "hardcoded_value"
+      "attribute.name": "hardcoded_attribute"
+      "attribute.nameformat": "Basic"
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Example 6: OpenID Audience Mapper
+# This example adds an audience claim to an OpenID Connect token.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: openid-audience-mapper
+spec:
+  forProvider:
+    clientId: another-openid-client
+    realmId: another-realm
+    protocol: openid-connect
+    protocolMapper: oidc-audience-mapper
+    name: audience-mapper
+    config:
+      "included.client.audience": "some-client"
+      "id.token.claim": "true"
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Example 7: SAML X.509 Subject Mapper
+# This example maps the X.509 Subject Name from the user's certificate into a SAML assertion.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: saml-x509-subject-mapper
+spec:
+  forProvider:
+    clientId: my-saml-client
+    realmId: my-realm
+    protocol: saml
+    protocolMapper: saml-x509-subject-name-mapper
+    name: x509-subject-mapper
+    config:
+      "attribute.name": "x509subject"
+      "attribute.nameformat": "Basic"
+  providerConfigRef:
+    name: keycloak-provider-config

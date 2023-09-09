@@ -1,0 +1,64 @@
+---
+# Example 1: Basic Role in Keycloak for Crossplane
+# This is the simplest form of a role. It only specifies the realm and the name of the role.
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: basic-role  # The name of the role in Kubernetes
+spec:
+  forProvider:
+    realmId: "example-realm"  # The ID of the realm where this role will be created
+    name: "basic-role"  # The name of the role in Keycloak
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the ProviderConfig resource
+
+---
+# Example 2: Role with Description and Attributes
+# This example includes additional fields like 'description' and 'attributes'.
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: descriptive-role
+spec:
+  forProvider:
+    realmId: "example-realm"
+    name: "descriptive-role"
+    description: "This role has a description and attributes."  # Description for the role
+    attributes:  # Additional attributes for the role
+      department: "HR"
+      level: "senior"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+# Example 3: Client Role
+# This role is associated with a specific client by specifying the 'clientId'.
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: client-role
+spec:
+  forProvider:
+    realmId: "example-realm"
+    name: "client-role"
+    clientId: "example-client-id"  # The client ID with which this role is associated
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+# Example 4: Role with Composite Roles
+# This role inherits permissions from other roles specified in 'compositeRoles'.
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: composite-role
+spec:
+  forProvider:
+    realmId: "example-realm"
+    name: "composite-role"
+    compositeRoles:  # List of roles from which this role will inherit permissions
+      - "basic-role"
+      - "client-role"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+

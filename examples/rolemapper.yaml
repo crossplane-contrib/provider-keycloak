@@ -1,0 +1,59 @@
+# This YAML file contains examples for the RoleMapper CRD in Keycloak managed by Crossplane.
+
+# Example 1: Basic Role Mapping for a Client
+# This example demonstrates how to map a role to a client with minimal configuration.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: basic-role-mapper-client
+spec:
+  forProvider:
+    clientId: "my-client-id"  # The ID of the client where the role will be mapped
+    realmId: "example-realm"  # The realm where the client exists
+    roleId: "example-role-id"  # The ID of the role to be mapped
+  deletionPolicy: "Delete"  # The policy for deleting the role mapping; can be "Delete" or "Orphan"
+
+---
+# Example 2: Role Mapping with Client Reference
+# This example shows how to map a role to a client using a client reference.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: role-mapper-client-ref
+spec:
+  forProvider:
+    clientIdRef:
+      name: "my-client"  # Reference to a Client custom resource
+    realmId: "example-realm"  # The realm where the client exists
+    roleId: "example-role-id"  # The ID of the role to be mapped
+  deletionPolicy: "Delete"  # The policy for deleting the role mapping; can be "Delete" or "Orphan"
+
+---
+# Example 3: Role Mapping for a Client Scope
+# This example demonstrates how to map a role to a client scope.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: role-mapper-client-scope
+spec:
+  forProvider:
+    clientScopeId: "my-client-scope-id"  # The ID of the client scope where the role will be mapped
+    realmId: "example-realm"  # The realm where the client scope exists
+    roleId: "example-role-id"  # The ID of the role to be mapped
+  deletionPolicy: "Delete"  # The policy for deleting the role mapping; can be "Delete" or "Orphan"
+
+---
+# Example 4: Role Mapping with Role Reference
+# This example shows how to map a role using a role reference.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: role-mapper-role-ref
+spec:
+  forProvider:
+    clientId: "my-client-id"  # The ID of the client where the role will be mapped
+    realmId: "example-realm"  # The realm where the client exists
+    roleIdRef:
+      name: "my-role"  # Reference to a Role custom resource
+  deletionPolicy: "Delete"  # The policy for deleting the role mapping; can be "Delete" or "Orphan"
+
