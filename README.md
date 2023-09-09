@@ -5,29 +5,32 @@ is built using [Upjet](https://github.com/upbound/upjet) code
 generation tools and exposes XRM-conformant managed resources for the
 keycloak API.
 
-## Getting Started
+Check out the examples in the `examples` directory for more information on how to use this provider.
 
-Install the provider by using the following command after changing the image tag
-to the [latest release](https://marketplace.upbound.io/providers/corewire/provider-keycloak):
-```
-up ctp provider install corewire/provider-keycloak:v0.1.0
-```
+## Current state
+- Currently the provider is built here: https://gitlab.com/corewire/images/provider-keycloak and pushed to the gitlab container registry https://gitlab.com/corewire/images/provider-keycloak/container_registry/4538877
+- Soon this provider will be moved to crossplane-contrib and published to upbound. 
 
-Alternatively, you can use declarative installation:
-```
-cat <<EOF | kubectl apply -f -
+
+## Install
+
+To install the provider, use the following resource definition:
+
+```yaml
+---
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: provider-keycloak
+  name: keycloak-provider
+  namespace: crossplane-system
+  annotations:
+    # Only if you use argocd
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  package: corewire/provider-keycloak:v0.1.0
-EOF
-```
+  # currently stored here:  https://gitlab.com/corewire/images/provider-keycloak/container_registry/4538877
+  package: registry.gitlab.com/corewire/images/provider-keycloak:v0.0.0-14.gb43e0c4
+``` 
 
-Notice that in this example Provider resource is referencing ControllerConfig with debug enabled.
-
-You can see the API reference [here](https://doc.crds.dev/github.com/corewire/provider-keycloak).
 
 ## Developing
 
