@@ -7,11 +7,6 @@ keycloak API.
 
 Check out the examples in the `examples` directory for more information on how to use this provider.
 
-## Current state
-- Currently the provider is built here: https://gitlab.com/corewire/images/provider-keycloak and pushed to the gitlab container registry https://gitlab.com/corewire/images/provider-keycloak/container_registry/4538877
-- Soon this provider will be moved to crossplane-contrib and published to upbound. 
-
-
 ## Install
 
 To install the provider, use the following resource definition:
@@ -21,14 +16,10 @@ To install the provider, use the following resource definition:
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: keycloak-provider
+  name: provider-keycloak
   namespace: crossplane-system
-  annotations:
-    # Only if you use argocd
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  # currently stored here:  https://gitlab.com/corewire/images/provider-keycloak/container_registry/4538877
-  package: registry.gitlab.com/corewire/images/provider-keycloak:v0.0.0-14.gb43e0c4
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v0.0.1
 ``` 
 
 
@@ -60,4 +51,4 @@ make build
 ## Report a Bug
 
 For filing bugs, suggesting improvements, or requesting new features, please
-open an [issue](https://github.com/corewire/provider-keycloak/issues).
+open an [issue](https://github.com/crossplane-contrib/provider-keycloak/issues).

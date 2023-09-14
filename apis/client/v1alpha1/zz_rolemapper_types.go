@@ -20,7 +20,7 @@ type RoleMapperObservation struct {
 type RoleMapperParameters struct {
 
 	// The destination client of the role. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/corewire/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -41,7 +41,7 @@ type RoleMapperParameters struct {
 	RealmID *string `json:"realmId" tf:"realm_id,omitempty"`
 
 	// Id of the role to assign
-	// +crossplane:generate:reference:type=github.com/corewire/provider-keycloak/apis/role/v1alpha1.Role
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
 	// +kubebuilder:validation:Optional
 	RoleID *string `json:"roleId,omitempty" tf:"role_id,omitempty"`
 
