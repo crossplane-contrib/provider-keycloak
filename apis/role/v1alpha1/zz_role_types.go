@@ -22,7 +22,7 @@ type RoleParameters struct {
 	// +kubebuilder:validation:Optional
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
-	// +crossplane:generate:reference:type=github.com/corewire/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 

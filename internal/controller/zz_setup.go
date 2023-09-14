@@ -9,16 +9,16 @@ import (
 
 	"github.com/upbound/upjet/pkg/controller"
 
-	protocolmapper "github.com/corewire/provider-keycloak/internal/controller/client/protocolmapper"
-	rolemapper "github.com/corewire/provider-keycloak/internal/controller/client/rolemapper"
-	group "github.com/corewire/provider-keycloak/internal/controller/group/group"
-	memberships "github.com/corewire/provider-keycloak/internal/controller/group/memberships"
-	roles "github.com/corewire/provider-keycloak/internal/controller/group/roles"
-	client "github.com/corewire/provider-keycloak/internal/controller/openidclient/client"
-	providerconfig "github.com/corewire/provider-keycloak/internal/controller/providerconfig"
-	realm "github.com/corewire/provider-keycloak/internal/controller/realm/realm"
-	role "github.com/corewire/provider-keycloak/internal/controller/role/role"
-	user "github.com/corewire/provider-keycloak/internal/controller/user/user"
+	protocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/protocolmapper"
+	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/rolemapper"
+	group "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/group"
+	memberships "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/memberships"
+	roles "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/roles"
+	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/client"
+	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/providerconfig"
+	realm "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/realm"
+	role "github.com/crossplane-contrib/provider-keycloak/internal/controller/role/role"
+	user "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/user"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to

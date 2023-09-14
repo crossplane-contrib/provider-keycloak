@@ -11,7 +11,7 @@ import (
 
 	"github.com/upbound/upjet/pkg/pipeline"
 
-	"github.com/corewire/provider-keycloak/config"
+	"github.com/crossplane-contrib/provider-keycloak/config"
 )
 
 func main() {

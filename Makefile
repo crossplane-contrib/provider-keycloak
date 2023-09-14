@@ -2,7 +2,7 @@
 # Setup Project
 
 PROJECT_NAME ?= provider-keycloak
-PROJECT_REPO ?= $(PROJECT_NAME)
+PROJECT_REPO ?= github.com/crossplane-contrib/$(PROJECT_NAME)
 
 export TERRAFORM_VERSION ?= 1.4.6
 
@@ -16,7 +16,6 @@ export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-keycloak_v4.2.0
 export TERRAFORM_DOCS_PATH ?= docs/resources
 
 PLATFORMS ?= linux_amd64 linux_arm64
-# PLATFORM ?= ${PLATFORMS}
 
 # -include will silently skip missing files, which allows us
 # to load those files with a target in the Makefile. If only
@@ -41,11 +40,12 @@ NPROCS ?= 1
 # to half the number of CPU cores.
 GO_TEST_PARALLEL := $(shell echo $$(( $(NPROCS) / 2 )))
 
-GO_REQUIRED_VERSION ?= 1.20
+GO_REQUIRED_VERSION ?= 1.19
 GOLANGCILINT_VERSION ?= 1.50.0
 GO_STATIC_PACKAGES = $(GO_PROJECT)/cmd/provider $(GO_PROJECT)/cmd/generator
 GO_LDFLAGS += -X $(GO_PROJECT)/internal/version.Version=$(VERSION)
 GO_SUBDIRS += cmd internal apis
+GO111MODULE = on
 -include build/makelib/golang.mk
 
 # ====================================================================================
@@ -54,29 +54,28 @@ GO_SUBDIRS += cmd internal apis
 KIND_VERSION = v0.15.0
 UP_VERSION = v0.14.0
 UP_CHANNEL = stable
-UPTEST_VERSION = v0.2.1
 -include build/makelib/k8s_tools.mk
 
 # ====================================================================================
 # Setup Images
 
-REGISTRY_ORGS ?= registry.example.com/corewire/provider-keycloak
+REGISTRY_ORGS ?= xpkg.upbound.io/upbound
 IMAGES = $(PROJECT_NAME)
 -include build/makelib/imagelight.mk
 
 # ====================================================================================
 # Setup XPKG
 
-XPKG_REG_ORGS ?= registry.example.com/corewire/provider-keycloak
+XPKG_REG_ORGS ?= xpkg.upbound.io/crossplane-contrib index.docker.io/crossplanecontrib
 # NOTE(hasheddan): skip promoting on xpkg.upbound.io as channel tags are
 # inferred.
-XPKG_REG_ORGS_NO_PROMOTE ?= registry.example.com/corewire/provider-keycloak
+XPKG_REG_ORGS_NO_PROMOTE ?= xpkg.upbound.io/crossplane-contrib
 XPKGS = $(PROJECT_NAME)
 -include build/makelib/xpkg.mk
 
 # NOTE(hasheddan): we force image building to happen prior to xpkg build so that
 # we ensure image is present in daemon.
-xpkg.build.provider-keycloak: do.build.images
+xpkg.build.provider-pagerduty: do.build.images
 
 # NOTE(hasheddan): we ensure up is installed prior to running platform-specific
 # build steps in parallel to avoid encountering an installation race condition.
@@ -141,6 +140,9 @@ generate.init: $(TERRAFORM_PROVIDER_SCHEMA) pull-docs
 go.cachedir:
 	@go env GOCACHE
 
+go.mod.cachedir:
+	@go env GOMODCACHE
+
 # Generate a coverage report for cobertura applying exclusions on
 # - generated file
 cobertura:
@@ -160,25 +162,6 @@ run: go.build
 	@$(INFO) Running Crossplane locally out-of-cluster . . .
 	@# To see other arguments that can be provided, run the command with --help instead
 	UPBOUND_CONTEXT="local" $(GO_OUT_DIR)/provider --debug
-
-# ====================================================================================
-# End to End Testing
-CROSSPLANE_NAMESPACE = upbound-system
--include build/makelib/local.xpkg.mk
--include build/makelib/controlplane.mk
-
-uptest: $(UPTEST) $(KUBECTL) $(KUTTL)
-	@$(INFO) running automated tests
-	@KUBECTL=$(KUBECTL) KUTTL=$(KUTTL) $(UPTEST) e2e "${UPTEST_EXAMPLE_LIST}" --setup-script=cluster/test/setup.sh || $(FAIL)
-	@$(OK) running automated tests
-
-local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
-	@$(INFO) running locally built provider
-	@$(KUBECTL) wait provider.pkg $(PROJECT_NAME) --for condition=Healthy --timeout 5m
-	@$(KUBECTL) -n upbound-system wait --for=condition=Available deployment --all --timeout=5m
-	@$(OK) running locally built provider
-
-e2e: local-deploy uptest
 
 .PHONY: cobertura submodules fallthrough run crds.clean
 
@@ -202,6 +185,3 @@ crossplane.help:
 help-special: crossplane.help
 
 .PHONY: crossplane.help help-special
-
-bla:
-	@echo "$(PLATFORMS)"

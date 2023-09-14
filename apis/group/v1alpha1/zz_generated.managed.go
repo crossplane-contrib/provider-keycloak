@@ -17,6 +17,11 @@ func (mg *Group) GetDeletionPolicy() xpv1.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
+// GetManagementPolicies of this Group.
+func (mg *Group) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
 // GetProviderConfigReference of this Group.
 func (mg *Group) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
@@ -48,6 +53,11 @@ func (mg *Group) SetConditions(c ...xpv1.Condition) {
 // SetDeletionPolicy of this Group.
 func (mg *Group) SetDeletionPolicy(r xpv1.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this Group.
+func (mg *Group) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this Group.
@@ -83,6 +93,11 @@ func (mg *Memberships) GetDeletionPolicy() xpv1.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
+// GetManagementPolicies of this Memberships.
+func (mg *Memberships) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
 // GetProviderConfigReference of this Memberships.
 func (mg *Memberships) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
@@ -114,6 +129,11 @@ func (mg *Memberships) SetConditions(c ...xpv1.Condition) {
 // SetDeletionPolicy of this Memberships.
 func (mg *Memberships) SetDeletionPolicy(r xpv1.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this Memberships.
+func (mg *Memberships) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this Memberships.
@@ -149,6 +169,11 @@ func (mg *Roles) GetDeletionPolicy() xpv1.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
+// GetManagementPolicies of this Roles.
+func (mg *Roles) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
 // GetProviderConfigReference of this Roles.
 func (mg *Roles) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
@@ -180,6 +205,11 @@ func (mg *Roles) SetConditions(c ...xpv1.Condition) {
 // SetDeletionPolicy of this Roles.
 func (mg *Roles) SetDeletionPolicy(r xpv1.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this Roles.
+func (mg *Roles) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this Roles.

@@ -17,6 +17,11 @@ func (mg *ProtocolMapper) GetDeletionPolicy() xpv1.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
+// GetManagementPolicies of this ProtocolMapper.
+func (mg *ProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
 // GetProviderConfigReference of this ProtocolMapper.
 func (mg *ProtocolMapper) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
@@ -48,6 +53,11 @@ func (mg *ProtocolMapper) SetConditions(c ...xpv1.Condition) {
 // SetDeletionPolicy of this ProtocolMapper.
 func (mg *ProtocolMapper) SetDeletionPolicy(r xpv1.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this ProtocolMapper.
+func (mg *ProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this ProtocolMapper.
@@ -83,6 +93,11 @@ func (mg *RoleMapper) GetDeletionPolicy() xpv1.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
+// GetManagementPolicies of this RoleMapper.
+func (mg *RoleMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
 // GetProviderConfigReference of this RoleMapper.
 func (mg *RoleMapper) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
@@ -114,6 +129,11 @@ func (mg *RoleMapper) SetConditions(c ...xpv1.Condition) {
 // SetDeletionPolicy of this RoleMapper.
 func (mg *RoleMapper) SetDeletionPolicy(r xpv1.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this RoleMapper.
+func (mg *RoleMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this RoleMapper.

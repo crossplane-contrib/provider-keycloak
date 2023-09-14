@@ -12,7 +12,7 @@ func Configure(p *config.Provider) {
 			Type: "Role",
 		}
 		r.References["client_id"] = config.Reference{
-			Type: "github.com/corewire/provider-keycloak/apis/openidclient/v1alpha1.Client",
+			Type: "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
 		}
 	})
 }

@@ -37,7 +37,7 @@ type RolesParameters struct {
 	// +kubebuilder:validation:Required
 	RealmID *string `json:"realmId" tf:"realm_id,omitempty"`
 
-	// +crossplane:generate:reference:type=github.com/corewire/provider-keycloak/apis/role/v1alpha1.Role
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
 	// +kubebuilder:validation:Optional
 	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
 
