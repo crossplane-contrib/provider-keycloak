@@ -83,8 +83,17 @@ type ClientParameters struct {
 	// +kubebuilder:validation:Optional
 	ClientAuthenticatorType *string `json:"clientAuthenticatorType,omitempty" tf:"client_authenticator_type,omitempty"`
 
-	// +kubebuilder:validation:Required
-	ClientID *string `json:"clientId" tf:"client_id,omitempty"`
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +kubebuilder:validation:Optional
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// +kubebuilder:validation:Optional
 	ClientOfflineSessionIdleTimeout *string `json:"clientOfflineSessionIdleTimeout,omitempty" tf:"client_offline_session_idle_timeout,omitempty"`
@@ -158,8 +167,17 @@ type ClientParameters struct {
 	// +kubebuilder:validation:Optional
 	PkceCodeChallengeMethod *string `json:"pkceCodeChallengeMethod,omitempty" tf:"pkce_code_challenge_method,omitempty"`
 
-	// +kubebuilder:validation:Required
-	RealmID *string `json:"realmId" tf:"realm_id,omitempty"`
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	// +kubebuilder:validation:Optional
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// +kubebuilder:validation:Optional
 	RootURL *string `json:"rootUrl,omitempty" tf:"root_url,omitempty"`

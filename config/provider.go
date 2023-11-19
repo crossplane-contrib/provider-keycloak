@@ -8,11 +8,13 @@ import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
 
+	"github.com/upbound/upjet/pkg/config"
 	ujconfig "github.com/upbound/upjet/pkg/config"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/group"
 	"github.com/crossplane-contrib/provider-keycloak/config/mapper"
 	"github.com/crossplane-contrib/provider-keycloak/config/openidclient"
+	"github.com/crossplane-contrib/provider-keycloak/config/openidgroup"
 	"github.com/crossplane-contrib/provider-keycloak/config/realm"
 	"github.com/crossplane-contrib/provider-keycloak/config/role"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
@@ -34,7 +36,10 @@ var providerMetadata string
 func GetProvider() *ujconfig.Provider {
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
 		ujconfig.WithIncludeList(ExternalNameConfigured()),
-		ujconfig.WithDefaultResourceOptions(ExternalNameConfigurations()),
+		ujconfig.WithDefaultResourceOptions(
+			ExternalNameConfigurations(),
+			KnownReferencers(),
+		),
 		ujconfig.WithRootGroup(rootGroup))
 
 	for _, configure := range []func(provider *ujconfig.Provider){
@@ -43,6 +48,7 @@ func GetProvider() *ujconfig.Provider {
 		group.Configure,
 		role.Configure,
 		openidclient.Configure,
+		openidgroup.Configure,
 		mapper.Configure,
 		user.Configure,
 	} {
@@ -51,4 +57,28 @@ func GetProvider() *ujconfig.Provider {
 
 	pc.ConfigureResources()
 	return pc
+}
+
+// KnownReferencers adds referencers for fields that are known and common among
+// more than a few resources.
+func KnownReferencers() config.ResourceOption { //nolint:gocyclo
+	return func(r *config.Resource) {
+		for k, s := range r.TerraformResource.Schema {
+			// We shouldn't add referencers for status fields and sensitive fields
+			// since they already have secret referencer.
+			if (s.Computed && !s.Optional) || s.Sensitive {
+				continue
+			}
+			switch k {
+			case "realm_id":
+				r.References["realm_id"] = config.Reference{
+					Type: "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm",
+				}
+			case "client_id":
+				r.References["client_id"] = config.Reference{
+					Type: "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
+				}
+			}
+		}
+	}
 }

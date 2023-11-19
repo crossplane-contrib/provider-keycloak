@@ -10,15 +10,19 @@ import "github.com/upbound/upjet/pkg/config"
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
-	"keycloak_group":                   config.IdentifierFromProvider,
-	"keycloak_group_memberships":       config.IdentifierFromProvider,
-	"keycloak_group_roles":             config.IdentifierFromProvider,
-	"keycloak_openid_client":           config.IdentifierFromProvider,
-	"keycloak_realm":                   config.IdentifierFromProvider,
-	"keycloak_role":                    config.IdentifierFromProvider,
-	"keycloak_generic_protocol_mapper": config.IdentifierFromProvider,
-	"keycloak_generic_role_mapper":     config.IdentifierFromProvider,
-	"keycloak_user":                    config.IdentifierFromProvider,
+	"keycloak_generic_protocol_mapper":                 config.IdentifierFromProvider,
+	"keycloak_generic_role_mapper":                     config.IdentifierFromProvider,
+	"keycloak_group_memberships":                       config.IdentifierFromProvider,
+	"keycloak_group_roles":                             config.IdentifierFromProvider,
+	"keycloak_group":                                   config.IdentifierFromProvider,
+	"keycloak_openid_client_default_scopes":            config.IdentifierFromProvider,
+	"keycloak_openid_client_scope":                     config.IdentifierFromProvider,
+	"keycloak_openid_client":                           config.IdentifierFromProvider,
+	"keycloak_openid_group_membership_protocol_mapper": config.IdentifierFromProvider,
+	"keycloak_realm":                                   config.IdentifierFromProvider,
+	"keycloak_role":                                    config.IdentifierFromProvider,
+	"keycloak_user_groups":                             config.IdentifierFromProvider,
+	"keycloak_user":                                    config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

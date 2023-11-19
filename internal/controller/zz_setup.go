@@ -15,9 +15,13 @@ import (
 	memberships "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/memberships"
 	roles "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/roles"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/client"
+	clientdefaultscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientdefaultscopes"
+	clientscope "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientscope"
+	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidgroup/groupmembershipprotocolmapper"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/providerconfig"
 	realm "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/realm"
 	role "github.com/crossplane-contrib/provider-keycloak/internal/controller/role/role"
+	groups "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/groups"
 	user "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/user"
 )
 
@@ -31,9 +35,13 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		memberships.Setup,
 		roles.Setup,
 		client.Setup,
+		clientdefaultscopes.Setup,
+		clientscope.Setup,
+		groupmembershipprotocolmapper.Setup,
 		providerconfig.Setup,
 		realm.Setup,
 		role.Setup,
+		groups.Setup,
 		user.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
