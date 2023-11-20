@@ -13,6 +13,7 @@ import (
 	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1"
 	v1alpha1group "github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1"
 	v1alpha1openidclient "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1"
+	v1alpha1openidgroup "github.com/crossplane-contrib/provider-keycloak/apis/openidgroup/v1alpha1"
 	v1alpha1realm "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1"
 	v1alpha1role "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1"
 	v1alpha1user "github.com/crossplane-contrib/provider-keycloak/apis/user/v1alpha1"
@@ -26,6 +27,7 @@ func init() {
 		v1alpha1.SchemeBuilder.AddToScheme,
 		v1alpha1group.SchemeBuilder.AddToScheme,
 		v1alpha1openidclient.SchemeBuilder.AddToScheme,
+		v1alpha1openidgroup.SchemeBuilder.AddToScheme,
 		v1alpha1realm.SchemeBuilder.AddToScheme,
 		v1alpha1role.SchemeBuilder.AddToScheme,
 		v1alpha1user.SchemeBuilder.AddToScheme,

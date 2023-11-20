@@ -37,8 +37,17 @@ type RoleMapperParameters struct {
 	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
 
 	// The realm id where the associated client or client scope exists.
-	// +kubebuilder:validation:Required
-	RealmID *string `json:"realmId" tf:"realm_id,omitempty"`
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	// +kubebuilder:validation:Optional
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Id of the role to assign
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role

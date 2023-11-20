@@ -101,6 +101,16 @@ func (in *ProtocolMapperParameters) DeepCopyInto(out *ProtocolMapperParameters) 
 		*out = new(string)
 		**out = **in
 	}
+	if in.ClientIDRef != nil {
+		in, out := &in.ClientIDRef, &out.ClientIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ClientIDSelector != nil {
+		in, out := &in.ClientIDSelector, &out.ClientIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.ClientScopeID != nil {
 		in, out := &in.ClientScopeID, &out.ClientScopeID
 		*out = new(string)
@@ -140,6 +150,16 @@ func (in *ProtocolMapperParameters) DeepCopyInto(out *ProtocolMapperParameters) 
 		in, out := &in.RealmID, &out.RealmID
 		*out = new(string)
 		**out = **in
+	}
+	if in.RealmIDRef != nil {
+		in, out := &in.RealmIDRef, &out.RealmIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmIDSelector != nil {
+		in, out := &in.RealmIDSelector, &out.RealmIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 }
 
@@ -293,6 +313,16 @@ func (in *RoleMapperParameters) DeepCopyInto(out *RoleMapperParameters) {
 		in, out := &in.RealmID, &out.RealmID
 		*out = new(string)
 		**out = **in
+	}
+	if in.RealmIDRef != nil {
+		in, out := &in.RealmIDRef, &out.RealmIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmIDSelector != nil {
+		in, out := &in.RealmIDSelector, &out.RealmIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleID != nil {
 		in, out := &in.RoleID, &out.RoleID

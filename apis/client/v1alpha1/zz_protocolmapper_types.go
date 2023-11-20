@@ -20,8 +20,17 @@ type ProtocolMapperObservation struct {
 type ProtocolMapperParameters struct {
 
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The mapper's associated client scope. Cannot be used at the same time as client_id.
 	// +kubebuilder:validation:Optional
@@ -43,8 +52,17 @@ type ProtocolMapperParameters struct {
 	ProtocolMapper *string `json:"protocolMapper" tf:"protocol_mapper,omitempty"`
 
 	// The realm id where the associated client or client scope exists.
-	// +kubebuilder:validation:Required
-	RealmID *string `json:"realmId" tf:"realm_id,omitempty"`
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	// +kubebuilder:validation:Optional
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // ProtocolMapperSpec defines the desired state of ProtocolMapper
