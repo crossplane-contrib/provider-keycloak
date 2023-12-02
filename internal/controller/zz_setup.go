@@ -20,6 +20,7 @@ import (
 	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidgroup/groupmembershipprotocolmapper"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/providerconfig"
 	realm "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/realm"
+	requiredaction "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/requiredaction"
 	role "github.com/crossplane-contrib/provider-keycloak/internal/controller/role/role"
 	groups "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/groups"
 	user "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/user"
@@ -40,6 +41,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		groupmembershipprotocolmapper.Setup,
 		providerconfig.Setup,
 		realm.Setup,
+		requiredaction.Setup,
 		role.Setup,
 		groups.Setup,
 		user.Setup,

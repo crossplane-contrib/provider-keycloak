@@ -9,4 +9,9 @@ func Configure(p *config.Provider) {
 		// this resource, which would be "github"
 		r.ShortGroup = "realm"
 	})
+
+	p.AddResourceConfigurator("keycloak_required_action", func(r *config.Resource) {
+		r.ShortGroup = "realm"
+		r.Kind = "RequiredAction"
+	})
 }

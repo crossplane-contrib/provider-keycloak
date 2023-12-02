@@ -20,6 +20,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_openid_client":                           config.IdentifierFromProvider,
 	"keycloak_openid_group_membership_protocol_mapper": config.IdentifierFromProvider,
 	"keycloak_realm":                                   config.IdentifierFromProvider,
+	"keycloak_required_action":                         config.IdentifierFromProvider,
 	"keycloak_role":                                    config.IdentifierFromProvider,
 	"keycloak_user_groups":                             config.IdentifierFromProvider,
 	"keycloak_user":                                    config.IdentifierFromProvider,
