@@ -40,6 +40,7 @@ const (
 	realmKey             = "realm"
 	basePathKey          = "base_path"
 	additionalHeadersKey = "additional_headers"
+	rootCaCertificateKey = "root_ca_certificate"
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -110,6 +111,10 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		// additional headers
 		if v, ok := creds[additionalHeadersKey]; ok {
 			ps.Configuration[additionalHeadersKey] = v
+		}
+		// root ca certificate
+		if v, ok := creds[rootCaCertificateKey]; ok {
+			ps.Configuration[rootCaCertificateKey] = v
 		}
 		return ps, nil
 	}
