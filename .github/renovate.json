@@ -5,11 +5,13 @@
     "dependencies"
   ],
   "extends": [
-    "config:base"
+    "config:base",
+    ":semanticCommits"
   ],
   "baseBranches": [
     "main"
   ],
+  "postUpdateOptions": ["gomodTidy"],
   "dependencyDashboard": true,
   "packageRules": [
     {
