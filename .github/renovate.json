@@ -10,6 +10,7 @@
   "baseBranches": [
     "main"
   ],
+  "dependencyDashboard": true,
   "packageRules": [
     {
       "matchManagers": ["dockerfile"],
