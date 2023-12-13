@@ -6,7 +6,7 @@ require (
 	github.com/crossplane/crossplane-runtime v0.20.0
 	github.com/crossplane/crossplane-tools v0.0.0-20230714144037-2684f4bc7638
 	github.com/pkg/errors v0.9.1
-	github.com/upbound/upjet v0.8.0-rc.0.0.20221024111721-c82119f5ef34
+	github.com/upbound/upjet v0.10.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	k8s.io/apimachinery v0.28.4
 	k8s.io/client-go v0.28.4
@@ -78,6 +78,7 @@ require (
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
+	github.com/mitchellh/go-ps v1.0.0 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
