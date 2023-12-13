@@ -31,17 +31,24 @@ const (
 // https://registry.terraform.io/providers/mrparkers/keycloak/latest/docs#argument-reference
 // https://registry.terraform.io/providers/mrparkers/keycloak/latest/docs#example-usage-client-credentials-grant
 // https://registry.terraform.io/providers/mrparkers/keycloak/latest/docs#example-usage-password-grant
-const (
-	usernameKey          = "username"
-	passwordKey          = "password"
-	clientIDKey          = "client_id"
-	clientSecretKey      = "client_secret"
-	urlKey               = "url"
-	realmKey             = "realm"
-	basePathKey          = "base_path"
-	additionalHeadersKey = "additional_headers"
-	rootCaCertificateKey = "root_ca_certificate"
-)
+
+var requiredKeycloakConfigKeys = []string{
+	"client_id",
+	"url",
+}
+
+var optionalKeycloakConfigKeys = []string{
+	"client_secret",
+	"username",
+	"password",
+	"realm",
+	"initial_login",
+	"client_timeout",
+	"tls_insecure_skip_verify",
+	"root_ca_certificate",
+	"base_path",
+	"additional_headers",
+}
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
 // returns Terraform provider setup configuration
@@ -80,42 +87,24 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 
 		// set provider configuration
 		ps.Configuration = map[string]any{}
-		// username
-		if v, ok := creds[usernameKey]; ok {
-			ps.Configuration[usernameKey] = v
+		// Iterate over the requiredKeycloakConfigKeys, they must be set
+		for _, key := range requiredKeycloakConfigKeys {
+			if value, ok := creds[key]; ok {
+				if !ok {
+					// Return an error if a required key is missing
+					return ps, errors.Errorf("required Keycloak configuration key '%s' is missing", key)
+				}
+				ps.Configuration[key] = value
+			}
 		}
-		// password
-		if v, ok := creds[passwordKey]; ok {
-			ps.Configuration[passwordKey] = v
+
+		// Iterate over the optionalKeycloakConfigKeys, they can be set and do not have to be in the creds map
+		for _, key := range optionalKeycloakConfigKeys {
+			if value, ok := creds[key]; ok {
+				ps.Configuration[key] = value
+			}
 		}
-		// client
-		if v, ok := creds[clientIDKey]; ok {
-			ps.Configuration[clientIDKey] = v
-		}
-		// secret
-		if v, ok := creds[clientSecretKey]; ok {
-			ps.Configuration[clientSecretKey] = v
-		}
-		// url
-		if v, ok := creds[urlKey]; ok {
-			ps.Configuration[urlKey] = v
-		}
-		// realm
-		if v, ok := creds[realmKey]; ok {
-			ps.Configuration[realmKey] = v
-		}
-		// basepath
-		if v, ok := creds[basePathKey]; ok {
-			ps.Configuration[basePathKey] = v
-		}
-		// additional headers
-		if v, ok := creds[additionalHeadersKey]; ok {
-			ps.Configuration[additionalHeadersKey] = v
-		}
-		// root ca certificate
-		if v, ok := creds[rootCaCertificateKey]; ok {
-			ps.Configuration[rootCaCertificateKey] = v
-		}
+
 		return ps, nil
 	}
 }
