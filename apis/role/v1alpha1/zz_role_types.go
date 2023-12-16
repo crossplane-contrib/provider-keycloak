@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
 Copyright 2022 Upbound Inc.
 */
@@ -13,15 +17,48 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
+type RoleInitParameters struct {
+
+	// A map representing attributes for the role. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
+
+	// The description of the role
+	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
+	// The name of the role
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+}
+
 type RoleObservation struct {
+
+	// A map representing attributes for the role. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
+
+	// When specified, this role will be created as a client role attached to the client with the provided ID
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
+	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
+
+	// The description of the role
+	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// The name of the role
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// The realm this role exists within.
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 }
 
 type RoleParameters struct {
 
+	// A map representing attributes for the role. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
 	// +kubebuilder:validation:Optional
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
+	// When specified, this role will be created as a client role attached to the client with the provided ID
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
@@ -34,6 +71,7 @@ type RoleParameters struct {
 	// +kubebuilder:validation:Optional
 	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
+	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
 	// +crossplane:generate:reference:type=Role
 	// +kubebuilder:validation:Optional
 	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
@@ -46,12 +84,15 @@ type RoleParameters struct {
 	// +kubebuilder:validation:Optional
 	CompositeRolesSelector *v1.Selector `json:"compositeRolesSelector,omitempty" tf:"-"`
 
+	// The description of the role
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// +kubebuilder:validation:Required
-	Name *string `json:"name" tf:"name,omitempty"`
+	// The name of the role
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The realm this role exists within.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -69,6 +110,17 @@ type RoleParameters struct {
 type RoleSpec struct {
 	v1.ResourceSpec `json:",inline"`
 	ForProvider     RoleParameters `json:"forProvider"`
+	// THIS IS A BETA FIELD. It will be honored
+	// unless the Management Policies feature flag is disabled.
+	// InitProvider holds the same fields as ForProvider, with the exception
+	// of Identifier and other resource reference fields. The fields that are
+	// in InitProvider are merged into ForProvider when the resource is created.
+	// The same fields are also added to the terraform ignore_changes hook, to
+	// avoid updating them after creation. This is useful for fields that are
+	// required on creation, but we do not desire to update them after creation,
+	// for example because of an external controller is managing them, like an
+	// autoscaler.
+	InitProvider RoleInitParameters `json:"initProvider,omitempty"`
 }
 
 // RoleStatus defines the observed state of Role.
@@ -79,7 +131,7 @@ type RoleStatus struct {
 
 // +kubebuilder:object:root=true
 
-// Role is the Schema for the Roles API. <no value>
+// Role is the Schema for the Roles API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
@@ -89,8 +141,9 @@ type RoleStatus struct {
 type Role struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              RoleSpec   `json:"spec"`
-	Status            RoleStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
+	Spec   RoleSpec   `json:"spec"`
+	Status RoleStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

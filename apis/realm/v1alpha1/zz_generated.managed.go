@@ -27,14 +27,6 @@ func (mg *Realm) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
-/*
-GetProviderReference of this Realm.
-Deprecated: Use GetProviderConfigReference.
-*/
-func (mg *Realm) GetProviderReference() *xpv1.Reference {
-	return mg.Spec.ProviderReference
-}
-
 // GetPublishConnectionDetailsTo of this Realm.
 func (mg *Realm) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
 	return mg.Spec.PublishConnectionDetailsTo
@@ -63,14 +55,6 @@ func (mg *Realm) SetManagementPolicies(r xpv1.ManagementPolicies) {
 // SetProviderConfigReference of this Realm.
 func (mg *Realm) SetProviderConfigReference(r *xpv1.Reference) {
 	mg.Spec.ProviderConfigReference = r
-}
-
-/*
-SetProviderReference of this Realm.
-Deprecated: Use SetProviderConfigReference.
-*/
-func (mg *Realm) SetProviderReference(r *xpv1.Reference) {
-	mg.Spec.ProviderReference = r
 }
 
 // SetPublishConnectionDetailsTo of this Realm.
@@ -103,14 +87,6 @@ func (mg *RequiredAction) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
-/*
-GetProviderReference of this RequiredAction.
-Deprecated: Use GetProviderConfigReference.
-*/
-func (mg *RequiredAction) GetProviderReference() *xpv1.Reference {
-	return mg.Spec.ProviderReference
-}
-
 // GetPublishConnectionDetailsTo of this RequiredAction.
 func (mg *RequiredAction) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
 	return mg.Spec.PublishConnectionDetailsTo
@@ -139,14 +115,6 @@ func (mg *RequiredAction) SetManagementPolicies(r xpv1.ManagementPolicies) {
 // SetProviderConfigReference of this RequiredAction.
 func (mg *RequiredAction) SetProviderConfigReference(r *xpv1.Reference) {
 	mg.Spec.ProviderConfigReference = r
-}
-
-/*
-SetProviderReference of this RequiredAction.
-Deprecated: Use SetProviderConfigReference.
-*/
-func (mg *RequiredAction) SetProviderReference(r *xpv1.Reference) {
-	mg.Spec.ProviderReference = r
 }
 
 // SetPublishConnectionDetailsTo of this RequiredAction.

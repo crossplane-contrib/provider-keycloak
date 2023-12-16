@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.1
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: roles.role.keycloak.crossplane.io
 spec:
   group: role.keycloak.crossplane.io
@@ -34,7 +34,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Role is the Schema for the Roles API. <no value>
+        description: Role is the Schema for the Roles API.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -69,8 +69,13 @@ spec:
                   attributes:
                     additionalProperties:
                       type: string
+                    description: 'A map representing attributes for the role. In order
+                      to add multivalue attributes, use ## to seperate the values.
+                      Max length for each value is 255 chars'
                     type: object
                   clientId:
+                    description: When specified, this role will be created as a client
+                      role attached to the client with the provided ID
                     type: string
                   clientIdRef:
                     description: Reference to a Client in openidclient to populate
@@ -148,6 +153,8 @@ spec:
                         type: object
                     type: object
                   compositeRoles:
+                    description: When specified, this role will be a composite role,
+                      composed of all roles that have an ID present within this list.
                     items:
                       type: string
                     type: array
@@ -228,10 +235,13 @@ spec:
                         type: object
                     type: object
                   description:
+                    description: The description of the role
                     type: string
                   name:
+                    description: The name of the role
                     type: string
                   realmId:
+                    description: The realm this role exists within.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -306,15 +316,38 @@ spec:
                             type: string
                         type: object
                     type: object
-                required:
-                - name
+                type: object
+              initProvider:
+                description: THIS IS A BETA FIELD. It will be honored unless the Management
+                  Policies feature flag is disabled. InitProvider holds the same fields
+                  as ForProvider, with the exception of Identifier and other resource
+                  reference fields. The fields that are in InitProvider are merged
+                  into ForProvider when the resource is created. The same fields are
+                  also added to the terraform ignore_changes hook, to avoid updating
+                  them after creation. This is useful for fields that are required
+                  on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them,
+                  like an autoscaler.
+                properties:
+                  attributes:
+                    additionalProperties:
+                      type: string
+                    description: 'A map representing attributes for the role. In order
+                      to add multivalue attributes, use ## to seperate the values.
+                      Max length for each value is 255 chars'
+                    type: object
+                  description:
+                    description: The description of the role
+                    type: string
+                  name:
+                    description: The name of the role
+                    type: string
                 type: object
               managementPolicies:
                 default:
                 - '*'
-                description: 'THIS IS AN ALPHA FIELD. Do not use it in production.
-                  It is not honored unless the relevant Crossplane feature flag is
-                  enabled, and may be changed or removed without notice. ManagementPolicies
+                description: 'THIS IS A BETA FIELD. It is on by default but can be
+                  opted out through a Crossplane feature flag. ManagementPolicies
                   specify the array of actions Crossplane is allowed to take on the
                   managed and external resources. This field is planned to replace
                   the DeletionPolicy field in a future release. Currently, both could
@@ -341,42 +374,6 @@ spec:
                 description: ProviderConfigReference specifies how the provider that
                   will be used to create, observe, update, and delete this managed
                   resource should be configured.
-                properties:
-                  name:
-                    description: Name of the referenced object.
-                    type: string
-                  policy:
-                    description: Policies for referencing.
-                    properties:
-                      resolution:
-                        default: Required
-                        description: Resolution specifies whether resolution of this
-                          reference is required. The default is 'Required', which
-                          means the reconcile will fail if the reference cannot be
-                          resolved. 'Optional' means this reference will be a no-op
-                          if it cannot be resolved.
-                        enum:
-                        - Required
-                        - Optional
-                        type: string
-                      resolve:
-                        description: Resolve specifies when this reference should
-                          be resolved. The default is 'IfNotPresent', which will attempt
-                          to resolve the reference only when the corresponding field
-                          is not present. Use 'Always' to resolve the reference on
-                          every reconcile.
-                        enum:
-                        - Always
-                        - IfNotPresent
-                        type: string
-                    type: object
-                required:
-                - name
-                type: object
-              providerRef:
-                description: 'ProviderReference specifies the provider that will be
-                  used to create, observe, update, and delete this managed resource.
-                  Deprecated: Please use ProviderConfigReference, i.e. `providerConfigRef`'
                 properties:
                   name:
                     description: Name of the referenced object.
@@ -506,12 +503,43 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
           status:
             description: RoleStatus defines the observed state of Role.
             properties:
               atProvider:
                 properties:
+                  attributes:
+                    additionalProperties:
+                      type: string
+                    description: 'A map representing attributes for the role. In order
+                      to add multivalue attributes, use ## to seperate the values.
+                      Max length for each value is 255 chars'
+                    type: object
+                  clientId:
+                    description: When specified, this role will be created as a client
+                      role attached to the client with the provided ID
+                    type: string
+                  compositeRoles:
+                    description: When specified, this role will be a composite role,
+                      composed of all roles that have an ID present within this list.
+                    items:
+                      type: string
+                    type: array
+                  description:
+                    description: The description of the role
+                    type: string
                   id:
+                    type: string
+                  name:
+                    description: The name of the role
+                    type: string
+                  realmId:
+                    description: The realm this role exists within.
                     type: string
                 type: object
               conditions:
@@ -547,6 +575,9 @@ spec:
                   - type
                   type: object
                 type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
             type: object
         required:
         - spec

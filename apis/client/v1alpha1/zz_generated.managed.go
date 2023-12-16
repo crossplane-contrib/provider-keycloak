@@ -27,14 +27,6 @@ func (mg *ProtocolMapper) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
-/*
-GetProviderReference of this ProtocolMapper.
-Deprecated: Use GetProviderConfigReference.
-*/
-func (mg *ProtocolMapper) GetProviderReference() *xpv1.Reference {
-	return mg.Spec.ProviderReference
-}
-
 // GetPublishConnectionDetailsTo of this ProtocolMapper.
 func (mg *ProtocolMapper) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
 	return mg.Spec.PublishConnectionDetailsTo
@@ -63,14 +55,6 @@ func (mg *ProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
 // SetProviderConfigReference of this ProtocolMapper.
 func (mg *ProtocolMapper) SetProviderConfigReference(r *xpv1.Reference) {
 	mg.Spec.ProviderConfigReference = r
-}
-
-/*
-SetProviderReference of this ProtocolMapper.
-Deprecated: Use SetProviderConfigReference.
-*/
-func (mg *ProtocolMapper) SetProviderReference(r *xpv1.Reference) {
-	mg.Spec.ProviderReference = r
 }
 
 // SetPublishConnectionDetailsTo of this ProtocolMapper.
@@ -103,14 +87,6 @@ func (mg *RoleMapper) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
-/*
-GetProviderReference of this RoleMapper.
-Deprecated: Use GetProviderConfigReference.
-*/
-func (mg *RoleMapper) GetProviderReference() *xpv1.Reference {
-	return mg.Spec.ProviderReference
-}
-
 // GetPublishConnectionDetailsTo of this RoleMapper.
 func (mg *RoleMapper) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
 	return mg.Spec.PublishConnectionDetailsTo
@@ -139,14 +115,6 @@ func (mg *RoleMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
 // SetProviderConfigReference of this RoleMapper.
 func (mg *RoleMapper) SetProviderConfigReference(r *xpv1.Reference) {
 	mg.Spec.ProviderConfigReference = r
-}
-
-/*
-SetProviderReference of this RoleMapper.
-Deprecated: Use SetProviderConfigReference.
-*/
-func (mg *RoleMapper) SetProviderReference(r *xpv1.Reference) {
-	mg.Spec.ProviderReference = r
 }
 
 // SetPublishConnectionDetailsTo of this RoleMapper.

@@ -1,0 +1,40 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/client
+  labels:
+    testing.upbound.io/example-name: openid_client
+  name: openid-client
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    enabled: true
+    extraConfig:
+      key1: value1
+      key2: value2
+    loginTheme: keycloak
+    name: test client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    validRedirectUris:
+    - http://localhost:8080/openid-callback
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/client
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

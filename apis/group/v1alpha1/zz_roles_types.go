@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
 Copyright 2022 Upbound Inc.
 */
@@ -13,15 +17,36 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
+type RolesInitParameters struct {
+
+	// Indicates if the list of roles is exhaustive. In this case, roles that are manually added to the group will be removed. Defaults to true.
+	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
+}
+
 type RolesObservation struct {
+
+	// Indicates if the list of roles is exhaustive. In this case, roles that are manually added to the group will be removed. Defaults to true.
+	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
+
+	// The ID of the group this resource should manage roles for.
+	GroupID *string `json:"groupId,omitempty" tf:"group_id,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// The realm this group exists in.
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// A list of role IDs to map to the group.
+	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
 }
 
 type RolesParameters struct {
 
+	// Indicates if the list of roles is exhaustive. In this case, roles that are manually added to the group will be removed. Defaults to true.
 	// +kubebuilder:validation:Optional
 	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
 
+	// The ID of the group this resource should manage roles for.
 	// +crossplane:generate:reference:type=Group
 	// +kubebuilder:validation:Optional
 	GroupID *string `json:"groupId,omitempty" tf:"group_id,omitempty"`
@@ -34,6 +59,7 @@ type RolesParameters struct {
 	// +kubebuilder:validation:Optional
 	GroupIDSelector *v1.Selector `json:"groupIdSelector,omitempty" tf:"-"`
 
+	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -46,6 +72,7 @@ type RolesParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// A list of role IDs to map to the group.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
 	// +kubebuilder:validation:Optional
 	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
@@ -63,6 +90,17 @@ type RolesParameters struct {
 type RolesSpec struct {
 	v1.ResourceSpec `json:",inline"`
 	ForProvider     RolesParameters `json:"forProvider"`
+	// THIS IS A BETA FIELD. It will be honored
+	// unless the Management Policies feature flag is disabled.
+	// InitProvider holds the same fields as ForProvider, with the exception
+	// of Identifier and other resource reference fields. The fields that are
+	// in InitProvider are merged into ForProvider when the resource is created.
+	// The same fields are also added to the terraform ignore_changes hook, to
+	// avoid updating them after creation. This is useful for fields that are
+	// required on creation, but we do not desire to update them after creation,
+	// for example because of an external controller is managing them, like an
+	// autoscaler.
+	InitProvider RolesInitParameters `json:"initProvider,omitempty"`
 }
 
 // RolesStatus defines the observed state of Roles.
@@ -73,7 +111,7 @@ type RolesStatus struct {
 
 // +kubebuilder:object:root=true
 
-// Roles is the Schema for the Roless API. <no value>
+// Roles is the Schema for the Roless API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

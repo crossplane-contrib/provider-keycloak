@@ -18,8 +18,14 @@ Copyright 2021 Upbound Inc.
 //go:generate bash -c "find ../internal/controller -type d -empty -delete"
 //go:generate rm -rf ../examples-generated
 
+// HACK: fetch latest docs from master branch, git clone https://github.com/mrparkers/terraform-provider-keycloak/${TERRAFORM_DOCS_PATH} to ../.work/${TERRAFORM_PROVIDER_SOURCE}/${TERRAFORM_DOCS_PATH}
+//go:generate rm -rf ../.work/latest_provider
+//go:generate git clone https://github.com/mrparkers/terraform-provider-keycloak.git ../.work/latest_provider
+//go:generate rm -rf ../.work/${TERRAFORM_PROVIDER_SOURCE}/${TERRAFORM_DOCS_PATH}
+//go:generate cp -r ../.work/latest_provider/${TERRAFORM_DOCS_PATH}  ../.work/${TERRAFORM_PROVIDER_SOURCE}/${TERRAFORM_DOCS_PATH}
+//go:generate rm -rf ../.work/latest_provider
 // Generate documentation from Terraform docs.
-//go:generate go run github.com/upbound/upjet/cmd/scraper -n ${TERRAFORM_PROVIDER_SOURCE} -r ../.work/${TERRAFORM_PROVIDER_SOURCE}/${TERRAFORM_DOCS_PATH} -o ../config/provider-metadata.yaml
+//go:generate go run github.com/crossplane/upjet/cmd/scraper -n ${TERRAFORM_PROVIDER_SOURCE} -r ../.work/${TERRAFORM_PROVIDER_SOURCE}/${TERRAFORM_DOCS_PATH} -o ../config/provider-metadata.yaml --prelude-xpath "//text()[contains(., \"page_title\")]"
 
 // Run Upjet generator
 //go:generate go run ../cmd/generator/main.go ..

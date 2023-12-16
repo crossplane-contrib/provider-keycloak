@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
 Copyright 2022 Upbound Inc.
 */
@@ -13,12 +17,29 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
+type MembershipsInitParameters struct {
+
+	// A list of usernames that belong to this group.
+	Members []*string `json:"members,omitempty" tf:"members,omitempty"`
+}
+
 type MembershipsObservation struct {
+
+	// The ID of the group this resource should manage memberships for.
+	GroupID *string `json:"groupId,omitempty" tf:"group_id,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// A list of usernames that belong to this group.
+	Members []*string `json:"members,omitempty" tf:"members,omitempty"`
+
+	// The realm this group exists in.
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 }
 
 type MembershipsParameters struct {
 
+	// The ID of the group this resource should manage memberships for.
 	// +crossplane:generate:reference:type=Group
 	// +kubebuilder:validation:Optional
 	GroupID *string `json:"groupId,omitempty" tf:"group_id,omitempty"`
@@ -31,9 +52,11 @@ type MembershipsParameters struct {
 	// +kubebuilder:validation:Optional
 	GroupIDSelector *v1.Selector `json:"groupIdSelector,omitempty" tf:"-"`
 
-	// +kubebuilder:validation:Required
-	Members []*string `json:"members" tf:"members,omitempty"`
+	// A list of usernames that belong to this group.
+	// +kubebuilder:validation:Optional
+	Members []*string `json:"members,omitempty" tf:"members,omitempty"`
 
+	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -51,6 +74,17 @@ type MembershipsParameters struct {
 type MembershipsSpec struct {
 	v1.ResourceSpec `json:",inline"`
 	ForProvider     MembershipsParameters `json:"forProvider"`
+	// THIS IS A BETA FIELD. It will be honored
+	// unless the Management Policies feature flag is disabled.
+	// InitProvider holds the same fields as ForProvider, with the exception
+	// of Identifier and other resource reference fields. The fields that are
+	// in InitProvider are merged into ForProvider when the resource is created.
+	// The same fields are also added to the terraform ignore_changes hook, to
+	// avoid updating them after creation. This is useful for fields that are
+	// required on creation, but we do not desire to update them after creation,
+	// for example because of an external controller is managing them, like an
+	// autoscaler.
+	InitProvider MembershipsInitParameters `json:"initProvider,omitempty"`
 }
 
 // MembershipsStatus defines the observed state of Memberships.
@@ -61,7 +95,7 @@ type MembershipsStatus struct {
 
 // +kubebuilder:object:root=true
 
-// Memberships is the Schema for the Membershipss API. <no value>
+// Memberships is the Schema for the Membershipss API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
@@ -71,8 +105,9 @@ type MembershipsStatus struct {
 type Memberships struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              MembershipsSpec   `json:"spec"`
-	Status            MembershipsStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.members) || (has(self.initProvider) && has(self.initProvider.members))",message="spec.forProvider.members is a required parameter"
+	Spec   MembershipsSpec   `json:"spec"`
+	Status MembershipsStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
