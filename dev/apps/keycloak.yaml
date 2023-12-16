@@ -1,0 +1,45 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: keycloak
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://codecentric.github.io/helm-charts
+    targetRevision: 2.2.2
+    chart: keycloakx
+    helm:
+      values: | 
+        command:
+          - "/opt/keycloak/bin/kc.sh"
+          - "start"
+          - "--http-enabled=true"
+          - "--http-port=8080"
+          - "--hostname-strict=false"
+          - "--hostname-strict-https=false"
+        extraEnv: |
+          - name: KEYCLOAK_ADMIN
+            value: admin
+          - name: KEYCLOAK_ADMIN_PASSWORD
+            value: admin
+          - name: JAVA_OPTS_APPEND
+            value: >-
+              -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+        service:
+          type: LoadBalancer
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: keycloak
+  # Sync policy
+  syncPolicy:
+    automated: # automated sync by default retries failed attempts 5 times with following delays between attempts ( 5s, 10s, 20s, 40s, 80s ); retry controlled using `retry` field.
+      prune: true # Specifies if resources should be pruned during auto-syncing ( false by default ).
+      selfHeal: true # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).
+      allowEmpty: false # Allows deleting all application resources during automatic syncing ( false by default ).
+    syncOptions:     # Sync options which modifies sync behavior
+    - CreateNamespace=true # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.
+    - PruneLast=true # Allow the ability for resource pruning to happen as a final, implicit wave of a sync operation
+    retry:
+      limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
