@@ -1,0 +1,60 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/realm
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    accessCodeLifespan: 1h
+    attributes:
+      mycustomAttribute: myCustomValue
+    displayName: my realm
+    displayNameHtml: <b>my realm</b>
+    enabled: true
+    internationalization:
+    - defaultLocale: en
+      supportedLocales:
+      - en
+      - de
+      - es
+    loginTheme: base
+    passwordPolicy: upperCase(1) and length(8) and forceExpiredPasswordChange(365)
+      and notUsername
+    realm: my-realm
+    securityDefenses:
+    - bruteForceDetection:
+      - failureResetTimeSeconds: 43200
+        maxFailureWaitSeconds: 900
+        maxLoginFailures: 30
+        minimumQuickLoginWaitSeconds: 60
+        permanentLockout: false
+        quickLoginCheckMilliSeconds: 1000
+        waitIncrementSeconds: 60
+      headers:
+      - contentSecurityPolicy: frame-src 'self'; frame-ancestors 'self'; object-src
+          'none';
+        contentSecurityPolicyReportOnly: ""
+        strictTransportSecurity: max-age=31536000; includeSubDomains
+        xContentTypeOptions: nosniff
+        xFrameOptions: DENY
+        xRobotsTag: none
+        xXssProtection: 1; mode=block
+    smtpServer:
+    - auth:
+      - passwordSecretRef:
+          key: example-key
+          name: example-secret
+          namespace: upbound-system
+        username: tom
+      from: example@example.com
+      host: smtp.example.com
+    sslRequired: external
+    webAuthnPolicy:
+    - relyingPartyEntityName: Example
+      relyingPartyId: keycloak.example.com
+      signatureAlgorithms:
+      - ES256
+      - RS256

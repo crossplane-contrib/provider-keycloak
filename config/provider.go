@@ -8,8 +8,8 @@ import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
 
-	"github.com/upbound/upjet/pkg/config"
-	ujconfig "github.com/upbound/upjet/pkg/config"
+	"github.com/crossplane/upjet/pkg/config"
+	ujconfig "github.com/crossplane/upjet/pkg/config"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/group"
 	"github.com/crossplane-contrib/provider-keycloak/config/mapper"

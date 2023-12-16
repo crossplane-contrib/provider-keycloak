@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
 Copyright 2022 Upbound Inc.
 */
@@ -13,15 +17,36 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
+type GroupsInitParameters struct {
+
+	// Indicates if the list of the user's groups is exhaustive. In this case, groups that are manually added to the user will be removed. Defaults to true.
+	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
+}
+
 type GroupsObservation struct {
+
+	// Indicates if the list of the user's groups is exhaustive. In this case, groups that are manually added to the user will be removed. Defaults to true.
+	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
+
+	// A list of group IDs that the user is member of.
+	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// The realm this group exists in.
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The ID of the user this resource should manage groups for.
+	UserID *string `json:"userId,omitempty" tf:"user_id,omitempty"`
 }
 
 type GroupsParameters struct {
 
+	// Indicates if the list of the user's groups is exhaustive. In this case, groups that are manually added to the user will be removed. Defaults to true.
 	// +kubebuilder:validation:Optional
 	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
 
+	// A list of group IDs that the user is member of.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
 	// +kubebuilder:validation:Optional
 	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
@@ -34,6 +59,7 @@ type GroupsParameters struct {
 	// +kubebuilder:validation:Optional
 	GroupIdsSelector *v1.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
 
+	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -46,6 +72,7 @@ type GroupsParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The ID of the user this resource should manage groups for.
 	// +crossplane:generate:reference:type=User
 	// +kubebuilder:validation:Optional
 	UserID *string `json:"userId,omitempty" tf:"user_id,omitempty"`
@@ -63,6 +90,17 @@ type GroupsParameters struct {
 type GroupsSpec struct {
 	v1.ResourceSpec `json:",inline"`
 	ForProvider     GroupsParameters `json:"forProvider"`
+	// THIS IS A BETA FIELD. It will be honored
+	// unless the Management Policies feature flag is disabled.
+	// InitProvider holds the same fields as ForProvider, with the exception
+	// of Identifier and other resource reference fields. The fields that are
+	// in InitProvider are merged into ForProvider when the resource is created.
+	// The same fields are also added to the terraform ignore_changes hook, to
+	// avoid updating them after creation. This is useful for fields that are
+	// required on creation, but we do not desire to update them after creation,
+	// for example because of an external controller is managing them, like an
+	// autoscaler.
+	InitProvider GroupsInitParameters `json:"initProvider,omitempty"`
 }
 
 // GroupsStatus defines the observed state of Groups.
@@ -73,7 +111,7 @@ type GroupsStatus struct {
 
 // +kubebuilder:object:root=true
 
-// Groups is the Schema for the Groupss API. <no value>
+// Groups is the Schema for the Groupss API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

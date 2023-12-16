@@ -1,0 +1,67 @@
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: Groups
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/groups
+  labels:
+    testing.upbound.io/example-name: user_groups
+  name: user-groups
+spec:
+  forProvider:
+    groupIdsRefs:
+    - name: group
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    userIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: user
+
+---
+
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/groups
+  labels:
+    testing.upbound.io/example-name: group
+  name: group
+spec:
+  forProvider:
+    name: foo
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/groups
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/groups
+  labels:
+    testing.upbound.io/example-name: user
+  name: user
+spec:
+  forProvider:
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    username: my-user

@@ -27,14 +27,6 @@ func (mg *GroupMembershipProtocolMapper) GetProviderConfigReference() *xpv1.Refe
 	return mg.Spec.ProviderConfigReference
 }
 
-/*
-GetProviderReference of this GroupMembershipProtocolMapper.
-Deprecated: Use GetProviderConfigReference.
-*/
-func (mg *GroupMembershipProtocolMapper) GetProviderReference() *xpv1.Reference {
-	return mg.Spec.ProviderReference
-}
-
 // GetPublishConnectionDetailsTo of this GroupMembershipProtocolMapper.
 func (mg *GroupMembershipProtocolMapper) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
 	return mg.Spec.PublishConnectionDetailsTo
@@ -63,14 +55,6 @@ func (mg *GroupMembershipProtocolMapper) SetManagementPolicies(r xpv1.Management
 // SetProviderConfigReference of this GroupMembershipProtocolMapper.
 func (mg *GroupMembershipProtocolMapper) SetProviderConfigReference(r *xpv1.Reference) {
 	mg.Spec.ProviderConfigReference = r
-}
-
-/*
-SetProviderReference of this GroupMembershipProtocolMapper.
-Deprecated: Use SetProviderConfigReference.
-*/
-func (mg *GroupMembershipProtocolMapper) SetProviderReference(r *xpv1.Reference) {
-	mg.Spec.ProviderReference = r
 }
 
 // SetPublishConnectionDetailsTo of this GroupMembershipProtocolMapper.

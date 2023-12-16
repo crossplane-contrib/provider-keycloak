@@ -1,0 +1,31 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: RequiredAction
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/requiredaction
+  labels:
+    testing.upbound.io/example-name: required_action
+  name: required-action
+spec:
+  forProvider:
+    alias: webauthn-register
+    enabled: true
+    name: Webauthn Register
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/requiredaction
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

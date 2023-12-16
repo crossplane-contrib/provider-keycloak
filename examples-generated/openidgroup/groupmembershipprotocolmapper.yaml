@@ -1,0 +1,57 @@
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: GroupMembershipProtocolMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/groupmembershipprotocolmapper
+  labels:
+    testing.upbound.io/example-name: group_membership_mapper
+  name: group-membership-mapper
+spec:
+  forProvider:
+    claimName: groups
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: openid_client
+    name: group-membership-mapper
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/groupmembershipprotocolmapper
+  labels:
+    testing.upbound.io/example-name: openid_client
+  name: openid-client
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    enabled: true
+    name: client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    validRedirectUris:
+    - http://localhost:8080/openid-callback
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/groupmembershipprotocolmapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
