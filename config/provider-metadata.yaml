@@ -1317,6 +1317,57 @@ resources:
             provider_alias: '- (Required) Alias of the identity provider.'
             realm_id: '- (Required) The realm that the identity provider exists in.'
         importStatements: []
+    keycloak_ldap_custom_mapper:
+        subCategory: ""
+        name: keycloak_ldap_custom_mapper
+        title: keycloak_ldap_custom_mapper Resource
+        examples:
+            - name: custom_mapper
+              manifest: |-
+                {
+                  "config": {
+                    "attribute.name": "name",
+                    "attribute.value": "value"
+                  },
+                  "ldap_user_federation_id": "${keycloak_ldap_user_federation.openldap.id}",
+                  "name": "custom-mapper",
+                  "provider_id": "custom-provider-registered-in-keycloak",
+                  "provider_type": "com.example.custom.ldap.mappers.CustomMapper",
+                  "realm_id": "${keycloak_ldap_user_federation.openldap.realm_id}"
+                }
+              references:
+                ldap_user_federation_id: keycloak_ldap_user_federation.openldap.id
+                realm_id: keycloak_ldap_user_federation.openldap.realm_id
+              dependencies:
+                keycloak_ldap_user_federation.ldap_user_federation: |-
+                    {
+                      "bind_credential": "admin",
+                      "bind_dn": "cn=admin,dc=example,dc=org",
+                      "connection_url": "ldap://openldap",
+                      "name": "openldap",
+                      "rdn_ldap_attribute": "cn",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "user_object_classes": [
+                        "simpleSecurityObject",
+                        "organizationalRole"
+                      ],
+                      "username_ldap_attribute": "cn",
+                      "users_dn": "dc=example,dc=org",
+                      "uuid_ldap_attribute": "entryDN"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            config: '- (Optional) A map with key / value pairs for configuring the LDAP mapper. The supported keys depend on the protocol mapper.'
+            ldap_user_federation_id: '- (Required) The ID of the LDAP user federation provider to attach this mapper to.'
+            name: '- (Required) Display name of this mapper when displayed in the console.'
+            provider_id: '- (Required) The id of the LDAP mapper implemented in MapperFactory.'
+            provider_type: '- (Required) The fully-qualified Java class name of the custom LDAP mapper.'
+            realm_id: '- (Required) The realm that this LDAP mapper will exist in.'
+        importStatements: []
     keycloak_ldap_full_name_mapper:
         subCategory: ""
         name: keycloak_ldap_full_name_mapper
@@ -3655,6 +3706,7 @@ resources:
                   "name": "my-rsa-key",
                   "priority": 100,
                   "private_key": "\u003cyour rsa private key\u003e",
+                  "provider_id": "rsa",
                   "realm_id": "${keycloak_realm.realm.id}"
                 }
               references:
@@ -3666,13 +3718,14 @@ resources:
                     }
         argumentDocs:
             active: '- (Optional) When false, key in not used for signing. Defaults to true.'
-            algorithm: '- (Optional) Intended algorithm for the key. Defaults to RS256'
+            algorithm: '- (Optional) Intended algorithm for the key. Defaults to RS256. Use RSA-OAEP for encryption keys'
             certificate: '- (Required) X509 Certificate encoded in PEM format.'
             enabled: '- (Optional) When false, key is not accessible in this realm. Defaults to true.'
             keystore_size: '- (Optional) Size for the generated keys. Defaults to 2048.'
             name: '- (Required) Display name of provider when linked in admin console.'
             priority: '- (Optional) Priority for the provider. Defaults to 0'
             private_key: '- (Required) Private RSA Key encoded in PEM format.'
+            provider_id: '- (Optional) Use rsa for signing keys, rsa-enc for encryption keys'
             realm_id: '- (Required) The realm this keystore exists in.'
         importStatements: []
     keycloak_realm_keystore_rsa_generated:
