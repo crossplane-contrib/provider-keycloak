@@ -11,18 +11,18 @@ import (
 	"github.com/crossplane/upjet/pkg/config"
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
-	"github.com/crossplane-contrib/provider-keycloak/config/group"
-	"github.com/crossplane-contrib/provider-keycloak/config/mapper"
-	"github.com/crossplane-contrib/provider-keycloak/config/openidclient"
-	"github.com/crossplane-contrib/provider-keycloak/config/openidgroup"
-	"github.com/crossplane-contrib/provider-keycloak/config/realm"
-	"github.com/crossplane-contrib/provider-keycloak/config/role"
-	"github.com/crossplane-contrib/provider-keycloak/config/user"
+	"github.com/stakater/provider-keycloak/config/group"
+	"github.com/stakater/provider-keycloak/config/mapper"
+	"github.com/stakater/provider-keycloak/config/openidclient"
+	"github.com/stakater/provider-keycloak/config/openidgroup"
+	"github.com/stakater/provider-keycloak/config/realm"
+	"github.com/stakater/provider-keycloak/config/role"
+	"github.com/stakater/provider-keycloak/config/user"
 )
 
 const (
 	resourcePrefix = "keycloak"
-	modulePath     = "github.com/crossplane-contrib/provider-keycloak"
+	modulePath     = "github.com/stakater/provider-keycloak"
 	rootGroup      = "keycloak.crossplane.io"
 )
 
@@ -72,11 +72,11 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 			switch k {
 			case "realm_id":
 				r.References["realm_id"] = config.Reference{
-					Type: "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm",
+					Type: "github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm",
 				}
 			case "client_id":
 				r.References["client_id"] = config.Reference{
-					Type: "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
+					Type: "github.com/stakater/provider-keycloak/apis/openidclient/v1alpha1.Client",
 				}
 			}
 		}

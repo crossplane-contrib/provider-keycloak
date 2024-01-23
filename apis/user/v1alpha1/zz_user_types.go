@@ -179,7 +179,7 @@ type UserParameters struct {
 	LastName *string `json:"lastName,omitempty" tf:"last_name,omitempty"`
 
 	// The realm this user belongs to.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

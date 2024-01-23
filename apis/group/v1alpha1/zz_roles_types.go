@@ -60,7 +60,7 @@ type RolesParameters struct {
 	GroupIDSelector *v1.Selector `json:"groupIdSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -73,7 +73,7 @@ type RolesParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of role IDs to map to the group.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/role/v1alpha1.Role
 	// +kubebuilder:validation:Optional
 	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
 
