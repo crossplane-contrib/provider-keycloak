@@ -2,7 +2,7 @@
 # Setup Project
 
 PROJECT_NAME ?= provider-keycloak
-PROJECT_REPO ?= github.com/crossplane-contrib/$(PROJECT_NAME)
+PROJECT_REPO ?= github.com/stakater/$(PROJECT_NAME)
 
 export TERRAFORM_VERSION ?= 1.4.6
 
@@ -58,17 +58,17 @@ UP_CHANNEL = stable
 # ====================================================================================
 # Setup Images
 
-REGISTRY_ORGS ?= xpkg.upbound.io/upbound
+REGISTRY_ORGS ?= xpkg.upbound.io/stakater
 IMAGES = $(PROJECT_NAME)
 -include build/makelib/imagelight.mk
 
 # ====================================================================================
 # Setup XPKG
 
-XPKG_REG_ORGS ?= xpkg.upbound.io/crossplane-contrib
+XPKG_REG_ORGS ?= xpkg.upbound.io/stakater
 # NOTE(hasheddan): skip promoting on xpkg.upbound.io as channel tags are
 # inferred.
-XPKG_REG_ORGS_NO_PROMOTE ?= xpkg.upbound.io/crossplane-contrib
+XPKG_REG_ORGS_NO_PROMOTE ?= xpkg.upbound.io/stakater
 XPKGS = $(PROJECT_NAME)
 -include build/makelib/xpkg.mk
 

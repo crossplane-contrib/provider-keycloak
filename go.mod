@@ -1,4 +1,4 @@
-module github.com/crossplane-contrib/provider-keycloak
+module github.com/stakater/provider-keycloak
 
 go 1.21
 
