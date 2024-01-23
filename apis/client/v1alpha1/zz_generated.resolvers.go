@@ -7,11 +7,11 @@ package v1alpha1
 
 import (
 	"context"
+	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
+	errors "github.com/pkg/errors"
 	v1alpha1 "github.com/stakater/provider-keycloak/apis/openidclient/v1alpha1"
 	v1alpha11 "github.com/stakater/provider-keycloak/apis/realm/v1alpha1"
 	v1alpha12 "github.com/stakater/provider-keycloak/apis/role/v1alpha1"
-	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
-	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
