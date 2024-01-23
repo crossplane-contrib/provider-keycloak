@@ -25,12 +25,12 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	"github.com/crossplane-contrib/provider-keycloak/apis"
-	"github.com/crossplane-contrib/provider-keycloak/apis/v1alpha1"
-	"github.com/crossplane-contrib/provider-keycloak/config"
-	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
-	"github.com/crossplane-contrib/provider-keycloak/internal/controller"
-	"github.com/crossplane-contrib/provider-keycloak/internal/features"
+	"github.com/stakater/provider-keycloak/apis"
+	"github.com/stakater/provider-keycloak/apis/v1alpha1"
+	"github.com/stakater/provider-keycloak/config"
+	"github.com/stakater/provider-keycloak/internal/clients"
+	"github.com/stakater/provider-keycloak/internal/controller"
+	"github.com/stakater/provider-keycloak/internal/features"
 )
 
 func main() {

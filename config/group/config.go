@@ -25,7 +25,7 @@ func Configure(p *config.Provider) {
 			Type: "Group",
 		}
 		r.References["role_ids"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
+			Type: "github.com/stakater/provider-keycloak/apis/role/v1alpha1.Role",
 		}
 	})
 }

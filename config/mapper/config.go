@@ -12,7 +12,7 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "client"
 
 		r.References["role_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
+			Type: "github.com/stakater/provider-keycloak/apis/role/v1alpha1.Role",
 		}
 	})
 }

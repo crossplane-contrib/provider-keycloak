@@ -4,4 +4,4 @@ metadata:
   name: provider-keycloak
   namespace: crossplane-system
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v0.0.1
+  package: xpkg.upbound.io/stakater/provider-keycloak:v0.0.1

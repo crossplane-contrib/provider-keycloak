@@ -47,7 +47,7 @@ type GroupsParameters struct {
 	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
 
 	// A list of group IDs that the user is member of.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/group/v1alpha1.Group
 	// +kubebuilder:validation:Optional
 	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
 
@@ -60,7 +60,7 @@ type GroupsParameters struct {
 	GroupIdsSelector *v1.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

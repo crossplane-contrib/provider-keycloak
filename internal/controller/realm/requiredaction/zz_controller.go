@@ -23,7 +23,7 @@ import (
 	"github.com/crossplane/upjet/pkg/terraform"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1"
+	v1alpha1 "github.com/stakater/provider-keycloak/apis/realm/v1alpha1"
 )
 
 // Setup adds a controller that reconciles RequiredAction managed resources.

@@ -12,7 +12,7 @@ import (
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/crossplane/upjet/pkg/controller"
 
-	"github.com/crossplane-contrib/provider-keycloak/apis/v1beta1"
+	"github.com/stakater/provider-keycloak/apis/v1beta1"
 )
 
 // Setup adds a controller that reconciles ProviderConfigs by accounting for

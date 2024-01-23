@@ -16,7 +16,7 @@ func Configure(p *config.Provider) {
 		}
 
 		r.References["group_ids"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group",
+			Type: "github.com/stakater/provider-keycloak/apis/group/v1alpha1.Group",
 		}
 	})
 }

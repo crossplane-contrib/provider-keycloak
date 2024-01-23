@@ -14,15 +14,15 @@ package apis
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1"
-	v1alpha1group "github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1"
-	v1alpha1openidclient "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1"
-	v1alpha1openidgroup "github.com/crossplane-contrib/provider-keycloak/apis/openidgroup/v1alpha1"
-	v1alpha1realm "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1"
-	v1alpha1role "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1"
-	v1alpha1user "github.com/crossplane-contrib/provider-keycloak/apis/user/v1alpha1"
-	v1alpha1apis "github.com/crossplane-contrib/provider-keycloak/apis/v1alpha1"
-	v1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/v1beta1"
+	v1alpha1 "github.com/stakater/provider-keycloak/apis/client/v1alpha1"
+	v1alpha1group "github.com/stakater/provider-keycloak/apis/group/v1alpha1"
+	v1alpha1openidclient "github.com/stakater/provider-keycloak/apis/openidclient/v1alpha1"
+	v1alpha1openidgroup "github.com/stakater/provider-keycloak/apis/openidgroup/v1alpha1"
+	v1alpha1realm "github.com/stakater/provider-keycloak/apis/realm/v1alpha1"
+	v1alpha1role "github.com/stakater/provider-keycloak/apis/role/v1alpha1"
+	v1alpha1user "github.com/stakater/provider-keycloak/apis/user/v1alpha1"
+	v1alpha1apis "github.com/stakater/provider-keycloak/apis/v1alpha1"
+	v1beta1 "github.com/stakater/provider-keycloak/apis/v1beta1"
 )
 
 func init() {

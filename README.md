@@ -19,7 +19,7 @@ metadata:
   name: provider-keycloak
   namespace: crossplane-system
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v0.0.1
+  package: xpkg.upbound.io/stakater/provider-keycloak:v0.0.1
 ``` 
 
 
@@ -51,4 +51,4 @@ make build
 ## Report a Bug
 
 For filing bugs, suggesting improvements, or requesting new features, please
-open an [issue](https://github.com/crossplane-contrib/provider-keycloak/issues).
+open an [issue](https://github.com/stakater/provider-keycloak/issues).
