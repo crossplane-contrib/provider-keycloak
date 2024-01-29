@@ -11,9 +11,10 @@ import (
 
 	protocolmapper "github.com/stakater/provider-keycloak/internal/controller/client/protocolmapper"
 	rolemapper "github.com/stakater/provider-keycloak/internal/controller/client/rolemapper"
+	roles "github.com/stakater/provider-keycloak/internal/controller/defaults/roles"
 	group "github.com/stakater/provider-keycloak/internal/controller/group/group"
 	memberships "github.com/stakater/provider-keycloak/internal/controller/group/memberships"
-	roles "github.com/stakater/provider-keycloak/internal/controller/group/roles"
+	rolesgroup "github.com/stakater/provider-keycloak/internal/controller/group/roles"
 	client "github.com/stakater/provider-keycloak/internal/controller/openidclient/client"
 	clientdefaultscopes "github.com/stakater/provider-keycloak/internal/controller/openidclient/clientdefaultscopes"
 	clientscope "github.com/stakater/provider-keycloak/internal/controller/openidclient/clientscope"
@@ -32,9 +33,10 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		protocolmapper.Setup,
 		rolemapper.Setup,
+		roles.Setup,
 		group.Setup,
 		memberships.Setup,
-		roles.Setup,
+		rolesgroup.Setup,
 		client.Setup,
 		clientdefaultscopes.Setup,
 		clientscope.Setup,

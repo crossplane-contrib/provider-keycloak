@@ -15,6 +15,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 
 	v1alpha1 "github.com/stakater/provider-keycloak/apis/client/v1alpha1"
+	v1alpha1defaults "github.com/stakater/provider-keycloak/apis/defaults/v1alpha1"
 	v1alpha1group "github.com/stakater/provider-keycloak/apis/group/v1alpha1"
 	v1alpha1openidclient "github.com/stakater/provider-keycloak/apis/openidclient/v1alpha1"
 	v1alpha1openidgroup "github.com/stakater/provider-keycloak/apis/openidgroup/v1alpha1"
@@ -29,6 +30,7 @@ func init() {
 	// Register the types with the Scheme so the components can map objects to GroupVersionKinds and back
 	AddToSchemes = append(AddToSchemes,
 		v1alpha1.SchemeBuilder.AddToScheme,
+		v1alpha1defaults.SchemeBuilder.AddToScheme,
 		v1alpha1group.SchemeBuilder.AddToScheme,
 		v1alpha1openidclient.SchemeBuilder.AddToScheme,
 		v1alpha1openidgroup.SchemeBuilder.AddToScheme,

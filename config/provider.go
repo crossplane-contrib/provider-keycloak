@@ -18,6 +18,7 @@ import (
 	"github.com/stakater/provider-keycloak/config/realm"
 	"github.com/stakater/provider-keycloak/config/role"
 	"github.com/stakater/provider-keycloak/config/user"
+	"github.com/stakater/provider-keycloak/config/defaults"
 )
 
 const (
@@ -51,6 +52,7 @@ func GetProvider() *ujconfig.Provider {
 		openidgroup.Configure,
 		mapper.Configure,
 		user.Configure,
+		defaults.Configure,
 	} {
 		configure(pc)
 	}
