@@ -56,6 +56,7 @@ type IdentityProviderInitParameters struct {
 	EntityID *string `json:"entityId,omitempty" tf:"entity_id,omitempty"`
 
 	// A map of key/value pairs to add extra configuration to this identity provider. Use this attribute at your own risk, as custom attributes may conflict with top-level configuration attributes in future provider updates.
+	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that there is not yet existing Keycloak account linked with the authenticated identity provider account. Defaults to first broker login.
@@ -112,6 +113,19 @@ type IdentityProviderInitParameters struct {
 	// The ID of the identity provider to use. Defaults to saml, which should be used unless you have extended Keycloak and provided your own implementation.
 	// provider id, is always saml, unless you have a custom implementation
 	ProviderID *string `json:"providerId,omitempty" tf:"provider_id,omitempty"`
+
+	// The name of the realm. This is unique across Keycloak.
+	// Realm Name
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// Reference to a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// Signing Algorithm. Defaults to empty.
 	// Signing Algorithm.
@@ -197,6 +211,7 @@ type IdentityProviderObservation struct {
 	EntityID *string `json:"entityId,omitempty" tf:"entity_id,omitempty"`
 
 	// A map of key/value pairs to add extra configuration to this identity provider. Use this attribute at your own risk, as custom attributes may conflict with top-level configuration attributes in future provider updates.
+	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that there is not yet existing Keycloak account linked with the authenticated identity provider account. Defaults to first broker login.
@@ -357,6 +372,7 @@ type IdentityProviderParameters struct {
 
 	// A map of key/value pairs to add extra configuration to this identity provider. Use this attribute at your own risk, as custom attributes may conflict with top-level configuration attributes in future provider updates.
 	// +kubebuilder:validation:Optional
+	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that there is not yet existing Keycloak account linked with the authenticated identity provider account. Defaults to first broker login.
@@ -522,13 +538,13 @@ type IdentityProviderStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // IdentityProvider is the Schema for the IdentityProviders API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type IdentityProvider struct {
 	metav1.TypeMeta   `json:",inline"`

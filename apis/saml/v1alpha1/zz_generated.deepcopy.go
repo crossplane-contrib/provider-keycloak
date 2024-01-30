@@ -186,6 +186,21 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(string)
 		**out = **in
 	}
+	if in.Realm != nil {
+		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmRef != nil {
+		in, out := &in.RealmRef, &out.RealmRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmSelector != nil {
+		in, out := &in.RealmSelector, &out.RealmSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.SignatureAlgorithm != nil {
 		in, out := &in.SignatureAlgorithm, &out.SignatureAlgorithm
 		*out = new(string)

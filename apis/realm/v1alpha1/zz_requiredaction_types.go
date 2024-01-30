@@ -33,6 +33,18 @@ type RequiredActionInitParameters struct {
 
 	// The priority of the required action.
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
+
+	// The realm the required action exists in.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type RequiredActionObservation struct {
@@ -118,13 +130,13 @@ type RequiredActionStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // RequiredAction is the Schema for the RequiredActions API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type RequiredAction struct {
 	metav1.TypeMeta   `json:",inline"`

@@ -127,6 +127,18 @@ type ClientInitParameters struct {
 	// Defaults to client-secret. The authenticator type for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. A default Keycloak installation will have the following available types:
 	ClientAuthenticatorType *string `json:"clientAuthenticatorType,omitempty" tf:"client_authenticator_type,omitempty"`
 
+	// The Client ID for this client, referenced in the URI during authentication and in issued tokens.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/openidclient/v1alpha1.Client
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+
 	// Time a client session is allowed to be idle before it expires. Tokens are invalidated when a client session is expired. If not set it uses the standard SSO Session Idle value.
 	ClientOfflineSessionIdleTimeout *string `json:"clientOfflineSessionIdleTimeout,omitempty" tf:"client_offline_session_idle_timeout,omitempty"`
 
@@ -161,6 +173,7 @@ type ClientInitParameters struct {
 	ExcludeSessionStateFromAuthResponse *bool `json:"excludeSessionStateFromAuthResponse,omitempty" tf:"exclude_session_state_from_auth_response,omitempty"`
 
 	// A map of key/value pairs to add extra configuration attributes to this client. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates. For example, the extra_config map can be used to set Authentication Context Class Reference (ACR) to Level of Authentication (LoA) mapping
+	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// When true, frontchannel logout will be enabled for this client. Specify the url with frontchannel_logout_url. Defaults to false.
@@ -196,6 +209,18 @@ type ClientInitParameters struct {
 	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value “.
 	PkceCodeChallengeMethod *string `json:"pkceCodeChallengeMethod,omitempty" tf:"pkce_code_challenge_method,omitempty"`
 
+	// The realm this client is attached to.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
 	// When specified, this URL is prepended to any relative URLs found within valid_redirect_uris, web_origins, and admin_url. NOTE: Due to limitations in the Keycloak API, when the root_url attribute is used, the valid_redirect_uris, web_origins, and admin_url attributes will be required.
 	RootURL *string `json:"rootUrl,omitempty" tf:"root_url,omitempty"`
 
@@ -212,14 +237,17 @@ type ClientInitParameters struct {
 	UseRefreshTokensClientCredentials *bool `json:"useRefreshTokensClientCredentials,omitempty" tf:"use_refresh_tokens_client_credentials,omitempty"`
 
 	// A list of valid URIs a browser is permitted to redirect to after a successful logout.
+	// +listType=set
 	ValidPostLogoutRedirectUris []*string `json:"validPostLogoutRedirectUris,omitempty" tf:"valid_post_logout_redirect_uris,omitempty"`
 
 	// A list of valid URIs a browser is permitted to redirect to after a successful login or logout. Simple
 	// wildcards in the form of an asterisk can be used here. This attribute must be set if either standard_flow_enabled or implicit_flow_enabled
 	// is set to true.
+	// +listType=set
 	ValidRedirectUris []*string `json:"validRedirectUris,omitempty" tf:"valid_redirect_uris,omitempty"`
 
 	// A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *."
+	// +listType=set
 	WebOrigins []*string `json:"webOrigins,omitempty" tf:"web_origins,omitempty"`
 }
 
@@ -292,6 +320,7 @@ type ClientObservation struct {
 	ExcludeSessionStateFromAuthResponse *bool `json:"excludeSessionStateFromAuthResponse,omitempty" tf:"exclude_session_state_from_auth_response,omitempty"`
 
 	// A map of key/value pairs to add extra configuration attributes to this client. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates. For example, the extra_config map can be used to set Authentication Context Class Reference (ACR) to Level of Authentication (LoA) mapping
+	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// When true, frontchannel logout will be enabled for this client. Specify the url with frontchannel_logout_url. Defaults to false.
@@ -354,14 +383,17 @@ type ClientObservation struct {
 	UseRefreshTokensClientCredentials *bool `json:"useRefreshTokensClientCredentials,omitempty" tf:"use_refresh_tokens_client_credentials,omitempty"`
 
 	// A list of valid URIs a browser is permitted to redirect to after a successful logout.
+	// +listType=set
 	ValidPostLogoutRedirectUris []*string `json:"validPostLogoutRedirectUris,omitempty" tf:"valid_post_logout_redirect_uris,omitempty"`
 
 	// A list of valid URIs a browser is permitted to redirect to after a successful login or logout. Simple
 	// wildcards in the form of an asterisk can be used here. This attribute must be set if either standard_flow_enabled or implicit_flow_enabled
 	// is set to true.
+	// +listType=set
 	ValidRedirectUris []*string `json:"validRedirectUris,omitempty" tf:"valid_redirect_uris,omitempty"`
 
 	// A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *."
+	// +listType=set
 	WebOrigins []*string `json:"webOrigins,omitempty" tf:"web_origins,omitempty"`
 }
 
@@ -470,6 +502,7 @@ type ClientParameters struct {
 
 	// A map of key/value pairs to add extra configuration attributes to this client. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates. For example, the extra_config map can be used to set Authentication Context Class Reference (ACR) to Level of Authentication (LoA) mapping
 	// +kubebuilder:validation:Optional
+	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// When true, frontchannel logout will be enabled for this client. Specify the url with frontchannel_logout_url. Defaults to false.
@@ -551,16 +584,19 @@ type ClientParameters struct {
 
 	// A list of valid URIs a browser is permitted to redirect to after a successful logout.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	ValidPostLogoutRedirectUris []*string `json:"validPostLogoutRedirectUris,omitempty" tf:"valid_post_logout_redirect_uris,omitempty"`
 
 	// A list of valid URIs a browser is permitted to redirect to after a successful login or logout. Simple
 	// wildcards in the form of an asterisk can be used here. This attribute must be set if either standard_flow_enabled or implicit_flow_enabled
 	// is set to true.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	ValidRedirectUris []*string `json:"validRedirectUris,omitempty" tf:"valid_redirect_uris,omitempty"`
 
 	// A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *."
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	WebOrigins []*string `json:"webOrigins,omitempty" tf:"web_origins,omitempty"`
 }
 
@@ -588,13 +624,13 @@ type ClientStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // Client is the Schema for the Clients API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type Client struct {
 	metav1.TypeMeta   `json:",inline"`

@@ -21,6 +21,43 @@ type RolesInitParameters struct {
 
 	// Indicates if the list of roles is exhaustive. In this case, roles that are manually added to the group will be removed. Defaults to true.
 	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
+
+	// The ID of the group this resource should manage roles for.
+	// +crossplane:generate:reference:type=Group
+	GroupID *string `json:"groupId,omitempty" tf:"group_id,omitempty"`
+
+	// Reference to a Group to populate groupId.
+	// +kubebuilder:validation:Optional
+	GroupIDRef *v1.Reference `json:"groupIdRef,omitempty" tf:"-"`
+
+	// Selector for a Group to populate groupId.
+	// +kubebuilder:validation:Optional
+	GroupIDSelector *v1.Selector `json:"groupIdSelector,omitempty" tf:"-"`
+
+	// The realm this group exists in.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// A list of role IDs to map to the group.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/role/v1alpha1.Role
+	// +listType=set
+	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
+
+	// References to Role in role to populate roleIds.
+	// +kubebuilder:validation:Optional
+	RoleIdsRefs []v1.Reference `json:"roleIdsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Role in role to populate roleIds.
+	// +kubebuilder:validation:Optional
+	RoleIdsSelector *v1.Selector `json:"roleIdsSelector,omitempty" tf:"-"`
 }
 
 type RolesObservation struct {
@@ -37,6 +74,7 @@ type RolesObservation struct {
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// A list of role IDs to map to the group.
+	// +listType=set
 	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
 }
 
@@ -75,6 +113,7 @@ type RolesParameters struct {
 	// A list of role IDs to map to the group.
 	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/role/v1alpha1.Role
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
 
 	// References to Role in role to populate roleIds.
@@ -110,13 +149,13 @@ type RolesStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // Roles is the Schema for the Roless API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type Roles struct {
 	metav1.TypeMeta   `json:",inline"`

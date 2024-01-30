@@ -43,6 +43,7 @@ func GetProvider() *ujconfig.Provider {
 			ExternalNameConfigurations(),
 			KnownReferencers(),
 		),
+		ujconfig.WithFeaturesPackage("internal/features"),
 		ujconfig.WithRootGroup(rootGroup))
 
 	for _, configure := range []func(provider *ujconfig.Provider){

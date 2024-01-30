@@ -19,11 +19,25 @@ import (
 
 type ProtocolMapperInitParameters struct {
 
+	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
+	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/openidclient/v1alpha1.Client
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+
 	// The ID of the client scope this protocol mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
 	// The mapper's associated client scope. Cannot be used at the same time as client_id.
 	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
 
 	// A map with key / value pairs for configuring the protocol mapper. The supported keys depends on the protocol mapper.
+	// +mapType=granular
 	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
 
 	// The display name of this protocol mapper in the GUI.
@@ -37,6 +51,19 @@ type ProtocolMapperInitParameters struct {
 	// The name of the protocol mapper. The protocol mapper must be compatible with the specified client.
 	// The type of the protocol mapper.
 	ProtocolMapper *string `json:"protocolMapper,omitempty" tf:"protocol_mapper,omitempty"`
+
+	// The realm this protocol mapper exists within.
+	// The realm id where the associated client or client scope exists.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type ProtocolMapperObservation struct {
@@ -50,6 +77,7 @@ type ProtocolMapperObservation struct {
 	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
 
 	// A map with key / value pairs for configuring the protocol mapper. The supported keys depends on the protocol mapper.
+	// +mapType=granular
 	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
@@ -94,6 +122,7 @@ type ProtocolMapperParameters struct {
 
 	// A map with key / value pairs for configuring the protocol mapper. The supported keys depends on the protocol mapper.
 	// +kubebuilder:validation:Optional
+	// +mapType=granular
 	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
 
 	// The display name of this protocol mapper in the GUI.
@@ -150,13 +179,13 @@ type ProtocolMapperStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // ProtocolMapper is the Schema for the ProtocolMappers API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type ProtocolMapper struct {
 	metav1.TypeMeta   `json:",inline"`
