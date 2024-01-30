@@ -11,17 +11,16 @@ import (
 	"github.com/crossplane/upjet/pkg/config"
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
+	"github.com/stakater/provider-keycloak/config/defaults"
 	"github.com/stakater/provider-keycloak/config/group"
 	"github.com/stakater/provider-keycloak/config/mapper"
+	"github.com/stakater/provider-keycloak/config/oidc"
 	"github.com/stakater/provider-keycloak/config/openidclient"
 	"github.com/stakater/provider-keycloak/config/openidgroup"
 	"github.com/stakater/provider-keycloak/config/realm"
 	"github.com/stakater/provider-keycloak/config/role"
-	"github.com/stakater/provider-keycloak/config/user"
-	"github.com/stakater/provider-keycloak/config/defaults"
-	"github.com/stakater/provider-keycloak/config/oidc"
 	"github.com/stakater/provider-keycloak/config/saml"
-
+	"github.com/stakater/provider-keycloak/config/user"
 )
 
 const (
