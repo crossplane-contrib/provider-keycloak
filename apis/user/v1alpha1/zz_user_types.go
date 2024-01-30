@@ -82,6 +82,7 @@ type InitialPasswordParameters struct {
 type UserInitParameters struct {
 
 	// A map representing attributes for the user. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// The user's email.
@@ -105,6 +106,18 @@ type UserInitParameters struct {
 	// The user's last name.
 	LastName *string `json:"lastName,omitempty" tf:"last_name,omitempty"`
 
+	// The realm this user belongs to.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
 	// The unique username of this user.
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
 }
@@ -112,6 +125,7 @@ type UserInitParameters struct {
 type UserObservation struct {
 
 	// A map representing attributes for the user. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// The user's email.
@@ -148,6 +162,7 @@ type UserParameters struct {
 
 	// A map representing attributes for the user. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
 	// +kubebuilder:validation:Optional
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// The user's email.
@@ -220,13 +235,13 @@ type UserStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // User is the Schema for the Users API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type User struct {
 	metav1.TypeMeta   `json:",inline"`

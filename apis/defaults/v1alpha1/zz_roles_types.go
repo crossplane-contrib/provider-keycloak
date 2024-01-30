@@ -18,12 +18,39 @@ import (
 )
 
 type RolesInitParameters struct {
+
+	// Realm level roles assigned to new users by default.
+	// Realm level roles assigned to new users.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/role/v1alpha1.Role
+	// +listType=set
+	DefaultRoles []*string `json:"defaultRoles,omitempty" tf:"default_roles,omitempty"`
+
+	// References to Role in role to populate defaultRoles.
+	// +kubebuilder:validation:Optional
+	DefaultRolesRefs []v1.Reference `json:"defaultRolesRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Role in role to populate defaultRoles.
+	// +kubebuilder:validation:Optional
+	DefaultRolesSelector *v1.Selector `json:"defaultRolesSelector,omitempty" tf:"-"`
+
+	// The realm this role exists within.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type RolesObservation struct {
 
 	// Realm level roles assigned to new users by default.
 	// Realm level roles assigned to new users.
+	// +listType=set
 	DefaultRoles []*string `json:"defaultRoles,omitempty" tf:"default_roles,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
@@ -38,6 +65,7 @@ type RolesParameters struct {
 	// Realm level roles assigned to new users.
 	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/role/v1alpha1.Role
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	DefaultRoles []*string `json:"defaultRoles,omitempty" tf:"default_roles,omitempty"`
 
 	// References to Role in role to populate defaultRoles.
@@ -86,13 +114,13 @@ type RolesStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // Roles is the Schema for the Roless API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type Roles struct {
 	metav1.TypeMeta   `json:",inline"`

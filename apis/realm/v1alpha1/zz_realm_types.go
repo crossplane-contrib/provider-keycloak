@@ -201,6 +201,7 @@ type InternationalizationInitParameters struct {
 	DefaultLocale *string `json:"defaultLocale,omitempty" tf:"default_locale,omitempty"`
 
 	// A list of ISO 639-1 locale codes that the realm should support.
+	// +listType=set
 	SupportedLocales []*string `json:"supportedLocales,omitempty" tf:"supported_locales,omitempty"`
 }
 
@@ -210,6 +211,7 @@ type InternationalizationObservation struct {
 	DefaultLocale *string `json:"defaultLocale,omitempty" tf:"default_locale,omitempty"`
 
 	// A list of ISO 639-1 locale codes that the realm should support.
+	// +listType=set
 	SupportedLocales []*string `json:"supportedLocales,omitempty" tf:"supported_locales,omitempty"`
 }
 
@@ -221,6 +223,7 @@ type InternationalizationParameters struct {
 
 	// A list of ISO 639-1 locale codes that the realm should support.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	SupportedLocales []*string `json:"supportedLocales" tf:"supported_locales,omitempty"`
 }
 
@@ -329,6 +332,7 @@ type RealmInitParameters struct {
 	AdminTheme *string `json:"adminTheme,omitempty" tf:"admin_theme,omitempty"`
 
 	// A map of custom attributes to add to the realm.
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// The desired flow for browser authentication. Defaults to browser.
@@ -346,9 +350,11 @@ type RealmInitParameters struct {
 	ClientSessionMaxLifespan *string `json:"clientSessionMaxLifespan,omitempty" tf:"client_session_max_lifespan,omitempty"`
 
 	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes.
+	// +listType=set
 	DefaultDefaultClientScopes []*string `json:"defaultDefaultClientScopes,omitempty" tf:"default_default_client_scopes,omitempty"`
 
 	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes.
+	// +listType=set
 	DefaultOptionalClientScopes []*string `json:"defaultOptionalClientScopes,omitempty" tf:"default_optional_client_scopes,omitempty"`
 
 	// Default algorithm used to sign tokens for the realm.
@@ -504,6 +510,7 @@ type RealmObservation struct {
 	AdminTheme *string `json:"adminTheme,omitempty" tf:"admin_theme,omitempty"`
 
 	// A map of custom attributes to add to the realm.
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// The desired flow for browser authentication. Defaults to browser.
@@ -521,9 +528,11 @@ type RealmObservation struct {
 	ClientSessionMaxLifespan *string `json:"clientSessionMaxLifespan,omitempty" tf:"client_session_max_lifespan,omitempty"`
 
 	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes.
+	// +listType=set
 	DefaultDefaultClientScopes []*string `json:"defaultDefaultClientScopes,omitempty" tf:"default_default_client_scopes,omitempty"`
 
 	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes.
+	// +listType=set
 	DefaultOptionalClientScopes []*string `json:"defaultOptionalClientScopes,omitempty" tf:"default_optional_client_scopes,omitempty"`
 
 	// Default algorithm used to sign tokens for the realm.
@@ -691,6 +700,7 @@ type RealmParameters struct {
 
 	// A map of custom attributes to add to the realm.
 	// +kubebuilder:validation:Optional
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// The desired flow for browser authentication. Defaults to browser.
@@ -713,10 +723,12 @@ type RealmParameters struct {
 
 	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	DefaultDefaultClientScopes []*string `json:"defaultDefaultClientScopes,omitempty" tf:"default_default_client_scopes,omitempty"`
 
 	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	DefaultOptionalClientScopes []*string `json:"defaultOptionalClientScopes,omitempty" tf:"default_optional_client_scopes,omitempty"`
 
 	// Default algorithm used to sign tokens for the realm.
@@ -1015,6 +1027,7 @@ type SecurityDefensesParameters struct {
 type WebAuthnPasswordlessPolicyInitParameters struct {
 
 	// A set of AAGUIDs for which an authenticator can be registered.
+	// +listType=set
 	AcceptableAaguids []*string `json:"acceptableAaguids,omitempty" tf:"acceptable_aaguids,omitempty"`
 
 	// The preference of how to generate a WebAuthn attestation statement. Valid options are not specified, none, indirect, direct, or enterprise. Defaults to not specified.
@@ -1043,6 +1056,7 @@ type WebAuthnPasswordlessPolicyInitParameters struct {
 
 	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
+	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
@@ -1053,6 +1067,7 @@ type WebAuthnPasswordlessPolicyInitParameters struct {
 type WebAuthnPasswordlessPolicyObservation struct {
 
 	// A set of AAGUIDs for which an authenticator can be registered.
+	// +listType=set
 	AcceptableAaguids []*string `json:"acceptableAaguids,omitempty" tf:"acceptable_aaguids,omitempty"`
 
 	// The preference of how to generate a WebAuthn attestation statement. Valid options are not specified, none, indirect, direct, or enterprise. Defaults to not specified.
@@ -1081,6 +1096,7 @@ type WebAuthnPasswordlessPolicyObservation struct {
 
 	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
+	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
@@ -1092,6 +1108,7 @@ type WebAuthnPasswordlessPolicyParameters struct {
 
 	// A set of AAGUIDs for which an authenticator can be registered.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	AcceptableAaguids []*string `json:"acceptableAaguids,omitempty" tf:"acceptable_aaguids,omitempty"`
 
 	// The preference of how to generate a WebAuthn attestation statement. Valid options are not specified, none, indirect, direct, or enterprise. Defaults to not specified.
@@ -1128,6 +1145,7 @@ type WebAuthnPasswordlessPolicyParameters struct {
 	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
@@ -1139,6 +1157,7 @@ type WebAuthnPasswordlessPolicyParameters struct {
 type WebAuthnPolicyInitParameters struct {
 
 	// A set of AAGUIDs for which an authenticator can be registered.
+	// +listType=set
 	AcceptableAaguids []*string `json:"acceptableAaguids,omitempty" tf:"acceptable_aaguids,omitempty"`
 
 	// The preference of how to generate a WebAuthn attestation statement. Valid options are not specified, none, indirect, direct, or enterprise. Defaults to not specified.
@@ -1167,6 +1186,7 @@ type WebAuthnPolicyInitParameters struct {
 
 	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
+	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
@@ -1177,6 +1197,7 @@ type WebAuthnPolicyInitParameters struct {
 type WebAuthnPolicyObservation struct {
 
 	// A set of AAGUIDs for which an authenticator can be registered.
+	// +listType=set
 	AcceptableAaguids []*string `json:"acceptableAaguids,omitempty" tf:"acceptable_aaguids,omitempty"`
 
 	// The preference of how to generate a WebAuthn attestation statement. Valid options are not specified, none, indirect, direct, or enterprise. Defaults to not specified.
@@ -1205,6 +1226,7 @@ type WebAuthnPolicyObservation struct {
 
 	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
+	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
@@ -1216,6 +1238,7 @@ type WebAuthnPolicyParameters struct {
 
 	// A set of AAGUIDs for which an authenticator can be registered.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	AcceptableAaguids []*string `json:"acceptableAaguids,omitempty" tf:"acceptable_aaguids,omitempty"`
 
 	// The preference of how to generate a WebAuthn attestation statement. Valid options are not specified, none, indirect, direct, or enterprise. Defaults to not specified.
@@ -1252,6 +1275,7 @@ type WebAuthnPolicyParameters struct {
 	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
@@ -1284,13 +1308,13 @@ type RealmStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // Realm is the Schema for the Realms API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type Realm struct {
 	metav1.TypeMeta   `json:",inline"`

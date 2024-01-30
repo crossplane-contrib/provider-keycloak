@@ -20,24 +20,64 @@ import (
 type RoleInitParameters struct {
 
 	// A map representing attributes for the role. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
+
+	// When specified, this role will be created as a client role attached to the client with the provided ID
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/openidclient/v1alpha1.Client
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+
+	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
+	// +crossplane:generate:reference:type=Role
+	// +listType=set
+	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
+
+	// References to Role to populate compositeRoles.
+	// +kubebuilder:validation:Optional
+	CompositeRolesRefs []v1.Reference `json:"compositeRolesRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Role to populate compositeRoles.
+	// +kubebuilder:validation:Optional
+	CompositeRolesSelector *v1.Selector `json:"compositeRolesSelector,omitempty" tf:"-"`
 
 	// The description of the role
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	// The name of the role
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// The realm this role exists within.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type RoleObservation struct {
 
 	// A map representing attributes for the role. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// When specified, this role will be created as a client role attached to the client with the provided ID
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
 	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
+	// +listType=set
 	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
 
 	// The description of the role
@@ -56,6 +96,7 @@ type RoleParameters struct {
 
 	// A map representing attributes for the role. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
 	// +kubebuilder:validation:Optional
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// When specified, this role will be created as a client role attached to the client with the provided ID
@@ -74,6 +115,7 @@ type RoleParameters struct {
 	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
 	// +crossplane:generate:reference:type=Role
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
 
 	// References to Role to populate compositeRoles.
@@ -130,13 +172,13 @@ type RoleStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // Role is the Schema for the Roles API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type Role struct {
 	metav1.TypeMeta   `json:",inline"`

@@ -38,6 +38,19 @@ type IdentityProviderInitParameters struct {
 	// Does the external IDP support backchannel logout?
 	BackchannelSupported *bool `json:"backchannelSupported,omitempty" tf:"backchannel_supported,omitempty"`
 
+	// The client or client identifier registered within the identity provider.
+	// Client ID.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/openidclient/v1alpha1.Client
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
 	DefaultScopes *string `json:"defaultScopes,omitempty" tf:"default_scopes,omitempty"`
@@ -55,6 +68,7 @@ type IdentityProviderInitParameters struct {
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
 	// A map of key/value pairs to add extra configuration to this identity provider. Use this attribute at your own risk, as custom attributes may conflict with top-level configuration attributes in future provider updates.
+	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// The authentication flow to use when users log in for the first time through this identity provider. Defaults to first broker login.
@@ -96,6 +110,19 @@ type IdentityProviderInitParameters struct {
 	// The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation.
 	// provider id, is always oidc, unless you have a custom implementation
 	ProviderID *string `json:"providerId,omitempty" tf:"provider_id,omitempty"`
+
+	// The name of the realm. This is unique across Keycloak.
+	// Realm Name
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// Reference to a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// When true, tokens will be stored after authenticating users. Defaults to true.
 	// Enable/disable if tokens must be stored after authenticating users.
@@ -168,6 +195,7 @@ type IdentityProviderObservation struct {
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
 	// A map of key/value pairs to add extra configuration to this identity provider. Use this attribute at your own risk, as custom attributes may conflict with top-level configuration attributes in future provider updates.
+	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// The authentication flow to use when users log in for the first time through this identity provider. Defaults to first broker login.
@@ -316,6 +344,7 @@ type IdentityProviderParameters struct {
 
 	// A map of key/value pairs to add extra configuration to this identity provider. Use this attribute at your own risk, as custom attributes may conflict with top-level configuration attributes in future provider updates.
 	// +kubebuilder:validation:Optional
+	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// The authentication flow to use when users log in for the first time through this identity provider. Defaults to first broker login.
@@ -442,13 +471,13 @@ type IdentityProviderStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // IdentityProvider is the Schema for the IdentityProviders API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type IdentityProvider struct {
 	metav1.TypeMeta   `json:",inline"`

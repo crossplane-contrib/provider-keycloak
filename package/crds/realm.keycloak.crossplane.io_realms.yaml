@@ -106,6 +106,7 @@ spec:
                       type: string
                     description: A map of custom attributes to add to the realm.
                     type: object
+                    x-kubernetes-map-type: granular
                   browserFlow:
                     description: The desired flow for browser authentication. Defaults
                       to browser. Which flow should be used for BrowserFlow
@@ -130,6 +131,7 @@ spec:
                     items:
                       type: string
                     type: array
+                    x-kubernetes-list-type: set
                   defaultOptionalClientScopes:
                     description: A list of default optional client scopes to be used
                       for client definitions. Defaults to [] or keycloak's built-in
@@ -137,6 +139,7 @@ spec:
                     items:
                       type: string
                     type: array
+                    x-kubernetes-list-type: set
                   defaultSignatureAlgorithm:
                     description: Default algorithm used to sign tokens for the realm.
                     type: string
@@ -189,6 +192,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                       type: object
                     type: array
                   loginTheme:
@@ -471,6 +475,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         attestationConveyancePreference:
                           description: The preference of how to generate a WebAuthn
                             attestation statement. Valid options are not specified,
@@ -515,6 +520,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         userVerificationRequirement:
                           description: Specifies the policy for verifying a user logging
                             in via WebAuthn. Valid options are not specified, required,
@@ -533,6 +539,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         attestationConveyancePreference:
                           description: The preference of how to generate a WebAuthn
                             attestation statement. Valid options are not specified,
@@ -577,6 +584,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         userVerificationRequirement:
                           description: Specifies the policy for verifying a user logging
                             in via WebAuthn. Valid options are not specified, required,
@@ -638,6 +646,7 @@ spec:
                       type: string
                     description: A map of custom attributes to add to the realm.
                     type: object
+                    x-kubernetes-map-type: granular
                   browserFlow:
                     description: The desired flow for browser authentication. Defaults
                       to browser. Which flow should be used for BrowserFlow
@@ -662,6 +671,7 @@ spec:
                     items:
                       type: string
                     type: array
+                    x-kubernetes-list-type: set
                   defaultOptionalClientScopes:
                     description: A list of default optional client scopes to be used
                       for client definitions. Defaults to [] or keycloak's built-in
@@ -669,6 +679,7 @@ spec:
                     items:
                       type: string
                     type: array
+                    x-kubernetes-list-type: set
                   defaultSignatureAlgorithm:
                     description: Default algorithm used to sign tokens for the realm.
                     type: string
@@ -721,6 +732,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                       type: object
                     type: array
                   loginTheme:
@@ -984,6 +996,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         attestationConveyancePreference:
                           description: The preference of how to generate a WebAuthn
                             attestation statement. Valid options are not specified,
@@ -1028,6 +1041,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         userVerificationRequirement:
                           description: Specifies the policy for verifying a user logging
                             in via WebAuthn. Valid options are not specified, required,
@@ -1046,6 +1060,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         attestationConveyancePreference:
                           description: The preference of how to generate a WebAuthn
                             attestation statement. Valid options are not specified,
@@ -1090,6 +1105,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         userVerificationRequirement:
                           description: Specifies the policy for verifying a user logging
                             in via WebAuthn. Valid options are not specified, required,
@@ -1309,6 +1325,7 @@ spec:
                       type: string
                     description: A map of custom attributes to add to the realm.
                     type: object
+                    x-kubernetes-map-type: granular
                   browserFlow:
                     description: The desired flow for browser authentication. Defaults
                       to browser. Which flow should be used for BrowserFlow
@@ -1333,6 +1350,7 @@ spec:
                     items:
                       type: string
                     type: array
+                    x-kubernetes-list-type: set
                   defaultOptionalClientScopes:
                     description: A list of default optional client scopes to be used
                       for client definitions. Defaults to [] or keycloak's built-in
@@ -1340,6 +1358,7 @@ spec:
                     items:
                       type: string
                     type: array
+                    x-kubernetes-list-type: set
                   defaultSignatureAlgorithm:
                     description: Default algorithm used to sign tokens for the realm.
                     type: string
@@ -1394,6 +1413,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                       type: object
                     type: array
                   loginTheme:
@@ -1657,6 +1677,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         attestationConveyancePreference:
                           description: The preference of how to generate a WebAuthn
                             attestation statement. Valid options are not specified,
@@ -1701,6 +1722,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         userVerificationRequirement:
                           description: Specifies the policy for verifying a user logging
                             in via WebAuthn. Valid options are not specified, required,
@@ -1719,6 +1741,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         attestationConveyancePreference:
                           description: The preference of how to generate a WebAuthn
                             attestation statement. Valid options are not specified,
@@ -1763,6 +1786,7 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: set
                         userVerificationRequirement:
                           description: Specifies the policy for verifying a user logging
                             in via WebAuthn. Valid options are not specified, required,

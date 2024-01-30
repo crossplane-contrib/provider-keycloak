@@ -21,6 +21,43 @@ type GroupsInitParameters struct {
 
 	// Indicates if the list of the user's groups is exhaustive. In this case, groups that are manually added to the user will be removed. Defaults to true.
 	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
+
+	// A list of group IDs that the user is member of.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/group/v1alpha1.Group
+	// +listType=set
+	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
+
+	// References to Group in group to populate groupIds.
+	// +kubebuilder:validation:Optional
+	GroupIdsRefs []v1.Reference `json:"groupIdsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Group in group to populate groupIds.
+	// +kubebuilder:validation:Optional
+	GroupIdsSelector *v1.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
+
+	// The realm this group exists in.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The ID of the user this resource should manage groups for.
+	// +crossplane:generate:reference:type=User
+	UserID *string `json:"userId,omitempty" tf:"user_id,omitempty"`
+
+	// Reference to a User to populate userId.
+	// +kubebuilder:validation:Optional
+	UserIDRef *v1.Reference `json:"userIdRef,omitempty" tf:"-"`
+
+	// Selector for a User to populate userId.
+	// +kubebuilder:validation:Optional
+	UserIDSelector *v1.Selector `json:"userIdSelector,omitempty" tf:"-"`
 }
 
 type GroupsObservation struct {
@@ -29,6 +66,7 @@ type GroupsObservation struct {
 	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
 
 	// A list of group IDs that the user is member of.
+	// +listType=set
 	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
@@ -49,6 +87,7 @@ type GroupsParameters struct {
 	// A list of group IDs that the user is member of.
 	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/group/v1alpha1.Group
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
 
 	// References to Group in group to populate groupIds.
@@ -110,13 +149,13 @@ type GroupsStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // Groups is the Schema for the Groupss API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type Groups struct {
 	metav1.TypeMeta   `json:",inline"`

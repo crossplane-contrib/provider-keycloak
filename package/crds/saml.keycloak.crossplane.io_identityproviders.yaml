@@ -120,6 +120,7 @@ spec:
                       as custom attributes may conflict with top-level configuration
                       attributes in future provider updates.
                     type: object
+                    x-kubernetes-map-type: granular
                   firstBrokerLoginFlowAlias:
                     description: Alias of authentication flow, which is triggered
                       after first login with this identity provider. Term 'First Login'
@@ -396,6 +397,7 @@ spec:
                       as custom attributes may conflict with top-level configuration
                       attributes in future provider updates.
                     type: object
+                    x-kubernetes-map-type: granular
                   firstBrokerLoginFlowAlias:
                     description: Alias of authentication flow, which is triggered
                       after first login with this identity provider. Term 'First Login'
@@ -481,6 +483,83 @@ spec:
                       and provided your own implementation. provider id, is always
                       saml, unless you have a custom implementation
                     type: string
+                  realm:
+                    description: The name of the realm. This is unique across Keycloak.
+                      Realm Name
+                    type: string
+                  realmRef:
+                    description: Reference to a Realm in realm to populate realm.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: Resolution specifies whether resolution of
+                              this reference is required. The default is 'Required',
+                              which means the reconcile will fail if the reference
+                              cannot be resolved. 'Optional' means this reference
+                              will be a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: Resolve specifies when this reference should
+                              be resolved. The default is 'IfNotPresent', which will
+                              attempt to resolve the reference only when the corresponding
+                              field is not present. Use 'Always' to resolve the reference
+                              on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  realmSelector:
+                    description: Selector for a Realm in realm to populate realm.
+                    properties:
+                      matchControllerRef:
+                        description: MatchControllerRef ensures an object with the
+                          same controller reference as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: Resolution specifies whether resolution of
+                              this reference is required. The default is 'Required',
+                              which means the reconcile will fail if the reference
+                              cannot be resolved. 'Optional' means this reference
+                              will be a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: Resolve specifies when this reference should
+                              be resolved. The default is 'IfNotPresent', which will
+                              attempt to resolve the reference only when the corresponding
+                              field is not present. Use 'Always' to resolve the reference
+                              on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
                   signatureAlgorithm:
                     description: Signing Algorithm. Defaults to empty. Signing Algorithm.
                     type: string
@@ -757,6 +836,7 @@ spec:
                       as custom attributes may conflict with top-level configuration
                       attributes in future provider updates.
                     type: object
+                    x-kubernetes-map-type: granular
                   firstBrokerLoginFlowAlias:
                     description: Alias of authentication flow, which is triggered
                       after first login with this identity provider. Term 'First Login'
