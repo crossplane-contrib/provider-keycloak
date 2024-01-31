@@ -24,7 +24,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_role":                                    config.IdentifierFromProvider,
 	"keycloak_user_groups":                             config.IdentifierFromProvider,
 	"keycloak_user":                                    config.IdentifierFromProvider,
-	"keycloak_default_roles":                           config.TemplatedStringAsIdentifier("id", "{{ .parameters.realm_id }}/{{ .external_name }}"),
+	"keycloak_default_roles":                           config.TemplatedStringAsIdentifier("", "{{ .parameters.realm_id }}/{{ .parameters.id }}"),
 	"keycloak_oidc_identity_provider":                  config.ParameterAsIdentifier("alias"),
 	"keycloak_saml_identity_provider":                  config.ParameterAsIdentifier("alias"),
 }
