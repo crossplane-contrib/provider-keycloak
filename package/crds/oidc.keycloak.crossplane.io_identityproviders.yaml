@@ -82,6 +82,12 @@ spec:
                       role. Defaults to false. Enable/disable if new users can read
                       any stored tokens. This assigns the broker.read-token role.
                     type: boolean
+                  alias:
+                    description: The alias uniquely identifies an identity provider
+                      and it is also used to build the redirect uri. The alias uniquely
+                      identifies an identity provider and it is also used to build
+                      the redirect uri.
+                    type: string
                   authenticateByDefault:
                     description: Enable/disable authenticate users by default.
                     type: boolean
@@ -419,6 +425,12 @@ spec:
                       role. Defaults to false. Enable/disable if new users can read
                       any stored tokens. This assigns the broker.read-token role.
                     type: boolean
+                  alias:
+                    description: The alias uniquely identifies an identity provider
+                      and it is also used to build the redirect uri. The alias uniquely
+                      identifies an identity provider and it is also used to build
+                      the redirect uri.
+                    type: string
                   authenticateByDefault:
                     description: Enable/disable authenticate users by default.
                     type: boolean
@@ -870,6 +882,10 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
+            - message: spec.forProvider.alias is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.alias)
+                || (has(self.initProvider) && has(self.initProvider.alias))'
             - message: spec.forProvider.authorizationUrl is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.authorizationUrl)
@@ -902,6 +918,12 @@ spec:
                       role. Defaults to false. Enable/disable if new users can read
                       any stored tokens. This assigns the broker.read-token role.
                     type: boolean
+                  alias:
+                    description: The alias uniquely identifies an identity provider
+                      and it is also used to build the redirect uri. The alias uniquely
+                      identifies an identity provider and it is also used to build
+                      the redirect uri.
+                    type: string
                   authenticateByDefault:
                     description: Enable/disable authenticate users by default.
                     type: boolean

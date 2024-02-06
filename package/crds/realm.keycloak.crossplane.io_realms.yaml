@@ -347,6 +347,11 @@ spec:
                               contentSecurityPolicyReportOnly:
                                 description: Used for testing Content Security Policies.
                                 type: string
+                              referrerPolicy:
+                                description: The Referrer-Policy HTTP header controls
+                                  how much referrer information (sent with the Referer
+                                  header) should be included with requests.
+                                type: string
                               strictTransportSecurity:
                                 description: The Script-Transport-Security HTTP header
                                   tells browsers to always use HTTPS.
@@ -886,6 +891,11 @@ spec:
                                 type: string
                               contentSecurityPolicyReportOnly:
                                 description: Used for testing Content Security Policies.
+                                type: string
+                              referrerPolicy:
+                                description: The Referrer-Policy HTTP header controls
+                                  how much referrer information (sent with the Referer
+                                  header) should be included with requests.
                                 type: string
                               strictTransportSecurity:
                                 description: The Script-Transport-Security HTTP header
@@ -1567,6 +1577,11 @@ spec:
                                 type: string
                               contentSecurityPolicyReportOnly:
                                 description: Used for testing Content Security Policies.
+                                type: string
+                              referrerPolicy:
+                                description: The Referrer-Policy HTTP header controls
+                                  how much referrer information (sent with the Referer
+                                  header) should be included with requests.
                                 type: string
                               strictTransportSecurity:
                                 description: The Script-Transport-Security HTTP header

@@ -237,6 +237,11 @@ func (in *HeadersInitParameters) DeepCopyInto(out *HeadersInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ReferrerPolicy != nil {
+		in, out := &in.ReferrerPolicy, &out.ReferrerPolicy
+		*out = new(string)
+		**out = **in
+	}
 	if in.StrictTransportSecurity != nil {
 		in, out := &in.StrictTransportSecurity, &out.StrictTransportSecurity
 		*out = new(string)
@@ -287,6 +292,11 @@ func (in *HeadersObservation) DeepCopyInto(out *HeadersObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ReferrerPolicy != nil {
+		in, out := &in.ReferrerPolicy, &out.ReferrerPolicy
+		*out = new(string)
+		**out = **in
+	}
 	if in.StrictTransportSecurity != nil {
 		in, out := &in.StrictTransportSecurity, &out.StrictTransportSecurity
 		*out = new(string)
@@ -334,6 +344,11 @@ func (in *HeadersParameters) DeepCopyInto(out *HeadersParameters) {
 	}
 	if in.ContentSecurityPolicyReportOnly != nil {
 		in, out := &in.ContentSecurityPolicyReportOnly, &out.ContentSecurityPolicyReportOnly
+		*out = new(string)
+		**out = **in
+	}
+	if in.ReferrerPolicy != nil {
+		in, out := &in.ReferrerPolicy, &out.ReferrerPolicy
 		*out = new(string)
 		**out = **in
 	}

@@ -8,6 +8,7 @@ metadata:
   name: realm-saml-identity-provider
 spec:
   forProvider:
+    alias: my-saml-idp
     backchannelSupported: true
     entityId: https://domain.com/entity_id
     forceAuthn: true

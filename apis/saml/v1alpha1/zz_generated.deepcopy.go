@@ -48,6 +48,11 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(bool)
 		**out = **in
 	}
+	if in.Alias != nil {
+		in, out := &in.Alias, &out.Alias
+		*out = new(string)
+		**out = **in
+	}
 	if in.AuthenticateByDefault != nil {
 		in, out := &in.AuthenticateByDefault, &out.AuthenticateByDefault
 		*out = new(bool)
@@ -308,6 +313,11 @@ func (in *IdentityProviderObservation) DeepCopyInto(out *IdentityProviderObserva
 		*out = new(bool)
 		**out = **in
 	}
+	if in.Alias != nil {
+		in, out := &in.Alias, &out.Alias
+		*out = new(string)
+		**out = **in
+	}
 	if in.AuthenticateByDefault != nil {
 		in, out := &in.AuthenticateByDefault, &out.AuthenticateByDefault
 		*out = new(bool)
@@ -534,6 +544,11 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 	if in.AddReadTokenRoleOnCreate != nil {
 		in, out := &in.AddReadTokenRoleOnCreate, &out.AddReadTokenRoleOnCreate
 		*out = new(bool)
+		**out = **in
+	}
+	if in.Alias != nil {
+		in, out := &in.Alias, &out.Alias
+		*out = new(string)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {

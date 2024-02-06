@@ -8,6 +8,7 @@ metadata:
   name: realm-identity-provider
 spec:
   forProvider:
+    alias: my-idp
     authorizationUrl: https://authorizationurl.com
     clientIdSelector:
       matchLabels:

@@ -118,6 +118,10 @@ type UserInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// A list of required user actions.
+	// +listType=set
+	RequiredActions []*string `json:"requiredActions,omitempty" tf:"required_actions,omitempty"`
+
 	// The unique username of this user.
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
 }
@@ -153,6 +157,10 @@ type UserObservation struct {
 
 	// The realm this user belongs to.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// A list of required user actions.
+	// +listType=set
+	RequiredActions []*string `json:"requiredActions,omitempty" tf:"required_actions,omitempty"`
 
 	// The unique username of this user.
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
@@ -205,6 +213,11 @@ type UserParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// A list of required user actions.
+	// +kubebuilder:validation:Optional
+	// +listType=set
+	RequiredActions []*string `json:"requiredActions,omitempty" tf:"required_actions,omitempty"`
 
 	// The unique username of this user.
 	// +kubebuilder:validation:Optional

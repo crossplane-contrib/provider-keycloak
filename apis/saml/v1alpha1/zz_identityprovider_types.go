@@ -23,6 +23,10 @@ type IdentityProviderInitParameters struct {
 	// Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.
 	AddReadTokenRoleOnCreate *bool `json:"addReadTokenRoleOnCreate,omitempty" tf:"add_read_token_role_on_create,omitempty"`
 
+	// The unique name of identity provider.
+	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
+	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
+
 	// Authenticate users by default. Defaults to false.
 	// Enable/disable authenticate users by default.
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
@@ -178,6 +182,10 @@ type IdentityProviderObservation struct {
 	// Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.
 	AddReadTokenRoleOnCreate *bool `json:"addReadTokenRoleOnCreate,omitempty" tf:"add_read_token_role_on_create,omitempty"`
 
+	// The unique name of identity provider.
+	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
+	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
+
 	// Authenticate users by default. Defaults to false.
 	// Enable/disable authenticate users by default.
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
@@ -329,6 +337,11 @@ type IdentityProviderParameters struct {
 	// Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.
 	// +kubebuilder:validation:Optional
 	AddReadTokenRoleOnCreate *bool `json:"addReadTokenRoleOnCreate,omitempty" tf:"add_read_token_role_on_create,omitempty"`
+
+	// The unique name of identity provider.
+	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
+	// +kubebuilder:validation:Optional
+	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
 	// Authenticate users by default. Defaults to false.
 	// Enable/disable authenticate users by default.
@@ -549,6 +562,7 @@ type IdentityProviderStatus struct {
 type IdentityProvider struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.alias) || (has(self.initProvider) && has(self.initProvider.alias))",message="spec.forProvider.alias is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.entityId) || (has(self.initProvider) && has(self.initProvider.entityId))",message="spec.forProvider.entityId is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.singleSignOnServiceUrl) || (has(self.initProvider) && has(self.initProvider.singleSignOnServiceUrl))",message="spec.forProvider.singleSignOnServiceUrl is a required parameter"
 	Spec   IdentityProviderSpec   `json:"spec"`

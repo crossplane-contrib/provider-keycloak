@@ -32,6 +32,18 @@ type RolesInitParameters struct {
 	// Selector for a list of Role in role to populate defaultRoles.
 	// +kubebuilder:validation:Optional
 	DefaultRolesSelector *v1.Selector `json:"defaultRolesSelector,omitempty" tf:"-"`
+
+	// The realm this role exists within.
+	// +crossplane:generate:reference:type=github.com/stakater/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type RolesObservation struct {
