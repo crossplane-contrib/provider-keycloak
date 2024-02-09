@@ -18,4 +18,12 @@ func Configure(p *config.Provider) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = "openidclient"
 	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_service_account_role", func(r *config.Resource) {
+		r.ShortGroup = "openidclient"
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_service_account_realm_role", func(r *config.Resource) {
+		r.ShortGroup = "openidclient"
+	})
 }

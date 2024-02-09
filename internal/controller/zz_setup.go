@@ -17,6 +17,8 @@ import (
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/client"
 	clientdefaultscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientdefaultscopes"
 	clientscope "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientscope"
+	clientserviceaccountrealmrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientserviceaccountrealmrole"
+	clientserviceaccountrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientserviceaccountrole"
 	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidgroup/groupmembershipprotocolmapper"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/providerconfig"
 	realm "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/realm"
@@ -38,6 +40,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		client.Setup,
 		clientdefaultscopes.Setup,
 		clientscope.Setup,
+		clientserviceaccountrealmrole.Setup,
+		clientserviceaccountrole.Setup,
 		groupmembershipprotocolmapper.Setup,
 		providerconfig.Setup,
 		realm.Setup,

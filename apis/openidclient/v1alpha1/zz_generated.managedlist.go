@@ -33,3 +33,21 @@ func (l *ClientScopeList) GetItems() []resource.Managed {
 	}
 	return items
 }
+
+// GetItems of this ClientServiceAccountRealmRoleList.
+func (l *ClientServiceAccountRealmRoleList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientServiceAccountRoleList.
+func (l *ClientServiceAccountRoleList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
