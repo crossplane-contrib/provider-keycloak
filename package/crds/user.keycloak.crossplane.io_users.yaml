@@ -215,6 +215,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  requiredActions:
+                    description: A list of required user actions.
+                    items:
+                      type: string
+                    type: array
                   username:
                     description: The unique username of this user.
                     type: string
@@ -285,6 +290,11 @@ spec:
                   lastName:
                     description: The user's last name.
                     type: string
+                  requiredActions:
+                    description: A list of required user actions.
+                    items:
+                      type: string
+                    type: array
                   username:
                     description: The unique username of this user.
                     type: string
@@ -518,6 +528,11 @@ spec:
                   realmId:
                     description: The realm this user belongs to.
                     type: string
+                  requiredActions:
+                    description: A list of required user actions.
+                    items:
+                      type: string
+                    type: array
                   username:
                     description: The unique username of this user.
                     type: string

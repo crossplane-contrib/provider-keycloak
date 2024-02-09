@@ -124,6 +124,9 @@ type HeadersInitParameters struct {
 	// Used for testing Content Security Policies.
 	ContentSecurityPolicyReportOnly *string `json:"contentSecurityPolicyReportOnly,omitempty" tf:"content_security_policy_report_only,omitempty"`
 
+	// The Referrer-Policy HTTP header controls how much referrer information (sent with the Referer header) should be included with requests.
+	ReferrerPolicy *string `json:"referrerPolicy,omitempty" tf:"referrer_policy,omitempty"`
+
 	// The Script-Transport-Security HTTP header tells browsers to always use HTTPS.
 	StrictTransportSecurity *string `json:"strictTransportSecurity,omitempty" tf:"strict_transport_security,omitempty"`
 
@@ -147,6 +150,9 @@ type HeadersObservation struct {
 
 	// Used for testing Content Security Policies.
 	ContentSecurityPolicyReportOnly *string `json:"contentSecurityPolicyReportOnly,omitempty" tf:"content_security_policy_report_only,omitempty"`
+
+	// The Referrer-Policy HTTP header controls how much referrer information (sent with the Referer header) should be included with requests.
+	ReferrerPolicy *string `json:"referrerPolicy,omitempty" tf:"referrer_policy,omitempty"`
 
 	// The Script-Transport-Security HTTP header tells browsers to always use HTTPS.
 	StrictTransportSecurity *string `json:"strictTransportSecurity,omitempty" tf:"strict_transport_security,omitempty"`
@@ -173,6 +179,10 @@ type HeadersParameters struct {
 	// Used for testing Content Security Policies.
 	// +kubebuilder:validation:Optional
 	ContentSecurityPolicyReportOnly *string `json:"contentSecurityPolicyReportOnly,omitempty" tf:"content_security_policy_report_only,omitempty"`
+
+	// The Referrer-Policy HTTP header controls how much referrer information (sent with the Referer header) should be included with requests.
+	// +kubebuilder:validation:Optional
+	ReferrerPolicy *string `json:"referrerPolicy,omitempty" tf:"referrer_policy,omitempty"`
 
 	// The Script-Transport-Security HTTP header tells browsers to always use HTTPS.
 	// +kubebuilder:validation:Optional
