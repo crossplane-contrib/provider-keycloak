@@ -51,9 +51,6 @@ echo "########### Installing Keycloak ###########"
 kubectl apply -f apps/keycloak.yaml
 sleep 5
 kubectl wait pod --all --for=condition=Ready --namespace keycloak --timeout=300s
-# patch svc to be ClusterIP
-kubectl patch svc keycloak-keycloakx-http -n keycloak --type='json' -p '[{"op":"replace","path":"/spec/type","value":"ClusterIP"}]'
-
 
 export KEYCLOAK_PORT=$(kubectl -n keycloak get svc keycloak-keycloakx-http -o json | jq -r .spec.ports[0].port)
 export KEYCLOAK_USER=admin
@@ -81,7 +78,7 @@ if lsof -Pi :8080 -sTCP:LISTEN -t >/dev/null 2>&1; then
   exit 1
 fi
 ARGOCD_PORT_FORWARD_PID=$(kubectl port-forward svc/argocd-server -n argocd 8888:443 > /dev/null 2>&1 & echo $!)
-KEYCLOAK_PORT_FORWARD_PID=$(kubectl port-forward svc/keycloak-keycloakx-http -n keycloak 8080:$KEYCLOAK_PORT > /dev/null 2>&1 & echo $!)
+KEYCLOAK_PORT_FORWARD_PID=$(kubectl port-forward svc/keycloak-keycloakx-http -n keycloak 8889:$KEYCLOAK_PORT > /dev/null 2>&1 & echo $!)
 
 echo $ARGOCD_PORT_FORWARD_PID
 echo $KEYCLOAK_PORT_FORWARD_PID
@@ -91,7 +88,7 @@ echo "You're ready to go!"
 echo "ArgoCD is ready at https://127.0.0.1:8888"
 echo "ArgoCD login: admin / $(kubectl -n argocd get secrets argocd-initial-admin-secret -o json | jq -r .data.password | base64 -d)"
 echo "-------------------------------------------------"
-echo "Keycloak is ready at http://127.0.0.1:8080/auth"
+echo "Keycloak is ready at http://127.0.0.1:8889/auth"
 echo "Keycloak login: admin / admin"
 echo "#################################################"
 echo "To delete the cluster run: kind delete cluster --name fenrir-1"
