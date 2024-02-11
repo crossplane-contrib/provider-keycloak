@@ -65,8 +65,10 @@ kubectl apply -f apps/crossplane.yaml
 sleep 10
 kubectl wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
 
-echo "########### Installing Keycloak Provider secret ###########"
+echo "########### Installing Keycloak Provider ###########"
 cat apps/keycloak-provider/keycloak-provider-secret.yaml | kubectl apply --namespace crossplane-system  -f -
+cat apps/keycloak-provider/keycloak-provider.yaml | kubectl apply --namespace crossplane-system  -f -
+
 
 # Port forward ArgoCD and Keycloak and save the process id
 # check if ports 8888 and 8080 are already in use
