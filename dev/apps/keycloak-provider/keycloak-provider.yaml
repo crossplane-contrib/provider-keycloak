@@ -7,4 +7,17 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v0.4.0
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v0.8.0
+---
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-provider-config
+  namespace: dev
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-credentials
+      key: credentials
+      namespace: crossplane-system

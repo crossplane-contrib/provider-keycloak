@@ -34,6 +34,7 @@ kind create cluster --name fenrir-1 --config kind-config.yaml --kubeconfig $HOME
 
 echo "Running some commands to make sure the cluster is ready"
 export KUBECONFIG=$HOME/.kube/fenrir-1
+kubectl config use-context kind-fenrir-1
 kubectl cluster-info
 kubectl get nodes
 
