@@ -22,6 +22,22 @@ func (mg *Group) ResolveReferences(ctx context.Context, c client.Reader) error {
 	var err error
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ParentID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.ForProvider.ParentIDRef,
+		Selector:     mg.Spec.ForProvider.ParentIDSelector,
+		To: reference.To{
+			List:    &GroupList{},
+			Managed: &Group{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ParentID")
+	}
+	mg.Spec.ForProvider.ParentID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ParentIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.RealmID),
 		Extract:      reference.ExternalName(),
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
