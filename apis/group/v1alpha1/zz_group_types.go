@@ -24,9 +24,6 @@ type GroupInitParameters struct {
 
 	// The name of the group.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
-
-	// The ID of this group's parent. If omitted, this group will be defined at the root level.
-	ParentID *string `json:"parentId,omitempty" tf:"parent_id,omitempty"`
 }
 
 type GroupObservation struct {
@@ -60,8 +57,17 @@ type GroupParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The ID of this group's parent. If omitted, this group will be defined at the root level.
+	// +crossplane:generate:reference:type=Group
 	// +kubebuilder:validation:Optional
 	ParentID *string `json:"parentId,omitempty" tf:"parent_id,omitempty"`
+
+	// Reference to a Group to populate parentId.
+	// +kubebuilder:validation:Optional
+	ParentIDRef *v1.Reference `json:"parentIdRef,omitempty" tf:"-"`
+
+	// Selector for a Group to populate parentId.
+	// +kubebuilder:validation:Optional
+	ParentIDSelector *v1.Selector `json:"parentIdSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
