@@ -14,6 +14,7 @@
   ],
   "postUpdateOptions": ["gomodTidy"],
   "dependencyDashboard": true,
+  "recreateClosed": true,
   "packageRules": [
     {
       "groupName": "godeps",
