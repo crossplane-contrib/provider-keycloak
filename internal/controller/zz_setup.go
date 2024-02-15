@@ -21,6 +21,7 @@ import (
 	clientscope "github.com/stakater/provider-keycloak/internal/controller/openidclient/clientscope"
 	groupmembershipprotocolmapper "github.com/stakater/provider-keycloak/internal/controller/openidgroup/groupmembershipprotocolmapper"
 	providerconfig "github.com/stakater/provider-keycloak/internal/controller/providerconfig"
+	keystorersa "github.com/stakater/provider-keycloak/internal/controller/realm/keystorersa"
 	realm "github.com/stakater/provider-keycloak/internal/controller/realm/realm"
 	requiredaction "github.com/stakater/provider-keycloak/internal/controller/realm/requiredaction"
 	role "github.com/stakater/provider-keycloak/internal/controller/role/role"
@@ -45,6 +46,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientscope.Setup,
 		groupmembershipprotocolmapper.Setup,
 		providerconfig.Setup,
+		keystorersa.Setup,
 		realm.Setup,
 		requiredaction.Setup,
 		role.Setup,

@@ -14,4 +14,7 @@ package v1alpha1
 func (tr *Realm) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *KeystoreRsa) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *RequiredAction) Hub() {}
