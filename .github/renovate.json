@@ -6,7 +6,8 @@
   ],
   "extends": [
     "config:base",
-    ":semanticCommits"
+    ":semanticCommits",
+    "helpers:pinGitHubActionDigests"
   ],
   "baseBranches": [
     "main"
@@ -24,6 +25,17 @@
       "matchManagers": ["gomod"],
       "matchUpdateTypes": ["major", "minor", "patch"],
       "matchDepNames": ["gopkg.in/alecthomas/kingpin.v2"]
+    },
+    {
+      "groupName": "github-actions",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
     }
   ]
 }
