@@ -38,6 +38,22 @@ func (mg *GroupMembershipProtocolMapper) ResolveReferences(ctx context.Context, 
 	mg.Spec.ForProvider.ClientIDRef = rsp.ResolvedReference
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientScopeID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.ForProvider.ClientScopeIDRef,
+		Selector:     mg.Spec.ForProvider.ClientScopeIDSelector,
+		To: reference.To{
+			List:    &v1alpha1.ClientScopeList{},
+			Managed: &v1alpha1.ClientScope{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ClientScopeID")
+	}
+	mg.Spec.ForProvider.ClientScopeID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ClientScopeIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.RealmID),
 		Extract:      reference.ExternalName(),
 		Reference:    mg.Spec.ForProvider.RealmIDRef,

@@ -31,10 +31,6 @@ type GroupMembershipProtocolMapperInitParameters struct {
 	// The name of the claim to insert into a token.
 	ClaimName *string `json:"claimName,omitempty" tf:"claim_name,omitempty"`
 
-	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
-	// The mapper's associated client scope. Cannot be used at the same time as client_id.
-	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
-
 	// Indicates whether the full path of the group including its parents will be used. Defaults to true.
 	FullPath *bool `json:"fullPath,omitempty" tf:"full_path,omitempty"`
 
@@ -113,8 +109,17 @@ type GroupMembershipProtocolMapperParameters struct {
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client scope. Cannot be used at the same time as client_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.ClientScope
 	// +kubebuilder:validation:Optional
 	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
+
+	// Reference to a ClientScope in openidclient to populate clientScopeId.
+	// +kubebuilder:validation:Optional
+	ClientScopeIDRef *v1.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClientScope in openidclient to populate clientScopeId.
+	// +kubebuilder:validation:Optional
+	ClientScopeIDSelector *v1.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// Indicates whether the full path of the group including its parents will be used. Defaults to true.
 	// +kubebuilder:validation:Optional
