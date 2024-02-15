@@ -27,10 +27,6 @@ type KeystoreRsaInitParameters struct {
 	// Intended algorithm for the key
 	Algorithm *string `json:"algorithm,omitempty" tf:"algorithm,omitempty"`
 
-	// X509 Certificate encoded in PEM format.
-	// X509 Certificate encoded in PEM format
-	Certificate *string `json:"certificate,omitempty" tf:"certificate,omitempty"`
-
 	// When false, key is not accessible in this realm. Defaults to true.
 	// Set if the keys are enabled
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
@@ -70,10 +66,6 @@ type KeystoreRsaObservation struct {
 	// Intended algorithm for the key
 	Algorithm *string `json:"algorithm,omitempty" tf:"algorithm,omitempty"`
 
-	// X509 Certificate encoded in PEM format.
-	// X509 Certificate encoded in PEM format
-	Certificate *string `json:"certificate,omitempty" tf:"certificate,omitempty"`
-
 	// When false, key is not accessible in this realm. Defaults to true.
 	// Set if the keys are enabled
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
@@ -111,7 +103,7 @@ type KeystoreRsaParameters struct {
 	// X509 Certificate encoded in PEM format.
 	// X509 Certificate encoded in PEM format
 	// +kubebuilder:validation:Optional
-	Certificate *string `json:"certificate,omitempty" tf:"certificate,omitempty"`
+	CertificateSecretRef v1.SecretKeySelector `json:"certificateSecretRef" tf:"-"`
 
 	// When false, key is not accessible in this realm. Defaults to true.
 	// Set if the keys are enabled
@@ -187,7 +179,7 @@ type KeystoreRsaStatus struct {
 type KeystoreRsa struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.certificate) || (has(self.initProvider) && has(self.initProvider.certificate))",message="spec.forProvider.certificate is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.certificateSecretRef)",message="spec.forProvider.certificateSecretRef is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.privateKeySecretRef)",message="spec.forProvider.privateKeySecretRef is a required parameter"
 	Spec   KeystoreRsaSpec   `json:"spec"`

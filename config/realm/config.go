@@ -21,7 +21,7 @@ func Configure(p *config.Provider) {
 		if s, ok := r.TerraformResource.Schema["private_key"]; ok {
 			s.Sensitive = true
 		}
-		if s, ok := r.TerraformResource.Schema["private_key"]; ok {
+		if s, ok := r.TerraformResource.Schema["certificate"]; ok {
 			s.Sensitive = true
 		}
 	})

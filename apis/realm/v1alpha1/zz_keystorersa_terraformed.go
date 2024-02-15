@@ -25,7 +25,7 @@ func (mg *KeystoreRsa) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this KeystoreRsa
 func (tr *KeystoreRsa) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"private_key": "spec.forProvider.privateKeySecretRef"}
+	return map[string]string{"certificate": "spec.forProvider.certificateSecretRef", "private_key": "spec.forProvider.privateKeySecretRef"}
 }
 
 // GetObservation of this KeystoreRsa

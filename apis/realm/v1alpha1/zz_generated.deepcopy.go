@@ -522,11 +522,6 @@ func (in *KeystoreRsaInitParameters) DeepCopyInto(out *KeystoreRsaInitParameters
 		*out = new(string)
 		**out = **in
 	}
-	if in.Certificate != nil {
-		in, out := &in.Certificate, &out.Certificate
-		*out = new(string)
-		**out = **in
-	}
 	if in.Enabled != nil {
 		in, out := &in.Enabled, &out.Enabled
 		*out = new(bool)
@@ -619,11 +614,6 @@ func (in *KeystoreRsaObservation) DeepCopyInto(out *KeystoreRsaObservation) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.Certificate != nil {
-		in, out := &in.Certificate, &out.Certificate
-		*out = new(string)
-		**out = **in
-	}
 	if in.Enabled != nil {
 		in, out := &in.Enabled, &out.Enabled
 		*out = new(bool)
@@ -679,11 +669,7 @@ func (in *KeystoreRsaParameters) DeepCopyInto(out *KeystoreRsaParameters) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.Certificate != nil {
-		in, out := &in.Certificate, &out.Certificate
-		*out = new(string)
-		**out = **in
-	}
+	out.CertificateSecretRef = in.CertificateSecretRef
 	if in.Enabled != nil {
 		in, out := &in.Enabled, &out.Enabled
 		*out = new(bool)
