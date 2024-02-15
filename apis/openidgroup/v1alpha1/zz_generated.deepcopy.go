@@ -63,11 +63,6 @@ func (in *GroupMembershipProtocolMapperInitParameters) DeepCopyInto(out *GroupMe
 		*out = new(string)
 		**out = **in
 	}
-	if in.ClientScopeID != nil {
-		in, out := &in.ClientScopeID, &out.ClientScopeID
-		*out = new(string)
-		**out = **in
-	}
 	if in.FullPath != nil {
 		in, out := &in.FullPath, &out.FullPath
 		*out = new(bool)
@@ -229,6 +224,16 @@ func (in *GroupMembershipProtocolMapperParameters) DeepCopyInto(out *GroupMember
 		in, out := &in.ClientScopeID, &out.ClientScopeID
 		*out = new(string)
 		**out = **in
+	}
+	if in.ClientScopeIDRef != nil {
+		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ClientScopeIDSelector != nil {
+		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.FullPath != nil {
 		in, out := &in.FullPath, &out.FullPath
