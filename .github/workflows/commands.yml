@@ -9,7 +9,7 @@ jobs:
     steps:
     - name: Extract Command
       id: command
-      uses: xt0rted/slash-command-action@v1
+      uses: xt0rted/slash-command-action@bf51f8f5f4ea3d58abc7eca58f77104182b23e88 # v2
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         command: backport
@@ -19,12 +19,12 @@ jobs:
         permission-level: write
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       with:
         fetch-depth: 0
 
     - name: Open Backport PR
-      uses: zeebe-io/backport-action@2ee900dc92632adf994f8e437b6d16840fd61f58 # v0.0.9
+      uses: zeebe-io/backport-action@e8161d6a0dbfa2651b7daa76cbb75bc7c925bbf3 # v2.4.1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         github_workspace: ${{ github.workspace }}
