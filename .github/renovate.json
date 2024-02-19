@@ -19,13 +19,7 @@
     {
       "groupName": "godeps",
       "matchManagers": ["gomod"],
-      "matchUpdateTypes": ["major", "minor", "patch"],
-      "excludeDepNames": ["gopkg.in/alecthomas/kingpin.v2"]
-    },
-    {
-      "matchManagers": ["gomod"],
-      "matchUpdateTypes": ["major", "minor", "patch"],
-      "matchDepNames": ["gopkg.in/alecthomas/kingpin.v2"]
+      "matchUpdateTypes": ["major", "minor", "patch"]
     },
     {
       "groupName": "github-actions",
