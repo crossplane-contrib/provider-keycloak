@@ -82,6 +82,7 @@ type InitialPasswordParameters struct {
 type UserInitParameters struct {
 
 	// A map representing attributes for the user. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// The user's email.
@@ -105,7 +106,20 @@ type UserInitParameters struct {
 	// The user's last name.
 	LastName *string `json:"lastName,omitempty" tf:"last_name,omitempty"`
 
+	// The realm this user belongs to.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
 	// A list of required user actions.
+	// +listType=set
 	RequiredActions []*string `json:"requiredActions,omitempty" tf:"required_actions,omitempty"`
 
 	// The unique username of this user.
@@ -115,6 +129,7 @@ type UserInitParameters struct {
 type UserObservation struct {
 
 	// A map representing attributes for the user. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// The user's email.
@@ -144,6 +159,7 @@ type UserObservation struct {
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// A list of required user actions.
+	// +listType=set
 	RequiredActions []*string `json:"requiredActions,omitempty" tf:"required_actions,omitempty"`
 
 	// The unique username of this user.
@@ -154,6 +170,7 @@ type UserParameters struct {
 
 	// A map representing attributes for the user. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
 	// +kubebuilder:validation:Optional
+	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
 	// The user's email.
@@ -199,6 +216,7 @@ type UserParameters struct {
 
 	// A list of required user actions.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	RequiredActions []*string `json:"requiredActions,omitempty" tf:"required_actions,omitempty"`
 
 	// The unique username of this user.
@@ -230,13 +248,14 @@ type UserStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // User is the Schema for the Users API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type User struct {
 	metav1.TypeMeta   `json:",inline"`

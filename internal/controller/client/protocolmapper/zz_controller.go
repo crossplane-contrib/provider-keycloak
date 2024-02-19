@@ -21,6 +21,7 @@ import (
 	tjcontroller "github.com/crossplane/upjet/pkg/controller"
 	"github.com/crossplane/upjet/pkg/controller/handler"
 	"github.com/crossplane/upjet/pkg/terraform"
+	"github.com/pkg/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1"
@@ -51,6 +52,17 @@ func Setup(mgr ctrl.Manager, o tjcontroller.Options) error {
 	if o.PollJitter != 0 {
 		opts = append(opts, managed.WithPollJitterHook(o.PollJitter))
 	}
+
+	// register webhooks for the kind v1alpha1.ProtocolMapper
+	// if they're enabled.
+	if o.StartWebhooks {
+		if err := ctrl.NewWebhookManagedBy(mgr).
+			For(&v1alpha1.ProtocolMapper{}).
+			Complete(); err != nil {
+			return errors.Wrap(err, "cannot register webhook for the kind v1alpha1.ProtocolMapper")
+		}
+	}
+
 	r := managed.NewReconciler(mgr, xpresource.ManagedKind(v1alpha1.ProtocolMapper_GroupVersionKind), opts...)
 
 	return ctrl.NewControllerManagedBy(mgr).
