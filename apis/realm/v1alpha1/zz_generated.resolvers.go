@@ -35,5 +35,21 @@ func (mg *RequiredAction) ResolveReferences(ctx context.Context, c client.Reader
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.RealmID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.RealmIDRef,
+		Selector:     mg.Spec.InitProvider.RealmIDSelector,
+		To: reference.To{
+			List:    &RealmList{},
+			Managed: &Realm{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.RealmID")
+	}
+	mg.Spec.InitProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.RealmIDRef = rsp.ResolvedReference
+
 	return nil
 }

@@ -59,6 +59,44 @@ func (in *RoleInitParameters) DeepCopyInto(out *RoleInitParameters) {
 			(*out)[key] = outVal
 		}
 	}
+	if in.ClientID != nil {
+		in, out := &in.ClientID, &out.ClientID
+		*out = new(string)
+		**out = **in
+	}
+	if in.ClientIDRef != nil {
+		in, out := &in.ClientIDRef, &out.ClientIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ClientIDSelector != nil {
+		in, out := &in.ClientIDSelector, &out.ClientIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.CompositeRoles != nil {
+		in, out := &in.CompositeRoles, &out.CompositeRoles
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.CompositeRolesRefs != nil {
+		in, out := &in.CompositeRolesRefs, &out.CompositeRolesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.CompositeRolesSelector != nil {
+		in, out := &in.CompositeRolesSelector, &out.CompositeRolesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Description != nil {
 		in, out := &in.Description, &out.Description
 		*out = new(string)
@@ -68,6 +106,21 @@ func (in *RoleInitParameters) DeepCopyInto(out *RoleInitParameters) {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
 		**out = **in
+	}
+	if in.RealmID != nil {
+		in, out := &in.RealmID, &out.RealmID
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmIDRef != nil {
+		in, out := &in.RealmIDRef, &out.RealmIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmIDSelector != nil {
+		in, out := &in.RealmIDSelector, &out.RealmIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 }
 

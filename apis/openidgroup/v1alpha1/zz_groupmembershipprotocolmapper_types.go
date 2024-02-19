@@ -31,12 +31,51 @@ type GroupMembershipProtocolMapperInitParameters struct {
 	// The name of the claim to insert into a token.
 	ClaimName *string `json:"claimName,omitempty" tf:"claim_name,omitempty"`
 
+	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
+	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate clientId.
+	// +kubebuilder:validation:Optional
+	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+
+	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
+	// The mapper's associated client scope. Cannot be used at the same time as client_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.ClientScope
+	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
+
+	// Reference to a ClientScope in openidclient to populate clientScopeId.
+	// +kubebuilder:validation:Optional
+	ClientScopeIDRef *v1.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClientScope in openidclient to populate clientScopeId.
+	// +kubebuilder:validation:Optional
+	ClientScopeIDSelector *v1.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+
 	// Indicates whether the full path of the group including its parents will be used. Defaults to true.
 	FullPath *bool `json:"fullPath,omitempty" tf:"full_path,omitempty"`
 
 	// The display name of this protocol mapper in the GUI.
 	// A human-friendly name that will appear in the Keycloak console.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// The realm this protocol mapper exists within.
+	// The realm id where the associated client or client scope exists.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type GroupMembershipProtocolMapperObservation struct {
@@ -169,13 +208,14 @@ type GroupMembershipProtocolMapperStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // GroupMembershipProtocolMapper is the Schema for the GroupMembershipProtocolMappers API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
 type GroupMembershipProtocolMapper struct {
 	metav1.TypeMeta   `json:",inline"`

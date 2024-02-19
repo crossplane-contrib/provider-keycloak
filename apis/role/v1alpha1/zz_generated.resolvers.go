@@ -70,5 +70,53 @@ func (mg *Role) ResolveReferences(ctx context.Context, c client.Reader) error {
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.ClientIDRef,
+		Selector:     mg.Spec.InitProvider.ClientIDSelector,
+		To: reference.To{
+			List:    &v1alpha1.ClientList{},
+			Managed: &v1alpha1.Client{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ClientID")
+	}
+	mg.Spec.InitProvider.ClientID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ClientIDRef = rsp.ResolvedReference
+
+	mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
+		CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.CompositeRoles),
+		Extract:       reference.ExternalName(),
+		References:    mg.Spec.InitProvider.CompositeRolesRefs,
+		Selector:      mg.Spec.InitProvider.CompositeRolesSelector,
+		To: reference.To{
+			List:    &RoleList{},
+			Managed: &Role{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.CompositeRoles")
+	}
+	mg.Spec.InitProvider.CompositeRoles = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.InitProvider.CompositeRolesRefs = mrsp.ResolvedReferences
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.RealmID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.RealmIDRef,
+		Selector:     mg.Spec.InitProvider.RealmIDSelector,
+		To: reference.To{
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.RealmID")
+	}
+	mg.Spec.InitProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.RealmIDRef = rsp.ResolvedReference
+
 	return nil
 }
