@@ -15,3 +15,6 @@ func (tr *User) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *Groups) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *Permissions) Hub() {}

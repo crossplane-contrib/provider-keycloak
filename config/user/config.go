@@ -19,4 +19,8 @@ func Configure(p *config.Provider) {
 			Type: "github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group",
 		}
 	})
+
+	p.AddResourceConfigurator("keycloak_users_permissions", func(r *config.Resource) {
+		r.ShortGroup = "user"
+	})
 }

@@ -1,0 +1,96 @@
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/permissions
+  labels:
+    testing.upbound.io/example-name: users_permissions
+  name: users-permissions
+spec:
+  forProvider:
+    impersonateScope:
+    - decisionStrategy: UNANIMOUS
+      description: description
+      policies:
+      - ${keycloak_openid_client_user_policy.test.id}
+    manageGroupMembershipScope:
+    - decisionStrategy: UNANIMOUS
+      description: description
+      policies:
+      - ${keycloak_openid_client_user_policy.test.id}
+    manageScope:
+    - decisionStrategy: UNANIMOUS
+      description: description
+      policies:
+      - ${keycloak_openid_client_user_policy.test.id}
+    mapRolesScope:
+    - decisionStrategy: UNANIMOUS
+      description: description
+      policies:
+      - ${keycloak_openid_client_user_policy.test.id}
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    userImpersonatedScope:
+    - decisionStrategy: UNANIMOUS
+      description: description
+      policies:
+      - ${keycloak_openid_client_user_policy.test.id}
+    viewScope:
+    - decisionStrategy: UNANIMOUS
+      description: description
+      policies:
+      - ${keycloak_openid_client_user_policy.test.id}
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientPermissions
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/permissions
+  labels:
+    testing.upbound.io/example-name: realm_management_permission
+  name: realm-management-permission
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: keycloak_openid_client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/permissions
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    realm: my-realm
+
+---
+
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/permissions
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    email: test-user@fakedomain.com
+    firstName: Testy
+    lastName: Tester
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    username: test-user

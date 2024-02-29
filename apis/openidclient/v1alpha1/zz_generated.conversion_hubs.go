@@ -14,7 +14,19 @@ package v1alpha1
 func (tr *Client) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *ClientClientPolicy) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *ClientDefaultScopes) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ClientGroupPolicy) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ClientPermissions) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ClientRolePolicy) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *ClientScope) Hub() {}
@@ -24,3 +36,6 @@ func (tr *ClientServiceAccountRealmRole) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *ClientServiceAccountRole) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ClientUserPolicy) Hub() {}

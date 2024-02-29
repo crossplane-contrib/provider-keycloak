@@ -25,6 +25,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1"
+	features "github.com/crossplane-contrib/provider-keycloak/internal/features"
 )
 
 // Setup adds a controller that reconciles ClientScope managed resources.
@@ -51,6 +52,9 @@ func Setup(mgr ctrl.Manager, o tjcontroller.Options) error {
 	}
 	if o.PollJitter != 0 {
 		opts = append(opts, managed.WithPollJitterHook(o.PollJitter))
+	}
+	if o.Features.Enabled(features.EnableBetaManagementPolicies) {
+		opts = append(opts, managed.WithManagementPolicies())
 	}
 
 	// register webhooks for the kind v1alpha1.ClientScope
