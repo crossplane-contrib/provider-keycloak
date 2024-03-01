@@ -12,19 +12,35 @@
   "baseBranches": [
     "main"
   ],
-  "postUpdateOptions": ["gomodTidy"],
+  "postUpdateOptions": [
+    "gomodTidy"
+  ],
   "dependencyDashboard": true,
   "recreateClosed": true,
   "packageRules": [
     {
       "groupName": "godeps",
-      "matchManagers": ["gomod"],
-      "matchUpdateTypes": ["major", "minor", "patch"]
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ]
     },
     {
       "groupName": "github-actions",
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["major","minor", "patch"],
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
       "automerge": true
     }
   ]
