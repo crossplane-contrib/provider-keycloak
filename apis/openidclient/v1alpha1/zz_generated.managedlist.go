@@ -7,6 +7,15 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/pkg/resource"
 
+// GetItems of this ClientClientPolicyList.
+func (l *ClientClientPolicyList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this ClientDefaultScopesList.
 func (l *ClientDefaultScopesList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -16,8 +25,35 @@ func (l *ClientDefaultScopesList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this ClientGroupPolicyList.
+func (l *ClientGroupPolicyList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this ClientList.
 func (l *ClientList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientPermissionsList.
+func (l *ClientPermissionsList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientRolePolicyList.
+func (l *ClientRolePolicyList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]
@@ -45,6 +81,15 @@ func (l *ClientServiceAccountRealmRoleList) GetItems() []resource.Managed {
 
 // GetItems of this ClientServiceAccountRoleList.
 func (l *ClientServiceAccountRoleList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientUserPolicyList.
+func (l *ClientUserPolicyList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

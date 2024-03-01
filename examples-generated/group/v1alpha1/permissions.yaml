@@ -1,0 +1,71 @@
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  annotations:
+    meta.upbound.io/example-id: group/v1alpha1/permissions
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    groupIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: group
+    manageMembersScope:
+    - decisionStrategy: UNANIMOUS
+      description: mangage_members_scope
+      policies:
+      - ${keycloak_openid_client_group_policy.test.id}
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  annotations:
+    meta.upbound.io/example-id: group/v1alpha1/permissions
+  labels:
+    testing.upbound.io/example-name: group
+  name: group
+spec:
+  forProvider:
+    name: '%s'
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientPermissions
+metadata:
+  annotations:
+    meta.upbound.io/example-id: group/v1alpha1/permissions
+  labels:
+    testing.upbound.io/example-name: realm-management_permission
+  name: realm-management-permission
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: keycloak_openid_client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: group/v1alpha1/permissions
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    realm: my_realm

@@ -13,8 +13,14 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_generic_protocol_mapper":                  config.IdentifierFromProvider,
 	"keycloak_generic_role_mapper":                      config.IdentifierFromProvider,
 	"keycloak_group_memberships":                        config.IdentifierFromProvider,
+	"keycloak_group_permissions":                        config.IdentifierFromProvider,
 	"keycloak_group_roles":                              config.IdentifierFromProvider,
 	"keycloak_group":                                    config.IdentifierFromProvider,
+	"keycloak_openid_client_client_policy":              config.IdentifierFromProvider,
+	"keycloak_openid_client_group_policy":               config.IdentifierFromProvider,
+	"keycloak_openid_client_permissions":                config.IdentifierFromProvider,
+	"keycloak_openid_client_role_policy":                config.IdentifierFromProvider,
+	"keycloak_openid_client_user_policy":                config.IdentifierFromProvider,
 	"keycloak_openid_client_default_scopes":             config.IdentifierFromProvider,
 	"keycloak_openid_client_scope":                      config.IdentifierFromProvider,
 	"keycloak_openid_client":                            config.IdentifierFromProvider,
@@ -25,6 +31,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_required_action":                          config.IdentifierFromProvider,
 	"keycloak_role":                                     config.IdentifierFromProvider,
 	"keycloak_user_groups":                              config.IdentifierFromProvider,
+	"keycloak_users_permissions":                        config.IdentifierFromProvider,
 	"keycloak_user":                                     config.IdentifierFromProvider,
 }
 

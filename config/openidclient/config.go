@@ -31,4 +31,24 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_openid_client_service_account_realm_role", func(r *config.Resource) {
 		r.ShortGroup = Group
 	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_client_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_group_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_role_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_user_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_permissions", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
 }
