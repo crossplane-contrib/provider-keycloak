@@ -1,0 +1,39 @@
+apiVersion: saml.keycloak.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: saml/v1alpha1/identityprovider
+  labels:
+    testing.upbound.io/example-name: realm_saml_identity_provider
+  name: realm-saml-identity-provider
+spec:
+  forProvider:
+    alias: my-saml-idp
+    backchannelSupported: true
+    entityId: https://domain.com/entity_id
+    forceAuthn: true
+    postBindingAuthnRequest: true
+    postBindingLogout: true
+    postBindingResponse: true
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    singleLogoutServiceUrl: https://domain.com/adfs/ls/?wa=wsignout1.0
+    singleSignOnServiceUrl: https://domain.com/adfs/ls/
+    storeToken: false
+    trustEmail: true
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: saml/v1alpha1/identityprovider
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
