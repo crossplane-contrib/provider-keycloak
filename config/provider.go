@@ -11,12 +11,15 @@ import (
 	"github.com/crossplane/upjet/pkg/config"
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
+	"github.com/crossplane-contrib/provider-keycloak/config/defaults"
 	"github.com/crossplane-contrib/provider-keycloak/config/group"
 	"github.com/crossplane-contrib/provider-keycloak/config/mapper"
+	"github.com/crossplane-contrib/provider-keycloak/config/oidc"
 	"github.com/crossplane-contrib/provider-keycloak/config/openidclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/openidgroup"
 	"github.com/crossplane-contrib/provider-keycloak/config/realm"
 	"github.com/crossplane-contrib/provider-keycloak/config/role"
+	"github.com/crossplane-contrib/provider-keycloak/config/saml"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
 )
 
@@ -52,6 +55,9 @@ func GetProvider() *ujconfig.Provider {
 		openidgroup.Configure,
 		mapper.Configure,
 		user.Configure,
+		defaults.Configure,
+		oidc.Configure,
+		saml.Configure,
 	} {
 		configure(pc)
 	}
