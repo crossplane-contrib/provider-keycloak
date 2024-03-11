@@ -14,4 +14,16 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "realm"
 		r.Kind = "RequiredAction"
 	})
+
+	p.AddResourceConfigurator("keycloak_realm_keystore_rsa", func(r *config.Resource) {
+		// We need to override the default group that upjet generated for
+		// this resource, which would be "github"
+		r.ShortGroup = "realm"
+		if s, ok := r.TerraformResource.Schema["private_key"]; ok {
+			s.Sensitive = true
+		}
+		if s, ok := r.TerraformResource.Schema["certificate"]; ok {
+			s.Sensitive = true
+		}
+	})
 }

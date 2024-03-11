@@ -48,6 +48,7 @@ var optionalKeycloakConfigKeys = []string{
 	"root_ca_certificate",
 	"base_path",
 	"additional_headers",
+	"red_hat_sso",
 }
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
