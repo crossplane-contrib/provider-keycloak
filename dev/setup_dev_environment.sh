@@ -1,25 +1,16 @@
 #!/bin/bash
-set -eou pipefail
+set -eo pipefail
 
-kill_port_forward() {
-  echo "Killing port forward"
-  echo "Killing ArgoCD port forward with PID $ARGOCD_PORT_FORWARD_PID"
-  kill $ARGOCD_PORT_FORWARD_PID
-  echo "Killing Keycloak port forward with PID $KEYCLOAK_PORT_FORWARD_PID"
-  kill $KEYCLOAK_PORT_FORWARD_PID
-}
+CLUSTER_NAME=$1
 
-# trap ctrl-c and call kill_port_forward()
-trap kill_port_forward INT
-
-
-# check if user can run docker without sudo, if not create an alias for sudo docker for this session
-if ! docker ps >/dev/null 2>&1; then
-  echo "You need to be able to run docker without sudo. Adding alias for this session."
-  alias docker='sudo docker'
+if [[ -n $CLUSTER_NAME ]]; then
+  echo "Cluster name provided: $CLUSTER_NAME"
+else
+  echo "Default cluster name: fenrir-1"
+  CLUSTER_NAME="fenrir-1"
 fi
 
-echo "Checking dependencies"
+echo "########### Checking dependencies ###########"
 command -v docker >/dev/null 2>&1 || { echo >&2 "Docker is required but not installed.  Aborting."; exit 1; }
 command -v kind >/dev/null 2>&1 || { echo >&2 "Kind is required but not installed.  Aborting."; exit 1; }
 command -v kubectl >/dev/null 2>&1 || { echo >&2 "Kubectl is required but not installed.  Aborting."; exit 1; }
@@ -29,75 +20,120 @@ command -v base64 >/dev/null 2>&1 || { echo >&2 "base64 is required but not inst
 command -v sed >/dev/null 2>&1 || { echo >&2 "sed is required but not installed.  Aborting."; exit 1; }
 echo "All dependencies are installed."
 
-echo "Creating cluster"
-kind create cluster --name fenrir-1 --config kind-config.yaml --kubeconfig $HOME/.kube/fenrir-1 || true
+# check if user can run docker without sudo, if not create an alias for sudo docker for this session
+if ! docker ps >/dev/null 2>&1; then
+  echo "Sudo required for docker."
+  sudo_prefix='sudo'
+else
+  sudo_prefix=''
+fi
+
+echo "########### Setup Cluster ###########"
+if $sudo_prefix kind get clusters | grep "$CLUSTER_NAME" >/dev/null 2>&1; then
+  echo "$CLUSTER_NAME cluster already exists"
+else
+  echo "Creating cluster"
+  old_context=$(kubectl config current-context)
+  $sudo_prefix kind create cluster --name $CLUSTER_NAME --config kind-config.yaml --kubeconfig $HOME/.kube/$CLUSTER_NAME
+  $sudo_prefix chown $USER:$USER $HOME/.kube/$CLUSTER_NAME
+  echo "Restore old context $old_context"
+  kubectl config use-context $old_context
+fi
 
 echo "Running some commands to make sure the cluster is ready"
-export KUBECONFIG=$HOME/.kube/fenrir-1
-kubectl config use-context kind-fenrir-1
-kubectl cluster-info
-kubectl get nodes
+export KUBECONFIG=$HOME/.kube/$CLUSTER_NAME
+kubectl_cmd="kubectl --context=kind-$CLUSTER_NAME"
+$kubectl_cmd cluster-info
+$kubectl_cmd get nodes
 
-echo "Switching context to fenrir-1"
-kubectl config use-context kind-fenrir-1
+echo "########### Setup MetalLB ###########"
+echo "* Installing MetalLB"
+$kubectl_cmd apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
+echo "* Waiting for MetalLB to be ready"
+$kubectl_cmd wait --namespace metallb-system --for=condition=ready --all pod --selector=app=metallb  --timeout=300s
+
+echo "* Get IPAM config: "
+$sudo_prefix docker network inspect kind
+echo "* Available subnets (IPv4 required): "
+$sudo_prefix docker network inspect kind | jq -r .[].IPAM.Config[].Subnet
+
+export IP_PREFIX=$($sudo_prefix docker network inspect kind | jq -r .[].IPAM.Config[].Subnet | grep -E "([0-9]+\.){3}0/[0-9]+" | sed -r 's|\.0/[0-9]+||g')
+echo "* Found IP Prefix: $IP_PREFIX"
+# if CLUSTER_NAME == "fenrir-1" then IP_PREFIX == "172.18.0" else IP_PREFIX == "172.19.0"
+if [[ $CLUSTER_NAME == "fenrir-1" ]]; then
+  export IP_RANGE_START="$IP_PREFIX.30"
+  export IP_RANGE_END="$IP_PREFIX.55"
+else
+  export IP_RANGE_START="$IP_PREFIX.56"
+  export IP_RANGE_END="$IP_PREFIX.80"
+fi
+
+echo "* Set IP Range: $IP_RANGE_START - $IP_RANGE_END"
+while true; do
+  cat metallb/pools.yaml | envsubst | $kubectl_cmd apply -f - && break  # Break the loop if command succeeds
+  echo "** still waiting for metallb resources to be ready"
+  sleep 1
+done
 
 echo "########### Installing ArgoCD ###########"
-kubectl create namespace argocd || true
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+$kubectl_cmd create namespace argocd || true
+$kubectl_cmd apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+echo "* Exposing ArgoCD"
+$kubectl_cmd patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+while [[ -z $($kubectl_cmd get svc -n argocd argocd-server -o jsonpath="{.status.loadBalancer.ingress}" 2>/dev/null) ]]; do
+  echo "** still waiting for argocd/argocd-server to get ingress"
+  sleep 1
+done
+echo "* argocd/argocd-server now has ingress."
+
+export ARGOCD_IP=$($kubectl_cmd -n argocd get svc argocd-server -o json | jq -r .status.loadBalancer.ingress[0].ip)
+
 echo "* Waiting for ArgoCD to be ready"
-kubectl wait pod --all --for=condition=Ready --namespace argocd --timeout=300s
+$kubectl_cmd wait pod --all --for=condition=Ready --namespace argocd --timeout=300s
 
 
 echo "########### Installing Keycloak ###########"
-kubectl apply -f apps/keycloak.yaml
-sleep 5
-kubectl wait pod --all --for=condition=Ready --namespace keycloak --timeout=300s
+if $kubectl_cmd diff -f apps/keycloak.yaml >/dev/null 2>&1; then
+  echo "Keycloak up-to-date."
+else
+  $kubectl_cmd apply -f apps/keycloak.yaml
+  sleep 5
+  $kubectl_cmd wait pod --all --for=condition=Ready --namespace keycloak --timeout=300s
+fi
 
-export KEYCLOAK_PORT=$(kubectl -n keycloak get svc keycloak-keycloakx-http -o json | jq -r .spec.ports[0].port)
+while [[ -z $($kubectl_cmd get svc -n keycloak keycloak-keycloakx-http -o jsonpath="{.status.loadBalancer.ingress}" 2>/dev/null) ]]; do
+  echo "** still waiting for service keycloak/keycloak-keycloakx-http to get ingress"
+  sleep 5
+done
+
+export KEYCLOAK_IP=$($kubectl_cmd -n keycloak get svc keycloak-keycloakx-http -o json | jq -r .status.loadBalancer.ingress[0].ip)
+export KEYCLOAK_PORT=$($kubectl_cmd -n keycloak get svc keycloak-keycloakx-http -o json | jq -r .spec.ports[0].port)
 export KEYCLOAK_USER=admin
 export KEYCLOAK_PASSWORD=admin
 
+
 echo "########### Installing Crossplane ###########"
-
-kubectl apply -f apps/crossplane.yaml
-sleep 10
-kubectl wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
-
-echo "########### Installing Keycloak Provider ###########"
-cat apps/keycloak-provider/keycloak-provider-secret.yaml | kubectl apply --namespace crossplane-system  -f -
-cat apps/keycloak-provider/keycloak-provider.yaml | kubectl apply --namespace crossplane-system  -f -
-
-
-# Port forward ArgoCD and Keycloak and save the process id
-# check if ports 8888 and 8080 are already in use
-if lsof -Pi :8888 -sTCP:LISTEN -t >/dev/null 2>&1; then
-  echo "Port 8888 is already in use. Aborting."
-  exit 1
+if $kubectl_cmd diff -f apps/crossplane.yaml >/dev/null 2>&1; then
+  echo "Crossplane up-to-date."
+else
+  $kubectl_cmd apply -f apps/crossplane.yaml
+  sleep 10
+  $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
+  sleep 10
+  $kubectl_cmd wait providers.pkg.crossplane.io/keycloak-provider --for=condition=Healthy --timeout=300s --namespace argocd
 fi
-if lsof -Pi :8080 -sTCP:LISTEN -t >/dev/null 2>&1; then
-  echo "Port 8080 is already in use. Aborting."
-  exit 1
-fi
-ARGOCD_PORT_FORWARD_PID=$(kubectl port-forward svc/argocd-server -n argocd 8888:443 > /dev/null 2>&1 & echo $!)
-KEYCLOAK_PORT_FORWARD_PID=$(kubectl port-forward svc/keycloak-keycloakx-http -n keycloak 8889:$KEYCLOAK_PORT > /dev/null 2>&1 & echo $!)
 
-echo $ARGOCD_PORT_FORWARD_PID
-echo $KEYCLOAK_PORT_FORWARD_PID
+echo "########### Installing Keycloak Provider secret ###########"
+cat ./apps/keycloak-provider/keycloak-provider-secret.yaml | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
+$kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider.yaml
+
 
 echo "#################################################"
 echo "You're ready to go!"
-echo "ArgoCD is ready at https://127.0.0.1:8888"
-echo "ArgoCD login: admin / $(kubectl -n argocd get secrets argocd-initial-admin-secret -o json | jq -r .data.password | base64 -d)"
+echo "ArgoCD is ready at https://$ARGOCD_IP:443"
+echo "ArgoCD login: admin / $($kubectl_cmd -n argocd get secrets argocd-initial-admin-secret -o json | jq -r .data.password | base64 -d)"
 echo "-------------------------------------------------"
-echo "Keycloak is ready at http://127.0.0.1:8889/auth"
+echo "Keycloak is ready at http://$KEYCLOAK_IP:$KEYCLOAK_PORT/auth"
 echo "Keycloak login: admin / admin"
 echo "#################################################"
-echo "To delete the cluster run: kind delete cluster --name fenrir-1"
-echo "#################################################"
-echo "You can now run the provider by executing: make run"
-echo "#################################################"
-echo "Press Ctrl+C to kill the port forwards and exit."
-
-while true; do sleep 10; done
-
-

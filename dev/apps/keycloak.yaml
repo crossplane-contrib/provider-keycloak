@@ -28,7 +28,7 @@ spec:
             value: >-
               -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
         service:
-          type: ClusterIP
+          type: LoadBalancer
   destination:
     server: https://kubernetes.default.svc
     namespace: keycloak
