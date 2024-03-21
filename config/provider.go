@@ -11,6 +11,7 @@ import (
 	"github.com/crossplane/upjet/pkg/config"
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/defaults"
 	"github.com/crossplane-contrib/provider-keycloak/config/group"
 	"github.com/crossplane-contrib/provider-keycloak/config/mapper"
@@ -85,6 +86,15 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 				r.References["client_id"] = config.Reference{
 					Type: "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
 				}
+			case "service_account_user_id":
+				r.References["service_account_user_id"] = config.Reference{
+					Type:      "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
+					Extractor: common.PathServiceAccountRoleIDExtractor,
+				}
+				r.LateInitializer = config.LateInitializer{
+					IgnoredFields: []string{"service_account_user_id"},
+				}
+
 			}
 		}
 	}

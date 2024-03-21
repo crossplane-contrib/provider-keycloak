@@ -10,7 +10,7 @@ const (
 	// SelfPackagePath is the golang path for this package.
 	SelfPackagePath = "github.com/crossplane-contrib/provider-keycloak/config/common"
 
-	// PathARNExtractor is the golang path to ARNExtractor function
+	// PathServiceAccountRoleIDExtractor is the golang path to ARNExtractor function
 	// in this package.
 	PathServiceAccountRoleIDExtractor = SelfPackagePath + ".ServiceAccountRoleIDExtractor()"
 )

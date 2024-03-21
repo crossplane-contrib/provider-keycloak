@@ -428,6 +428,22 @@ func (mg *ClientServiceAccountRealmRole) ResolveReferences(ctx context.Context, 
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ServiceAccountUserID),
+		Extract:      common.ServiceAccountRoleIDExtractor(),
+		Reference:    mg.Spec.ForProvider.ServiceAccountUserIDRef,
+		Selector:     mg.Spec.ForProvider.ServiceAccountUserIDSelector,
+		To: reference.To{
+			List:    &ClientList{},
+			Managed: &Client{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ServiceAccountUserID")
+	}
+	mg.Spec.ForProvider.ServiceAccountUserID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ServiceAccountUserIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.RealmID),
 		Extract:      reference.ExternalName(),
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
@@ -442,6 +458,22 @@ func (mg *ClientServiceAccountRealmRole) ResolveReferences(ctx context.Context, 
 	}
 	mg.Spec.InitProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ServiceAccountUserID),
+		Extract:      common.ServiceAccountRoleIDExtractor(),
+		Reference:    mg.Spec.InitProvider.ServiceAccountUserIDRef,
+		Selector:     mg.Spec.InitProvider.ServiceAccountUserIDSelector,
+		To: reference.To{
+			List:    &ClientList{},
+			Managed: &Client{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ServiceAccountUserID")
+	}
+	mg.Spec.InitProvider.ServiceAccountUserID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ServiceAccountUserIDRef = rsp.ResolvedReference
 
 	return nil
 }

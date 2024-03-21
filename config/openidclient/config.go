@@ -1,7 +1,6 @@
 package openidclient
 
 import (
-	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane/upjet/pkg/config"
 )
 
@@ -29,15 +28,6 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_openid_client_service_account_role", func(r *config.Resource) {
 		r.ShortGroup = Group
-
-		r.References["service_account_user_id"] = config.Reference{
-			Type:      "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
-			Extractor: common.PathServiceAccountRoleIDExtractor,
-		}
-
-		//r.References["role"] = config.Reference{
-		//	Type: "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
-		//}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_service_account_realm_role", func(r *config.Resource) {
