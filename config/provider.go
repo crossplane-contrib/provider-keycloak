@@ -20,6 +20,7 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/realm"
 	"github.com/crossplane-contrib/provider-keycloak/config/role"
 	"github.com/crossplane-contrib/provider-keycloak/config/saml"
+	"github.com/crossplane-contrib/provider-keycloak/config/samlclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
 )
 
@@ -58,6 +59,7 @@ func GetProvider() *ujconfig.Provider {
 		defaults.Configure,
 		oidc.Configure,
 		saml.Configure,
+		samlclient.Configure,
 	} {
 		configure(pc)
 	}
