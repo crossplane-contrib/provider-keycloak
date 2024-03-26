@@ -35,6 +35,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_user":                                     config.IdentifierFromProvider,
 	"keycloak_oidc_identity_provider":                   config.IdentifierFromProvider,
 	"keycloak_saml_identity_provider":                   config.IdentifierFromProvider,
+	"keycloak_custom_identity_provider_mapper":          config.IdentifierFromProvider,
 	"keycloak_saml_client":                              config.IdentifierFromProvider,
 	"keycloak_saml_client_default_scopes":               config.IdentifierFromProvider,
 	"keycloak_saml_client_scope":                        config.IdentifierFromProvider,

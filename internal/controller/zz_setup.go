@@ -16,6 +16,7 @@ import (
 	memberships "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/memberships"
 	permissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/permissions"
 	rolesgroup "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/roles"
+	identityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/identityprovider/identityprovidermapper"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/oidc/identityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/client"
 	clientclientpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientclientpolicy"
@@ -53,6 +54,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		memberships.Setup,
 		permissions.Setup,
 		rolesgroup.Setup,
+		identityprovidermapper.Setup,
 		identityprovider.Setup,
 		client.Setup,
 		clientclientpolicy.Setup,
