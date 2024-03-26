@@ -97,10 +97,10 @@ func main() {
 	}
 
 	if *enableManagementPolicies {
-	    o.Features.Enable(features.EnableBetaManagementPolicies)
-	    log.Info("Beta feature enabled", "flag", features.EnableBetaManagementPolicies)
+		o.Features.Enable(features.EnableBetaManagementPolicies)
+		log.Info("Beta feature enabled", "flag", features.EnableBetaManagementPolicies)
 	}
-		
+
 	if *enableExternalSecretStores {
 		o.SecretStoreConfigGVK = &v1alpha1.StoreConfigGroupVersionKind
 		log.Info("Alpha feature enabled", "flag", features.EnableAlphaExternalSecretStores)
