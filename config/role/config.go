@@ -11,8 +11,5 @@ func Configure(p *config.Provider) {
 		r.References["composite_roles"] = config.Reference{
 			Type: "Role",
 		}
-		r.References["client_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
-		}
 	})
 }
