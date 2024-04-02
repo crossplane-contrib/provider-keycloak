@@ -90,8 +90,8 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 				r.References["service_account_user_id"] = config.Reference{
 					Type:              "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
 					Extractor:         common.PathServiceAccountRoleIDExtractor,
-					RefFieldName:      "ServiceAccountUserClientIdRef",
-					SelectorFieldName: "ServiceAccountUserClientIdSelector",
+					RefFieldName:      "ServiceAccountUserClientIDRef",
+					SelectorFieldName: "ServiceAccountUserClientIDSelector",
 				}
 				r.LateInitializer = config.LateInitializer{
 					IgnoredFields: []string{"service_account_user_id"},
