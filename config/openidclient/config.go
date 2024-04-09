@@ -1,6 +1,8 @@
 package openidclient
 
-import "github.com/crossplane/upjet/pkg/config"
+import (
+	"github.com/crossplane/upjet/pkg/config"
+)
 
 const (
 	// Group is the short group for this provider.

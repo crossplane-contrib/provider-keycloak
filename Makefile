@@ -15,6 +15,8 @@ export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-keycloak_v4.4.0
 
 export TERRAFORM_DOCS_PATH ?= docs/resources
 
+export GOLANGCILINT_VERSION ?= 1.57.2
+
 PLATFORMS ?= linux_amd64 linux_arm64
 
 # -include will silently skip missing files, which allows us

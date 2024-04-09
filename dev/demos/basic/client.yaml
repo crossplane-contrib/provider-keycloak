@@ -10,3 +10,17 @@ spec:
   providerConfigRef:
     name: "keycloak-provider-config"
   managementPolicies: ["Observe"]
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: test
+spec:
+  forProvider:
+    realmIdRef:
+      name: "dev"
+    accessType: "CONFIDENTIAL"
+    clientId: "test"
+    serviceAccountsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"

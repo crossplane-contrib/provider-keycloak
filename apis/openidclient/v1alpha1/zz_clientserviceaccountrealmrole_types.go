@@ -34,7 +34,19 @@ type ClientServiceAccountRealmRoleInitParameters struct {
 	// The name of the role that is assigned.
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 
+	// Reference to a Client in openidclient to populate serviceAccountUserId.
+	// +kubebuilder:validation:Optional
+	ServiceAccountUserClientIDRef *v1.Reference `json:"serviceAccountUserClientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate serviceAccountUserId.
+	// +kubebuilder:validation:Optional
+	ServiceAccountUserClientIDSelector *v1.Selector `json:"serviceAccountUserClientIdSelector,omitempty" tf:"-"`
+
 	// The id of the service account that is assigned the role (the service account of the client that "consumes" the role).
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.ServiceAccountRoleIDExtractor()
+	// +crossplane:generate:reference:refFieldName=ServiceAccountUserClientIDRef
+	// +crossplane:generate:reference:selectorFieldName=ServiceAccountUserClientIDSelector
 	ServiceAccountUserID *string `json:"serviceAccountUserId,omitempty" tf:"service_account_user_id,omitempty"`
 }
 
@@ -70,7 +82,19 @@ type ClientServiceAccountRealmRoleParameters struct {
 	// +kubebuilder:validation:Optional
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 
+	// Reference to a Client in openidclient to populate serviceAccountUserId.
+	// +kubebuilder:validation:Optional
+	ServiceAccountUserClientIDRef *v1.Reference `json:"serviceAccountUserClientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate serviceAccountUserId.
+	// +kubebuilder:validation:Optional
+	ServiceAccountUserClientIDSelector *v1.Selector `json:"serviceAccountUserClientIdSelector,omitempty" tf:"-"`
+
 	// The id of the service account that is assigned the role (the service account of the client that "consumes" the role).
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.ServiceAccountRoleIDExtractor()
+	// +crossplane:generate:reference:refFieldName=ServiceAccountUserClientIDRef
+	// +crossplane:generate:reference:selectorFieldName=ServiceAccountUserClientIDSelector
 	// +kubebuilder:validation:Optional
 	ServiceAccountUserID *string `json:"serviceAccountUserId,omitempty" tf:"service_account_user_id,omitempty"`
 }
@@ -112,7 +136,6 @@ type ClientServiceAccountRealmRole struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.role) || (has(self.initProvider) && has(self.initProvider.role))",message="spec.forProvider.role is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.serviceAccountUserId) || (has(self.initProvider) && has(self.initProvider.serviceAccountUserId))",message="spec.forProvider.serviceAccountUserId is a required parameter"
 	Spec   ClientServiceAccountRealmRoleSpec   `json:"spec"`
 	Status ClientServiceAccountRealmRoleStatus `json:"status,omitempty"`
 }
