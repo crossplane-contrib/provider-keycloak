@@ -1,0 +1,44 @@
+---
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: my-realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: my-realm-role
+spec:
+  forProvider:
+    description: My Realm Role
+    name: my-realm-role
+    realmIdRef:
+      name: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: default-roles-my-realm
+  annotations:
+    crossplane.io/external-name: "my-realm/05e2e0a5-68bb-4470-ad50-90fe0c310fc9"
+spec:
+  managementPolicies: ["*"]
+  deletionPolicy: Orphan
+  forProvider: 
+    compositeRoles:
+    - 1e989e18-31c1-43f2-bb9f-6949bc2db878
+    - 6899af0e-ea33-4c47-b9e3-ac62bcbffdc7
+    - d225dfe5-0642-47be-9492-12ef89e30ea3
+    - e92cdbab-23f8-4289-b7f2-aa424a485327
+    name: default-roles-my-realm
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
