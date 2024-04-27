@@ -121,7 +121,6 @@ else
   sleep 10
   $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
   sleep 10
-  $kubectl_cmd wait providers.pkg.crossplane.io/keycloak-provider --for=condition=Healthy --timeout=300s --namespace argocd
 fi
 
 echo "########### Installing Keycloak Provider secret ###########"
