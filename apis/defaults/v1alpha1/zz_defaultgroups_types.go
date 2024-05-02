@@ -13,24 +13,22 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type RolesInitParameters struct {
+type DefaultGroupsInitParameters struct {
 
-	// Realm level roles assigned to new users by default.
-	// Realm level roles assigned to new users.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)
+	// A set of group ids that should be default groups on the realm referenced by realm_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
 	// +listType=set
-	DefaultRoles []*string `json:"defaultRoles,omitempty" tf:"default_roles,omitempty"`
+	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
 
-	// References to Role in role to populate defaultRoles.
+	// References to Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	DefaultRolesRefs []v1.Reference `json:"defaultRolesRefs,omitempty" tf:"-"`
+	GroupIdsRefs []v1.Reference `json:"groupIdsRefs,omitempty" tf:"-"`
 
-	// Selector for a list of Role in role to populate defaultRoles.
+	// Selector for a list of Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	DefaultRolesSelector *v1.Selector `json:"defaultRolesSelector,omitempty" tf:"-"`
+	GroupIdsSelector *v1.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
 
-	// The realm this role exists within.
+	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -43,38 +41,35 @@ type RolesInitParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
-type RolesObservation struct {
+type DefaultGroupsObservation struct {
 
-	// Realm level roles assigned to new users by default.
-	// Realm level roles assigned to new users.
+	// A set of group ids that should be default groups on the realm referenced by realm_id.
 	// +listType=set
-	DefaultRoles []*string `json:"defaultRoles,omitempty" tf:"default_roles,omitempty"`
+	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// The realm this role exists within.
+	// The realm this group exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 }
 
-type RolesParameters struct {
+type DefaultGroupsParameters struct {
 
-	// Realm level roles assigned to new users by default.
-	// Realm level roles assigned to new users.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)
+	// A set of group ids that should be default groups on the realm referenced by realm_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
 	// +kubebuilder:validation:Optional
 	// +listType=set
-	DefaultRoles []*string `json:"defaultRoles,omitempty" tf:"default_roles,omitempty"`
+	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
 
-	// References to Role in role to populate defaultRoles.
+	// References to Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	DefaultRolesRefs []v1.Reference `json:"defaultRolesRefs,omitempty" tf:"-"`
+	GroupIdsRefs []v1.Reference `json:"groupIdsRefs,omitempty" tf:"-"`
 
-	// Selector for a list of Role in role to populate defaultRoles.
+	// Selector for a list of Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	DefaultRolesSelector *v1.Selector `json:"defaultRolesSelector,omitempty" tf:"-"`
+	GroupIdsSelector *v1.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
 
-	// The realm this role exists within.
+	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -88,10 +83,10 @@ type RolesParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
-// RolesSpec defines the desired state of Roles
-type RolesSpec struct {
+// DefaultGroupsSpec defines the desired state of DefaultGroups
+type DefaultGroupsSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     RolesParameters `json:"forProvider"`
+	ForProvider     DefaultGroupsParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -102,49 +97,49 @@ type RolesSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider RolesInitParameters `json:"initProvider,omitempty"`
+	InitProvider DefaultGroupsInitParameters `json:"initProvider,omitempty"`
 }
 
-// RolesStatus defines the observed state of Roles.
-type RolesStatus struct {
+// DefaultGroupsStatus defines the observed state of DefaultGroups.
+type DefaultGroupsStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        RolesObservation `json:"atProvider,omitempty"`
+	AtProvider        DefaultGroupsObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// Roles is the Schema for the Roless API.
+// DefaultGroups is the Schema for the DefaultGroupss API.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
-type Roles struct {
+type DefaultGroups struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              RolesSpec   `json:"spec"`
-	Status            RolesStatus `json:"status,omitempty"`
+	Spec              DefaultGroupsSpec   `json:"spec"`
+	Status            DefaultGroupsStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// RolesList contains a list of Roless
-type RolesList struct {
+// DefaultGroupsList contains a list of DefaultGroupss
+type DefaultGroupsList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Roles `json:"items"`
+	Items           []DefaultGroups `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	Roles_Kind             = "Roles"
-	Roles_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: Roles_Kind}.String()
-	Roles_KindAPIVersion   = Roles_Kind + "." + CRDGroupVersion.String()
-	Roles_GroupVersionKind = CRDGroupVersion.WithKind(Roles_Kind)
+	DefaultGroups_Kind             = "DefaultGroups"
+	DefaultGroups_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: DefaultGroups_Kind}.String()
+	DefaultGroups_KindAPIVersion   = DefaultGroups_Kind + "." + CRDGroupVersion.String()
+	DefaultGroups_GroupVersionKind = CRDGroupVersion.WithKind(DefaultGroups_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&Roles{}, &RolesList{})
+	SchemeBuilder.Register(&DefaultGroups{}, &DefaultGroupsList{})
 }

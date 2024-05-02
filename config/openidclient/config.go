@@ -28,6 +28,7 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_openid_client_service_account_role", func(r *config.Resource) {
 		r.ShortGroup = Group
+
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_service_account_realm_role", func(r *config.Resource) {

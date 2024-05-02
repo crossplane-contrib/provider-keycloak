@@ -11,6 +11,7 @@ import (
 
 	protocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/protocolmapper"
 	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/rolemapper"
+	defaultgroups "github.com/crossplane-contrib/provider-keycloak/internal/controller/defaults/defaultgroups"
 	roles "github.com/crossplane-contrib/provider-keycloak/internal/controller/defaults/roles"
 	group "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/group"
 	memberships "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/memberships"
@@ -49,6 +50,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		protocolmapper.Setup,
 		rolemapper.Setup,
+		defaultgroups.Setup,
 		roles.Setup,
 		group.Setup,
 		memberships.Setup,
