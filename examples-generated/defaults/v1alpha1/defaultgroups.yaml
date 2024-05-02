@@ -30,6 +30,7 @@ spec:
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
+
 ---
 
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
