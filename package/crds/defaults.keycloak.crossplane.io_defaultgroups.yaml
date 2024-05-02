@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: roles.defaults.keycloak.crossplane.io
+  name: defaultgroups.defaults.keycloak.crossplane.io
 spec:
   group: defaults.keycloak.crossplane.io
   names:
@@ -12,10 +12,10 @@ spec:
     - crossplane
     - managed
     - keycloak
-    kind: Roles
-    listKind: RolesList
-    plural: roles
-    singular: roles
+    kind: DefaultGroups
+    listKind: DefaultGroupsList
+    plural: defaultgroups
+    singular: defaultgroups
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,7 +34,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Roles is the Schema for the Roless API.
+        description: DefaultGroups is the Schema for the DefaultGroupss API.
         properties:
           apiVersion:
             description: |-
@@ -54,7 +54,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: RolesSpec defines the desired state of Roles
+            description: DefaultGroupsSpec defines the desired state of DefaultGroups
             properties:
               deletionPolicy:
                 default: Delete
@@ -72,16 +72,15 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  defaultRoles:
-                    description: |-
-                      Realm level roles assigned to new users by default.
-                      Realm level roles assigned to new users.
+                  groupIds:
+                    description: A set of group ids that should be default groups
+                      on the realm referenced by realm_id.
                     items:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
-                  defaultRolesRefs:
-                    description: References to Role in role to populate defaultRoles.
+                  groupIdsRefs:
+                    description: References to Group in group to populate groupIds.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -117,8 +116,9 @@ spec:
                       - name
                       type: object
                     type: array
-                  defaultRolesSelector:
-                    description: Selector for a list of Role in role to populate defaultRoles.
+                  groupIdsSelector:
+                    description: Selector for a list of Group in group to populate
+                      groupIds.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -158,7 +158,7 @@ spec:
                         type: object
                     type: object
                   realmId:
-                    description: The realm this role exists within.
+                    description: The realm this group exists in.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -248,16 +248,15 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  defaultRoles:
-                    description: |-
-                      Realm level roles assigned to new users by default.
-                      Realm level roles assigned to new users.
+                  groupIds:
+                    description: A set of group ids that should be default groups
+                      on the realm referenced by realm_id.
                     items:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
-                  defaultRolesRefs:
-                    description: References to Role in role to populate defaultRoles.
+                  groupIdsRefs:
+                    description: References to Group in group to populate groupIds.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -293,8 +292,9 @@ spec:
                       - name
                       type: object
                     type: array
-                  defaultRolesSelector:
-                    description: Selector for a list of Role in role to populate defaultRoles.
+                  groupIdsSelector:
+                    description: Selector for a list of Group in group to populate
+                      groupIds.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -334,7 +334,7 @@ spec:
                         type: object
                     type: object
                   realmId:
-                    description: The realm this role exists within.
+                    description: The realm this group exists in.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -579,14 +579,13 @@ spec:
             - forProvider
             type: object
           status:
-            description: RolesStatus defines the observed state of Roles.
+            description: DefaultGroupsStatus defines the observed state of DefaultGroups.
             properties:
               atProvider:
                 properties:
-                  defaultRoles:
-                    description: |-
-                      Realm level roles assigned to new users by default.
-                      Realm level roles assigned to new users.
+                  groupIds:
+                    description: A set of group ids that should be default groups
+                      on the realm referenced by realm_id.
                     items:
                       type: string
                     type: array
@@ -594,7 +593,7 @@ spec:
                   id:
                     type: string
                   realmId:
-                    description: The realm this role exists within.
+                    description: The realm this group exists in.
                     type: string
                 type: object
               conditions:

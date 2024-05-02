@@ -52,55 +52,44 @@ spec:
   providerConfigRef:
     name: keycloak-provider-config
 ---
-apiVersion: defaults.keycloak.crossplane.io/v1alpha1
-kind: Roles
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
 metadata:
-  name: default-roles-my-realm
+  name: my-group
 spec:
-  deletionPolicy: Orphan
-  #managementPolicies: ["Observe"]
   forProvider:
-    defaultRolesRefs:
-    - name: my-realm-role
-    - name: my-client-role
-    defaultRoles:
-    - offline_access
-    - uma_authorization
+    name: my-group
     realmIdRef:
       name: my-realm
   providerConfigRef:
     name: keycloak-provider-config
 --- 
-
+# Example Role mapping: Using groupId and roleIds to assign roles to the default group
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: dev-group-roles
+spec:
+  forProvider:
+    realmIdRef:
+      name: my-realm
+    groupIdRef: 
+      name: my-group
+    roleIdsRefs:
+      - name: my-realm-role
+      - name: my-client-role
+  providerConfigRef:
+    name: keycloak-provider-config
+--- 
 apiVersion: defaults.keycloak.crossplane.io/v1alpha1
 kind: DefaultGroups
 metadata:
-  annotations:
-    meta.upbound.io/example-id: defaults/v1alpha1/defaultgroups
-  labels:
-    testing.upbound.io/example-name: default
   name: default
 spec:
   forProvider:
     groupIdsRefs:
-    - name: group
-    realmIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: realm
-
----
-
-apiVersion: group.keycloak.crossplane.io/v1alpha1
-kind: Group
-metadata:
-  annotations:
-    meta.upbound.io/example-id: defaults/v1alpha1/defaultgroups
-  labels:
-    testing.upbound.io/example-name: group
-  name: group
-spec:
-  forProvider:
-    name: my-group
-    realmIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: realm
+    - name: my-group
+    realmIdRef:
+      name: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
