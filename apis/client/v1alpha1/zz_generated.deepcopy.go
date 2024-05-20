@@ -63,6 +63,16 @@ func (in *ProtocolMapperInitParameters) DeepCopyInto(out *ProtocolMapperInitPara
 		*out = new(string)
 		**out = **in
 	}
+	if in.ClientScopeIDRef != nil {
+		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ClientScopeIDSelector != nil {
+		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Config != nil {
 		in, out := &in.Config, &out.Config
 		*out = make(map[string]*string, len(*in))
@@ -241,6 +251,16 @@ func (in *ProtocolMapperParameters) DeepCopyInto(out *ProtocolMapperParameters) 
 		in, out := &in.ClientScopeID, &out.ClientScopeID
 		*out = new(string)
 		**out = **in
+	}
+	if in.ClientScopeIDRef != nil {
+		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ClientScopeIDSelector != nil {
+		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Config != nil {
 		in, out := &in.Config, &out.Config
