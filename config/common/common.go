@@ -15,6 +15,7 @@ const (
 	PathServiceAccountRoleIDExtractor = SelfPackagePath + ".ServiceAccountRoleIDExtractor()"
 )
 
+// ServiceAccountRoleIDExtractor returns a reference.ExtractValueFn that can be used to extract the ServiceAccountRoleID from a managed resource.
 func ServiceAccountRoleIDExtractor() reference.ExtractValueFn {
 	return func(mg xpresource.Managed) string {
 		paved, err := fieldpath.PaveObject(mg)
