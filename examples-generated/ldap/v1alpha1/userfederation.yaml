@@ -1,0 +1,49 @@
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ldap/v1alpha1/userfederation
+  labels:
+    testing.upbound.io/example-name: ldap_user_federation
+  name: ldap-user-federation
+spec:
+  forProvider:
+    bindCredentialSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    bindDn: cn=admin,dc=example,dc=org
+    connectionTimeout: 5s
+    connectionUrl: ldap://openldap
+    enabled: true
+    kerberos:
+    - kerberosRealm: FOO.LOCAL
+      keyTab: /etc/host.keytab
+      serverPrincipal: HTTP/host.foo.com@FOO.LOCAL
+    name: openldap
+    rdnLdapAttribute: cn
+    readTimeout: 10s
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    userObjectClasses:
+    - simpleSecurityObject
+    - organizationalRole
+    usernameLdapAttribute: cn
+    usersDn: dc=example,dc=org
+    uuidLdapAttribute: entryDN
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ldap/v1alpha1/userfederation
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

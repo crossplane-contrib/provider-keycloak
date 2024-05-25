@@ -42,6 +42,18 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_realm_keystore_rsa":                       config.IdentifierFromProvider,
 	"keycloak_default_roles":                            config.IdentifierFromProvider,
 	"keycloak_default_groups":                           config.IdentifierFromProvider,
+	// ldap
+	"keycloak_ldap_user_federation":                      config.IdentifierFromProvider,
+	"keycloak_ldap_user_attribute_mapper":                config.IdentifierFromProvider,
+	"keycloak_ldap_role_mapper":                          config.IdentifierFromProvider,
+	"keycloak_ldap_group_mapper":                         config.IdentifierFromProvider,
+	"keycloak_ldap_hardcoded_role_mapper":                config.IdentifierFromProvider,
+	"keycloak_ldap_hardcoded_group_mapper":               config.IdentifierFromProvider,
+	"keycloak_ldap_msad_user_account_control_mapper":     config.IdentifierFromProvider,
+	"keycloak_ldap_msad_lds_user_account_control_mapper": config.IdentifierFromProvider,
+	"keycloak_ldap_hardcoded_attribute_mapper":           config.IdentifierFromProvider,
+	"keycloak_ldap_full_name_mapper":                     config.IdentifierFromProvider,
+	"keycloak_ldap_custom_mapper":                        config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the
