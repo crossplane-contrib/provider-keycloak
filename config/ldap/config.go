@@ -2,6 +2,7 @@ package ldap
 
 import "github.com/crossplane/upjet/pkg/config"
 
+// Group is the short group name for the resources in this package
 var Group = "ldap"
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
