@@ -1,0 +1,116 @@
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/roles
+  labels:
+    testing.upbound.io/example-name: user_roles
+  name: user-roles
+spec:
+  forProvider:
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    roleIds:
+    - ${keycloak_role.realm_role.id}
+    - ${keycloak_role.client_role.id}
+    userIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: user
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/roles
+  labels:
+    testing.upbound.io/example-name: client
+  name: client
+spec:
+  forProvider:
+    accessType: BEARER-ONLY
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    enabled: true
+    name: client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/roles
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/roles
+  labels:
+    testing.upbound.io/example-name: client_role
+  name: client-role
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: client
+    description: My Client Role
+    name: my-client-role
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/roles
+  labels:
+    testing.upbound.io/example-name: realm_role
+  name: realm-role
+spec:
+  forProvider:
+    description: My Realm Role
+    name: my-realm-role
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/roles
+  labels:
+    testing.upbound.io/example-name: user
+  name: user
+spec:
+  forProvider:
+    email: bob@domain.com
+    enabled: true
+    firstName: Bob
+    lastName: Bobson
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    username: bob

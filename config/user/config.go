@@ -20,6 +20,14 @@ func Configure(p *config.Provider) {
 		}
 	})
 
+	p.AddResourceConfigurator("keycloak_user_roles", func(r *config.Resource) {
+		r.ShortGroup = "user"
+
+		r.References["user_id"] = config.Reference{
+			Type: "User",
+		}
+	})
+
 	p.AddResourceConfigurator("keycloak_users_permissions", func(r *config.Resource) {
 		r.ShortGroup = "user"
 	})

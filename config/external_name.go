@@ -31,6 +31,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_required_action":                          config.IdentifierFromProvider,
 	"keycloak_role":                                     config.IdentifierFromProvider,
 	"keycloak_user_groups":                              config.IdentifierFromProvider,
+	"keycloak_user_roles":                               config.IdentifierFromProvider,
 	"keycloak_users_permissions":                        config.IdentifierFromProvider,
 	"keycloak_user":                                     config.IdentifierFromProvider,
 	"keycloak_oidc_identity_provider":                   config.IdentifierFromProvider,
