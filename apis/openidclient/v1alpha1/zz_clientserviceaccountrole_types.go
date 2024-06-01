@@ -17,6 +17,7 @@ type ClientServiceAccountRoleInitParameters struct {
 
 	// The id of the client that provides the role.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
 	// Reference to a Client in openidclient to populate clientId.
@@ -79,6 +80,7 @@ type ClientServiceAccountRoleParameters struct {
 
 	// The id of the client that provides the role.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 

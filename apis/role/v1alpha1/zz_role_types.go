@@ -21,6 +21,7 @@ type RoleInitParameters struct {
 
 	// When specified, this role will be created as a client role attached to the client with the provided ID
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
 	// Reference to a Client in openidclient to populate clientId.
@@ -97,6 +98,7 @@ type RoleParameters struct {
 
 	// When specified, this role will be created as a client role attached to the client with the provided ID
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 

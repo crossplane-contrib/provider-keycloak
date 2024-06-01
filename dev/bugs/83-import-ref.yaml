@@ -2,12 +2,12 @@
 apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Group
 metadata:
-  name: my-realm-default-group
+  name: dev-default-group
 spec:
   deletionPolicy: Delete
   forProvider:
-    realmId: my-realm
-    name: my-realm-default-group
+    realmId: dev
+    name: dev-default-group
   initProvider: {}
   providerConfigRef:
     name: "keycloak-provider-config"
@@ -15,19 +15,17 @@ spec:
 apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Roles
 metadata:
-  name: my-realm-default-group-roles
+  name: dev-default-group-roles
 spec:
   deletionPolicy: Delete
   forProvider:
     groupIdRef:
-      name: my-realm-default-group
-    realmId: my-realm
+      name: dev-default-group
+    realmId: dev
     #roleIds:
     #  - a1016794-5600-48ce-85d8-1a01274b3767
     roleIdsRefs:
-      - name: builtin-my-realm-realm-management-view-users
-      - name: builtin-my-realm-realm-management-view-clients
-      - name: builtin-my-realm-realm-management-view-realm
+      - name: builtin-dev-realm-role-uma-authorization
     #roleIdsSelector:
     #  matchLabels:
     #    defaultRole: 'true'

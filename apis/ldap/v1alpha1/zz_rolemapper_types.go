@@ -17,6 +17,7 @@ type RoleMapperInitParameters struct {
 
 	// When specified, LDAP role mappings will be mapped to client role mappings tied to this client ID. Can only be set if use_realm_roles_mapping is false.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
 	// Reference to a Client in openidclient to populate clientId.
@@ -148,6 +149,7 @@ type RoleMapperParameters struct {
 
 	// When specified, LDAP role mappings will be mapped to client role mappings tied to this client ID. Can only be set if use_realm_roles_mapping is false.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
