@@ -56,6 +56,9 @@ type InitialPasswordInitParameters struct {
 
 	// If set to true, the initial password is set up for renewal on first use. Default to false.
 	Temporary *bool `json:"temporary,omitempty" tf:"temporary,omitempty"`
+
+	// The initial password.
+	ValueSecretRef v1.SecretKeySelector `json:"valueSecretRef" tf:"-"`
 }
 
 type InitialPasswordObservation struct {
@@ -71,7 +74,7 @@ type InitialPasswordParameters struct {
 	Temporary *bool `json:"temporary,omitempty" tf:"temporary,omitempty"`
 
 	// The initial password.
-	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:Optional
 	ValueSecretRef v1.SecretKeySelector `json:"valueSecretRef" tf:"-"`
 }
 
@@ -248,8 +251,8 @@ type UserStatus struct {
 // +kubebuilder:storageversion
 
 // User is the Schema for the Users API.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}

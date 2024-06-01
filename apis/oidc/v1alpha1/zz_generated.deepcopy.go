@@ -88,6 +88,7 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	out.ClientSecretSecretRef = in.ClientSecretSecretRef
 	if in.DefaultScopes != nil {
 		in, out := &in.DefaultScopes, &out.DefaultScopes
 		*out = new(string)

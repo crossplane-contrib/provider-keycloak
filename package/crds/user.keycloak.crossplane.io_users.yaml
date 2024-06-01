@@ -19,11 +19,11 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -139,8 +139,6 @@ spec:
                           - name
                           - namespace
                           type: object
-                      required:
-                      - valueSecretRef
                       type: object
                     type: array
                   lastName:
@@ -296,6 +294,25 @@ spec:
                           description: If set to true, the initial password is set
                             up for renewal on first use. Default to false.
                           type: boolean
+                        valueSecretRef:
+                          description: The initial password.
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
+                      required:
+                      - valueSecretRef
                       type: object
                     type: array
                   lastName:

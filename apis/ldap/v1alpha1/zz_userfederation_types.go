@@ -151,6 +151,10 @@ type UserFederationInitParameters struct {
 	// The number of users to sync within a single transaction.
 	BatchSizeForSync *float64 `json:"batchSizeForSync,omitempty" tf:"batch_size_for_sync,omitempty"`
 
+	// Password of LDAP admin. This attribute must be set if bind_dn is set.
+	// Password of LDAP admin.
+	BindCredentialSecretRef *v1.SecretKeySelector `json:"bindCredentialSecretRef,omitempty" tf:"-"`
+
 	// DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.
 	// DN of LDAP admin, which will be used by Keycloak to access LDAP server.
 	BindDn *string `json:"bindDn,omitempty" tf:"bind_dn,omitempty"`
@@ -607,8 +611,8 @@ type UserFederationStatus struct {
 // +kubebuilder:storageversion
 
 // UserFederation is the Schema for the UserFederations API.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}

@@ -19,11 +19,11 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -670,6 +670,26 @@ spec:
                       are invalidated when a client session is expired. If not set,
                       it uses the standard SSO Session Max value.
                     type: string
+                  clientSecretSecretRef:
+                    description: The secret for clients with an access_type of CONFIDENTIAL
+                      or BEARER-ONLY. This value is sensitive and should be treated
+                      with the same care as a password. If omitted, this will be generated
+                      by Keycloak.
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                   clientSessionIdleTimeout:
                     description: Time a client offline session is allowed to be idle
                       before it expires. Offline tokens are invalidated when a client

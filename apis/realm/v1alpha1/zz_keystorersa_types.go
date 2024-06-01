@@ -23,6 +23,10 @@ type KeystoreRsaInitParameters struct {
 	// Intended algorithm for the key
 	Algorithm *string `json:"algorithm,omitempty" tf:"algorithm,omitempty"`
 
+	// X509 Certificate encoded in PEM format.
+	// X509 Certificate encoded in PEM format
+	CertificateSecretRef v1.SecretKeySelector `json:"certificateSecretRef" tf:"-"`
+
 	// When false, key is not accessible in this realm. Defaults to true.
 	// Set if the keys are enabled
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
@@ -34,6 +38,10 @@ type KeystoreRsaInitParameters struct {
 	// Priority for the provider. Defaults to 0
 	// Priority for the provider
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
+
+	// Private RSA Key encoded in PEM format.
+	// Private RSA Key encoded in PEM format
+	PrivateKeySecretRef v1.SecretKeySelector `json:"privateKeySecretRef" tf:"-"`
 
 	// Use rsa for signing keys, rsa-enc for encryption keys
 	// RSA key provider id
@@ -168,8 +176,8 @@ type KeystoreRsaStatus struct {
 // +kubebuilder:storageversion
 
 // KeystoreRsa is the Schema for the KeystoreRsas API.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}

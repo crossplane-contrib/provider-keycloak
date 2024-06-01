@@ -19,11 +19,11 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -389,6 +389,25 @@ spec:
                       The number of users to sync within a single transaction. Defaults to 1000.
                       The number of users to sync within a single transaction.
                     type: number
+                  bindCredentialSecretRef:
+                    description: |-
+                      Password of LDAP admin. This attribute must be set if bind_dn is set.
+                      Password of LDAP admin.
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                   bindDn:
                     description: |-
                       DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.

@@ -7,10 +7,10 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 // Hub marks this type as a conversion hub.
-func (tr *Realm) Hub() {}
+func (tr *KeystoreRsa) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *KeystoreRsa) Hub() {}
+func (tr *Realm) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *RequiredAction) Hub() {}

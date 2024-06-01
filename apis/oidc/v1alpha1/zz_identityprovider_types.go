@@ -51,6 +51,10 @@ type IdentityProviderInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
+	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
+	// Client Secret.
+	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
 	DefaultScopes *string `json:"defaultScopes,omitempty" tf:"default_scopes,omitempty"`
@@ -484,8 +488,8 @@ type IdentityProviderStatus struct {
 // +kubebuilder:storageversion
 
 // IdentityProvider is the Schema for the IdentityProviders API.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}

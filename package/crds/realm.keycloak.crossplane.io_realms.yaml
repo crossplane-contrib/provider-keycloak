@@ -19,11 +19,11 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -413,8 +413,6 @@ spec:
                               username:
                                 description: The SMTP server username.
                                 type: string
-                            required:
-                            - passwordSecretRef
                             type: object
                           type: array
                         envelopeFrom:
@@ -928,9 +926,28 @@ spec:
                             block supports the following arguments:'
                           items:
                             properties:
+                              passwordSecretRef:
+                                description: The SMTP server password.
+                                properties:
+                                  key:
+                                    description: The key to select.
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                  namespace:
+                                    description: Namespace of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                - namespace
+                                type: object
                               username:
                                 description: The SMTP server username.
                                 type: string
+                            required:
+                            - passwordSecretRef
                             type: object
                           type: array
                         envelopeFrom:

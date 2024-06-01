@@ -1126,6 +1126,11 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ClientSecretSecretRef != nil {
+		in, out := &in.ClientSecretSecretRef, &out.ClientSecretSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
 	if in.ClientSessionIdleTimeout != nil {
 		in, out := &in.ClientSessionIdleTimeout, &out.ClientSessionIdleTimeout
 		*out = new(string)

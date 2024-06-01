@@ -21,7 +21,7 @@ func (mg *UserFederation) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this UserFederation
 func (tr *UserFederation) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"bind_credential": "spec.forProvider.bindCredentialSecretRef"}
+	return map[string]string{"bind_credential": "bindCredentialSecretRef"}
 }
 
 // GetObservation of this UserFederation
