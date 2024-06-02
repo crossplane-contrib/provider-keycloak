@@ -116,16 +116,7 @@ type IdentityProviderInitParameters struct {
 
 	// The name of the realm. This is unique across Keycloak.
 	// Realm Name
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
-
-	// Reference to a Realm in realm to populate realm.
-	// +kubebuilder:validation:Optional
-	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
-
-	// Selector for a Realm in realm to populate realm.
-	// +kubebuilder:validation:Optional
-	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// Signing Algorithm. Defaults to empty.
 	// Signing Algorithm.
@@ -455,17 +446,8 @@ type IdentityProviderParameters struct {
 
 	// The name of the realm. This is unique across Keycloak.
 	// Realm Name
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
-
-	// Reference to a Realm in realm to populate realm.
-	// +kubebuilder:validation:Optional
-	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
-
-	// Selector for a Realm in realm to populate realm.
-	// +kubebuilder:validation:Optional
-	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// Signing Algorithm. Defaults to empty.
 	// Signing Algorithm.
@@ -561,6 +543,7 @@ type IdentityProvider struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.alias) || (has(self.initProvider) && has(self.initProvider.alias))",message="spec.forProvider.alias is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.entityId) || (has(self.initProvider) && has(self.initProvider.entityId))",message="spec.forProvider.entityId is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.realm) || (has(self.initProvider) && has(self.initProvider.realm))",message="spec.forProvider.realm is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.singleSignOnServiceUrl) || (has(self.initProvider) && has(self.initProvider.singleSignOnServiceUrl))",message="spec.forProvider.singleSignOnServiceUrl is a required parameter"
 	Spec   IdentityProviderSpec   `json:"spec"`
 	Status IdentityProviderStatus `json:"status,omitempty"`

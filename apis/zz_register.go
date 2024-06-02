@@ -15,13 +15,11 @@ import (
 	v1alpha1group "github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1"
 	v1alpha1identityprovider "github.com/crossplane-contrib/provider-keycloak/apis/identityprovider/v1alpha1"
 	v1alpha1ldap "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1"
-	v1alpha1oidc "github.com/crossplane-contrib/provider-keycloak/apis/oidc/v1alpha1"
-	v1alpha1openidclient "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1"
-	v1alpha1openidgroup "github.com/crossplane-contrib/provider-keycloak/apis/openidgroup/v1alpha1"
+	v1alpha1mapper "github.com/crossplane-contrib/provider-keycloak/apis/mapper/v1alpha1"
+	v1alpha1openid "github.com/crossplane-contrib/provider-keycloak/apis/openid/v1alpha1"
 	v1alpha1realm "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1"
 	v1alpha1role "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1"
 	v1alpha1saml "github.com/crossplane-contrib/provider-keycloak/apis/saml/v1alpha1"
-	v1alpha1samlclient "github.com/crossplane-contrib/provider-keycloak/apis/samlclient/v1alpha1"
 	v1alpha1user "github.com/crossplane-contrib/provider-keycloak/apis/user/v1alpha1"
 	v1alpha1apis "github.com/crossplane-contrib/provider-keycloak/apis/v1alpha1"
 	v1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/v1beta1"
@@ -35,13 +33,11 @@ func init() {
 		v1alpha1group.SchemeBuilder.AddToScheme,
 		v1alpha1identityprovider.SchemeBuilder.AddToScheme,
 		v1alpha1ldap.SchemeBuilder.AddToScheme,
-		v1alpha1oidc.SchemeBuilder.AddToScheme,
-		v1alpha1openidclient.SchemeBuilder.AddToScheme,
-		v1alpha1openidgroup.SchemeBuilder.AddToScheme,
+		v1alpha1mapper.SchemeBuilder.AddToScheme,
+		v1alpha1openid.SchemeBuilder.AddToScheme,
 		v1alpha1realm.SchemeBuilder.AddToScheme,
 		v1alpha1role.SchemeBuilder.AddToScheme,
 		v1alpha1saml.SchemeBuilder.AddToScheme,
-		v1alpha1samlclient.SchemeBuilder.AddToScheme,
 		v1alpha1user.SchemeBuilder.AddToScheme,
 		v1alpha1apis.SchemeBuilder.AddToScheme,
 		v1beta1.SchemeBuilder.AddToScheme,

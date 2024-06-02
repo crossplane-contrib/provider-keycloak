@@ -7,8 +7,8 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/pkg/resource"
 
-// GetItems of this ProtocolMapperList.
-func (l *ProtocolMapperList) GetItems() []resource.Managed {
+// GetItems of this OpenIdClientList.
+func (l *OpenIdClientList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]
@@ -16,8 +16,8 @@ func (l *ProtocolMapperList) GetItems() []resource.Managed {
 	return items
 }
 
-// GetItems of this RoleMapperList.
-func (l *RoleMapperList) GetItems() []resource.Managed {
+// GetItems of this SamlClientList.
+func (l *SamlClientList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

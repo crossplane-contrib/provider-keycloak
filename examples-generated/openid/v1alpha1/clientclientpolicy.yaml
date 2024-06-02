@@ -1,0 +1,75 @@
+apiVersion: openid.keycloak.crossplane.io/v1alpha1
+kind: ClientClientPolicy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openid/v1alpha1/clientclientpolicy
+  labels:
+    testing.upbound.io/example-name: token_exchange
+  name: token-exchange
+spec:
+  forProvider:
+    clients:
+    - ${keycloak_openid_client.openid_client.id}
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    name: my-policy
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerId: ${data.keycloak_openid_client.realm_management.id}
+
+---
+
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: OpenIdClient
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openid/v1alpha1/clientclientpolicy
+  labels:
+    testing.upbound.io/example-name: openid_client
+  name: openid-client
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    name: openid_client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    serviceAccountsEnabled: true
+
+---
+
+apiVersion: openid.keycloak.crossplane.io/v1alpha1
+kind: ClientPermissions
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openid/v1alpha1/clientclientpolicy
+  labels:
+    testing.upbound.io/example-name: my_permission
+  name: my-permission
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: openid_client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openid/v1alpha1/clientclientpolicy
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

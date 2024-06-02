@@ -44,7 +44,7 @@ spec:
 
 ---
 
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openid.keycloak.crossplane.io/v1alpha1
 kind: ClientPermissions
 metadata:
   annotations:

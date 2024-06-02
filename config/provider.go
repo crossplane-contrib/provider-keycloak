@@ -11,19 +11,17 @@ import (
 	"github.com/crossplane/upjet/pkg/config"
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
+	"github.com/crossplane-contrib/provider-keycloak/config/client"
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/defaults"
 	"github.com/crossplane-contrib/provider-keycloak/config/group"
 	"github.com/crossplane-contrib/provider-keycloak/config/identityprovider"
 	"github.com/crossplane-contrib/provider-keycloak/config/ldap"
 	"github.com/crossplane-contrib/provider-keycloak/config/mapper"
-	"github.com/crossplane-contrib/provider-keycloak/config/oidc"
-	"github.com/crossplane-contrib/provider-keycloak/config/openidclient"
-	"github.com/crossplane-contrib/provider-keycloak/config/openidgroup"
+	"github.com/crossplane-contrib/provider-keycloak/config/openid"
 	"github.com/crossplane-contrib/provider-keycloak/config/realm"
 	"github.com/crossplane-contrib/provider-keycloak/config/role"
 	"github.com/crossplane-contrib/provider-keycloak/config/saml"
-	"github.com/crossplane-contrib/provider-keycloak/config/samlclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
 )
 
@@ -55,20 +53,17 @@ func GetProvider() *ujconfig.Provider {
 		realm.Configure,
 		group.Configure,
 		role.Configure,
-		openidclient.Configure,
-		openidgroup.Configure,
-		mapper.Configure,
 		user.Configure,
 		defaults.Configure,
-		oidc.Configure,
+		openid.Configure,
 		saml.Configure,
 		identityprovider.Configure,
 		ldap.Configure,
-		samlclient.Configure,
+		client.Configure,
+		mapper.Configure,
 	} {
 		configure(pc)
 	}
-
 	pc.ConfigureResources()
 	return pc
 }
@@ -90,12 +85,12 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 				}
 			case "client_id":
 				r.References["client_id"] = config.Reference{
-					Type:      "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
+					Type:      "github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient",
 					Extractor: common.PathUUIDExtractor,
 				}
 			case "service_account_user_id":
 				r.References["service_account_user_id"] = config.Reference{
-					Type:              "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
+					Type:              "github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient",
 					Extractor:         common.PathServiceAccountRoleIDExtractor,
 					RefFieldName:      "ServiceAccountUserClientIDRef",
 					SelectorFieldName: "ServiceAccountUserClientIDSelector",

@@ -20,8 +20,8 @@ spec:
 
 ---
 
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: Client
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: OpenIdClient
 metadata:
   annotations:
     meta.upbound.io/example-id: user/v1alpha1/roles

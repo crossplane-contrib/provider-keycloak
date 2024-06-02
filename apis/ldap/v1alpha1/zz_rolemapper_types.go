@@ -16,15 +16,15 @@ import (
 type RoleMapperInitParameters struct {
 
 	// When specified, LDAP role mappings will be mapped to client role mappings tied to this client ID. Can only be set if use_realm_roles_mapping is false.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
-	// Reference to a Client in openidclient to populate clientId.
+	// Reference to a OpenIdClient in client to populate clientId.
 	// +kubebuilder:validation:Optional
 	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
 
-	// Selector for a Client in openidclient to populate clientId.
+	// Selector for a OpenIdClient in client to populate clientId.
 	// +kubebuilder:validation:Optional
 	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
@@ -148,16 +148,16 @@ type RoleMapperObservation struct {
 type RoleMapperParameters struct {
 
 	// When specified, LDAP role mappings will be mapped to client role mappings tied to this client ID. Can only be set if use_realm_roles_mapping is false.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
-	// Reference to a Client in openidclient to populate clientId.
+	// Reference to a OpenIdClient in client to populate clientId.
 	// +kubebuilder:validation:Optional
 	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
 
-	// Selector for a Client in openidclient to populate clientId.
+	// Selector for a OpenIdClient in client to populate clientId.
 	// +kubebuilder:validation:Optional
 	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 

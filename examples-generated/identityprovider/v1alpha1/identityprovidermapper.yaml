@@ -21,7 +21,7 @@ spec:
 
 ---
 
-apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+apiVersion: openid.keycloak.crossplane.io/v1alpha1
 kind: IdentityProvider
 metadata:
   annotations:
@@ -41,9 +41,7 @@ spec:
       name: example-secret
       namespace: upbound-system
     defaultScopes: openid random profile
-    realmSelector:
-      matchLabels:
-        testing.upbound.io/example-name: realm
+    realm: ${keycloak_realm.realm.id}
     tokenUrl: https://example.com/token
 
 ---

@@ -15,9 +15,7 @@ spec:
     postBindingAuthnRequest: true
     postBindingLogout: true
     postBindingResponse: true
-    realmSelector:
-      matchLabels:
-        testing.upbound.io/example-name: realm
+    realm: ${keycloak_realm.realm.id}
     singleLogoutServiceUrl: https://domain.com/adfs/ls/?wa=wsignout1.0
     singleSignOnServiceUrl: https://domain.com/adfs/ls/
     storeToken: false

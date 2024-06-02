@@ -7,8 +7,8 @@ package v1alpha1
 
 import (
 	"context"
+	v1alpha13 "github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1"
 	v1alpha11 "github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1"
-	v1alpha13 "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1"
 	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1"
 	v1alpha12 "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1"
 	common "github.com/crossplane-contrib/provider-keycloak/config/common"
@@ -687,8 +687,8 @@ func (mg *RoleMapper) ResolveReferences(ctx context.Context, c client.Reader) er
 		Reference:    mg.Spec.ForProvider.ClientIDRef,
 		Selector:     mg.Spec.ForProvider.ClientIDSelector,
 		To: reference.To{
-			List:    &v1alpha13.ClientList{},
-			Managed: &v1alpha13.Client{},
+			List:    &v1alpha13.OpenIdClientList{},
+			Managed: &v1alpha13.OpenIdClient{},
 		},
 	})
 	if err != nil {
@@ -735,8 +735,8 @@ func (mg *RoleMapper) ResolveReferences(ctx context.Context, c client.Reader) er
 		Reference:    mg.Spec.InitProvider.ClientIDRef,
 		Selector:     mg.Spec.InitProvider.ClientIDSelector,
 		To: reference.To{
-			List:    &v1alpha13.ClientList{},
-			Managed: &v1alpha13.Client{},
+			List:    &v1alpha13.OpenIdClientList{},
+			Managed: &v1alpha13.OpenIdClient{},
 		},
 	})
 	if err != nil {

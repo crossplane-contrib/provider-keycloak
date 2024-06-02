@@ -7,122 +7,122 @@ package v1alpha1
 
 import xpv1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 
-// GetCondition of this ProtocolMapper.
-func (mg *ProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+// GetCondition of this OpenIdClient.
+func (mg *OpenIdClient) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
-// GetDeletionPolicy of this ProtocolMapper.
-func (mg *ProtocolMapper) GetDeletionPolicy() xpv1.DeletionPolicy {
+// GetDeletionPolicy of this OpenIdClient.
+func (mg *OpenIdClient) GetDeletionPolicy() xpv1.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
-// GetManagementPolicies of this ProtocolMapper.
-func (mg *ProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+// GetManagementPolicies of this OpenIdClient.
+func (mg *OpenIdClient) GetManagementPolicies() xpv1.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
-// GetProviderConfigReference of this ProtocolMapper.
-func (mg *ProtocolMapper) GetProviderConfigReference() *xpv1.Reference {
+// GetProviderConfigReference of this OpenIdClient.
+func (mg *OpenIdClient) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
-// GetPublishConnectionDetailsTo of this ProtocolMapper.
-func (mg *ProtocolMapper) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
+// GetPublishConnectionDetailsTo of this OpenIdClient.
+func (mg *OpenIdClient) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
 	return mg.Spec.PublishConnectionDetailsTo
 }
 
-// GetWriteConnectionSecretToReference of this ProtocolMapper.
-func (mg *ProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+// GetWriteConnectionSecretToReference of this OpenIdClient.
+func (mg *OpenIdClient) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
-// SetConditions of this ProtocolMapper.
-func (mg *ProtocolMapper) SetConditions(c ...xpv1.Condition) {
+// SetConditions of this OpenIdClient.
+func (mg *OpenIdClient) SetConditions(c ...xpv1.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
-// SetDeletionPolicy of this ProtocolMapper.
-func (mg *ProtocolMapper) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+// SetDeletionPolicy of this OpenIdClient.
+func (mg *OpenIdClient) SetDeletionPolicy(r xpv1.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
-// SetManagementPolicies of this ProtocolMapper.
-func (mg *ProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+// SetManagementPolicies of this OpenIdClient.
+func (mg *OpenIdClient) SetManagementPolicies(r xpv1.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
-// SetProviderConfigReference of this ProtocolMapper.
-func (mg *ProtocolMapper) SetProviderConfigReference(r *xpv1.Reference) {
+// SetProviderConfigReference of this OpenIdClient.
+func (mg *OpenIdClient) SetProviderConfigReference(r *xpv1.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
-// SetPublishConnectionDetailsTo of this ProtocolMapper.
-func (mg *ProtocolMapper) SetPublishConnectionDetailsTo(r *xpv1.PublishConnectionDetailsTo) {
+// SetPublishConnectionDetailsTo of this OpenIdClient.
+func (mg *OpenIdClient) SetPublishConnectionDetailsTo(r *xpv1.PublishConnectionDetailsTo) {
 	mg.Spec.PublishConnectionDetailsTo = r
 }
 
-// SetWriteConnectionSecretToReference of this ProtocolMapper.
-func (mg *ProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+// SetWriteConnectionSecretToReference of this OpenIdClient.
+func (mg *OpenIdClient) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
-// GetCondition of this RoleMapper.
-func (mg *RoleMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+// GetCondition of this SamlClient.
+func (mg *SamlClient) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
-// GetDeletionPolicy of this RoleMapper.
-func (mg *RoleMapper) GetDeletionPolicy() xpv1.DeletionPolicy {
+// GetDeletionPolicy of this SamlClient.
+func (mg *SamlClient) GetDeletionPolicy() xpv1.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
-// GetManagementPolicies of this RoleMapper.
-func (mg *RoleMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+// GetManagementPolicies of this SamlClient.
+func (mg *SamlClient) GetManagementPolicies() xpv1.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
-// GetProviderConfigReference of this RoleMapper.
-func (mg *RoleMapper) GetProviderConfigReference() *xpv1.Reference {
+// GetProviderConfigReference of this SamlClient.
+func (mg *SamlClient) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
-// GetPublishConnectionDetailsTo of this RoleMapper.
-func (mg *RoleMapper) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
+// GetPublishConnectionDetailsTo of this SamlClient.
+func (mg *SamlClient) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
 	return mg.Spec.PublishConnectionDetailsTo
 }
 
-// GetWriteConnectionSecretToReference of this RoleMapper.
-func (mg *RoleMapper) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+// GetWriteConnectionSecretToReference of this SamlClient.
+func (mg *SamlClient) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
-// SetConditions of this RoleMapper.
-func (mg *RoleMapper) SetConditions(c ...xpv1.Condition) {
+// SetConditions of this SamlClient.
+func (mg *SamlClient) SetConditions(c ...xpv1.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
-// SetDeletionPolicy of this RoleMapper.
-func (mg *RoleMapper) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+// SetDeletionPolicy of this SamlClient.
+func (mg *SamlClient) SetDeletionPolicy(r xpv1.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
-// SetManagementPolicies of this RoleMapper.
-func (mg *RoleMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+// SetManagementPolicies of this SamlClient.
+func (mg *SamlClient) SetManagementPolicies(r xpv1.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
-// SetProviderConfigReference of this RoleMapper.
-func (mg *RoleMapper) SetProviderConfigReference(r *xpv1.Reference) {
+// SetProviderConfigReference of this SamlClient.
+func (mg *SamlClient) SetProviderConfigReference(r *xpv1.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
-// SetPublishConnectionDetailsTo of this RoleMapper.
-func (mg *RoleMapper) SetPublishConnectionDetailsTo(r *xpv1.PublishConnectionDetailsTo) {
+// SetPublishConnectionDetailsTo of this SamlClient.
+func (mg *SamlClient) SetPublishConnectionDetailsTo(r *xpv1.PublishConnectionDetailsTo) {
 	mg.Spec.PublishConnectionDetailsTo = r
 }
 
-// SetWriteConnectionSecretToReference of this RoleMapper.
-func (mg *RoleMapper) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+// SetWriteConnectionSecretToReference of this SamlClient.
+func (mg *SamlClient) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }

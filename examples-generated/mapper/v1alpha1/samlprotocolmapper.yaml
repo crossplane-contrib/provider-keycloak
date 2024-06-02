@@ -1,0 +1,58 @@
+apiVersion: mapper.keycloak.crossplane.io/v1alpha1
+kind: SamlProtocolMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: mapper/v1alpha1/samlprotocolmapper
+  labels:
+    testing.upbound.io/example-name: saml_hardcode_attribute_mapper
+  name: saml-hardcode-attribute-mapper
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: saml_client
+    config:
+      attribute.name: name
+      attribute.nameformat: Basic
+      attribute.value: value
+      friendly.name: display name
+    name: test-mapper
+    protocol: saml
+    protocolMapper: saml-hardcode-attribute-mapper
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: mapper/v1alpha1/samlprotocolmapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: SamlClient
+metadata:
+  annotations:
+    meta.upbound.io/example-id: mapper/v1alpha1/samlprotocolmapper
+  labels:
+    testing.upbound.io/example-name: saml_client
+  name: saml-client
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm

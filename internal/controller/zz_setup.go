@@ -9,8 +9,8 @@ import (
 
 	"github.com/crossplane/upjet/pkg/controller"
 
-	protocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/protocolmapper"
-	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/rolemapper"
+	openidclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/openidclient"
+	samlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/samlclient"
 	defaultgroups "github.com/crossplane-contrib/provider-keycloak/internal/controller/defaults/defaultgroups"
 	roles "github.com/crossplane-contrib/provider-keycloak/internal/controller/defaults/roles"
 	group "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/group"
@@ -26,30 +26,30 @@ import (
 	hardcodedrolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/hardcodedrolemapper"
 	msadldsuseraccountcontrolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/msadldsuseraccountcontrolmapper"
 	msaduseraccountcontrolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/msaduseraccountcontrolmapper"
-	rolemapperldap "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/rolemapper"
+	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/rolemapper"
 	userattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/userattributemapper"
 	userfederation "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/userfederation"
-	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/oidc/identityprovider"
-	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/client"
-	clientclientpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientclientpolicy"
-	clientdefaultscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientdefaultscopes"
-	clientgrouppolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientgrouppolicy"
-	clientpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientpermissions"
-	clientrolepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientrolepolicy"
-	clientscope "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientscope"
-	clientserviceaccountrealmrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientserviceaccountrealmrole"
-	clientserviceaccountrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientserviceaccountrole"
-	clientuserpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientuserpolicy"
-	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidgroup/groupmembershipprotocolmapper"
+	rolemappermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/mapper/rolemapper"
+	samlprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/mapper/samlprotocolmapper"
+	clientclientpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientclientpolicy"
+	clientdefaultscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientdefaultscopes"
+	clientgrouppolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientgrouppolicy"
+	clientpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientpermissions"
+	clientrolepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientrolepolicy"
+	clientscope "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientscope"
+	clientserviceaccountrealmrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientserviceaccountrealmrole"
+	clientserviceaccountrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientserviceaccountrole"
+	clientuserpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientuserpolicy"
+	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/groupmembershipprotocolmapper"
+	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/identityprovider"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/providerconfig"
 	keystorersa "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/keystorersa"
 	realm "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/realm"
 	requiredaction "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/requiredaction"
 	role "github.com/crossplane-contrib/provider-keycloak/internal/controller/role/role"
+	clientdefaultscopessaml "github.com/crossplane-contrib/provider-keycloak/internal/controller/saml/clientdefaultscopes"
+	clientscopesaml "github.com/crossplane-contrib/provider-keycloak/internal/controller/saml/clientscope"
 	identityprovidersaml "github.com/crossplane-contrib/provider-keycloak/internal/controller/saml/identityprovider"
-	clientsamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/samlclient/client"
-	clientdefaultscopessamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/samlclient/clientdefaultscopes"
-	clientscopesamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/samlclient/clientscope"
 	groups "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/groups"
 	permissionsuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/permissions"
 	rolesuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/roles"
@@ -60,8 +60,8 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		protocolmapper.Setup,
-		rolemapper.Setup,
+		openidclient.Setup,
+		samlclient.Setup,
 		defaultgroups.Setup,
 		roles.Setup,
 		group.Setup,
@@ -77,11 +77,11 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		hardcodedrolemapper.Setup,
 		msadldsuseraccountcontrolmapper.Setup,
 		msaduseraccountcontrolmapper.Setup,
-		rolemapperldap.Setup,
+		rolemapper.Setup,
 		userattributemapper.Setup,
 		userfederation.Setup,
-		identityprovider.Setup,
-		client.Setup,
+		rolemappermapper.Setup,
+		samlprotocolmapper.Setup,
 		clientclientpolicy.Setup,
 		clientdefaultscopes.Setup,
 		clientgrouppolicy.Setup,
@@ -92,15 +92,15 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientserviceaccountrole.Setup,
 		clientuserpolicy.Setup,
 		groupmembershipprotocolmapper.Setup,
+		identityprovider.Setup,
 		providerconfig.Setup,
 		keystorersa.Setup,
 		realm.Setup,
 		requiredaction.Setup,
 		role.Setup,
+		clientdefaultscopessaml.Setup,
+		clientscopesaml.Setup,
 		identityprovidersaml.Setup,
-		clientsamlclient.Setup,
-		clientdefaultscopessamlclient.Setup,
-		clientscopesamlclient.Setup,
 		groups.Setup,
 		permissionsuser.Setup,
 		rolesuser.Setup,

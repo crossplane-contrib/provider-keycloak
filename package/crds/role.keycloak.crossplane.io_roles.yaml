@@ -85,7 +85,7 @@ spec:
                       role attached to the client with the provided ID
                     type: string
                   clientIdRef:
-                    description: Reference to a Client in openidclient to populate
+                    description: Reference to a OpenIdClient in client to populate
                       clientId.
                     properties:
                       name:
@@ -120,7 +120,7 @@ spec:
                     - name
                     type: object
                   clientIdSelector:
-                    description: Selector for a Client in openidclient to populate
+                    description: Selector for a OpenIdClient in client to populate
                       clientId.
                     properties:
                       matchControllerRef:
@@ -354,7 +354,7 @@ spec:
                       role attached to the client with the provided ID
                     type: string
                   clientIdRef:
-                    description: Reference to a Client in openidclient to populate
+                    description: Reference to a OpenIdClient in client to populate
                       clientId.
                     properties:
                       name:
@@ -389,7 +389,7 @@ spec:
                     - name
                     type: object
                   clientIdSelector:
-                    description: Selector for a Client in openidclient to populate
+                    description: Selector for a OpenIdClient in client to populate
                       clientId.
                     properties:
                       matchControllerRef:
