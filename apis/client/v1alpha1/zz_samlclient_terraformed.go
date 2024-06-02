@@ -21,7 +21,7 @@ func (mg *SamlClient) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this SamlClient
 func (tr *SamlClient) GetConnectionDetailsMapping() map[string]string {
-	return nil
+	return map[string]string{"encryption_certificate": "encryptionCertificateSecretRef", "signing_certificate": "signingCertificateSecretRef", "signing_private_key": "signingPrivateKeySecretRef"}
 }
 
 // GetObservation of this SamlClient

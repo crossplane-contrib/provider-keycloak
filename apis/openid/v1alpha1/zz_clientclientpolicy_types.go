@@ -16,8 +16,18 @@ import (
 type ClientClientPolicyInitParameters struct {
 
 	// The clients allowed by this client policy.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
 	Clients []*string `json:"clients,omitempty" tf:"clients,omitempty"`
+
+	// References to OpenIdClient in client to populate clients.
+	// +kubebuilder:validation:Optional
+	ClientsRefs []v1.Reference `json:"clientsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of OpenIdClient in client to populate clients.
+	// +kubebuilder:validation:Optional
+	ClientsSelector *v1.Selector `json:"clientsSelector,omitempty" tf:"-"`
 
 	// (Computed) Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
@@ -44,7 +54,17 @@ type ClientClientPolicyInitParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server this client policy is attached to.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
+
+	// Reference to a OpenIdClient in client to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDRef *v1.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
+
+	// Selector for a OpenIdClient in client to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 }
 
 type ClientClientPolicyObservation struct {
@@ -77,9 +97,19 @@ type ClientClientPolicyObservation struct {
 type ClientClientPolicyParameters struct {
 
 	// The clients allowed by this client policy.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Clients []*string `json:"clients,omitempty" tf:"clients,omitempty"`
+
+	// References to OpenIdClient in client to populate clients.
+	// +kubebuilder:validation:Optional
+	ClientsRefs []v1.Reference `json:"clientsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of OpenIdClient in client to populate clients.
+	// +kubebuilder:validation:Optional
+	ClientsSelector *v1.Selector `json:"clientsSelector,omitempty" tf:"-"`
 
 	// (Computed) Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
 	// +kubebuilder:validation:Optional
@@ -111,8 +141,18 @@ type ClientClientPolicyParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server this client policy is attached to.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
+
+	// Reference to a OpenIdClient in client to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDRef *v1.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
+
+	// Selector for a OpenIdClient in client to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 }
 
 // ClientClientPolicySpec defines the desired state of ClientClientPolicy
@@ -151,9 +191,7 @@ type ClientClientPolicyStatus struct {
 type ClientClientPolicy struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clients) || (has(self.initProvider) && has(self.initProvider.clients))",message="spec.forProvider.clients is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.resourceServerId) || (has(self.initProvider) && has(self.initProvider.resourceServerId))",message="spec.forProvider.resourceServerId is a required parameter"
 	Spec   ClientClientPolicySpec   `json:"spec"`
 	Status ClientClientPolicyStatus `json:"status,omitempty"`
 }

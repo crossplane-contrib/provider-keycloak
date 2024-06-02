@@ -60,17 +60,7 @@ type SamlClientInitParameters struct {
 	CanonicalizationMethod *string `json:"canonicalizationMethod,omitempty" tf:"canonicalization_method,omitempty"`
 
 	// The unique ID of this client, referenced in the URI during authentication and in issued tokens.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
-	// Reference to a OpenIdClient in client to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
-
-	// Selector for a OpenIdClient in client to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// When true, Keycloak will expect that documents originating from a client will be signed using the certificate and/or key configured via signing_certificate and signing_private_key. Defaults to true.
 	ClientSignatureRequired *bool `json:"clientSignatureRequired,omitempty" tf:"client_signature_required,omitempty"`
@@ -85,7 +75,7 @@ type SamlClientInitParameters struct {
 	EncryptAssertions *bool `json:"encryptAssertions,omitempty" tf:"encrypt_assertions,omitempty"`
 
 	// If assertions for the client are encrypted, this certificate will be used for encryption.
-	EncryptionCertificate *string `json:"encryptionCertificate,omitempty" tf:"encryption_certificate,omitempty"`
+	EncryptionCertificateSecretRef *v1.SecretKeySelector `json:"encryptionCertificateSecretRef,omitempty" tf:"-"`
 
 	// A map of key/value pairs to add extra configuration attributes to this client. Use this attribute at your own risk, as s may conflict with top-level configuration attributes in future provider updates.
 	// +mapType=granular
@@ -158,10 +148,10 @@ type SamlClientInitParameters struct {
 	SignatureKeyName *string `json:"signatureKeyName,omitempty" tf:"signature_key_name,omitempty"`
 
 	// If documents or assertions from the client are signed, this certificate will be used to verify the signature.
-	SigningCertificate *string `json:"signingCertificate,omitempty" tf:"signing_certificate,omitempty"`
+	SigningCertificateSecretRef *v1.SecretKeySelector `json:"signingCertificateSecretRef,omitempty" tf:"-"`
 
 	// If documents or assertions from the client are signed, this private key will be used to verify the signature.
-	SigningPrivateKey *string `json:"signingPrivateKey,omitempty" tf:"signing_private_key,omitempty"`
+	SigningPrivateKeySecretRef *v1.SecretKeySelector `json:"signingPrivateKeySecretRef,omitempty" tf:"-"`
 
 	// When specified, Keycloak will use this list to validate given Assertion Consumer URLs specified in the authentication request.
 	// +listType=set
@@ -199,9 +189,6 @@ type SamlClientObservation struct {
 
 	// When true, the SAML assertions will be encrypted by Keycloak using the client's public key. Defaults to false.
 	EncryptAssertions *bool `json:"encryptAssertions,omitempty" tf:"encrypt_assertions,omitempty"`
-
-	// If assertions for the client are encrypted, this certificate will be used for encryption.
-	EncryptionCertificate *string `json:"encryptionCertificate,omitempty" tf:"encryption_certificate,omitempty"`
 
 	// (Computed) The sha1sum fingerprint of the encryption certificate. If the encryption certificate is not in correct base64 format, this will be left empty.
 	EncryptionCertificateSha1 *string `json:"encryptionCertificateSha1,omitempty" tf:"encryption_certificate_sha1,omitempty"`
@@ -269,14 +256,8 @@ type SamlClientObservation struct {
 	// The value of the KeyName element within the signed SAML document. Should be one of "NONE", "KEY_ID", or "CERT_SUBJECT". Defaults to "KEY_ID".
 	SignatureKeyName *string `json:"signatureKeyName,omitempty" tf:"signature_key_name,omitempty"`
 
-	// If documents or assertions from the client are signed, this certificate will be used to verify the signature.
-	SigningCertificate *string `json:"signingCertificate,omitempty" tf:"signing_certificate,omitempty"`
-
 	// (Computed) The sha1sum fingerprint of the signing certificate. If the signing certificate is not in correct base64 format, this will be left empty.
 	SigningCertificateSha1 *string `json:"signingCertificateSha1,omitempty" tf:"signing_certificate_sha1,omitempty"`
-
-	// If documents or assertions from the client are signed, this private key will be used to verify the signature.
-	SigningPrivateKey *string `json:"signingPrivateKey,omitempty" tf:"signing_private_key,omitempty"`
 
 	// (Computed) The sha1sum fingerprint of the signing private key. If the signing private key is not in correct base64 format, this will be left empty.
 	SigningPrivateKeySha1 *string `json:"signingPrivateKeySha1,omitempty" tf:"signing_private_key_sha1,omitempty"`
@@ -309,18 +290,8 @@ type SamlClientParameters struct {
 	CanonicalizationMethod *string `json:"canonicalizationMethod,omitempty" tf:"canonicalization_method,omitempty"`
 
 	// The unique ID of this client, referenced in the URI during authentication and in issued tokens.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
-	// Reference to a OpenIdClient in client to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
-
-	// Selector for a OpenIdClient in client to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// When true, Keycloak will expect that documents originating from a client will be signed using the certificate and/or key configured via signing_certificate and signing_private_key. Defaults to true.
 	// +kubebuilder:validation:Optional
@@ -340,7 +311,7 @@ type SamlClientParameters struct {
 
 	// If assertions for the client are encrypted, this certificate will be used for encryption.
 	// +kubebuilder:validation:Optional
-	EncryptionCertificate *string `json:"encryptionCertificate,omitempty" tf:"encryption_certificate,omitempty"`
+	EncryptionCertificateSecretRef *v1.SecretKeySelector `json:"encryptionCertificateSecretRef,omitempty" tf:"-"`
 
 	// A map of key/value pairs to add extra configuration attributes to this client. Use this attribute at your own risk, as s may conflict with top-level configuration attributes in future provider updates.
 	// +kubebuilder:validation:Optional
@@ -434,11 +405,11 @@ type SamlClientParameters struct {
 
 	// If documents or assertions from the client are signed, this certificate will be used to verify the signature.
 	// +kubebuilder:validation:Optional
-	SigningCertificate *string `json:"signingCertificate,omitempty" tf:"signing_certificate,omitempty"`
+	SigningCertificateSecretRef *v1.SecretKeySelector `json:"signingCertificateSecretRef,omitempty" tf:"-"`
 
 	// If documents or assertions from the client are signed, this private key will be used to verify the signature.
 	// +kubebuilder:validation:Optional
-	SigningPrivateKey *string `json:"signingPrivateKey,omitempty" tf:"signing_private_key,omitempty"`
+	SigningPrivateKeySecretRef *v1.SecretKeySelector `json:"signingPrivateKeySecretRef,omitempty" tf:"-"`
 
 	// When specified, Keycloak will use this list to validate given Assertion Consumer URLs specified in the authentication request.
 	// +kubebuilder:validation:Optional
@@ -482,8 +453,9 @@ type SamlClientStatus struct {
 type SamlClient struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              SamlClientSpec   `json:"spec"`
-	Status            SamlClientStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clientId) || (has(self.initProvider) && has(self.initProvider.clientId))",message="spec.forProvider.clientId is a required parameter"
+	Spec   SamlClientSpec   `json:"spec"`
+	Status SamlClientStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

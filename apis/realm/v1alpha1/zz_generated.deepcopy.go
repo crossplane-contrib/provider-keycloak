@@ -1133,6 +1133,16 @@ func (in *RealmInitParameters) DeepCopyInto(out *RealmInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmRef != nil {
+		in, out := &in.RealmRef, &out.RealmRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmSelector != nil {
+		in, out := &in.RealmSelector, &out.RealmSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.RefreshTokenMaxReuse != nil {
 		in, out := &in.RefreshTokenMaxReuse, &out.RefreshTokenMaxReuse
 		*out = new(float64)
@@ -1829,6 +1839,16 @@ func (in *RealmParameters) DeepCopyInto(out *RealmParameters) {
 		in, out := &in.Realm, &out.Realm
 		*out = new(string)
 		**out = **in
+	}
+	if in.RealmRef != nil {
+		in, out := &in.RealmRef, &out.RealmRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmSelector != nil {
+		in, out := &in.RealmSelector, &out.RealmSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.RefreshTokenMaxReuse != nil {
 		in, out := &in.RefreshTokenMaxReuse, &out.RefreshTokenMaxReuse

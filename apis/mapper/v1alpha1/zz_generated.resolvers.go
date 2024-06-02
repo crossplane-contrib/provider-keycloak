@@ -136,8 +136,8 @@ func (mg *SamlProtocolMapper) ResolveReferences(ctx context.Context, c client.Re
 		Reference:    mg.Spec.ForProvider.ClientIDRef,
 		Selector:     mg.Spec.ForProvider.ClientIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.OpenIdClientList{},
-			Managed: &v1alpha1.OpenIdClient{},
+			List:    &v1alpha1.SamlClientList{},
+			Managed: &v1alpha1.SamlClient{},
 		},
 	})
 	if err != nil {
@@ -184,8 +184,8 @@ func (mg *SamlProtocolMapper) ResolveReferences(ctx context.Context, c client.Re
 		Reference:    mg.Spec.InitProvider.ClientIDRef,
 		Selector:     mg.Spec.InitProvider.ClientIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.OpenIdClientList{},
-			Managed: &v1alpha1.OpenIdClient{},
+			List:    &v1alpha1.SamlClientList{},
+			Managed: &v1alpha1.SamlClient{},
 		},
 	})
 	if err != nil {

@@ -21,7 +21,17 @@ type IdentityProviderMapperInitParameters struct {
 
 	// The alias of the associated identity provider.
 	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/idp/v1alpha1.OpenIdIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("alias", false)
 	IdentityProviderAlias *string `json:"identityProviderAlias,omitempty" tf:"identity_provider_alias,omitempty"`
+
+	// Reference to a OpenIdIdentityProvider in idp to populate identityProviderAlias.
+	// +kubebuilder:validation:Optional
+	IdentityProviderAliasRef *v1.Reference `json:"identityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a OpenIdIdentityProvider in idp to populate identityProviderAlias.
+	// +kubebuilder:validation:Optional
+	IdentityProviderAliasSelector *v1.Selector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The type of the identity provider mapper. This can be a format string that includes a %s - this will be replaced by the provider id.
 	// IDP Mapper Type
@@ -79,8 +89,18 @@ type IdentityProviderMapperParameters struct {
 
 	// The alias of the associated identity provider.
 	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/idp/v1alpha1.OpenIdIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("alias", false)
 	// +kubebuilder:validation:Optional
 	IdentityProviderAlias *string `json:"identityProviderAlias,omitempty" tf:"identity_provider_alias,omitempty"`
+
+	// Reference to a OpenIdIdentityProvider in idp to populate identityProviderAlias.
+	// +kubebuilder:validation:Optional
+	IdentityProviderAliasRef *v1.Reference `json:"identityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a OpenIdIdentityProvider in idp to populate identityProviderAlias.
+	// +kubebuilder:validation:Optional
+	IdentityProviderAliasSelector *v1.Selector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The type of the identity provider mapper. This can be a format string that includes a %s - this will be replaced by the provider id.
 	// IDP Mapper Type
@@ -143,7 +163,6 @@ type IdentityProviderMapperStatus struct {
 type IdentityProviderMapper struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.identityProviderAlias) || (has(self.initProvider) && has(self.initProvider.identityProviderAlias))",message="spec.forProvider.identityProviderAlias is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.identityProviderMapper) || (has(self.initProvider) && has(self.initProvider.identityProviderMapper))",message="spec.forProvider.identityProviderMapper is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	Spec   IdentityProviderMapperSpec   `json:"spec"`

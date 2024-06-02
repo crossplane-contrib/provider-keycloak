@@ -124,17 +124,7 @@ type OpenIdClientInitParameters struct {
 	ClientAuthenticatorType *string `json:"clientAuthenticatorType,omitempty" tf:"client_authenticator_type,omitempty"`
 
 	// The Client ID for this client, referenced in the URI during authentication and in issued tokens.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
-	// Reference to a OpenIdClient in client to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
-
-	// Selector for a OpenIdClient in client to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// Time a client session is allowed to be idle before it expires. Tokens are invalidated when a client session is expired. If not set it uses the standard SSO Session Idle value.
 	ClientOfflineSessionIdleTimeout *string `json:"clientOfflineSessionIdleTimeout,omitempty" tf:"client_offline_session_idle_timeout,omitempty"`
@@ -440,18 +430,8 @@ type OpenIdClientParameters struct {
 	ClientAuthenticatorType *string `json:"clientAuthenticatorType,omitempty" tf:"client_authenticator_type,omitempty"`
 
 	// The Client ID for this client, referenced in the URI during authentication and in issued tokens.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
-	// Reference to a OpenIdClient in client to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
-
-	// Selector for a OpenIdClient in client to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// Time a client session is allowed to be idle before it expires. Tokens are invalidated when a client session is expired. If not set it uses the standard SSO Session Idle value.
 	// +kubebuilder:validation:Optional
@@ -638,6 +618,7 @@ type OpenIdClient struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.accessType) || (has(self.initProvider) && has(self.initProvider.accessType))",message="spec.forProvider.accessType is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clientId) || (has(self.initProvider) && has(self.initProvider.clientId))",message="spec.forProvider.clientId is a required parameter"
 	Spec   OpenIdClientSpec   `json:"spec"`
 	Status OpenIdClientStatus `json:"status,omitempty"`
 }

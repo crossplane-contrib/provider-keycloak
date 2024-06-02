@@ -2604,16 +2604,6 @@ func (in *RoleMapperInitParameters) DeepCopyInto(out *RoleMapperInitParameters) 
 		*out = new(string)
 		**out = **in
 	}
-	if in.ClientIDRef != nil {
-		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.Reference)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.ClientIDSelector != nil {
-		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.Selector)
-		(*in).DeepCopyInto(*out)
-	}
 	if in.LdapRolesDn != nil {
 		in, out := &in.LdapRolesDn, &out.LdapRolesDn
 		*out = new(string)
@@ -2862,16 +2852,6 @@ func (in *RoleMapperParameters) DeepCopyInto(out *RoleMapperParameters) {
 		in, out := &in.ClientID, &out.ClientID
 		*out = new(string)
 		**out = **in
-	}
-	if in.ClientIDRef != nil {
-		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.Reference)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.ClientIDSelector != nil {
-		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.Selector)
-		(*in).DeepCopyInto(*out)
 	}
 	if in.LdapRolesDn != nil {
 		in, out := &in.LdapRolesDn, &out.LdapRolesDn

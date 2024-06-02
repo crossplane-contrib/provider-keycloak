@@ -13,7 +13,7 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type IdentityProviderInitParameters struct {
+type OpenIdIdentityProviderInitParameters struct {
 
 	// When true, the IDP will accept forwarded authentication requests that contain the prompt=none query parameter. Defaults to false.
 	// This is just used together with Identity Provider Authenticator or when kc_idp_hint points to this identity provider. In case that client sends a request with prompt=none and user is not yet authenticated, the error will not be directly returned to client, but the request with prompt=none will be forwarded to this identity provider.
@@ -118,7 +118,16 @@ type IdentityProviderInitParameters struct {
 
 	// The name of the realm. This is unique across Keycloak.
 	// Realm Name
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// Reference to a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// When true, tokens will be stored after authenticating users. Defaults to true.
 	// Enable/disable if tokens must be stored after authenticating users.
@@ -149,7 +158,7 @@ type IdentityProviderInitParameters struct {
 	ValidateSignature *bool `json:"validateSignature,omitempty" tf:"validate_signature,omitempty"`
 }
 
-type IdentityProviderObservation struct {
+type OpenIdIdentityProviderObservation struct {
 
 	// When true, the IDP will accept forwarded authentication requests that contain the prompt=none query parameter. Defaults to false.
 	// This is just used together with Identity Provider Authenticator or when kc_idp_hint points to this identity provider. In case that client sends a request with prompt=none and user is not yet authenticated, the error will not be directly returned to client, but the request with prompt=none will be forwarded to this identity provider.
@@ -277,7 +286,7 @@ type IdentityProviderObservation struct {
 	ValidateSignature *bool `json:"validateSignature,omitempty" tf:"validate_signature,omitempty"`
 }
 
-type IdentityProviderParameters struct {
+type OpenIdIdentityProviderParameters struct {
 
 	// When true, the IDP will accept forwarded authentication requests that contain the prompt=none query parameter. Defaults to false.
 	// This is just used together with Identity Provider Authenticator or when kc_idp_hint points to this identity provider. In case that client sends a request with prompt=none and user is not yet authenticated, the error will not be directly returned to client, but the request with prompt=none will be forwarded to this identity provider.
@@ -405,8 +414,17 @@ type IdentityProviderParameters struct {
 
 	// The name of the realm. This is unique across Keycloak.
 	// Realm Name
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// Reference to a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// When true, tokens will be stored after authenticating users. Defaults to true.
 	// Enable/disable if tokens must be stored after authenticating users.
@@ -444,10 +462,10 @@ type IdentityProviderParameters struct {
 	ValidateSignature *bool `json:"validateSignature,omitempty" tf:"validate_signature,omitempty"`
 }
 
-// IdentityProviderSpec defines the desired state of IdentityProvider
-type IdentityProviderSpec struct {
+// OpenIdIdentityProviderSpec defines the desired state of OpenIdIdentityProvider
+type OpenIdIdentityProviderSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     IdentityProviderParameters `json:"forProvider"`
+	ForProvider     OpenIdIdentityProviderParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -458,54 +476,53 @@ type IdentityProviderSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider IdentityProviderInitParameters `json:"initProvider,omitempty"`
+	InitProvider OpenIdIdentityProviderInitParameters `json:"initProvider,omitempty"`
 }
 
-// IdentityProviderStatus defines the observed state of IdentityProvider.
-type IdentityProviderStatus struct {
+// OpenIdIdentityProviderStatus defines the observed state of OpenIdIdentityProvider.
+type OpenIdIdentityProviderStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        IdentityProviderObservation `json:"atProvider,omitempty"`
+	AtProvider        OpenIdIdentityProviderObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// IdentityProvider is the Schema for the IdentityProviders API.
+// OpenIdIdentityProvider is the Schema for the OpenIdIdentityProviders API.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
-type IdentityProvider struct {
+type OpenIdIdentityProvider struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.alias) || (has(self.initProvider) && has(self.initProvider.alias))",message="spec.forProvider.alias is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.authorizationUrl) || (has(self.initProvider) && has(self.initProvider.authorizationUrl))",message="spec.forProvider.authorizationUrl is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clientSecretSecretRef)",message="spec.forProvider.clientSecretSecretRef is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.realm) || (has(self.initProvider) && has(self.initProvider.realm))",message="spec.forProvider.realm is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.tokenUrl) || (has(self.initProvider) && has(self.initProvider.tokenUrl))",message="spec.forProvider.tokenUrl is a required parameter"
-	Spec   IdentityProviderSpec   `json:"spec"`
-	Status IdentityProviderStatus `json:"status,omitempty"`
+	Spec   OpenIdIdentityProviderSpec   `json:"spec"`
+	Status OpenIdIdentityProviderStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// IdentityProviderList contains a list of IdentityProviders
-type IdentityProviderList struct {
+// OpenIdIdentityProviderList contains a list of OpenIdIdentityProviders
+type OpenIdIdentityProviderList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []IdentityProvider `json:"items"`
+	Items           []OpenIdIdentityProvider `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	IdentityProvider_Kind             = "IdentityProvider"
-	IdentityProvider_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: IdentityProvider_Kind}.String()
-	IdentityProvider_KindAPIVersion   = IdentityProvider_Kind + "." + CRDGroupVersion.String()
-	IdentityProvider_GroupVersionKind = CRDGroupVersion.WithKind(IdentityProvider_Kind)
+	OpenIdIdentityProvider_Kind             = "OpenIdIdentityProvider"
+	OpenIdIdentityProvider_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: OpenIdIdentityProvider_Kind}.String()
+	OpenIdIdentityProvider_KindAPIVersion   = OpenIdIdentityProvider_Kind + "." + CRDGroupVersion.String()
+	OpenIdIdentityProvider_GroupVersionKind = CRDGroupVersion.WithKind(OpenIdIdentityProvider_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&IdentityProvider{}, &IdentityProviderList{})
+	SchemeBuilder.Register(&OpenIdIdentityProvider{}, &OpenIdIdentityProviderList{})
 }

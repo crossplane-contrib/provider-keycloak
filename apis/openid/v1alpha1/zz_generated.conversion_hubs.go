@@ -35,6 +35,3 @@ func (tr *ClientUserPolicy) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *GroupMembershipProtocolMapper) Hub() {}
-
-// Hub marks this type as a conversion hub.
-func (tr *IdentityProvider) Hub() {}

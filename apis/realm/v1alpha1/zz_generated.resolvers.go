@@ -54,6 +54,48 @@ func (mg *KeystoreRsa) ResolveReferences(ctx context.Context, c client.Reader) e
 	return nil
 }
 
+// ResolveReferences of this Realm.
+func (mg *Realm) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Realm),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.ForProvider.RealmRef,
+		Selector:     mg.Spec.ForProvider.RealmSelector,
+		To: reference.To{
+			List:    &RealmList{},
+			Managed: &Realm{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.Realm")
+	}
+	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Realm),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.RealmRef,
+		Selector:     mg.Spec.InitProvider.RealmSelector,
+		To: reference.To{
+			List:    &RealmList{},
+			Managed: &Realm{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.Realm")
+	}
+	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
+
+	return nil
+}
+
 // ResolveReferences of this RequiredAction.
 func (mg *RequiredAction) ResolveReferences(ctx context.Context, c client.Reader) error {
 	r := reference.NewAPIResolver(c, mg)

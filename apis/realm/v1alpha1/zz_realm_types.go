@@ -428,7 +428,16 @@ type RealmInitParameters struct {
 	PasswordPolicy *string `json:"passwordPolicy,omitempty" tf:"password_policy,omitempty"`
 
 	// The name of the realm. This is unique across Keycloak. This will also be used as the realm's internal ID within Keycloak.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// Reference to a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// Maximum number of times a refresh token can be reused before they are revoked. If unspecified and 'revoke_refresh_token' is enabled the default value is 0 and refresh tokens can not be reused.
 	RefreshTokenMaxReuse *float64 `json:"refreshTokenMaxReuse,omitempty" tf:"refresh_token_max_reuse,omitempty"`
@@ -822,8 +831,17 @@ type RealmParameters struct {
 	PasswordPolicy *string `json:"passwordPolicy,omitempty" tf:"password_policy,omitempty"`
 
 	// The name of the realm. This is unique across Keycloak. This will also be used as the realm's internal ID within Keycloak.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// Reference to a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// Maximum number of times a refresh token can be reused before they are revoked. If unspecified and 'revoke_refresh_token' is enabled the default value is 0 and refresh tokens can not be reused.
 	// +kubebuilder:validation:Optional
@@ -1329,9 +1347,8 @@ type RealmStatus struct {
 type Realm struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.realm) || (has(self.initProvider) && has(self.initProvider.realm))",message="spec.forProvider.realm is a required parameter"
-	Spec   RealmSpec   `json:"spec"`
-	Status RealmStatus `json:"status,omitempty"`
+	Spec              RealmSpec   `json:"spec"`
+	Status            RealmStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

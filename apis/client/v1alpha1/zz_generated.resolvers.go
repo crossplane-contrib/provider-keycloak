@@ -8,7 +8,6 @@ package v1alpha1
 import (
 	"context"
 	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1"
-	common "github.com/crossplane-contrib/provider-keycloak/config/common"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
@@ -20,22 +19,6 @@ func (mg *OpenIdClient) ResolveReferences(ctx context.Context, c client.Reader) 
 
 	var rsp reference.ResolutionResponse
 	var err error
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-		Extract:      common.UUIDExtractor(),
-		Reference:    mg.Spec.ForProvider.ClientIDRef,
-		Selector:     mg.Spec.ForProvider.ClientIDSelector,
-		To: reference.To{
-			List:    &OpenIdClientList{},
-			Managed: &OpenIdClient{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.ClientID")
-	}
-	mg.Spec.ForProvider.ClientID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.ClientIDRef = rsp.ResolvedReference
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.RealmID),
@@ -52,22 +35,6 @@ func (mg *OpenIdClient) ResolveReferences(ctx context.Context, c client.Reader) 
 	}
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-		Extract:      common.UUIDExtractor(),
-		Reference:    mg.Spec.InitProvider.ClientIDRef,
-		Selector:     mg.Spec.InitProvider.ClientIDSelector,
-		To: reference.To{
-			List:    &OpenIdClientList{},
-			Managed: &OpenIdClient{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.ClientID")
-	}
-	mg.Spec.InitProvider.ClientID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.ClientIDRef = rsp.ResolvedReference
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.RealmID),
@@ -96,22 +63,6 @@ func (mg *SamlClient) ResolveReferences(ctx context.Context, c client.Reader) er
 	var err error
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-		Extract:      common.UUIDExtractor(),
-		Reference:    mg.Spec.ForProvider.ClientIDRef,
-		Selector:     mg.Spec.ForProvider.ClientIDSelector,
-		To: reference.To{
-			List:    &OpenIdClientList{},
-			Managed: &OpenIdClient{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.ClientID")
-	}
-	mg.Spec.ForProvider.ClientID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.ClientIDRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.RealmID),
 		Extract:      reference.ExternalName(),
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
@@ -126,22 +77,6 @@ func (mg *SamlClient) ResolveReferences(ctx context.Context, c client.Reader) er
 	}
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-		Extract:      common.UUIDExtractor(),
-		Reference:    mg.Spec.InitProvider.ClientIDRef,
-		Selector:     mg.Spec.InitProvider.ClientIDSelector,
-		To: reference.To{
-			List:    &OpenIdClientList{},
-			Managed: &OpenIdClient{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.ClientID")
-	}
-	mg.Spec.InitProvider.ClientID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.ClientIDRef = rsp.ResolvedReference
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.RealmID),

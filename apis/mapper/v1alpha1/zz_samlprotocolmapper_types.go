@@ -17,15 +17,15 @@ type SamlProtocolMapperInitParameters struct {
 
 	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.SamlClient
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
-	// Reference to a OpenIdClient in client to populate clientId.
+	// Reference to a SamlClient in client to populate clientId.
 	// +kubebuilder:validation:Optional
 	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
 
-	// Selector for a OpenIdClient in client to populate clientId.
+	// Selector for a SamlClient in client to populate clientId.
 	// +kubebuilder:validation:Optional
 	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
@@ -109,16 +109,16 @@ type SamlProtocolMapperParameters struct {
 
 	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.SamlClient
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
-	// Reference to a OpenIdClient in client to populate clientId.
+	// Reference to a SamlClient in client to populate clientId.
 	// +kubebuilder:validation:Optional
 	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
 
-	// Selector for a OpenIdClient in client to populate clientId.
+	// Selector for a SamlClient in client to populate clientId.
 	// +kubebuilder:validation:Optional
 	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
