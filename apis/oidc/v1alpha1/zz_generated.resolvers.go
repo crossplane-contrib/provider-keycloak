@@ -9,6 +9,7 @@ import (
 	"context"
 	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1"
 	v1alpha11 "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1"
+	common "github.com/crossplane-contrib/provider-keycloak/config/common"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
@@ -23,7 +24,7 @@ func (mg *IdentityProvider) ResolveReferences(ctx context.Context, c client.Read
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.ForProvider.ClientIDRef,
 		Selector:     mg.Spec.ForProvider.ClientIDSelector,
 		To: reference.To{
@@ -55,7 +56,7 @@ func (mg *IdentityProvider) ResolveReferences(ctx context.Context, c client.Read
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.InitProvider.ClientIDRef,
 		Selector:     mg.Spec.InitProvider.ClientIDSelector,
 		To: reference.To{

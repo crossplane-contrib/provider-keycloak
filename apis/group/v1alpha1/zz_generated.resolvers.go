@@ -9,6 +9,7 @@ import (
 	"context"
 	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1"
 	v1alpha11 "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1"
+	common "github.com/crossplane-contrib/provider-keycloak/config/common"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
@@ -278,7 +279,7 @@ func (mg *Roles) ResolveReferences(ctx context.Context, c client.Reader) error {
 
 	mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
 		CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.RoleIds),
-		Extract:       reference.ExternalName(),
+		Extract:       common.UUIDExtractor(),
 		References:    mg.Spec.ForProvider.RoleIdsRefs,
 		Selector:      mg.Spec.ForProvider.RoleIdsSelector,
 		To: reference.To{
@@ -326,7 +327,7 @@ func (mg *Roles) ResolveReferences(ctx context.Context, c client.Reader) error {
 
 	mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
 		CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.RoleIds),
-		Extract:       reference.ExternalName(),
+		Extract:       common.UUIDExtractor(),
 		References:    mg.Spec.InitProvider.RoleIdsRefs,
 		Selector:      mg.Spec.InitProvider.RoleIdsSelector,
 		To: reference.To{

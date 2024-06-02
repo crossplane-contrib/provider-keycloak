@@ -11,9 +11,9 @@ spec:
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
-    roleIds:
-    - ${keycloak_role.realm_role.id}
-    - ${keycloak_role.client_role.id}
+    roleIdsRefs:
+    - name: realm_role
+    - name: client_role
     userIdSelector:
       matchLabels:
         testing.upbound.io/example-name: user

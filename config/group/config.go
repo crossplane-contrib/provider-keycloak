@@ -26,9 +26,6 @@ func Configure(p *config.Provider) {
 		r.References["group_id"] = config.Reference{
 			Type: "Group",
 		}
-		r.References["role_ids"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
-		}
 	})
 	p.AddResourceConfigurator("keycloak_group_permissions", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
