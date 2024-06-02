@@ -8,9 +8,7 @@ metadata:
   name: saml-client
 spec:
   forProvider:
-    clientIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: example
+    clientId: saml-client
     includeAuthnStatement: true
     name: saml-client
     realmIdSelector:
@@ -18,8 +16,14 @@ spec:
         testing.upbound.io/example-name: realm
     signAssertions: true
     signDocuments: false
-    signingCertificate: ${file("saml-cert.pem")}
-    signingPrivateKey: ${file("saml-key.pem")}
+    signingCertificateSecretRef:
+      key: attribute.saml-cert.pem
+      name: example-secret
+      namespace: upbound-system
+    signingPrivateKeySecretRef:
+      key: attribute.saml-key.pem
+      name: example-secret
+      namespace: upbound-system
 
 ---
 
@@ -34,4 +38,6 @@ metadata:
 spec:
   forProvider:
     enabled: true
-    realm: my-realm
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example

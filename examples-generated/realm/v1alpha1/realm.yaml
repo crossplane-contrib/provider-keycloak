@@ -23,7 +23,9 @@ spec:
     loginTheme: base
     passwordPolicy: upperCase(1) and length(8) and forceExpiredPasswordChange(365)
       and notUsername
-    realm: my-realm
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
     securityDefenses:
     - bruteForceDetection:
       - failureResetTimeSeconds: 43200

@@ -8,15 +8,17 @@ metadata:
   name: token-exchange
 spec:
   forProvider:
-    clients:
-    - ${keycloak_openid_client.openid_client.id}
+    clientsRefs:
+    - name: openid_client
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     name: my-policy
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
-    resourceServerId: ${data.keycloak_openid_client.realm_management.id}
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: keycloak_openid_client
 
 ---
 
@@ -31,9 +33,7 @@ metadata:
 spec:
   forProvider:
     accessType: CONFIDENTIAL
-    clientIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: example
+    clientId: openid_client
     name: openid_client
     realmIdSelector:
       matchLabels:
@@ -72,4 +72,6 @@ metadata:
 spec:
   forProvider:
     enabled: true
-    realm: my-realm
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example

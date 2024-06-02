@@ -27,4 +27,6 @@ metadata:
 spec:
   forProvider:
     enabled: true
-    realm: my-realm
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example

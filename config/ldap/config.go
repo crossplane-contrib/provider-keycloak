@@ -11,6 +11,9 @@ func Configure(p *config.Provider) {
 	// ldap
 	p.AddResourceConfigurator("keycloak_ldap_user_federation", func(r *config.Resource) {
 		r.ShortGroup = Group
+		if s, ok := r.TerraformResource.Schema["bind_credential"]; ok {
+			s.Sensitive = true
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_ldap_user_attribute_mapper", func(r *config.Resource) {

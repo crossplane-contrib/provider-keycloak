@@ -17,7 +17,9 @@ import (
 	memberships "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/memberships"
 	permissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/permissions"
 	rolesgroup "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/roles"
-	identityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/identityprovider/identityprovidermapper"
+	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/idp/identityprovider"
+	identityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/idp/identityprovidermapper"
+	openididentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/idp/openididentityprovider"
 	custommapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/custommapper"
 	fullnamemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/fullnamemapper"
 	groupmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/groupmapper"
@@ -41,7 +43,6 @@ import (
 	clientserviceaccountrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientserviceaccountrole"
 	clientuserpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/clientuserpolicy"
 	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/groupmembershipprotocolmapper"
-	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/openid/identityprovider"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/providerconfig"
 	keystorersa "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/keystorersa"
 	realm "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/realm"
@@ -49,7 +50,6 @@ import (
 	role "github.com/crossplane-contrib/provider-keycloak/internal/controller/role/role"
 	clientdefaultscopessaml "github.com/crossplane-contrib/provider-keycloak/internal/controller/saml/clientdefaultscopes"
 	clientscopesaml "github.com/crossplane-contrib/provider-keycloak/internal/controller/saml/clientscope"
-	identityprovidersaml "github.com/crossplane-contrib/provider-keycloak/internal/controller/saml/identityprovider"
 	groups "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/groups"
 	permissionsuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/permissions"
 	rolesuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/user/roles"
@@ -68,7 +68,9 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		memberships.Setup,
 		permissions.Setup,
 		rolesgroup.Setup,
+		identityprovider.Setup,
 		identityprovidermapper.Setup,
+		openididentityprovider.Setup,
 		custommapper.Setup,
 		fullnamemapper.Setup,
 		groupmapper.Setup,
@@ -92,7 +94,6 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientserviceaccountrole.Setup,
 		clientuserpolicy.Setup,
 		groupmembershipprotocolmapper.Setup,
-		identityprovider.Setup,
 		providerconfig.Setup,
 		keystorersa.Setup,
 		realm.Setup,
@@ -100,7 +101,6 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		role.Setup,
 		clientdefaultscopessaml.Setup,
 		clientscopesaml.Setup,
-		identityprovidersaml.Setup,
 		groups.Setup,
 		permissionsuser.Setup,
 		rolesuser.Setup,

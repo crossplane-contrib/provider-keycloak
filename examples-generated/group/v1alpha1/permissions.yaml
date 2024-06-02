@@ -68,4 +68,6 @@ metadata:
   name: realm
 spec:
   forProvider:
-    realm: my_realm
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example

@@ -79,8 +79,7 @@ spec:
                       The mapper's associated client. Cannot be used at the same time as client_scope_id.
                     type: string
                   clientIdRef:
-                    description: Reference to a OpenIdClient in client to populate
-                      clientId.
+                    description: Reference to a SamlClient in client to populate clientId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -114,8 +113,7 @@ spec:
                     - name
                     type: object
                   clientIdSelector:
-                    description: Selector for a OpenIdClient in client to populate
-                      clientId.
+                    description: Selector for a SamlClient in client to populate clientId.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -355,8 +353,7 @@ spec:
                       The mapper's associated client. Cannot be used at the same time as client_scope_id.
                     type: string
                   clientIdRef:
-                    description: Reference to a OpenIdClient in client to populate
-                      clientId.
+                    description: Reference to a SamlClient in client to populate clientId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -390,8 +387,7 @@ spec:
                     - name
                     type: object
                   clientIdSelector:
-                    description: Selector for a OpenIdClient in client to populate
-                      clientId.
+                    description: Selector for a SamlClient in client to populate clientId.
                     properties:
                       matchControllerRef:
                         description: |-

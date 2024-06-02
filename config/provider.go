@@ -83,11 +83,15 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 				r.References["realm_id"] = config.Reference{
 					Type: "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm",
 				}
-			case "client_id":
-				r.References["client_id"] = config.Reference{
-					Type:      "github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient",
-					Extractor: common.PathUUIDExtractor,
+			case "realm":
+				r.References["realm"] = config.Reference{
+					Type: "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm",
 				}
+			//case "client_id":
+			//	r.References["client_id"] = config.Reference{
+			//		Type:      "github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient",
+			//		Extractor: common.PathUUIDExtractor,
+			//	}
 			case "service_account_user_id":
 				r.References["service_account_user_id"] = config.Reference{
 					Type:              "github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1.OpenIdClient",

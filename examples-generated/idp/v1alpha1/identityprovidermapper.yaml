@@ -1,8 +1,8 @@
-apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+apiVersion: idp.keycloak.crossplane.io/v1alpha1
 kind: IdentityProviderMapper
 metadata:
   annotations:
-    meta.upbound.io/example-id: identityprovider/v1alpha1/identityprovidermapper
+    meta.upbound.io/example-id: idp/v1alpha1/identityprovidermapper
   labels:
     testing.upbound.io/example-name: oidc
   name: oidc
@@ -12,7 +12,9 @@ spec:
       Claim: my-email-claim
       UserAttribute: email
       syncMode: INHERIT
-    identityProviderAlias: my-idp
+    identityProviderAliasSelector:
+      matchLabels:
+        testing.upbound.io/example-name: oidc
     identityProviderMapper: '%s-user-attribute-idp-mapper'
     name: email-attribute-importer
     realmSelector:
@@ -21,11 +23,11 @@ spec:
 
 ---
 
-apiVersion: openid.keycloak.crossplane.io/v1alpha1
-kind: IdentityProvider
+apiVersion: idp.keycloak.crossplane.io/v1alpha1
+kind: OpenIdIdentityProvider
 metadata:
   annotations:
-    meta.upbound.io/example-id: identityprovider/v1alpha1/identityprovidermapper
+    meta.upbound.io/example-id: idp/v1alpha1/identityprovidermapper
   labels:
     testing.upbound.io/example-name: oidc
   name: oidc
@@ -41,7 +43,9 @@ spec:
       name: example-secret
       namespace: upbound-system
     defaultScopes: openid random profile
-    realm: ${keycloak_realm.realm.id}
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
     tokenUrl: https://example.com/token
 
 ---
@@ -50,11 +54,13 @@ apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
   annotations:
-    meta.upbound.io/example-id: identityprovider/v1alpha1/identityprovidermapper
+    meta.upbound.io/example-id: idp/v1alpha1/identityprovidermapper
   labels:
     testing.upbound.io/example-name: realm
   name: realm
 spec:
   forProvider:
     enabled: true
-    realm: my-realm
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
