@@ -1259,6 +1259,18 @@ func (in *RolesInitParameters) DeepCopyInto(out *RolesInitParameters) {
 			}
 		}
 	}
+	if in.RoleIdsRefs != nil {
+		in, out := &in.RoleIdsRefs, &out.RoleIdsRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.RoleIdsSelector != nil {
+		in, out := &in.RoleIdsSelector, &out.RoleIdsSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.UserID != nil {
 		in, out := &in.UserID, &out.UserID
 		*out = new(string)
@@ -1397,6 +1409,18 @@ func (in *RolesParameters) DeepCopyInto(out *RolesParameters) {
 				**out = **in
 			}
 		}
+	}
+	if in.RoleIdsRefs != nil {
+		in, out := &in.RoleIdsRefs, &out.RoleIdsRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.RoleIdsSelector != nil {
+		in, out := &in.RoleIdsSelector, &out.RoleIdsSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.UserID != nil {
 		in, out := &in.UserID, &out.UserID

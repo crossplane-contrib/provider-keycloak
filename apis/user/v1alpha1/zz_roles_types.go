@@ -31,8 +31,18 @@ type RolesInitParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of role IDs to map to the user
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
 	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
+
+	// References to Role in role to populate roleIds.
+	// +kubebuilder:validation:Optional
+	RoleIdsRefs []v1.Reference `json:"roleIdsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Role in role to populate roleIds.
+	// +kubebuilder:validation:Optional
+	RoleIdsSelector *v1.Selector `json:"roleIdsSelector,omitempty" tf:"-"`
 
 	// The ID of the user this resource should manage roles for.
 	// +crossplane:generate:reference:type=User
@@ -85,9 +95,19 @@ type RolesParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of role IDs to map to the user
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
+
+	// References to Role in role to populate roleIds.
+	// +kubebuilder:validation:Optional
+	RoleIdsRefs []v1.Reference `json:"roleIdsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Role in role to populate roleIds.
+	// +kubebuilder:validation:Optional
+	RoleIdsSelector *v1.Selector `json:"roleIdsSelector,omitempty" tf:"-"`
 
 	// The ID of the user this resource should manage roles for.
 	// +crossplane:generate:reference:type=User
@@ -139,9 +159,8 @@ type RolesStatus struct {
 type Roles struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.roleIds) || (has(self.initProvider) && has(self.initProvider.roleIds))",message="spec.forProvider.roleIds is a required parameter"
-	Spec   RolesSpec   `json:"spec"`
-	Status RolesStatus `json:"status,omitempty"`
+	Spec              RolesSpec   `json:"spec"`
+	Status            RolesStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

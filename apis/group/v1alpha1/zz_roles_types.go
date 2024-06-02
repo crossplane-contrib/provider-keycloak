@@ -44,6 +44,7 @@ type RolesInitParameters struct {
 
 	// A list of role IDs to map to the group.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
 	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
 
@@ -108,6 +109,7 @@ type RolesParameters struct {
 
 	// A list of role IDs to map to the group.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	RoleIds []*string `json:"roleIds,omitempty" tf:"role_ids,omitempty"`
