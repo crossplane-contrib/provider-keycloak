@@ -30,6 +30,18 @@ Run code-generation pipeline:
 go run cmd/generator/main.go "$PWD"
 ```
 
+Checkout sub-repositories:
+
+```console
+make submodules
+```
+
+Execute code generation:
+
+```console
+make generate
+```
+
 Run against a Kubernetes cluster:
 
 ```console
