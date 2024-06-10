@@ -23,7 +23,7 @@ func (mg *Client) ResolveReferences(ctx context.Context, c client.Reader) error 
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.ForProvider.ClientIDRef,
 		Selector:     mg.Spec.ForProvider.ClientIDSelector,
 		To: reference.To{
@@ -55,7 +55,7 @@ func (mg *Client) ResolveReferences(ctx context.Context, c client.Reader) error 
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.InitProvider.ClientIDRef,
 		Selector:     mg.Spec.InitProvider.ClientIDSelector,
 		To: reference.To{
@@ -139,7 +139,7 @@ func (mg *ClientDefaultScopes) ResolveReferences(ctx context.Context, c client.R
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.ForProvider.ClientIDRef,
 		Selector:     mg.Spec.ForProvider.ClientIDSelector,
 		To: reference.To{
@@ -171,7 +171,7 @@ func (mg *ClientDefaultScopes) ResolveReferences(ctx context.Context, c client.R
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.InitProvider.ClientIDRef,
 		Selector:     mg.Spec.InitProvider.ClientIDSelector,
 		To: reference.To{
@@ -255,7 +255,7 @@ func (mg *ClientPermissions) ResolveReferences(ctx context.Context, c client.Rea
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.ForProvider.ClientIDRef,
 		Selector:     mg.Spec.ForProvider.ClientIDSelector,
 		To: reference.To{
@@ -287,7 +287,7 @@ func (mg *ClientPermissions) ResolveReferences(ctx context.Context, c client.Rea
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.InitProvider.ClientIDRef,
 		Selector:     mg.Spec.InitProvider.ClientIDSelector,
 		To: reference.To{
@@ -487,7 +487,7 @@ func (mg *ClientServiceAccountRole) ResolveReferences(ctx context.Context, c cli
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.ForProvider.ClientIDRef,
 		Selector:     mg.Spec.ForProvider.ClientIDSelector,
 		To: reference.To{
@@ -535,7 +535,7 @@ func (mg *ClientServiceAccountRole) ResolveReferences(ctx context.Context, c cli
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.InitProvider.ClientIDRef,
 		Selector:     mg.Spec.InitProvider.ClientIDSelector,
 		To: reference.To{

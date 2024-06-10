@@ -1,0 +1,53 @@
+# Example 1: Basic Realm Configuration
+# This example demonstrates the minimum required fields to create a realm.
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: dev  # The name of the realm in Kubernetes
+spec:
+  forProvider:
+    realm: "dev"  # The name of the realm in Keycloak
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the ProviderConfig resource
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: dev-default-group
+  labels:
+    issue: "83"
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: dev
+    name: dev-default-group
+  initProvider: {}
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: dev-default-group-roles
+  labels:
+    issue: "83"
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    groupIdRef:
+      name: dev-default-group
+      policy: 
+        resolve: Always
+    realmId: dev
+    #roleIds:
+    #  - 6f6bc131-7a5c-467f-83cb-dac11bc8e8f5
+    roleIdsRefs:
+      - name: builtin-dev-realm-role-uma-authorization
+    #roleIdsSelector:
+    #  matchLabels:
+    #    defaultRole: 'true'
+    #    realmName: my-realm
+  managementPolicies:
+    - '*'
+  providerConfigRef:
+    name: "keycloak-provider-config"

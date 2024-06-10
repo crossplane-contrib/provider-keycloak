@@ -25,7 +25,7 @@ func (mg *IdentityProvider) ResolveReferences(ctx context.Context, c client.Read
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.ForProvider.ClientIDRef,
 		Selector:     mg.Spec.ForProvider.ClientIDSelector,
 		To: reference.To{
@@ -73,7 +73,7 @@ func (mg *IdentityProvider) ResolveReferences(ctx context.Context, c client.Read
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.UUIDExtractor(),
 		Reference:    mg.Spec.InitProvider.ClientIDRef,
 		Selector:     mg.Spec.InitProvider.ClientIDSelector,
 		To: reference.To{

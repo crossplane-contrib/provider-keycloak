@@ -92,7 +92,8 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 				}
 			case "client_id":
 				r.References["client_id"] = config.Reference{
-					Type: "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
+					Type:      "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
+					Extractor: common.PathUUIDExtractor,
 				}
 			case "service_account_user_id":
 				r.References["service_account_user_id"] = config.Reference{
@@ -105,11 +106,17 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 					IgnoredFields: []string{"service_account_user_id"},
 				}
 
-				// case "role":
-				// 	r.References["role"] = config.Reference{
-				// 		Type:      "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
-				// 		Extractor: `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
-				// 	}
+			case "role_ids":
+				r.References["role_ids"] = config.Reference{
+					Type:      "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
+					Extractor: common.PathUUIDExtractor,
+				}
+
+			case "role_id":
+				r.References["role_id"] = config.Reference{
+					Type:      "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
+					Extractor: common.PathUUIDExtractor,
+				}
 			}
 
 		}
