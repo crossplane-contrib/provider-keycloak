@@ -9,6 +9,11 @@ import (
 
 	"github.com/crossplane/upjet/pkg/controller"
 
+	bindings "github.com/crossplane-contrib/provider-keycloak/internal/controller/authenticationflow/bindings"
+	execution "github.com/crossplane-contrib/provider-keycloak/internal/controller/authenticationflow/execution"
+	executionconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/authenticationflow/executionconfig"
+	flow "github.com/crossplane-contrib/provider-keycloak/internal/controller/authenticationflow/flow"
+	subflow "github.com/crossplane-contrib/provider-keycloak/internal/controller/authenticationflow/subflow"
 	protocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/protocolmapper"
 	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/rolemapper"
 	defaultgroups "github.com/crossplane-contrib/provider-keycloak/internal/controller/defaults/defaultgroups"
@@ -60,6 +65,11 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
+		bindings.Setup,
+		execution.Setup,
+		executionconfig.Setup,
+		flow.Setup,
+		subflow.Setup,
 		protocolmapper.Setup,
 		rolemapper.Setup,
 		defaultgroups.Setup,

@@ -77,7 +77,17 @@ type IdentityProviderInitParameters struct {
 
 	// The authentication flow to use when users log in for the first time through this identity provider. Defaults to first broker login.
 	// Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that there is not yet existing Keycloak account linked with the authenticated identity provider account.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.AuthenticationFlowAliasExtractor()
 	FirstBrokerLoginFlowAlias *string `json:"firstBrokerLoginFlowAlias,omitempty" tf:"first_broker_login_flow_alias,omitempty"`
+
+	// Reference to a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
+	// +kubebuilder:validation:Optional
+	FirstBrokerLoginFlowAliasRef *v1.Reference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+
+	// Selector for a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
+	// +kubebuilder:validation:Optional
+	FirstBrokerLoginFlowAliasSelector *v1.Selector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// A number defining the order of this identity provider in the GUI.
 	// GUI Order
@@ -362,8 +372,18 @@ type IdentityProviderParameters struct {
 
 	// The authentication flow to use when users log in for the first time through this identity provider. Defaults to first broker login.
 	// Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that there is not yet existing Keycloak account linked with the authenticated identity provider account.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.AuthenticationFlowAliasExtractor()
 	// +kubebuilder:validation:Optional
 	FirstBrokerLoginFlowAlias *string `json:"firstBrokerLoginFlowAlias,omitempty" tf:"first_broker_login_flow_alias,omitempty"`
+
+	// Reference to a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
+	// +kubebuilder:validation:Optional
+	FirstBrokerLoginFlowAliasRef *v1.Reference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+
+	// Selector for a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
+	// +kubebuilder:validation:Optional
+	FirstBrokerLoginFlowAliasSelector *v1.Selector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// A number defining the order of this identity provider in the GUI.
 	// GUI Order
