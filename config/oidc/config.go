@@ -1,6 +1,9 @@
 package oidc
 
-import "github.com/crossplane/upjet/pkg/config"
+import (
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
+	"github.com/crossplane/upjet/pkg/config"
+)
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
@@ -10,6 +13,9 @@ func Configure(p *config.Provider) {
 		r.References["realm"] = config.Reference{
 			Type: "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm",
 		}
+		r.References["first_broker_login_flow_alias"] = config.Reference{
+			Type:      "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow",
+			Extractor: common.PathAuthenticationFlowAliasExtractor,
+		}
 	})
-
 }

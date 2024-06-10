@@ -11,6 +11,7 @@ import (
 	"github.com/crossplane/upjet/pkg/config"
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
+	"github.com/crossplane-contrib/provider-keycloak/config/authentication"
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/defaults"
 	"github.com/crossplane-contrib/provider-keycloak/config/group"
@@ -65,6 +66,7 @@ func GetProvider() *ujconfig.Provider {
 		identityprovider.Configure,
 		ldap.Configure,
 		samlclient.Configure,
+		authentication.Configure,
 	} {
 		configure(pc)
 	}

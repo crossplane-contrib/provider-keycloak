@@ -130,6 +130,16 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(string)
 		**out = **in
 	}
+	if in.FirstBrokerLoginFlowAliasRef != nil {
+		in, out := &in.FirstBrokerLoginFlowAliasRef, &out.FirstBrokerLoginFlowAliasRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.FirstBrokerLoginFlowAliasSelector != nil {
+		in, out := &in.FirstBrokerLoginFlowAliasSelector, &out.FirstBrokerLoginFlowAliasSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.GuiOrder != nil {
 		in, out := &in.GuiOrder, &out.GuiOrder
 		*out = new(string)
@@ -544,6 +554,16 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 		in, out := &in.FirstBrokerLoginFlowAlias, &out.FirstBrokerLoginFlowAlias
 		*out = new(string)
 		**out = **in
+	}
+	if in.FirstBrokerLoginFlowAliasRef != nil {
+		in, out := &in.FirstBrokerLoginFlowAliasRef, &out.FirstBrokerLoginFlowAliasRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.FirstBrokerLoginFlowAliasSelector != nil {
+		in, out := &in.FirstBrokerLoginFlowAliasSelector, &out.FirstBrokerLoginFlowAliasSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.GuiOrder != nil {
 		in, out := &in.GuiOrder, &out.GuiOrder

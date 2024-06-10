@@ -1,0 +1,50 @@
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  annotations:
+    meta.upbound.io/example-id: authenticationflow/v1alpha1/execution
+  labels:
+    testing.upbound.io/example-name: execution_one
+  name: execution-one
+spec:
+  forProvider:
+    authenticator: auth-cookie
+    parentFlowAliasSelector:
+      matchLabels:
+        testing.upbound.io/example-name: flow
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    requirement: ALTERNATIVE
+
+---
+
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Flow
+metadata:
+  annotations:
+    meta.upbound.io/example-id: authenticationflow/v1alpha1/execution
+  labels:
+    testing.upbound.io/example-name: flow
+  name: flow
+spec:
+  forProvider:
+    alias: my-flow-alias
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: authenticationflow/v1alpha1/execution
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
