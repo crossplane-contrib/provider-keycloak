@@ -1,0 +1,15 @@
+# Example 1: To map a Client Role to all LDAP users
+# This example maps a Client Role named k8s-admin from the Kubernetes client to all LDAP users.
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: HardcodedRoleMapper
+metadata:
+  name: default-kubernetes-role
+spec:
+  forProvider:
+    name: "default-kubernetes-role"
+    role: kubernetes.k8s-admin  # Client.<Role name>
+    ldapUserFederationIdRef:
+      name: my-realm
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config

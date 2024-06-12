@@ -137,3 +137,51 @@ spec:
       "attribute.nameformat": "Basic"
   providerConfigRef:
     name: keycloak-provider-config
+
+---
+# Example 7: User Client Role Mapper
+# This example uses the User Client Role mapper to include roles as claims.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: kubernetes-roles
+spec:
+  forProvider:
+    clientIdRef: 
+      name: kubernetes
+    config:
+      usermodel.clientRoleMapping.clientId: kubernetes
+      access.token.claim: "true"
+      claim.name: roles
+      id.token.claim: "true"
+      multivalued: "true"
+    name: roles
+    protocol: openid-connect
+    protocolMapper: oidc-usermodel-client-role-mapper
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+# Example 8: User Attribute
+# This example uses the User Attribute mapper to include roles as claims.
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: kubernetes-name
+spec:
+  forProvider:
+    clientIdRef: 
+      name: kubernetes
+    config:
+      access.token.claim: "true"
+      claim.name: name
+      id.token.claim: "true"
+      user.attribute: name
+    name: name
+    protocol: openid-connect
+    protocolMapper: oidc-usermodel-attribute-mapper
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+

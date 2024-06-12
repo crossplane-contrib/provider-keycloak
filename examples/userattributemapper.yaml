@@ -1,0 +1,17 @@
+# Example 1: to add User Attribute Mapper in User Federation
+# This example creates a new firstname mapper to use givenName as the LDAP attribute.
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserAttributeMapper
+metadata:
+  name: firstname
+spec:
+  forProvider:
+    name: "firstname"
+    userModelAttribute: "firstName"
+    ldapAttribute: "givenName"
+    alwaysReadValueFromLdap: true
+    ldapUserFederationIdRef:
+      name: my-realm
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config

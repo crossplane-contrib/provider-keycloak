@@ -62,3 +62,50 @@ spec:
     validRedirectUris:
       - "myapp://callback"  # Replace with your mobile app's custom URI scheme
 
+---
+# Example 5: Client for ArgoCD Application
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: argocd
+spec:
+  forProvider:
+    name: argocd
+    clientId: argocd
+    accessType: CONFIDENTIAL
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: true
+    rootUrl: "https://argocd.example.com"
+    adminUrl: "https://argocd.example.com"
+    webOrigins: 
+      - https://argocd.example.com
+    validRedirectUris:
+      - https://argocd.example.com/auth/callback
+    validPostLogoutRedirectUris:
+      - https://argocd.example.com
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+# Example 6: Client for Kubernetes Application
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: kubernetes
+spec:
+  forProvider:
+    name: kubernetes
+    clientId: kubernetes
+    accessType: CONFIDENTIAL
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: true
+    authorization:
+      - policyEnforcementMode: ENFORCING
+    validRedirectUris:
+      - http://localhost:18000
+      - http://localhost:8000
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config

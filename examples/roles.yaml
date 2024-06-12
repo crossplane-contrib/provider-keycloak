@@ -62,3 +62,34 @@ spec:
   providerConfigRef:
     name: "keycloak-provider-config"
 
+---
+# Example 5: Roles with Group
+# This example map multiple Client Roles to an internal Group
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: ldap-admin-role-mapper
+spec:
+  forProvider:
+    groupIdRef: 
+      name: ldap-admin
+    roleIdsRefs:
+      - name: k8s-admin
+      - name: argocd-admin
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+# Example 65: Roles with Group
+# This example creates a Realm Role
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: k8s-realm-role
+spec:
+  forProvider:
+    name: k8s-role
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
