@@ -1,0 +1,54 @@
+# Example 1: User Federation Group Mapper
+# This example fetches an LDAP group from an OpenLDAP server into Keycloak.
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: GroupMapper
+metadata:
+  name: admin-group
+spec:
+  forProvider:
+    name: "amsterdam"
+    ldapGroupsDn: "ou=groups,dc=example,dc=local"
+    groupNameLdapAttribute: "cn"
+    groupObjectClasses: ["groupOfNames"]
+    groupsPath: "LDAP-ADMIN"
+    membershipLdapAttribute: "member"
+    membershipAttributeType: "DN"
+    membershipUserLdapAttribute: "memberOf"
+    groupsLdapFilter: "(&(objectClass=groupOfNames)(cn=amsterdam))"
+    mode: "READ_ONLY"
+    userRolesRetrieveStrategy: "LOAD_GROUPS_BY_MEMBER_ATTRIBUTE"
+    preserveGroupInheritance: false
+    memberofLdapAttribute: "memberOf"
+    ldapUserFederationIdRef:
+      name: example
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+# Example 2: User Federation Group Mapper
+# This example fetches an LDAP group from an Active Directory server into Keycloak.
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: GroupMapper
+metadata:
+  name: admin-group
+spec:
+  forProvider:
+    name: "amsterdam"
+    ldapGroupsDn: "ou=groups,dc=example,dc=local"
+    groupNameLdapAttribute: "cn"
+    groupObjectClasses: ["group"]
+    groupsPath: "LDAP-ADMIN"
+    membershipLdapAttribute: "member"
+    membershipAttributeType: "DN"
+    membershipUserLdapAttribute: "sAMAccountName"
+    groupsLdapFilter: "(&(objectClass=group)(cn=amsterdam))"
+    mode: "READ_ONLY"
+    userRolesRetrieveStrategy: "LOAD_GROUPS_BY_MEMBER_ATTRIBUTE"
+    preserveGroupInheritance: false
+    memberofLdapAttribute: "memberOf"
+    ldapUserFederationIdRef:
+      name: example
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config

@@ -1,0 +1,63 @@
+# Example 1: User Federation to integrate LDAP with Keycloak
+# This example integrates OpenLDAP with Keycloak..
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  name: my-realm
+spec:
+  forProvider:
+    name: "example"
+    connectionUrl: "ldap://10.0.1.8:389"
+    startTls: false
+    bindDn: "cn=admin,dc=example,dc=local"
+    bindCredentialSecretRef:
+      key: "password"
+      name: "ldap-password"
+      namespace: "crossplane-system"
+    editMode: "UNSYNCED"
+    usersDn: "ou=users,dc=example,dc=local"
+    usernameLdapAttribute: "uid"
+    rdnLdapAttribute: "uid"
+    uuidLdapAttribute: "entryUUID"
+    userObjectClasses: ["inetOrgPerson", "shadowAccount"]
+    searchScope: "SUBTREE"
+    importEnabled: true
+    batchSizeForSync: 100
+    changedSyncPeriod: 604800
+    trustEmail: true
+    validatePasswordPolicy: false
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+
+# Example 2: User Federation to integrate LDAP with Keycloak
+# This example integrates Active Directory with Keycloak.
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  name: my-realm
+spec:
+  forProvider:
+    name: "example"
+    connectionUrl: "ldap://10.0.1.8:389"
+    startTls: false
+    bindDn: "cn=admin,dc=example,dc=local"
+    bindCredentialSecretRef:
+      key: "password"
+      name: "ldap-password"
+      namespace: "crossplane-system"
+    editMode: "UNSYNCED"
+    usersDn: "ou=users,dc=example,dc=local"
+    usernameLdapAttribute: "sAMAccountName"
+    rdnLdapAttribute: "cn"
+    uuidLdapAttribute: "sAMAccountName"
+    userObjectClasses: ["person", "organizationalPerson","user"]
+    searchScope: "SUBTREE"
+    importEnabled: true
+    batchSizeForSync: 100
+    changedSyncPeriod: 604800
+    trustEmail: true
+    validatePasswordPolicy: false
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config
