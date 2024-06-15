@@ -17,7 +17,9 @@ import (
 	"github.com/crossplane/crossplane-runtime/pkg/feature"
 	"github.com/crossplane/crossplane-runtime/pkg/logging"
 	"github.com/crossplane/crossplane-runtime/pkg/ratelimiter"
+	"github.com/crossplane/crossplane-runtime/pkg/reconciler/managed"
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
+	"github.com/crossplane/crossplane-runtime/pkg/statemetrics"
 	tjcontroller "github.com/crossplane/upjet/pkg/controller"
 	"github.com/crossplane/upjet/pkg/terraform"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
@@ -26,6 +28,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
+	"sigs.k8s.io/controller-runtime/pkg/metrics"
 
 	"github.com/crossplane-contrib/provider-keycloak/apis"
 	"github.com/crossplane-contrib/provider-keycloak/apis/v1alpha1"
@@ -39,12 +42,13 @@ func main() {
 	var (
 		app                        = kingpin.New(filepath.Base(os.Args[0]), "Terraform based Crossplane provider for keycloak").DefaultEnvars()
 		debug                      = app.Flag("debug", "Run with debug logging.").Short('d').Bool()
-		syncPeriod                 = app.Flag("sync", "Controller manager sync period such as 300ms, 1.5h, or 2h45m").Short('s').Default("1h").Duration()
+		syncInterval               = app.Flag("sync", "Controller manager sync period such as 300ms, 1.5h, or 2h45m").Short('s').Default("1h").Duration()
+		pollInterval               = app.Flag("poll", "Poll interval controls how often an individual resource should be checked for drift.").Default("10m").Duration()
+		pollStateMetricInterval    = app.Flag("poll-state-metric", "State metric recording interval").Default("5s").Duration()
 		leaderElection             = app.Flag("leader-election", "Use leader election for the controller manager.").Short('l').Default("false").OverrideDefaultFromEnvar("LEADER_ELECTION").Bool()
 		terraformVersion           = app.Flag("terraform-version", "Terraform version.").Required().Envar("TERRAFORM_VERSION").String()
 		providerSource             = app.Flag("terraform-provider-source", "Terraform provider source.").Required().Envar("TERRAFORM_PROVIDER_SOURCE").String()
 		providerVersion            = app.Flag("terraform-provider-version", "Terraform provider version.").Required().Envar("TERRAFORM_PROVIDER_VERSION").String()
-		pollInterval               = app.Flag("poll", "Poll interval controls how often an individual resource should be checked for drift.").Default("10m").Duration()
 		maxReconcileRate           = app.Flag("max-reconcile-rate", "The global maximum rate per second at which resources may checked for drift from the desired state.").Default("10").Int()
 		namespace                  = app.Flag("namespace", "Namespace used to set as default scope in default secret store config.").Default("crossplane-system").Envar("POD_NAMESPACE").String()
 		enableExternalSecretStores = app.Flag("enable-external-secret-stores", "Enable support for ExternalSecretStores.").Default("false").Envar("ENABLE_EXTERNAL_SECRET_STORES").Bool()
@@ -63,14 +67,14 @@ func main() {
 		ctrl.SetLogger(zl)
 	}
 
-	log.Debug("Starting", "sync-period", syncPeriod.String())
+	log.Debug("Starting", "sync-period", syncInterval.String())
 
 	cfg, err := ctrl.GetConfig()
 	kingpin.FatalIfError(err, "Cannot get API server rest config")
 
 	mgr, err := ctrl.NewManager(cfg, ctrl.Options{
 		Cache: cache.Options{
-			SyncPeriod: syncPeriod,
+			SyncPeriod: syncInterval,
 		},
 		LeaderElection:             *leaderElection,
 		LeaderElectionID:           "crossplane-leader-election-provider-keycloak",
@@ -79,7 +83,14 @@ func main() {
 		RenewDeadline:              func() *time.Duration { d := 50 * time.Second; return &d }(),
 	})
 	kingpin.FatalIfError(err, "Cannot create controller manager")
+
+	metricRecorder := managed.NewMRMetricRecorder()
+	stateMetrics := statemetrics.NewMRStateMetrics()
+
+	metrics.Registry.MustRegister(metricRecorder)
+	metrics.Registry.MustRegister(stateMetrics)
 	kingpin.FatalIfError(apis.AddToScheme(mgr.GetScheme()), "Cannot add keycloak APIs to scheme")
+
 	featureFlags := &feature.Flags{}
 	o := tjcontroller.Options{
 		Options: xpcontroller.Options{
@@ -88,6 +99,11 @@ func main() {
 			PollInterval:            *pollInterval,
 			MaxConcurrentReconciles: *maxReconcileRate,
 			Features:                featureFlags,
+			MetricOptions: &xpcontroller.MetricOptions{
+				PollStateMetricInterval: *pollStateMetricInterval,
+				MRMetrics:               metricRecorder,
+				MRStateMetrics:          stateMetrics,
+			},
 		},
 		Provider: config.GetProvider(),
 		// use the following WorkspaceStoreOption to enable the shared gRPC mode
