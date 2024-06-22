@@ -1,1 +1,1 @@
-python-keycloak==4.1.0
+python-keycloak==4.2.0
