@@ -4,7 +4,7 @@
 PROJECT_NAME ?= provider-keycloak
 PROJECT_REPO ?= github.com/crossplane-contrib/$(PROJECT_NAME)
 
-export TERRAFORM_VERSION ?= 1.4.6
+export TERRAFORM_VERSION ?= 1.5.7
 
 export TERRAFORM_PROVIDER_SOURCE ?= mrparkers/keycloak
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/mrparkers/terraform-provider-keycloak
