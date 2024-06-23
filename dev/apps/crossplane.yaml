@@ -8,15 +8,25 @@ spec:
   project: default
   sources:
     - repoURL: https://charts.crossplane.io/stable
-      targetRevision: 1.15.2
+      targetRevision: 1.16.0
       chart: crossplane
       helm:
         values: | 
           args: 
             - --debug
             - --enable-composition-functions
+            - --enable-composition-functions-extra-resources
+            - --enable-composition-webhook-schema-validation
+            - --enable-deployment-runtime-configs
+            - --enable-environment-configs	
+            - --enable-external-secret-stores	
+            - --enable-realtime-compositions
+            - --enable-ssa-claims
+            - --enable-usages	
           xfn.enabled: true
           xfn.args: "{--debug}"
+          metrics:
+            enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: crossplane-system

@@ -2,18 +2,6 @@
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: Client
 metadata:
-  annotations:
-    crossplane.io/external-name: "master/152d4b09-aaf8-414a-8649-63976cc01af2"
-  name: admin-cli
-spec:
-  forProvider: {}
-  providerConfigRef:
-    name: "keycloak-provider-config"
-  managementPolicies: ["Observe"]
----
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: Client
-metadata:
   name: test
 spec:
   forProvider:

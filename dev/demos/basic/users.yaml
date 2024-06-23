@@ -5,6 +5,7 @@ apiVersion: user.keycloak.crossplane.io/v1alpha1
 kind: User
 metadata:
   name: bree
+  namespace: dev
 spec:
   forProvider:
     realmId: "dev"  # The realm to which this user belongs
