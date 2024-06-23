@@ -65,6 +65,8 @@ func main() {
 		// *very* verbose even at info level, so we only provide it a real
 		// logger when we're running in debug mode.
 		ctrl.SetLogger(zl)
+	} else {
+		log.Info("Debug mode is disabled. Run with --debug flag to enable and get logs for the controller-runtime.")
 	}
 
 	log.Debug("Starting", "sync-period", syncInterval.String())
