@@ -127,17 +127,17 @@ func (c *connector) Connect(ctx context.Context, mg resource.Managed) (managed.E
 
 	// Get credentials from JSON data
 	url := jsonData["url"]
-	base_path := jsonData["base_path"]
+	basePath := jsonData["base_path"]
 	user := jsonData["username"]
 	password := jsonData["password"]
 	realm := jsonData["realm"]
 	clientID := jsonData["client_id"]
 	clientSecret := jsonData["client_secret"]
 
-	server_url := url + base_path
+	serverUrl := url + basePath
 
 	// Create a GoCloak client
-	kc_client := gocloak.NewClient(server_url)
+	kc_client := gocloak.NewClient(serverUrl)
 
 	var token string
 	// Authenticate based on available credentials
