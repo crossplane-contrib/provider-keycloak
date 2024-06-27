@@ -16,10 +16,28 @@ import (
 type AuthenticationFlowBindingOverridesInitParameters struct {
 
 	// Browser flow id, (flow needs to exist)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow
 	BrowserID *string `json:"browserId,omitempty" tf:"browser_id,omitempty"`
 
+	// Reference to a Flow in authenticationflow to populate browserId.
+	// +kubebuilder:validation:Optional
+	BrowserIDRef *v1.Reference `json:"browserIdRef,omitempty" tf:"-"`
+
+	// Selector for a Flow in authenticationflow to populate browserId.
+	// +kubebuilder:validation:Optional
+	BrowserIDSelector *v1.Selector `json:"browserIdSelector,omitempty" tf:"-"`
+
 	// Direct grant flow id (flow needs to exist)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow
 	DirectGrantID *string `json:"directGrantId,omitempty" tf:"direct_grant_id,omitempty"`
+
+	// Reference to a Flow in authenticationflow to populate directGrantId.
+	// +kubebuilder:validation:Optional
+	DirectGrantIDRef *v1.Reference `json:"directGrantIdRef,omitempty" tf:"-"`
+
+	// Selector for a Flow in authenticationflow to populate directGrantId.
+	// +kubebuilder:validation:Optional
+	DirectGrantIDSelector *v1.Selector `json:"directGrantIdSelector,omitempty" tf:"-"`
 }
 
 type AuthenticationFlowBindingOverridesObservation struct {
@@ -34,12 +52,30 @@ type AuthenticationFlowBindingOverridesObservation struct {
 type AuthenticationFlowBindingOverridesParameters struct {
 
 	// Browser flow id, (flow needs to exist)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow
 	// +kubebuilder:validation:Optional
 	BrowserID *string `json:"browserId,omitempty" tf:"browser_id,omitempty"`
 
+	// Reference to a Flow in authenticationflow to populate browserId.
+	// +kubebuilder:validation:Optional
+	BrowserIDRef *v1.Reference `json:"browserIdRef,omitempty" tf:"-"`
+
+	// Selector for a Flow in authenticationflow to populate browserId.
+	// +kubebuilder:validation:Optional
+	BrowserIDSelector *v1.Selector `json:"browserIdSelector,omitempty" tf:"-"`
+
 	// Direct grant flow id (flow needs to exist)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow
 	// +kubebuilder:validation:Optional
 	DirectGrantID *string `json:"directGrantId,omitempty" tf:"direct_grant_id,omitempty"`
+
+	// Reference to a Flow in authenticationflow to populate directGrantId.
+	// +kubebuilder:validation:Optional
+	DirectGrantIDRef *v1.Reference `json:"directGrantIdRef,omitempty" tf:"-"`
+
+	// Selector for a Flow in authenticationflow to populate directGrantId.
+	// +kubebuilder:validation:Optional
+	DirectGrantIDSelector *v1.Selector `json:"directGrantIdSelector,omitempty" tf:"-"`
 }
 
 type AuthorizationInitParameters struct {
