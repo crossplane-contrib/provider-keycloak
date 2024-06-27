@@ -21,10 +21,30 @@ func (in *AuthenticationFlowBindingOverridesInitParameters) DeepCopyInto(out *Au
 		*out = new(string)
 		**out = **in
 	}
+	if in.BrowserIDRef != nil {
+		in, out := &in.BrowserIDRef, &out.BrowserIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.BrowserIDSelector != nil {
+		in, out := &in.BrowserIDSelector, &out.BrowserIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.DirectGrantID != nil {
 		in, out := &in.DirectGrantID, &out.DirectGrantID
 		*out = new(string)
 		**out = **in
+	}
+	if in.DirectGrantIDRef != nil {
+		in, out := &in.DirectGrantIDRef, &out.DirectGrantIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.DirectGrantIDSelector != nil {
+		in, out := &in.DirectGrantIDSelector, &out.DirectGrantIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 }
 
@@ -71,10 +91,30 @@ func (in *AuthenticationFlowBindingOverridesParameters) DeepCopyInto(out *Authen
 		*out = new(string)
 		**out = **in
 	}
+	if in.BrowserIDRef != nil {
+		in, out := &in.BrowserIDRef, &out.BrowserIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.BrowserIDSelector != nil {
+		in, out := &in.BrowserIDSelector, &out.BrowserIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.DirectGrantID != nil {
 		in, out := &in.DirectGrantID, &out.DirectGrantID
 		*out = new(string)
 		**out = **in
+	}
+	if in.DirectGrantIDRef != nil {
+		in, out := &in.DirectGrantIDRef, &out.DirectGrantIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.DirectGrantIDSelector != nil {
+		in, out := &in.DirectGrantIDSelector, &out.DirectGrantIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 }
 

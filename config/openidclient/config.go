@@ -14,6 +14,14 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_openid_client", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = Group
+
+		r.References["authentication_flow_binding_overrides.browser_id"] = config.Reference{
+			Type: "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow",
+		}
+		r.References["authentication_flow_binding_overrides.direct_grant_id"] = config.Reference{
+			Type: "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow",
+		}
+
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_default_scopes", func(r *config.Resource) {

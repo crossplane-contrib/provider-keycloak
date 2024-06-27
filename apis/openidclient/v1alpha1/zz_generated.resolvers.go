@@ -7,7 +7,8 @@ package v1alpha1
 
 import (
 	"context"
-	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1"
+	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1"
+	v1alpha11 "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1"
 	common "github.com/crossplane-contrib/provider-keycloak/config/common"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
 	errors "github.com/pkg/errors"
@@ -21,6 +22,42 @@ func (mg *Client) ResolveReferences(ctx context.Context, c client.Reader) error 
 	var rsp reference.ResolutionResponse
 	var err error
 
+	for i3 := 0; i3 < len(mg.Spec.ForProvider.AuthenticationFlowBindingOverrides); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].BrowserID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].BrowserIDRef,
+			Selector:     mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].BrowserIDSelector,
+			To: reference.To{
+				List:    &v1alpha1.FlowList{},
+				Managed: &v1alpha1.Flow{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].BrowserID")
+		}
+		mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].BrowserID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].BrowserIDRef = rsp.ResolvedReference
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.ForProvider.AuthenticationFlowBindingOverrides); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantIDRef,
+			Selector:     mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantIDSelector,
+			To: reference.To{
+				List:    &v1alpha1.FlowList{},
+				Managed: &v1alpha1.Flow{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantID")
+		}
+		mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantIDRef = rsp.ResolvedReference
+
+	}
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
 		Extract:      common.UUIDExtractor(),
@@ -43,8 +80,8 @@ func (mg *Client) ResolveReferences(ctx context.Context, c client.Reader) error 
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
 		Selector:     mg.Spec.ForProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -53,6 +90,42 @@ func (mg *Client) ResolveReferences(ctx context.Context, c client.Reader) error 
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 
+	for i3 := 0; i3 < len(mg.Spec.InitProvider.AuthenticationFlowBindingOverrides); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].BrowserID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].BrowserIDRef,
+			Selector:     mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].BrowserIDSelector,
+			To: reference.To{
+				List:    &v1alpha1.FlowList{},
+				Managed: &v1alpha1.Flow{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].BrowserID")
+		}
+		mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].BrowserID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].BrowserIDRef = rsp.ResolvedReference
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.InitProvider.AuthenticationFlowBindingOverrides); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantIDRef,
+			Selector:     mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantIDSelector,
+			To: reference.To{
+				List:    &v1alpha1.FlowList{},
+				Managed: &v1alpha1.Flow{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantID")
+		}
+		mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantIDRef = rsp.ResolvedReference
+
+	}
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
 		Extract:      common.UUIDExtractor(),
@@ -75,8 +148,8 @@ func (mg *Client) ResolveReferences(ctx context.Context, c client.Reader) error 
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
 		Selector:     mg.Spec.InitProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -101,8 +174,8 @@ func (mg *ClientClientPolicy) ResolveReferences(ctx context.Context, c client.Re
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
 		Selector:     mg.Spec.ForProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -117,8 +190,8 @@ func (mg *ClientClientPolicy) ResolveReferences(ctx context.Context, c client.Re
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
 		Selector:     mg.Spec.InitProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -159,8 +232,8 @@ func (mg *ClientDefaultScopes) ResolveReferences(ctx context.Context, c client.R
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
 		Selector:     mg.Spec.ForProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -191,8 +264,8 @@ func (mg *ClientDefaultScopes) ResolveReferences(ctx context.Context, c client.R
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
 		Selector:     mg.Spec.InitProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -217,8 +290,8 @@ func (mg *ClientGroupPolicy) ResolveReferences(ctx context.Context, c client.Rea
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
 		Selector:     mg.Spec.ForProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -233,8 +306,8 @@ func (mg *ClientGroupPolicy) ResolveReferences(ctx context.Context, c client.Rea
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
 		Selector:     mg.Spec.InitProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -275,8 +348,8 @@ func (mg *ClientPermissions) ResolveReferences(ctx context.Context, c client.Rea
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
 		Selector:     mg.Spec.ForProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -307,8 +380,8 @@ func (mg *ClientPermissions) ResolveReferences(ctx context.Context, c client.Rea
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
 		Selector:     mg.Spec.InitProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -333,8 +406,8 @@ func (mg *ClientRolePolicy) ResolveReferences(ctx context.Context, c client.Read
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
 		Selector:     mg.Spec.ForProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -349,8 +422,8 @@ func (mg *ClientRolePolicy) ResolveReferences(ctx context.Context, c client.Read
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
 		Selector:     mg.Spec.InitProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -375,8 +448,8 @@ func (mg *ClientScope) ResolveReferences(ctx context.Context, c client.Reader) e
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
 		Selector:     mg.Spec.ForProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -391,8 +464,8 @@ func (mg *ClientScope) ResolveReferences(ctx context.Context, c client.Reader) e
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
 		Selector:     mg.Spec.InitProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -417,8 +490,8 @@ func (mg *ClientServiceAccountRealmRole) ResolveReferences(ctx context.Context, 
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
 		Selector:     mg.Spec.ForProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -449,8 +522,8 @@ func (mg *ClientServiceAccountRealmRole) ResolveReferences(ctx context.Context, 
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
 		Selector:     mg.Spec.InitProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -507,8 +580,8 @@ func (mg *ClientServiceAccountRole) ResolveReferences(ctx context.Context, c cli
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
 		Selector:     mg.Spec.ForProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -555,8 +628,8 @@ func (mg *ClientServiceAccountRole) ResolveReferences(ctx context.Context, c cli
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
 		Selector:     mg.Spec.InitProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -597,8 +670,8 @@ func (mg *ClientUserPolicy) ResolveReferences(ctx context.Context, c client.Read
 		Reference:    mg.Spec.ForProvider.RealmIDRef,
 		Selector:     mg.Spec.ForProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
@@ -613,8 +686,8 @@ func (mg *ClientUserPolicy) ResolveReferences(ctx context.Context, c client.Read
 		Reference:    mg.Spec.InitProvider.RealmIDRef,
 		Selector:     mg.Spec.InitProvider.RealmIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RealmList{},
-			Managed: &v1alpha1.Realm{},
+			List:    &v1alpha11.RealmList{},
+			Managed: &v1alpha11.Realm{},
 		},
 	})
 	if err != nil {
