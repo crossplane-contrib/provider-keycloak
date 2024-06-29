@@ -46,9 +46,6 @@ func main() {
 		pollInterval               = app.Flag("poll", "Poll interval controls how often an individual resource should be checked for drift.").Default("10m").Duration()
 		pollStateMetricInterval    = app.Flag("poll-state-metric", "State metric recording interval").Default("5s").Duration()
 		leaderElection             = app.Flag("leader-election", "Use leader election for the controller manager.").Short('l').Default("false").OverrideDefaultFromEnvar("LEADER_ELECTION").Bool()
-		terraformVersion           = app.Flag("terraform-version", "Terraform version.").Required().Envar("TERRAFORM_VERSION").String()
-		providerSource             = app.Flag("terraform-provider-source", "Terraform provider source.").Required().Envar("TERRAFORM_PROVIDER_SOURCE").String()
-		providerVersion            = app.Flag("terraform-provider-version", "Terraform provider version.").Required().Envar("TERRAFORM_PROVIDER_VERSION").String()
 		maxReconcileRate           = app.Flag("max-reconcile-rate", "The global maximum rate per second at which resources may checked for drift from the desired state.").Default("10").Int()
 		namespace                  = app.Flag("namespace", "Namespace used to set as default scope in default secret store config.").Default("crossplane-system").Envar("POD_NAMESPACE").String()
 		enableExternalSecretStores = app.Flag("enable-external-secret-stores", "Enable support for ExternalSecretStores.").Default("false").Envar("ENABLE_EXTERNAL_SECRET_STORES").Bool()
@@ -93,6 +90,9 @@ func main() {
 	metrics.Registry.MustRegister(stateMetrics)
 	kingpin.FatalIfError(apis.AddToScheme(mgr.GetScheme()), "Cannot add keycloak APIs to scheme")
 
+	provider, err := config.GetProvider(false)
+	kingpin.FatalIfError(err, "Cannot get provider configuration")
+
 	featureFlags := &feature.Flags{}
 	o := tjcontroller.Options{
 		Options: xpcontroller.Options{
@@ -107,11 +107,12 @@ func main() {
 				MRStateMetrics:          stateMetrics,
 			},
 		},
-		Provider: config.GetProvider(),
 		// use the following WorkspaceStoreOption to enable the shared gRPC mode
 		// terraform.WithProviderRunner(terraform.NewSharedProvider(log, os.Getenv("TERRAFORM_NATIVE_PROVIDER_PATH"), terraform.WithNativeProviderArgs("-debuggable")))
-		WorkspaceStore: terraform.NewWorkspaceStore(log, terraform.WithProcessReportInterval(*pollInterval), terraform.WithFeatures(featureFlags)),
-		SetupFn:        clients.TerraformSetupBuilder(*terraformVersion, *providerSource, *providerVersion),
+		WorkspaceStore:        terraform.NewWorkspaceStore(log, terraform.WithProcessReportInterval(*pollInterval), terraform.WithFeatures(featureFlags)),
+		SetupFn:               clients.TerraformSetupBuilder(),
+		OperationTrackerStore: tjcontroller.NewOperationStore(log),
+		Provider:              provider,
 	}
 
 	if *enableManagementPolicies {

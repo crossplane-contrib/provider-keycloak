@@ -7,6 +7,7 @@ package clients
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/pkg/errors"
@@ -16,6 +17,8 @@ import (
 	"github.com/crossplane/upjet/pkg/terraform"
 
 	"github.com/crossplane-contrib/provider-keycloak/apis/v1beta1"
+	terraformSDK "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	keycloakProvider "github.com/mrparkers/terraform-provider-keycloak/provider"
 )
 
 const (
@@ -53,15 +56,9 @@ var optionalKeycloakConfigKeys = []string{
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
 // returns Terraform provider setup configuration
-func TerraformSetupBuilder(version, providerSource, providerVersion string) terraform.SetupFn { // nolint: gocyclo
+func TerraformSetupBuilder() terraform.SetupFn { // nolint: gocyclo
 	return func(ctx context.Context, client client.Client, mg resource.Managed) (terraform.Setup, error) {
-		ps := terraform.Setup{
-			Version: version,
-			Requirement: terraform.ProviderRequirement{
-				Source:  providerSource,
-				Version: providerVersion,
-			},
-		}
+		ps := terraform.Setup{}
 
 		configRef := mg.GetProviderConfigReference()
 		if configRef == nil {
@@ -106,6 +103,19 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			}
 		}
 
-		return ps, nil
+		return ps, errors.Wrap(configureNoForkKeycloakClient(ctx, &ps), "failed to configure the no-fork Azure client")
 	}
+}
+
+func configureNoForkKeycloakClient(ctx context.Context, ps *terraform.Setup) error {
+
+	cb := keycloakProvider.KeycloakProvider(nil)
+
+	diags := cb.Configure(ctx, terraformSDK.NewResourceConfigRaw(ps.Configuration))
+	if diags.HasError() {
+		return fmt.Errorf("failed to configure the Grafana provider: %v", diags)
+	}
+
+	ps.Meta = cb.Meta()
+	return nil
 }
