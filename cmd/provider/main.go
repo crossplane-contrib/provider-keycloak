@@ -21,7 +21,6 @@ import (
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/crossplane/crossplane-runtime/pkg/statemetrics"
 	tjcontroller "github.com/crossplane/upjet/pkg/controller"
-	"github.com/crossplane/upjet/pkg/terraform"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/tools/leaderelection/resourcelock"
@@ -108,8 +107,6 @@ func main() {
 			},
 		},
 		// use the following WorkspaceStoreOption to enable the shared gRPC mode
-		// terraform.WithProviderRunner(terraform.NewSharedProvider(log, os.Getenv("TERRAFORM_NATIVE_PROVIDER_PATH"), terraform.WithNativeProviderArgs("-debuggable")))
-		WorkspaceStore:        terraform.NewWorkspaceStore(log, terraform.WithProcessReportInterval(*pollInterval), terraform.WithFeatures(featureFlags)),
 		SetupFn:               clients.TerraformSetupBuilder(),
 		OperationTrackerStore: tjcontroller.NewOperationStore(log),
 		Provider:              provider,
