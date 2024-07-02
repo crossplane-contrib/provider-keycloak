@@ -103,7 +103,7 @@ func TerraformSetupBuilder() terraform.SetupFn { // nolint: gocyclo
 			}
 		}
 
-		return ps, errors.Wrap(configureNoForkKeycloakClient(ctx, &ps), "failed to configure the no-fork Azure client")
+		return ps, errors.Wrap(configureNoForkKeycloakClient(ctx, &ps), "failed to configure the no-fork client")
 	}
 }
 
