@@ -25,9 +25,18 @@ import (
 	xpv1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
+type OpenIdConfig struct {
+}
+
+type SamlConfig struct {
+}
+
 // ClientParameters are the configurable fields of a Client.
 type ClientParameters struct {
-	ConfigurableField string `json:"configurableField"`
+	ClientId     string       `json:"clientId"`
+	RealmId      string       `json:"realmId"`
+	OpenIdConfig OpenIdConfig `json:"openIdConfig,omitempty"`
+	SamlConfig   SamlConfig   `json:"samlConfig,omitempty"`
 }
 
 // ClientObservation are the observable fields of a Client.
