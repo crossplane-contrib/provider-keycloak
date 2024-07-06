@@ -22,7 +22,7 @@ metadata:
   name: provider-keycloak
   namespace: crossplane-system
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v0.21.0
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.0.0
 ``` 
 
 This will install the provider in the `crossplane-system` namespace and install CRDs and controllers for the provider.
@@ -61,7 +61,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v0.21.0
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.0.0
 + runtimeConfigRef:
 +   name: enable-ess
 ```
@@ -119,6 +119,11 @@ You can explore the available custom resources:
 - `kubectl get crd | grep keycloak.crossplane.io` to list all the CRDs provided by the provider
 - `kubectl explain <CRD_NAME>` for docs on the CLI
 - You can also see the CRDs in the `package/crds` directory
+
+
+### Functions and Compositions: 
+
+- [function-keycloak-builtin-objects](https://gitlab.com/corewire/images/crossplane/function-keycloak-builtin-objects) - The function is used to import the builtin objects of a keycloak, e.g. clients and roles. Everything you need to know is in the README of the repository. 
 
 
 
