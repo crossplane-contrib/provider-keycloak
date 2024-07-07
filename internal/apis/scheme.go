@@ -15,22 +15,40 @@ var s = runtime.NewScheme()
 
 // GetManagedResource is Function to eliminate cross references using a transformer scheme
 func GetManagedResource(group, version, kind, listKind string) (xpresource.Managed, xpresource.ManagedList, error) {
-	gv := schema.GroupVersion{
-		Group:   group,
-		Version: version,
-	}
-	kingGVK := gv.WithKind(kind)
-	m, err := s.New(kingGVK)
-	if err != nil {
-		return nil, nil, errors.Wrapf(err, "failed to get a new API object of GVK %q from the runtime scheme", kingGVK)
+
+	// Define a function to get the managed resource based on group and version
+	getResource := func(group, version, kind, listKind string) (xpresource.Managed, xpresource.ManagedList, error) {
+		gv := schema.GroupVersion{
+			Group:   group,
+			Version: version,
+		}
+		kingGVK := gv.WithKind(kind)
+		m, err := s.New(kingGVK)
+		if err != nil {
+			return nil, nil, errors.Wrapf(err, "failed to get a new API object of GVK %q from the runtime scheme", kingGVK)
+		}
+
+		listGVK := gv.WithKind(listKind)
+		l, err := s.New(listGVK)
+		if err != nil {
+			return nil, nil, errors.Wrapf(err, "failed to get a new API object list of GVK %q from the runtime scheme", listGVK)
+		}
+		return m.(xpresource.Managed), l.(xpresource.ManagedList), nil
 	}
 
-	listGVK := gv.WithKind(listKind)
-	l, err := s.New(listGVK)
-	if err != nil {
-		return nil, nil, errors.Wrapf(err, "failed to get a new API object list of GVK %q from the runtime scheme", listGVK)
+	// Check for the special case input
+	if group == "openidclient.keycloak.crossplane.io" && version == "v1alpha1" && kind == "Client" && listKind == "ClientList" {
+		// Try the special case input first
+		m, l, err := getResource(group, version, kind, listKind)
+		if err == nil {
+			return m, l, nil
+		}
+		// Fallback to the alternative input if the first attempt fails
+		return getResource("samlclient.keycloak.crossplane.io", version, kind, listKind)
 	}
-	return m.(xpresource.Managed), l.(xpresource.ManagedList), nil
+
+	// For all other cases, use the provided input directly
+	return getResource(group, version, kind, listKind)
 }
 
 // BuildScheme builds the runtime scheme for the Crossplane resources
