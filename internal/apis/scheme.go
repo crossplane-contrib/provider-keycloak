@@ -40,7 +40,8 @@ func GetManagedResource(group, version, kind, listKind string) (xpresource.Manag
 	if group == "openidclient.keycloak.crossplane.io" && version == "v1alpha1" && kind == "Client" && listKind == "ClientList" {
 		// Try the special case input first
 		m, l, err := getResource(group, version, kind, listKind)
-		if err == nil {
+
+		if err == nil && m.GetName() != "" {
 			return m, l, nil
 		}
 		// Fallback to the alternative input if the first attempt fails
