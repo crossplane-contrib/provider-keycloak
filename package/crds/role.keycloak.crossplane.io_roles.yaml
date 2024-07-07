@@ -168,7 +168,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   compositeRolesRefs:
-                    description: References to Role to populate compositeRoles.
+                    description: References to Role in role to populate compositeRoles.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -205,7 +205,7 @@ spec:
                       type: object
                     type: array
                   compositeRolesSelector:
-                    description: Selector for a list of Role to populate compositeRoles.
+                    description: Selector for a list of Role in role to populate compositeRoles.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -437,7 +437,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   compositeRolesRefs:
-                    description: References to Role to populate compositeRoles.
+                    description: References to Role in role to populate compositeRoles.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -474,7 +474,7 @@ spec:
                       type: object
                     type: array
                   compositeRolesSelector:
-                    description: Selector for a list of Role to populate compositeRoles.
+                    description: Selector for a list of Role in role to populate compositeRoles.
                     properties:
                       matchControllerRef:
                         description: |-

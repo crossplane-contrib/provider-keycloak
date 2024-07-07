@@ -14,7 +14,7 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_generic_role_mapper", func(r *config.Resource) {
 		r.ShortGroup = "client"
 		r.References["role_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
+			TerraformName: "keycloak_role",
 		}
 
 	})

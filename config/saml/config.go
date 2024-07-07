@@ -11,7 +11,7 @@ func Configure(p *config.Provider) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = "saml"
 		r.References["realm"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm",
+			TerraformName: "keycloak_realm",
 		}
 	})
 	p.AddResourceConfigurator("keycloak_saml_client", func(r *config.Resource) {

@@ -12,6 +12,7 @@ import (
 
 	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1"
 	v1alpha1client "github.com/crossplane-contrib/provider-keycloak/apis/client/v1alpha1"
+	v1alpha1default "github.com/crossplane-contrib/provider-keycloak/apis/default/v1alpha1"
 	v1alpha1defaults "github.com/crossplane-contrib/provider-keycloak/apis/defaults/v1alpha1"
 	v1alpha1group "github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1"
 	v1alpha1identityprovider "github.com/crossplane-contrib/provider-keycloak/apis/identityprovider/v1alpha1"
@@ -33,6 +34,7 @@ func init() {
 	AddToSchemes = append(AddToSchemes,
 		v1alpha1.SchemeBuilder.AddToScheme,
 		v1alpha1client.SchemeBuilder.AddToScheme,
+		v1alpha1default.SchemeBuilder.AddToScheme,
 		v1alpha1defaults.SchemeBuilder.AddToScheme,
 		v1alpha1group.SchemeBuilder.AddToScheme,
 		v1alpha1identityprovider.SchemeBuilder.AddToScheme,

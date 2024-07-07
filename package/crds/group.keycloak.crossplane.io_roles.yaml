@@ -82,7 +82,7 @@ spec:
                       for.
                     type: string
                   groupIdRef:
-                    description: Reference to a Group to populate groupId.
+                    description: Reference to a Group in group to populate groupId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -116,7 +116,7 @@ spec:
                     - name
                     type: object
                   groupIdSelector:
-                    description: Selector for a Group to populate groupId.
+                    description: Selector for a Group in group to populate groupId.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -339,7 +339,7 @@ spec:
                       for.
                     type: string
                   groupIdRef:
-                    description: Reference to a Group to populate groupId.
+                    description: Reference to a Group in group to populate groupId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -373,7 +373,7 @@ spec:
                     - name
                     type: object
                   groupIdSelector:
-                    description: Selector for a Group to populate groupId.
+                    description: Selector for a Group in group to populate groupId.
                     properties:
                       matchControllerRef:
                         description: |-

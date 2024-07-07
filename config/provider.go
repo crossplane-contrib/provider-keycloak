@@ -128,16 +128,16 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 			switch k {
 			case "realm_id":
 				r.References["realm_id"] = config.Reference{
-					Type: "github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm",
+					TerraformName: "keycloak_realm",
 				}
 			case "client_id":
 				r.References["client_id"] = config.Reference{
-					Type:      "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
-					Extractor: common.PathUUIDExtractor,
+					TerraformName: "keycloak_openid_client",
+					Extractor:     common.PathUUIDExtractor,
 				}
 			case "service_account_user_id":
 				r.References["service_account_user_id"] = config.Reference{
-					Type:              "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client",
+					TerraformName:     "keycloak_openid_client",
 					Extractor:         common.PathServiceAccountRoleIDExtractor,
 					RefFieldName:      "ServiceAccountUserClientIDRef",
 					SelectorFieldName: "ServiceAccountUserClientIDSelector",
@@ -148,14 +148,14 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 
 			case "role_ids":
 				r.References["role_ids"] = config.Reference{
-					Type:      "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
-					Extractor: common.PathUUIDExtractor,
+					TerraformName: "keycloak_role",
+					Extractor:     common.PathUUIDExtractor,
 				}
 
 			case "role_id":
 				r.References["role_id"] = config.Reference{
-					Type:      "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
-					Extractor: common.PathUUIDExtractor,
+					TerraformName: "keycloak_role",
+					Extractor:     common.PathUUIDExtractor,
 				}
 			}
 

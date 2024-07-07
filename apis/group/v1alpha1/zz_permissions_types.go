@@ -142,14 +142,14 @@ type ManageScopeParameters struct {
 type PermissionsInitParameters struct {
 
 	// The id of the group.
-	// +crossplane:generate:reference:type=Group
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
 	GroupID *string `json:"groupId,omitempty" tf:"group_id,omitempty"`
 
-	// Reference to a Group to populate groupId.
+	// Reference to a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
 	GroupIDRef *v1.Reference `json:"groupIdRef,omitempty" tf:"-"`
 
-	// Selector for a Group to populate groupId.
+	// Selector for a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
 	GroupIDSelector *v1.Selector `json:"groupIdSelector,omitempty" tf:"-"`
 
@@ -217,15 +217,15 @@ type PermissionsObservation struct {
 type PermissionsParameters struct {
 
 	// The id of the group.
-	// +crossplane:generate:reference:type=Group
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
 	// +kubebuilder:validation:Optional
 	GroupID *string `json:"groupId,omitempty" tf:"group_id,omitempty"`
 
-	// Reference to a Group to populate groupId.
+	// Reference to a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
 	GroupIDRef *v1.Reference `json:"groupIdRef,omitempty" tf:"-"`
 
-	// Selector for a Group to populate groupId.
+	// Selector for a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
 	GroupIDSelector *v1.Selector `json:"groupIdSelector,omitempty" tf:"-"`
 

@@ -16,8 +16,8 @@ import (
 	subflow "github.com/crossplane-contrib/provider-keycloak/internal/controller/authenticationflow/subflow"
 	protocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/protocolmapper"
 	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/client/rolemapper"
+	roles "github.com/crossplane-contrib/provider-keycloak/internal/controller/default/roles"
 	defaultgroups "github.com/crossplane-contrib/provider-keycloak/internal/controller/defaults/defaultgroups"
-	roles "github.com/crossplane-contrib/provider-keycloak/internal/controller/defaults/roles"
 	group "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/group"
 	memberships "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/memberships"
 	permissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/group/permissions"
@@ -72,8 +72,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		subflow.Setup,
 		protocolmapper.Setup,
 		rolemapper.Setup,
-		defaultgroups.Setup,
 		roles.Setup,
+		defaultgroups.Setup,
 		group.Setup,
 		memberships.Setup,
 		permissions.Setup,

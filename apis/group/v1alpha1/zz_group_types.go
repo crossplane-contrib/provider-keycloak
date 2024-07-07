@@ -23,14 +23,14 @@ type GroupInitParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The ID of this group's parent. If omitted, this group will be defined at the root level.
-	// +crossplane:generate:reference:type=Group
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
 	ParentID *string `json:"parentId,omitempty" tf:"parent_id,omitempty"`
 
-	// Reference to a Group to populate parentId.
+	// Reference to a Group in group to populate parentId.
 	// +kubebuilder:validation:Optional
 	ParentIDRef *v1.Reference `json:"parentIdRef,omitempty" tf:"-"`
 
-	// Selector for a Group to populate parentId.
+	// Selector for a Group in group to populate parentId.
 	// +kubebuilder:validation:Optional
 	ParentIDSelector *v1.Selector `json:"parentIdSelector,omitempty" tf:"-"`
 
@@ -80,15 +80,15 @@ type GroupParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The ID of this group's parent. If omitted, this group will be defined at the root level.
-	// +crossplane:generate:reference:type=Group
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
 	// +kubebuilder:validation:Optional
 	ParentID *string `json:"parentId,omitempty" tf:"parent_id,omitempty"`
 
-	// Reference to a Group to populate parentId.
+	// Reference to a Group in group to populate parentId.
 	// +kubebuilder:validation:Optional
 	ParentIDRef *v1.Reference `json:"parentIdRef,omitempty" tf:"-"`
 
-	// Selector for a Group to populate parentId.
+	// Selector for a Group in group to populate parentId.
 	// +kubebuilder:validation:Optional
 	ParentIDSelector *v1.Selector `json:"parentIdSelector,omitempty" tf:"-"`
 

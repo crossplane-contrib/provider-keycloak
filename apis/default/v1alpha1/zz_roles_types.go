@@ -17,18 +17,8 @@ type RolesInitParameters struct {
 
 	// Realm level roles assigned to new users by default.
 	// Realm level roles assigned to new users.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)
 	// +listType=set
 	DefaultRoles []*string `json:"defaultRoles,omitempty" tf:"default_roles,omitempty"`
-
-	// References to Role in role to populate defaultRoles.
-	// +kubebuilder:validation:Optional
-	DefaultRolesRefs []v1.Reference `json:"defaultRolesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of Role in role to populate defaultRoles.
-	// +kubebuilder:validation:Optional
-	DefaultRolesSelector *v1.Selector `json:"defaultRolesSelector,omitempty" tf:"-"`
 
 	// The realm this role exists within.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
@@ -60,19 +50,9 @@ type RolesParameters struct {
 
 	// Realm level roles assigned to new users by default.
 	// Realm level roles assigned to new users.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	DefaultRoles []*string `json:"defaultRoles,omitempty" tf:"default_roles,omitempty"`
-
-	// References to Role in role to populate defaultRoles.
-	// +kubebuilder:validation:Optional
-	DefaultRolesRefs []v1.Reference `json:"defaultRolesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of Role in role to populate defaultRoles.
-	// +kubebuilder:validation:Optional
-	DefaultRolesSelector *v1.Selector `json:"defaultRolesSelector,omitempty" tf:"-"`
 
 	// The realm this role exists within.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
@@ -124,8 +104,9 @@ type RolesStatus struct {
 type Roles struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              RolesSpec   `json:"spec"`
-	Status            RolesStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.defaultRoles) || (has(self.initProvider) && has(self.initProvider.defaultRoles))",message="spec.forProvider.defaultRoles is a required parameter"
+	Spec   RolesSpec   `json:"spec"`
+	Status RolesStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

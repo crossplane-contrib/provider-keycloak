@@ -11,13 +11,14 @@ import (
 
 	apisresolver "github.com/crossplane-contrib/provider-keycloak/internal/apis"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
-	xpresource "github.com/crossplane/crossplane-runtime/pkg/resource"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
+
+	// ResolveReferences of this Roles.
+	xpresource "github.com/crossplane/crossplane-runtime/pkg/resource"
 )
 
-func (mg *IdentityProvider) ResolveReferences( // ResolveReferences of this IdentityProvider.
-	ctx context.Context, c client.Reader) error {
+func (mg *Roles) ResolveReferences(ctx context.Context, c client.Reader) error {
 	var m xpresource.Managed
 	var l xpresource.ManagedList
 	r := reference.NewAPIResolver(c, mg)
@@ -31,18 +32,18 @@ func (mg *IdentityProvider) ResolveReferences( // ResolveReferences of this Iden
 		}
 
 		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Realm),
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.RealmID),
 			Extract:      reference.ExternalName(),
-			Reference:    mg.Spec.ForProvider.RealmRef,
-			Selector:     mg.Spec.ForProvider.RealmSelector,
+			Reference:    mg.Spec.ForProvider.RealmIDRef,
+			Selector:     mg.Spec.ForProvider.RealmIDSelector,
 			To:           reference.To{List: l, Managed: m},
 		})
 	}
 	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.Realm")
+		return errors.Wrap(err, "mg.Spec.ForProvider.RealmID")
 	}
-	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
+	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
@@ -50,18 +51,18 @@ func (mg *IdentityProvider) ResolveReferences( // ResolveReferences of this Iden
 		}
 
 		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Realm),
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.RealmID),
 			Extract:      reference.ExternalName(),
-			Reference:    mg.Spec.InitProvider.RealmRef,
-			Selector:     mg.Spec.InitProvider.RealmSelector,
+			Reference:    mg.Spec.InitProvider.RealmIDRef,
+			Selector:     mg.Spec.InitProvider.RealmIDSelector,
 			To:           reference.To{List: l, Managed: m},
 		})
 	}
 	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.Realm")
+		return errors.Wrap(err, "mg.Spec.InitProvider.RealmID")
 	}
-	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
+	mg.Spec.InitProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.RealmIDRef = rsp.ResolvedReference
 
 	return nil
 }

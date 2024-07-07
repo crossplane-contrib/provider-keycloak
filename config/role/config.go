@@ -9,7 +9,7 @@ func Configure(p *config.Provider) {
 		// this resource, which would be "github"
 		r.ShortGroup = "role"
 		r.References["composite_roles"] = config.Reference{
-			Type: "Role",
+			TerraformName: "keycloak_role",
 		}
 	})
 }
