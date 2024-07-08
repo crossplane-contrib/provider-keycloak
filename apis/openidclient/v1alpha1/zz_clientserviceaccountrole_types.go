@@ -41,7 +41,17 @@ type ClientServiceAccountRoleInitParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The name of the role that is assigned.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
+
+	// Reference to a Role in role to populate role.
+	// +kubebuilder:validation:Optional
+	RoleRef *v1.Reference `json:"roleRef,omitempty" tf:"-"`
+
+	// Selector for a Role in role to populate role.
+	// +kubebuilder:validation:Optional
+	RoleSelector *v1.Selector `json:"roleSelector,omitempty" tf:"-"`
 
 	// Reference to a Client in openidclient to populate serviceAccountUserId.
 	// +kubebuilder:validation:Optional
@@ -106,8 +116,18 @@ type ClientServiceAccountRoleParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The name of the role that is assigned.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)
 	// +kubebuilder:validation:Optional
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
+
+	// Reference to a Role in role to populate role.
+	// +kubebuilder:validation:Optional
+	RoleRef *v1.Reference `json:"roleRef,omitempty" tf:"-"`
+
+	// Selector for a Role in role to populate role.
+	// +kubebuilder:validation:Optional
+	RoleSelector *v1.Selector `json:"roleSelector,omitempty" tf:"-"`
 
 	// Reference to a Client in openidclient to populate serviceAccountUserId.
 	// +kubebuilder:validation:Optional
@@ -162,9 +182,8 @@ type ClientServiceAccountRoleStatus struct {
 type ClientServiceAccountRole struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.role) || (has(self.initProvider) && has(self.initProvider.role))",message="spec.forProvider.role is a required parameter"
-	Spec   ClientServiceAccountRoleSpec   `json:"spec"`
-	Status ClientServiceAccountRoleStatus `json:"status,omitempty"`
+	Spec              ClientServiceAccountRoleSpec   `json:"spec"`
+	Status            ClientServiceAccountRoleStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

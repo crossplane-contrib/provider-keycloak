@@ -88,7 +88,7 @@ spec:
                       will be defined at the root level.
                     type: string
                   parentIdRef:
-                    description: Reference to a Group to populate parentId.
+                    description: Reference to a Group in group to populate parentId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -122,7 +122,7 @@ spec:
                     - name
                     type: object
                   parentIdSelector:
-                    description: Selector for a Group to populate parentId.
+                    description: Selector for a Group in group to populate parentId.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -268,7 +268,7 @@ spec:
                       will be defined at the root level.
                     type: string
                   parentIdRef:
-                    description: Reference to a Group to populate parentId.
+                    description: Reference to a Group in group to populate parentId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -302,7 +302,7 @@ spec:
                     - name
                     type: object
                   parentIdSelector:
-                    description: Selector for a Group to populate parentId.
+                    description: Selector for a Group in group to populate parentId.
                     properties:
                       matchControllerRef:
                         description: |-

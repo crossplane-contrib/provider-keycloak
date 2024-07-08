@@ -84,7 +84,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   groupIdsRefs:
-                    description: References to Group in group to populate groupIds.
+                    description: References to  to populate groupIds.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -121,8 +121,7 @@ spec:
                       type: object
                     type: array
                   groupIdsSelector:
-                    description: Selector for a list of Group in group to populate
-                      groupIds.
+                    description: Selector for a list of  to populate groupIds.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -243,7 +242,7 @@ spec:
                       for.
                     type: string
                   userIdRef:
-                    description: Reference to a User to populate userId.
+                    description: Reference to a User in user to populate userId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -277,7 +276,7 @@ spec:
                     - name
                     type: object
                   userIdSelector:
-                    description: Selector for a User to populate userId.
+                    description: Selector for a User in user to populate userId.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -342,7 +341,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   groupIdsRefs:
-                    description: References to Group in group to populate groupIds.
+                    description: References to  to populate groupIds.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -379,8 +378,7 @@ spec:
                       type: object
                     type: array
                   groupIdsSelector:
-                    description: Selector for a list of Group in group to populate
-                      groupIds.
+                    description: Selector for a list of  to populate groupIds.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -501,7 +499,7 @@ spec:
                       for.
                     type: string
                   userIdRef:
-                    description: Reference to a User to populate userId.
+                    description: Reference to a User in user to populate userId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -535,7 +533,7 @@ spec:
                     - name
                     type: object
                   userIdSelector:
-                    description: Selector for a User to populate userId.
+                    description: Selector for a User in user to populate userId.
                     properties:
                       matchControllerRef:
                         description: |-

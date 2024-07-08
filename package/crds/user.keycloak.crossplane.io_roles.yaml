@@ -242,7 +242,7 @@ spec:
                       for.
                     type: string
                   userIdRef:
-                    description: Reference to a User to populate userId.
+                    description: Reference to a User in user to populate userId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -276,7 +276,7 @@ spec:
                     - name
                     type: object
                   userIdSelector:
-                    description: Selector for a User to populate userId.
+                    description: Selector for a User in user to populate userId.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -499,7 +499,7 @@ spec:
                       for.
                     type: string
                   userIdRef:
-                    description: Reference to a User to populate userId.
+                    description: Reference to a User in user to populate userId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -533,7 +533,7 @@ spec:
                     - name
                     type: object
                   userIdSelector:
-                    description: Selector for a User to populate userId.
+                    description: Selector for a User in user to populate userId.
                     properties:
                       matchControllerRef:
                         description: |-
