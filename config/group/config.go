@@ -9,14 +9,14 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "group"
 
 		r.References["parent_id"] = config.Reference{
-			Type: "Group",
+			TerraformName: "keycloak_group",
 		}
 	})
 	p.AddResourceConfigurator("keycloak_group_memberships", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = "group"
 		r.References["group_id"] = config.Reference{
-			Type: "Group",
+			TerraformName: "keycloak_group",
 		}
 
 	})
@@ -24,14 +24,14 @@ func Configure(p *config.Provider) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = "group"
 		r.References["group_id"] = config.Reference{
-			Type: "Group",
+			TerraformName: "keycloak_group",
 		}
 	})
 	p.AddResourceConfigurator("keycloak_group_permissions", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = "group"
 		r.References["group_id"] = config.Reference{
-			Type: "Group",
+			TerraformName: "keycloak_group",
 		}
 	})
 }

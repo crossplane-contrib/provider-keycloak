@@ -32,6 +32,7 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/apis"
 	"github.com/crossplane-contrib/provider-keycloak/apis/v1alpha1"
 	"github.com/crossplane-contrib/provider-keycloak/config"
+	resolverapis "github.com/crossplane-contrib/provider-keycloak/internal/apis"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
 	"github.com/crossplane-contrib/provider-keycloak/internal/controller"
 	"github.com/crossplane-contrib/provider-keycloak/internal/features"
@@ -88,6 +89,7 @@ func main() {
 	metrics.Registry.MustRegister(metricRecorder)
 	metrics.Registry.MustRegister(stateMetrics)
 	kingpin.FatalIfError(apis.AddToScheme(mgr.GetScheme()), "Cannot add keycloak APIs to scheme")
+	kingpin.FatalIfError(resolverapis.BuildScheme(apis.AddToSchemes), "Cannot register the keycloak APIs with the API resolver's runtime scheme")
 
 	provider, err := config.GetProvider(false)
 	kingpin.FatalIfError(err, "Cannot get provider configuration")

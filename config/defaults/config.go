@@ -8,8 +8,8 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_default_roles", func(r *config.Resource) {
 		r.ShortGroup = "defaults"
 		r.References["default_roles"] = config.Reference{
-			Type:      "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
-			Extractor: `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
+			TerraformName: "keycloak_role",
+			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
 		}
 
 	})
@@ -20,7 +20,7 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "defaults"
 		r.Kind = "DefaultGroups"
 		r.References["group_ids"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group",
+			TerraformName: "keycloak_group",
 		}
 
 	})

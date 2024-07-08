@@ -9,7 +9,7 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "openidgroup"
 
 		r.References["client_scope_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.ClientScope",
+			TerraformName: "keycloak_openid_client_scope",
 		}
 	})
 }

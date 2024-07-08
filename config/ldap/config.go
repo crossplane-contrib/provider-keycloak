@@ -16,21 +16,21 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_ldap_user_attribute_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1.UserFederation",
+			TerraformName: "keycloak_ldap_user_federation",
 		}
 	})
 
 	p.AddResourceConfigurator("keycloak_ldap_role_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1.UserFederation",
+			TerraformName: "keycloak_ldap_user_federation",
 		}
 	})
 
 	p.AddResourceConfigurator("keycloak_ldap_group_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1.UserFederation",
+			TerraformName: "keycloak_ldap_user_federation",
 		}
 
 	})
@@ -38,11 +38,11 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_ldap_hardcoded_role_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1.UserFederation",
+			TerraformName: "keycloak_ldap_user_federation",
 		}
 		r.References["role"] = config.Reference{
-			Type:      "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role",
-			Extractor: `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
+			TerraformName: "keycloak_role",
+			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
 		}
 
 	})
@@ -50,18 +50,18 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_ldap_hardcoded_group_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1.UserFederation",
+			TerraformName: "keycloak_ldap_user_federation",
 		}
 		r.References["group"] = config.Reference{
-			Type:      "github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group",
-			Extractor: `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
+			TerraformName: "keycloak_group",
+			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
 		}
 	})
 
 	p.AddResourceConfigurator("keycloak_ldap_msad_user_account_control_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1.UserFederation",
+			TerraformName: "keycloak_ldap_user_federation",
 		}
 
 	})
@@ -69,7 +69,7 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_ldap_msad_lds_user_account_control_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1.UserFederation",
+			TerraformName: "keycloak_ldap_user_federation",
 		}
 
 	})
@@ -77,7 +77,7 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_ldap_hardcoded_attribute_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1.UserFederation",
+			TerraformName: "keycloak_ldap_user_federation",
 		}
 
 	})
@@ -85,14 +85,14 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_ldap_full_name_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1.UserFederation",
+			TerraformName: "keycloak_ldap_user_federation",
 		}
 	})
 
 	p.AddResourceConfigurator("keycloak_ldap_custom_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/ldap/v1alpha1.UserFederation",
+			TerraformName: "keycloak_ldap_user_federation",
 		}
 	})
 }

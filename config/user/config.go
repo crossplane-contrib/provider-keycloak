@@ -12,19 +12,17 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "user"
 
 		r.References["user_id"] = config.Reference{
-			Type: "User",
+			TerraformName: "keycloak_user",
 		}
 
-		r.References["group_ids"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group",
-		}
+		r.References["group_ids"] = config.Reference{}
 	})
 
 	p.AddResourceConfigurator("keycloak_user_roles", func(r *config.Resource) {
 		r.ShortGroup = "user"
 
 		r.References["user_id"] = config.Reference{
-			Type: "User",
+			TerraformName: "keycloak_user",
 		}
 	})
 
