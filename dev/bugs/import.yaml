@@ -1,0 +1,15 @@
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  annotations:
+    crossplane.io/external-name: 182b0c9b-197f-45e3-8f4a-386cd6890d73
+  name: builtin-master-realm-role-uma-authorization
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    name: uma_authorization
+    realmId: master
+  managementPolicies:
+  - Observe
+  providerConfigRef:
+    name: keycloak-provider-config

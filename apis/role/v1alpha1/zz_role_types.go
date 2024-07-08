@@ -33,15 +33,15 @@ type RoleInitParameters struct {
 	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
-	// +crossplane:generate:reference:type=Role
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
 	// +listType=set
 	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
 
-	// References to Role to populate compositeRoles.
+	// References to Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
 	CompositeRolesRefs []v1.Reference `json:"compositeRolesRefs,omitempty" tf:"-"`
 
-	// Selector for a list of Role to populate compositeRoles.
+	// Selector for a list of Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
 	CompositeRolesSelector *v1.Selector `json:"compositeRolesSelector,omitempty" tf:"-"`
 
@@ -111,16 +111,16 @@ type RoleParameters struct {
 	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
-	// +crossplane:generate:reference:type=Role
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
 
-	// References to Role to populate compositeRoles.
+	// References to Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
 	CompositeRolesRefs []v1.Reference `json:"compositeRolesRefs,omitempty" tf:"-"`
 
-	// Selector for a list of Role to populate compositeRoles.
+	// Selector for a list of Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
 	CompositeRolesSelector *v1.Selector `json:"compositeRolesSelector,omitempty" tf:"-"`
 

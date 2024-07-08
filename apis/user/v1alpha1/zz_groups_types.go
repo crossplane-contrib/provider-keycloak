@@ -19,15 +19,14 @@ type GroupsInitParameters struct {
 	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
 
 	// A list of group IDs that the user is member of.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
 	// +listType=set
 	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
 
-	// References to Group in group to populate groupIds.
+	// References to  to populate groupIds.
 	// +kubebuilder:validation:Optional
 	GroupIdsRefs []v1.Reference `json:"groupIdsRefs,omitempty" tf:"-"`
 
-	// Selector for a list of Group in group to populate groupIds.
+	// Selector for a list of  to populate groupIds.
 	// +kubebuilder:validation:Optional
 	GroupIdsSelector *v1.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
 
@@ -44,14 +43,14 @@ type GroupsInitParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the user this resource should manage groups for.
-	// +crossplane:generate:reference:type=User
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/user/v1alpha1.User
 	UserID *string `json:"userId,omitempty" tf:"user_id,omitempty"`
 
-	// Reference to a User to populate userId.
+	// Reference to a User in user to populate userId.
 	// +kubebuilder:validation:Optional
 	UserIDRef *v1.Reference `json:"userIdRef,omitempty" tf:"-"`
 
-	// Selector for a User to populate userId.
+	// Selector for a User in user to populate userId.
 	// +kubebuilder:validation:Optional
 	UserIDSelector *v1.Selector `json:"userIdSelector,omitempty" tf:"-"`
 }
@@ -81,16 +80,15 @@ type GroupsParameters struct {
 	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
 
 	// A list of group IDs that the user is member of.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	GroupIds []*string `json:"groupIds,omitempty" tf:"group_ids,omitempty"`
 
-	// References to Group in group to populate groupIds.
+	// References to  to populate groupIds.
 	// +kubebuilder:validation:Optional
 	GroupIdsRefs []v1.Reference `json:"groupIdsRefs,omitempty" tf:"-"`
 
-	// Selector for a list of Group in group to populate groupIds.
+	// Selector for a list of  to populate groupIds.
 	// +kubebuilder:validation:Optional
 	GroupIdsSelector *v1.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
 
@@ -108,15 +106,15 @@ type GroupsParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the user this resource should manage groups for.
-	// +crossplane:generate:reference:type=User
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/user/v1alpha1.User
 	// +kubebuilder:validation:Optional
 	UserID *string `json:"userId,omitempty" tf:"user_id,omitempty"`
 
-	// Reference to a User to populate userId.
+	// Reference to a User in user to populate userId.
 	// +kubebuilder:validation:Optional
 	UserIDRef *v1.Reference `json:"userIdRef,omitempty" tf:"-"`
 
-	// Selector for a User to populate userId.
+	// Selector for a User in user to populate userId.
 	// +kubebuilder:validation:Optional
 	UserIDSelector *v1.Selector `json:"userIdSelector,omitempty" tf:"-"`
 }

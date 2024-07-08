@@ -8,8 +8,8 @@ metadata:
   name: user-groups
 spec:
   forProvider:
-    groupIdsRefs:
-    - name: group
+    groupIds:
+    - ${keycloak_group.group.id}
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
