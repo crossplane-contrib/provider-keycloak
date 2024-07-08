@@ -1,6 +1,7 @@
 package openidclient
 
 import (
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane/upjet/pkg/config"
 )
 
@@ -16,10 +17,10 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 
 		r.References["authentication_flow_binding_overrides.browser_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow",
+			TerraformName: "keycloak_authentication_flow",
 		}
 		r.References["authentication_flow_binding_overrides.direct_grant_id"] = config.Reference{
-			Type: "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow",
+			TerraformName: "keycloak_authentication_flow",
 		}
 
 	})
@@ -36,6 +37,27 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_openid_client_service_account_role", func(r *config.Resource) {
 		r.ShortGroup = Group
+		//  The id of the client that provides the role.
+		r.References["client_id"] = config.Reference{
+
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+		// The id of the service account that is assigned the role (the service account of the client that "consumes" the role).
+		r.References["service_account_user_id"] = config.Reference{
+			TerraformName:     "keycloak_openid_client",
+			Extractor:         common.PathServiceAccountRoleIDExtractor,
+			RefFieldName:      "ServiceAccountUserClientIDRef",
+			SelectorFieldName: "ServiceAccountUserClientIDSelector",
+		}
+		// The name of the role that is assigned.
+		r.References["role"] = config.Reference{
+			TerraformName: "keycloak_role",
+			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
+		}
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{"service_account_user_id"},
+		}
 
 	})
 
