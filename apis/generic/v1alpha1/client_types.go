@@ -22,38 +22,294 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	xpv1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
+	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type OpenIdConfig struct {
+type AuthenticationFlowBindingOverridesInitParameters struct {
+
+	// Browser flow id, (flow needs to exist)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow
+	BrowserID *string `json:"browserId,omitempty"`
+
+	// Reference to a Flow in authenticationflow to populate browserId.
+	// +kubebuilder:validation:Optional
+	BrowserIDRef *v1.Reference `json:"browserIdRef,omitempty"`
+
+	// Selector for a Flow in authenticationflow to populate browserId.
+	// +kubebuilder:validation:Optional
+	BrowserIDSelector *v1.Selector `json:"browserIdSelector,omitempty"`
+
+	// Direct grant flow id (flow needs to exist)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow
+	DirectGrantID *string `json:"directGrantId,omitempty"`
+
+	// Reference to a Flow in authenticationflow to populate directGrantId.
+	// +kubebuilder:validation:Optional
+	DirectGrantIDRef *v1.Reference `json:"directGrantIdRef,omitempty"`
+
+	// Selector for a Flow in authenticationflow to populate directGrantId.
+	// +kubebuilder:validation:Optional
+	DirectGrantIDSelector *v1.Selector `json:"directGrantIdSelector,omitempty"`
 }
 
+type AuthenticationFlowBindingOverridesObservation struct {
+
+	// Browser flow id, (flow needs to exist)
+	BrowserID *string `json:"browserId,omitempty"`
+
+	// Direct grant flow id (flow needs to exist)
+	DirectGrantID *string `json:"directGrantId,omitempty"`
+}
+
+type AuthenticationFlowBindingOverridesParameters struct {
+
+	// Browser flow id, (flow needs to exist)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow
+	// +kubebuilder:validation:Optional
+	BrowserID *string `json:"browserId,omitempty"`
+
+	// Reference to a Flow in authenticationflow to populate browserId.
+	// +kubebuilder:validation:Optional
+	BrowserIDRef *v1.Reference `json:"browserIdRef,omitempty"`
+
+	// Selector for a Flow in authenticationflow to populate browserId.
+	// +kubebuilder:validation:Optional
+	BrowserIDSelector *v1.Selector `json:"browserIdSelector,omitempty"`
+
+	// Direct grant flow id (flow needs to exist)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow
+	// +kubebuilder:validation:Optional
+	DirectGrantID *string `json:"directGrantId,omitempty"`
+
+	// Reference to a Flow in authenticationflow to populate directGrantId.
+	// +kubebuilder:validation:Optional
+	DirectGrantIDRef *v1.Reference `json:"directGrantIdRef,omitempty"`
+
+	// Selector for a Flow in authenticationflow to populate directGrantId.
+	// +kubebuilder:validation:Optional
+	DirectGrantIDSelector *v1.Selector `json:"directGrantIdSelector,omitempty"`
+}
+
+type AuthorizationInitParameters struct {
+
+	// When true, resources can be managed remotely by the resource server. Defaults to false.
+	AllowRemoteResourceManagement *bool `json:"allowRemoteResourceManagement,omitempty"`
+
+	// Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
+	DecisionStrategy *string `json:"decisionStrategy,omitempty"`
+
+	// When true, defaults set by Keycloak will be respected. Defaults to false.
+	KeepDefaults *bool `json:"keepDefaults,omitempty"`
+
+	// Dictates how policies are enforced when evaluating authorization requests. Can be one of ENFORCING, PERMISSIVE, or DISABLED.
+	PolicyEnforcementMode *string `json:"policyEnforcementMode,omitempty"`
+}
+
+type AuthorizationObservation struct {
+
+	// When true, resources can be managed remotely by the resource server. Defaults to false.
+	AllowRemoteResourceManagement *bool `json:"allowRemoteResourceManagement,omitempty"`
+
+	// Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
+	DecisionStrategy *string `json:"decisionStrategy,omitempty"`
+
+	// When true, defaults set by Keycloak will be respected. Defaults to false.
+	KeepDefaults *bool `json:"keepDefaults,omitempty"`
+
+	// Dictates how policies are enforced when evaluating authorization requests. Can be one of ENFORCING, PERMISSIVE, or DISABLED.
+	PolicyEnforcementMode *string `json:"policyEnforcementMode,omitempty"`
+}
+
+type AuthorizationParameters struct {
+
+	// When true, resources can be managed remotely by the resource server. Defaults to false.
+	// +kubebuilder:validation:Optional
+	AllowRemoteResourceManagement *bool `json:"allowRemoteResourceManagement,omitempty"`
+
+	// Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
+	// +kubebuilder:validation:Optional
+	DecisionStrategy *string `json:"decisionStrategy,omitempty"`
+
+	// When true, defaults set by Keycloak will be respected. Defaults to false.
+	// +kubebuilder:validation:Optional
+	KeepDefaults *bool `json:"keepDefaults,omitempty"`
+
+	// Dictates how policies are enforced when evaluating authorization requests. Can be one of ENFORCING, PERMISSIVE, or DISABLED.
+	// +kubebuilder:validation:Optional
+	PolicyEnforcementMode *string `json:"policyEnforcementMode"`
+}
+
+// OpenIDConfig contains the fields specific to OpenID clients.
+type OpenIDConfig struct {
+	AccessTokenLifespan                    *string                   `json:"accessTokenLifespan,omitempty"`
+	AccessType                             *string                   `json:"accessType,omitempty"`
+	AdminURL                               *string                   `json:"adminUrl,omitempty"`
+	Authorization                          []AuthorizationParameters `json:"authorization,omitempty"`
+	BackchannelLogoutRevokeOfflineSessions *bool                     `json:"backchannelLogoutRevokeOfflineSessions,omitempty"`
+	BackchannelLogoutSessionRequired       *bool                     `json:"backchannelLogoutSessionRequired,omitempty"`
+	BackchannelLogoutURL                   *string                   `json:"backchannelLogoutUrl,omitempty"`
+	ClientAuthenticatorType                *string                   `json:"clientAuthenticatorType,omitempty"`
+	ClientOfflineSessionIdleTimeout        *string                   `json:"clientOfflineSessionIdleTimeout,omitempty"`
+	ClientOfflineSessionMaxLifespan        *string                   `json:"clientOfflineSessionMaxLifespan,omitempty"`
+	ClientSecretSecretRef                  *v1.SecretKeySelector     `json:"clientSecretSecretRef,omitempty"`
+	ClientSessionIdleTimeout               *string                   `json:"clientSessionIdleTimeout,omitempty"`
+	ClientSessionMaxLifespan               *string                   `json:"clientSessionMaxLifespan,omitempty"`
+	ConsentRequired                        *bool                     `json:"consentRequired,omitempty"`
+	ConsentScreenText                      *string                   `json:"consentScreenText,omitempty"`
+	DirectAccessGrantsEnabled              *bool                     `json:"directAccessGrantsEnabled,omitempty"`
+	DisplayOnConsentScreen                 *bool                     `json:"displayOnConsentScreen,omitempty"`
+	ExcludeSessionStateFromAuthResponse    *bool                     `json:"excludeSessionStateFromAuthResponse,omitempty"`
+	FrontchannelLogoutEnabled              *bool                     `json:"frontchannelLogoutEnabled,omitempty"`
+	FrontchannelLogoutURL                  *string                   `json:"frontchannelLogoutUrl,omitempty"`
+	ImplicitFlowEnabled                    *bool                     `json:"implicitFlowEnabled,omitempty"`
+	Import                                 *bool                     `json:"import,omitempty"`
+	Oauth2DeviceAuthorizationGrantEnabled  *bool                     `json:"oauth2DeviceAuthorizationGrantEnabled,omitempty"`
+	Oauth2DeviceCodeLifespan               *string                   `json:"oauth2DeviceCodeLifespan,omitempty"`
+	Oauth2DevicePollingInterval            *string                   `json:"oauth2DevicePollingInterval,omitempty"`
+	PkceCodeChallengeMethod                *string                   `json:"pkceCodeChallengeMethod,omitempty"`
+	RootURL                                *string                   `json:"rootUrl,omitempty"`
+	ServiceAccountsEnabled                 *bool                     `json:"serviceAccountsEnabled,omitempty"`
+	StandardFlowEnabled                    *bool                     `json:"standardFlowEnabled,omitempty"`
+	UseRefreshTokens                       *bool                     `json:"useRefreshTokens,omitempty"`
+	UseRefreshTokensClientCredentials      *bool                     `json:"useRefreshTokensClientCredentials,omitempty"`
+	ValidPostLogoutRedirectUris            []*string                 `json:"validPostLogoutRedirectUris,omitempty"`
+	ValidRedirectUris                      []*string                 `json:"validRedirectUris,omitempty"`
+	WebOrigins                             []*string                 `json:"webOrigins,omitempty"`
+}
+
+// SamlConfig contains the fields specific to SAML clients.
 type SamlConfig struct {
+	AssertionConsumerPostURL        *string   `json:"assertionConsumerPostUrl,omitempty"`
+	AssertionConsumerRedirectURL    *string   `json:"assertionConsumerRedirectUrl,omitempty"`
+	CanonicalizationMethod          *string   `json:"canonicalizationMethod,omitempty"`
+	ClientSignatureRequired         *bool     `json:"clientSignatureRequired,omitempty"`
+	EncryptAssertions               *bool     `json:"encryptAssertions,omitempty"`
+	EncryptionCertificate           *string   `json:"encryptionCertificate,omitempty"`
+	ForceNameIDFormat               *bool     `json:"forceNameIdFormat,omitempty"`
+	ForcePostBinding                *bool     `json:"forcePostBinding,omitempty"`
+	FrontChannelLogout              *bool     `json:"frontChannelLogout,omitempty"`
+	IdpInitiatedSsoRelayState       *string   `json:"idpInitiatedSsoRelayState,omitempty"`
+	IdpInitiatedSsoURLName          *string   `json:"idpInitiatedSsoUrlName,omitempty"`
+	IncludeAuthnStatement           *bool     `json:"includeAuthnStatement,omitempty"`
+	LogoutServicePostBindingURL     *string   `json:"logoutServicePostBindingUrl,omitempty"`
+	LogoutServiceRedirectBindingURL *string   `json:"logoutServiceRedirectBindingUrl,omitempty"`
+	MasterSAMLProcessingURL         *string   `json:"masterSamlProcessingUrl,omitempty"`
+	NameIDFormat                    *string   `json:"nameIdFormat,omitempty"`
+	RootURL                         *string   `json:"rootUrl,omitempty"`
+	SignAssertions                  *bool     `json:"signAssertions,omitempty"`
+	SignDocuments                   *bool     `json:"signDocuments,omitempty"`
+	SignatureAlgorithm              *string   `json:"signatureAlgorithm,omitempty"`
+	SignatureKeyName                *string   `json:"signatureKeyName,omitempty"`
+	SigningCertificate              *string   `json:"signingCertificate,omitempty"`
+	SigningPrivateKey               *string   `json:"signingPrivateKey,omitempty"`
+	ValidRedirectUris               []*string `json:"validRedirectUris,omitempty"`
+}
+
+// ClientInitParameters are the configurable fields of a Client.
+type ClientInitParameters struct {
+	ClientID string `json:"clientId"`
+
+	// The realm this client is attached to.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	Name                               *string                                        `json:"name,omitempty"`
+	Description                        *string                                        `json:"description,omitempty"`
+	BaseURL                            *string                                        `json:"baseUrl,omitempty"`
+	Enabled                            *bool                                          `json:"enabled,omitempty"`
+	LoginTheme                         *string                                        `json:"loginTheme,omitempty"`
+	ExtraConfig                        map[string]*string                             `json:"extraConfig,omitempty"`
+	FullScopeAllowed                   *bool                                          `json:"fullScopeAllowed,omitempty"`
+	AuthenticationFlowBindingOverrides []AuthenticationFlowBindingOverridesParameters `json:"authenticationFlowBindingOverrides,omitempty"`
+	OpenIdConfig                       OpenIDConfig                                   `json:"openIdConfig,omitempty"`
+	SamlConfig                         SamlConfig                                     `json:"samlConfig,omitempty"`
+}
+
+// ClientObservation are the configurable fields of a Client.
+type ClientObservation struct {
+	ClientID string `json:"clientId"`
+
+	// The realm this client is attached to.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	Name                               *string                                        `json:"name,omitempty"`
+	Description                        *string                                        `json:"description,omitempty"`
+	BaseURL                            *string                                        `json:"baseUrl,omitempty"`
+	Enabled                            *bool                                          `json:"enabled,omitempty"`
+	LoginTheme                         *string                                        `json:"loginTheme,omitempty"`
+	ExtraConfig                        map[string]*string                             `json:"extraConfig,omitempty"`
+	FullScopeAllowed                   *bool                                          `json:"fullScopeAllowed,omitempty"`
+	AuthenticationFlowBindingOverrides []AuthenticationFlowBindingOverridesParameters `json:"authenticationFlowBindingOverrides,omitempty"`
+	OpenIdConfig                       OpenIDConfig                                   `json:"openIdConfig,omitempty"`
+	SamlConfig                         SamlConfig                                     `json:"samlConfig,omitempty"`
 }
 
 // ClientParameters are the configurable fields of a Client.
 type ClientParameters struct {
-	ClientId     string       `json:"clientId"`
-	RealmId      string       `json:"realmId"`
-	OpenIdConfig OpenIdConfig `json:"openIdConfig,omitempty"`
-	SamlConfig   SamlConfig   `json:"samlConfig,omitempty"`
-}
+	ClientID string `json:"clientId"`
 
-// ClientObservation are the observable fields of a Client.
-type ClientObservation struct {
-	ObservableField string `json:"observableField,omitempty"`
+	// The realm this client is attached to.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
+	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Reference to a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realmId.
+	// +kubebuilder:validation:Optional
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	Name                               *string                                        `json:"name,omitempty"`
+	Description                        *string                                        `json:"description,omitempty"`
+	BaseURL                            *string                                        `json:"baseUrl,omitempty"`
+	Enabled                            *bool                                          `json:"enabled,omitempty"`
+	LoginTheme                         *string                                        `json:"loginTheme,omitempty"`
+	ExtraConfig                        map[string]*string                             `json:"extraConfig,omitempty"`
+	FullScopeAllowed                   *bool                                          `json:"fullScopeAllowed,omitempty"`
+	AuthenticationFlowBindingOverrides []AuthenticationFlowBindingOverridesParameters `json:"authenticationFlowBindingOverrides,omitempty"`
+	OpenIdConfig                       OpenIDConfig                                   `json:"openIdConfig,omitempty"`
+	SamlConfig                         SamlConfig                                     `json:"samlConfig,omitempty"`
 }
 
 // A ClientSpec defines the desired state of a Client.
 type ClientSpec struct {
-	xpv1.ResourceSpec `json:",inline"`
-	ForProvider       ClientParameters `json:"forProvider"`
+	v1.ResourceSpec `json:",inline"`
+	ForProvider     ClientParameters `json:"forProvider"`
+	// THIS IS A BETA FIELD. It will be honored
+	// unless the Management Policies feature flag is disabled.
+	// InitProvider holds the same fields as ForProvider, with the exception
+	// of Identifier and other resource reference fields. The fields that are
+	// in InitProvider are merged into ForProvider when the resource is created.
+	// The same fields are also added to the terraform ignore_changes hook, to
+	// avoid updating them after creation. This is useful for fields that are
+	// required on creation, but we do not desire to update them after creation,
+	// for example because of an external controller is managing them, like an
+	// autoscaler.
+	InitProvider ClientInitParameters `json:"initProvider,omitempty"`
 }
 
 // A ClientStatus represents the observed state of a Client.
 type ClientStatus struct {
-	xpv1.ResourceStatus `json:",inline"`
-	AtProvider          ClientObservation `json:"atProvider,omitempty"`
+	v1.ResourceStatus `json:",inline"`
+	AtProvider        ClientObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

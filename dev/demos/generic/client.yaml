@@ -1,0 +1,17 @@
+---
+apiVersion: generic.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: my-generic-oidc-client
+  annotations:
+    crossplane.io/external-name: 90878f8a-b8a4-4514-9189-5d2fb95dd9e3
+spec:
+  forProvider:
+    name: my-generic-oidc-client
+    clientId: my-generic-oidc-client
+    realmId: master
+    openIdConfig: 
+      accessType: confidential
+    samlConfig: {}
+  providerConfigRef:
+    name: "keycloak-provider-config"

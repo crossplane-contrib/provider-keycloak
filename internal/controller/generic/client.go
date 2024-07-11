@@ -21,12 +21,13 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/Nerzal/gocloak"
+	gocloak "github.com/Nerzal/gocloak/v13"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 	"github.com/crossplane/crossplane-runtime/pkg/connection"
 	"github.com/crossplane/crossplane-runtime/pkg/controller"
 	"github.com/crossplane/crossplane-runtime/pkg/event"
@@ -178,7 +179,88 @@ func (c *external) Observe(ctx context.Context, mg resource.Managed) (managed.Ex
 	}
 
 	// These fmt statements should be removed in the real implementation.
-	fmt.Printf("Observing: %+v", cr)
+	fmt.Println("Observing: %+v", cr)
+	annotations := cr.GetAnnotations()
+	fmt.Println("Annotations: %+v", annotations)
+	externalName := annotations["crossplane.io/external-name"]
+	fmt.Println("ExternalName: %+v", externalName)
+
+	existing_client, err := c.client.GetClient(ctx, c.token, *cr.Spec.ForProvider.RealmID, externalName)
+	if err != nil {
+		return managed.ExternalObservation{}, errors.Wrap(err, "failed to get client")
+	}
+
+	fmt.Println("ExistingClient: %+v", existing_client)
+	/*
+			ExistingClient: %+v {
+		        "access": {
+		                "configure": true,
+		                "manage": true,
+		                "view": true
+		        },
+		        "adminUrl": "",
+		        "attributes": {
+		                "backchannel.logout.revoke.offline.tokens": "false",
+		                "backchannel.logout.session.required": "true",
+		                "client.secret.creation.time": "1720725218",
+		                "oauth2.device.authorization.grant.enabled": "false",
+		                "oidc.ciba.grant.enabled": "false"
+		        },
+		        "authenticationFlowBindingOverrides": {},
+		        "baseUrl": "",
+		        "bearerOnly": false,
+		        "clientAuthenticatorType": "client-secret",
+		        "clientId": "test",
+		        "consentRequired": false,
+		        "defaultClientScopes": [
+		                "web-origins",
+		                "acr",
+		                "roles",
+		                "profile",
+		                "email"
+		        ],
+		        "description": "",
+		        "directAccessGrantsEnabled": true,
+		        "enabled": true,
+		        "frontchannelLogout": true,
+		        "fullScopeAllowed": true,
+		        "id": "90878f8a-b8a4-4514-9189-5d2fb95dd9e3",
+		        "implicitFlowEnabled": false,
+		        "name": "test",
+		        "nodeReRegistrationTimeout": -1,
+		        "notBefore": 0,
+		        "optionalClientScopes": [
+		                "address",
+		                "phone",
+		                "offline_access",
+		                "microprofile-jwt"
+		        ],
+		        "protocol": "openid-connect",
+		        "publicClient": false,
+		        "redirectUris": [
+		                "/*"
+		        ],
+		        "rootUrl": "",
+		        "secret": "CXwTPItWvexFa6H0UbH0QqYXJv3anWAL",
+		        "serviceAccountsEnabled": false,
+		        "standardFlowEnabled": true,
+		        "surrogateAuthRequired": false,
+		        "webOrigins": [
+		                "/*"
+		        ]
+		}
+	*/
+
+	cr.Status.AtProvider.ClientID = *existing_client.Name
+	cr.Status.AtProvider.RealmID = cr.Spec.ForProvider.RealmID
+	cr.Status.AtProvider.AuthenticationFlowBindingOverrides = []v1alpha1Generic.AuthenticationFlowBindingOverridesParameters{
+		{
+			BrowserID:     existing_client.AuthenticationFlowBindingOverrides["browser_id"],
+			DirectGrantID: existing_client.AuthenticationFlowBindingOverrides["direct_grant_id"],
+		},
+	}
+
+	cr.SetConditions(v1.Available())
 
 	return managed.ExternalObservation{
 		// Return false when the external resource does not exist. This lets

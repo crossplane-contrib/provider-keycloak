@@ -109,8 +109,7 @@ func main() {
 	}
 
 	upjetControllerOptions := tjcontroller.Options{
-		Options:  controllerOptions,
-		Provider: config.GetProvider(),
+		Options: controllerOptions,
 		// use the following WorkspaceStoreOption to enable the shared gRPC mode
 		SetupFn:               clients.TerraformSetupBuilder(),
 		OperationTrackerStore: tjcontroller.NewOperationStore(log),

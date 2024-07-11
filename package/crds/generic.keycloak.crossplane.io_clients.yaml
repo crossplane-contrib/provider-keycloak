@@ -73,10 +73,873 @@ spec:
               forProvider:
                 description: ClientParameters are the configurable fields of a Client.
                 properties:
-                  configurableField:
+                  authenticationFlowBindingOverrides:
+                    items:
+                      properties:
+                        browserId:
+                          description: Browser flow id, (flow needs to exist)
+                          type: string
+                        browserIdRef:
+                          description: Reference to a Flow in authenticationflow to
+                            populate browserId.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        browserIdSelector:
+                          description: Selector for a Flow in authenticationflow to
+                            populate browserId.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                        directGrantId:
+                          description: Direct grant flow id (flow needs to exist)
+                          type: string
+                        directGrantIdRef:
+                          description: Reference to a Flow in authenticationflow to
+                            populate directGrantId.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        directGrantIdSelector:
+                          description: Selector for a Flow in authenticationflow to
+                            populate directGrantId.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  baseUrl:
                     type: string
+                  clientId:
+                    type: string
+                  description:
+                    type: string
+                  enabled:
+                    type: boolean
+                  extraConfig:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  fullScopeAllowed:
+                    type: boolean
+                  loginTheme:
+                    type: string
+                  name:
+                    type: string
+                  openIdConfig:
+                    description: OpenIDConfig contains the fields specific to OpenID
+                      clients.
+                    properties:
+                      accessTokenLifespan:
+                        type: string
+                      accessType:
+                        type: string
+                      adminUrl:
+                        type: string
+                      authorization:
+                        items:
+                          properties:
+                            allowRemoteResourceManagement:
+                              description: When true, resources can be managed remotely
+                                by the resource server. Defaults to false.
+                              type: boolean
+                            decisionStrategy:
+                              description: Dictates how the policies associated with
+                                a given permission are evaluated and how a final decision
+                                is obtained. Could be one of AFFIRMATIVE, CONSENSUS,
+                                or UNANIMOUS. Applies to permissions.
+                              type: string
+                            keepDefaults:
+                              description: When true, defaults set by Keycloak will
+                                be respected. Defaults to false.
+                              type: boolean
+                            policyEnforcementMode:
+                              description: Dictates how policies are enforced when
+                                evaluating authorization requests. Can be one of ENFORCING,
+                                PERMISSIVE, or DISABLED.
+                              type: string
+                          type: object
+                        type: array
+                      backchannelLogoutRevokeOfflineSessions:
+                        type: boolean
+                      backchannelLogoutSessionRequired:
+                        type: boolean
+                      backchannelLogoutUrl:
+                        type: string
+                      clientAuthenticatorType:
+                        type: string
+                      clientOfflineSessionIdleTimeout:
+                        type: string
+                      clientOfflineSessionMaxLifespan:
+                        type: string
+                      clientSecretSecretRef:
+                        description: A SecretKeySelector is a reference to a secret
+                          key in an arbitrary namespace.
+                        properties:
+                          key:
+                            description: The key to select.
+                            type: string
+                          name:
+                            description: Name of the secret.
+                            type: string
+                          namespace:
+                            description: Namespace of the secret.
+                            type: string
+                        required:
+                        - key
+                        - name
+                        - namespace
+                        type: object
+                      clientSessionIdleTimeout:
+                        type: string
+                      clientSessionMaxLifespan:
+                        type: string
+                      consentRequired:
+                        type: boolean
+                      consentScreenText:
+                        type: string
+                      directAccessGrantsEnabled:
+                        type: boolean
+                      displayOnConsentScreen:
+                        type: boolean
+                      excludeSessionStateFromAuthResponse:
+                        type: boolean
+                      frontchannelLogoutEnabled:
+                        type: boolean
+                      frontchannelLogoutUrl:
+                        type: string
+                      implicitFlowEnabled:
+                        type: boolean
+                      import:
+                        type: boolean
+                      oauth2DeviceAuthorizationGrantEnabled:
+                        type: boolean
+                      oauth2DeviceCodeLifespan:
+                        type: string
+                      oauth2DevicePollingInterval:
+                        type: string
+                      pkceCodeChallengeMethod:
+                        type: string
+                      rootUrl:
+                        type: string
+                      serviceAccountsEnabled:
+                        type: boolean
+                      standardFlowEnabled:
+                        type: boolean
+                      useRefreshTokens:
+                        type: boolean
+                      useRefreshTokensClientCredentials:
+                        type: boolean
+                      validPostLogoutRedirectUris:
+                        items:
+                          type: string
+                        type: array
+                      validRedirectUris:
+                        items:
+                          type: string
+                        type: array
+                      webOrigins:
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  realmId:
+                    description: The realm this client is attached to.
+                    type: string
+                  realmIdRef:
+                    description: Reference to a Realm in realm to populate realmId.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  realmIdSelector:
+                    description: Selector for a Realm in realm to populate realmId.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
+                  samlConfig:
+                    description: SamlConfig contains the fields specific to SAML clients.
+                    properties:
+                      assertionConsumerPostUrl:
+                        type: string
+                      assertionConsumerRedirectUrl:
+                        type: string
+                      canonicalizationMethod:
+                        type: string
+                      clientSignatureRequired:
+                        type: boolean
+                      encryptAssertions:
+                        type: boolean
+                      encryptionCertificate:
+                        type: string
+                      forceNameIdFormat:
+                        type: boolean
+                      forcePostBinding:
+                        type: boolean
+                      frontChannelLogout:
+                        type: boolean
+                      idpInitiatedSsoRelayState:
+                        type: string
+                      idpInitiatedSsoUrlName:
+                        type: string
+                      includeAuthnStatement:
+                        type: boolean
+                      logoutServicePostBindingUrl:
+                        type: string
+                      logoutServiceRedirectBindingUrl:
+                        type: string
+                      masterSamlProcessingUrl:
+                        type: string
+                      nameIdFormat:
+                        type: string
+                      rootUrl:
+                        type: string
+                      signAssertions:
+                        type: boolean
+                      signDocuments:
+                        type: boolean
+                      signatureAlgorithm:
+                        type: string
+                      signatureKeyName:
+                        type: string
+                      signingCertificate:
+                        type: string
+                      signingPrivateKey:
+                        type: string
+                      validRedirectUris:
+                        items:
+                          type: string
+                        type: array
+                    type: object
                 required:
-                - configurableField
+                - clientId
+                type: object
+              initProvider:
+                description: ClientInitParameters are the configurable fields of a
+                  Client.
+                properties:
+                  authenticationFlowBindingOverrides:
+                    items:
+                      properties:
+                        browserId:
+                          description: Browser flow id, (flow needs to exist)
+                          type: string
+                        browserIdRef:
+                          description: Reference to a Flow in authenticationflow to
+                            populate browserId.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        browserIdSelector:
+                          description: Selector for a Flow in authenticationflow to
+                            populate browserId.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                        directGrantId:
+                          description: Direct grant flow id (flow needs to exist)
+                          type: string
+                        directGrantIdRef:
+                          description: Reference to a Flow in authenticationflow to
+                            populate directGrantId.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        directGrantIdSelector:
+                          description: Selector for a Flow in authenticationflow to
+                            populate directGrantId.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  baseUrl:
+                    type: string
+                  clientId:
+                    type: string
+                  description:
+                    type: string
+                  enabled:
+                    type: boolean
+                  extraConfig:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  fullScopeAllowed:
+                    type: boolean
+                  loginTheme:
+                    type: string
+                  name:
+                    type: string
+                  openIdConfig:
+                    description: OpenIDConfig contains the fields specific to OpenID
+                      clients.
+                    properties:
+                      accessTokenLifespan:
+                        type: string
+                      accessType:
+                        type: string
+                      adminUrl:
+                        type: string
+                      authorization:
+                        items:
+                          properties:
+                            allowRemoteResourceManagement:
+                              description: When true, resources can be managed remotely
+                                by the resource server. Defaults to false.
+                              type: boolean
+                            decisionStrategy:
+                              description: Dictates how the policies associated with
+                                a given permission are evaluated and how a final decision
+                                is obtained. Could be one of AFFIRMATIVE, CONSENSUS,
+                                or UNANIMOUS. Applies to permissions.
+                              type: string
+                            keepDefaults:
+                              description: When true, defaults set by Keycloak will
+                                be respected. Defaults to false.
+                              type: boolean
+                            policyEnforcementMode:
+                              description: Dictates how policies are enforced when
+                                evaluating authorization requests. Can be one of ENFORCING,
+                                PERMISSIVE, or DISABLED.
+                              type: string
+                          type: object
+                        type: array
+                      backchannelLogoutRevokeOfflineSessions:
+                        type: boolean
+                      backchannelLogoutSessionRequired:
+                        type: boolean
+                      backchannelLogoutUrl:
+                        type: string
+                      clientAuthenticatorType:
+                        type: string
+                      clientOfflineSessionIdleTimeout:
+                        type: string
+                      clientOfflineSessionMaxLifespan:
+                        type: string
+                      clientSecretSecretRef:
+                        description: A SecretKeySelector is a reference to a secret
+                          key in an arbitrary namespace.
+                        properties:
+                          key:
+                            description: The key to select.
+                            type: string
+                          name:
+                            description: Name of the secret.
+                            type: string
+                          namespace:
+                            description: Namespace of the secret.
+                            type: string
+                        required:
+                        - key
+                        - name
+                        - namespace
+                        type: object
+                      clientSessionIdleTimeout:
+                        type: string
+                      clientSessionMaxLifespan:
+                        type: string
+                      consentRequired:
+                        type: boolean
+                      consentScreenText:
+                        type: string
+                      directAccessGrantsEnabled:
+                        type: boolean
+                      displayOnConsentScreen:
+                        type: boolean
+                      excludeSessionStateFromAuthResponse:
+                        type: boolean
+                      frontchannelLogoutEnabled:
+                        type: boolean
+                      frontchannelLogoutUrl:
+                        type: string
+                      implicitFlowEnabled:
+                        type: boolean
+                      import:
+                        type: boolean
+                      oauth2DeviceAuthorizationGrantEnabled:
+                        type: boolean
+                      oauth2DeviceCodeLifespan:
+                        type: string
+                      oauth2DevicePollingInterval:
+                        type: string
+                      pkceCodeChallengeMethod:
+                        type: string
+                      rootUrl:
+                        type: string
+                      serviceAccountsEnabled:
+                        type: boolean
+                      standardFlowEnabled:
+                        type: boolean
+                      useRefreshTokens:
+                        type: boolean
+                      useRefreshTokensClientCredentials:
+                        type: boolean
+                      validPostLogoutRedirectUris:
+                        items:
+                          type: string
+                        type: array
+                      validRedirectUris:
+                        items:
+                          type: string
+                        type: array
+                      webOrigins:
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  realmId:
+                    description: The realm this client is attached to.
+                    type: string
+                  realmIdRef:
+                    description: Reference to a Realm in realm to populate realmId.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  realmIdSelector:
+                    description: Selector for a Realm in realm to populate realmId.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
+                  samlConfig:
+                    description: SamlConfig contains the fields specific to SAML clients.
+                    properties:
+                      assertionConsumerPostUrl:
+                        type: string
+                      assertionConsumerRedirectUrl:
+                        type: string
+                      canonicalizationMethod:
+                        type: string
+                      clientSignatureRequired:
+                        type: boolean
+                      encryptAssertions:
+                        type: boolean
+                      encryptionCertificate:
+                        type: string
+                      forceNameIdFormat:
+                        type: boolean
+                      forcePostBinding:
+                        type: boolean
+                      frontChannelLogout:
+                        type: boolean
+                      idpInitiatedSsoRelayState:
+                        type: string
+                      idpInitiatedSsoUrlName:
+                        type: string
+                      includeAuthnStatement:
+                        type: boolean
+                      logoutServicePostBindingUrl:
+                        type: string
+                      logoutServiceRedirectBindingUrl:
+                        type: string
+                      masterSamlProcessingUrl:
+                        type: string
+                      nameIdFormat:
+                        type: string
+                      rootUrl:
+                        type: string
+                      signAssertions:
+                        type: boolean
+                      signDocuments:
+                        type: boolean
+                      signatureAlgorithm:
+                        type: string
+                      signatureKeyName:
+                        type: string
+                      signingCertificate:
+                        type: string
+                      signingPrivateKey:
+                        type: string
+                      validRedirectUris:
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                required:
+                - clientId
                 type: object
               managementPolicies:
                 default:
@@ -249,10 +1112,439 @@ spec:
             description: A ClientStatus represents the observed state of a Client.
             properties:
               atProvider:
-                description: ClientObservation are the observable fields of a Client.
+                description: ClientObservation are the configurable fields of a Client.
                 properties:
-                  observableField:
+                  authenticationFlowBindingOverrides:
+                    items:
+                      properties:
+                        browserId:
+                          description: Browser flow id, (flow needs to exist)
+                          type: string
+                        browserIdRef:
+                          description: Reference to a Flow in authenticationflow to
+                            populate browserId.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        browserIdSelector:
+                          description: Selector for a Flow in authenticationflow to
+                            populate browserId.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                        directGrantId:
+                          description: Direct grant flow id (flow needs to exist)
+                          type: string
+                        directGrantIdRef:
+                          description: Reference to a Flow in authenticationflow to
+                            populate directGrantId.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        directGrantIdSelector:
+                          description: Selector for a Flow in authenticationflow to
+                            populate directGrantId.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  baseUrl:
                     type: string
+                  clientId:
+                    type: string
+                  description:
+                    type: string
+                  enabled:
+                    type: boolean
+                  extraConfig:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  fullScopeAllowed:
+                    type: boolean
+                  loginTheme:
+                    type: string
+                  name:
+                    type: string
+                  openIdConfig:
+                    description: OpenIDConfig contains the fields specific to OpenID
+                      clients.
+                    properties:
+                      accessTokenLifespan:
+                        type: string
+                      accessType:
+                        type: string
+                      adminUrl:
+                        type: string
+                      authorization:
+                        items:
+                          properties:
+                            allowRemoteResourceManagement:
+                              description: When true, resources can be managed remotely
+                                by the resource server. Defaults to false.
+                              type: boolean
+                            decisionStrategy:
+                              description: Dictates how the policies associated with
+                                a given permission are evaluated and how a final decision
+                                is obtained. Could be one of AFFIRMATIVE, CONSENSUS,
+                                or UNANIMOUS. Applies to permissions.
+                              type: string
+                            keepDefaults:
+                              description: When true, defaults set by Keycloak will
+                                be respected. Defaults to false.
+                              type: boolean
+                            policyEnforcementMode:
+                              description: Dictates how policies are enforced when
+                                evaluating authorization requests. Can be one of ENFORCING,
+                                PERMISSIVE, or DISABLED.
+                              type: string
+                          type: object
+                        type: array
+                      backchannelLogoutRevokeOfflineSessions:
+                        type: boolean
+                      backchannelLogoutSessionRequired:
+                        type: boolean
+                      backchannelLogoutUrl:
+                        type: string
+                      clientAuthenticatorType:
+                        type: string
+                      clientOfflineSessionIdleTimeout:
+                        type: string
+                      clientOfflineSessionMaxLifespan:
+                        type: string
+                      clientSecretSecretRef:
+                        description: A SecretKeySelector is a reference to a secret
+                          key in an arbitrary namespace.
+                        properties:
+                          key:
+                            description: The key to select.
+                            type: string
+                          name:
+                            description: Name of the secret.
+                            type: string
+                          namespace:
+                            description: Namespace of the secret.
+                            type: string
+                        required:
+                        - key
+                        - name
+                        - namespace
+                        type: object
+                      clientSessionIdleTimeout:
+                        type: string
+                      clientSessionMaxLifespan:
+                        type: string
+                      consentRequired:
+                        type: boolean
+                      consentScreenText:
+                        type: string
+                      directAccessGrantsEnabled:
+                        type: boolean
+                      displayOnConsentScreen:
+                        type: boolean
+                      excludeSessionStateFromAuthResponse:
+                        type: boolean
+                      frontchannelLogoutEnabled:
+                        type: boolean
+                      frontchannelLogoutUrl:
+                        type: string
+                      implicitFlowEnabled:
+                        type: boolean
+                      import:
+                        type: boolean
+                      oauth2DeviceAuthorizationGrantEnabled:
+                        type: boolean
+                      oauth2DeviceCodeLifespan:
+                        type: string
+                      oauth2DevicePollingInterval:
+                        type: string
+                      pkceCodeChallengeMethod:
+                        type: string
+                      rootUrl:
+                        type: string
+                      serviceAccountsEnabled:
+                        type: boolean
+                      standardFlowEnabled:
+                        type: boolean
+                      useRefreshTokens:
+                        type: boolean
+                      useRefreshTokensClientCredentials:
+                        type: boolean
+                      validPostLogoutRedirectUris:
+                        items:
+                          type: string
+                        type: array
+                      validRedirectUris:
+                        items:
+                          type: string
+                        type: array
+                      webOrigins:
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  realmId:
+                    description: The realm this client is attached to.
+                    type: string
+                  realmIdRef:
+                    description: Reference to a Realm in realm to populate realmId.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  realmIdSelector:
+                    description: Selector for a Realm in realm to populate realmId.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
+                  samlConfig:
+                    description: SamlConfig contains the fields specific to SAML clients.
+                    properties:
+                      assertionConsumerPostUrl:
+                        type: string
+                      assertionConsumerRedirectUrl:
+                        type: string
+                      canonicalizationMethod:
+                        type: string
+                      clientSignatureRequired:
+                        type: boolean
+                      encryptAssertions:
+                        type: boolean
+                      encryptionCertificate:
+                        type: string
+                      forceNameIdFormat:
+                        type: boolean
+                      forcePostBinding:
+                        type: boolean
+                      frontChannelLogout:
+                        type: boolean
+                      idpInitiatedSsoRelayState:
+                        type: string
+                      idpInitiatedSsoUrlName:
+                        type: string
+                      includeAuthnStatement:
+                        type: boolean
+                      logoutServicePostBindingUrl:
+                        type: string
+                      logoutServiceRedirectBindingUrl:
+                        type: string
+                      masterSamlProcessingUrl:
+                        type: string
+                      nameIdFormat:
+                        type: string
+                      rootUrl:
+                        type: string
+                      signAssertions:
+                        type: boolean
+                      signDocuments:
+                        type: boolean
+                      signatureAlgorithm:
+                        type: string
+                      signatureKeyName:
+                        type: string
+                      signingCertificate:
+                        type: string
+                      signingPrivateKey:
+                        type: string
+                      validRedirectUris:
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                required:
+                - clientId
                 type: object
               conditions:
                 description: Conditions of the resource.
