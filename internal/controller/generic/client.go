@@ -251,13 +251,27 @@ func (c *external) Observe(ctx context.Context, mg resource.Managed) (managed.Ex
 		}
 	*/
 
-	cr.Status.AtProvider.ClientID = *existing_client.Name
+	cr.Status.AtProvider.ClientID = *existing_client.ClientID
 	cr.Status.AtProvider.RealmID = cr.Spec.ForProvider.RealmID
-	cr.Status.AtProvider.AuthenticationFlowBindingOverrides = []v1alpha1Generic.AuthenticationFlowBindingOverridesParameters{
-		{
-			BrowserID:     existing_client.AuthenticationFlowBindingOverrides["browser_id"],
-			DirectGrantID: existing_client.AuthenticationFlowBindingOverrides["direct_grant_id"],
-		},
+	cr.Status.AtProvider.Name = existing_client.Name
+	cr.Status.AtProvider.Description = existing_client.Description
+	cr.Status.AtProvider.Enabled = existing_client.Enabled
+	cr.Status.AtProvider.LoginTheme = ""
+
+	authflow := *existing_client.AuthenticationFlowBindingOverrides
+	if authflow != nil {
+		// browser_id
+		browser_id := authflow["browser_id"]
+
+		// direct_grant_id
+		direct_grant_id := authflow["direct_grant_id"]
+		cr.Status.AtProvider.AuthenticationFlowBindingOverrides = []v1alpha1Generic.AuthenticationFlowBindingOverridesParameters{
+			{
+				BrowserID:     &browser_id,
+				DirectGrantID: &direct_grant_id,
+			},
+		}
+
 	}
 
 	cr.SetConditions(v1.Available())
