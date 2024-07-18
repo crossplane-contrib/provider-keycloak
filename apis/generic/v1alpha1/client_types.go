@@ -23,6 +23,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
+	"github.com/mrparkers/terraform-provider-keycloak/keycloak/types"
 )
 
 type AuthenticationFlowBindingOverridesInitParameters struct {
@@ -139,8 +140,33 @@ type AuthorizationParameters struct {
 	PolicyEnforcementMode *string `json:"policyEnforcementMode"`
 }
 
+type OpenidClientAttributes struct {
+	PkceCodeChallengeMethod               *string                           `json:"pkce.code.challenge.method"`
+	ExcludeSessionStateFromAuthResponse   *bool                             `json:"exclude.session.state.from.auth.response"`
+	AccessTokenLifespan                   *string                           `json:"access.token.lifespan"`
+	LoginTheme                            *string                           `json:"login_theme"`
+	ClientOfflineSessionIdleTimeout       *string                           `json:"client.offline.session.idle.timeout,omitempty"`
+	DisplayOnConsentScreen                *bool                             `json:"display.on.consent.screen"`
+	ConsentScreenText                     *string                           `json:"consent.screen.text"`
+	ClientOfflineSessionMaxLifespan       *string                           `json:"client.offline.session.max.lifespan,omitempty"`
+	ClientSessionIdleTimeout              *string                           `json:"client.session.idle.timeout,omitempty"`
+	ClientSessionMaxLifespan              *string                           `json:"client.session.max.lifespan,omitempty"`
+	UseRefreshTokens                      *bool                             `json:"use.refresh.tokens"`
+	UseRefreshTokensClientCredentials     *bool                             `json:"client_credentials.use_refresh_token"`
+	BackchannelLogoutUrl                  *string                           `json:"backchannel.logout.url"`
+	FrontchannelLogoutUrl                 *string                           `json:"frontchannel.logout.url"`
+	BackchannelLogoutRevokeOfflineTokens  *bool                             `json:"backchannel.logout.revoke.offline.tokens"`
+	BackchannelLogoutSessionRequired      *bool                             `json:"backchannel.logout.session.required"`
+	ExtraConfig                           *map[string]interface{}           `json:"-"`
+	Oauth2DeviceAuthorizationGrantEnabled *bool                             `json:"oauth2.device.authorization.grant.enabled"`
+	Oauth2DeviceCodeLifespan              *string                           `json:"oauth2.device.code.lifespan,omitempty"`
+	Oauth2DevicePollingInterval           *string                           `json:"oauth2.device.polling.interval,omitempty"`
+	PostLogoutRedirectUris                *types.KeycloakSliceHashDelimited `json:"post.logout.redirect.uris,omitempty"`
+}
+
 // OpenIDConfig contains the fields specific to OpenID clients.
 type OpenIDConfig struct {
+	Attributes                             *OpenidClientAttributes   `json:"attributes,omitempty"`
 	AccessTokenLifespan                    *string                   `json:"accessTokenLifespan,omitempty"`
 	AccessType                             *string                   `json:"accessType,omitempty"`
 	AdminURL                               *string                   `json:"adminUrl,omitempty"`
@@ -177,32 +203,59 @@ type OpenIDConfig struct {
 	WebOrigins                             []*string                 `json:"webOrigins,omitempty"`
 }
 
+type SamlClientAttributes struct {
+	IncludeAuthnStatement           *bool  `json:"saml.authnstatement"`
+	SignDocuments                   *bool  `json:"saml.server.signature"`
+	SignAssertions                  *bool  `json:"saml.assertion.signature"`
+	EncryptAssertions               *bool  `json:"saml.encrypt"`
+	ClientSignatureRequired         *bool  `json:"saml.client.signature"`
+	ForcePostBinding                *bool  `json:"saml.force.post.binding"`
+	ForceNameIdFormat               *bool  `json:"saml_force_name_id_format"`
+	SignatureAlgorithm              string `json:"saml.signature.algorithm"`
+	SignatureKeyName                string `json:"saml.server.signature.keyinfo.xmlSigKeyInfoKeyNameTransformer"`
+	CanonicalizationMethod          string `json:"saml_signature_canonicalization_method"`
+	NameIdFormat                    string `json:"saml_name_id_format"`
+	SigningCertificate              string `json:"saml.signing.certificate,omitempty"`
+	SigningPrivateKey               string `json:"saml.signing.private.key"`
+	EncryptionCertificate           string `json:"saml.encryption.certificate"`
+	IDPInitiatedSSOURLName          string `json:"saml_idp_initiated_sso_url_name"`
+	IDPInitiatedSSORelayState       string `json:"saml_idp_initiated_sso_relay_state"`
+	AssertionConsumerPostURL        string `json:"saml_assertion_consumer_url_post"`
+	AssertionConsumerRedirectURL    string `json:"saml_assertion_consumer_url_redirect"`
+	LogoutServicePostBindingURL     string `json:"saml_single_logout_service_url_post"`
+	LogoutServiceRedirectBindingURL string `json:"saml_single_logout_service_url_redirect"`
+	LoginTheme                      string `json:"login_theme"`
+
+	ExtraConfig map[string]interface{} `json:"-"`
+}
+
 // SamlConfig contains the fields specific to SAML clients.
 type SamlConfig struct {
-	AssertionConsumerPostURL        *string   `json:"assertionConsumerPostUrl,omitempty"`
-	AssertionConsumerRedirectURL    *string   `json:"assertionConsumerRedirectUrl,omitempty"`
-	CanonicalizationMethod          *string   `json:"canonicalizationMethod,omitempty"`
-	ClientSignatureRequired         *bool     `json:"clientSignatureRequired,omitempty"`
-	EncryptAssertions               *bool     `json:"encryptAssertions,omitempty"`
-	EncryptionCertificate           *string   `json:"encryptionCertificate,omitempty"`
-	ForceNameIDFormat               *bool     `json:"forceNameIdFormat,omitempty"`
-	ForcePostBinding                *bool     `json:"forcePostBinding,omitempty"`
-	FrontChannelLogout              *bool     `json:"frontChannelLogout,omitempty"`
-	IdpInitiatedSsoRelayState       *string   `json:"idpInitiatedSsoRelayState,omitempty"`
-	IdpInitiatedSsoURLName          *string   `json:"idpInitiatedSsoUrlName,omitempty"`
-	IncludeAuthnStatement           *bool     `json:"includeAuthnStatement,omitempty"`
-	LogoutServicePostBindingURL     *string   `json:"logoutServicePostBindingUrl,omitempty"`
-	LogoutServiceRedirectBindingURL *string   `json:"logoutServiceRedirectBindingUrl,omitempty"`
-	MasterSAMLProcessingURL         *string   `json:"masterSamlProcessingUrl,omitempty"`
-	NameIDFormat                    *string   `json:"nameIdFormat,omitempty"`
-	RootURL                         *string   `json:"rootUrl,omitempty"`
-	SignAssertions                  *bool     `json:"signAssertions,omitempty"`
-	SignDocuments                   *bool     `json:"signDocuments,omitempty"`
-	SignatureAlgorithm              *string   `json:"signatureAlgorithm,omitempty"`
-	SignatureKeyName                *string   `json:"signatureKeyName,omitempty"`
-	SigningCertificate              *string   `json:"signingCertificate,omitempty"`
-	SigningPrivateKey               *string   `json:"signingPrivateKey,omitempty"`
-	ValidRedirectUris               []*string `json:"validRedirectUris,omitempty"`
+	Attributes                      *SamlClientAttributes `json:"attributes,omitempty"`
+	AssertionConsumerPostURL        *string               `json:"assertionConsumerPostUrl,omitempty"`
+	AssertionConsumerRedirectURL    *string               `json:"assertionConsumerRedirectUrl,omitempty"`
+	CanonicalizationMethod          *string               `json:"canonicalizationMethod,omitempty"`
+	ClientSignatureRequired         *bool                 `json:"clientSignatureRequired,omitempty"`
+	EncryptAssertions               *bool                 `json:"encryptAssertions,omitempty"`
+	EncryptionCertificate           *string               `json:"encryptionCertificate,omitempty"`
+	ForceNameIDFormat               *bool                 `json:"forceNameIdFormat,omitempty"`
+	ForcePostBinding                *bool                 `json:"forcePostBinding,omitempty"`
+	FrontChannelLogout              *bool                 `json:"frontChannelLogout,omitempty"`
+	IdpInitiatedSsoRelayState       *string               `json:"idpInitiatedSsoRelayState,omitempty"`
+	IdpInitiatedSsoURLName          *string               `json:"idpInitiatedSsoUrlName,omitempty"`
+	IncludeAuthnStatement           *bool                 `json:"includeAuthnStatement,omitempty"`
+	LogoutServicePostBindingURL     *string               `json:"logoutServicePostBindingUrl,omitempty"`
+	LogoutServiceRedirectBindingURL *string               `json:"logoutServiceRedirectBindingUrl,omitempty"`
+	MasterSAMLProcessingURL         *string               `json:"masterSamlProcessingUrl,omitempty"`
+	NameIDFormat                    *string               `json:"nameIdFormat,omitempty"`
+	RootURL                         *string               `json:"rootUrl,omitempty"`
+	SignAssertions                  *bool                 `json:"signAssertions,omitempty"`
+	SignDocuments                   *bool                 `json:"signDocuments,omitempty"`
+	SignatureAlgorithm              *string               `json:"signatureAlgorithm,omitempty"`
+	SignatureKeyName                *string               `json:"signatureKeyName,omitempty"`
+	SigningCertificate              *string               `json:"signingCertificate,omitempty"`
+	SigningPrivateKey               *string               `json:"signingPrivateKey,omitempty"`
+	ValidRedirectUris               []*string             `json:"validRedirectUris,omitempty"`
 }
 
 // ClientInitParameters are the configurable fields of a Client.
