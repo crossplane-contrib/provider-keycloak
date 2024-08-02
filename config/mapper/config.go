@@ -16,6 +16,8 @@ func Configure(p *config.Provider) {
 		r.References["role_id"] = config.Reference{
 			TerraformName: "keycloak_role",
 		}
-
+		r.References["client_scope_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client_scope",
+		}
 	})
 }

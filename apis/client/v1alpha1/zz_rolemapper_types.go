@@ -31,7 +31,16 @@ type RoleMapperInitParameters struct {
 
 	// The ID of the client scope this role mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
 	// The destination client scope of the role. Cannot be used at the same time as client_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.ClientScope
 	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
+
+	// Reference to a ClientScope in openidclient to populate clientScopeId.
+	// +kubebuilder:validation:Optional
+	ClientScopeIDRef *v1.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClientScope in openidclient to populate clientScopeId.
+	// +kubebuilder:validation:Optional
+	ClientScopeIDSelector *v1.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// The realm this role mapper exists within.
 	// The realm id where the associated client or client scope exists.
@@ -100,8 +109,17 @@ type RoleMapperParameters struct {
 
 	// The ID of the client scope this role mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
 	// The destination client scope of the role. Cannot be used at the same time as client_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.ClientScope
 	// +kubebuilder:validation:Optional
 	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
+
+	// Reference to a ClientScope in openidclient to populate clientScopeId.
+	// +kubebuilder:validation:Optional
+	ClientScopeIDRef *v1.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClientScope in openidclient to populate clientScopeId.
+	// +kubebuilder:validation:Optional
+	ClientScopeIDSelector *v1.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// The realm this role mapper exists within.
 	// The realm id where the associated client or client scope exists.
