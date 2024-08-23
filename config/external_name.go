@@ -41,6 +41,8 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_saml_client_default_scopes":               config.IdentifierFromProvider,
 	"keycloak_saml_client_scope":                        config.IdentifierFromProvider,
 	"keycloak_realm_keystore_rsa":                       config.IdentifierFromProvider,
+	"keycloak_realm_user_profile":                       config.IdentifierFromProvider,
+	"keycloak_realm_events":                             config.IdentifierFromProvider,
 	"keycloak_authentication_flow":                      config.IdentifierFromProvider,
 	"keycloak_authentication_subflow":                   config.IdentifierFromProvider,
 	"keycloak_authentication_execution":                 config.IdentifierFromProvider,

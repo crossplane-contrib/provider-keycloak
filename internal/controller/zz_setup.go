@@ -49,7 +49,9 @@ import (
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/providerconfig"
 	keystorersa "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/keystorersa"
 	realm "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/realm"
+	realmevents "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/realmevents"
 	requiredaction "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/requiredaction"
+	userprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/userprofile"
 	role "github.com/crossplane-contrib/provider-keycloak/internal/controller/role/role"
 	identityprovidersaml "github.com/crossplane-contrib/provider-keycloak/internal/controller/saml/identityprovider"
 	clientsamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/samlclient/client"
@@ -105,7 +107,9 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		providerconfig.Setup,
 		keystorersa.Setup,
 		realm.Setup,
+		realmevents.Setup,
 		requiredaction.Setup,
+		userprofile.Setup,
 		role.Setup,
 		identityprovidersaml.Setup,
 		clientsamlclient.Setup,

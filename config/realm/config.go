@@ -1,6 +1,8 @@
 package realm
 
-import "github.com/crossplane/upjet/pkg/config"
+import (
+	"github.com/crossplane/upjet/pkg/config"
+)
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
@@ -25,5 +27,14 @@ func Configure(p *config.Provider) {
 		if s, ok := r.TerraformResource.Schema["certificate"]; ok {
 			s.Sensitive = true
 		}
+	})
+
+	p.AddResourceConfigurator("keycloak_realm_user_profile", func(r *config.Resource) {
+		r.ShortGroup = "realm"
+	})
+
+	p.AddResourceConfigurator("keycloak_realm_events", func(r *config.Resource) {
+		r.ShortGroup = "realm"
+		r.Kind = "RealmEvents"
 	})
 }
