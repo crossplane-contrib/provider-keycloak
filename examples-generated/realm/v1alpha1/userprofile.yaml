@@ -1,0 +1,69 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: UserProfile
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/userprofile
+  labels:
+    testing.upbound.io/example-name: userprofile
+  name: userprofile
+spec:
+  forProvider:
+    attribute:
+    - annotations:
+        foo: bar
+      displayName: Field 1
+      enabledWhenScope:
+      - offline_access
+      group: group1
+      name: field1
+      permissions:
+      - edit:
+        - admin
+        - user
+        view:
+        - admin
+        - user
+      requiredForRoles:
+      - user
+      requiredForScopes:
+      - offline_access
+      validator:
+      - name: person-name-prohibited-characters
+      - config:
+          error-message: Nope
+          pattern: ^[a-z]+$
+        name: pattern
+    - annotations:
+        foo: '${jsonencode ( {"key": "val" } )}'
+      name: field2
+      validator:
+      - config:
+          options: ${jsonencode ( [ "opt1" ])}
+        name: options
+    group:
+    - annotations:
+        foo: bar
+        foo2: '${jsonencode ( { "key": "val" } )}'
+      displayDescription: A first group
+      displayHeader: Group 1
+      name: group1
+    - name: group2
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: my_realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/userprofile
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    attributes:
+      userProfileEnabled: true
+    realm: my-realm

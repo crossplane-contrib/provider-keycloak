@@ -1,0 +1,56 @@
+# Example 1: Keep only email and username and add new field field2
+# Generated example does not work because it would remove email and username
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: UserProfile
+metadata:
+  name: basic-userprofile
+spec:
+  forProvider:
+    attribute:
+      - annotations:
+          foo: '${jsonencode ( {"key": "val" } )}'
+        name: field2
+        validator:
+          - config:
+              options: ${jsonencode ( [ "opt1" ])}
+            name: options
+      - name: email
+        displayName: "${email}"
+        permissions:
+          - edit:
+              - admin
+              - user
+          - view:
+              - admin
+              - user
+        validator:
+          - name: length
+            config:
+              max: "255"
+          - name: email
+        requiredForRoles:
+          - "user"
+      - name: username
+        displayName: "${username}"
+        permissions:
+          - edit:
+              - admin
+              - user
+          - view:
+              - admin
+              - user
+        validator:
+          - name: length
+            config:
+              max: "255"
+              min: "3"
+          - name: up-username-not-idn-homograph
+          - name: username-prohibited-characters
+    group:
+      - name: "user-metadata"
+        displayHeader: "User metadata"
+        displayDescription: "Attributes, which refer to user metadata"
+    realmId: my-realm  # Replace with your realm ID
+  providerConfigRef:
+    name: "keycloak-provider-config"
+

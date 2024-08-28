@@ -16,6 +16,15 @@ func (l *KeystoreRsaList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this RealmEventsList.
+func (l *RealmEventsList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this RealmList.
 func (l *RealmList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -27,6 +36,15 @@ func (l *RealmList) GetItems() []resource.Managed {
 
 // GetItems of this RequiredActionList.
 func (l *RequiredActionList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this UserProfileList.
+func (l *UserProfileList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]
