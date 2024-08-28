@@ -1,0 +1,37 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: RealmEvents
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/realmevents
+  labels:
+    testing.upbound.io/example-name: realm_events
+  name: realm-events
+spec:
+  forProvider:
+    adminEventsDetailsEnabled: true
+    adminEventsEnabled: true
+    enabledEventTypes:
+    - LOGIN
+    - LOGOUT
+    eventsEnabled: true
+    eventsExpiration: 3600
+    eventsListeners:
+    - jboss-logging
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/realmevents
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

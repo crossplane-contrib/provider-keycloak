@@ -123,7 +123,7 @@ You can explore the available custom resources:
 
 ### Functions and Compositions: 
 
-- [function-keycloak-builtin-objects](https://gitlab.com/corewire/images/crossplane/function-keycloak-builtin-objects) - The function is used to import the builtin objects of a keycloak, e.g. clients and roles. Everything you need to know is in the README of the repository. 
+- [function-keycloak-builtin-objects](https://gitlab.com/corewire/images/crossplane/function-keycloak-builtin-objects) - The function is used to import the builtin objects of a keycloak, e.g. clients and roles. Since v3.0 it also offers the possibility to adapt some default config. Everything you need to know is in the README of the repository.  
 
 
 
