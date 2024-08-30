@@ -37,7 +37,17 @@ type ClientGroupPolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDRef *v1.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 }
 
 type ClientGroupPolicyObservation struct {
@@ -92,8 +102,18 @@ type ClientGroupPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDRef *v1.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 }
 
 type GroupsInitParameters struct {
@@ -163,7 +183,6 @@ type ClientGroupPolicy struct {
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.decisionStrategy) || (has(self.initProvider) && has(self.initProvider.decisionStrategy))",message="spec.forProvider.decisionStrategy is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.groups) || (has(self.initProvider) && has(self.initProvider.groups))",message="spec.forProvider.groups is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.resourceServerId) || (has(self.initProvider) && has(self.initProvider.resourceServerId))",message="spec.forProvider.resourceServerId is a required parameter"
 	Spec   ClientGroupPolicySpec   `json:"spec"`
 	Status ClientGroupPolicyStatus `json:"status,omitempty"`
 }

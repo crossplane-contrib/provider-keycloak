@@ -44,7 +44,17 @@ type ClientClientPolicyInitParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server this client policy is attached to.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDRef *v1.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 }
 
 type ClientClientPolicyObservation struct {
@@ -111,8 +121,18 @@ type ClientClientPolicyParameters struct {
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server this client policy is attached to.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDRef *v1.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate resourceServerId.
+	// +kubebuilder:validation:Optional
+	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 }
 
 // ClientClientPolicySpec defines the desired state of ClientClientPolicy
@@ -153,7 +173,6 @@ type ClientClientPolicy struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clients) || (has(self.initProvider) && has(self.initProvider.clients))",message="spec.forProvider.clients is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.resourceServerId) || (has(self.initProvider) && has(self.initProvider.resourceServerId))",message="spec.forProvider.resourceServerId is a required parameter"
 	Spec   ClientClientPolicySpec   `json:"spec"`
 	Status ClientClientPolicyStatus `json:"status,omitempty"`
 }

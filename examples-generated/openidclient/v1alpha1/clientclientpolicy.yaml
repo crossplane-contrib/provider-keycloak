@@ -16,7 +16,9 @@ spec:
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
-    resourceServerId: ${data.keycloak_openid_client.realm_management.id}
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: keycloak_openid_client
 
 ---
 
