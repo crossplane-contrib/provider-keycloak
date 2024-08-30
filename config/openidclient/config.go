@@ -67,18 +67,55 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_openid_client_client_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
+
+		if s, ok := r.TerraformResource.Schema["decisionStrategy"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+
+		if s, ok := r.TerraformResource.Schema["logic"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_group_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
+		if s, ok := r.TerraformResource.Schema["decisionStrategy"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+
+		if s, ok := r.TerraformResource.Schema["logic"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_role_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
+		if s, ok := r.TerraformResource.Schema["decisionStrategy"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+
+		if s, ok := r.TerraformResource.Schema["logic"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_user_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
+		if s, ok := r.TerraformResource.Schema["decisionStrategy"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+
+		if s, ok := r.TerraformResource.Schema["logic"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_permissions", func(r *config.Resource) {
