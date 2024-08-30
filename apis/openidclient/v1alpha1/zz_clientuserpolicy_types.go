@@ -149,6 +149,7 @@ type ClientUserPolicy struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.decisionStrategy) || (has(self.initProvider) && has(self.initProvider.decisionStrategy))",message="spec.forProvider.decisionStrategy is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.logic) || (has(self.initProvider) && has(self.initProvider.logic))",message="spec.forProvider.logic is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.users) || (has(self.initProvider) && has(self.initProvider.users))",message="spec.forProvider.users is a required parameter"
 	Spec   ClientUserPolicySpec   `json:"spec"`

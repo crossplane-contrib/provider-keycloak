@@ -618,6 +618,10 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.clients)
                 || (has(self.initProvider) && has(self.initProvider.clients))'
+            - message: spec.forProvider.logic is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.logic)
+                || (has(self.initProvider) && has(self.initProvider.logic))'
             - message: spec.forProvider.name is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
