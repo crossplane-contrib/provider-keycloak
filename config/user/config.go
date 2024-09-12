@@ -6,6 +6,12 @@ import "github.com/crossplane/upjet/pkg/config"
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_user", func(r *config.Resource) {
 		r.ShortGroup = "user"
+
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{"required_actions", "initial_password.value", "initial_password.value", "initial_password.temporary"},
+		}
+
+
 	})
 
 	p.AddResourceConfigurator("keycloak_user_groups", func(r *config.Resource) {
