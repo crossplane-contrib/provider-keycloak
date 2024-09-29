@@ -22,7 +22,7 @@ metadata:
   name: provider-keycloak
   namespace: crossplane-system
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.0.0
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.5.0
 ``` 
 
 This will install the provider in the `crossplane-system` namespace and install CRDs and controllers for the provider.
@@ -61,7 +61,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.0.0
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.5.0
 + runtimeConfigRef:
 +   name: enable-ess
 ```
