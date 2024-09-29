@@ -11,7 +11,6 @@ func Configure(p *config.Provider) {
 			IgnoredFields: []string{"required_actions", "initial_password.value", "initial_password.value", "initial_password.temporary"},
 		}
 
-
 	})
 
 	p.AddResourceConfigurator("keycloak_user_groups", func(r *config.Resource) {
