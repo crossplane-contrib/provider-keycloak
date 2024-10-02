@@ -84,7 +84,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   groupIdsRefs:
-                    description: References to  to populate groupIds.
+                    description: References to Group in group to populate groupIds.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -121,7 +121,8 @@ spec:
                       type: object
                     type: array
                   groupIdsSelector:
-                    description: Selector for a list of  to populate groupIds.
+                    description: Selector for a list of Group in group to populate
+                      groupIds.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -341,7 +342,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   groupIdsRefs:
-                    description: References to  to populate groupIds.
+                    description: References to Group in group to populate groupIds.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -378,7 +379,8 @@ spec:
                       type: object
                     type: array
                   groupIdsSelector:
-                    description: Selector for a list of  to populate groupIds.
+                    description: Selector for a list of Group in group to populate
+                      groupIds.
                     properties:
                       matchControllerRef:
                         description: |-
