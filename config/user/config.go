@@ -20,7 +20,9 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_user",
 		}
 
-		r.References["group_ids"] = config.Reference{}
+		r.References["group_ids"] = config.Reference{
+			TerraformName: "keycloak_group",
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_user_roles", func(r *config.Resource) {
