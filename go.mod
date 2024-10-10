@@ -3,19 +3,19 @@ module github.com/crossplane-contrib/provider-keycloak
 go 1.21
 
 require (
-	dario.cat/mergo v1.0.0
+	dario.cat/mergo v1.0.1
 	github.com/alecthomas/kingpin/v2 v2.4.0
-	github.com/crossplane/crossplane-runtime v1.16.0
-	github.com/crossplane/crossplane-tools v0.0.0-20230925130601-628280f8bf79
-	github.com/crossplane/upjet v1.4.0
-	github.com/hashicorp/terraform-json v0.17.1
-	github.com/hashicorp/terraform-plugin-sdk/v2 v2.30.0
-	github.com/mrparkers/terraform-provider-keycloak v0.0.0-20240108222732-3f6b75b79ada
+	github.com/crossplane/crossplane-runtime v1.17.0
+	github.com/crossplane/crossplane-tools 1ad3d4c87f21
+	github.com/crossplane/upjet v1.4.1
+	github.com/hashicorp/terraform-json v0.22.1
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.34.0
+	github.com/mrparkers/terraform-provider-keycloak d65c3b87b47f
 	github.com/pkg/errors v0.9.1
-	k8s.io/apimachinery v0.29.3
-	k8s.io/client-go v0.29.3
-	sigs.k8s.io/controller-runtime v0.17.3
-	sigs.k8s.io/controller-tools v0.14.0
+	k8s.io/apimachinery v0.31.1
+	k8s.io/client-go v0.31.1
+	sigs.k8s.io/controller-runtime v0.19.0
+	sigs.k8s.io/controller-tools v0.16.4
 
 )
 
