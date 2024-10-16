@@ -111,6 +111,26 @@ stringData:
 
 The secret `keycloak-credentials` contains the keycloak API server URL, credentials, and other configuration details that are required to connect to the keycloak API server. **It supports the same fields as the [terraform provider configuration](https://registry.terraform.io/providers/mrparkers/keycloak/latest/docs#argument-reference)**
 
+As an alternative to using the embedded JSON format shown above, you can also place settings in a plain Kubernetes secret like this:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-credentials
+  namespace: crossplane-system
+  labels:
+    type: provider-credentials
+type: Opaque
+stringData:
+  client_id: "admin-cli"
+  username: "admin"
+  password: "admin"
+  url: "https://keycloak.example.com"
+  base_path: "/auth"
+  realm: "master"
+```
+
 
 ### Custom Resource Definitions
 
