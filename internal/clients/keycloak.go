@@ -107,6 +107,7 @@ func TerraformSetupBuilder() terraform.SetupFn { // nolint: gocyclo
 	}
 }
 
+// Function to setup provider that uses terraform SDK
 func configureNoForkKeycloakClient(ctx context.Context, ps *terraform.Setup) error {
 
 	cb := keycloakProvider.KeycloakProvider(nil)
@@ -120,6 +121,7 @@ func configureNoForkKeycloakClient(ctx context.Context, ps *terraform.Setup) err
 	return nil
 }
 
+// Function that extracts credentials from the secret provided to providerconfig 
 func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, client client.Client, selector xpv1.CommonCredentialSelectors) (map[string]string, error) {
 	creds := make(map[string]string)
 
