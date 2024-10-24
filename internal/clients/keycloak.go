@@ -113,7 +113,7 @@ func configureNoForkKeycloakClient(ctx context.Context, ps *terraform.Setup) err
 
 	diags := cb.Configure(ctx, terraformSDK.NewResourceConfigRaw(ps.Configuration))
 	if diags.HasError() {
-		return fmt.Errorf("failed to configure the Grafana provider: %v", diags)
+		return fmt.Errorf("failed to configure the Keycloak provider: %v", diags)
 	}
 
 	ps.Meta = cb.Meta()
