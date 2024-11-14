@@ -1,6 +1,6 @@
 module github.com/crossplane-contrib/provider-keycloak
 
-go 1.21
+go 1.22
 
 require (
 	dario.cat/mergo v1.0.0
