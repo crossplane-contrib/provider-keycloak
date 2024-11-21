@@ -39,6 +39,7 @@ import (
 	clientclientpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientclientpolicy"
 	clientdefaultscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientdefaultscopes"
 	clientgrouppolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientgrouppolicy"
+	clientoptionalscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientoptionalscopes"
 	clientpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientpermissions"
 	clientrolepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientrolepolicy"
 	clientscope "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientscope"
@@ -97,6 +98,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientclientpolicy.Setup,
 		clientdefaultscopes.Setup,
 		clientgrouppolicy.Setup,
+		clientoptionalscopes.Setup,
 		clientpermissions.Setup,
 		clientrolepolicy.Setup,
 		clientscope.Setup,

@@ -22,6 +22,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_openid_client_role_policy":                config.IdentifierFromProvider,
 	"keycloak_openid_client_user_policy":                config.IdentifierFromProvider,
 	"keycloak_openid_client_default_scopes":             config.IdentifierFromProvider,
+	"keycloak_openid_client_optional_scopes":            config.IdentifierFromProvider,
 	"keycloak_openid_client_scope":                      config.IdentifierFromProvider,
 	"keycloak_openid_client":                            config.IdentifierFromProvider,
 	"keycloak_openid_group_membership_protocol_mapper":  config.IdentifierFromProvider,
