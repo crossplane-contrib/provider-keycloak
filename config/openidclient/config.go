@@ -30,6 +30,11 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 	})
 
+	p.AddResourceConfigurator("keycloak_openid_client_optional_scopes", func(r *config.Resource) {
+		// We need to override the default group that upjet generated for
+		r.ShortGroup = Group
+	})
+
 	p.AddResourceConfigurator("keycloak_openid_client_scope", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = Group

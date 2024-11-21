@@ -19,6 +19,9 @@ func (tr *ClientDefaultScopes) Hub() {}
 func (tr *ClientGroupPolicy) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *ClientOptionalScopes) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *ClientPermissions) Hub() {}
 
 // Hub marks this type as a conversion hub.
