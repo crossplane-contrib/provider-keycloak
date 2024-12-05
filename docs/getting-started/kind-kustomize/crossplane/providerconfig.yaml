@@ -6,11 +6,14 @@ metadata:
   labels:
     type: provider-credentials
 type: Opaque
-stringData:
-  client_id: "crossplane"
-  client_secret: "xppw_OJKzQjuBoyPlIEePgiWg"
-  url: "http://keycloak.keycloak.svc.cluster.local"
-  realm: "master"
+stringData: # these have to be in a credentials json when used with the xrd XBuiltinObjects
+  credentials: |
+    {
+      "client_id": "crossplane",
+      "client_secret": "xppw_OJKzQjuBoyPlIEePgiWg",
+      "url": "http://keycloak.keycloak.svc.cluster.local",
+      "realm": "master"
+    }
 ---
 apiVersion: keycloak.crossplane.io/v1beta1
 kind: ProviderConfig

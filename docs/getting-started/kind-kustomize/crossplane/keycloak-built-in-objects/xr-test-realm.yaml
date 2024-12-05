@@ -1,0 +1,20 @@
+---
+# Example for a custom realm (custom realms have different builtin clients/roles than the master realm)
+apiVersion: keycloak.crossplane.io/v1alpha1
+kind: XBuiltinObjects
+metadata:
+  name: keycloak-builtin-objects-dev
+spec:
+  providerConfigName: keycloak-config
+  providerSecretName: keycloak-credentials
+  realm: test-realm
+  builtinClients: 
+    - account
+    - account-console
+    - admin-cli
+    - broker
+    - realm-management
+    - security-admin-console
+  builtinRealmRoles:
+    - offline_access
+    - uma_authorization

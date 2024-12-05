@@ -9,7 +9,7 @@ This is an express installation of keycloak on new kind cluster.
 ctlptl apply -f kind-kustomize/cluster/cluster.yaml
 
 kubectl apply -f kind-kustomize/keycloak/keycloak.yaml
-
+kubectl wait --for=condition=Available deployment kc -n keycloak --timeout=180s
 kubectl port-forward -n keycloak svc/keycloak 8080:80
 ```
 
@@ -36,10 +36,6 @@ Switched to context "kind-provider-keycloak-cluster".
  👐 Push images to the cluster like 'docker push localhost:52145/alpine'
 cluster.ctlptl.dev/kind-provider-keycloak-cluster created
 
-> kubectl config get-contexts
-CURRENT   NAME                             CLUSTER                          AUTHINFO                         NAMESPACE
-*         kind-provider-keycloak-cluster   kind-provider-keycloak-cluster   kind-provider-keycloak-cluster
-
 ```
 
 ```
@@ -52,6 +48,9 @@ deployment.apps/kc created
 ```
 
 ```
+> kubectl wait --for=condition=Available deployment kc -n keycloak --timeout=180s
+deployment.apps/kc condition met
+
 > kubectl port-forward -n keycloak svc/keycloak 8080:80
 Forwarding from 127.0.0.1:8080 -> 8080
 Forwarding from [::1]:8080 -> 8080
@@ -60,7 +59,7 @@ Handling connection for 8080
 
 When surfing into the keycloak UI at http://localhost:8080 you can logon as admin/admin. You are then prompted to replace the temporary admin account with a permanent one. For the purpose of demonstrating or getting started with this crossplane provider you can skip this step. Make sure the new user can log on and has the correct access (typically the admin role) before deleting the temporary user.
 
-![An orange banner at the top urging the temporary user to be replaced](replace-user-banner.png)
+![An orange banner at the top urging the temporary user to be replaced](assets/replace-user-banner.png)
 
 Refer to the keycloak documentation on how to best harden security for your setup of keycloak and consider using an external database. https://www.keycloak.org/docs/latest/server_admin/#proc-creating-user_server_administration_guide
 
@@ -100,6 +99,7 @@ The settings for the client will also make it appear as a service-account user i
 kubectl apply -f ./kind-kustomize/crossplane/provider.yaml
 
 # awaits the creation of the custom resource defintions, before creating the keycloak provider configuration
+# todo: Error from server (NotFound): customresourcedefinitions.apiextensions.k8s.io "providerconfigs.keycloak.crossplane.io" not found
 kubectl wait --for=condition=established crd providerconfigs.keycloak.crossplane.io --timeout=30s
 kubectl apply -f ./kind-kustomize/crossplane/providerconfig.yaml
 ```
@@ -109,3 +109,31 @@ Finally we can try out using our keycloak crossplane provider, here is an exampl
 ``` sh
 kubectl apply -f ./kind-kustomize/test-realm/realm.yaml
 ```
+
+If we want to observe the new realm to be able to use data generated inside it we can leverage existing functions for the provider.
+
+```
+kubectl apply -f ./kind-kustomize/crossplane/keycloak-built-in-objects/xrd.yaml
+kubectl apply -f ./kind-kustomize/crossplane/keycloak-built-in-objects/composition.yaml
+kubectl apply -f ./kind-kustomize/crossplane/keycloak-built-in-objects/functions.yaml
+# written specifically for the test-realm
+kubectl apply -f ./kind-kustomize/crossplane/keycloak-built-in-objects/xr-test-realm.yaml
+```
+
+Once synced the observable default items will all be available through kube-api.
+
+``` sh
+kubectl get roles.role.keycloak.crossplane.io
+```
+
+This will then allow us to reference them in crossplane like in the example below that creates a user in the new role and assigns them the administrative role. The format is `builtin-<realm-name>-<client-name>-<client-role-name>`. Thus for role *realm-admin* in the realm *test-realm* which is a client role for the client *realm-management* the name would be `builtin-test-realm-realm-management-realm-admin` :)
+
+``` sh
+kubectl apply -f ./kind-kustomize/test-realm/admin-user.yaml
+```
+
+Once this has synched, you can surf to the security admin console of the test-realm, sign in with testadmin/testadmin and you will be prompted to update your temporary password for the user testadmin.
+
+http://localhost:8080/admin/test-realm/console/
+
+![update-temporary-password](assets/update-temporary-password.png)
