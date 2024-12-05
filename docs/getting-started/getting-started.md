@@ -67,7 +67,9 @@ Refer to the keycloak documentation on how to best harden security for your setu
 
 ## Installing crossplane
 
-This is described in better detail on the crossplane main repository, and on their webpage: https://docs.crossplane.io/latest/software/install/
+The procedure to install crossplane is described in better detail on the crossplane main repository, and on their webpage: https://docs.crossplane.io/latest/software/install/
+
+Here is a minimal example to get up and running with everything you need.
 
 ``` sh
 helm repo add crossplane-stable https://charts.crossplane.io/stable
@@ -76,7 +78,7 @@ helm install crossplane --namespace crossplane-system --create-namespace crosspl
 
 ``` 
 
-This will bootstrap a working crossplane client in the master realm with the admin role. You should consider learning to set up a similar client through the UI or through the API in a manner which fits your security practices.
+The following step will bootstrap a working client in the master realm with the admin role that crossplane will use in a future step. You should consider learning to set up a similar client through the UI or through the API in a manner which fits your security practices.
 
 ``` sh
 # creates a config map with the script to run
@@ -87,8 +89,23 @@ kubectl apply -f kind-kustomize/crossplane/create-client.yaml
 
 ```
 
-This will create the keycloak-provider and configure it to use a client withing the master realm to perform actions there.
+We can now create the keycloak crossplane provider and configure it to use the client withing the master realm to perform actions there.
 
 The settings for the client will also make it appear as a service-account user in the realm.
 
 ![Displays the crossplane service-account user](assets/service-account-crossplane.png)
+
+``` sh
+# deploys the keycloak provider
+kubectl apply -f ./kind-kustomize/crossplane/provider.yaml
+
+# awaits the creation of the custom resource defintions, before creating the keycloak provider configuration
+kubectl wait --for=condition=established crd providerconfigs.keycloak.crossplane.io --timeout=30s
+kubectl apply -f ./kind-kustomize/crossplane/providerconfig.yaml
+```
+
+Finally we can try out using our keycloak crossplane provider, here is an example of creating a new realm.
+
+``` sh
+kubectl apply -f ./kind-kustomize/test-realm/realm.yaml
+```
