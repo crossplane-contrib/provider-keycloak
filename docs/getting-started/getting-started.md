@@ -1,5 +1,12 @@
+# Getting started
 
-prereqs: ctlptl, kind, kubectl
+This guide will let you set up everything to try out crossplane-contrib/provider-keycloak on a fresh kind cluster.
+
+## Prerequisites
+
+[ctlptl](https://github.com/tilt-dev/ctlptl), [kind](https://kind.sigs.k8s.io/), [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl), [helm](https://helm.sh/docs/intro/install/)
+
+This example is written with linux in mind, but it will work on Windows with PowerShell 7 as well.
 
 ## Keycloak up and running
 
@@ -97,9 +104,7 @@ The settings for the client will also make it appear as a service-account user i
 ``` sh
 # deploys the keycloak provider
 kubectl apply -f ./kind-kustomize/crossplane/provider.yaml
-
-# awaits the creation of the custom resource defintions, before creating the keycloak provider configuration
-# todo: Error from server (NotFound): customresourcedefinitions.apiextensions.k8s.io "providerconfigs.keycloak.crossplane.io" not found
+sleep 3
 kubectl wait --for=condition=established crd providerconfigs.keycloak.crossplane.io --timeout=30s
 kubectl apply -f ./kind-kustomize/crossplane/providerconfig.yaml
 ```
@@ -137,3 +142,11 @@ Once this has synched, you can surf to the security admin console of the test-re
 http://localhost:8080/admin/test-realm/console/
 
 ![update-temporary-password](assets/update-temporary-password.png)
+
+## clean up
+
+To delete the cluster you created with ctlptl, run the following.
+
+``` sh
+ctlptl delete -f kind-kustomize/cluster/cluster.yaml
+```
