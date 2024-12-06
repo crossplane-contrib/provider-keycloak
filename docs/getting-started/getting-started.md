@@ -104,8 +104,10 @@ The settings for the client will also make it appear as a service-account user i
 ``` sh
 # deploys the keycloak provider
 kubectl apply -f ./kind-kustomize/crossplane/provider.yaml
-sleep 3
-kubectl wait --for=condition=established crd providerconfigs.keycloak.crossplane.io --timeout=30s
+echo "Waiting for the required CRDs to show up..."
+sleep 10
+kubectl wait --for=condition=established crd providerconfigs.keycloak.crossplane.io --timeout=15s
+
 kubectl apply -f ./kind-kustomize/crossplane/providerconfig.yaml
 ```
 
