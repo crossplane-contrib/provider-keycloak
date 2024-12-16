@@ -13,7 +13,7 @@ import (
 	conversiontfjson "github.com/crossplane/upjet/pkg/types/conversion/tfjson"
 	tfjson "github.com/hashicorp/terraform-json"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	keycloakProvider "github.com/mrparkers/terraform-provider-keycloak/provider"
+	keycloakProvider "github.com/keycloak/terraform-provider-keycloak/provider"
 	"github.com/pkg/errors"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/authentication"
