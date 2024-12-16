@@ -20,7 +20,7 @@ import (
 
 	"github.com/crossplane-contrib/provider-keycloak/apis/v1beta1"
 	terraformSDK "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-	keycloakProvider "github.com/mrparkers/terraform-provider-keycloak/provider"
+	keycloakProvider "github.com/keycloak/terraform-provider-keycloak/provider"
 )
 
 const (
@@ -121,7 +121,7 @@ func configureNoForkKeycloakClient(ctx context.Context, ps *terraform.Setup) err
 	return nil
 }
 
-// Function that extracts credentials from the secret provided to providerconfig 
+// Function that extracts credentials from the secret provided to providerconfig
 func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, client client.Client, selector xpv1.CommonCredentialSelectors) (map[string]string, error) {
 	creds := make(map[string]string)
 
