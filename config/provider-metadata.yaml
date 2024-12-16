@@ -1,4 +1,4 @@
-name: mrparkers/keycloak
+name: keycloak/keycloak
 resources:
     keycloak_attribute_importer_identity_provider_mapper:
         subCategory: ""
