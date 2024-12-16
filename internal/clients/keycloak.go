@@ -35,9 +35,9 @@ const (
 )
 
 // Password and client secret auth parameters  + general config parameters
-// https://registry.terraform.io/providers/mrparkers/keycloak/latest/docs#argument-reference
-// https://registry.terraform.io/providers/mrparkers/keycloak/latest/docs#example-usage-client-credentials-grant
-// https://registry.terraform.io/providers/mrparkers/keycloak/latest/docs#example-usage-password-grant
+// https://registry.terraform.io/providers/keycloak/keycloak/latest/docs#argument-reference
+// https://registry.terraform.io/providers/keycloak/keycloak/latest/docs#example-usage-client-credentials-grant
+// https://registry.terraform.io/providers/keycloak/keycloak/latest/docs#example-usage-password-grant
 
 var requiredKeycloakConfigKeys = []string{
 	"client_id",
@@ -121,7 +121,7 @@ func configureNoForkKeycloakClient(ctx context.Context, ps *terraform.Setup) err
 	return nil
 }
 
-// Function that extracts credentials from the secret provided to providerconfig
+// ExtractCredentials Function that extracts credentials from the secret provided to providerconfig
 func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, client client.Client, selector xpv1.CommonCredentialSelectors) (map[string]string, error) {
 	creds := make(map[string]string)
 
