@@ -58,19 +58,19 @@ func main() {
 
 	zl := zap.New(zap.UseDevMode(*debug))
 	log := logging.NewLogrLogger(zl.WithName("provider-keycloak"))
-	
+
 	// Setting the controller-runtime logger to a no-op logger by default,
 	// unless debug mode is enabled. This is because the controller-runtime
 	// logger is *very* verbose even at info level. This is not really needed,
 	// but otherwise we get a warning from the controller-runtime.
 	ctrl.SetLogger(zap.New(zap.WriteTo(io.Discard)))
-	
+
 	if *debug {
 		// The controller-runtime runs with a no-op logger by default. It is
 		// *very* verbose even at info level, so we only provide it a real
 		// logger when we're running in debug mode.
 		ctrl.SetLogger(zl)
-	} 
+	}
 
 	log.Debug("Starting", "sync-period", syncInterval.String())
 
