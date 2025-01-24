@@ -114,19 +114,19 @@
       ],
       "automerge": true
     },
-    {
-      "groupName": "godeps",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true
-    },
+    //{
+    //  "groupName": "godeps",
+    //  "matchManagers": [
+    //    "gomod"
+    //  ],
+    //  "matchUpdateTypes": [
+    //    "major",
+    //    "minor",
+    //    "patch",
+    //    "digest"
+    //  ],
+    //  "automerge": true
+    //},
     {
       "groupName": "github-actions",
       "matchManagers": [
