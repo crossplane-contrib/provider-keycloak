@@ -31,7 +31,8 @@
         "minor",
         "patch",
         "digest"
-      ]
+      ],
+      "automerge": true
     },
     {
       "groupName": "sigs.k8s.io dependencies",
@@ -46,7 +47,8 @@
         "minor",
         "patch",
         "digest"
-      ]
+      ],
+      "automerge": true
     },
     {
       "groupName": "github.com/keycloak/terraform-provider-keycloak dependencies",
@@ -61,7 +63,8 @@
         "minor",
         "patch",
         "digest"
-      ]
+      ],
+      "automerge": true
     },
     {
       "groupName": "github.com/hashicorp dependencies",
@@ -76,7 +79,8 @@
         "minor",
         "patch",
         "digest"
-      ]
+      ],
+      "automerge": true
     },
     {
       "groupName": "github.com/crossplane dependencies",
@@ -91,7 +95,8 @@
         "minor",
         "patch",
         "digest"
-      ]
+      ],
+      "automerge": true
     },
     {
       "groupName": "github.com/alecthomas dependencies",
@@ -106,7 +111,8 @@
         "minor",
         "patch",
         "digest"
-      ]
+      ],
+      "automerge": true
     },
     {
       "groupName": "godeps",
@@ -118,7 +124,8 @@
         "minor",
         "patch",
         "digest"
-      ]
+      ],
+      "automerge": true
     },
     {
       "groupName": "github-actions",
