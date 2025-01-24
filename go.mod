@@ -5,11 +5,11 @@ go 1.22.0
 toolchain go1.22.3
 
 require (
-	dario.cat/mergo v1.0.0
+	dario.cat/mergo v1.0.1
 	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/crossplane/crossplane-runtime v1.16.0
 	github.com/crossplane/crossplane-tools v0.0.0-20230925130601-628280f8bf79
-	github.com/crossplane/upjet v1.4.0
+	github.com/crossplane/upjet v1.4.2
 	github.com/hashicorp/terraform-json v0.17.1
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.30.0
 	github.com/keycloak/terraform-provider-keycloak v0.0.0-20241206084240-f87470c95855
