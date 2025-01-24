@@ -12,6 +12,7 @@ spec:
     parentFlowAliasSelector:
       matchLabels:
         testing.upbound.io/example-name: flow
+    priority: 10
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm

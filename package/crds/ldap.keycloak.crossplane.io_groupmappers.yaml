@@ -87,9 +87,8 @@ spec:
                       type: string
                     type: array
                   groupsLdapFilter:
-                    description: When specified, adds an additional custom filter
-                      to be used when querying for groups. Must start with ( and end
-                      with ).
+                    description: When specified, adds a custom filter to be used when
+                      querying for groups. Must start with ( and end with ).
                     type: string
                   groupsPath:
                     description: Keycloak group path the LDAP groups are added to.
@@ -335,9 +334,8 @@ spec:
                       type: string
                     type: array
                   groupsLdapFilter:
-                    description: When specified, adds an additional custom filter
-                      to be used when querying for groups. Must start with ( and end
-                      with ).
+                    description: When specified, adds a custom filter to be used when
+                      querying for groups. Must start with ( and end with ).
                     type: string
                   groupsPath:
                     description: Keycloak group path the LDAP groups are added to.
@@ -768,9 +766,8 @@ spec:
                       type: string
                     type: array
                   groupsLdapFilter:
-                    description: When specified, adds an additional custom filter
-                      to be used when querying for groups. Must start with ( and end
-                      with ).
+                    description: When specified, adds a custom filter to be used when
+                      querying for groups. Must start with ( and end with ).
                     type: string
                   groupsPath:
                     description: Keycloak group path the LDAP groups are added to.

@@ -163,6 +163,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  priority:
+                    description: The authenticator priority. Lower values will be
+                      executed prior higher values (Only supported by Keycloak >=
+                      25).
+                    type: number
                   providerId:
                     description: |-
                       The type of authentication subflow to create. Valid choices include basic-flow, form-flow
@@ -356,6 +361,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  priority:
+                    description: The authenticator priority. Lower values will be
+                      executed prior higher values (Only supported by Keycloak >=
+                      25).
+                    type: number
                   providerId:
                     description: |-
                       The type of authentication subflow to create. Valid choices include basic-flow, form-flow
@@ -639,6 +649,11 @@ spec:
                   parentFlowAlias:
                     description: The alias for the parent authentication flow.
                     type: string
+                  priority:
+                    description: The authenticator priority. Lower values will be
+                      executed prior higher values (Only supported by Keycloak >=
+                      25).
+                    type: number
                   providerId:
                     description: |-
                       The type of authentication subflow to create. Valid choices include basic-flow, form-flow

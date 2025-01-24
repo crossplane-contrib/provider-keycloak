@@ -636,7 +636,7 @@ spec:
                   webOrigins:
                     description: A list of allowed CORS origins. To permit all valid
                       redirect URIs, add +. Note that this will not include the *
-                      wildcard. To permit all origins, explicitly add *."
+                      wildcard. To permit all origins, explicitly add *.
                     items:
                       type: string
                     type: array
@@ -1219,7 +1219,7 @@ spec:
                   webOrigins:
                     description: A list of allowed CORS origins. To permit all valid
                       redirect URIs, add +. Note that this will not include the *
-                      wildcard. To permit all origins, explicitly add *."
+                      wildcard. To permit all origins, explicitly add *.
                     items:
                       type: string
                     type: array
@@ -1656,7 +1656,7 @@ spec:
                   webOrigins:
                     description: A list of allowed CORS origins. To permit all valid
                       redirect URIs, add +. Note that this will not include the *
-                      wildcard. To permit all origins, explicitly add *."
+                      wildcard. To permit all origins, explicitly add *.
                     items:
                       type: string
                     type: array

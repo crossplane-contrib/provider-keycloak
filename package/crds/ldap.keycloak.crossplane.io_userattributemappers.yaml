@@ -83,6 +83,11 @@ spec:
                       Default value to set in LDAP if is_mandatory_in_ldap is true and the value is empty.
                       Default value to set in LDAP if is_mandatory_in_ldap and the value is empty
                     type: string
+                  attributeForceDefault:
+                    description: |-
+                      When true, an empty default value is forced for mandatory attributes even when a default value is not specified. Defaults to true.
+                      When true, an empty default value is forced for mandatory attributes even when a default value is not specified.
+                    type: boolean
                   isBinaryAttribute:
                     description: |-
                       Should be true for binary LDAP attributes.
@@ -297,6 +302,11 @@ spec:
                       Default value to set in LDAP if is_mandatory_in_ldap is true and the value is empty.
                       Default value to set in LDAP if is_mandatory_in_ldap and the value is empty
                     type: string
+                  attributeForceDefault:
+                    description: |-
+                      When true, an empty default value is forced for mandatory attributes even when a default value is not specified. Defaults to true.
+                      When true, an empty default value is forced for mandatory attributes even when a default value is not specified.
+                    type: boolean
                   isBinaryAttribute:
                     description: |-
                       Should be true for binary LDAP attributes.
@@ -683,6 +693,11 @@ spec:
                       Default value to set in LDAP if is_mandatory_in_ldap is true and the value is empty.
                       Default value to set in LDAP if is_mandatory_in_ldap and the value is empty
                     type: string
+                  attributeForceDefault:
+                    description: |-
+                      When true, an empty default value is forced for mandatory attributes even when a default value is not specified. Defaults to true.
+                      When true, an empty default value is forced for mandatory attributes even when a default value is not specified.
+                    type: boolean
                   id:
                     type: string
                   isBinaryAttribute:

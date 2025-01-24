@@ -358,11 +358,11 @@ type RealmInitParameters struct {
 	// The maximum amount of time before a session expires regardless of activity. Users can override it for individual clients.
 	ClientSessionMaxLifespan *string `json:"clientSessionMaxLifespan,omitempty" tf:"client_session_max_lifespan,omitempty"`
 
-	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes.
+	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_default_client_scopes.
 	// +listType=set
 	DefaultDefaultClientScopes []*string `json:"defaultDefaultClientScopes,omitempty" tf:"default_default_client_scopes,omitempty"`
 
-	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes.
+	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_optional_client_scopes.
 	// +listType=set
 	DefaultOptionalClientScopes []*string `json:"defaultOptionalClientScopes,omitempty" tf:"default_optional_client_scopes,omitempty"`
 
@@ -395,6 +395,10 @@ type RealmInitParameters struct {
 	// When false, users and clients will not be able to access this realm. Defaults to true.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
+	// The desired flow for First Broker Login (since Keycloak 24). Defaults to first broker login.
+	// Which flow should be used for FirstBrokerLoginFlow
+	FirstBrokerLoginFlow *string `json:"firstBrokerLoginFlow,omitempty" tf:"first_broker_login_flow,omitempty"`
+
 	// When specified, this will be used as the realm's internal ID within Keycloak. When not specified, the realm's internal ID will be set to the realm's name.
 	InternalID *string `json:"internalId,omitempty" tf:"internal_id,omitempty"`
 
@@ -420,6 +424,9 @@ type RealmInitParameters struct {
 
 	// Enable offline_session_max_lifespan.
 	OfflineSessionMaxLifespanEnabled *bool `json:"offlineSessionMaxLifespanEnabled,omitempty" tf:"offline_session_max_lifespan_enabled,omitempty"`
+
+	// When true, organization support is enabled. Defaults to false.
+	OrganizationsEnabled *bool `json:"organizationsEnabled,omitempty" tf:"organizations_enabled,omitempty"`
 
 	OtpPolicy []OtpPolicyInitParameters `json:"otpPolicy,omitempty" tf:"otp_policy,omitempty"`
 
@@ -536,11 +543,11 @@ type RealmObservation struct {
 	// The maximum amount of time before a session expires regardless of activity. Users can override it for individual clients.
 	ClientSessionMaxLifespan *string `json:"clientSessionMaxLifespan,omitempty" tf:"client_session_max_lifespan,omitempty"`
 
-	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes.
+	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_default_client_scopes.
 	// +listType=set
 	DefaultDefaultClientScopes []*string `json:"defaultDefaultClientScopes,omitempty" tf:"default_default_client_scopes,omitempty"`
 
-	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes.
+	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_optional_client_scopes.
 	// +listType=set
 	DefaultOptionalClientScopes []*string `json:"defaultOptionalClientScopes,omitempty" tf:"default_optional_client_scopes,omitempty"`
 
@@ -573,6 +580,10 @@ type RealmObservation struct {
 	// When false, users and clients will not be able to access this realm. Defaults to true.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
+	// The desired flow for First Broker Login (since Keycloak 24). Defaults to first broker login.
+	// Which flow should be used for FirstBrokerLoginFlow
+	FirstBrokerLoginFlow *string `json:"firstBrokerLoginFlow,omitempty" tf:"first_broker_login_flow,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// When specified, this will be used as the realm's internal ID within Keycloak. When not specified, the realm's internal ID will be set to the realm's name.
@@ -600,6 +611,9 @@ type RealmObservation struct {
 
 	// Enable offline_session_max_lifespan.
 	OfflineSessionMaxLifespanEnabled *bool `json:"offlineSessionMaxLifespanEnabled,omitempty" tf:"offline_session_max_lifespan_enabled,omitempty"`
+
+	// When true, organization support is enabled. Defaults to false.
+	OrganizationsEnabled *bool `json:"organizationsEnabled,omitempty" tf:"organizations_enabled,omitempty"`
 
 	OtpPolicy []OtpPolicyObservation `json:"otpPolicy,omitempty" tf:"otp_policy,omitempty"`
 
@@ -730,12 +744,12 @@ type RealmParameters struct {
 	// +kubebuilder:validation:Optional
 	ClientSessionMaxLifespan *string `json:"clientSessionMaxLifespan,omitempty" tf:"client_session_max_lifespan,omitempty"`
 
-	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes.
+	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_default_client_scopes.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	DefaultDefaultClientScopes []*string `json:"defaultDefaultClientScopes,omitempty" tf:"default_default_client_scopes,omitempty"`
 
-	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes.
+	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_optional_client_scopes.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	DefaultOptionalClientScopes []*string `json:"defaultOptionalClientScopes,omitempty" tf:"default_optional_client_scopes,omitempty"`
@@ -778,6 +792,11 @@ type RealmParameters struct {
 	// +kubebuilder:validation:Optional
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
+	// The desired flow for First Broker Login (since Keycloak 24). Defaults to first broker login.
+	// Which flow should be used for FirstBrokerLoginFlow
+	// +kubebuilder:validation:Optional
+	FirstBrokerLoginFlow *string `json:"firstBrokerLoginFlow,omitempty" tf:"first_broker_login_flow,omitempty"`
+
 	// When specified, this will be used as the realm's internal ID within Keycloak. When not specified, the realm's internal ID will be set to the realm's name.
 	// +kubebuilder:validation:Optional
 	InternalID *string `json:"internalId,omitempty" tf:"internal_id,omitempty"`
@@ -812,6 +831,10 @@ type RealmParameters struct {
 	// Enable offline_session_max_lifespan.
 	// +kubebuilder:validation:Optional
 	OfflineSessionMaxLifespanEnabled *bool `json:"offlineSessionMaxLifespanEnabled,omitempty" tf:"offline_session_max_lifespan_enabled,omitempty"`
+
+	// When true, organization support is enabled. Defaults to false.
+	// +kubebuilder:validation:Optional
+	OrganizationsEnabled *bool `json:"organizationsEnabled,omitempty" tf:"organizations_enabled,omitempty"`
 
 	// +kubebuilder:validation:Optional
 	OtpPolicy []OtpPolicyParameters `json:"otpPolicy,omitempty" tf:"otp_policy,omitempty"`
@@ -1053,13 +1076,13 @@ type WebAuthnPasswordlessPolicyInitParameters struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
-	// A human readable server name for the WebAuthn Relying Party. Defaults to keycloak.
+	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
 
 	// The WebAuthn relying party ID.
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether or not a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
@@ -1093,13 +1116,13 @@ type WebAuthnPasswordlessPolicyObservation struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
-	// A human readable server name for the WebAuthn Relying Party. Defaults to keycloak.
+	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
 
 	// The WebAuthn relying party ID.
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether or not a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
@@ -1138,7 +1161,7 @@ type WebAuthnPasswordlessPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
-	// A human readable server name for the WebAuthn Relying Party. Defaults to keycloak.
+	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	// +kubebuilder:validation:Optional
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
 
@@ -1146,7 +1169,7 @@ type WebAuthnPasswordlessPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether or not a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
 	// Either Yes or No
 	// +kubebuilder:validation:Optional
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
@@ -1183,13 +1206,13 @@ type WebAuthnPolicyInitParameters struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
-	// A human readable server name for the WebAuthn Relying Party. Defaults to keycloak.
+	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
 
 	// The WebAuthn relying party ID.
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether or not a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
@@ -1223,13 +1246,13 @@ type WebAuthnPolicyObservation struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
-	// A human readable server name for the WebAuthn Relying Party. Defaults to keycloak.
+	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
 
 	// The WebAuthn relying party ID.
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether or not a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
@@ -1268,7 +1291,7 @@ type WebAuthnPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
-	// A human readable server name for the WebAuthn Relying Party. Defaults to keycloak.
+	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	// +kubebuilder:validation:Optional
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
 
@@ -1276,7 +1299,7 @@ type WebAuthnPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether or not a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
 	// Either Yes or No
 	// +kubebuilder:validation:Optional
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`

@@ -24,7 +24,7 @@ type GroupMapperInitParameters struct {
 	// List of strings representing the object classes for the group. Must contain at least one.
 	GroupObjectClasses []*string `json:"groupObjectClasses,omitempty" tf:"group_object_classes,omitempty"`
 
-	// When specified, adds an additional custom filter to be used when querying for groups. Must start with ( and end with ).
+	// When specified, adds a custom filter to be used when querying for groups. Must start with ( and end with ).
 	GroupsLdapFilter *string `json:"groupsLdapFilter,omitempty" tf:"groups_ldap_filter,omitempty"`
 
 	// Keycloak group path the LDAP groups are added to. For example if value /Applications/App1 is used, then LDAP groups will be available in Keycloak under group App1, which is the child of top level group Applications. The configured group path must already exist in Keycloak when creating this mapper.
@@ -102,7 +102,7 @@ type GroupMapperObservation struct {
 	// List of strings representing the object classes for the group. Must contain at least one.
 	GroupObjectClasses []*string `json:"groupObjectClasses,omitempty" tf:"group_object_classes,omitempty"`
 
-	// When specified, adds an additional custom filter to be used when querying for groups. Must start with ( and end with ).
+	// When specified, adds a custom filter to be used when querying for groups. Must start with ( and end with ).
 	GroupsLdapFilter *string `json:"groupsLdapFilter,omitempty" tf:"groups_ldap_filter,omitempty"`
 
 	// Keycloak group path the LDAP groups are added to. For example if value /Applications/App1 is used, then LDAP groups will be available in Keycloak under group App1, which is the child of top level group Applications. The configured group path must already exist in Keycloak when creating this mapper.
@@ -167,7 +167,7 @@ type GroupMapperParameters struct {
 	// +kubebuilder:validation:Optional
 	GroupObjectClasses []*string `json:"groupObjectClasses,omitempty" tf:"group_object_classes,omitempty"`
 
-	// When specified, adds an additional custom filter to be used when querying for groups. Must start with ( and end with ).
+	// When specified, adds a custom filter to be used when querying for groups. Must start with ( and end with ).
 	// +kubebuilder:validation:Optional
 	GroupsLdapFilter *string `json:"groupsLdapFilter,omitempty" tf:"groups_ldap_filter,omitempty"`
 

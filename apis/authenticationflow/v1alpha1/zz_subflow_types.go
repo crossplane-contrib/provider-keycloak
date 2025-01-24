@@ -41,6 +41,9 @@ type SubflowInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ParentFlowAliasSelector *v1.Selector `json:"parentFlowAliasSelector,omitempty" tf:"-"`
 
+	// The authenticator priority. Lower values will be executed prior higher values (Only supported by Keycloak >= 25).
+	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
+
 	// The type of authentication subflow to create. Valid choices include basic-flow, form-flow
 	// and client-flow. Defaults to basic-flow.
 	ProviderID *string `json:"providerId,omitempty" tf:"provider_id,omitempty"`
@@ -79,6 +82,9 @@ type SubflowObservation struct {
 
 	// The alias for the parent authentication flow.
 	ParentFlowAlias *string `json:"parentFlowAlias,omitempty" tf:"parent_flow_alias,omitempty"`
+
+	// The authenticator priority. Lower values will be executed prior higher values (Only supported by Keycloak >= 25).
+	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
 
 	// The type of authentication subflow to create. Valid choices include basic-flow, form-flow
 	// and client-flow. Defaults to basic-flow.
@@ -123,6 +129,10 @@ type SubflowParameters struct {
 	// Selector for a Flow in authenticationflow to populate parentFlowAlias.
 	// +kubebuilder:validation:Optional
 	ParentFlowAliasSelector *v1.Selector `json:"parentFlowAliasSelector,omitempty" tf:"-"`
+
+	// The authenticator priority. Lower values will be executed prior higher values (Only supported by Keycloak >= 25).
+	// +kubebuilder:validation:Optional
+	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
 
 	// The type of authentication subflow to create. Valid choices include basic-flow, form-flow
 	// and client-flow. Defaults to basic-flow.

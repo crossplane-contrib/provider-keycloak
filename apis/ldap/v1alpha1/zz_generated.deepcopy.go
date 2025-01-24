@@ -3056,6 +3056,11 @@ func (in *UserAttributeMapperInitParameters) DeepCopyInto(out *UserAttributeMapp
 		*out = new(string)
 		**out = **in
 	}
+	if in.AttributeForceDefault != nil {
+		in, out := &in.AttributeForceDefault, &out.AttributeForceDefault
+		*out = new(bool)
+		**out = **in
+	}
 	if in.IsBinaryAttribute != nil {
 		in, out := &in.IsBinaryAttribute, &out.IsBinaryAttribute
 		*out = new(bool)
@@ -3173,6 +3178,11 @@ func (in *UserAttributeMapperObservation) DeepCopyInto(out *UserAttributeMapperO
 		*out = new(string)
 		**out = **in
 	}
+	if in.AttributeForceDefault != nil {
+		in, out := &in.AttributeForceDefault, &out.AttributeForceDefault
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ID != nil {
 		in, out := &in.ID, &out.ID
 		*out = new(string)
@@ -3241,6 +3251,11 @@ func (in *UserAttributeMapperParameters) DeepCopyInto(out *UserAttributeMapperPa
 	if in.AttributeDefaultValue != nil {
 		in, out := &in.AttributeDefaultValue, &out.AttributeDefaultValue
 		*out = new(string)
+		**out = **in
+	}
+	if in.AttributeForceDefault != nil {
+		in, out := &in.AttributeForceDefault, &out.AttributeForceDefault
+		*out = new(bool)
 		**out = **in
 	}
 	if in.IsBinaryAttribute != nil {

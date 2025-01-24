@@ -23,6 +23,10 @@ type UserAttributeMapperInitParameters struct {
 	// Default value to set in LDAP if is_mandatory_in_ldap and the value is empty
 	AttributeDefaultValue *string `json:"attributeDefaultValue,omitempty" tf:"attribute_default_value,omitempty"`
 
+	// When true, an empty default value is forced for mandatory attributes even when a default value is not specified. Defaults to true.
+	// When true, an empty default value is forced for mandatory attributes even when a default value is not specified.
+	AttributeForceDefault *bool `json:"attributeForceDefault,omitempty" tf:"attribute_force_default,omitempty"`
+
 	// Should be true for binary LDAP attributes.
 	// Should be true for binary LDAP attributes
 	IsBinaryAttribute *bool `json:"isBinaryAttribute,omitempty" tf:"is_binary_attribute,omitempty"`
@@ -84,6 +88,10 @@ type UserAttributeMapperObservation struct {
 	// Default value to set in LDAP if is_mandatory_in_ldap and the value is empty
 	AttributeDefaultValue *string `json:"attributeDefaultValue,omitempty" tf:"attribute_default_value,omitempty"`
 
+	// When true, an empty default value is forced for mandatory attributes even when a default value is not specified. Defaults to true.
+	// When true, an empty default value is forced for mandatory attributes even when a default value is not specified.
+	AttributeForceDefault *bool `json:"attributeForceDefault,omitempty" tf:"attribute_force_default,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// Should be true for binary LDAP attributes.
@@ -130,6 +138,11 @@ type UserAttributeMapperParameters struct {
 	// Default value to set in LDAP if is_mandatory_in_ldap and the value is empty
 	// +kubebuilder:validation:Optional
 	AttributeDefaultValue *string `json:"attributeDefaultValue,omitempty" tf:"attribute_default_value,omitempty"`
+
+	// When true, an empty default value is forced for mandatory attributes even when a default value is not specified. Defaults to true.
+	// When true, an empty default value is forced for mandatory attributes even when a default value is not specified.
+	// +kubebuilder:validation:Optional
+	AttributeForceDefault *bool `json:"attributeForceDefault,omitempty" tf:"attribute_force_default,omitempty"`
 
 	// Should be true for binary LDAP attributes.
 	// Should be true for binary LDAP attributes

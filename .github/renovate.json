@@ -19,6 +19,102 @@
   "recreateClosed": true,
   "packageRules": [
     {
+      "groupName": "k8s.io dependencies",
+      "matchPackagePatterns": [
+        "^k8s\\.io/"
+      ],
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "groupName": "sigs.k8s.io dependencies",
+      "matchPackagePatterns": [
+        "^sigs\\.k8s\\.io/"
+      ],
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "groupName": "github.com/keycloak/terraform-provider-keycloak dependencies",
+      "matchPackagePatterns": [
+        "^github\\.com/keycloak/terraform-provider-keycloak"
+      ],
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "groupName": "github.com/hashicorp dependencies",
+      "matchPackagePatterns": [
+        "^github\\.com/hashicorp/"
+      ],
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "groupName": "github.com/crossplane dependencies",
+      "matchPackagePatterns": [
+        "^github\\.com/crossplane/"
+      ],
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "groupName": "github.com/alecthomas dependencies",
+      "matchPackagePatterns": [
+        "^github\\.com/alecthomas/"
+      ],
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
       "groupName": "godeps",
       "matchManagers": [
         "gomod"
@@ -28,7 +124,8 @@
         "minor",
         "patch",
         "digest"
-      ]
+      ],
+      "automerge": true
     },
     {
       "groupName": "github-actions",

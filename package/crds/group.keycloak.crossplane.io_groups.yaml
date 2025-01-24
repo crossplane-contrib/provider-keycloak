@@ -76,8 +76,8 @@ spec:
                     additionalProperties:
                       type: string
                     description: 'A map representing attributes for the group. In
-                      order to add multivalue attributes, use ## to seperate the values.
-                      Max length for each value is 255 chars'
+                      order to add multivalued attributes, use ## to separate the
+                      values. Max length for each value is 255 chars'
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -256,8 +256,8 @@ spec:
                     additionalProperties:
                       type: string
                     description: 'A map representing attributes for the group. In
-                      order to add multivalue attributes, use ## to seperate the values.
-                      Max length for each value is 255 chars'
+                      order to add multivalued attributes, use ## to separate the
+                      values. Max length for each value is 255 chars'
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -600,8 +600,8 @@ spec:
                     additionalProperties:
                       type: string
                     description: 'A map representing attributes for the group. In
-                      order to add multivalue attributes, use ## to seperate the values.
-                      Max length for each value is 255 chars'
+                      order to add multivalued attributes, use ## to separate the
+                      values. Max length for each value is 255 chars'
                     type: object
                     x-kubernetes-map-type: granular
                   id:
