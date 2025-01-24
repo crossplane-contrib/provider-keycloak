@@ -157,6 +157,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  priority:
+                    description: The authenticator priority. Lower values will be
+                      executed prior higher values (Only supported by Keycloak >=
+                      25).
+                    type: number
                   realmId:
                     description: The realm the authentication execution exists in.
                     type: string
@@ -338,6 +343,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  priority:
+                    description: The authenticator priority. Lower values will be
+                      executed prior higher values (Only supported by Keycloak >=
+                      25).
+                    type: number
                   realmId:
                     description: The realm the authentication execution exists in.
                     type: string
@@ -609,6 +619,11 @@ spec:
                     description: The alias of the flow this execution is attached
                       to.
                     type: string
+                  priority:
+                    description: The authenticator priority. Lower values will be
+                      executed prior higher values (Only supported by Keycloak >=
+                      25).
+                    type: number
                   realmId:
                     description: The realm the authentication execution exists in.
                     type: string

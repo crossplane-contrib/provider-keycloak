@@ -29,6 +29,9 @@ type AttributeInitParameters struct {
 	// A list of groups.
 	Group *string `json:"group,omitempty" tf:"group,omitempty"`
 
+	// If the attribute supports multiple values. Defaults to false.
+	MultiValued *bool `json:"multiValued,omitempty" tf:"multi_valued,omitempty"`
+
 	// The name of the attribute.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
@@ -62,6 +65,9 @@ type AttributeObservation struct {
 
 	// A list of groups.
 	Group *string `json:"group,omitempty" tf:"group,omitempty"`
+
+	// If the attribute supports multiple values. Defaults to false.
+	MultiValued *bool `json:"multiValued,omitempty" tf:"multi_valued,omitempty"`
 
 	// The name of the attribute.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
@@ -100,6 +106,10 @@ type AttributeParameters struct {
 	// A list of groups.
 	// +kubebuilder:validation:Optional
 	Group *string `json:"group,omitempty" tf:"group,omitempty"`
+
+	// If the attribute supports multiple values. Defaults to false.
+	// +kubebuilder:validation:Optional
+	MultiValued *bool `json:"multiValued,omitempty" tf:"multi_valued,omitempty"`
 
 	// The name of the attribute.
 	// +kubebuilder:validation:Optional
@@ -230,6 +240,9 @@ type UserProfileInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// Unmanaged attributes are user attributes not explicitly defined in the user profile configuration. By default, unmanaged attributes are not enabled. Value could be one of DISABLED, ENABLED, ADMIN_EDIT or ADMIN_VIEW. If value is not specified it means DISABLED
+	UnmanagedAttributePolicy *string `json:"unmanagedAttributePolicy,omitempty" tf:"unmanaged_attribute_policy,omitempty"`
 }
 
 type UserProfileObservation struct {
@@ -244,6 +257,9 @@ type UserProfileObservation struct {
 
 	// The ID of the realm the user profile applies to.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Unmanaged attributes are user attributes not explicitly defined in the user profile configuration. By default, unmanaged attributes are not enabled. Value could be one of DISABLED, ENABLED, ADMIN_EDIT or ADMIN_VIEW. If value is not specified it means DISABLED
+	UnmanagedAttributePolicy *string `json:"unmanagedAttributePolicy,omitempty" tf:"unmanaged_attribute_policy,omitempty"`
 }
 
 type UserProfileParameters struct {
@@ -268,6 +284,10 @@ type UserProfileParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// Unmanaged attributes are user attributes not explicitly defined in the user profile configuration. By default, unmanaged attributes are not enabled. Value could be one of DISABLED, ENABLED, ADMIN_EDIT or ADMIN_VIEW. If value is not specified it means DISABLED
+	// +kubebuilder:validation:Optional
+	UnmanagedAttributePolicy *string `json:"unmanagedAttributePolicy,omitempty" tf:"unmanaged_attribute_policy,omitempty"`
 }
 
 type ValidatorInitParameters struct {

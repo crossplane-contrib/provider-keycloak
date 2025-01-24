@@ -79,6 +79,10 @@ type BindingsInitParameters struct {
 	// +kubebuilder:validation:Optional
 	DockerAuthenticationFlowSelector *v1.Selector `json:"dockerAuthenticationFlowSelector,omitempty" tf:"-"`
 
+	// The alias of the flow to assign to the realm FirstBrokerLoginFlow (since Keycloak 24).
+	// Which flow should be used for FirstBrokerLoginFlow
+	FirstBrokerLoginFlow *string `json:"firstBrokerLoginFlow,omitempty" tf:"first_broker_login_flow,omitempty"`
+
 	// The realm the authentication flow binding exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -141,6 +145,10 @@ type BindingsObservation struct {
 	// The alias of the flow to assign to the realm DockerAuthenticationFlow.
 	// Which flow should be used for DockerAuthenticationFlow
 	DockerAuthenticationFlow *string `json:"dockerAuthenticationFlow,omitempty" tf:"docker_authentication_flow,omitempty"`
+
+	// The alias of the flow to assign to the realm FirstBrokerLoginFlow (since Keycloak 24).
+	// Which flow should be used for FirstBrokerLoginFlow
+	FirstBrokerLoginFlow *string `json:"firstBrokerLoginFlow,omitempty" tf:"first_broker_login_flow,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
@@ -225,6 +233,11 @@ type BindingsParameters struct {
 	// Selector for a Flow in authenticationflow to populate dockerAuthenticationFlow.
 	// +kubebuilder:validation:Optional
 	DockerAuthenticationFlowSelector *v1.Selector `json:"dockerAuthenticationFlowSelector,omitempty" tf:"-"`
+
+	// The alias of the flow to assign to the realm FirstBrokerLoginFlow (since Keycloak 24).
+	// Which flow should be used for FirstBrokerLoginFlow
+	// +kubebuilder:validation:Optional
+	FirstBrokerLoginFlow *string `json:"firstBrokerLoginFlow,omitempty" tf:"first_broker_login_flow,omitempty"`
 
 	// The realm the authentication flow binding exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm

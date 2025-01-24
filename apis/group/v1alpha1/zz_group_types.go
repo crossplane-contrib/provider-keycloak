@@ -15,7 +15,7 @@ import (
 
 type GroupInitParameters struct {
 
-	// A map representing attributes for the group. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	// A map representing attributes for the group. In order to add multivalued attributes, use ## to separate the values. Max length for each value is 255 chars
 	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
@@ -49,7 +49,7 @@ type GroupInitParameters struct {
 
 type GroupObservation struct {
 
-	// A map representing attributes for the group. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	// A map representing attributes for the group. In order to add multivalued attributes, use ## to separate the values. Max length for each value is 255 chars
 	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
@@ -70,7 +70,7 @@ type GroupObservation struct {
 
 type GroupParameters struct {
 
-	// A map representing attributes for the group. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars
+	// A map representing attributes for the group. In order to add multivalued attributes, use ## to separate the values. Max length for each value is 255 chars
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`

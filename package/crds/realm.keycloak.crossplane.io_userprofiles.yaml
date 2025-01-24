@@ -96,6 +96,10 @@ spec:
                         group:
                           description: A list of groups.
                           type: string
+                        multiValued:
+                          description: If the attribute supports multiple values.
+                            Defaults to false.
+                          type: boolean
                         name:
                           description: The name of the attribute.
                           type: string
@@ -250,6 +254,13 @@ spec:
                             type: string
                         type: object
                     type: object
+                  unmanagedAttributePolicy:
+                    description: Unmanaged attributes are user attributes not explicitly
+                      defined in the user profile configuration. By default, unmanaged
+                      attributes are not enabled. Value could be one of DISABLED,
+                      ENABLED, ADMIN_EDIT or ADMIN_VIEW. If value is not specified
+                      it means DISABLED
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -288,6 +299,10 @@ spec:
                         group:
                           description: A list of groups.
                           type: string
+                        multiValued:
+                          description: If the attribute supports multiple values.
+                            Defaults to false.
+                          type: boolean
                         name:
                           description: The name of the attribute.
                           type: string
@@ -442,6 +457,13 @@ spec:
                             type: string
                         type: object
                     type: object
+                  unmanagedAttributePolicy:
+                    description: Unmanaged attributes are user attributes not explicitly
+                      defined in the user profile configuration. By default, unmanaged
+                      attributes are not enabled. Value could be one of DISABLED,
+                      ENABLED, ADMIN_EDIT or ADMIN_VIEW. If value is not specified
+                      it means DISABLED
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -639,6 +661,10 @@ spec:
                         group:
                           description: A list of groups.
                           type: string
+                        multiValued:
+                          description: If the attribute supports multiple values.
+                            Defaults to false.
+                          type: boolean
                         name:
                           description: The name of the attribute.
                           type: string
@@ -720,6 +746,13 @@ spec:
                     type: string
                   realmId:
                     description: The ID of the realm the user profile applies to.
+                    type: string
+                  unmanagedAttributePolicy:
+                    description: Unmanaged attributes are user attributes not explicitly
+                      defined in the user profile configuration. By default, unmanaged
+                      attributes are not enabled. Value could be one of DISABLED,
+                      ENABLED, ADMIN_EDIT or ADMIN_VIEW. If value is not specified
+                      it means DISABLED
                     type: string
                 type: object
               conditions:

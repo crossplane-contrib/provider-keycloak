@@ -282,7 +282,7 @@ type ClientInitParameters struct {
 	// +listType=set
 	ValidRedirectUris []*string `json:"validRedirectUris,omitempty" tf:"valid_redirect_uris,omitempty"`
 
-	// A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *."
+	// A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *.
 	// +listType=set
 	WebOrigins []*string `json:"webOrigins,omitempty" tf:"web_origins,omitempty"`
 }
@@ -428,7 +428,7 @@ type ClientObservation struct {
 	// +listType=set
 	ValidRedirectUris []*string `json:"validRedirectUris,omitempty" tf:"valid_redirect_uris,omitempty"`
 
-	// A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *."
+	// A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *.
 	// +listType=set
 	WebOrigins []*string `json:"webOrigins,omitempty" tf:"web_origins,omitempty"`
 }
@@ -631,7 +631,7 @@ type ClientParameters struct {
 	// +listType=set
 	ValidRedirectUris []*string `json:"validRedirectUris,omitempty" tf:"valid_redirect_uris,omitempty"`
 
-	// A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *."
+	// A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	WebOrigins []*string `json:"webOrigins,omitempty" tf:"web_origins,omitempty"`

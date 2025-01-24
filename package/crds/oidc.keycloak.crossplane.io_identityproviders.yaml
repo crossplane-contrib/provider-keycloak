@@ -84,7 +84,7 @@ spec:
                     type: boolean
                   alias:
                     description: |-
-                      The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
+                      The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
                     type: string
                   authenticateByDefault:
@@ -213,7 +213,7 @@ spec:
                   displayName:
                     description: |-
                       Display name for the identity provider in the GUI.
-                      Friendly name for Identity Providers.
+                      The human-friendly name of the identity provider, used in the log in form.
                     type: string
                   enabled:
                     description: |-
@@ -332,7 +332,7 @@ spec:
                     type: string
                   linkOnly:
                     description: |-
-                      When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+                      When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.
                       If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
                     type: boolean
                   loginHint:
@@ -342,7 +342,7 @@ spec:
                     type: string
                   logoutUrl:
                     description: |-
-                      The Logout URL is the end session endpoint to use to logout user from external identity provider.
+                      The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
                       Logout URL
                     type: string
                   postBrokerLoginFlowAlias:
@@ -495,7 +495,7 @@ spec:
                     type: boolean
                   alias:
                     description: |-
-                      The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
+                      The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
                     type: string
                   authenticateByDefault:
@@ -624,7 +624,7 @@ spec:
                   displayName:
                     description: |-
                       Display name for the identity provider in the GUI.
-                      Friendly name for Identity Providers.
+                      The human-friendly name of the identity provider, used in the log in form.
                     type: string
                   enabled:
                     description: |-
@@ -743,7 +743,7 @@ spec:
                     type: string
                   linkOnly:
                     description: |-
-                      When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+                      When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.
                       If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
                     type: boolean
                   loginHint:
@@ -753,7 +753,7 @@ spec:
                     type: string
                   logoutUrl:
                     description: |-
-                      The Logout URL is the end session endpoint to use to logout user from external identity provider.
+                      The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
                       Logout URL
                     type: string
                   postBrokerLoginFlowAlias:
@@ -1083,7 +1083,7 @@ spec:
                     type: boolean
                   alias:
                     description: |-
-                      The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
+                      The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
                     type: string
                   authenticateByDefault:
@@ -1117,7 +1117,7 @@ spec:
                   displayName:
                     description: |-
                       Display name for the identity provider in the GUI.
-                      Friendly name for Identity Providers.
+                      The human-friendly name of the identity provider, used in the log in form.
                     type: string
                   enabled:
                     description: |-
@@ -1167,7 +1167,7 @@ spec:
                     type: string
                   linkOnly:
                     description: |-
-                      When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+                      When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.
                       If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
                     type: boolean
                   loginHint:
@@ -1177,7 +1177,7 @@ spec:
                     type: string
                   logoutUrl:
                     description: |-
-                      The Logout URL is the end session endpoint to use to logout user from external identity provider.
+                      The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
                       Logout URL
                     type: string
                   postBrokerLoginFlowAlias:

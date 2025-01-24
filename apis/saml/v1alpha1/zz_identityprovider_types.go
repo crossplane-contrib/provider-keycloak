@@ -75,7 +75,7 @@ type IdentityProviderInitParameters struct {
 	// Hide On Login Page.
 	HideOnLoginPage *bool `json:"hideOnLoginPage,omitempty" tf:"hide_on_login_page,omitempty"`
 
-	// When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+	// When true, users cannot log in using this provider, but their existing accounts will be linked when possible. Defaults to false.
 	// If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
 	LinkOnly *bool `json:"linkOnly,omitempty" tf:"link_only,omitempty"`
 
@@ -94,7 +94,7 @@ type IdentityProviderInitParameters struct {
 	// Post Binding Logout.
 	PostBindingLogout *bool `json:"postBindingLogout,omitempty" tf:"post_binding_logout,omitempty"`
 
-	// Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used..
+	// Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
 	// Post Binding Response.
 	PostBindingResponse *bool `json:"postBindingResponse,omitempty" tf:"post_binding_response,omitempty"`
 
@@ -239,7 +239,7 @@ type IdentityProviderObservation struct {
 	// Internal Identity Provider Id
 	InternalID *string `json:"internalId,omitempty" tf:"internal_id,omitempty"`
 
-	// When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+	// When true, users cannot log in using this provider, but their existing accounts will be linked when possible. Defaults to false.
 	// If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
 	LinkOnly *bool `json:"linkOnly,omitempty" tf:"link_only,omitempty"`
 
@@ -258,7 +258,7 @@ type IdentityProviderObservation struct {
 	// Post Binding Logout.
 	PostBindingLogout *bool `json:"postBindingLogout,omitempty" tf:"post_binding_logout,omitempty"`
 
-	// Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used..
+	// Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
 	// Post Binding Response.
 	PostBindingResponse *bool `json:"postBindingResponse,omitempty" tf:"post_binding_response,omitempty"`
 
@@ -404,7 +404,7 @@ type IdentityProviderParameters struct {
 	// +kubebuilder:validation:Optional
 	HideOnLoginPage *bool `json:"hideOnLoginPage,omitempty" tf:"hide_on_login_page,omitempty"`
 
-	// When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+	// When true, users cannot log in using this provider, but their existing accounts will be linked when possible. Defaults to false.
 	// If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
 	// +kubebuilder:validation:Optional
 	LinkOnly *bool `json:"linkOnly,omitempty" tf:"link_only,omitempty"`
@@ -428,7 +428,7 @@ type IdentityProviderParameters struct {
 	// +kubebuilder:validation:Optional
 	PostBindingLogout *bool `json:"postBindingLogout,omitempty" tf:"post_binding_logout,omitempty"`
 
-	// Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used..
+	// Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
 	// Post Binding Response.
 	// +kubebuilder:validation:Optional
 	PostBindingResponse *bool `json:"postBindingResponse,omitempty" tf:"post_binding_response,omitempty"`
