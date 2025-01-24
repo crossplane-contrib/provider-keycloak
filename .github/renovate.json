@@ -5,7 +5,7 @@
     "dependencies"
   ],
   "extends": [
-    "config:base",
+    "config:recommended",
     ":semanticCommits",
     "helpers:pinGitHubActionDigests"
   ],
@@ -16,13 +16,10 @@
     "gomodTidy"
   ],
   "dependencyDashboard": true,
-  "recreateClosed": true,
+  "recreateWhen": "always",
   "packageRules": [
     {
       "groupName": "k8s.io dependencies",
-      "matchPackagePatterns": [
-        "^k8s\\.io/"
-      ],
       "matchManagers": [
         "gomod"
       ],
@@ -32,13 +29,13 @@
         "patch",
         "digest"
       ],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": [
+        "/^k8s\\.io//"
+      ]
     },
     {
       "groupName": "sigs.k8s.io dependencies",
-      "matchPackagePatterns": [
-        "^sigs\\.k8s\\.io/"
-      ],
       "matchManagers": [
         "gomod"
       ],
@@ -48,13 +45,13 @@
         "patch",
         "digest"
       ],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": [
+        "/^sigs\\.k8s\\.io//"
+      ]
     },
     {
       "groupName": "github.com/keycloak/terraform-provider-keycloak dependencies",
-      "matchPackagePatterns": [
-        "^github\\.com/keycloak/terraform-provider-keycloak"
-      ],
       "matchManagers": [
         "gomod"
       ],
@@ -64,13 +61,13 @@
         "patch",
         "digest"
       ],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": [
+        "/^github\\.com/keycloak/terraform-provider-keycloak/"
+      ]
     },
     {
       "groupName": "github.com/hashicorp dependencies",
-      "matchPackagePatterns": [
-        "^github\\.com/hashicorp/"
-      ],
       "matchManagers": [
         "gomod"
       ],
@@ -80,13 +77,13 @@
         "patch",
         "digest"
       ],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": [
+        "/^github\\.com/hashicorp//"
+      ]
     },
     {
       "groupName": "github.com/crossplane dependencies",
-      "matchPackagePatterns": [
-        "^github\\.com/crossplane/"
-      ],
       "matchManagers": [
         "gomod"
       ],
@@ -96,13 +93,13 @@
         "patch",
         "digest"
       ],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": [
+        "/^github\\.com/crossplane//"
+      ]
     },
     {
       "groupName": "github.com/alecthomas dependencies",
-      "matchPackagePatterns": [
-        "^github\\.com/alecthomas/"
-      ],
       "matchManagers": [
         "gomod"
       ],
@@ -112,21 +109,11 @@
         "patch",
         "digest"
       ],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": [
+        "/^github\\.com/alecthomas//"
+      ]
     },
-    //{
-    //  "groupName": "godeps",
-    //  "matchManagers": [
-    //    "gomod"
-    //  ],
-    //  "matchUpdateTypes": [
-    //    "major",
-    //    "minor",
-    //    "patch",
-    //    "digest"
-    //  ],
-    //  "automerge": true
-    //},
     {
       "groupName": "github-actions",
       "matchManagers": [
