@@ -15,6 +15,7 @@ spec:
       enabledWhenScope:
       - offline_access
       group: group1
+      multiValued: false
       name: field1
       permissions:
       - edit:
@@ -51,6 +52,7 @@ spec:
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: my_realm
+    unmanagedAttributePolicy: ENABLED
 
 ---
 
@@ -64,6 +66,4 @@ metadata:
   name: realm
 spec:
   forProvider:
-    attributes:
-      userProfileEnabled: true
     realm: my-realm

@@ -82,7 +82,7 @@ type RoleMapperInitParameters struct {
 	// List of strings representing the object classes for the role. Must contain at least one.
 	RoleObjectClasses []*string `json:"roleObjectClasses,omitempty" tf:"role_object_classes,omitempty"`
 
-	// When specified, adds an additional custom filter to be used when querying for roles. Must start with ( and end with ).
+	// When specified, adds a custom filter to be used when querying for roles. Must start with ( and end with ).
 	RolesLdapFilter *string `json:"rolesLdapFilter,omitempty" tf:"roles_ldap_filter,omitempty"`
 
 	// When true, LDAP role mappings will be mapped to realm roles within Keycloak. Defaults to true.
@@ -135,7 +135,7 @@ type RoleMapperObservation struct {
 	// List of strings representing the object classes for the role. Must contain at least one.
 	RoleObjectClasses []*string `json:"roleObjectClasses,omitempty" tf:"role_object_classes,omitempty"`
 
-	// When specified, adds an additional custom filter to be used when querying for roles. Must start with ( and end with ).
+	// When specified, adds a custom filter to be used when querying for roles. Must start with ( and end with ).
 	RolesLdapFilter *string `json:"rolesLdapFilter,omitempty" tf:"roles_ldap_filter,omitempty"`
 
 	// When true, LDAP role mappings will be mapped to realm roles within Keycloak. Defaults to true.
@@ -226,7 +226,7 @@ type RoleMapperParameters struct {
 	// +kubebuilder:validation:Optional
 	RoleObjectClasses []*string `json:"roleObjectClasses,omitempty" tf:"role_object_classes,omitempty"`
 
-	// When specified, adds an additional custom filter to be used when querying for roles. Must start with ( and end with ).
+	// When specified, adds a custom filter to be used when querying for roles. Must start with ( and end with ).
 	// +kubebuilder:validation:Optional
 	RolesLdapFilter *string `json:"rolesLdapFilter,omitempty" tf:"roles_ldap_filter,omitempty"`
 

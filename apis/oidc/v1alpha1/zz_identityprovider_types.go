@@ -23,7 +23,7 @@ type IdentityProviderInitParameters struct {
 	// Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.
 	AddReadTokenRoleOnCreate *bool `json:"addReadTokenRoleOnCreate,omitempty" tf:"add_read_token_role_on_create,omitempty"`
 
-	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
+	// The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
@@ -65,7 +65,7 @@ type IdentityProviderInitParameters struct {
 	DisableUserInfo *bool `json:"disableUserInfo,omitempty" tf:"disable_user_info,omitempty"`
 
 	// Display name for the identity provider in the GUI.
-	// Friendly name for Identity Providers.
+	// The human-friendly name of the identity provider, used in the log in form.
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name,omitempty"`
 
 	// When true, users will be able to log in to this realm using this identity provider. Defaults to true.
@@ -106,7 +106,7 @@ type IdentityProviderInitParameters struct {
 	// JSON Web Key Set URL
 	JwksURL *string `json:"jwksUrl,omitempty" tf:"jwks_url,omitempty"`
 
-	// When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+	// When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.
 	// If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
 	LinkOnly *bool `json:"linkOnly,omitempty" tf:"link_only,omitempty"`
 
@@ -114,7 +114,7 @@ type IdentityProviderInitParameters struct {
 	// Login Hint.
 	LoginHint *string `json:"loginHint,omitempty" tf:"login_hint,omitempty"`
 
-	// The Logout URL is the end session endpoint to use to logout user from external identity provider.
+	// The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
 	// Logout URL
 	LogoutURL *string `json:"logoutUrl,omitempty" tf:"logout_url,omitempty"`
 
@@ -178,7 +178,7 @@ type IdentityProviderObservation struct {
 	// Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.
 	AddReadTokenRoleOnCreate *bool `json:"addReadTokenRoleOnCreate,omitempty" tf:"add_read_token_role_on_create,omitempty"`
 
-	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
+	// The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
@@ -206,7 +206,7 @@ type IdentityProviderObservation struct {
 	DisableUserInfo *bool `json:"disableUserInfo,omitempty" tf:"disable_user_info,omitempty"`
 
 	// Display name for the identity provider in the GUI.
-	// Friendly name for Identity Providers.
+	// The human-friendly name of the identity provider, used in the log in form.
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name,omitempty"`
 
 	// When true, users will be able to log in to this realm using this identity provider. Defaults to true.
@@ -243,7 +243,7 @@ type IdentityProviderObservation struct {
 	// JSON Web Key Set URL
 	JwksURL *string `json:"jwksUrl,omitempty" tf:"jwks_url,omitempty"`
 
-	// When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+	// When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.
 	// If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
 	LinkOnly *bool `json:"linkOnly,omitempty" tf:"link_only,omitempty"`
 
@@ -251,7 +251,7 @@ type IdentityProviderObservation struct {
 	// Login Hint.
 	LoginHint *string `json:"loginHint,omitempty" tf:"login_hint,omitempty"`
 
-	// The Logout URL is the end session endpoint to use to logout user from external identity provider.
+	// The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
 	// Logout URL
 	LogoutURL *string `json:"logoutUrl,omitempty" tf:"logout_url,omitempty"`
 
@@ -308,7 +308,7 @@ type IdentityProviderParameters struct {
 	// +kubebuilder:validation:Optional
 	AddReadTokenRoleOnCreate *bool `json:"addReadTokenRoleOnCreate,omitempty" tf:"add_read_token_role_on_create,omitempty"`
 
-	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
+	// The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	// +kubebuilder:validation:Optional
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
@@ -358,7 +358,7 @@ type IdentityProviderParameters struct {
 	DisableUserInfo *bool `json:"disableUserInfo,omitempty" tf:"disable_user_info,omitempty"`
 
 	// Display name for the identity provider in the GUI.
-	// Friendly name for Identity Providers.
+	// The human-friendly name of the identity provider, used in the log in form.
 	// +kubebuilder:validation:Optional
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name,omitempty"`
 
@@ -407,7 +407,7 @@ type IdentityProviderParameters struct {
 	// +kubebuilder:validation:Optional
 	JwksURL *string `json:"jwksUrl,omitempty" tf:"jwks_url,omitempty"`
 
-	// When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+	// When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.
 	// If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
 	// +kubebuilder:validation:Optional
 	LinkOnly *bool `json:"linkOnly,omitempty" tf:"link_only,omitempty"`
@@ -417,7 +417,7 @@ type IdentityProviderParameters struct {
 	// +kubebuilder:validation:Optional
 	LoginHint *string `json:"loginHint,omitempty" tf:"login_hint,omitempty"`
 
-	// The Logout URL is the end session endpoint to use to logout user from external identity provider.
+	// The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
 	// Logout URL
 	// +kubebuilder:validation:Optional
 	LogoutURL *string `json:"logoutUrl,omitempty" tf:"logout_url,omitempty"`

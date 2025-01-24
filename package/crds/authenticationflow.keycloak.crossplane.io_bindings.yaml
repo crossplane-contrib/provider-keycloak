@@ -396,6 +396,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  firstBrokerLoginFlow:
+                    description: |-
+                      The alias of the flow to assign to the realm FirstBrokerLoginFlow (since Keycloak 24).
+                      Which flow should be used for FirstBrokerLoginFlow
+                    type: string
                   realmId:
                     description: The realm the authentication flow binding exists
                       in.
@@ -974,6 +979,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  firstBrokerLoginFlow:
+                    description: |-
+                      The alias of the flow to assign to the realm FirstBrokerLoginFlow (since Keycloak 24).
+                      Which flow should be used for FirstBrokerLoginFlow
+                    type: string
                   realmId:
                     description: The realm the authentication flow binding exists
                       in.
@@ -1406,6 +1416,11 @@ spec:
                     description: |-
                       The alias of the flow to assign to the realm DockerAuthenticationFlow.
                       Which flow should be used for DockerAuthenticationFlow
+                    type: string
+                  firstBrokerLoginFlow:
+                    description: |-
+                      The alias of the flow to assign to the realm FirstBrokerLoginFlow (since Keycloak 24).
+                      Which flow should be used for FirstBrokerLoginFlow
                     type: string
                   id:
                     type: string

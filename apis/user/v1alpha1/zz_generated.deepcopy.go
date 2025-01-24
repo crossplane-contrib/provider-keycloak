@@ -1665,6 +1665,11 @@ func (in *UserInitParameters) DeepCopyInto(out *UserInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.Import != nil {
+		in, out := &in.Import, &out.Import
+		*out = new(bool)
+		**out = **in
+	}
 	if in.InitialPassword != nil {
 		in, out := &in.InitialPassword, &out.InitialPassword
 		*out = make([]InitialPasswordInitParameters, len(*in))
@@ -1803,6 +1808,11 @@ func (in *UserObservation) DeepCopyInto(out *UserObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.Import != nil {
+		in, out := &in.Import, &out.Import
+		*out = new(bool)
+		**out = **in
+	}
 	if in.InitialPassword != nil {
 		in, out := &in.InitialPassword, &out.InitialPassword
 		*out = make([]InitialPasswordObservation, len(*in))
@@ -1892,6 +1902,11 @@ func (in *UserParameters) DeepCopyInto(out *UserParameters) {
 	if in.FirstName != nil {
 		in, out := &in.FirstName, &out.FirstName
 		*out = new(string)
+		**out = **in
+	}
+	if in.Import != nil {
+		in, out := &in.Import, &out.Import
+		*out = new(bool)
 		**out = **in
 	}
 	if in.InitialPassword != nil {

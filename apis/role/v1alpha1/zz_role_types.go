@@ -48,6 +48,9 @@ type RoleInitParameters struct {
 	// The description of the role
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// When true, the role with the specified name is assumed to already exist, and it will be imported into state instead of being created. This attribute is useful when dealing with roles that Keycloak creates automatically during realm creation, such as the client roles create-client, view-realm, ... for the client realm-management created per realm. Note, that the role will not be removed during destruction if import is true.
+	Import *bool `json:"import,omitempty" tf:"import,omitempty"`
+
 	// The name of the role
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
@@ -81,6 +84,9 @@ type RoleObservation struct {
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// When true, the role with the specified name is assumed to already exist, and it will be imported into state instead of being created. This attribute is useful when dealing with roles that Keycloak creates automatically during realm creation, such as the client roles create-client, view-realm, ... for the client realm-management created per realm. Note, that the role will not be removed during destruction if import is true.
+	Import *bool `json:"import,omitempty" tf:"import,omitempty"`
 
 	// The name of the role
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
@@ -127,6 +133,10 @@ type RoleParameters struct {
 	// The description of the role
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
+	// When true, the role with the specified name is assumed to already exist, and it will be imported into state instead of being created. This attribute is useful when dealing with roles that Keycloak creates automatically during realm creation, such as the client roles create-client, view-realm, ... for the client realm-management created per realm. Note, that the role will not be removed during destruction if import is true.
+	// +kubebuilder:validation:Optional
+	Import *bool `json:"import,omitempty" tf:"import,omitempty"`
 
 	// The name of the role
 	// +kubebuilder:validation:Optional

@@ -352,9 +352,8 @@ spec:
                       type: string
                     type: array
                   rolesLdapFilter:
-                    description: When specified, adds an additional custom filter
-                      to be used when querying for roles. Must start with ( and end
-                      with ).
+                    description: When specified, adds a custom filter to be used when
+                      querying for roles. Must start with ( and end with ).
                     type: string
                   useRealmRolesMapping:
                     description: When true, LDAP role mappings will be mapped to realm
@@ -658,9 +657,8 @@ spec:
                       type: string
                     type: array
                   rolesLdapFilter:
-                    description: When specified, adds an additional custom filter
-                      to be used when querying for roles. Must start with ( and end
-                      with ).
+                    description: When specified, adds a custom filter to be used when
+                      querying for roles. Must start with ( and end with ).
                     type: string
                   useRealmRolesMapping:
                     description: When true, LDAP role mappings will be mapped to realm
@@ -925,9 +923,8 @@ spec:
                       type: string
                     type: array
                   rolesLdapFilter:
-                    description: When specified, adds an additional custom filter
-                      to be used when querying for roles. Must start with ( and end
-                      with ).
+                    description: When specified, adds a custom filter to be used when
+                      querying for roles. Must start with ( and end with ).
                     type: string
                   useRealmRolesMapping:
                     description: When true, LDAP role mappings will be mapped to realm

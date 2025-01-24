@@ -247,6 +247,15 @@ spec:
                   description:
                     description: The description of the role
                     type: string
+                  import:
+                    description: When true, the role with the specified name is assumed
+                      to already exist, and it will be imported into state instead
+                      of being created. This attribute is useful when dealing with
+                      roles that Keycloak creates automatically during realm creation,
+                      such as the client roles create-client, view-realm, ... for
+                      the client realm-management created per realm. Note, that the
+                      role will not be removed during destruction if import is true.
+                    type: boolean
                   name:
                     description: The name of the role
                     type: string
@@ -516,6 +525,15 @@ spec:
                   description:
                     description: The description of the role
                     type: string
+                  import:
+                    description: When true, the role with the specified name is assumed
+                      to already exist, and it will be imported into state instead
+                      of being created. This attribute is useful when dealing with
+                      roles that Keycloak creates automatically during realm creation,
+                      such as the client roles create-client, view-realm, ... for
+                      the client realm-management created per realm. Note, that the
+                      role will not be removed during destruction if import is true.
+                    type: boolean
                   name:
                     description: The name of the role
                     type: string
@@ -798,6 +816,15 @@ spec:
                     type: string
                   id:
                     type: string
+                  import:
+                    description: When true, the role with the specified name is assumed
+                      to already exist, and it will be imported into state instead
+                      of being created. This attribute is useful when dealing with
+                      roles that Keycloak creates automatically during realm creation,
+                      such as the client roles create-client, view-realm, ... for
+                      the client realm-management created per realm. Note, that the
+                      role will not be removed during destruction if import is true.
+                    type: boolean
                   name:
                     description: The name of the role
                     type: string

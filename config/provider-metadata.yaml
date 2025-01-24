@@ -148,6 +148,7 @@ resources:
             client_authentication_flow: '- (Optional) The alias of the flow to assign to the realm ClientAuthenticationFlow.'
             direct_grant_flow: '- (Optional) The alias of the flow to assign to the realm DirectGrantFlow.'
             docker_authentication_flow: '- (Optional) The alias of the flow to assign to the realm DockerAuthenticationFlow.'
+            first_broker_login_flow: '- (Optional) The alias of the flow to assign to the realm FirstBrokerLoginFlow (since Keycloak 24).'
             realm_id: '- (Required) The realm the authentication flow binding exists in.'
             registration_flow: '- (Optional) The alias of the flow to assign to the realm RegistrationFlow.'
             reset_credentials_flow: '- (Optional) The alias of the flow to assign to the realm ResetCredentialsFlow.'
@@ -162,6 +163,7 @@ resources:
                 {
                   "authenticator": "auth-cookie",
                   "parent_flow_alias": "${keycloak_authentication_flow.flow.alias}",
+                  "priority": 10,
                   "realm_id": "${keycloak_realm.realm.id}",
                   "requirement": "ALTERNATIVE"
                 }
@@ -180,10 +182,8 @@ resources:
               manifest: |-
                 {
                   "authenticator": "identity-provider-redirector",
-                  "depends_on": [
-                    "${keycloak_authentication_execution.execution_one}"
-                  ],
                   "parent_flow_alias": "${keycloak_authentication_flow.flow.alias}",
+                  "priority": 20,
                   "realm_id": "${keycloak_realm.realm.id}",
                   "requirement": "ALTERNATIVE"
                 }
@@ -201,6 +201,7 @@ resources:
         argumentDocs:
             authenticator: '- (Required) The name of the authenticator. This can be found by experimenting with the GUI and looking at HTTP requests within the network tab of your browser''s development tools.'
             parent_flow_alias: '- (Required) The alias of the flow this execution is attached to.'
+            priority: '- (Optional) The authenticator priority. Lower values will be executed prior higher values (Only supported by Keycloak >= 25).'
             realm_id: '- (Required) The realm the authentication execution exists in.'
             requirement: '- (Optional) The requirement setting, which can be one of REQUIRED, ALTERNATIVE, OPTIONAL, CONDITIONAL, or DISABLED. Defaults to DISABLED.'
         importStatements: []
@@ -287,6 +288,7 @@ resources:
                 {
                   "alias": "my-subflow-alias",
                   "parent_flow_alias": "${keycloak_authentication_flow.flow.alias}",
+                  "priority": 10,
                   "provider_id": "basic-flow",
                   "realm_id": "${keycloak_realm.realm.id}",
                   "requirement": "ALTERNATIVE"
@@ -312,6 +314,7 @@ resources:
                 authenticators. In general this will remain empty.
             description: '- (Optional) A description for the authentication subflow.'
             parent_flow_alias: '- (Required) The alias for the parent authentication flow.'
+            priority: '- (Optional) The authenticator priority. Lower values will be executed prior higher values (Only supported by Keycloak >= 25).'
             provider_id: |-
                 - (Optional) The type of authentication subflow to create. Valid choices include basic-flow, form-flow
                 and client-flow. Defaults to basic-flow.
@@ -393,7 +396,7 @@ resources:
         argumentDocs:
             cache_policy: '- (Optional) Can be one of DEFAULT, EVICT_DAILY, EVICT_WEEKLY, MAX_LIFESPAN, or NO_CACHE. Defaults to DEFAULT.'
             changed_sync_period: '- (Optional) How frequently Keycloak should sync changed users, in seconds. Omit this property to disable periodic changed users sync.'
-            config: '- (Optional) The provider configuration handed over to your custom user federation provider. In order to add multivalue settings, use ## to seperate the values.'
+            config: '- (Optional) The provider configuration handed over to your custom user federation provider. In order to add multivalued settings, use ## to separate the values.'
             enabled: '- (Optional) When false, this provider will not be used when performing queries for users. Defaults to true.'
             full_sync_period: '- (Optional) How frequently Keycloak should sync all users, in seconds. Omit this property to disable periodic full sync.'
             name: '- (Required) Display name of the provider when displayed in the console.'
@@ -908,7 +911,7 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
-            attributes: '- (Optional) A map representing attributes for the group. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars'
+            attributes: '- (Optional) A map representing attributes for the group. In order to add multivalued attributes, use ## to separate the values. Max length for each value is 255 chars'
             name: '- (Required) The name of the group.'
             parent_id: '- (Optional) The ID of this group''s parent. If omitted, this group will be defined at the root level.'
             path: '- (Computed) The complete path of the group. For example, the child group''s path in the example configuration would be /parent-group/child-group.'
@@ -1464,7 +1467,7 @@ resources:
             drop_non_existing_groups_during_sync: '- (Optional) When true, groups that no longer exist within LDAP will be dropped in Keycloak during sync. Defaults to false.'
             group_name_ldap_attribute: '- (Required) The name of the LDAP attribute that is used in group objects for the name and RDN of the group. Typically cn.'
             group_object_classes: '- (Required) List of strings representing the object classes for the group. Must contain at least one.'
-            groups_ldap_filter: '- (Optional) When specified, adds an additional custom filter to be used when querying for groups. Must start with ( and end with ).'
+            groups_ldap_filter: '- (Optional) When specified, adds a custom filter to be used when querying for groups. Must start with ( and end with ).'
             groups_path: '- (Optional) Keycloak group path the LDAP groups are added to. For example if value /Applications/App1 is used, then LDAP groups will be available in Keycloak under group App1, which is the child of top level group Applications. The configured group path must already exist in Keycloak when creating this mapper.'
             ignore_missing_groups: '- (Optional) When true, missing groups in the hierarchy will be ignored.'
             ldap_groups_dn: '- (Required) The LDAP DN where groups can be found.'
@@ -1808,7 +1811,7 @@ resources:
             realm_id: '- (Required) The realm that this LDAP mapper will exist in.'
             role_name_ldap_attribute: '- (Required) The name of the LDAP attribute that is used in role objects for the name and RDN of the role. Typically cn.'
             role_object_classes: '- (Required) List of strings representing the object classes for the role. Must contain at least one.'
-            roles_ldap_filter: '- (Optional) When specified, adds an additional custom filter to be used when querying for roles. Must start with ( and end with ).'
+            roles_ldap_filter: '- (Optional) When specified, adds a custom filter to be used when querying for roles. Must start with ( and end with ).'
             use_realm_roles_mapping: '- (Optional) When true, LDAP role mappings will be mapped to realm roles within Keycloak. Defaults to true.'
             user_roles_retrieve_strategy: '- (Optional) Can be one of LOAD_ROLES_BY_MEMBER_ATTRIBUTE, GET_ROLES_FROM_USER_MEMBEROF_ATTRIBUTE, or LOAD_ROLES_BY_MEMBER_ATTRIBUTE_RECURSIVELY. Defaults to LOAD_ROLES_BY_MEMBER_ATTRIBUTE.'
         importStatements: []
@@ -1854,6 +1857,7 @@ resources:
         argumentDocs:
             always_read_value_from_ldap: '- (Optional) When true, the value fetched from LDAP will override the value stored in Keycloak. Defaults to false.'
             attribute_default_value: '- (Optional) Default value to set in LDAP if is_mandatory_in_ldap is true and the value is empty.'
+            attribute_force_default: '- (Optional) When true, an empty default value is forced for mandatory attributes even when a default value is not specified. Defaults to true.'
             is_binary_attribute: '- (Optional) Should be true for binary LDAP attributes.'
             is_mandatory_in_ldap: '- (Optional) When true, this attribute must exist in LDAP. Defaults to false.'
             ldap_attribute: '- (Required) Name of the mapped attribute on the LDAP object.'
@@ -1996,7 +2000,7 @@ resources:
             hide_on_login_page: '- (Optional) When true, this identity provider will be hidden on the login page. Defaults to false.'
             hosted_domain: '- (Optional) Sets the "hd" query parameter when logging in with Google. Google will only list accounts for this domain. Keycloak will validate that the returned identity token has a claim for this domain. When * is entered, an account from any domain can be used.'
             internal_id: '- (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.'
-            link_only: '- (Optional) When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.'
+            link_only: '- (Optional) When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.'
             post_broker_login_flow_alias: '- (Optional) The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.'
             provider_id: '- (Optional) The ID of the identity provider to use. Defaults to google, which should be used unless you have extended Keycloak and provided your own implementation.'
             realm: '- (Required) The name of the realm. This is unique across Keycloak.'
@@ -2035,7 +2039,7 @@ resources:
         argumentDocs:
             accepts_prompt_none_forward_from_client: (Optional) When true, the IDP will accept forwarded authentication requests that contain the prompt=none query parameter. Defaults to false.
             add_read_token_role_on_create: '- (Optional) When true, new users will be able to read stored tokens. This will automatically assign the broker.read-token role. Defaults to false.'
-            alias: '- (Required) The alias uniquely identifies an identity provider and it is also used to build the redirect uri.'
+            alias: '- (Required) The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.'
             authorization_url: '- (Required) The Authorization Url.'
             backchannel_supported: '- (Optional) Does the external IDP support backchannel logout? Defaults to true.'
             client_id: '- (Required) The client or client identifier registered within the identity provider.'
@@ -2052,9 +2056,9 @@ resources:
             internal_id: '- (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.'
             issuer: '- (Optional) The issuer identifier for the issuer of the response. If not provided, no validation will be performed.'
             jwks_url: '- (Optional) JSON Web Key Set URL.'
-            link_only: '- (Optional) When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.'
+            link_only: '- (Optional) When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.'
             login_hint: '- (Optional) Pass login hint to identity provider.'
-            logout_url: '- (Optional) The Logout URL is the end session endpoint to use to logout user from external identity provider.'
+            logout_url: '- (Optional) The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.'
             post_broker_login_flow_alias: '- (Optional) The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.'
             provider_id: '- (Optional) The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation.'
             realm: '- (Required) The name of the realm. This is unique across Keycloak.'
@@ -2265,7 +2269,7 @@ resources:
                 - (Optional) A list of valid URIs a browser is permitted to redirect to after a successful login or logout. Simple
                 wildcards in the form of an asterisk can be used here. This attribute must be set if either standard_flow_enabled or implicit_flow_enabled
                 is set to true.
-            web_origins: '- (Optional) A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *."'
+            web_origins: '- (Optional) A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *.'
         importStatements: []
     keycloak_openid_client_authorization_permission:
         subCategory: ""
@@ -3204,7 +3208,7 @@ resources:
             client_scope_id: '- (Optional) The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified. client_scope_id - (Required if client_id is not specified) The client scope this protocol mapper is attached to.'
             name: '- (Required) The display name of this protocol mapper in the GUI.'
             realm_id: '- (Required) The realm this protocol mapper exists within.'
-            user_property: '- (Required) The built in user property (such as email) to map a claim for.'
+            user_property: '- (Required) The built-in user property (such as email) to map a claim for.'
         importStatements: []
     keycloak_openid_user_realm_role_protocol_mapper:
         subCategory: ""
@@ -3450,8 +3454,8 @@ resources:
             client_session_idle_timeout: '- (Optional) The amount of time a session can be idle before it expires. Users can override it for individual clients.'
             client_session_max_lifespan: '- (Optional) The maximum amount of time before a session expires regardless of activity. Users can override it for individual clients.'
             create_timeout: '- (Optional) The timeout value for creating a user''s public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.'
-            default_default_client_scopes: '- (Optional) A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak''s built-in default default client-scopes.'
-            default_optional_client_scopes: '- (Optional) A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak''s built-in default optional client-scopes.'
+            default_default_client_scopes: '- (Optional) A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak''s built-in default default client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_default_client_scopes.'
+            default_optional_client_scopes: '- (Optional) A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak''s built-in default optional client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_optional_client_scopes.'
             default_signature_algorithm: '- (Optional) Default algorithm used to sign tokens for the realm.'
             direct_grant_flow: '- (Optional) The desired flow for direct access authentication. Defaults to direct grant.'
             display_name: '- (Optional) The display name for the realm that is shown when logging in to the admin console.'
@@ -3461,6 +3465,7 @@ resources:
             edit_username_allowed: '- (Optional) When true, the username field is editable.'
             email_theme: '- (Optional) Used for emails that are sent by Keycloak.'
             enabled: '- (Optional) When false, users and clients will not be able to access this realm. Defaults to true.'
+            first_broker_login_flow: '- (Optional) The desired flow for First Broker Login (since Keycloak 24). Defaults to first broker login.'
             headers.content_security_policy: '- (Optional) Sets the Content Security Policy, which can be used for prevent pages from being included by non-origin iframes. More information can be found in the W3C-CSP Abstract.'
             headers.content_security_policy_report_only: '- (Optional) Used for testing Content Security Policies.'
             headers.referrer_policy: '- (Optional) The Referrer-Policy HTTP header controls how much referrer information (sent with the Referer header) should be included with requests.'
@@ -3479,6 +3484,7 @@ resources:
             offline_session_idle_timeout: '- (Optional) The amount of time an offline session can be idle before it expires.'
             offline_session_max_lifespan: '- (Optional) The maximum amount of time before an offline session expires regardless of activity.'
             offline_session_max_lifespan_enabled: '- (Optional) Enable offline_session_max_lifespan.'
+            organizations_enabled: '- (Optional) When true, organization support is enabled. Defaults to false.'
             otp_policy.algorithm: '- (Optional) What hashing algorithm should be used to generate the OTP, Valid options are HmacSHA1,HmacSHA256 and HmacSHA512. Defaults to HmacSHA1.'
             otp_policy.digits: '- (Optional) How many digits the OTP have. Defaults to 6.'
             otp_policy.initial_counter: '- (Optional) What should the initial counter value be. Defaults to 2.'
@@ -3492,10 +3498,10 @@ resources:
             registration_allowed: '- (Optional) When true, user registration will be enabled, and a link for registration will be displayed on the login page.'
             registration_email_as_username: '- (Optional) When true, the user''s email will be used as their username during registration.'
             registration_flow: '- (Optional) The desired flow for user registration. Defaults to registration.'
-            relying_party_entity_name: '- (Optional) A human readable server name for the WebAuthn Relying Party. Defaults to keycloak.'
+            relying_party_entity_name: '- (Optional) A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.'
             relying_party_id: '- (Optional) The WebAuthn relying party ID.'
             remember_me: '- (Optional) When true, a "remember me" checkbox will be displayed on the login page, and the user''s session will not expire between browser restarts.'
-            require_resident_key: '- (Optional) Specifies whether or not a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.'
+            require_resident_key: '- (Optional) Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.'
             reset_credentials_flow: '- (Optional) The desired flow to use when a user attempts to reset their credentials. Defaults to reset credentials.'
             reset_password_allowed: '- (Optional) When true, a "forgot password" link will be displayed on the login page.'
             revoke_refresh_token: '- (Optional) If enabled a refresh token can only be used number of times specified in ''refresh_token_max_reuse'' before they are revoked. If unspecified, refresh tokens can be reused.'
@@ -3521,6 +3527,40 @@ resources:
             verify_email: '- (Optional) When true, users are required to verify their email address after registration and after email address changes.'
             web_authn_passwordless_policy: '- (Optional) Configuration for WebAuthn Passwordless Policy authentication.'
             web_authn_policy: '- (Optional) Configuration for WebAuthn Policy authentication.'
+        importStatements: []
+    keycloak_realm_default_client_scopes:
+        subCategory: ""
+        name: keycloak_realm_default_client_scopes
+        title: keycloak_realm_default_client_scopes Resource
+        examples:
+            - name: default_scopes
+              manifest: |-
+                {
+                  "default_scopes": [
+                    "profile",
+                    "email",
+                    "roles",
+                    "web-origins",
+                    "${keycloak_openid_client_scope.client_scope.name}"
+                  ],
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_openid_client_scope.client_scope: |-
+                    {
+                      "name": "test-client-scope",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            default_scopes: '- (Required) An array of default client scope names that should be used when creating new Keycloak clients.'
+            realm_id: '- (Required) The realm this client and scopes exists in.'
         importStatements: []
     keycloak_realm_events:
         subCategory: ""
@@ -3760,6 +3800,40 @@ resources:
             priority: '- (Optional) Priority for the provider. Defaults to 0'
             realm_id: '- (Required) The realm this keystore exists in.'
         importStatements: []
+    keycloak_realm_optional_client_scopes:
+        subCategory: ""
+        name: keycloak_realm_optional_client_scopes
+        title: keycloak_realm_optional_client_scopes Resource
+        examples:
+            - name: optional_scopes
+              manifest: |-
+                {
+                  "optional_scopes": [
+                    "address",
+                    "phone",
+                    "offline_access",
+                    "microprofile-jwt",
+                    "${keycloak_openid_client_scope.client_scope.name}"
+                  ],
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_openid_client_scope.client_scope: |-
+                    {
+                      "name": "test-client-scope",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            optional_scopes: '- (Required) An array of optional client scope names that should be used when creating new Keycloak clients.'
+            realm_id: '- (Required) The realm this client and scopes exists in.'
+        importStatements: []
     keycloak_realm_user_profile:
         subCategory: ""
         name: keycloak_realm_user_profile
@@ -3778,6 +3852,7 @@ resources:
                         "offline_access"
                       ],
                       "group": "group1",
+                      "multi_valued": false,
                       "name": "field1",
                       "permissions": [
                         {
@@ -3839,20 +3914,17 @@ resources:
                       "name": "group2"
                     }
                   ],
-                  "realm_id": "${keycloak_realm.my_realm.id}"
+                  "realm_id": "${keycloak_realm.my_realm.id}",
+                  "unmanaged_attribute_policy": "ENABLED"
                 }
               references:
                 realm_id: keycloak_realm.my_realm.id
               dependencies:
                 keycloak_realm.realm: |-
                     {
-                      "attributes": {
-                        "userProfileEnabled": true
-                      },
                       "realm": "my-realm"
                     }
         argumentDocs:
-            --features=preview: or --features=declarative-user-profile
             annotations: '- (Optional) A map of annotations for the attribute. Values can be a String or a json object.'
             attribute: '- (Optional) An ordered list of attributes.'
             config: '- (Optional) A map defining the configuration of the validator. Values can be a String or a json object.'
@@ -3862,11 +3934,13 @@ resources:
             edit: '- (Optional) A list of profiles that will be able to edit the attribute. One of admin, user.'
             enabled_when_scope: '- (Optional) A list of scopes. The attribute will only be enabled when these scopes are requested by clients.'
             group: '- (Optional) A list of groups.'
+            multi_valued: '- (Optional) If the attribute supports multiple values. Defaults to false.'
             name: '- (Required) The name of the attribute.'
             permissions: '- (Optional) The permissions configuration information.'
             realm_id: '- (Required) The ID of the realm the user profile applies to.'
             required_for_roles: '- (Optional) A list of roles for which the attribute will be required.'
             required_for_scopes: '- (Optional) A list of scopes for which the attribute will be required.'
+            unmanaged_attribute_policy: '- (Optional) Unmanaged attributes are user attributes not explicitly defined in the user profile configuration. By default, unmanaged attributes are not enabled. Value could be one of DISABLED, ENABLED, ADMIN_EDIT or ADMIN_VIEW. If value is not specified it means DISABLED'
             validator: '- (Optional) A list of validators for the attribute.'
             view: '- (Optional) A list of profiles that will be able to view the attribute. One of admin, user.'
         importStatements: []
@@ -4137,6 +4211,7 @@ resources:
             client_id: '- (Optional) When specified, this role will be created as a client role attached to the client with the provided ID'
             composite_roles: '- (Optional) When specified, this role will be a composite role, composed of all roles that have an ID present within this list.'
             description: '- (Optional) The description of the role'
+            import: '- (Optional) When true, the role with the specified name is assumed to already exist, and it will be imported into state instead of being created. This attribute is useful when dealing with roles that Keycloak creates automatically during realm creation, such as the client roles create-client, view-realm, ... for the client realm-management created per realm. Note, that the role will not be removed during destruction if import is true.'
             name: '- (Required) The name of the role'
             realm_id: '- (Required) The realm this role exists within.'
         importStatements: []
@@ -4324,11 +4399,11 @@ resources:
             force_authn: '- (Optional) Indicates whether the identity provider must authenticate the presenter directly rather than rely on a previous security context.'
             gui_order: '- (Optional) A number defining the order of this identity provider in the GUI.'
             hide_on_login_page: '- (Optional) If hidden, then login with this provider is possible only if requested explicitly, e.g. using the ''kc_idp_hint'' parameter.'
-            link_only: '- (Optional) When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.'
+            link_only: '- (Optional) When true, users cannot log in using this provider, but their existing accounts will be linked when possible. Defaults to false.'
             name_id_policy_format: '- (Optional) Specifies the URI reference corresponding to a name identifier format. Defaults to empty.'
             post_binding_authn_request: '- (Optional) Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.'
             post_binding_logout: '- (Optional) Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.'
-            post_binding_response: '- (Optional) Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used..'
+            post_binding_response: '- (Optional) Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.'
             post_broker_login_flow_alias: '- (Optional) Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don''t want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it. Defaults to empty.'
             principal_attribute: '- (Optional) The principal attribute.'
             principal_type: '- (Optional) The principal type. Can be one of SUBJECT, ATTRIBUTE or FRIENDLY_ATTRIBUTE.'
@@ -4418,6 +4493,7 @@ resources:
                       "realm_id": "${keycloak_realm.realm.id}"
                     }
         argumentDocs:
+            aggregate_attributes: '- (Optional) Indicates whether this attribute is a single value or an array of values. Defaults to false.'
             client_id: '- (Optional) The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.'
             client_scope_id: '- (Optional) The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.'
             friendly_name: '- (Optional) An optional human-friendly name for this attribute.'
@@ -4526,13 +4602,14 @@ resources:
             federated_identity: '- (Optional) When specified, the user will be linked to a federated identity provider. Refer to the federated user example for more details.'
             first_name: '- (Optional) The user''s first name.'
             identity_provider: '- (Required) The name of the identity provider'
+            import: '- (Optional) When true, the user with the specified username is assumed to already exist, and it will be imported into state instead of being created. This attribute is useful when dealing with users that Keycloak creates automatically during realm creation, such as admin. Note, that the user will not be removed during destruction if import is true.'
             initial_password: '- (Optional) When given, the user''s initial password will be set. This attribute is only respected during initial user creation.'
             last_name: '- (Optional) The user''s last name.'
             realm_id: '- (Required) The realm this user belongs to.'
             required_actions: '- (Optional) A list of required user actions.'
             temporary: '- (Optional) If set to true, the initial password is set up for renewal on first use. Default to false.'
             user_id: '- (Required) The ID of the user defined in the identity provider'
-            user_name: '- (Required) The user name of the user defined in the identity provider'
+            user_name: '- (Required) The username of the user defined in the identity provider'
             username: '- (Required) The unique username of this user.'
             value: '- (Required) The initial password.'
         importStatements: []

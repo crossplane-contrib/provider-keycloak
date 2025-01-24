@@ -105,7 +105,7 @@ spec:
                             provider
                           type: string
                         userName:
-                          description: The user name of the user defined in the identity
+                          description: The username of the user defined in the identity
                             provider
                           type: string
                       type: object
@@ -113,6 +113,14 @@ spec:
                   firstName:
                     description: The user's first name.
                     type: string
+                  import:
+                    description: When true, the user with the specified username is
+                      assumed to already exist, and it will be imported into state
+                      instead of being created. This attribute is useful when dealing
+                      with users that Keycloak creates automatically during realm
+                      creation, such as admin. Note, that the user will not be removed
+                      during destruction if import is true.
+                    type: boolean
                   initialPassword:
                     description: When given, the user's initial password will be set.
                       This attribute is only respected during initial user creation.
@@ -277,7 +285,7 @@ spec:
                             provider
                           type: string
                         userName:
-                          description: The user name of the user defined in the identity
+                          description: The username of the user defined in the identity
                             provider
                           type: string
                       type: object
@@ -285,6 +293,14 @@ spec:
                   firstName:
                     description: The user's first name.
                     type: string
+                  import:
+                    description: When true, the user with the specified username is
+                      assumed to already exist, and it will be imported into state
+                      instead of being created. This attribute is useful when dealing
+                      with users that Keycloak creates automatically during realm
+                      creation, such as admin. Note, that the user will not be removed
+                      during destruction if import is true.
+                    type: boolean
                   initialPassword:
                     description: When given, the user's initial password will be set.
                       This attribute is only respected during initial user creation.
@@ -615,7 +631,7 @@ spec:
                             provider
                           type: string
                         userName:
-                          description: The user name of the user defined in the identity
+                          description: The username of the user defined in the identity
                             provider
                           type: string
                       type: object
@@ -625,6 +641,14 @@ spec:
                     type: string
                   id:
                     type: string
+                  import:
+                    description: When true, the user with the specified username is
+                      assumed to already exist, and it will be imported into state
+                      instead of being created. This attribute is useful when dealing
+                      with users that Keycloak creates automatically during realm
+                      creation, such as admin. Note, that the user will not be removed
+                      during destruction if import is true.
+                    type: boolean
                   initialPassword:
                     description: When given, the user's initial password will be set.
                       This attribute is only respected during initial user creation.

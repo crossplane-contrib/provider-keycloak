@@ -157,7 +157,7 @@ spec:
                     type: boolean
                   linkOnly:
                     description: |-
-                      When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+                      When true, users cannot log in using this provider, but their existing accounts will be linked when possible. Defaults to false.
                       If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
                     type: boolean
                   loginHint:
@@ -180,7 +180,7 @@ spec:
                     type: boolean
                   postBindingResponse:
                     description: |-
-                      Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used..
+                      Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
                       Post Binding Response.
                     type: boolean
                   postBrokerLoginFlowAlias:
@@ -436,7 +436,7 @@ spec:
                     type: boolean
                   linkOnly:
                     description: |-
-                      When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+                      When true, users cannot log in using this provider, but their existing accounts will be linked when possible. Defaults to false.
                       If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
                     type: boolean
                   loginHint:
@@ -459,7 +459,7 @@ spec:
                     type: boolean
                   postBindingResponse:
                     description: |-
-                      Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used..
+                      Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
                       Post Binding Response.
                     type: boolean
                   postBrokerLoginFlowAlias:
@@ -892,7 +892,7 @@ spec:
                     type: string
                   linkOnly:
                     description: |-
-                      When true, users cannot login using this provider, but their existing accounts will be linked when possible. Defaults to false.
+                      When true, users cannot log in using this provider, but their existing accounts will be linked when possible. Defaults to false.
                       If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
                     type: boolean
                   loginHint:
@@ -915,7 +915,7 @@ spec:
                     type: boolean
                   postBindingResponse:
                     description: |-
-                      Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used..
+                      Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
                       Post Binding Response.
                     type: boolean
                   postBrokerLoginFlowAlias:
