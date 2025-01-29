@@ -240,6 +240,40 @@ XPKG_REG_ORGS_NO_PROMOTE=xpkg.upbound.io/<owner> \
 make publish
 ```
 
+### Local Environment 
+
+Change dir to `dev/` Folder
+```console
+cd dev/
+```
+
+Execute setup script which creates a KIND Cluster
+and installs crossplane, keycloak and the official crossplane provider
+via ArgoCD (for more options run script with `--help`)
+```console
+./setup_dev_environment.sh 
+```
+**Hint**: If you are using rootless docker you can `--skip-metal-lb` 
+and run `sudo cloud-provider-kind` (how to install [see here](https://github.com/kubernetes-sigs/cloud-provider-kind) and don´t forget to give root access to your user´s docker socket)
+
+Use created file from KIND as kubeconfig `~/.kube/<clustername>` 
+
+For debugging local source code you need to scale down 
+the crossplane provider which is running in the cluster
+and then start your local crossplane provider instance
+```console
+kubectl patch DeploymentRuntimeConfig enable-ess --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
+```
+
+### Alternative Local Environment
+
+This make target creates a KIND Cluster
+and installs crossplane and the crossplane provider 
+from current sources
+```console
+make local-deploy
+```
+
 ## Regression Tests
 TODO: Add regression test docs
 
