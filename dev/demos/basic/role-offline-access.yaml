@@ -2,12 +2,11 @@
 apiVersion: role.keycloak.crossplane.io/v1alpha1
 kind: Role
 metadata:
-  name: test
+  name: offline-access
   namespace: upbound-system
 spec:
   forProvider:
     realmId: "dev"
-    name: "abc"
-    description: "abc"
+    name: "offline_access"
   providerConfigRef:
     name: "keycloak-provider-config"  # Reference to the provider configuration
