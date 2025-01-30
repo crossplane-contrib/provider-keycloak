@@ -25,7 +25,7 @@ func Configure(p *config.Provider) {
 // IdentifierLookupForRole is used to find the existing resource by it´s identifying properties
 var IdentifierLookupForRole = config.ExternalName{
 	SetIdentifierArgumentFn: config.NopSetIdentifierArgument,
-	GetExternalNameFn:       getExternalNameFromRole,
+	GetExternalNameFn:       config.IDAsExternalName,
 	GetIDFn:                 getIdFromRole,
 	DisableNameInitializer:  true,
 }
@@ -56,6 +56,18 @@ func getIdFromRole(ctx context.Context, externalName string, parameters map[stri
 		clientId = *r.ClientID
 	}
 
+	if externalName != "" {
+		found, err := kcClient.GetRole(ctx, *r.RealmID, externalName)
+		if err != nil {
+			var apiErr *keycloak.ApiError
+			if !(errors.As(err, &apiErr) && apiErr.Code == 404) {
+				return "", err
+			}
+		} else {
+			return found.Id, nil
+		}
+	}
+
 	found, err := kcClient.GetRoleByName(ctx, *r.RealmID, clientId, *r.Name)
 	if err != nil {
 		var apiErr *keycloak.ApiError
@@ -67,11 +79,4 @@ func getIdFromRole(ctx context.Context, externalName string, parameters map[stri
 	}
 
 	return found.Id, nil
-}
-
-func getExternalNameFromRole(tfState map[string]any) (string, error) {
-	return utils.GetExternalNameFromTemplate(
-		`{{if eq .client_id ""}}{{ .realm_id }}/{{ .name }}{{else}}{{ .realm_id }}/{{ .client_id }}/{{ .name }}{{end}}`,
-		tfState,
-	)
 }

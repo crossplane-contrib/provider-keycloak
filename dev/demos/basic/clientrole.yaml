@@ -6,9 +6,10 @@ metadata:
   namespace: upbound-system
 spec:
   forProvider:
-    realmId: "master"  # The realm to which this user belongs
-    name: "abc"     # The username for this user
-    clientId: "terraform"
+    realmId: "dev"
+    name: "abc"
+    clientIdRef:
+      name: "test"
     description: "abc"
   providerConfigRef:
     name: "keycloak-provider-config"  # Reference to the provider configuration
