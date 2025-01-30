@@ -13,7 +13,7 @@ require (
 	github.com/hashicorp/terraform-json v0.24.0
 	github.com/hashicorp/terraform-plugin-framework v1.13.0 // indirect
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.35.0
-	github.com/keycloak/terraform-provider-keycloak v0.0.0-20250129141227-5f4347a0765d
+	github.com/keycloak/terraform-provider-keycloak v0.0.0-20250130183822-2a6926dd2650
 	github.com/pkg/errors v0.9.1
 	k8s.io/api v0.29.3
 	k8s.io/apimachinery v0.29.3
