@@ -176,13 +176,21 @@ else
   sleep 10
   $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
   sleep 10
-  $kubectl_cmd wait --for condition=established --timeout=60s crd/providerconfigs.keycloak.crossplane.io
+
 fi
 
-echo "########### Installing Keycloak Provider secret ###########"
+echo "########### Installing Keycloak Provider ###########"
+if $kubectl_cmd diff -f apps/keycloak-provider/keycloak-provider-config.yaml >/dev/null 2>&1; then
+  echo "Keycloak Provider up-to-date."
+else
 cat ./apps/keycloak-provider/keycloak-provider-secret.yaml | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
 $kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider.yaml
+sleep 10
+$kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
+$kubectl_cmd wait --for condition=established --timeout=60s crd/providerconfigs.keycloak.crossplane.io
 
+$kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider-config.yaml
+fi
 
 echo "#################################################"
 echo "You're ready to go!"
