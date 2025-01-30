@@ -1,8 +1,14 @@
 package openidclient
 
 import (
+	"context"
+	"errors"
+	client "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1"
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
+	"github.com/crossplane-contrib/provider-keycloak/config/utils"
+	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
 	"github.com/crossplane/upjet/pkg/config"
+	"strings"
 )
 
 const (
@@ -126,4 +132,51 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_openid_client_permissions", func(r *config.Resource) {
 		r.ShortGroup = Group
 	})
+}
+
+// IdentifierLookupForOidcClient is used to find the existing resource by it´s identifying properties
+var IdentifierLookupForOidcClient = config.ExternalName{
+	SetIdentifierArgumentFn: config.NopSetIdentifierArgument,
+	GetExternalNameFn:       getExternalNameFromOidcClient,
+	GetIDFn:                 getIdFromOidcClientProperties,
+	DisableNameInitializer:  true,
+}
+
+func getIdFromOidcClientProperties(ctx context.Context, externalName string, parameters map[string]any, terraformProviderConfig map[string]any) (string, error) {
+	kcClient, err := clients.NewKeycloakClient(ctx, terraformProviderConfig)
+	if err != nil {
+		return "", err
+	}
+
+	cp := client.ClientParameters{}
+	err = utils.UnmarshalTerraformParamsToObject(parameters, &cp)
+	if err != nil {
+		return "", err
+	}
+
+	if cp.RealmID == nil {
+		return "", errors.New("realmId not set")
+	}
+
+	if cp.ClientID == nil {
+		return "", errors.New("clientId not set")
+	}
+
+	found, err := kcClient.GetGenericClientByClientId(ctx, *cp.RealmID, *cp.ClientID)
+	if err != nil {
+		if strings.Contains(err.Error(), "does not exist") {
+			return "", nil
+		}
+
+		return "", err
+	}
+
+	return found.Id, nil
+}
+
+func getExternalNameFromOidcClient(tfState map[string]any) (string, error) {
+	return utils.GetExternalNameFromTemplate(
+		`{{ .realm_id }}/{{ .client_id }}`,
+		tfState,
+	)
 }
