@@ -1,14 +1,13 @@
 package role
 
 import (
-	"bytes"
 	"context"
 	"errors"
+	role "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1"
+	"github.com/crossplane-contrib/provider-keycloak/config/utils"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
-	"strings"
-	"text/template"
 )
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
@@ -23,8 +22,8 @@ func Configure(p *config.Provider) {
 	})
 }
 
-// IdentifierByNameLookup is used to find the existing resource by it´s identifying properties
-var IdentifierByNameLookup = config.ExternalName{
+// IdentifierLookupForRole is used to find the existing resource by it´s identifying properties
+var IdentifierLookupForRole = config.ExternalName{
 	SetIdentifierArgumentFn: config.NopSetIdentifierArgument,
 	GetExternalNameFn:       getExternalNameFromRole,
 	GetIDFn:                 getIdFromRole,
@@ -38,22 +37,26 @@ func getIdFromRole(ctx context.Context, externalName string, parameters map[stri
 		return "", err
 	}
 
-	realmID, realmIdExists := parameters["realm_id"]
-	if !realmIdExists {
+	r := role.RoleParameters{}
+	err = utils.UnmarshalTerraformParamsToObject(parameters, &r)
+	if err != nil {
+		return "", err
+	}
+
+	if r.RealmID == nil {
 		return "", errors.New("realmId not set")
 	}
 
-	name, nameExists := parameters["name"]
-	if !nameExists {
+	if r.Name == nil {
 		return "", errors.New("name not set")
 	}
 
-	clientID, clientIdExists := parameters["client_id"]
-	if !clientIdExists {
-		clientID = ""
+	clientId := ""
+	if r.ClientID != nil {
+		clientId = *r.ClientID
 	}
 
-	role, err := kcClient.GetRoleByName(ctx, realmID.(string), clientID.(string), name.(string))
+	found, err := kcClient.GetRoleByName(ctx, *r.RealmID, clientId, *r.Name)
 	if err != nil {
 		var apiErr *keycloak.ApiError
 		if errors.As(err, &apiErr) && apiErr.Code == 404 {
@@ -63,24 +66,12 @@ func getIdFromRole(ctx context.Context, externalName string, parameters map[stri
 		return "", err
 	}
 
-	return role.Id, nil
+	return found.Id, nil
 }
 
 func getExternalNameFromRole(tfState map[string]any) (string, error) {
-	t, err := template.New("getExternalName").Funcs(template.FuncMap{
-		"ToLower": strings.ToLower,
-		"ToUpper": strings.ToUpper,
-	}).Parse(`{{if eq .client_id ""}}{{ .realm_id }}/{{ .name }}{{else}}{{ .realm_id }}/{{ .client_id }}/{{ .name }}{{end}}`)
-
-	if err != nil {
-		return "", err
-	}
-
-	var buf bytes.Buffer
-	err = t.Execute(&buf, tfState)
-	if err != nil {
-		return "", err
-	}
-	externalName := buf.String()
-	return externalName, nil
+	return utils.GetExternalNameFromTemplate(
+		`{{if eq .client_id ""}}{{ .realm_id }}/{{ .name }}{{else}}{{ .realm_id }}/{{ .client_id }}/{{ .name }}{{end}}`,
+		tfState,
+	)
 }

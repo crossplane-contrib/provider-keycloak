@@ -5,6 +5,7 @@ Copyright 2022 Upbound Inc.
 package config
 
 import (
+	"github.com/crossplane-contrib/provider-keycloak/config/openidclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/role"
 	"github.com/crossplane/upjet/pkg/config"
 )
@@ -27,13 +28,13 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_openid_client_default_scopes":             config.IdentifierFromProvider,
 	"keycloak_openid_client_optional_scopes":            config.IdentifierFromProvider,
 	"keycloak_openid_client_scope":                      config.IdentifierFromProvider,
-	"keycloak_openid_client":                            config.IdentifierFromProvider,
+	"keycloak_openid_client":                            openidclient.IdentifierLookupForOidcClient,
 	"keycloak_openid_group_membership_protocol_mapper":  config.IdentifierFromProvider,
 	"keycloak_openid_client_service_account_realm_role": config.IdentifierFromProvider,
 	"keycloak_openid_client_service_account_role":       config.IdentifierFromProvider,
 	"keycloak_realm":                                    config.IdentifierFromProvider,
 	"keycloak_required_action":                          config.IdentifierFromProvider,
-	"keycloak_role":                                     role.IdentifierByNameLookup,
+	"keycloak_role":                                     role.IdentifierLookupForRole,
 	"keycloak_user_groups":                              config.IdentifierFromProvider,
 	"keycloak_user_roles":                               config.IdentifierFromProvider,
 	"keycloak_users_permissions":                        config.IdentifierFromProvider,
