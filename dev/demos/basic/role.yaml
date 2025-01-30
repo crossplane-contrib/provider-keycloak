@@ -1,0 +1,13 @@
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: test
+  namespace: upbound-system
+spec:
+  forProvider:
+    realmId: "master"  # The realm to which this user belongs
+    name: "abc"     # The username for this user
+    description: "abc"
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the provider configuration
