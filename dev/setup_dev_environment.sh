@@ -1,14 +1,63 @@
 #!/bin/bash
 set -eo pipefail
 
-CLUSTER_NAME=$1
+# Default variable values
+CLUSTER_NAME="fenrir-1"
+skipmetallb=false
 
-if [[ -n $CLUSTER_NAME ]]; then
-  echo "Cluster name provided: $CLUSTER_NAME"
-else
-  echo "Default cluster name: fenrir-1"
-  CLUSTER_NAME="fenrir-1"
-fi
+# Function to display script usage
+usage() {
+ echo "Usage: $0 [OPTIONS]"
+ echo "Options:"
+ echo " -h, --help           Display this help message"
+ echo " -c, --cluster-name   Name of the Cluster"
+ echo " -s, --skip-metal-lb  Do not install MetalLB"
+}
+
+has_argument() {
+    [[ ("$1" == *=* && -n ${1#*=}) || ( ! -z "$2" && "$2" != -*)  ]];
+}
+
+extract_argument() {
+  echo "${2:-${1#*=}}"
+}
+
+# Function to handle options and arguments
+handle_options() {
+  while [ $# -gt 0 ]; do
+    case $1 in
+      -h | --help)
+        usage
+        exit 0
+        ;;
+      -s | --skip-metal-lb)
+        skipmetallb=true
+        ;;
+      -c | --cluster-name*)
+        if ! has_argument $@; then
+          echo "Clustername not specified." >&2
+          usage
+          exit 1
+        fi
+
+        CLUSTER_NAME=$(extract_argument $@)
+
+        shift
+        ;;
+      *)
+        echo "Invalid option: $1" >&2
+        usage
+        exit 1
+        ;;
+    esac
+    shift
+  done
+}
+
+# Main script execution
+handle_options "$@"
+
+echo "Cluster name: $CLUSTER_NAME"
 
 echo "########### Checking dependencies ###########"
 command -v docker >/dev/null 2>&1 || { echo >&2 "Docker is required but not installed.  Aborting."; exit 1; }
@@ -33,11 +82,13 @@ if $sudo_prefix kind get clusters | grep "$CLUSTER_NAME" >/dev/null 2>&1; then
   echo "$CLUSTER_NAME cluster already exists"
 else
   echo "Creating cluster"
-  old_context=$(kubectl config current-context)
+  old_context=$(kubectl config current-context || echo "notset")
   $sudo_prefix kind create cluster --name $CLUSTER_NAME --config kind-config.yaml --kubeconfig $HOME/.kube/$CLUSTER_NAME
   $sudo_prefix chown $USER:$USER $HOME/.kube/$CLUSTER_NAME
-  echo "Restore old context $old_context"
-  kubectl config use-context $old_context
+  if [[ ! "$old_context" == "notset" ]]; then
+    echo "Restore old context $old_context"
+    kubectl config use-context $old_context
+  fi
 fi
 
 echo "Running some commands to make sure the cluster is ready"
@@ -46,6 +97,9 @@ kubectl_cmd="kubectl --context=kind-$CLUSTER_NAME"
 $kubectl_cmd cluster-info
 $kubectl_cmd get nodes
 
+if [[ "$skipmetallb" == "true" ]]; then
+echo "Skipping MetalLB"
+else
 echo "########### Setup MetalLB ###########"
 echo "* Installing MetalLB"
 $kubectl_cmd apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
@@ -74,6 +128,7 @@ while true; do
   echo "** still waiting for metallb resources to be ready"
   sleep 1
 done
+fi
 
 echo "########### Installing ArgoCD ###########"
 $kubectl_cmd create namespace argocd || true
@@ -121,12 +176,21 @@ else
   sleep 10
   $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
   sleep 10
+
 fi
 
-echo "########### Installing Keycloak Provider secret ###########"
+echo "########### Installing Keycloak Provider ###########"
+if $kubectl_cmd diff -f apps/keycloak-provider/keycloak-provider-config.yaml >/dev/null 2>&1; then
+  echo "Keycloak Provider up-to-date."
+else
 cat ./apps/keycloak-provider/keycloak-provider-secret.yaml | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
 $kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider.yaml
+sleep 10
+$kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
+$kubectl_cmd wait --for condition=established --timeout=60s crd/providerconfigs.keycloak.crossplane.io
 
+$kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider-config.yaml
+fi
 
 echo "#################################################"
 echo "You're ready to go!"

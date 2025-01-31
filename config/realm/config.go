@@ -36,6 +36,14 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 	})
 
+	p.AddResourceConfigurator("keycloak_realm_default_client_scopes", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
+
+	p.AddResourceConfigurator("keycloak_realm_optional_client_scopes", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
+
 	p.AddResourceConfigurator("keycloak_realm_events", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.Kind = "RealmEvents"

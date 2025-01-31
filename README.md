@@ -151,7 +151,8 @@ You can explore the available custom resources:
 
 Run code-generation pipeline:
 ```console
-go run cmd/generator/main.go "$PWD"
+go install golang.org/x/tools/cmd/goimports@latest
+go run cmd/generator/main.go "$(pwd)"
 ```
 
 Checkout sub-repositories:
@@ -184,7 +185,96 @@ Build binary:
 make build
 ```
 
-## Regression Tests 
+### Build from custom Terraform Provider
+
+If you want to build this crossplane provider on top of a forked `terraform-provider-keycloak` follow these instructions:
+
+1. Execute code generation:
+```
+TERRAFORM_PROVIDER_REPO=https://github.com/<owner>/terraform-provider-keycloak \
+TERRAFORM_PROVIDER_VERSION=1.0.0 \
+make generate
+```
+**Hint:** `TERRAFORM_PROVIDER_VERSION` must be a Release. Releases can be found here: `https://github.com/<owner>/terraform-provider-keycloak/releases`. 
+Every ReleaseName should have the prefix "v" (i.e 'v1.0.0'). But if you specify the `TERRAFORM_PROVIDER_VERSION` you need to 
+skip that prefix (i.e. '1.0.0')
+
+2. Use forked repo as go dependency:
+```
+go mod edit -replace="github.com/keycloak/terraform-provider-keycloak@v0.0.0-20241206084240-f87470c95855=github.com/<owner>/terraform-provider-keycloak@v1.0.0"
+go mod tidy
+```
+**Hint:** You can also specify the version as `github.com/<owner>/terraform-provider-keycloak@v0.0.0-<timestamp>-<commitHash>`
+
+### Build and publish to custom repo
+
+Install up cli: https://docs.upbound.io/reference/cli/
+
+Git tag with the version that should be published:
+```console
+git tag v<VersionNumber>
+```
+
+Create a release branch with git:
+```console
+git checkout -b release-v<VersionNumber>
+```
+
+Ensure that you ran `make generate` and `make build`
+
+**Hint:** If you want to build a specific platform you can do this with:
+```console
+PLATFORMS=linux_amd64 make build
+```
+
+Login
+```console
+up login -t <TOKEN>
+```
+
+Publish
+```console
+PLATFORMS=linux_amd64 \
+XPKG_REG_ORGS=xpkg.upbound.io/<owner> \
+XPKG_REG_ORGS_NO_PROMOTE=xpkg.upbound.io/<owner> \
+make publish
+```
+
+### Local Environment 
+
+Change dir to `dev/` Folder
+```console
+cd dev/
+```
+
+Execute setup script which creates a KIND Cluster
+and installs crossplane, keycloak and the official crossplane provider
+via ArgoCD (for more options run script with `--help`)
+```console
+./setup_dev_environment.sh 
+```
+**Hint**: If you are using rootless docker you can `--skip-metal-lb` 
+and run `sudo cloud-provider-kind` (how to install [see here](https://github.com/kubernetes-sigs/cloud-provider-kind) and don´t forget to give root access to your user´s docker socket)
+
+Use created file from KIND as kubeconfig `~/.kube/<clustername>` 
+
+For debugging local source code you need to scale down 
+the crossplane provider which is running in the cluster
+and then start your local crossplane provider instance
+```console
+kubectl patch DeploymentRuntimeConfig enable-ess --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
+```
+
+### Alternative Local Environment
+
+This make target creates a KIND Cluster
+and installs crossplane and the crossplane provider 
+from current sources
+```console
+make local-deploy
+```
+
+## Regression Tests
 TODO: Add regression test docs
 
 ## Report a Bug
