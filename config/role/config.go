@@ -3,7 +3,7 @@ package role
 import (
 	"context"
 	"errors"
-	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
+	"github.com/crossplane-contrib/provider-keycloak/config/utils"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 )
@@ -29,8 +29,7 @@ var IdentifierLookupForRole = config.ExternalName{
 }
 
 func getIdFromRole(ctx context.Context, externalName string, parameters map[string]any, terraformProviderConfig map[string]any) (string, error) {
-
-	kcClient, err := clients.NewKeycloakClient(ctx, terraformProviderConfig)
+	kcClient, err := utils.NewKeycloakClient(ctx, terraformProviderConfig)
 	if err != nil {
 		return "", err
 	}
