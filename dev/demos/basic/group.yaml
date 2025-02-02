@@ -1,0 +1,10 @@
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: test
+spec:
+  forProvider:
+    name: test
+    realmId: dev
+  providerConfigRef:
+    name: "keycloak-provider-config"

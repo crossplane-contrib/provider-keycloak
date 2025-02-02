@@ -3,9 +3,7 @@ package openidclient
 import (
 	"context"
 	"errors"
-	client "github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1"
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
-	"github.com/crossplane-contrib/provider-keycloak/config/utils"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
@@ -149,22 +147,18 @@ func getIdFromOidcClientProperties(ctx context.Context, externalName string, par
 		return "", err
 	}
 
-	cp := client.ClientParameters{}
-	err = utils.UnmarshalTerraformParamsToObject(parameters, &cp)
-	if err != nil {
-		return "", err
-	}
-
-	if cp.RealmID == nil {
+	realmID, realmIdExists := parameters["realm_id"]
+	if !realmIdExists {
 		return "", errors.New("realmId not set")
 	}
 
-	if cp.ClientID == nil {
+	clientID, clientIdExists := parameters["client_id"]
+	if !clientIdExists {
 		return "", errors.New("clientId not set")
 	}
 
 	if externalName != "" {
-		found, err := kcClient.GetGenericClient(ctx, *cp.RealmID, externalName)
+		found, err := kcClient.GetGenericClient(ctx, realmID.(string), externalName)
 		if err != nil {
 			var apiErr *keycloak.ApiError
 			if !(errors.As(err, &apiErr) && apiErr.Code == 404) {
@@ -175,7 +169,7 @@ func getIdFromOidcClientProperties(ctx context.Context, externalName string, par
 		}
 	}
 
-	found, err := kcClient.GetGenericClientByClientId(ctx, *cp.RealmID, *cp.ClientID)
+	found, err := kcClient.GetGenericClientByClientId(ctx, realmID.(string), clientID.(string))
 	if err != nil {
 		if strings.Contains(err.Error(), "does not exist") {
 			return "", nil

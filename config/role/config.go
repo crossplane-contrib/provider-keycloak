@@ -3,8 +3,6 @@ package role
 import (
 	"context"
 	"errors"
-	role "github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1"
-	"github.com/crossplane-contrib/provider-keycloak/config/utils"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
@@ -37,27 +35,23 @@ func getIdFromRole(ctx context.Context, externalName string, parameters map[stri
 		return "", err
 	}
 
-	r := role.RoleParameters{}
-	err = utils.UnmarshalTerraformParamsToObject(parameters, &r)
-	if err != nil {
-		return "", err
-	}
-
-	if r.RealmID == nil {
+	realmID, realmIdExists := parameters["realm_id"]
+	if !realmIdExists {
 		return "", errors.New("realmId not set")
 	}
 
-	if r.Name == nil {
+	name, nameExists := parameters["name"]
+	if !nameExists {
 		return "", errors.New("name not set")
 	}
 
-	clientId := ""
-	if r.ClientID != nil {
-		clientId = *r.ClientID
+	clientID, clientIdExists := parameters["client_id"]
+	if !clientIdExists {
+		clientID = ""
 	}
 
 	if externalName != "" {
-		found, err := kcClient.GetRole(ctx, *r.RealmID, externalName)
+		found, err := kcClient.GetRole(ctx, realmID.(string), externalName)
 		if err != nil {
 			var apiErr *keycloak.ApiError
 			if !(errors.As(err, &apiErr) && apiErr.Code == 404) {
@@ -68,7 +62,7 @@ func getIdFromRole(ctx context.Context, externalName string, parameters map[stri
 		}
 	}
 
-	found, err := kcClient.GetRoleByName(ctx, *r.RealmID, clientId, *r.Name)
+	found, err := kcClient.GetRoleByName(ctx, realmID.(string), clientID.(string), name.(string))
 	if err != nil {
 		var apiErr *keycloak.ApiError
 		if errors.As(err, &apiErr) && apiErr.Code == 404 {
