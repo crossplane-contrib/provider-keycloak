@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
-	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
+	"github.com/crossplane-contrib/provider-keycloak/config/utils"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 	"strings"
@@ -142,7 +142,7 @@ var IdentifierLookupForOidcClient = config.ExternalName{
 }
 
 func getIdFromOidcClientProperties(ctx context.Context, externalName string, parameters map[string]any, terraformProviderConfig map[string]any) (string, error) {
-	kcClient, err := clients.NewKeycloakClient(ctx, terraformProviderConfig)
+	kcClient, err := utils.NewKeycloakClient(ctx, terraformProviderConfig)
 	if err != nil {
 		return "", err
 	}
