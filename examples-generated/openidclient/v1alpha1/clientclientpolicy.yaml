@@ -8,8 +8,8 @@ metadata:
   name: token-exchange
 spec:
   forProvider:
-    clients:
-    - ${keycloak_openid_client.openid_client.id}
+    clientsRefs:
+    - name: openid_client
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     name: my-policy

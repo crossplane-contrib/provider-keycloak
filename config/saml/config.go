@@ -1,6 +1,11 @@
 package saml
 
-import "github.com/crossplane/upjet/pkg/config"
+import (
+	"context"
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+	"github.com/crossplane/upjet/pkg/config"
+	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+)
 
 // Group is the short group name for the resources in this package
 var Group = "saml"
@@ -29,4 +34,25 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 	})
 
+}
+
+var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm", "alias"},
+	GetIDByExternalName:          getIDByExternalName,
+	GetIDByIdentifyingProperties: getIDByIdentifyingProperties,
+}
+
+// IdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var IdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(identifyingPropertiesLookup)
+
+func getIDByExternalName(ctx context.Context, _ string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	return getIDByIdentifyingProperties(ctx, parameters, kcClient)
+}
+
+func getIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetIdentityProvider(ctx, parameters["realm"].(string), parameters["alias"].(string))
+	if err != nil {
+		return "", err
+	}
+	return found.Alias, nil
 }

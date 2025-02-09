@@ -1,0 +1,22 @@
+apiVersion: saml.keycloak.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  name: saml-identity-provider
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    alias: my-saml-idp
+    backchannelSupported: true
+    entityId: https://domain.com/entity_id
+    forceAuthn: true
+    postBindingAuthnRequest: true
+    postBindingLogout: true
+    postBindingResponse: true
+    realmRef:
+      name: "dev"
+    singleLogoutServiceUrl: https://domain.com/adfs/ls/?wa=wsignout1.0
+    singleSignOnServiceUrl: https://domain.com/adfs/ls/
+    storeToken: false
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"

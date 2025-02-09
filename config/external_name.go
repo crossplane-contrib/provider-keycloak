@@ -5,8 +5,18 @@ Copyright 2022 Upbound Inc.
 package config
 
 import (
+	"github.com/crossplane-contrib/provider-keycloak/config/authentication"
+	"github.com/crossplane-contrib/provider-keycloak/config/group"
+	"github.com/crossplane-contrib/provider-keycloak/config/identityprovider"
+	"github.com/crossplane-contrib/provider-keycloak/config/mapper"
+	"github.com/crossplane-contrib/provider-keycloak/config/oidc"
 	"github.com/crossplane-contrib/provider-keycloak/config/openidclient"
+	"github.com/crossplane-contrib/provider-keycloak/config/openidgroup"
+	"github.com/crossplane-contrib/provider-keycloak/config/realm"
 	"github.com/crossplane-contrib/provider-keycloak/config/role"
+	"github.com/crossplane-contrib/provider-keycloak/config/saml"
+	"github.com/crossplane-contrib/provider-keycloak/config/samlclient"
+	"github.com/crossplane-contrib/provider-keycloak/config/user"
 	"github.com/crossplane/upjet/pkg/config"
 )
 
@@ -14,49 +24,49 @@ import (
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
-	"keycloak_generic_protocol_mapper":                  config.IdentifierFromProvider,
-	"keycloak_generic_role_mapper":                      config.IdentifierFromProvider,
-	"keycloak_group_memberships":                        config.IdentifierFromProvider,
-	"keycloak_group_permissions":                        config.IdentifierFromProvider,
-	"keycloak_group_roles":                              config.IdentifierFromProvider,
-	"keycloak_group":                                    config.IdentifierFromProvider,
-	"keycloak_openid_client_client_policy":              config.IdentifierFromProvider,
-	"keycloak_openid_client_group_policy":               config.IdentifierFromProvider,
-	"keycloak_openid_client_permissions":                config.IdentifierFromProvider,
-	"keycloak_openid_client_role_policy":                config.IdentifierFromProvider,
-	"keycloak_openid_client_user_policy":                config.IdentifierFromProvider,
-	"keycloak_openid_client_default_scopes":             config.IdentifierFromProvider,
-	"keycloak_openid_client_optional_scopes":            config.IdentifierFromProvider,
-	"keycloak_openid_client_scope":                      config.IdentifierFromProvider,
-	"keycloak_openid_client":                            openidclient.IdentifierLookupForOidcClient,
-	"keycloak_openid_group_membership_protocol_mapper":  config.IdentifierFromProvider,
-	"keycloak_openid_client_service_account_realm_role": config.IdentifierFromProvider,
-	"keycloak_openid_client_service_account_role":       config.IdentifierFromProvider,
-	"keycloak_realm":                                    config.IdentifierFromProvider,
-	"keycloak_required_action":                          config.IdentifierFromProvider,
-	"keycloak_role":                                     role.IdentifierLookupForRole,
-	"keycloak_user_groups":                              config.IdentifierFromProvider,
-	"keycloak_user_roles":                               config.IdentifierFromProvider,
-	"keycloak_users_permissions":                        config.IdentifierFromProvider,
-	"keycloak_user":                                     config.IdentifierFromProvider,
-	"keycloak_oidc_identity_provider":                   config.IdentifierFromProvider,
-	"keycloak_saml_identity_provider":                   config.IdentifierFromProvider,
-	"keycloak_custom_identity_provider_mapper":          config.IdentifierFromProvider,
-	"keycloak_saml_client":                              config.IdentifierFromProvider,
-	"keycloak_saml_client_default_scopes":               config.IdentifierFromProvider,
-	"keycloak_saml_client_scope":                        config.IdentifierFromProvider,
-	"keycloak_realm_keystore_rsa":                       config.IdentifierFromProvider,
-	"keycloak_realm_user_profile":                       config.IdentifierFromProvider,
-	"keycloak_realm_default_client_scopes":              config.IdentifierFromProvider,
-	"keycloak_realm_optional_client_scopes":             config.IdentifierFromProvider,
-	"keycloak_realm_events":                             config.IdentifierFromProvider,
-	"keycloak_authentication_flow":                      config.IdentifierFromProvider,
-	"keycloak_authentication_subflow":                   config.IdentifierFromProvider,
-	"keycloak_authentication_execution":                 config.IdentifierFromProvider,
-	"keycloak_authentication_execution_config":          config.IdentifierFromProvider,
-	"keycloak_authentication_bindings":                  config.IdentifierFromProvider,
-	"keycloak_default_roles":                            config.IdentifierFromProvider,
-	"keycloak_default_groups":                           config.IdentifierFromProvider,
+	"keycloak_generic_protocol_mapper":                  mapper.ProtocolMapperIdentifierFromIdentifyingProperties,            // {UUid}
+	"keycloak_generic_role_mapper":                      config.IdentifierFromProvider,                                       // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
+	"keycloak_group_memberships":                        config.IdentifierFromProvider,                                       // {realm}/group-memberships/{Group.UUid}
+	"keycloak_group_permissions":                        config.IdentifierFromProvider,                                       // {realm}/{Group.UUid}
+	"keycloak_group_roles":                              config.IdentifierFromProvider,                                       // {realm}/{Group.UUid}
+	"keycloak_group":                                    group.GroupIdentifierFromIdentifyingProperties,                      // {UUid}
+	"keycloak_openid_client_client_policy":              openidclient.AuthzClientPoliciesIdentifierFromIdentifyingProperties, // {UUid}
+	"keycloak_openid_client_group_policy":               openidclient.AuthzGroupPoliciesIdentifierFromIdentifyingProperties,  // {UUid}
+	"keycloak_openid_client_permissions":                config.IdentifierFromProvider,                                       // {realm}/{Client.UUid}
+	"keycloak_openid_client_role_policy":                openidclient.AuthzRolePoliciesIdentifierFromIdentifyingProperties,   // {UUid}
+	"keycloak_openid_client_user_policy":                openidclient.AuthzUserPoliciesIdentifierFromIdentifyingProperties,   // {UUid}
+	"keycloak_openid_client_default_scopes":             config.IdentifierFromProvider,                                       // {realm}/{Client.UUid}
+	"keycloak_openid_client_optional_scopes":            config.IdentifierFromProvider,                                       // {realm}/{Client.UUid}
+	"keycloak_openid_client_scope":                      openidclient.ClientScopeIdentifierFromIdentifyingProperties,         // {UUid}
+	"keycloak_openid_client":                            openidclient.ClientIdentifierFromIdentifyingProperties,              // {UUid}
+	"keycloak_openid_group_membership_protocol_mapper":  openidgroup.IdentifierFromIdentifyingProperties,                     // {UUid}
+	"keycloak_openid_client_service_account_realm_role": config.IdentifierFromProvider,                                       // {serviceAccountUserId.UUid}/{role.UUid}
+	"keycloak_openid_client_service_account_role":       config.IdentifierFromProvider,                                       // {serviceAccountUserId.UUid}/{role.UUid}
+	"keycloak_realm":                                    realm.RealmIdentifierFromIdentifyingProperties,                      // {realm}}
+	"keycloak_required_action":                          config.IdentifierFromProvider,                                       // {realm}/{alias}
+	"keycloak_role":                                     role.IdentifierFromIdentifyingProperties,                            // {UUid}
+	"keycloak_user_groups":                              config.IdentifierFromProvider,                                       // {realm}/{User.UUid}
+	"keycloak_user_roles":                               config.IdentifierFromProvider,                                       // {realm}/{User.UUid}
+	"keycloak_users_permissions":                        config.IdentifierFromProvider,                                       // {realm}
+	"keycloak_user":                                     user.UserIdentifierFromIdentifyingProperties,                        // {UUid}
+	"keycloak_oidc_identity_provider":                   oidc.IdentifierFromIdentifyingProperties,                            // {alias}
+	"keycloak_saml_identity_provider":                   saml.IdentifierFromIdentifyingProperties,                            // {alias}
+	"keycloak_custom_identity_provider_mapper":          identityprovider.IdentifierFromIdentifyingProperties,                // {UUid}
+	"keycloak_saml_client":                              samlclient.ClientIdentifierFromIdentifyingProperties,                // {UUid}
+	"keycloak_saml_client_default_scopes":               config.IdentifierFromProvider,                                       // {realm}/{Client.UUid}
+	"keycloak_saml_client_scope":                        samlclient.ClientScopeIdentifierFromIdentifyingProperties,           // {UUid}
+	"keycloak_realm_keystore_rsa":                       realm.KeystoreRsaIdentifierFromIdentifyingProperties,                // {UUid}
+	"keycloak_realm_user_profile":                       config.IdentifierFromProvider,                                       // {realm}
+	"keycloak_realm_default_client_scopes":              config.IdentifierFromProvider,                                       // {realm}
+	"keycloak_realm_optional_client_scopes":             config.IdentifierFromProvider,                                       // {realm}
+	"keycloak_realm_events":                             config.IdentifierFromProvider,                                       // {realm}
+	"keycloak_authentication_flow":                      authentication.FlowIdentifierFromIdentifyingProperties,              // {UUid}
+	"keycloak_authentication_subflow":                   authentication.SubFlowIdentifierFromIdentifyingProperties,           // {UUid}
+	"keycloak_authentication_execution":                 authentication.ExecutionIdentifierFromIdentifyingProperties,         // {UUid}
+	"keycloak_authentication_execution_config":          authentication.ExecutionConfigIdentifierFromIdentifyingProperties,   // {UUid}
+	"keycloak_authentication_bindings":                  config.IdentifierFromProvider,                                       // {realm}
+	"keycloak_default_roles":                            config.IdentifierFromProvider,                                       // {UUid}
+	"keycloak_default_groups":                           config.IdentifierFromProvider,                                       // {realm}/default-groups
 	// ldap
 	"keycloak_ldap_user_federation":                      config.IdentifierFromProvider,
 	"keycloak_ldap_user_attribute_mapper":                config.IdentifierFromProvider,

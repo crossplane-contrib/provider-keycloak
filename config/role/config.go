@@ -2,8 +2,7 @@ package role
 
 import (
 	"context"
-	"errors"
-	"github.com/crossplane-contrib/provider-keycloak/config/utils"
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 )
@@ -20,56 +19,28 @@ func Configure(p *config.Provider) {
 	})
 }
 
-// IdentifierLookupForRole is used to find the existing resource by it´s identifying properties
-var IdentifierLookupForRole = config.ExternalName{
-	SetIdentifierArgumentFn: config.NopSetIdentifierArgument,
-	GetExternalNameFn:       config.IDAsExternalName,
-	GetIDFn:                 getIdFromRole,
-	DisableNameInitializer:  true,
+var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "name"},
+	OptionalParameters:           []string{"client_id"},
+	GetIDByExternalName:          getIDByExternalName,
+	GetIDByIdentifyingProperties: getIDByIdentifyingProperties,
 }
 
-func getIdFromRole(ctx context.Context, externalName string, parameters map[string]any, terraformProviderConfig map[string]any) (string, error) {
-	kcClient, err := utils.NewKeycloakClient(ctx, terraformProviderConfig)
+// IdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var IdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(identifyingPropertiesLookup)
+
+func getIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetRole(ctx, parameters["realm_id"].(string), id)
 	if err != nil {
 		return "", err
 	}
+	return found.Id, nil
+}
 
-	realmID, realmIdExists := parameters["realm_id"]
-	if !realmIdExists {
-		return "", errors.New("realmId not set")
-	}
-
-	name, nameExists := parameters["name"]
-	if !nameExists {
-		return "", errors.New("name not set")
-	}
-
-	clientID, clientIdExists := parameters["client_id"]
-	if !clientIdExists {
-		clientID = ""
-	}
-
-	if externalName != "" {
-		found, err := kcClient.GetRole(ctx, realmID.(string), externalName)
-		if err != nil {
-			var apiErr *keycloak.ApiError
-			if !(errors.As(err, &apiErr) && apiErr.Code == 404) {
-				return "", err
-			}
-		} else {
-			return found.Id, nil
-		}
-	}
-
-	found, err := kcClient.GetRoleByName(ctx, realmID.(string), clientID.(string), name.(string))
+func getIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetRoleByName(ctx, parameters["realm_id"].(string), parameters["client_id"].(string), parameters["name"].(string))
 	if err != nil {
-		var apiErr *keycloak.ApiError
-		if errors.As(err, &apiErr) && apiErr.Code == 404 {
-			return "", nil
-		}
-
 		return "", err
 	}
-
 	return found.Id, nil
 }

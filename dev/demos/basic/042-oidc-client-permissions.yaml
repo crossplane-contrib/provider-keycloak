@@ -1,0 +1,13 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientPermissions
+metadata:
+  name: my-permission
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Orphan
+  forProvider:
+    clientIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev"

@@ -1,13 +1,15 @@
 apiVersion: group.keycloak.crossplane.io/v1alpha1
-kind: Memberships
+kind: Roles
 metadata:
-  name: test-members
+  name: group-roles
 spec:
+  deletionPolicy: Orphan
   forProvider:
+    realmIdRef:
+      name: "dev"
     groupIdRef:
       name: test
-    members:
-      - bree
-    realmId: dev
+    roleIdsRefs:
+      - name: "test-client"
   providerConfigRef:
     name: "keycloak-provider-config"

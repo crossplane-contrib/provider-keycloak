@@ -1,0 +1,13 @@
+apiVersion: defaults.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: default-roles
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    defaultRolesRefs:
+      - name: test
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"

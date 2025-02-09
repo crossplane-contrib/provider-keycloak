@@ -1,0 +1,16 @@
+---
+apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+kind: ClientScope
+metadata:
+  name: saml-client-scopes
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    description: This scope will map a user's group memberships to SAML assertion
+    guiOrder: 1
+    name: groups
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
