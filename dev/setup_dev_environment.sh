@@ -4,14 +4,17 @@ set -eo pipefail
 # Default variable values
 CLUSTER_NAME="fenrir-1"
 skipmetallb=false
-
+runcloudproviderkind=false
+uselocalprovider=false
 # Function to display script usage
 usage() {
  echo "Usage: $0 [OPTIONS]"
  echo "Options:"
- echo " -h, --help           Display this help message"
- echo " -c, --cluster-name   Name of the Cluster"
- echo " -s, --skip-metal-lb  Do not install MetalLB"
+ echo " -h, --help                       Display this help message"
+ echo " -c, --cluster-name               Name of the Cluster"
+ echo " -s, --skip-metal-lb              Do not install MetalLB"
+ echo " -p, --start-cloud-provider-kind  Run 'cloud-provider-kind' with sudo as Background task due to rootless docker (metal lb wont work) + mounting user docker socket to root docker socket"
+ echo " -l, --use-local-provider         Use local provider (Scales down 'provider-keycloak')"
 }
 
 has_argument() {
@@ -32,6 +35,12 @@ handle_options() {
         ;;
       -s | --skip-metal-lb)
         skipmetallb=true
+        ;;
+      -p | --start-cloud-provider-kind)
+        runcloudproviderkind=true
+        ;;
+      -l | --use-local-provider)
+        uselocalprovider=true
         ;;
       -c | --cluster-name*)
         if ! has_argument $@; then
@@ -130,7 +139,19 @@ while true; do
 done
 fi
 
+if [[ "$runcloudproviderkind" == "true" ]]; then
+echo "Starting cloud-provider-kind with sudo as BackgroundTask"
+export CLOUD_PROVIDER_KIND_LOGS=$(mktemp)
+echo "Cloud-Provider-Kind Logs are here: tail -f '$CLOUD_PROVIDER_KIND_LOGS'"
+sudo echo -n ""
+sudo ln -s /run/user/1000/docker.sock /var/run/docker.sock || true
+sudo cloud-provider-kind -v 0  > $CLOUD_PROVIDER_KIND_LOGS 2>&1 &
+fi
+
 echo "########### Installing ArgoCD ###########"
+if $kubectl_cmd diff -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml >/dev/null 2>&1; then
+  echo "Argo up-to-date."
+else
 $kubectl_cmd create namespace argocd || true
 $kubectl_cmd apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 echo "* Exposing ArgoCD"
@@ -146,7 +167,7 @@ export ARGOCD_IP=$($kubectl_cmd -n argocd get svc argocd-server -o json | jq -r 
 
 echo "* Waiting for ArgoCD to be ready"
 $kubectl_cmd wait pod --all --for=condition=Ready --namespace argocd --timeout=300s
-
+fi
 
 echo "########### Installing Keycloak ###########"
 if $kubectl_cmd diff -f apps/keycloak.yaml >/dev/null 2>&1; then
@@ -176,20 +197,25 @@ else
   sleep 10
   $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
   sleep 10
-
 fi
 
 echo "########### Installing Keycloak Provider ###########"
+cat ./apps/keycloak-provider/keycloak-provider-secret.yaml | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
 if $kubectl_cmd diff -f apps/keycloak-provider/keycloak-provider-config.yaml >/dev/null 2>&1; then
   echo "Keycloak Provider up-to-date."
 else
-cat ./apps/keycloak-provider/keycloak-provider-secret.yaml | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
 $kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider.yaml
 sleep 10
 $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
 $kubectl_cmd wait --for condition=established --timeout=60s crd/providerconfigs.keycloak.crossplane.io
 
 $kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider-config.yaml
+fi
+
+if [[ "$uselocalprovider" == "true" ]]; then
+echo "Scaling down 'provider-keycloak' to use local provider"
+$kubectl_cmd patch DeploymentRuntimeConfig enable-ess --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
+$kubectl_cmd apply -f ../package/crds
 fi
 
 echo "#################################################"
@@ -200,3 +226,12 @@ echo "-------------------------------------------------"
 echo "Keycloak is ready at http://$KEYCLOAK_IP:$KEYCLOAK_PORT/auth"
 echo "Keycloak login: admin / admin"
 echo "#################################################"
+if [[ "$runcloudproviderkind" == "true" ]]; then
+echo "Cloud-Provider-Kind Logs are here: tail -f $CLOUD_PROVIDER_KIND_LOGS"
+
+# Do not finish script, so that Cloud-Provider-Kind keeps running!
+tail -f /dev/null
+
+echo "Killing Cloud-Provider-Kind, which runs in background"
+pkill -P $$
+fi

@@ -1,0 +1,12 @@
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  name: my-user-permission
+  namespace: dev
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"

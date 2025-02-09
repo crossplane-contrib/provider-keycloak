@@ -1,0 +1,31 @@
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: openid-client-role-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Orphan
+  forProvider:
+    clientIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev"
+    roleIdRef:
+      name: "test-client"
+---
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: openid-client-scope-role-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Orphan
+  forProvider:
+    clientScopeIdRef:
+      name: "openid-client-scope"
+    realmIdRef:
+      name: "dev"
+    roleIdRef:
+      name: "test-client"

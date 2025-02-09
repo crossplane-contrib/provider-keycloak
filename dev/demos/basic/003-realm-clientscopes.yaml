@@ -4,6 +4,7 @@ metadata:
   name: dev-default-scopes
   namespace: dev
 spec:
+  deletionPolicy: Orphan
   forProvider:
     realmId: "dev"
     defaultScopes:
@@ -18,9 +19,10 @@ spec:
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: OptionalClientScopes
 metadata:
-  name: dev-default-scopes
+  name: dev-optional-scopes
   namespace: dev
 spec:
+  deletionPolicy: Orphan
   forProvider:
     realmId: "dev"
     optionalScopes:

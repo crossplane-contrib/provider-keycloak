@@ -1,0 +1,16 @@
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: ExecutionConfig
+metadata:
+  name: execution-identity-redirect-config
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    alias: my-config-alias
+    config:
+      defaultProvider: my-config-default-idp
+    executionIdRef:
+      name: execution-identity-redirect
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"

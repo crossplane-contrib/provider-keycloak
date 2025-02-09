@@ -6,7 +6,10 @@ metadata:
   name: dev  # The name of the realm in Kubernetes
   namespace: dev  # The namespace in which the realm will be created
 spec:
+  deletionPolicy: Orphan
   forProvider:
     realm: "dev"  # The name of the realm in Keycloak
+    attributes:
+      userProfileEnabled: "true"
   providerConfigRef:
     name: "keycloak-provider-config"  # Reference to the ProviderConfig resource

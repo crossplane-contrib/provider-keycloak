@@ -1,0 +1,13 @@
+apiVersion: defaults.keycloak.crossplane.io/v1alpha1
+kind: DefaultGroups
+metadata:
+  name: my-default-groups
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    groupIdsRefs:
+      - name: test
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"

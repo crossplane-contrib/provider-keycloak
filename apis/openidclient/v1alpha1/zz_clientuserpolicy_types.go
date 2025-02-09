@@ -45,8 +45,18 @@ type ClientUserPolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/user/v1alpha1.User
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
 	Users []*string `json:"users,omitempty" tf:"users,omitempty"`
+
+	// References to User in user to populate users.
+	// +kubebuilder:validation:Optional
+	UsersRefs []v1.Reference `json:"usersRefs,omitempty" tf:"-"`
+
+	// Selector for a list of User in user to populate users.
+	// +kubebuilder:validation:Optional
+	UsersSelector *v1.Selector `json:"usersSelector,omitempty" tf:"-"`
 }
 
 type ClientUserPolicyObservation struct {
@@ -107,9 +117,19 @@ type ClientUserPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/user/v1alpha1.User
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Users []*string `json:"users,omitempty" tf:"users,omitempty"`
+
+	// References to User in user to populate users.
+	// +kubebuilder:validation:Optional
+	UsersRefs []v1.Reference `json:"usersRefs,omitempty" tf:"-"`
+
+	// Selector for a list of User in user to populate users.
+	// +kubebuilder:validation:Optional
+	UsersSelector *v1.Selector `json:"usersSelector,omitempty" tf:"-"`
 }
 
 // ClientUserPolicySpec defines the desired state of ClientUserPolicy
@@ -151,7 +171,6 @@ type ClientUserPolicy struct {
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.decisionStrategy) || (has(self.initProvider) && has(self.initProvider.decisionStrategy))",message="spec.forProvider.decisionStrategy is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.logic) || (has(self.initProvider) && has(self.initProvider.logic))",message="spec.forProvider.logic is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.users) || (has(self.initProvider) && has(self.initProvider.users))",message="spec.forProvider.users is a required parameter"
 	Spec   ClientUserPolicySpec   `json:"spec"`
 	Status ClientUserPolicyStatus `json:"status,omitempty"`
 }

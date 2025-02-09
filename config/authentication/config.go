@@ -1,8 +1,12 @@
 package authentication
 
 import (
+	"context"
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	"github.com/crossplane/upjet/pkg/config"
+	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+	"strings"
 )
 
 const (
@@ -78,4 +82,140 @@ func Configure(p *config.Provider) {
 			SelectorFieldName: "DockerAuthenticationFlowSelector",
 		}
 	})
+}
+
+var flowIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "alias"},
+	GetIDByExternalName:          getFlowIDByExternalName,
+	GetIDByIdentifyingProperties: getFlowIDByIdentifyingProperties,
+}
+
+// FlowIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var FlowIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(flowIdentifyingPropertiesLookup)
+
+func getFlowIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetAuthenticationFlow(ctx, parameters["realm_id"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getFlowIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetAuthenticationFlowFromAlias(ctx, parameters["realm_id"].(string), parameters["alias"].(string))
+	if err != nil {
+		if strings.Contains(err.Error(), "no authentication flow found for alias") {
+			return "", nil
+		}
+
+		return "", err
+	}
+
+	return found.Id, nil
+}
+
+var subFlowIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "parent_flow_alias", "alias"},
+	GetIDByExternalName:          getSubFlowIDByExternalName,
+	GetIDByIdentifyingProperties: getSubFlowIDByIdentifyingProperties,
+}
+
+// SubFlowIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var SubFlowIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(subFlowIdentifyingPropertiesLookup)
+
+func getSubFlowIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetAuthenticationSubFlow(ctx, parameters["realm_id"].(string), parameters["parent_flow_alias"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getSubFlowIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	executions, err := kcClient.ListAuthenticationExecutions(ctx, parameters["realm_id"].(string), parameters["parent_flow_alias"].(string))
+	if err != nil {
+		return "", err
+	}
+
+	filtered := lookup.Filter(executions, func(execution *keycloak.AuthenticationExecutionInfo) bool {
+		return execution.AuthenticationFlow && execution.Level == 0
+	})
+
+	for _, flow := range filtered {
+		subFlow, err := kcClient.GetAuthenticationSubFlow(ctx, parameters["realm_id"].(string), parameters["parent_flow_alias"].(string), flow.FlowId)
+		if err != nil {
+			return "", err
+		}
+		if subFlow != nil && subFlow.Alias == parameters["alias"].(string) {
+			return subFlow.Id, nil
+		}
+	}
+
+	return "", nil
+}
+
+var executionIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "parent_flow_alias", "authenticator"},
+	GetIDByExternalName:          getExecutionIDByExternalName,
+	GetIDByIdentifyingProperties: getExecutionIDByIdentifyingProperties,
+}
+
+// ExecutionIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var ExecutionIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(executionIdentifyingPropertiesLookup)
+
+func getExecutionIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetAuthenticationExecution(ctx, parameters["realm_id"].(string), parameters["parent_flow_alias"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getExecutionIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	executions, err := kcClient.ListAuthenticationExecutions(ctx, parameters["realm_id"].(string), parameters["parent_flow_alias"].(string))
+	if err != nil {
+		return "", err
+	}
+
+	// This limits the usage for authentication execution per flow to a single instance of the same ProviderId
+	// A workaround is to encapsulate a duplicated execution with same ProviderId into a subFlow
+	filtered := lookup.Filter(executions, func(execution *keycloak.AuthenticationExecutionInfo) bool {
+		// execution.Level == 0 means that this execution is directly assigned to the parent_flow_alias
+		// and not part of a nested subFlow
+		return !execution.AuthenticationFlow && execution.ProviderId == parameters["authenticator"].(string) && execution.Level == 0
+	})
+
+	return lookup.SingleOrEmpty(filtered, func(execution *keycloak.AuthenticationExecutionInfo) string {
+		return execution.Id
+	})
+}
+
+var executionConfigIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "execution_id"},
+	GetIDByExternalName:          getExecutionConfigIDByExternalName,
+	GetIDByIdentifyingProperties: getExecutionConfigIDByIdentifyingProperties,
+}
+
+// ExecutionConfigIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var ExecutionConfigIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(executionConfigIdentifyingPropertiesLookup)
+
+func getExecutionConfigIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	executionConfig := keycloak.AuthenticationExecutionConfig{
+		Id:      id,
+		RealmId: parameters["realm_id"].(string),
+	}
+
+	err := kcClient.GetAuthenticationExecutionConfig(ctx, &executionConfig)
+	if err != nil {
+		return "", err
+	}
+
+	return executionConfig.Id, nil
+}
+
+func getExecutionConfigIDByIdentifyingProperties(_ context.Context, _ map[string]any, _ *keycloak.KeycloakClient) (string, error) {
+	// If External-Name is not matching anymore we can simply create a new config
+	// We do not need to try to find the existing one, because it´s a 1:1 relationship between Execution and ExecutionConfig
+	// We can simply create it
+	return "", nil
 }
