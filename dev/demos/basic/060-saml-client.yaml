@@ -1,0 +1,20 @@
+---
+apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: saml-client
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    clientId: saml-client-id
+    includeAuthnStatement: true
+    name: saml-client
+    realmIdRef:
+      name: "dev"
+    signAssertions: true
+    signDocuments: false
+    signingCertificate: ${file("saml-cert.pem")}
+    signingPrivateKey: ${file("saml-key.pem")}
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---

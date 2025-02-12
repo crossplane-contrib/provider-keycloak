@@ -1,0 +1,59 @@
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: test
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    realmIdRef:
+      name: "dev"
+    accessType: "CONFIDENTIAL"
+    clientId: "test"
+    fullScopeAllowed: false
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: account
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    realmIdRef:
+      name: "dev"
+    accessType: "CONFIDENTIAL"
+    clientId: "account"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: service-acc-1
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    realmIdRef:
+      name: "dev"
+    accessType: "CONFIDENTIAL"
+    clientId: "service-acc-1"
+    serviceAccountsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: svc-role
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    realmId: "dev"
+    name: "svc-role"
+    clientIdRef:
+      name: "test"
+    description: "Role that svc account uses"
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the provider configuration

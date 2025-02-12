@@ -1,0 +1,17 @@
+---
+apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: saml-client-default-scopes
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    clientIdRef:
+      name: saml-client
+    defaultScopes:
+      - role_list
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---

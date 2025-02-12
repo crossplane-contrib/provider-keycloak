@@ -1,0 +1,81 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientClientPolicy
+metadata:
+  name: my-client-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Orphan
+  forProvider:
+    name: my-client-policy
+    clientsRefs:
+      - name: "test"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev"
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientGroupPolicy
+metadata:
+  name: my-group-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Orphan
+  forProvider:
+    name: my-group-policy
+    groups:
+      - path: /
+        extendChildren: false
+        idRef:
+          name: "test"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev"
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientRolePolicy
+metadata:
+  name: my-role-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Orphan
+  forProvider:
+    name: my-role-policy
+    role:
+      - required: true
+        idRef:
+          name: "test"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev"
+    type: "role"
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientUserPolicy
+metadata:
+  name: my-user-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Orphan
+  forProvider:
+    name: my-user-policy
+    usersRefs:
+      - name: "tim-tester"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev"
