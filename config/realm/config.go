@@ -92,14 +92,9 @@ func getKeystoreRsaIDByExternalName(ctx context.Context, id string, parameters m
 }
 
 func getKeystoreRsaIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	components, err := lookup.GetComponents(kcClient, ctx, parameters["realm_id"].(string), "org.keycloak.keys.KeyProvider", parameters["name"].(string))
-	if err != nil {
-		return "", err
-	}
+	typ := "org.keycloak.keys.KeyProvider"
+	providerId := "rsa"
+	name := parameters["name"].(string)
 
-	// Currently the Keycloak API allows to add multiple KeyProvider with the SAME name
-	// If this is the case an error would be thrown here
-	return lookup.SingleOrEmpty(components, func(scope *lookup.Component) string {
-		return scope.Id
-	})
+	return lookup.GetComponentId(kcClient, ctx, parameters["realm_id"].(string), &typ, nil, &providerId, &name)
 }
