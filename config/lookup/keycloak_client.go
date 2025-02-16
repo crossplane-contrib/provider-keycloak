@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/crossplane/upjet/pkg/terraform"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+	"strconv"
 )
 
 // Component is a generic keycloak data model
@@ -81,15 +82,66 @@ func tryGetMap(m map[string]any, key string) map[string]string {
 	return result
 }
 
+// GetComponentId returns the components id of the specified realm, type, parent, providerId and name
+func GetComponentId(kcClient *keycloak.KeycloakClient, ctx context.Context, realmId string, typ, parent, providerId, name *string) (string, error) {
+	found, err := GetComponent(kcClient, ctx, realmId, typ, parent, providerId, name)
+	if err != nil {
+		return "", err
+	}
+
+	if found == nil {
+		return "", nil
+	}
+
+	return found.Id, nil
+}
+
+// GetComponent returns the component of the specified realm, type, parent, providerId and name
+func GetComponent(kcClient *keycloak.KeycloakClient, ctx context.Context, realmId string, typ, parent, providerId, name *string) (*Component, error) {
+	components, err := GetComponents(kcClient, ctx, realmId, typ, parent, name)
+	if err != nil {
+		return nil, err
+	}
+
+	if providerId == nil {
+		return nil, errors.New("providerId not set")
+	}
+
+	filtered := Filter(components, func(component *Component) bool {
+		return component.ProviderId == *providerId
+	})
+
+	if len(filtered) == 0 {
+		return nil, nil
+	}
+
+	// Currently the Keycloak API allows to add multiple Components with the SAME name
+	// If this is the case an error would be thrown here
+	if len(filtered) > 1 {
+		return nil, errors.New("Too many resources found, which match the identifying parameters. Expected 0 or 1, but was " + strconv.Itoa(len(filtered)))
+	}
+
+	return filtered[0], nil
+}
+
 // GetComponents returns the components of the specified realm, type and name
 // This needs to be removed in the future.
 // We need to clarify with terraform-provider-keycloak maintainers if we could add a GetComponents method
 // Currently we need this i.e. because there is no method to list all RealmKeystoreRsa
 // or to get the RealmKeystoreRsa by name
-func GetComponents(kcClient *keycloak.KeycloakClient, ctx context.Context, realmId string, typ string, name string) ([]*Component, error) {
+func GetComponents(kcClient *keycloak.KeycloakClient, ctx context.Context, realmId string, typ, parent, name *string) ([]*Component, error) {
 	params := make(map[string]string)
-	params["type"] = typ
-	params["name"] = name
+	if typ != nil {
+		params["type"] = *typ
+	}
+
+	if name != nil {
+		params["name"] = *name
+	}
+
+	if parent != nil {
+		params["parent"] = *parent
+	}
 
 	var components []*Component
 
@@ -146,5 +198,4 @@ func GetGenericProtocolMappers(kcClient *keycloak.KeycloakClient, ctx context.Co
 	}
 
 	return &genericProtocolMappers, nil
-
 }

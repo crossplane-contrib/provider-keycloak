@@ -1,0 +1,30 @@
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: MsadUserAccountControlMapper
+metadata:
+  name: msad-user-account-control-mapper
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    name: msad-user-account-control-mapper
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: MsadLdsUserAccountControlMapper
+metadata:
+  name: msad-lds-user-account-control-mapper
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    name: msad-lds-user-account-control-mapper
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---

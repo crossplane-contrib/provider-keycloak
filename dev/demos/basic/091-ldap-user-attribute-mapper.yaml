@@ -1,0 +1,16 @@
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserAttributeMapper
+metadata:
+  name: ldap-user-attribute-mapper
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    ldapAttribute: bar
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    name: user-attribute-mapper
+    realmIdRef:
+      name: "dev"
+    userModelAttribute: foo
+  providerConfigRef:
+    name: "keycloak-provider-config"
