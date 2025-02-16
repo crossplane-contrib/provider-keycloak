@@ -214,7 +214,7 @@ fi
 
 if [[ "$uselocalprovider" == "true" ]]; then
 echo "Scaling down 'provider-keycloak' to use local provider"
-$kubectl_cmd patch DeploymentRuntimeConfig enable-ess --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
+$kubectl_cmd patch DeploymentRuntimeConfig runtimeconfig-provider-keycloak --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
 $kubectl_cmd apply -f ../package/crds
 fi
 

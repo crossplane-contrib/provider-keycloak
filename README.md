@@ -36,7 +36,7 @@ We also support DeploymentRuntimeConfig to enable additional features in the pro
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
-  name: enable-ess
+  name: runtimeconfig-provider-keycloak
 spec:
   deploymentTemplate:
     spec:
@@ -63,7 +63,7 @@ metadata:
 spec:
   package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.5.0
 + runtimeConfigRef:
-+   name: enable-ess
++   name: runtimeconfig-provider-keycloak
 ```
 (Without the + signs of course)
 
@@ -262,7 +262,7 @@ For debugging local source code you need to scale down
 the crossplane provider which is running in the cluster
 and then start your local crossplane provider instance
 ```console
-kubectl patch DeploymentRuntimeConfig enable-ess --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
+kubectl patch DeploymentRuntimeConfig runtimeconfig-provider-keycloak --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
 ```
 
 ### Alternative Local Environment
