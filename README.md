@@ -275,7 +275,30 @@ make local-deploy
 ```
 
 ## Regression Tests
-TODO: Add regression test docs
+Run end to end tests:
+
+Change dir to `dev/` Folder
+```console
+./dev/setup_dev_environment.sh
+```
+
+```console
+kubectl delete providerconfigs keycloak-provider-config
+kubectl delete providers keycloak-provider
+```
+
+Deploy local provider into cluster
+```console
+make local-deploy-provider
+```
+
+```console
+kubectl apply -f ./dev/apps/keycloak-provider/keycloak-provider-config.yaml
+```
+
+```console
+make uptest
+```
 
 ## Report a Bug
 
