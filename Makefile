@@ -57,12 +57,19 @@ GO_SUBDIRS += cmd internal apis
 
 # ====================================================================================
 # Setup Kubernetes tools
-
+KUBECTL_VERSION ?= v1.32.2
 KIND_VERSION = v0.27.0
 UP_VERSION = v0.37.0
 UP_CHANNEL = stable
 UPTEST_VERSION = v1.3.0
 -include build/makelib/k8s_tools.mk
+
+# Workaround until https://github.com/crossplane/build/pull/27 is merged
+$(KUBECTL):
+	@$(INFO) installing kubectl $(KUBECTL_VERSION)
+	@curl -fsSLo $(KUBECTL) --create-dirs https://dl.k8s.io/$(KUBECTL_VERSION)/bin/$(HOSTOS)/$(SAFEHOSTARCH)/kubectl || $(FAIL)
+	@chmod +x $(KUBECTL)
+	@$(OK) installing kubectl $(KUBECTL_VERSION)
 
 # ====================================================================================
 # Setup Images
@@ -219,14 +226,14 @@ uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW) $(CROSSPLANE_CLI)
 
 local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(INFO) running locally built provider
-	@$(KUBECTL) wait provider.pkg $(PROJECT_NAME) --for condition=Healthy --timeout 5m
-	@$(KUBECTL) -n upbound-system wait --for=condition=Available deployment --all --timeout=5m
+	@$(KUBECTL) wait crd providers.pkg.crossplane.io --for=create --timeout 5m
+	@$(KUBECTL) wait provider.pkg $(PROJECT_NAME) --for condition=Healthy --for condition=Installed --for=create --timeout 5m
 	@$(OK) running locally built provider
 
 local-deploy-provider: build local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(INFO) running locally built provider
-	@$(KUBECTL) wait provider.pkg $(PROJECT_NAME) --for condition=Healthy --timeout 5m
-	@$(KUBECTL) -n $(CROSSPLANE_NAMESPACE) wait --for=condition=Available deployment --all --timeout=5m
+	@$(KUBECTL) wait crd providers.pkg.crossplane.io --for=create --timeout 5m
+	@$(KUBECTL) wait provider.pkg $(PROJECT_NAME) --for condition=Healthy --for condition=Installed --for=create --timeout 5m
 	@$(OK) running locally built provider
 
 e2e: local-deploy uptest
