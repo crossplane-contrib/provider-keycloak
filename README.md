@@ -275,27 +275,28 @@ make local-deploy
 ```
 
 ## Regression Tests
-Run end to end tests:
+Follow the following steps to run end to end tests:
 
-Change dir to `dev/` Folder
+
+Start local dev cluster
 ```console
 ./dev/setup_dev_environment.sh
 ```
 
+Remove automatically provisioned keycloak-provider
 ```console
 kubectl delete providerconfigs keycloak-provider-config
 kubectl delete providers keycloak-provider
 ```
 
-Deploy local provider into cluster
+Build and Deploy local provider into cluster
 ```console
-make local-deploy-provider
+KIND_CLUSTER_NAME=fenrir-1 make local-deploy-provider
 ```
+Hint: crossplane pod´s filesystem based cache fpr providers is patched with local built provider 
 
-```console
-kubectl apply -f ./dev/apps/keycloak-provider/keycloak-provider-config.yaml
-```
 
+Run tests
 ```console
 make uptest
 ```
