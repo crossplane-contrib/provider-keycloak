@@ -36,7 +36,7 @@ We also support DeploymentRuntimeConfig to enable additional features in the pro
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
-  name: enable-ess
+  name: runtimeconfig-provider-keycloak
 spec:
   deploymentTemplate:
     spec:
@@ -63,7 +63,7 @@ metadata:
 spec:
   package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.5.0
 + runtimeConfigRef:
-+   name: enable-ess
++   name: runtimeconfig-provider-keycloak
 ```
 (Without the + signs of course)
 
@@ -262,7 +262,7 @@ For debugging local source code you need to scale down
 the crossplane provider which is running in the cluster
 and then start your local crossplane provider instance
 ```console
-kubectl patch DeploymentRuntimeConfig enable-ess --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
+kubectl patch DeploymentRuntimeConfig runtimeconfig-provider-keycloak --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
 ```
 
 ### Alternative Local Environment
@@ -275,7 +275,31 @@ make local-deploy
 ```
 
 ## Regression Tests
-TODO: Add regression test docs
+Follow the following steps to run end to end tests:
+
+
+Start local dev cluster
+```console
+./dev/setup_dev_environment.sh
+```
+
+Remove automatically provisioned keycloak-provider
+```console
+kubectl delete providerconfigs keycloak-provider-config
+kubectl delete providers keycloak-provider
+```
+
+Build and Deploy local provider into cluster
+```console
+KIND_CLUSTER_NAME=fenrir-1 make local-deploy-provider
+```
+Hint: crossplane pod´s filesystem based cache fpr providers is patched with local built provider 
+
+
+Run tests
+```console
+make uptest
+```
 
 ## Report a Bug
 

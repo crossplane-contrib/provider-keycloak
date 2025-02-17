@@ -19,6 +19,7 @@ spec:
           - "--http-port=8080"
           - "--hostname-strict=false"
           - "--hostname-strict-https=false"
+          - "--features=declarative-user-profile,admin-fine-grained-authz"
         extraEnv: |
           - name: KEYCLOAK_ADMIN
             value: admin

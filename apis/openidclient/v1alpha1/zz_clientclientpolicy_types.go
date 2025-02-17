@@ -16,8 +16,18 @@ import (
 type ClientClientPolicyInitParameters struct {
 
 	// The clients allowed by this client policy.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
 	Clients []*string `json:"clients,omitempty" tf:"clients,omitempty"`
+
+	// References to Client in openidclient to populate clients.
+	// +kubebuilder:validation:Optional
+	ClientsRefs []v1.Reference `json:"clientsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Client in openidclient to populate clients.
+	// +kubebuilder:validation:Optional
+	ClientsSelector *v1.Selector `json:"clientsSelector,omitempty" tf:"-"`
 
 	// (Computed) Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
@@ -87,9 +97,19 @@ type ClientClientPolicyObservation struct {
 type ClientClientPolicyParameters struct {
 
 	// The clients allowed by this client policy.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Clients []*string `json:"clients,omitempty" tf:"clients,omitempty"`
+
+	// References to Client in openidclient to populate clients.
+	// +kubebuilder:validation:Optional
+	ClientsRefs []v1.Reference `json:"clientsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Client in openidclient to populate clients.
+	// +kubebuilder:validation:Optional
+	ClientsSelector *v1.Selector `json:"clientsSelector,omitempty" tf:"-"`
 
 	// (Computed) Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
 	// +kubebuilder:validation:Optional
@@ -171,7 +191,6 @@ type ClientClientPolicyStatus struct {
 type ClientClientPolicy struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clients) || (has(self.initProvider) && has(self.initProvider.clients))",message="spec.forProvider.clients is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.logic) || (has(self.initProvider) && has(self.initProvider.logic))",message="spec.forProvider.logic is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	Spec   ClientClientPolicySpec   `json:"spec"`

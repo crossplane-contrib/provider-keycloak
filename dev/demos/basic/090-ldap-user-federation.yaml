@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: dev
+  name: bind-credential-secret
+type: Opaque
+stringData:
+  secret: "xyz"
+---
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  name: ldap-user-federation
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    bindCredentialSecretRef:
+      key: secret
+      name: bind-credential-secret
+      namespace: dev
+    bindDn: cn=admin,dc=example,dc=org
+    connectionTimeout: 5s
+    connectionUrl: ldap://openldap
+    enabled: true
+    kerberos:
+      - kerberosRealm: FOO.LOCAL
+        keyTab: /etc/host.keytab
+        serverPrincipal: HTTP/host.foo.com@FOO.LOCAL
+    name: openldap
+    rdnLdapAttribute: cn
+    readTimeout: 10s
+    realmIdRef:
+      name: "dev"
+    userObjectClasses:
+      - simpleSecurityObject
+      - organizationalRole
+    usernameLdapAttribute: cn
+    usersDn: dc=example,dc=org
+    uuidLdapAttribute: entryDN
+    deleteDefaultMappers: false
+  providerConfigRef:
+    name: "keycloak-provider-config"

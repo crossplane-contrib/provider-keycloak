@@ -1,0 +1,62 @@
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-one
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    authenticator: auth-cookie
+    parentFlowAliasRef:
+      name: flow
+    realmIdRef:
+      name: "dev"
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-two
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    authenticator: auth-cookie
+    parentFlowAlias: my-subflow-alias-1
+    realmIdRef:
+      name: "dev"
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-three
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    authenticator: auth-cookie
+    parentFlowAlias: my-subflow-alias-99
+    realmIdRef:
+      name: "dev"
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-identity-redirect
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    authenticator: identity-provider-redirector
+    parentFlowAliasRef:
+      name: flow
+    realmIdRef:
+      name: "dev"
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
