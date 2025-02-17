@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 
+SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+
 # Default variable values
 CLUSTER_NAME="fenrir-1"
 skipmetallb=false
@@ -92,7 +94,7 @@ if $sudo_prefix kind get clusters | grep "$CLUSTER_NAME" >/dev/null 2>&1; then
 else
   echo "Creating cluster"
   old_context=$(kubectl config current-context || echo "notset")
-  $sudo_prefix kind create cluster --name $CLUSTER_NAME --config kind-config.yaml --kubeconfig $HOME/.kube/$CLUSTER_NAME
+  $sudo_prefix kind create cluster --name $CLUSTER_NAME --config ${SCRIPT_DIR}/kind-config.yaml --kubeconfig $HOME/.kube/$CLUSTER_NAME
   $sudo_prefix chown $USER:$USER $HOME/.kube/$CLUSTER_NAME
   if [[ ! "$old_context" == "notset" ]]; then
     echo "Restore old context $old_context"
@@ -133,7 +135,7 @@ fi
 
 echo "* Set IP Range: $IP_RANGE_START - $IP_RANGE_END"
 while true; do
-  cat metallb/pools.yaml | envsubst | $kubectl_cmd apply -f - && break  # Break the loop if command succeeds
+  cat ${SCRIPT_DIR}/metallb/pools.yaml | envsubst | $kubectl_cmd apply -f - && break  # Break the loop if command succeeds
   echo "** still waiting for metallb resources to be ready"
   sleep 1
 done
@@ -170,10 +172,10 @@ $kubectl_cmd wait pod --all --for=condition=Ready --namespace argocd --timeout=3
 fi
 
 echo "########### Installing Keycloak ###########"
-if $kubectl_cmd diff -f apps/keycloak.yaml >/dev/null 2>&1; then
+if $kubectl_cmd diff -f ${SCRIPT_DIR}/apps/keycloak.yaml >/dev/null 2>&1; then
   echo "Keycloak up-to-date."
 else
-  $kubectl_cmd apply -f apps/keycloak.yaml
+  $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak.yaml
   sleep 5
   $kubectl_cmd wait pod --all --for=condition=Ready --namespace keycloak --timeout=300s
 fi
@@ -190,26 +192,26 @@ export KEYCLOAK_PASSWORD=admin
 
 
 echo "########### Installing Crossplane ###########"
-if $kubectl_cmd diff -f apps/crossplane.yaml >/dev/null 2>&1; then
+if $kubectl_cmd diff -f ${SCRIPT_DIR}/apps/crossplane.yaml >/dev/null 2>&1; then
   echo "Crossplane up-to-date."
 else
-  $kubectl_cmd apply -f apps/crossplane.yaml
+  $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/crossplane.yaml
   sleep 10
   $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
   sleep 10
 fi
 
 echo "########### Installing Keycloak Provider ###########"
-cat ./apps/keycloak-provider/keycloak-provider-secret.yaml | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
-if $kubectl_cmd diff -f apps/keycloak-provider/keycloak-provider-config.yaml >/dev/null 2>&1; then
+cat ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
+if $kubectl_cmd diff -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml >/dev/null 2>&1; then
   echo "Keycloak Provider up-to-date."
 else
-$kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider.yaml
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider.yaml
 sleep 10
 $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
 $kubectl_cmd wait --for condition=established --timeout=60s crd/providerconfigs.keycloak.crossplane.io
 
-$kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider-config.yaml
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml
 fi
 
 if [[ "$uselocalprovider" == "true" ]]; then

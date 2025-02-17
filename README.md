@@ -241,35 +241,26 @@ make publish
 ```
 
 ### Local Environment 
-
-Change dir to `dev/` Folder
-```console
-cd dev/
-```
-
 Execute setup script which creates a KIND Cluster
 and installs crossplane, keycloak and the official crossplane provider
 via ArgoCD (for more options run script with `--help`)
 ```console
-./setup_dev_environment.sh 
+./dev/setup_dev_environment.sh 
 ```
-**Hint**: If you are using rootless docker you can `--skip-metal-lb` 
-and run `sudo cloud-provider-kind` (how to install [see here](https://github.com/kubernetes-sigs/cloud-provider-kind) and don´t forget to give root access to your user´s docker socket)
+**Hint**: If you are using rootless docker you can add the flags `--skip-metal-lb` 
+and `--start-cloud-provider-kind` (how to install cloud-provider-kind [see here](https://github.com/kubernetes-sigs/cloud-provider-kind))
 
 Use created file from KIND as kubeconfig `~/.kube/<clustername>` 
 
-For debugging local source code you need to scale down 
-the crossplane provider which is running in the cluster
-and then start your local crossplane provider instance
-```console
-kubectl patch DeploymentRuntimeConfig runtimeconfig-provider-keycloak --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
-```
+For debugging local source code you can run the script with `--use-local-provider` flag
+this will scale down the crossplane provider which is running in the cluster
+and then start your local crossplane provider instance.
 
 ### Alternative Local Environment
 
 This make target creates a KIND Cluster
 and installs crossplane and the crossplane provider 
-from current sources
+from current sources. But no keycloak deployment is stared.
 ```console
 make local-deploy
 ```
