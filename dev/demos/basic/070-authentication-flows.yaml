@@ -1,0 +1,13 @@
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Flow
+metadata:
+  name: flow
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    alias: my-flow-alias
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---

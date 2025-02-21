@@ -1,0 +1,46 @@
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: openid-client-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Orphan
+  forProvider:
+    name: "picture"
+    protocol: "openid-connect"
+    clientIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev"
+    protocolMapper: "oidc-usermodel-attribute-mapper"
+    config:
+      userinfo.token.claim: "true"
+      user.attribute: "picture"
+      id.token.claim: "true"
+      access.token.claim: "true"
+      claim.name: "picture"
+      jsonType.label: "String"
+---
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: openid-client-scope-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Orphan
+  forProvider:
+    name: "client roles"
+    protocol: "openid-connect"
+    clientScopeIdRef:
+      name: "openid-client-scope"
+    realmIdRef:
+      name: "dev"
+    protocolMapper: "oidc-usermodel-client-role-mapper"
+    config:
+      multivalued: "true"
+      user.attribute: "foo"
+      access.token.claim: "true"
+      claim.name: "resource_access.${client_id}.roles"
+      jsonType.label: "String"

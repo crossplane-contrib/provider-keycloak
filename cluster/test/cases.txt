@@ -1,0 +1,3 @@
+examples-generated/realm/v1alpha1/realm.yaml
+examples-generated/authenticationflow/v1alpha1/flow.yaml
+examples-generated/user/v1alpha1/user.yaml

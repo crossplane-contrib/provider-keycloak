@@ -1,17 +1,22 @@
 #!/bin/bash
 set -eo pipefail
 
+SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+
 # Default variable values
 CLUSTER_NAME="fenrir-1"
 skipmetallb=false
-
+runcloudproviderkind=false
+uselocalprovider=false
 # Function to display script usage
 usage() {
  echo "Usage: $0 [OPTIONS]"
  echo "Options:"
- echo " -h, --help           Display this help message"
- echo " -c, --cluster-name   Name of the Cluster"
- echo " -s, --skip-metal-lb  Do not install MetalLB"
+ echo " -h, --help                       Display this help message"
+ echo " -c, --cluster-name               Name of the Cluster"
+ echo " -s, --skip-metal-lb              Do not install MetalLB"
+ echo " -p, --start-cloud-provider-kind  Run 'cloud-provider-kind' with sudo as Background task due to rootless docker (metal lb wont work) + mounting user docker socket to root docker socket"
+ echo " -l, --use-local-provider         Use local provider (Scales down 'provider-keycloak')"
 }
 
 has_argument() {
@@ -32,6 +37,12 @@ handle_options() {
         ;;
       -s | --skip-metal-lb)
         skipmetallb=true
+        ;;
+      -p | --start-cloud-provider-kind)
+        runcloudproviderkind=true
+        ;;
+      -l | --use-local-provider)
+        uselocalprovider=true
         ;;
       -c | --cluster-name*)
         if ! has_argument $@; then
@@ -83,7 +94,7 @@ if $sudo_prefix kind get clusters | grep "$CLUSTER_NAME" >/dev/null 2>&1; then
 else
   echo "Creating cluster"
   old_context=$(kubectl config current-context || echo "notset")
-  $sudo_prefix kind create cluster --name $CLUSTER_NAME --config kind-config.yaml --kubeconfig $HOME/.kube/$CLUSTER_NAME
+  $sudo_prefix kind create cluster --name $CLUSTER_NAME --config ${SCRIPT_DIR}/kind-config.yaml --kubeconfig $HOME/.kube/$CLUSTER_NAME
   $sudo_prefix chown $USER:$USER $HOME/.kube/$CLUSTER_NAME
   if [[ ! "$old_context" == "notset" ]]; then
     echo "Restore old context $old_context"
@@ -124,13 +135,25 @@ fi
 
 echo "* Set IP Range: $IP_RANGE_START - $IP_RANGE_END"
 while true; do
-  cat metallb/pools.yaml | envsubst | $kubectl_cmd apply -f - && break  # Break the loop if command succeeds
+  cat ${SCRIPT_DIR}/metallb/pools.yaml | envsubst | $kubectl_cmd apply -f - && break  # Break the loop if command succeeds
   echo "** still waiting for metallb resources to be ready"
   sleep 1
 done
 fi
 
+if [[ "$runcloudproviderkind" == "true" ]]; then
+echo "Starting cloud-provider-kind with sudo as BackgroundTask"
+export CLOUD_PROVIDER_KIND_LOGS=$(mktemp)
+echo "Cloud-Provider-Kind Logs are here: tail -f '$CLOUD_PROVIDER_KIND_LOGS'"
+sudo echo -n ""
+sudo ln -s /run/user/1000/docker.sock /var/run/docker.sock || true
+sudo cloud-provider-kind -v 0  > $CLOUD_PROVIDER_KIND_LOGS 2>&1 &
+fi
+
 echo "########### Installing ArgoCD ###########"
+if $kubectl_cmd diff -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml >/dev/null 2>&1; then
+  echo "Argo up-to-date."
+else
 $kubectl_cmd create namespace argocd || true
 $kubectl_cmd apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 echo "* Exposing ArgoCD"
@@ -146,13 +169,13 @@ export ARGOCD_IP=$($kubectl_cmd -n argocd get svc argocd-server -o json | jq -r 
 
 echo "* Waiting for ArgoCD to be ready"
 $kubectl_cmd wait pod --all --for=condition=Ready --namespace argocd --timeout=300s
-
+fi
 
 echo "########### Installing Keycloak ###########"
-if $kubectl_cmd diff -f apps/keycloak.yaml >/dev/null 2>&1; then
+if $kubectl_cmd diff -f ${SCRIPT_DIR}/apps/keycloak.yaml >/dev/null 2>&1; then
   echo "Keycloak up-to-date."
 else
-  $kubectl_cmd apply -f apps/keycloak.yaml
+  $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak.yaml
   sleep 5
   $kubectl_cmd wait pod --all --for=condition=Ready --namespace keycloak --timeout=300s
 fi
@@ -169,27 +192,32 @@ export KEYCLOAK_PASSWORD=admin
 
 
 echo "########### Installing Crossplane ###########"
-if $kubectl_cmd diff -f apps/crossplane.yaml >/dev/null 2>&1; then
+if $kubectl_cmd diff -f ${SCRIPT_DIR}/apps/crossplane.yaml >/dev/null 2>&1; then
   echo "Crossplane up-to-date."
 else
-  $kubectl_cmd apply -f apps/crossplane.yaml
+  $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/crossplane.yaml
   sleep 10
   $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
   sleep 10
-
 fi
 
 echo "########### Installing Keycloak Provider ###########"
-if $kubectl_cmd diff -f apps/keycloak-provider/keycloak-provider-config.yaml >/dev/null 2>&1; then
+cat ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
+if $kubectl_cmd diff -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml >/dev/null 2>&1; then
   echo "Keycloak Provider up-to-date."
 else
-cat ./apps/keycloak-provider/keycloak-provider-secret.yaml | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
-$kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider.yaml
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider.yaml
 sleep 10
 $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
 $kubectl_cmd wait --for condition=established --timeout=60s crd/providerconfigs.keycloak.crossplane.io
 
-$kubectl_cmd apply -f ./apps/keycloak-provider/keycloak-provider-config.yaml
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml
+fi
+
+if [[ "$uselocalprovider" == "true" ]]; then
+echo "Scaling down 'provider-keycloak' to use local provider"
+$kubectl_cmd patch DeploymentRuntimeConfig runtimeconfig-provider-keycloak --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
+$kubectl_cmd apply -f ../package/crds
 fi
 
 echo "#################################################"
@@ -200,3 +228,12 @@ echo "-------------------------------------------------"
 echo "Keycloak is ready at http://$KEYCLOAK_IP:$KEYCLOAK_PORT/auth"
 echo "Keycloak login: admin / admin"
 echo "#################################################"
+if [[ "$runcloudproviderkind" == "true" ]]; then
+echo "Cloud-Provider-Kind Logs are here: tail -f $CLOUD_PROVIDER_KIND_LOGS"
+
+# Do not finish script, so that Cloud-Provider-Kind keeps running!
+tail -f /dev/null
+
+echo "Killing Cloud-Provider-Kind, which runs in background"
+pkill -P $$
+fi

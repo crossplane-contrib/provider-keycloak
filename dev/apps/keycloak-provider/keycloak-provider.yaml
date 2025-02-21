@@ -9,12 +9,12 @@ metadata:
 spec:
   package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.10.1
   runtimeConfigRef:
-    name: enable-ess
+    name: runtimeconfig-provider-keycloak
 --- 
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
-  name: enable-ess
+  name: runtimeconfig-provider-keycloak
 spec:
   deploymentTemplate:
     spec:

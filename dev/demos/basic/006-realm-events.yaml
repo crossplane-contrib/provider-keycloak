@@ -1,0 +1,20 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: RealmEvents
+metadata:
+  name: realm-events
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    adminEventsDetailsEnabled: true
+    adminEventsEnabled: true
+    enabledEventTypes:
+      - LOGIN
+      - LOGOUT
+    eventsEnabled: true
+    eventsExpiration: 3600
+    eventsListeners:
+      - jboss-logging
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"
