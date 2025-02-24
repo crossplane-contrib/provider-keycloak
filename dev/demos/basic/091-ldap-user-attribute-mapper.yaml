@@ -3,7 +3,7 @@ kind: UserAttributeMapper
 metadata:
   name: ldap-user-attribute-mapper
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     ldapAttribute: bar
     ldapUserFederationIdRef:

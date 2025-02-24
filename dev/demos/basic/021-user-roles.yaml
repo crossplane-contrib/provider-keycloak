@@ -3,7 +3,7 @@ kind: Roles
 metadata:
   name: user-roles
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmIdRef:
       name: "dev"

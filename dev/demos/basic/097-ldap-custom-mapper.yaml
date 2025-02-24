@@ -3,7 +3,7 @@ kind: CustomMapper
 metadata:
   name: custom-mapper
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     config:
       ldap.full.name.attribute: cn

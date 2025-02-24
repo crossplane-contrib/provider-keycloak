@@ -5,7 +5,7 @@ metadata:
 spec:
   providerConfigRef:
     name: "keycloak-provider-config"
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     name: "picture"
     protocol: "openid-connect"
@@ -29,7 +29,7 @@ metadata:
 spec:
   providerConfigRef:
     name: "keycloak-provider-config"
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     name: "client roles"
     protocol: "openid-connect"

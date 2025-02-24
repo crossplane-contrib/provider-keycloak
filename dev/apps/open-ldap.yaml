@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: keycloak
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openldap-deployment
+  namespace: keycloak
+  labels:
+    app: openldap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openldap
+  template:
+    metadata:
+      labels:
+        app: openldap
+    spec:
+      containers:
+        - name: openldap
+          image: bitnami/openldap:2.6
+          env:
+            - name: LDAP_PORT_NUMBER
+              value: "389"
+            - name: LDAP_ADMIN_USERNAME
+              value: "admin"
+            - name: LDAP_ADMIN_PASSWORD
+              value: "admin"
+            - name: LDAP_ROOT
+              value: "dc=example,dc=org"
+            - name: LDAP_ADMIN_DN
+              value: "cn=admin,dc=example,dc=org"
+          ports:
+            - containerPort: 389
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openldap
+  namespace: keycloak
+spec:
+  ports:
+    - name: ldap
+      port: 389
+      protocol: TCP
+      targetPort: 389
+  selector:
+    app: openldap

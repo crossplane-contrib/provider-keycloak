@@ -3,7 +3,7 @@ kind: Groups
 metadata:
   name: user-groups
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmIdRef:
       name: "dev"

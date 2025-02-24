@@ -3,7 +3,7 @@ kind: RealmEvents
 metadata:
   name: realm-events
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     adminEventsDetailsEnabled: true
     adminEventsEnabled: true

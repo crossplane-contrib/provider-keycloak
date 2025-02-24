@@ -18,6 +18,7 @@ metadata:
 spec:
   deploymentTemplate:
     spec:
+      replicas: 1
       selector: {}
       template:
         spec:

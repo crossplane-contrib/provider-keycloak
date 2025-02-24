@@ -5,7 +5,7 @@ metadata:
 spec:
   providerConfigRef:
     name: "keycloak-provider-config"
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     name: "my-mapper"
     clientIdRef:

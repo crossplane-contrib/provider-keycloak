@@ -12,7 +12,7 @@ kind: IdentityProvider
 metadata:
   name: oidc-identity-provider
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     alias: my-idp
     authorizationUrl: https://authorizationurl.com

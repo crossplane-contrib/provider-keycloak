@@ -3,7 +3,7 @@ kind: IdentityProvider
 metadata:
   name: saml-identity-provider
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     alias: my-saml-idp
     backchannelSupported: true

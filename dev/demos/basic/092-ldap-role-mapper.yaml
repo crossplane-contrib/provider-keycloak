@@ -3,7 +3,7 @@ kind: RoleMapper
 metadata:
   name: ldap-role-mapper
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     ldapRolesDn: dc=example,dc=org
     ldapUserFederationIdRef:
@@ -27,7 +27,7 @@ kind: HardcodedRoleMapper
 metadata:
   name: assign-test-role-to-all-users
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     ldapUserFederationIdRef:
       name: ldap-user-federation

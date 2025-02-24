@@ -5,7 +5,7 @@ metadata:
   name: test-client
   namespace: upbound-system
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmId: "dev"
     name: "test-client"
@@ -21,7 +21,7 @@ metadata:
   name: test
   namespace: upbound-system
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmId: "dev"
     name: "test"
@@ -35,7 +35,7 @@ metadata:
   name: offline-access
   namespace: upbound-system
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmId: "dev"
     name: "offline_access"

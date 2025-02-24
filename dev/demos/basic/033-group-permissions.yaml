@@ -4,7 +4,7 @@ metadata:
   name: my-group-permission
   namespace: dev
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmIdRef:
       name: "dev"

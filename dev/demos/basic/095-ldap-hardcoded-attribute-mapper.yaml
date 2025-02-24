@@ -3,7 +3,7 @@ kind: HardcodedAttributeMapper
 metadata:
   name: assign-bar-to-foo
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     attributeName: foo
     attributeValue: bar

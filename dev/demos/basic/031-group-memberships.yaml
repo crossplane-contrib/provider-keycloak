@@ -3,7 +3,7 @@ kind: Memberships
 metadata:
   name: test-members
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     groupIdRef:
       name: test

@@ -3,7 +3,7 @@ kind: ExecutionConfig
 metadata:
   name: execution-identity-redirect-config
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     alias: my-config-alias
     config:

@@ -4,7 +4,7 @@ kind: Client
 metadata:
   name: saml-client
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     clientId: saml-client-id
     includeAuthnStatement: true

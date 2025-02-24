@@ -5,14 +5,14 @@ metadata:
   name: bind-credential-secret
 type: Opaque
 stringData:
-  secret: "xyz"
+  secret: "admin"
 ---
 apiVersion: ldap.keycloak.crossplane.io/v1alpha1
 kind: UserFederation
 metadata:
   name: ldap-user-federation
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     bindCredentialSecretRef:
       key: secret

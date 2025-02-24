@@ -7,7 +7,7 @@ metadata:
   name: bree
   namespace: dev
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmId: "dev"  # The realm to which this user belongs
     username: "bree"     # The username for this user
@@ -22,7 +22,7 @@ metadata:
   name: tim-tester
   namespace: dev
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmId: "dev"  # The realm to which this user belongs
     username: "tim-tester"     # The username for this user

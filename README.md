@@ -271,21 +271,12 @@ Follow the following steps to run end to end tests:
 
 Start local dev cluster
 ```console
-./dev/setup_dev_environment.sh
+./dev/setup_dev_environment.sh --deploy-local-provider
 ```
+**Hint**: If you are using rootless docker you can add the flags `--skip-metal-lb`
+and `--start-cloud-provider-kind` (how to install cloud-provider-kind [see here](https://github.com/kubernetes-sigs/cloud-provider-kind))
 
-Remove automatically provisioned keycloak-provider
-```console
-kubectl delete providerconfigs keycloak-provider-config
-kubectl delete providers keycloak-provider
-```
-
-Build and Deploy local provider into cluster
-```console
-KIND_CLUSTER_NAME=fenrir-1 make local-deploy-provider
-```
-Hint: crossplane pod´s filesystem based cache fpr providers is patched with local built provider 
-
+Use created file from KIND as kubeconfig `~/.kube/<clustername>`
 
 Run tests
 ```console

@@ -6,7 +6,7 @@ metadata:
   name: dev  # The name of the realm in Kubernetes
   namespace: dev  # The namespace in which the realm will be created
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realm: "dev"  # The name of the realm in Keycloak
     attributes:

@@ -3,7 +3,7 @@ kind: Roles
 metadata:
   name: default-roles
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     defaultRolesRefs:
       - name: test

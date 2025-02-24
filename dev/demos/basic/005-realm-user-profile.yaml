@@ -3,9 +3,11 @@ kind: UserProfile
 metadata:
   name: userprofile
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     attribute:
+      - name: username
+      - name: email
       - annotations:
           foo: bar
         displayName: Field 1
