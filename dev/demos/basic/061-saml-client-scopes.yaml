@@ -4,7 +4,7 @@ kind: ClientScope
 metadata:
   name: saml-client-scopes
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     description: This scope will map a user's group memberships to SAML assertion
     guiOrder: 1

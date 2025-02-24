@@ -4,13 +4,16 @@ kind: Client
 metadata:
   name: test
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmIdRef:
       name: "dev"
     accessType: "CONFIDENTIAL"
     clientId: "test"
     fullScopeAllowed: false
+    serviceAccountsEnabled: true
+    authorization:
+      - policyEnforcementMode: "ENFORCING"
   providerConfigRef:
     name: "keycloak-provider-config"
 ---
@@ -19,7 +22,7 @@ kind: Client
 metadata:
   name: account
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmIdRef:
       name: "dev"
@@ -33,7 +36,7 @@ kind: Client
 metadata:
   name: service-acc-1
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmIdRef:
       name: "dev"
@@ -48,7 +51,7 @@ kind: Role
 metadata:
   name: svc-role
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     realmId: "dev"
     name: "svc-role"

@@ -3,7 +3,7 @@ kind: Group
 metadata:
   name: test
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     name: test
     realmId: dev

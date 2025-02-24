@@ -3,7 +3,7 @@ kind: GroupMapper
 metadata:
   name: ldap-group-mapper
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     groupNameLdapAttribute: cn
     groupObjectClasses:
@@ -26,7 +26,7 @@ kind: HardcodedGroupMapper
 metadata:
   name: assign-group-to-users
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     groupRef:
       name: test

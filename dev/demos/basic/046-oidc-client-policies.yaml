@@ -5,7 +5,7 @@ metadata:
 spec:
   providerConfigRef:
     name: "keycloak-provider-config"
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     name: my-client-policy
     clientsRefs:
@@ -24,7 +24,7 @@ metadata:
 spec:
   providerConfigRef:
     name: "keycloak-provider-config"
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     name: my-group-policy
     groups:
@@ -46,7 +46,7 @@ metadata:
 spec:
   providerConfigRef:
     name: "keycloak-provider-config"
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     name: my-role-policy
     role:
@@ -68,7 +68,7 @@ metadata:
 spec:
   providerConfigRef:
     name: "keycloak-provider-config"
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     name: my-user-policy
     usersRefs:

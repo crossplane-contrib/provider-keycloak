@@ -8,6 +8,7 @@ CLUSTER_NAME="fenrir-1"
 skipmetallb=false
 runcloudproviderkind=false
 uselocalprovider=false
+deploylocalprovider=false
 # Function to display script usage
 usage() {
  echo "Usage: $0 [OPTIONS]"
@@ -17,6 +18,7 @@ usage() {
  echo " -s, --skip-metal-lb              Do not install MetalLB"
  echo " -p, --start-cloud-provider-kind  Run 'cloud-provider-kind' with sudo as Background task due to rootless docker (metal lb wont work) + mounting user docker socket to root docker socket"
  echo " -l, --use-local-provider         Use local provider (Scales down 'provider-keycloak')"
+ echo " -d, --deploy-local-provider      Deploy local provider"
 }
 
 has_argument() {
@@ -43,6 +45,9 @@ handle_options() {
         ;;
       -l | --use-local-provider)
         uselocalprovider=true
+        ;;
+      -d | --deploy-local-provider)
+        deploylocalprovider=true
         ;;
       -c | --cluster-name*)
         if ! has_argument $@; then
@@ -78,6 +83,9 @@ command -v jq >/dev/null 2>&1 || { echo >&2 "jq is required but not installed.  
 command -v envsubst >/dev/null 2>&1 || { echo >&2 "envsubst is required but not installed.  Aborting."; exit 1; }
 command -v base64 >/dev/null 2>&1 || { echo >&2 "base64 is required but not installed.  Aborting."; exit 1; }
 command -v sed >/dev/null 2>&1 || { echo >&2 "sed is required but not installed.  Aborting."; exit 1; }
+if [[ "$runcloudproviderkind" == "true" ]]; then
+command -v cloud-provider-kind >/dev/null 2>&1 || { echo >&2 "cloud-provider-kind is required but not installed.  Aborting."; exit 1; }
+fi
 echo "All dependencies are installed."
 
 # check if user can run docker without sudo, if not create an alias for sudo docker for this session
@@ -148,12 +156,21 @@ echo "Cloud-Provider-Kind Logs are here: tail -f '$CLOUD_PROVIDER_KIND_LOGS'"
 sudo echo -n ""
 sudo ln -s /run/user/1000/docker.sock /var/run/docker.sock || true
 sudo cloud-provider-kind -v 0  > $CLOUD_PROVIDER_KIND_LOGS 2>&1 &
+
+## Define the cleanup function
+cleanup() {
+  parentProcess=$$
+  echo ""
+  echo "Killing children of ${parentProcess} (Cloud-Provider-Kind), which runs in background"
+  pkill -SIGTERM -P $$ cloud-provider
+  sleep 2
+}
+
+## Register the cleanup function to be executed on script interruption
+trap cleanup SIGINT SIGTERM
 fi
 
 echo "########### Installing ArgoCD ###########"
-if $kubectl_cmd diff -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml >/dev/null 2>&1; then
-  echo "Argo up-to-date."
-else
 $kubectl_cmd create namespace argocd || true
 $kubectl_cmd apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 echo "* Exposing ArgoCD"
@@ -169,55 +186,62 @@ export ARGOCD_IP=$($kubectl_cmd -n argocd get svc argocd-server -o json | jq -r 
 
 echo "* Waiting for ArgoCD to be ready"
 $kubectl_cmd wait pod --all --for=condition=Ready --namespace argocd --timeout=300s
-fi
 
-echo "########### Installing Keycloak ###########"
-if $kubectl_cmd diff -f ${SCRIPT_DIR}/apps/keycloak.yaml >/dev/null 2>&1; then
-  echo "Keycloak up-to-date."
-else
-  $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak.yaml
-  sleep 5
-  $kubectl_cmd wait pod --all --for=condition=Ready --namespace keycloak --timeout=300s
-fi
+echo "########### Installing Keycloak & OpenLdap ###########"
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/open-ldap.yaml
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak.yaml
+
+echo "* Waiting for Keycloak to be ready"
+$kubectl_cmd wait applications.argoproj.io  --namespace argocd keycloak --for=create --for=jsonpath='{.status.health.status}'=Healthy --timeout=300s
+$kubectl_cmd wait pod --namespace keycloak --selector="app.kubernetes.io/name=keycloakx" --for=condition=Ready --timeout=300s
 
 while [[ -z $($kubectl_cmd get svc -n keycloak keycloak-keycloakx-http -o jsonpath="{.status.loadBalancer.ingress}" 2>/dev/null) ]]; do
   echo "** still waiting for service keycloak/keycloak-keycloakx-http to get ingress"
-  sleep 5
+  sleep 1
 done
 
 export KEYCLOAK_IP=$($kubectl_cmd -n keycloak get svc keycloak-keycloakx-http -o json | jq -r .status.loadBalancer.ingress[0].ip)
-export KEYCLOAK_PORT=$($kubectl_cmd -n keycloak get svc keycloak-keycloakx-http -o json | jq -r .spec.ports[0].port)
+export KEYCLOAK_PORT=$($kubectl_cmd -n keycloak get svc keycloak-keycloakx-http -o json | jq -r '.spec.ports[] | select(.name == "http").port')
 export KEYCLOAK_USER=admin
 export KEYCLOAK_PASSWORD=admin
 
 
 echo "########### Installing Crossplane ###########"
-if $kubectl_cmd diff -f ${SCRIPT_DIR}/apps/crossplane.yaml >/dev/null 2>&1; then
-  echo "Crossplane up-to-date."
-else
-  $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/crossplane.yaml
-  sleep 10
-  $kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
-  sleep 10
-fi
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/crossplane.yaml
+
+echo "* Waiting for Crossplane to be ready"
+$kubectl_cmd wait applications.argoproj.io  --namespace argocd crossplane-system --for=create --for=jsonpath='{.status.health.status}'=Healthy --timeout=300s
+$kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane" --for=condition=Ready --timeout=300s
+$kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane-rbac-manager" --for=condition=Ready --timeout=300s
 
 echo "########### Installing Keycloak Provider ###########"
-cat ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
-if $kubectl_cmd diff -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml >/dev/null 2>&1; then
-  echo "Keycloak Provider up-to-date."
+cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
+if [[ "$deploylocalprovider" == "false" ]]; then
+  $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider.yaml
 else
-$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider.yaml
-sleep 10
-$kubectl_cmd wait pod --all --for=condition=Ready --namespace crossplane-system --timeout=300s
-$kubectl_cmd wait --for condition=established --timeout=60s crd/providerconfigs.keycloak.crossplane.io
+  echo "Deploy local source code as provider 'provider-keycloak'"
 
-$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml
+  # Hint: crossplane pod´s filesystem based cache for providers is patched with local built provider
+  KIND_CLUSTER_NAME=$CLUSTER_NAME make local-deploy-provider
 fi
 
+echo "* Waiting for Keycloak Provider to be ready"
+$kubectl_cmd wait provider.pkg.crossplane.io/provider-keycloak --for=create --timeout=300s
+$kubectl_cmd wait provider.pkg.crossplane.io/provider-keycloak --for=condition=Healthy --timeout=300s
+$kubectl_cmd wait deployment --all --namespace crossplane-system --for=condition=Available
+$kubectl_cmd wait pod --all --namespace crossplane-system --for=condition=Ready --timeout=300s
+$kubectl_cmd wait crd/providerconfigs.keycloak.crossplane.io --for condition=established --timeout=60s
+
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml
+
 if [[ "$uselocalprovider" == "true" ]]; then
-echo "Scaling down 'provider-keycloak' to use local provider"
-$kubectl_cmd patch DeploymentRuntimeConfig runtimeconfig-provider-keycloak --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
-$kubectl_cmd apply -f ../package/crds
+  echo "Scaling down 'provider-keycloak' to use local provider"
+  $kubectl_cmd patch DeploymentRuntimeConfig runtimeconfig-provider-keycloak --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
+
+  echo "* Waiting for Keycloak Provider to be removed"
+  $kubectl_cmd wait pod --namespace crossplane-system --selector="pkg.crossplane.io/provider=provider-keycloak" --for=delete --timeout=300s
+  $kubectl_cmd wait deployment --all --namespace crossplane-system --for=condition=Available
+  $kubectl_cmd apply -f ${SCRIPT_DIR}/../package/crds
 fi
 
 echo "#################################################"
@@ -225,15 +249,13 @@ echo "You're ready to go!"
 echo "ArgoCD is ready at https://$ARGOCD_IP:443"
 echo "ArgoCD login: admin / $($kubectl_cmd -n argocd get secrets argocd-initial-admin-secret -o json | jq -r .data.password | base64 -d)"
 echo "-------------------------------------------------"
-echo "Keycloak is ready at http://$KEYCLOAK_IP:$KEYCLOAK_PORT/auth"
+echo "Keycloak is ready at http://$KEYCLOAK_IP:$KEYCLOAK_PORT/"
 echo "Keycloak login: admin / admin"
 echo "#################################################"
+
 if [[ "$runcloudproviderkind" == "true" ]]; then
 echo "Cloud-Provider-Kind Logs are here: tail -f $CLOUD_PROVIDER_KIND_LOGS"
 
 # Do not finish script, so that Cloud-Provider-Kind keeps running!
 tail -f /dev/null
-
-echo "Killing Cloud-Provider-Kind, which runs in background"
-pkill -P $$
 fi

@@ -3,7 +3,7 @@ kind: MsadUserAccountControlMapper
 metadata:
   name: msad-user-account-control-mapper
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     ldapUserFederationIdRef:
       name: ldap-user-federation
@@ -18,7 +18,7 @@ kind: MsadLdsUserAccountControlMapper
 metadata:
   name: msad-lds-user-account-control-mapper
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     ldapUserFederationIdRef:
       name: ldap-user-federation

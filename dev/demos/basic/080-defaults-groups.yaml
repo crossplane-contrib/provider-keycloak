@@ -3,7 +3,7 @@ kind: DefaultGroups
 metadata:
   name: my-default-groups
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     groupIdsRefs:
       - name: test

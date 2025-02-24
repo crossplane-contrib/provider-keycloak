@@ -3,7 +3,7 @@ kind: IdentityProviderMapper
 metadata:
   name: oidc-identity-provider-mapper
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     extraConfig:
       Claim: my-email-claim

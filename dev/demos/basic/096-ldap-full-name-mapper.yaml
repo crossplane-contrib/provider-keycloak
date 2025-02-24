@@ -4,7 +4,7 @@ kind: FullNameMapper
 metadata:
   name: ldap-full-name-mapper
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     ldapFullNameAttribute: cn
     ldapUserFederationIdRef:

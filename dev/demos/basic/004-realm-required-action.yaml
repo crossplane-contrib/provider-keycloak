@@ -3,7 +3,7 @@ kind: RequiredAction
 metadata:
   name: required-action
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   providerConfigRef:
     name: "keycloak-provider-config"
   forProvider:

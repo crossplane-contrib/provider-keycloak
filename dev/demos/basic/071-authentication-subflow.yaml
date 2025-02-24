@@ -3,7 +3,7 @@ kind: Subflow
 metadata:
   name: subflow
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     alias: my-subflow-alias-1
     parentFlowAliasRef:
@@ -20,7 +20,7 @@ kind: Subflow
 metadata:
   name: subflow-of-subflow
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     alias: my-subflow-alias-99
     parentFlowAlias: my-subflow-alias-1

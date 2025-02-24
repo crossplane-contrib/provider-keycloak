@@ -3,7 +3,7 @@ kind: Flow
 metadata:
   name: flow
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     alias: my-flow-alias
     realmIdRef:

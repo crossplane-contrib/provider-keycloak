@@ -3,7 +3,7 @@ kind: Execution
 metadata:
   name: execution-one
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     authenticator: auth-cookie
     parentFlowAliasRef:
@@ -19,7 +19,7 @@ kind: Execution
 metadata:
   name: execution-two
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     authenticator: auth-cookie
     parentFlowAlias: my-subflow-alias-1
@@ -34,7 +34,7 @@ kind: Execution
 metadata:
   name: execution-three
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     authenticator: auth-cookie
     parentFlowAlias: my-subflow-alias-99
@@ -49,7 +49,7 @@ kind: Execution
 metadata:
   name: execution-identity-redirect
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     authenticator: identity-provider-redirector
     parentFlowAliasRef:

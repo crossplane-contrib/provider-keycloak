@@ -3,7 +3,7 @@ kind: ClientScope
 metadata:
   name: openid-client-scope
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   providerConfigRef:
     name: "keycloak-provider-config"
   forProvider:
@@ -20,7 +20,7 @@ kind: ClientDefaultScopes
 metadata:
   name: client-default-scopes
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     clientIdRef:
       name: "test"
@@ -39,7 +39,7 @@ kind: ClientOptionalScopes
 metadata:
   name: client-optional-scopes
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     clientIdRef:
       name: "test"

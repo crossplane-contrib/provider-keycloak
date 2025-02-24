@@ -3,7 +3,7 @@ kind: Bindings
 metadata:
   name: browser-authentication-binding
 spec:
-  deletionPolicy: Orphan
+  deletionPolicy: Delete
   forProvider:
     dockerAuthenticationFlowRef:
       name: "flow"

@@ -8,22 +8,25 @@ spec:
   project: default
   source:
     repoURL: https://codecentric.github.io/helm-charts
-    targetRevision: 2.2.2
+    targetRevision: 7.0.1
     chart: keycloakx
     helm:
-      values: | 
+      values: |
+        image:
+          tag: "26.1.2"
+        http:
+          relativePath: "/"
         command:
           - "/opt/keycloak/bin/kc.sh"
           - "start"
           - "--http-enabled=true"
           - "--http-port=8080"
           - "--hostname-strict=false"
-          - "--hostname-strict-https=false"
-          - "--features=declarative-user-profile,admin-fine-grained-authz"
+          - "--features=admin-fine-grained-authz"
         extraEnv: |
-          - name: KEYCLOAK_ADMIN
+          - name: KC_BOOTSTRAP_ADMIN_USERNAME
             value: admin
-          - name: KEYCLOAK_ADMIN_PASSWORD
+          - name: KC_BOOTSTRAP_ADMIN_PASSWORD
             value: admin
           - name: JAVA_OPTS_APPEND
             value: >-
