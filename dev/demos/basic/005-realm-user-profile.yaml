@@ -7,10 +7,10 @@ spec:
   forProvider:
     attribute:
       - name: username
+        displayName: username
       - name: email
-      - annotations:
-          foo: bar
-        displayName: Field 1
+        displayName: email
+      - displayName: Field 1
         enabledWhenScope:
           - offline_access
         group: group1
@@ -33,21 +33,13 @@ spec:
               error-message: Nope
               pattern: ^[a-z]+$
             name: pattern
-      - annotations:
-          foo: '{"key": "val" }'
-        name: field2
-        validator:
-          - config:
-              options: '[ "opt1" ]'
-            name: options
+      - name: field2
     group:
-      - annotations:
-          foo: bar
-          foo2: '{ "key": "val" }'
-        displayDescription: A first group
+      - displayDescription: A first group
         displayHeader: Group 1
         name: group1
       - name: group2
+        displayHeader: Group 2
     realmIdRef:
       name: "dev"
     unmanagedAttributePolicy: ENABLED

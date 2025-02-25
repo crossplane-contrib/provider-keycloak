@@ -5,7 +5,6 @@ apiVersion: user.keycloak.crossplane.io/v1alpha1
 kind: User
 metadata:
   name: bree
-  namespace: dev
 spec:
   deletionPolicy: Delete
   forProvider:
@@ -20,7 +19,6 @@ apiVersion: user.keycloak.crossplane.io/v1alpha1
 kind: User
 metadata:
   name: tim-tester
-  namespace: dev
 spec:
   deletionPolicy: Delete
   forProvider:

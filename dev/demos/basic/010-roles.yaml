@@ -3,7 +3,6 @@ apiVersion: role.keycloak.crossplane.io/v1alpha1
 kind: Role
 metadata:
   name: test-client
-  namespace: upbound-system
 spec:
   deletionPolicy: Delete
   forProvider:
@@ -19,7 +18,6 @@ apiVersion: role.keycloak.crossplane.io/v1alpha1
 kind: Role
 metadata:
   name: test
-  namespace: upbound-system
 spec:
   deletionPolicy: Delete
   forProvider:
@@ -33,7 +31,6 @@ apiVersion: role.keycloak.crossplane.io/v1alpha1
 kind: Role
 metadata:
   name: offline-access
-  namespace: upbound-system
 spec:
   deletionPolicy: Delete
   forProvider:

@@ -192,7 +192,7 @@ $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/open-ldap.yaml
 $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak.yaml
 
 echo "* Waiting for Keycloak to be ready"
-$kubectl_cmd wait applications.argoproj.io  --namespace argocd keycloak --for=create --for=jsonpath='{.status.health.status}'=Healthy --timeout=300s
+$kubectl_cmd wait applications.argoproj.io  --namespace argocd keycloak --for=create --for=jsonpath='{.status.health.status}'=Healthy --for=jsonpath='{.status.sync.status}'=Synced  --timeout=300s
 $kubectl_cmd wait pod --namespace keycloak --selector="app.kubernetes.io/name=keycloakx" --for=condition=Ready --timeout=300s
 
 while [[ -z $($kubectl_cmd get svc -n keycloak keycloak-keycloakx-http -o jsonpath="{.status.loadBalancer.ingress}" 2>/dev/null) ]]; do
@@ -210,15 +210,21 @@ echo "########### Installing Crossplane ###########"
 $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/crossplane.yaml
 
 echo "* Waiting for Crossplane to be ready"
-$kubectl_cmd wait applications.argoproj.io  --namespace argocd crossplane-system --for=create --for=jsonpath='{.status.health.status}'=Healthy --timeout=300s
+$kubectl_cmd wait applications.argoproj.io  --namespace argocd crossplane-system --for=create --for=jsonpath='{.status.health.status}'=Healthy --for=jsonpath='{.status.sync.status}'=Synced --timeout=300s
 $kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane" --for=condition=Ready --timeout=300s
 $kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane-rbac-manager" --for=condition=Ready --timeout=300s
 
 echo "########### Installing Keycloak Provider ###########"
-cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
+
 if [[ "$deploylocalprovider" == "false" ]]; then
+  cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
   $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider.yaml
 else
+  export OLD_KEYCLOAK_IP=$KEYCLOAK_IP
+  export KEYCLOAK_IP=keycloak-keycloakx-http.keycloak.svc.cluster.local
+  cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
+  export KEYCLOAK_IP=$OLD_KEYCLOAK_IP
+
   echo "Deploy local source code as provider 'provider-keycloak'"
 
   # Hint: crossplane pod´s filesystem based cache for providers is patched with local built provider
