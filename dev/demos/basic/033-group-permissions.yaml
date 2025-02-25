@@ -2,7 +2,6 @@ apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Permissions
 metadata:
   name: my-group-permission
-  namespace: dev
 spec:
   deletionPolicy: Delete
   forProvider:

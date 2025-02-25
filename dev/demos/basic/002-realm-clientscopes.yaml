@@ -2,7 +2,6 @@ apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: DefaultClientScopes
 metadata:
   name: dev-default-scopes
-  namespace: dev
 spec:
   deletionPolicy: Delete
   forProvider:
@@ -20,7 +19,6 @@ apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: OptionalClientScopes
 metadata:
   name: dev-optional-scopes
-  namespace: dev
 spec:
   deletionPolicy: Delete
   forProvider:

@@ -2,7 +2,6 @@ apiVersion: user.keycloak.crossplane.io/v1alpha1
 kind: Permissions
 metadata:
   name: my-user-permission
-  namespace: dev
 spec:
   deletionPolicy: Delete
   forProvider:
