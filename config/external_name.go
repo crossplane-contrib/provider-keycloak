@@ -43,7 +43,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_openid_group_membership_protocol_mapper":   openidgroup.IdentifierFromIdentifyingProperties,                         // {UUid}
 	"keycloak_openid_client_service_account_realm_role":  config.IdentifierFromProvider,                                           // {serviceAccountUserId.UUid}/{role.UUid}
 	"keycloak_openid_client_service_account_role":        config.IdentifierFromProvider,                                           // {serviceAccountUserId.UUid}/{role.UUid}
-	"keycloak_realm":                                     realm.RealmIdentifierFromIdentifyingProperties,                          // {realm}}
+	"keycloak_realm":                                     realm.RealmIdentifierFromIdentifyingProperties,                          // {realm}
 	"keycloak_required_action":                           config.IdentifierFromProvider,                                           // {realm}/{alias}
 	"keycloak_role":                                      role.IdentifierFromIdentifyingProperties,                                // {UUid}
 	"keycloak_user_groups":                               config.IdentifierFromProvider,                                           // {realm}/{User.UUid}

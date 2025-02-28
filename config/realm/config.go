@@ -71,7 +71,7 @@ func getRealmIDByIdentifyingProperties(ctx context.Context, parameters map[strin
 	if err != nil {
 		return "", err
 	}
-	return found.Id, nil
+	return found.Realm, nil
 }
 
 var keystoreRsaIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
