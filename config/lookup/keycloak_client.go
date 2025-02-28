@@ -56,9 +56,15 @@ func tryGetString(m map[string]any, key string, defaultValue string) string {
 }
 
 func tryGetBool(m map[string]any, key string, defaultValue bool) bool {
-	value, ok := m[key]
-	if ok {
-		return value.(bool)
+	if value, ok := m[key]; ok {
+		switch v := value.(type) {
+		case bool:
+			return v
+		case string:
+			if parsed, err := strconv.ParseBool(v); err == nil {
+				return parsed
+			}
+		}
 	}
 	return defaultValue
 }
