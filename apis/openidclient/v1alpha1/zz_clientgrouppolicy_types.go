@@ -119,7 +119,17 @@ type ClientGroupPolicyParameters struct {
 type GroupsInitParameters struct {
 	ExtendChildren *bool `json:"extendChildren,omitempty" tf:"extend_children,omitempty"`
 
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// Reference to a Group in group to populate id.
+	// +kubebuilder:validation:Optional
+	IDRef *v1.Reference `json:"idRef,omitempty" tf:"-"`
+
+	// Selector for a Group in group to populate id.
+	// +kubebuilder:validation:Optional
+	IDSelector *v1.Selector `json:"idSelector,omitempty" tf:"-"`
 
 	Path *string `json:"path,omitempty" tf:"path,omitempty"`
 }
@@ -137,8 +147,18 @@ type GroupsParameters struct {
 	// +kubebuilder:validation:Optional
 	ExtendChildren *bool `json:"extendChildren" tf:"extend_children,omitempty"`
 
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/group/v1alpha1.Group
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
-	ID *string `json:"id" tf:"id,omitempty"`
+	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// Reference to a Group in group to populate id.
+	// +kubebuilder:validation:Optional
+	IDRef *v1.Reference `json:"idRef,omitempty" tf:"-"`
+
+	// Selector for a Group in group to populate id.
+	// +kubebuilder:validation:Optional
+	IDSelector *v1.Selector `json:"idSelector,omitempty" tf:"-"`
 
 	// +kubebuilder:validation:Optional
 	Path *string `json:"path" tf:"path,omitempty"`
