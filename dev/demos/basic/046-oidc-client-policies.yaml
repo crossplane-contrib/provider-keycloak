@@ -28,7 +28,7 @@ spec:
   forProvider:
     name: my-group-policy
     groups:
-      - path: /
+      - path: /test
         extendChildren: false
         idRef:
           name: "test"

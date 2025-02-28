@@ -21,6 +21,7 @@ spec:
       access.token.claim: "true"
       claim.name: "picture"
       jsonType.label: "String"
+      introspection.token.claim: "true"
 ---
 apiVersion: client.keycloak.crossplane.io/v1alpha1
 kind: ProtocolMapper
@@ -44,3 +45,4 @@ spec:
       access.token.claim: "true"
       claim.name: "resource_access.${client_id}.roles"
       jsonType.label: "String"
+      introspection.token.claim: "true"

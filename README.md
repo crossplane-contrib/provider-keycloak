@@ -266,6 +266,8 @@ make local-deploy
 ```
 
 ## Regression Tests
+
+### Run Tests
 Follow the following steps to run end to end tests:
 
 
@@ -282,6 +284,10 @@ Run tests
 ```console
 make uptest
 ```
+
+### Add Tests
+New TestCases are added to this file `cluster/test/cases.txt`.
+Every resource that is necessary (i.e. Secrets) but no ManagedResource has to be created within this file `dev/demos/basic/000-init.yaml`
 
 ## Report a Bug
 
