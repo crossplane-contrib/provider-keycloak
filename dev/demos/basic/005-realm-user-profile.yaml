@@ -6,11 +6,17 @@ spec:
   deletionPolicy: Delete
   forProvider:
     attribute:
-      - name: username
-        displayName: username
-      - name: email
-        displayName: email
-      - displayName: Field 1
+      - displayName: ""
+        group: ""
+        multiValued: false
+        name: username
+      - displayName: ""
+        group: ""
+        multiValued: false
+        name: email
+      - annotations:
+          foo: bar
+        displayName: Field 1
         enabledWhenScope:
           - offline_access
         group: group1
@@ -33,13 +39,26 @@ spec:
               error-message: Nope
               pattern: ^[a-z]+$
             name: pattern
-      - name: field2
+      - annotations:
+          foo: '{"key":"val"}'
+        displayName: ""
+        group: ""
+        multiValued: false
+        name: field2
+        validator:
+          - config:
+              options: '["opt1"]'
+            name: options
     group:
-      - displayDescription: A first group
+      - annotations:
+          foo: bar
+          foo2: '{"key":"val"}'
+        displayDescription: A first group
         displayHeader: Group 1
         name: group1
-      - name: group2
-        displayHeader: Group 2
+      - displayDescription: ""
+        displayHeader: ""
+        name: group2
     realmIdRef:
       name: "dev"
     unmanagedAttributePolicy: ENABLED
