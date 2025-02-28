@@ -7,6 +7,7 @@
 ./dev/demos/basic/004-realm-keystore-rsa.yaml
 ./dev/demos/basic/005-realm-user-profile.yaml
 ./dev/demos/basic/006-realm-events.yaml
+./dev/demos/basic/007-existing-realm.yaml
 ./dev/demos/basic/010-roles.yaml
 ./dev/demos/basic/020-user.yaml
 ./dev/demos/basic/021-user-roles.yaml
