@@ -135,7 +135,7 @@
         "^Makefile$"
       ],
       "matchStrings": [
-        "export TERRAFORM_PROVIDER_VERSION ?= (?<currentValue>.*)"
+        "export TERRAFORM_PROVIDER_VERSION .*= (?<currentValue>.*)"
       ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "keycloak/terraform-provider-keycloak",
