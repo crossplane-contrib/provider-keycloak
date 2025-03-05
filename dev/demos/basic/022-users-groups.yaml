@@ -1,0 +1,15 @@
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: Groups
+metadata:
+  name: user-groups
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+    groupIdsRefs:
+      - name: test
+    userIdRef:
+      name: "tim-tester"
+  providerConfigRef:
+    name: "keycloak-provider-config"

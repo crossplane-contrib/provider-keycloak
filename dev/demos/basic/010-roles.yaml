@@ -1,0 +1,40 @@
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: test-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "dev"
+    name: "test-client"
+    clientIdRef:
+      name: "test"
+    description: "abc"
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the provider configuration
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: test
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "dev"
+    name: "test"
+    description: "abc"
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the provider configuration
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: offline-access
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "dev"
+    name: "offline_access"
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the provider configuration
