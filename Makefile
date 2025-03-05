@@ -22,7 +22,7 @@ export TERRAFORM_DOCS_PATH ?= docs/resources
 export TERRAFORM_FILE_MIRROR ?= .terraform.d/plugins
 export TERRAFORM_FILE_MIRROR_REPO ?= ${TERRAFORM_FILE_MIRROR}/registry.terraform.io
 
-export GOLANGCILINT_VERSION ?= 1.57.2
+export GOLANGCILINT_VERSION ?= 1.64.6
 
 PLATFORMS ?= linux_amd64 linux_arm64
 
