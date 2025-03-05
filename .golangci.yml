@@ -1,3 +1,9 @@
+run:
+  # Timeout for analysis, e.g. 30s, 5m, 5m30s.
+  # If the value is lower or equal to 0, the timeout is disabled.
+  # Default: 1m
+  timeout: 10m
+
 output:
   # The formats used to render issues.
   # Formats:
