@@ -1,0 +1,54 @@
+# This example demonstrates the minimum required fields to create a realm.
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: dev  # The name of the realm in Kubernetes
+spec:
+  forProvider:
+    realm: "dev"  # The name of the realm in Keycloak
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the ProviderConfig resource
+--- 
+apiVersion: v1 
+kind: Secret
+metadata:
+  name: example-secret
+  namespace: default
+type: Opaque
+data:
+  example-key: dGVzdA==
+---
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  name: realm-identity-provider
+spec:
+  forProvider:
+    alias: my-idp
+    authorizationUrl: https://authorizationurl.com
+    clientId: "test"
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: default
+    realm: dev
+    tokenUrl: https://tokenurl.com
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the ProviderConfig resource
+--- 
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: IdentityProviderMapper
+metadata:
+  name: azure-email-importer
+spec:
+  forProvider:
+    realm: dev
+    name: azure-email-importer
+    identityProviderAlias: my-idp 
+    identityProviderMapper: "oidc-user-attribute-idp-mapper"
+    extraConfig:
+      syncMode: "INHERIT"
+      Claim: "my-email-claim"
+      UserAttribute: email
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the ProviderConfig resource
