@@ -1,0 +1,30 @@
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: my-oidc-client-role
+spec:
+  forProvider:
+    description: My Client Role
+    name: my-oidc-client-role
+    realmIdRef:
+      name: dev
+    clientIdRef:
+      name: test
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: my-saml-client-role
+spec:
+  forProvider:
+    description: My Client Role
+    name: my-saml-client-role
+    realmIdRef:
+      name: dev
+    clientIdRef:
+      name: test-saml-client
+  providerConfigRef:
+    name: keycloak-provider-config

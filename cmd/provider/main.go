@@ -101,19 +101,21 @@ func main() {
 	kingpin.FatalIfError(err, "Cannot get provider configuration")
 
 	featureFlags := &feature.Flags{}
-	o := tjcontroller.Options{
-		Options: xpcontroller.Options{
-			Logger:                  log,
-			GlobalRateLimiter:       ratelimiter.NewGlobal(*maxReconcileRate),
-			PollInterval:            *pollInterval,
-			MaxConcurrentReconciles: *maxReconcileRate,
-			Features:                featureFlags,
-			MetricOptions: &xpcontroller.MetricOptions{
-				PollStateMetricInterval: *pollStateMetricInterval,
-				MRMetrics:               metricRecorder,
-				MRStateMetrics:          stateMetrics,
-			},
+	controllerOptions := xpcontroller.Options{
+		Logger:                  log,
+		GlobalRateLimiter:       ratelimiter.NewGlobal(*maxReconcileRate),
+		PollInterval:            *pollInterval,
+		MaxConcurrentReconciles: *maxReconcileRate,
+		Features:                featureFlags,
+		MetricOptions: &xpcontroller.MetricOptions{
+			PollStateMetricInterval: *pollStateMetricInterval,
+			MRMetrics:               metricRecorder,
+			MRStateMetrics:          stateMetrics,
 		},
+	}
+
+	upjetControllerOptions := tjcontroller.Options{
+		Options: controllerOptions,
 		// use the following WorkspaceStoreOption to enable the shared gRPC mode
 		SetupFn:               clients.TerraformSetupBuilder(),
 		OperationTrackerStore: tjcontroller.NewOperationStore(log),
@@ -121,21 +123,21 @@ func main() {
 	}
 
 	if *enableManagementPolicies {
-		o.Features.Enable(features.EnableBetaManagementPolicies)
+		upjetControllerOptions.Features.Enable(features.EnableBetaManagementPolicies)
 		log.Info("Beta feature enabled", "flag", features.EnableBetaManagementPolicies)
 	}
 
 	if *enableExternalSecretStores {
-		o.SecretStoreConfigGVK = &v1alpha1.StoreConfigGroupVersionKind
+		upjetControllerOptions.SecretStoreConfigGVK = &v1alpha1.StoreConfigGroupVersionKind
 		log.Info("Alpha feature enabled", "flag", features.EnableAlphaExternalSecretStores)
 
-		o.ESSOptions = &tjcontroller.ESSOptions{}
+		upjetControllerOptions.ESSOptions = &tjcontroller.ESSOptions{}
 		if *essTLSCertsPath != "" {
 			log.Info("ESS TLS certificates path is set. Loading mTLS configuration.")
 			tCfg, err := certificates.LoadMTLSConfig(filepath.Join(*essTLSCertsPath, "ca.crt"), filepath.Join(*essTLSCertsPath, "tls.crt"), filepath.Join(*essTLSCertsPath, "tls.key"), false)
 			kingpin.FatalIfError(err, "Cannot load ESS TLS config.")
 
-			o.ESSOptions.TLSConfig = tCfg
+			upjetControllerOptions.ESSOptions.TLSConfig = tCfg
 		}
 
 		// Ensure default store config exists.
@@ -153,6 +155,7 @@ func main() {
 		})), "cannot create default store config")
 	}
 
-	kingpin.FatalIfError(controller.Setup(mgr, o), "Cannot setup keycloak controllers")
+	kingpin.FatalIfError(controller.Setup(mgr, upjetControllerOptions), "Cannot setup keycloak controllers")
+	kingpin.FatalIfError(controller.SetupSelfmanaged(mgr, controllerOptions), "Cannot setup selfmanaged keycloak controllers")
 	kingpin.FatalIfError(mgr.Start(ctrl.SetupSignalHandler()), "Cannot start controller manager")
 }
