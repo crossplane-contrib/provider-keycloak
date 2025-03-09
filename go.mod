@@ -6,8 +6,8 @@ toolchain go1.24.0
 
 require (
 	dario.cat/mergo v1.0.1
-	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/Nerzal/gocloak/v13 v13.9.0
+	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/crossplane/crossplane-runtime v1.16.0
 	github.com/crossplane/crossplane-tools v0.0.0-20230925130601-628280f8bf79
 	github.com/crossplane/upjet v1.4.2
@@ -23,6 +23,8 @@ require (
 	sigs.k8s.io/controller-tools v0.14.0
 
 )
+
+require github.com/google/go-cmp v0.6.0
 
 require (
 	github.com/ProtonMail/go-crypto v1.1.3 // indirect
