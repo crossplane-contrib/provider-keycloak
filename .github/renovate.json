@@ -127,5 +127,19 @@
       ],
       "automerge": true
     }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^Makefile$"
+      ],
+      "matchStrings": [
+        "export TERRAFORM_PROVIDER_VERSION .*= (?<currentValue>.*)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "keycloak/terraform-provider-keycloak",
+      "versioningTemplate": "semver"
+    }
   ]
 }
