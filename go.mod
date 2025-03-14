@@ -1,8 +1,8 @@
 module github.com/crossplane-contrib/provider-keycloak
 
-go 1.22.0
+go 1.23.0
 
-toolchain go1.24.0
+toolchain go1.24.1
 
 require (
 	dario.cat/mergo v1.0.1
@@ -13,7 +13,7 @@ require (
 	github.com/hashicorp/terraform-json v0.24.0
 	github.com/hashicorp/terraform-plugin-framework v1.13.0 // indirect
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.36.1
-	github.com/keycloak/terraform-provider-keycloak v0.0.0-20250313093438-319067e6708e
+	github.com/keycloak/terraform-provider-keycloak v0.0.0-20250314204323-b90d06e42906
 	github.com/pkg/errors v0.9.1
 	k8s.io/api v0.29.3
 	k8s.io/apimachinery v0.29.3
@@ -113,10 +113,10 @@ require (
 	github.com/zclconf/go-cty-yaml v1.0.3 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.26.0 // indirect
-	golang.org/x/crypto v0.33.0 // indirect
+	golang.org/x/crypto v0.35.0 // indirect
 	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3 // indirect
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/net v0.34.0 // indirect
+	golang.org/x/net v0.36.0 // indirect
 	golang.org/x/oauth2 v0.23.0 // indirect
 	golang.org/x/sync v0.11.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
