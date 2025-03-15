@@ -1,0 +1,11 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: existing-master
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    realm: master
+    displayName: Customized Keycloak
+  providerConfigRef:
+    name: "keycloak-provider-config"

@@ -1,0 +1,13 @@
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  name: my-group-permission
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+    groupIdRef:
+      name: "test"
+  providerConfigRef:
+    name: "keycloak-provider-config"
