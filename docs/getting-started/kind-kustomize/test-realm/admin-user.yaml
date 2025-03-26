@@ -1,0 +1,47 @@
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: testadmin
+  namespace: keycloak
+spec:
+  forProvider:
+    realmId: "test-realm"
+    username: "testadmin"
+    firstName: "Test"
+    lastName: "Admin"
+    email: "testadmin@keycloak.keycloak"
+    initialPassword: 
+      - temporary: true
+        valueSecretRef:
+          namespace: "keycloak"
+          name: "testadmin-temp-credentials"
+          key: "password"
+  providerConfigRef:
+    name: "keycloak-config"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: testadmin-temp-credentials
+  namespace: keycloak
+  labels:
+    type: user-temporary-credentials
+type: Opaque
+stringData:
+  password: "testadmin"
+---
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: test-realm-testadmin
+  namespace: keycloak
+spec:
+  forProvider:
+    realmId: "test-realm"
+    roleIdsRefs:
+      - name: builtin-test-realm-realm-management-realm-admin
+      - name: builtin-test-realm-account-manage-account
+    userIdRef:
+      name: testadmin
+  providerConfigRef:
+    name: "keycloak-config"
