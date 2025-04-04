@@ -13,6 +13,16 @@ env:
   GO_VERSION: '1.22'
   GOLANGCI_VERSION: 'v1.55.2'
   DOCKER_BUILDX_VERSION: 'v0.8.2'
+  UP_VERSION: 'v0.37.1'
+
+  # Registry/Org names
+  CROSSPLANE_REGORG: 'ghcr.io/crossplane-contrib' # xpkg.crossplane.io/crossplane-contrib
+  UPBOUND_REGORG: 'xpkg.upbound.io/crossplane-contrib'
+
+  PROVIDER_REPO: provider-keycloak
+
+  # Upbound registry specific variables
+  UP_DOMAIN: "https://upbound.io"
 
   # Common users. We can't run a step 'if secrets.XXX != ""' but we can run a
   # step 'if env.XXX != ""', so we copy these to succinctly test whether
@@ -217,7 +227,10 @@ jobs:
     runs-on: ubuntu-24.04
     needs: detect-noop
     if: needs.detect-noop.outputs.noop != 'true'
-
+    outputs:
+      version: ${{ steps.version.outputs.VERSION }}
+    permissions:
+      packages: write
     steps:
       - name: Setup QEMU
         uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3
@@ -230,13 +243,12 @@ jobs:
           version: ${{ env.DOCKER_BUILDX_VERSION }}
           install: true
 
-      - name: Login to Upbound
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
-        if: env.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR != ''
+      - name: Login to GHCR using PAT
+        uses: docker/login-action@v3.3.0
         with:
-          registry: xpkg.upbound.io
-          username: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR }}
-          password: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_PSW }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -254,6 +266,10 @@ jobs:
       - name: Find the Go Build Cache
         id: go
         run: echo "cache=$(make go.cachedir)" >> $GITHUB_OUTPUT
+
+      - name: Find the version
+        id: version
+        run: make common.buildvars >> $GITHUB_OUTPUT
 
       - name: Cache the Go Build Cache
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
@@ -273,7 +289,8 @@ jobs:
         run: make vendor vendor.check
 
       - name: Build Artifacts
-        run: make -j2 build.all
+        run: |-
+          make -j XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" ${{ steps.version.outputs.VERSION }} build.all
         env:
           # We're using docker buildx, which doesn't actually load the images it
           # builds by default. Specifying --load does so.
@@ -286,4 +303,56 @@ jobs:
           path: _output/**
 
       - name: Publish Artifacts
-        run: make publish BRANCH_NAME=${GITHUB_REF##*/}
+        run: |-
+          make -j XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" ${{ steps.version.outputs.VERSION }} publish
+
+  mirror-to-xpkg-upbound-io:
+    needs: publish-artifacts
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@2b82ce82d56a2a04d2637cd93a637ae1b359c0a7 # v2
+        with:
+          platforms: all
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@885d1462b80bc1c1c7f0b00334ad271f09369c55 # v2
+        with:
+          version: ${{ env.DOCKER_BUILDX_VERSION }}
+          install: true
+
+      - name: Setup crane
+        # crane will inherit credentials from `docker login`
+        uses: imjasonh/setup-crane@v0.4
+
+      - name: Validate crane installation
+        run: crane version
+
+      - name: Up Login
+        run: |
+          curl -fsSLo /tmp/up --create-dirs 'https://cli.upbound.io/stable/${{ env.UP_VERSION }}/bin/linux_amd64/up' && \
+          chmod +x /tmp/up && \
+          /tmp/up login
+
+      - name: Install docker-credential-up
+        run: |
+          curl -fsSLo /tmp/docker-credential-up --create-dirs 'https://cli.upbound.io/stable/${{ env.UP_VERSION }}/bin/linux_amd64/docker-credential-up' && \
+          chmod +x /tmp/docker-credential-up && \
+          sudo mv /tmp/docker-credential-up /usr/local/bin/docker-credential-up
+
+      - name: Get creds
+        run: |
+          echo "${{ env.UP_DOMAIN }}" | docker-credential-up get > $HOME/.up/up.token.json
+          echo "DOCKER_USERNAME=$(cat $HOME/.up/up.token.json | jq -r '.Username')" >> $GITHUB_ENV
+          echo "DOCKER_PWD=$(cat $HOME/.up/up.token.json | jq -r '.Secret')" >> $GITHUB_ENV
+
+      - name: Login to Upbound
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
+        with:
+          registry: "xpkg.upbound.io"
+          username: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR }}
+          password: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_PSW }}
+
+      - name: Mirror to xpkg.upbound.io
+        run: |
+          crane copy ${{ env.CROSSPLANE_REGORG }}/${{ env.PROVIDER_REPO }}:${{ needs.publish-artifacts.outputs.version }} ${{ env.UPBOUND_REGORG }}/${{ env.PROVIDER_REPO }}:${{ needs.publish-artifacts.outputs.version }} --allow-nondistributable-artifacts
