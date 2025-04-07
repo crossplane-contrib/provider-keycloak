@@ -65,12 +65,12 @@ UP_CHANNEL = stable
 UPTEST_VERSION = v1.3.0
 -include build/makelib/k8s_tools.mk
 
-# Workaround until https://github.com/crossplane/build/pull/27 is merged
-$(KUBECTL):
-	@$(INFO) installing kubectl $(KUBECTL_VERSION)
-	@curl -fsSLo $(KUBECTL) --create-dirs https://dl.k8s.io/$(KUBECTL_VERSION)/bin/$(HOSTOS)/$(SAFEHOSTARCH)/kubectl || $(FAIL)
-	@chmod +x $(KUBECTL)
-	@$(OK) installing kubectl $(KUBECTL_VERSION)
+# # Workaround until https://github.com/crossplane/build/pull/27 is merged
+# $(KUBECTL):
+# 	@$(INFO) installing kubectl $(KUBECTL_VERSION)
+# 	@curl -fsSLo $(KUBECTL) --create-dirs https://dl.k8s.io/$(KUBECTL_VERSION)/bin/$(HOSTOS)/$(SAFEHOSTARCH)/kubectl || $(FAIL)
+# 	@chmod +x $(KUBECTL)
+# 	@$(OK) installing kubectl $(KUBECTL_VERSION)
 
 # ====================================================================================
 # Setup Images
