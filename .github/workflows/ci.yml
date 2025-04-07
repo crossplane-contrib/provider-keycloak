@@ -290,7 +290,7 @@ jobs:
 
       - name: Build Artifacts
         run: |-
-          make -j XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" ${{ steps.version.outputs.VERSION }} build.all
+          make -j XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" VERSION="${{ steps.version.outputs.VERSION }}" build.all
         env:
           # We're using docker buildx, which doesn't actually load the images it
           # builds by default. Specifying --load does so.
@@ -304,7 +304,7 @@ jobs:
 
       - name: Publish Artifacts
         run: |-
-          make -j XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" ${{ steps.version.outputs.VERSION }} publish
+          make -j XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" VERSION="${{ steps.version.outputs.VERSION }}" publish
 
   mirror-to-xpkg-upbound-io:
     needs: publish-artifacts
