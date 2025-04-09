@@ -60,17 +60,17 @@ GO_SUBDIRS += cmd internal apis
 # Setup Kubernetes tools
 KUBECTL_VERSION ?= v1.32.2
 KIND_VERSION = v0.27.0
-UP_VERSION = v0.37.0
+UP_VERSION = v0.38.4
 UP_CHANNEL = stable
 UPTEST_VERSION = v1.3.0
 -include build/makelib/k8s_tools.mk
 
-# # Workaround until https://github.com/crossplane/build/pull/27 is merged
-# $(KUBECTL):
-# 	@$(INFO) installing kubectl $(KUBECTL_VERSION)
-# 	@curl -fsSLo $(KUBECTL) --create-dirs https://dl.k8s.io/$(KUBECTL_VERSION)/bin/$(HOSTOS)/$(SAFEHOSTARCH)/kubectl || $(FAIL)
-# 	@chmod +x $(KUBECTL)
-# 	@$(OK) installing kubectl $(KUBECTL_VERSION)
+# Workaround until https://github.com/crossplane/build/pull/27 is merged
+$(KUBECTL):
+	@$(INFO) installing kubectl $(KUBECTL_VERSION)
+	@curl -fsSLo $(KUBECTL) --create-dirs https://dl.k8s.io/$(KUBECTL_VERSION)/bin/$(HOSTOS)/$(SAFEHOSTARCH)/kubectl || $(FAIL)
+	@chmod +x $(KUBECTL)
+	@$(OK) installing kubectl $(KUBECTL_VERSION)
 
 # ====================================================================================
 # Setup Images
@@ -204,7 +204,7 @@ CROSSPLANE_NAMESPACE = crossplane-system
 -include build/makelib/local.xpkg.mk
 -include build/makelib/controlplane.mk
 
-UPTEST_EXAMPLE_LIST := $(shell cat cluster/test/cases.txt | grep -v '#'  | tr '\n' ',')
+UPTEST_EXAMPLE_LIST := $(shell cat cluster/test/cases.txt | grep -v '^#'  | tr '\n' ',')
 
 # This target requires the following environment variables to be set:
 # - UPTEST_EXAMPLE_LIST, a comma-separated list of examples to test

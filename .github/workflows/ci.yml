@@ -12,8 +12,8 @@ env:
   # Common versions
   GO_VERSION: '1.22'
   GOLANGCI_VERSION: 'v1.55.2'
-  DOCKER_BUILDX_VERSION: 'v0.20.1'
-  UP_VERSION: 'v0.37.1'
+  DOCKER_BUILDX_VERSION: 'v0.22.0'
+  UP_VERSION: 'v0.38.4'
 
   # Registry/Org names
   CROSSPLANE_REGORG: 'ghcr.io/crossplane-contrib' # xpkg.crossplane.io/crossplane-contrib
@@ -290,7 +290,7 @@ jobs:
 
       - name: Build Artifacts
         run: |-
-          make -j XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" VERSION="${{ steps.version.outputs.VERSION }}" build.all
+          make -j2 XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" VERSION="${{ steps.version.outputs.VERSION }}" build.all
         env:
           # We're using docker buildx, which doesn't actually load the images it
           # builds by default. Specifying --load does so.
@@ -304,7 +304,7 @@ jobs:
 
       - name: Publish Artifacts
         run: |-
-          make -j XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" VERSION="${{ steps.version.outputs.VERSION }}" publish
+          make -j2 XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" VERSION="${{ steps.version.outputs.VERSION }}" publish
 
   mirror-to-xpkg-upbound-io:
     needs: publish-artifacts
