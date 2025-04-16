@@ -326,7 +326,7 @@ jobs:
 
       - name: Setup crane
         # crane will inherit credentials from `docker login`
-        uses: imjasonh/setup-crane@v0.4
+        uses: imjasonh/setup-crane@31b88efe9de28ae0ffa220711af4b60be9435f6e # v0.4
 
       - name: Validate crane installation
         run: crane version
