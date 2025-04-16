@@ -331,24 +331,6 @@ jobs:
       - name: Validate crane installation
         run: crane version
 
-      - name: Up Login
-        run: |
-          curl -fsSLo /tmp/up --create-dirs 'https://cli.upbound.io/stable/${{ env.UP_VERSION }}/bin/linux_amd64/up' && \
-          chmod +x /tmp/up && \
-          /tmp/up login
-
-      - name: Install docker-credential-up
-        run: |
-          curl -fsSLo /tmp/docker-credential-up --create-dirs 'https://cli.upbound.io/stable/${{ env.UP_VERSION }}/bin/linux_amd64/docker-credential-up' && \
-          chmod +x /tmp/docker-credential-up && \
-          sudo mv /tmp/docker-credential-up /usr/local/bin/docker-credential-up
-
-      - name: Get creds
-        run: |
-          echo "${{ env.UP_DOMAIN }}" | docker-credential-up get > $HOME/.up/up.token.json
-          echo "DOCKER_USERNAME=$(cat $HOME/.up/up.token.json | jq -r '.Username')" >> $GITHUB_ENV
-          echo "DOCKER_PWD=$(cat $HOME/.up/up.token.json | jq -r '.Secret')" >> $GITHUB_ENV
-
       - name: Login to Upbound
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
         with:
