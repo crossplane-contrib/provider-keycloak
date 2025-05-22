@@ -2,6 +2,7 @@ package openidgroup
 
 import (
 	"context"
+
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
@@ -20,7 +21,8 @@ func Configure(p *config.Provider) {
 }
 
 var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
-	RequiredParameters:           []string{"realm_id", "client_id", "name"},
+	RequiredParameters:           []string{"realm_id", "name"},
+	OptionalParameters:           []string{"client_id", "client_scope_id"},
 	GetIDByExternalName:          getIDByExternalName,
 	GetIDByIdentifyingProperties: getIDByIdentifyingProperties,
 }
@@ -29,7 +31,7 @@ var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
 var IdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(identifyingPropertiesLookup)
 
 func getIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	found, err := kcClient.GetOpenIdGroupMembershipProtocolMapper(ctx, parameters["realm_id"].(string), parameters["client_id"].(string), "", id)
+	found, err := kcClient.GetOpenIdGroupMembershipProtocolMapper(ctx, parameters["realm_id"].(string), parameters["client_id"].(string), parameters["client_scope_id"].(string), id)
 	if err != nil {
 		return "", err
 	}
@@ -37,7 +39,7 @@ func getIDByExternalName(ctx context.Context, id string, parameters map[string]a
 }
 
 func getIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	found, err := kcClient.GetGenericProtocolMappers(ctx, parameters["realm_id"].(string), parameters["client_id"].(string))
+	found, err := lookup.GetGenericProtocolMappers(kcClient, ctx, parameters["realm_id"].(string), parameters["client_id"].(string), parameters["client_scope_id"].(string))
 	if err != nil {
 		return "", err
 	}
