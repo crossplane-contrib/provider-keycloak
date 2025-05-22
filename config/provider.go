@@ -135,6 +135,11 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 					TerraformName: "keycloak_openid_client",
 					Extractor:     common.PathUUIDExtractor,
 				}
+			case "client_scope_id":
+				r.References["client_scope_id"] = config.Reference{
+					TerraformName: "keycloak_openid_client_scope",
+					Extractor:     common.PathUUIDExtractor,
+				}
 			case "service_account_user_id":
 				r.References["service_account_user_id"] = config.Reference{
 					TerraformName:     "keycloak_openid_client",
