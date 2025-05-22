@@ -3317,6 +3317,22 @@ func (in *RequiredActionInitParameters) DeepCopyInto(out *RequiredActionInitPara
 		*out = new(string)
 		**out = **in
 	}
+	if in.Config != nil {
+		in, out := &in.Config, &out.Config
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.DefaultAction != nil {
 		in, out := &in.DefaultAction, &out.DefaultAction
 		*out = new(bool)
@@ -3404,6 +3420,22 @@ func (in *RequiredActionObservation) DeepCopyInto(out *RequiredActionObservation
 		*out = new(string)
 		**out = **in
 	}
+	if in.Config != nil {
+		in, out := &in.Config, &out.Config
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.DefaultAction != nil {
 		in, out := &in.DefaultAction, &out.DefaultAction
 		*out = new(bool)
@@ -3453,6 +3485,22 @@ func (in *RequiredActionParameters) DeepCopyInto(out *RequiredActionParameters) 
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
 		**out = **in
+	}
+	if in.Config != nil {
+		in, out := &in.Config, &out.Config
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
 	}
 	if in.DefaultAction != nil {
 		in, out := &in.DefaultAction, &out.DefaultAction
@@ -4202,6 +4250,17 @@ func (in *WebAuthnPasswordlessPolicyInitParameters) DeepCopyInto(out *WebAuthnPa
 		*out = new(float64)
 		**out = **in
 	}
+	if in.ExtraOrigins != nil {
+		in, out := &in.ExtraOrigins, &out.ExtraOrigins
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
 	if in.RelyingPartyEntityName != nil {
 		in, out := &in.RelyingPartyEntityName, &out.RelyingPartyEntityName
 		*out = new(string)
@@ -4278,6 +4337,17 @@ func (in *WebAuthnPasswordlessPolicyObservation) DeepCopyInto(out *WebAuthnPassw
 		in, out := &in.CreateTimeout, &out.CreateTimeout
 		*out = new(float64)
 		**out = **in
+	}
+	if in.ExtraOrigins != nil {
+		in, out := &in.ExtraOrigins, &out.ExtraOrigins
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
 	}
 	if in.RelyingPartyEntityName != nil {
 		in, out := &in.RelyingPartyEntityName, &out.RelyingPartyEntityName
@@ -4356,6 +4426,17 @@ func (in *WebAuthnPasswordlessPolicyParameters) DeepCopyInto(out *WebAuthnPasswo
 		*out = new(float64)
 		**out = **in
 	}
+	if in.ExtraOrigins != nil {
+		in, out := &in.ExtraOrigins, &out.ExtraOrigins
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
 	if in.RelyingPartyEntityName != nil {
 		in, out := &in.RelyingPartyEntityName, &out.RelyingPartyEntityName
 		*out = new(string)
@@ -4432,6 +4513,17 @@ func (in *WebAuthnPolicyInitParameters) DeepCopyInto(out *WebAuthnPolicyInitPara
 		in, out := &in.CreateTimeout, &out.CreateTimeout
 		*out = new(float64)
 		**out = **in
+	}
+	if in.ExtraOrigins != nil {
+		in, out := &in.ExtraOrigins, &out.ExtraOrigins
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
 	}
 	if in.RelyingPartyEntityName != nil {
 		in, out := &in.RelyingPartyEntityName, &out.RelyingPartyEntityName
@@ -4510,6 +4602,17 @@ func (in *WebAuthnPolicyObservation) DeepCopyInto(out *WebAuthnPolicyObservation
 		*out = new(float64)
 		**out = **in
 	}
+	if in.ExtraOrigins != nil {
+		in, out := &in.ExtraOrigins, &out.ExtraOrigins
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
 	if in.RelyingPartyEntityName != nil {
 		in, out := &in.RelyingPartyEntityName, &out.RelyingPartyEntityName
 		*out = new(string)
@@ -4586,6 +4689,17 @@ func (in *WebAuthnPolicyParameters) DeepCopyInto(out *WebAuthnPolicyParameters) 
 		in, out := &in.CreateTimeout, &out.CreateTimeout
 		*out = new(float64)
 		**out = **in
+	}
+	if in.ExtraOrigins != nil {
+		in, out := &in.ExtraOrigins, &out.ExtraOrigins
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
 	}
 	if in.RelyingPartyEntityName != nil {
 		in, out := &in.RelyingPartyEntityName, &out.RelyingPartyEntityName

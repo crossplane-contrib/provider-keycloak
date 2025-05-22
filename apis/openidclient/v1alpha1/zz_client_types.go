@@ -138,6 +138,8 @@ type ClientInitParameters struct {
 	// URL to the admin interface of the client.
 	AdminURL *string `json:"adminUrl,omitempty" tf:"admin_url,omitempty"`
 
+	AlwaysDisplayInConsole *bool `json:"alwaysDisplayInConsole,omitempty" tf:"always_display_in_console,omitempty"`
+
 	// Override realm authentication flow bindings
 	AuthenticationFlowBindingOverrides []AuthenticationFlowBindingOverridesInitParameters `json:"authenticationFlowBindingOverrides,omitempty" tf:"authentication_flow_binding_overrides,omitempty"`
 
@@ -204,6 +206,8 @@ type ClientInitParameters struct {
 
 	// When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+
+	ExcludeIssuerFromAuthResponse *bool `json:"excludeIssuerFromAuthResponse,omitempty" tf:"exclude_issuer_from_auth_response,omitempty"`
 
 	// When true, the parameter session_state will not be included in OpenID Connect Authentication Response.
 	ExcludeSessionStateFromAuthResponse *bool `json:"excludeSessionStateFromAuthResponse,omitempty" tf:"exclude_session_state_from_auth_response,omitempty"`
@@ -298,6 +302,8 @@ type ClientObservation struct {
 	// URL to the admin interface of the client.
 	AdminURL *string `json:"adminUrl,omitempty" tf:"admin_url,omitempty"`
 
+	AlwaysDisplayInConsole *bool `json:"alwaysDisplayInConsole,omitempty" tf:"always_display_in_console,omitempty"`
+
 	// Override realm authentication flow bindings
 	AuthenticationFlowBindingOverrides []AuthenticationFlowBindingOverridesObservation `json:"authenticationFlowBindingOverrides,omitempty" tf:"authentication_flow_binding_overrides,omitempty"`
 
@@ -351,6 +357,8 @@ type ClientObservation struct {
 
 	// When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+
+	ExcludeIssuerFromAuthResponse *bool `json:"excludeIssuerFromAuthResponse,omitempty" tf:"exclude_issuer_from_auth_response,omitempty"`
 
 	// When true, the parameter session_state will not be included in OpenID Connect Authentication Response.
 	ExcludeSessionStateFromAuthResponse *bool `json:"excludeSessionStateFromAuthResponse,omitempty" tf:"exclude_session_state_from_auth_response,omitempty"`
@@ -447,6 +455,9 @@ type ClientParameters struct {
 	// +kubebuilder:validation:Optional
 	AdminURL *string `json:"adminUrl,omitempty" tf:"admin_url,omitempty"`
 
+	// +kubebuilder:validation:Optional
+	AlwaysDisplayInConsole *bool `json:"alwaysDisplayInConsole,omitempty" tf:"always_display_in_console,omitempty"`
+
 	// Override realm authentication flow bindings
 	// +kubebuilder:validation:Optional
 	AuthenticationFlowBindingOverrides []AuthenticationFlowBindingOverridesParameters `json:"authenticationFlowBindingOverrides,omitempty" tf:"authentication_flow_binding_overrides,omitempty"`
@@ -532,6 +543,9 @@ type ClientParameters struct {
 	// When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.
 	// +kubebuilder:validation:Optional
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	ExcludeIssuerFromAuthResponse *bool `json:"excludeIssuerFromAuthResponse,omitempty" tf:"exclude_issuer_from_auth_response,omitempty"`
 
 	// When true, the parameter session_state will not be included in OpenID Connect Authentication Response.
 	// +kubebuilder:validation:Optional
