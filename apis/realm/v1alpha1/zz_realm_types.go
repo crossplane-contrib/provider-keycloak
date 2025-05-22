@@ -1076,6 +1076,9 @@ type WebAuthnPasswordlessPolicyInitParameters struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
+	// +listType=set
+	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
+
 	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
 
@@ -1115,6 +1118,9 @@ type WebAuthnPasswordlessPolicyObservation struct {
 
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
+
+	// +listType=set
+	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
 
 	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
@@ -1161,6 +1167,10 @@ type WebAuthnPasswordlessPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
+	// +kubebuilder:validation:Optional
+	// +listType=set
+	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
+
 	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	// +kubebuilder:validation:Optional
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
@@ -1206,6 +1216,9 @@ type WebAuthnPolicyInitParameters struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
+	// +listType=set
+	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
+
 	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
 
@@ -1245,6 +1258,9 @@ type WebAuthnPolicyObservation struct {
 
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
+
+	// +listType=set
+	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
 
 	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
@@ -1290,6 +1306,10 @@ type WebAuthnPolicyParameters struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	// +kubebuilder:validation:Optional
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	// +listType=set
+	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
 
 	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	// +kubebuilder:validation:Optional

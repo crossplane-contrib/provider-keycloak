@@ -83,6 +83,8 @@ spec:
                   adminUrl:
                     description: URL to the admin interface of the client.
                     type: string
+                  alwaysDisplayInConsole:
+                    type: boolean
                   authenticationFlowBindingOverrides:
                     description: Override realm authentication flow bindings
                     items:
@@ -446,6 +448,8 @@ spec:
                   enabled:
                     description: When false, this client will not be able to initiate
                       a login or obtain access tokens. Defaults to true.
+                    type: boolean
+                  excludeIssuerFromAuthResponse:
                     type: boolean
                   excludeSessionStateFromAuthResponse:
                     description: When true, the parameter session_state will not be
@@ -666,6 +670,8 @@ spec:
                   adminUrl:
                     description: URL to the admin interface of the client.
                     type: string
+                  alwaysDisplayInConsole:
+                    type: boolean
                   authenticationFlowBindingOverrides:
                     description: Override realm authentication flow bindings
                     items:
@@ -1029,6 +1035,8 @@ spec:
                   enabled:
                     description: When false, this client will not be able to initiate
                       a login or obtain access tokens. Defaults to true.
+                    type: boolean
+                  excludeIssuerFromAuthResponse:
                     type: boolean
                   excludeSessionStateFromAuthResponse:
                     description: When true, the parameter session_state will not be
@@ -1413,6 +1421,8 @@ spec:
                   adminUrl:
                     description: URL to the admin interface of the client.
                     type: string
+                  alwaysDisplayInConsole:
+                    type: boolean
                   authenticationFlowBindingOverrides:
                     description: Override realm authentication flow bindings
                     items:
@@ -1528,6 +1538,8 @@ spec:
                   enabled:
                     description: When false, this client will not be able to initiate
                       a login or obtain access tokens. Defaults to true.
+                    type: boolean
+                  excludeIssuerFromAuthResponse:
                     type: boolean
                   excludeSessionStateFromAuthResponse:
                     description: When true, the parameter session_state will not be

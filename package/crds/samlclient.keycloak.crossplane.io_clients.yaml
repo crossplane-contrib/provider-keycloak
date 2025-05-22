@@ -72,6 +72,8 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  alwaysDisplayInConsole:
+                    type: boolean
                   assertionConsumerPostUrl:
                     description: SAML POST Binding URL for the client's assertion
                       consumer service (login responses).
@@ -186,6 +188,8 @@ spec:
                       from a client will be signed using the certificate and/or key
                       configured via signing_certificate and signing_private_key.
                       Defaults to true.
+                    type: boolean
+                  consentRequired:
                     type: boolean
                   description:
                     description: The description of this client in the GUI.
@@ -390,6 +394,8 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
+                  alwaysDisplayInConsole:
+                    type: boolean
                   assertionConsumerPostUrl:
                     description: SAML POST Binding URL for the client's assertion
                       consumer service (login responses).
@@ -504,6 +510,8 @@ spec:
                       from a client will be signed using the certificate and/or key
                       configured via signing_certificate and signing_private_key.
                       Defaults to true.
+                    type: boolean
+                  consentRequired:
                     type: boolean
                   description:
                     description: The description of this client in the GUI.
@@ -867,6 +875,8 @@ spec:
             properties:
               atProvider:
                 properties:
+                  alwaysDisplayInConsole:
+                    type: boolean
                   assertionConsumerPostUrl:
                     description: SAML POST Binding URL for the client's assertion
                       consumer service (login responses).
@@ -905,6 +915,8 @@ spec:
                       from a client will be signed using the certificate and/or key
                       configured via signing_certificate and signing_private_key.
                       Defaults to true.
+                    type: boolean
+                  consentRequired:
                     type: boolean
                   description:
                     description: The description of this client in the GUI.

@@ -18,6 +18,9 @@ type RequiredActionInitParameters struct {
 	// The alias of the action to attach as a required action.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// +mapType=granular
+	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
+
 	// When true, the required action is set as the default action for new users. Defaults to false.
 	DefaultAction *bool `json:"defaultAction,omitempty" tf:"default_action,omitempty"`
 
@@ -48,6 +51,9 @@ type RequiredActionObservation struct {
 	// The alias of the action to attach as a required action.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// +mapType=granular
+	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
+
 	// When true, the required action is set as the default action for new users. Defaults to false.
 	DefaultAction *bool `json:"defaultAction,omitempty" tf:"default_action,omitempty"`
 
@@ -71,6 +77,10 @@ type RequiredActionParameters struct {
 	// The alias of the action to attach as a required action.
 	// +kubebuilder:validation:Optional
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	// +mapType=granular
+	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
 
 	// When true, the required action is set as the default action for new users. Defaults to false.
 	// +kubebuilder:validation:Optional

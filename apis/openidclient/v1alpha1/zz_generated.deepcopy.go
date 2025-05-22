@@ -1166,6 +1166,11 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.AlwaysDisplayInConsole != nil {
+		in, out := &in.AlwaysDisplayInConsole, &out.AlwaysDisplayInConsole
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticationFlowBindingOverrides != nil {
 		in, out := &in.AuthenticationFlowBindingOverrides, &out.AuthenticationFlowBindingOverrides
 		*out = make([]AuthenticationFlowBindingOverridesInitParameters, len(*in))
@@ -1272,6 +1277,11 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 	}
 	if in.Enabled != nil {
 		in, out := &in.Enabled, &out.Enabled
+		*out = new(bool)
+		**out = **in
+	}
+	if in.ExcludeIssuerFromAuthResponse != nil {
+		in, out := &in.ExcludeIssuerFromAuthResponse, &out.ExcludeIssuerFromAuthResponse
 		*out = new(bool)
 		**out = **in
 	}
@@ -1486,6 +1496,11 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.AlwaysDisplayInConsole != nil {
+		in, out := &in.AlwaysDisplayInConsole, &out.AlwaysDisplayInConsole
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticationFlowBindingOverrides != nil {
 		in, out := &in.AuthenticationFlowBindingOverrides, &out.AuthenticationFlowBindingOverrides
 		*out = make([]AuthenticationFlowBindingOverridesObservation, len(*in))
@@ -1577,6 +1592,11 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 	}
 	if in.Enabled != nil {
 		in, out := &in.Enabled, &out.Enabled
+		*out = new(bool)
+		**out = **in
+	}
+	if in.ExcludeIssuerFromAuthResponse != nil {
+		in, out := &in.ExcludeIssuerFromAuthResponse, &out.ExcludeIssuerFromAuthResponse
 		*out = new(bool)
 		**out = **in
 	}
@@ -2011,6 +2031,11 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.AlwaysDisplayInConsole != nil {
+		in, out := &in.AlwaysDisplayInConsole, &out.AlwaysDisplayInConsole
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticationFlowBindingOverrides != nil {
 		in, out := &in.AuthenticationFlowBindingOverrides, &out.AuthenticationFlowBindingOverrides
 		*out = make([]AuthenticationFlowBindingOverridesParameters, len(*in))
@@ -2117,6 +2142,11 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 	}
 	if in.Enabled != nil {
 		in, out := &in.Enabled, &out.Enabled
+		*out = new(bool)
+		**out = **in
+	}
+	if in.ExcludeIssuerFromAuthResponse != nil {
+		in, out := &in.ExcludeIssuerFromAuthResponse, &out.ExcludeIssuerFromAuthResponse
 		*out = new(bool)
 		**out = **in
 	}
