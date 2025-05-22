@@ -75,6 +75,13 @@ spec:
                   alias:
                     description: The alias of the action to attach as a required action.
                     type: string
+                  config:
+                    additionalProperties:
+                      type: string
+                    description: The configuration. Keys are specific to each configurable
+                      required action and not checked when applying.
+                    type: object
+                    x-kubernetes-map-type: granular
                   defaultAction:
                     description: When true, the required action is set as the default
                       action for new users. Defaults to false.
@@ -183,6 +190,13 @@ spec:
                   alias:
                     description: The alias of the action to attach as a required action.
                     type: string
+                  config:
+                    additionalProperties:
+                      type: string
+                    description: The configuration. Keys are specific to each configurable
+                      required action and not checked when applying.
+                    type: object
+                    x-kubernetes-map-type: granular
                   defaultAction:
                     description: When true, the required action is set as the default
                       action for new users. Defaults to false.
@@ -455,6 +469,13 @@ spec:
                   alias:
                     description: The alias of the action to attach as a required action.
                     type: string
+                  config:
+                    additionalProperties:
+                      type: string
+                    description: The configuration. Keys are specific to each configurable
+                      required action and not checked when applying.
+                    type: object
+                    x-kubernetes-map-type: granular
                   defaultAction:
                     description: When true, the required action is set as the default
                       action for new users. Defaults to false.

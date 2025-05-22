@@ -44,6 +44,9 @@ type AuthenticationFlowBindingOverridesParameters struct {
 
 type ClientInitParameters struct {
 
+	// Always list this client in the Account UI, even if the user does not have an active session.
+	AlwaysDisplayInConsole *bool `json:"alwaysDisplayInConsole,omitempty" tf:"always_display_in_console,omitempty"`
+
 	// SAML POST Binding URL for the client's assertion consumer service (login responses).
 	AssertionConsumerPostURL *string `json:"assertionConsumerPostUrl,omitempty" tf:"assertion_consumer_post_url,omitempty"`
 
@@ -74,6 +77,9 @@ type ClientInitParameters struct {
 
 	// When true, Keycloak will expect that documents originating from a client will be signed using the certificate and/or key configured via signing_certificate and signing_private_key. Defaults to true.
 	ClientSignatureRequired *bool `json:"clientSignatureRequired,omitempty" tf:"client_signature_required,omitempty"`
+
+	// When true, users have to consent to client access. Defaults to false.
+	ConsentRequired *bool `json:"consentRequired,omitempty" tf:"consent_required,omitempty"`
 
 	// The description of this client in the GUI.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
@@ -170,6 +176,9 @@ type ClientInitParameters struct {
 
 type ClientObservation struct {
 
+	// Always list this client in the Account UI, even if the user does not have an active session.
+	AlwaysDisplayInConsole *bool `json:"alwaysDisplayInConsole,omitempty" tf:"always_display_in_console,omitempty"`
+
 	// SAML POST Binding URL for the client's assertion consumer service (login responses).
 	AssertionConsumerPostURL *string `json:"assertionConsumerPostUrl,omitempty" tf:"assertion_consumer_post_url,omitempty"`
 
@@ -190,6 +199,9 @@ type ClientObservation struct {
 
 	// When true, Keycloak will expect that documents originating from a client will be signed using the certificate and/or key configured via signing_certificate and signing_private_key. Defaults to true.
 	ClientSignatureRequired *bool `json:"clientSignatureRequired,omitempty" tf:"client_signature_required,omitempty"`
+
+	// When true, users have to consent to client access. Defaults to false.
+	ConsentRequired *bool `json:"consentRequired,omitempty" tf:"consent_required,omitempty"`
 
 	// The description of this client in the GUI.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
@@ -288,6 +300,10 @@ type ClientObservation struct {
 
 type ClientParameters struct {
 
+	// Always list this client in the Account UI, even if the user does not have an active session.
+	// +kubebuilder:validation:Optional
+	AlwaysDisplayInConsole *bool `json:"alwaysDisplayInConsole,omitempty" tf:"always_display_in_console,omitempty"`
+
 	// SAML POST Binding URL for the client's assertion consumer service (login responses).
 	// +kubebuilder:validation:Optional
 	AssertionConsumerPostURL *string `json:"assertionConsumerPostUrl,omitempty" tf:"assertion_consumer_post_url,omitempty"`
@@ -325,6 +341,10 @@ type ClientParameters struct {
 	// When true, Keycloak will expect that documents originating from a client will be signed using the certificate and/or key configured via signing_certificate and signing_private_key. Defaults to true.
 	// +kubebuilder:validation:Optional
 	ClientSignatureRequired *bool `json:"clientSignatureRequired,omitempty" tf:"client_signature_required,omitempty"`
+
+	// When true, users have to consent to client access. Defaults to false.
+	// +kubebuilder:validation:Optional
+	ConsentRequired *bool `json:"consentRequired,omitempty" tf:"consent_required,omitempty"`
 
 	// The description of this client in the GUI.
 	// +kubebuilder:validation:Optional

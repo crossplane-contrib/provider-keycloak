@@ -1216,6 +1216,100 @@ resources:
             realm: '- (Required) The realm ID that this mapper will exist in.'
             user_session: '- (Required) Is Attribute related to a User Session.'
         importStatements: []
+    keycloak_hardcoded_attribute_mapper:
+        subCategory: ""
+        name: keycloak_hardcoded_attribute_mapper
+        title: keycloak_hardcoded_attribute_mapper Resource
+        examples:
+            - name: email_verified
+              manifest: |-
+                {
+                  "attribute_name": "email_verified",
+                  "attribute_value": "true",
+                  "ldap_user_federation_id": "${keycloak_ldap_user_federation.ldap_user_federation.id}",
+                  "name": "email_verified",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                ldap_user_federation_id: keycloak_ldap_user_federation.ldap_user_federation.id
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_ldap_user_federation.ldap_user_federation: |-
+                    {
+                      "bind_credential": "admin",
+                      "bind_dn": "cn=admin,dc=example,dc=org",
+                      "connection_url": "ldap://openldap",
+                      "name": "openldap",
+                      "rdn_ldap_attribute": "cn",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "sync_registrations": true,
+                      "user_object_classes": [
+                        "simpleSecurityObject",
+                        "organizationalRole"
+                      ],
+                      "username_ldap_attribute": "cn",
+                      "users_dn": "dc=example,dc=org",
+                      "uuid_ldap_attribute": "entryDN"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            attribute_name: '- (Required) The name of the user model attribute to set.'
+            attribute_value: '- (Required) The value to set to model attribute. You can hardcode any value like ''foo''.'
+            ldap_user_federation_id: '- (Required) The ID of the LDAP user federation provider to attach this mapper to.'
+            name: '- (Required) Display name of this mapper when displayed in the console.'
+            realm_id: '- (Required) The realm that this LDAP mapper will exist in.'
+        importStatements: []
+    keycloak_hardcoded_group_identity_provider_mapper:
+        subCategory: ""
+        name: keycloak_hardcoded_group_identity_provider_mapper
+        title: keycloak_hardcoded_group_identity_provider_mapper Resource
+        examples:
+            - name: oidc
+              manifest: |-
+                {
+                  "extra_config": {
+                    "syncMode": "INHERIT"
+                  },
+                  "group": "my-realm-group",
+                  "identity_provider_alias": "${keycloak_oidc_identity_provider.oidc.alias}",
+                  "name": "hardcodedGroup",
+                  "realm": "${keycloak_realm.realm.id}"
+                }
+              references:
+                identity_provider_alias: keycloak_oidc_identity_provider.oidc.alias
+                realm: keycloak_realm.realm.id
+              dependencies:
+                keycloak_group.realm_group: |-
+                    {
+                      "description": "My Realm Group",
+                      "name": "my-realm-group",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_oidc_identity_provider.oidc: |-
+                    {
+                      "alias": "my-idp",
+                      "authorization_url": "https://authorizationurl.com",
+                      "client_id": "clientID",
+                      "client_secret": "clientSecret",
+                      "realm": "${keycloak_realm.realm.id}",
+                      "token_url": "https://tokenurl.com"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            extra_config: '- (Optional) A map of key/value pairs to add extra configuration attributes to this mapper. This can be used for custom attributes, or to add configuration attributes that are not yet supported by this Terraform provider. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates.'
+            group: '- (Optional) The name of the group which should be assigned to the users.'
+            identity_provider_alias: '- (Required) The IDP alias of the attribute to set.'
+            name: '- (Required) Display name of this mapper when displayed in the console.'
+            realm: '- (Required) The realm ID that this mapper will exist in.'
+        importStatements: []
     keycloak_hardcoded_role_identity_provider_mapper:
         subCategory: ""
         name: keycloak_hardcoded_role_identity_provider_mapper
@@ -1987,12 +2081,12 @@ resources:
         argumentDocs:
             accepts_prompt_none_forward_from_client: '- (Optional) When true, unauthenticated requests with prompt=none will be forwarded to Google instead of returning an error. Defaults to false.'
             add_read_token_role_on_create: '- (Optional) When true, new users will be able to read stored tokens. This will automatically assign the broker.read-token role. Defaults to false.'
-            alias: '- (Computed) The alias for the Google identity provider.'
+            alias: '- (Optional) The alias for the Google identity provider.'
             client_id: '- (Required) The client or client identifier registered within the identity provider.'
             client_secret: '- (Required) The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.'
             default_scopes: '- (Optional) The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid profile email.'
             disable_user_info: '- (Optional) When true, disables the usage of the user info service to obtain additional user information. Defaults to false.'
-            display_name: '- (Computed) Display name for the Google identity provider in the GUI.'
+            display_name: '- (Optional) Display name for the Google identity provider in the GUI.'
             enabled: '- (Optional) When true, users will be able to log in to this realm using this identity provider. Defaults to true.'
             extra_config: '- (Optional) A map of key/value pairs to add extra configuration to this identity provider. This can be used for custom oidc provider implementations, or to add configuration that is not yet supported by this Terraform provider. Use this attribute at your own risk, as custom attributes may conflict with top-level configuration attributes in future provider updates.'
             first_broker_login_flow_alias: '- (Optional) The authentication flow to use when users log in for the first time through this identity provider. Defaults to first broker login.'
@@ -2214,6 +2308,7 @@ resources:
             access_token_lifespan: '- (Optional) The amount of time in seconds before an access token expires. This will override the default for the realm.'
             access_type: '- (Required) Specifies the type of client, which can be one of the following:'
             admin_url: '- (Optional) URL to the admin interface of the client.'
+            always_display_in_console: '- (Optional) Always list this client in the Account UI, even if the user does not have an active session.'
             authentication_flow_binding_overrides: '- (Optional) Override realm authentication flow bindings'
             authorization: '- (Optional) When this block is present, fine-grained authorization will be enabled for this client. The client''s access_type must be CONFIDENTIAL, and service_accounts_enabled must be true. This block has the following arguments:'
             authorization.allow_remote_resource_management: '- (Optional) When true, resources can be managed remotely by the resource server. Defaults to false.'
@@ -2243,6 +2338,7 @@ resources:
             direct_grant_id: '- (Optional) Direct grant flow id (flow needs to exist)'
             display_on_consent_screen: '- (Optional) When true, the consent screen will display information about the client itself. Defaults to false. This is applicable only when consent_required is true.'
             enabled: '- (Optional) When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.'
+            exclude_issuer_from_auth_response: '- (Optional) When true, the parameter iss will not be included in OpenID Connect Authentication Response.'
             exclude_session_state_from_auth_response: '- (Optional) When true, the parameter session_state will not be included in OpenID Connect Authentication Response.'
             extra_config: '- (Optional) A map of key/value pairs to add extra configuration attributes to this client. This can be used for custom attributes, or to add configuration attributes that are not yet supported by this Terraform provider. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates. For example, the extra_config map can be used to set Authentication Context Class Reference (ACR) to Level of Authentication (LoA) mapping'
             frontchannel_logout_enabled: '- (Optional) When true, frontchannel logout will be enabled for this client. Specify the url with frontchannel_logout_url. Defaults to false.'
@@ -2270,6 +2366,126 @@ resources:
                 wildcards in the form of an asterisk can be used here. This attribute must be set if either standard_flow_enabled or implicit_flow_enabled
                 is set to true.
             web_origins: '- (Optional) A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *.'
+        importStatements: []
+    keycloak_openid_client_authorization_client_scope_policy:
+        subCategory: ""
+        name: keycloak_openid_client_authorization_client_scope_policy
+        title: keycloak_openid_client_authorization_client_scope_policy Resource
+        examples:
+            - name: test
+              manifest: |-
+                {
+                  "decision_strategy": "AFFIRMATIVE",
+                  "description": "test",
+                  "logic": "POSITIVE",
+                  "name": "test_policy_single",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}",
+                  "scope": [
+                    {
+                      "id": "${keycloak_openid_client_scope.test1.id}",
+                      "required": false
+                    }
+                  ]
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+                scope.id: keycloak_openid_client_scope.test1.id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_openid_client_scope.test1: |-
+                    {
+                      "description": "test1",
+                      "name": "test1",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_openid_client_scope.test2: |-
+                    {
+                      "description": "test2",
+                      "name": "test2",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+            - name: test_multiple
+              manifest: |-
+                {
+                  "decision_strategy": "AFFIRMATIVE",
+                  "description": "test",
+                  "logic": "POSITIVE",
+                  "name": "test_policy_multiple",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}",
+                  "scope": [
+                    {
+                      "id": "${keycloak_openid_client_scope.test1.id}",
+                      "required": false
+                    },
+                    {
+                      "id": "${keycloak_openid_client_scope.test2.id}",
+                      "required": true
+                    }
+                  ]
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+                scope.id: keycloak_openid_client_scope.test2.id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_openid_client_scope.test1: |-
+                    {
+                      "description": "test1",
+                      "name": "test1",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_openid_client_scope.test2: |-
+                    {
+                      "description": "test2",
+                      "name": "test2",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            decision_strategy: '- (Optional) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.'
+            description: '- (Optional) A description for the authorization policy.'
+            id: '- (Required) Id of client scope.'
+            logic: '- (Optional) The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.'
+            name: '- (Required) The name of the policy.'
+            realm_id: '- (Required) The realm this group exists in.'
+            required: '- (Optional) When true, then this client scope will be set as required. Defaults to false.'
+            resource_server_id: '- (Required) The ID of the resource server.'
+            scope: '- An client scope to add client scope. At least one should be defined.'
         importStatements: []
     keycloak_openid_client_authorization_permission:
         subCategory: ""
@@ -3465,6 +3681,7 @@ resources:
             edit_username_allowed: '- (Optional) When true, the username field is editable.'
             email_theme: '- (Optional) Used for emails that are sent by Keycloak.'
             enabled: '- (Optional) When false, users and clients will not be able to access this realm. Defaults to true.'
+            extra_origins: '- (Optional) A set of extra origins for non-web applications.'
             first_broker_login_flow: '- (Optional) The desired flow for First Broker Login (since Keycloak 24). Defaults to first broker login.'
             headers.content_security_policy: '- (Optional) Sets the Content Security Policy, which can be used for prevent pages from being included by non-origin iframes. More information can be found in the W3C-CSP Abstract.'
             headers.content_security_policy_report_only: '- (Optional) Used for testing Content Security Policies.'
@@ -3800,6 +4017,32 @@ resources:
             priority: '- (Optional) Priority for the provider. Defaults to 0'
             realm_id: '- (Required) The realm this keystore exists in.'
         importStatements: []
+    keycloak_realm_localization:
+        subCategory: ""
+        name: keycloak_realm_localization
+        title: keycloak_realm_localization Resource
+        examples:
+            - name: german_texts
+              manifest: |-
+                {
+                  "locale": "de",
+                  "realm_id": "${keycloak_realm.my_realm.id}",
+                  "texts": {
+                    "Hello": "Hallo"
+                  }
+                }
+              references:
+                realm_id: keycloak_realm.my_realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            locale: '- (Required) The locale (language code) the texts apply to.'
+            realm_id: '- (Required) The ID of the realm the user profile applies to.'
+            texts: '- (Optional) A map of translation keys to values.'
+        importStatements: []
     keycloak_realm_optional_client_scopes:
         subCategory: ""
         name: keycloak_realm_optional_client_scopes
@@ -3952,9 +4195,12 @@ resources:
             - name: required_action
               manifest: |-
                 {
-                  "alias": "webauthn-register",
+                  "alias": "UPDATE_PASSWORD",
+                  "config": {
+                    "max_auth_age": "600"
+                  },
                   "enabled": true,
-                  "name": "Webauthn Register",
+                  "name": "Update Password",
                   "realm_id": "${keycloak_realm.realm.realm}"
                 }
               references:
@@ -3967,6 +4213,7 @@ resources:
                     }
         argumentDocs:
             alias: '- (Required) The alias of the action to attach as a required action.'
+            config: '- (Optional) The configuration. Keys are specific to each configurable required action and not checked when applying.'
             default_action: '- (Optional) When true, the required action is set as the default action for new users. Defaults to false.'
             enabled: '- (Optional) When false, the required action is not enabled for new users. Defaults to false.'
             name: '- (Optional) The name of the required action.'
@@ -4241,6 +4488,7 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
+            always_display_in_console: '- (Optional) Always list this client in the Account UI, even if the user does not have an active session.'
             assertion_consumer_post_url: '- (Optional) SAML POST Binding URL for the client''s assertion consumer service (login responses).'
             assertion_consumer_redirect_url: '- (Optional) SAML Redirect Binding URL for the client''s assertion consumer service (login responses).'
             authentication_flow_binding_overrides: '- (Optional) Override realm authentication flow bindings'
@@ -4249,6 +4497,7 @@ resources:
             canonicalization_method: '- (Optional) The Canonicalization Method for XML signatures. Should be one of "EXCLUSIVE", "EXCLUSIVE_WITH_COMMENTS", "INCLUSIVE", or "INCLUSIVE_WITH_COMMENTS". Defaults to "EXCLUSIVE".'
             client_id: '- (Required) The unique ID of this client, referenced in the URI during authentication and in issued tokens.'
             client_signature_required: '- (Optional) When true, Keycloak will expect that documents originating from a client will be signed using the certificate and/or key configured via signing_certificate and signing_private_key. Defaults to true.'
+            consent_required: '- (Optional) When true, users have to consent to client access. Defaults to false.'
             description: '- (Optional) The description of this client in the GUI.'
             direct_grant_id: '- (Optional) Direct grant flow id (flow needs to exist)'
             enabled: '- (Optional) When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.'

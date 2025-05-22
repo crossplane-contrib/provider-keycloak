@@ -72,6 +72,10 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  alwaysDisplayInConsole:
+                    description: Always list this client in the Account UI, even if
+                      the user does not have an active session.
+                    type: boolean
                   assertionConsumerPostUrl:
                     description: SAML POST Binding URL for the client's assertion
                       consumer service (login responses).
@@ -186,6 +190,10 @@ spec:
                       from a client will be signed using the certificate and/or key
                       configured via signing_certificate and signing_private_key.
                       Defaults to true.
+                    type: boolean
+                  consentRequired:
+                    description: When true, users have to consent to client access.
+                      Defaults to false.
                     type: boolean
                   description:
                     description: The description of this client in the GUI.
@@ -390,6 +398,10 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
+                  alwaysDisplayInConsole:
+                    description: Always list this client in the Account UI, even if
+                      the user does not have an active session.
+                    type: boolean
                   assertionConsumerPostUrl:
                     description: SAML POST Binding URL for the client's assertion
                       consumer service (login responses).
@@ -504,6 +516,10 @@ spec:
                       from a client will be signed using the certificate and/or key
                       configured via signing_certificate and signing_private_key.
                       Defaults to true.
+                    type: boolean
+                  consentRequired:
+                    description: When true, users have to consent to client access.
+                      Defaults to false.
                     type: boolean
                   description:
                     description: The description of this client in the GUI.
@@ -867,6 +883,10 @@ spec:
             properties:
               atProvider:
                 properties:
+                  alwaysDisplayInConsole:
+                    description: Always list this client in the Account UI, even if
+                      the user does not have an active session.
+                    type: boolean
                   assertionConsumerPostUrl:
                     description: SAML POST Binding URL for the client's assertion
                       consumer service (login responses).
@@ -905,6 +925,10 @@ spec:
                       from a client will be signed using the certificate and/or key
                       configured via signing_certificate and signing_private_key.
                       Defaults to true.
+                    type: boolean
+                  consentRequired:
+                    description: When true, users have to consent to client access.
+                      Defaults to false.
                     type: boolean
                   description:
                     description: The description of this client in the GUI.

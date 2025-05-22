@@ -8,9 +8,11 @@ metadata:
   name: required-action
 spec:
   forProvider:
-    alias: webauthn-register
+    alias: UPDATE_PASSWORD
+    config:
+      max_auth_age: "600"
     enabled: true
-    name: Webauthn Register
+    name: Update Password
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm

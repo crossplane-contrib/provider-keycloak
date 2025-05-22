@@ -517,6 +517,12 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        extraOrigins:
+                          description: A set of extra origins for non-web applications.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: set
                         relyingPartyEntityName:
                           description: A human-readable server name for the WebAuthn
                             Relying Party. Defaults to keycloak.
@@ -575,6 +581,12 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        extraOrigins:
+                          description: A set of extra origins for non-web applications.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: set
                         relyingPartyEntityName:
                           description: A human-readable server name for the WebAuthn
                             Relying Party. Defaults to keycloak.
@@ -1063,6 +1075,12 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        extraOrigins:
+                          description: A set of extra origins for non-web applications.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: set
                         relyingPartyEntityName:
                           description: A human-readable server name for the WebAuthn
                             Relying Party. Defaults to keycloak.
@@ -1121,6 +1139,12 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        extraOrigins:
+                          description: A set of extra origins for non-web applications.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: set
                         relyingPartyEntityName:
                           description: A human-readable server name for the WebAuthn
                             Relying Party. Defaults to keycloak.
@@ -1756,6 +1780,12 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        extraOrigins:
+                          description: A set of extra origins for non-web applications.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: set
                         relyingPartyEntityName:
                           description: A human-readable server name for the WebAuthn
                             Relying Party. Defaults to keycloak.
@@ -1814,6 +1844,12 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        extraOrigins:
+                          description: A set of extra origins for non-web applications.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: set
                         relyingPartyEntityName:
                           description: A human-readable server name for the WebAuthn
                             Relying Party. Defaults to keycloak.
