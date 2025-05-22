@@ -8,7 +8,7 @@ spec:
   project: default
   sources:
     - repoURL: https://charts.crossplane.io/stable
-      targetRevision: 1.16.0
+      targetRevision: 1.20.0
       chart: crossplane
       helm:
         values: | 
@@ -18,7 +18,6 @@ spec:
             - --enable-composition-functions-extra-resources
             - --enable-composition-webhook-schema-validation
             - --enable-deployment-runtime-configs
-            - --enable-environment-configs	
             - --enable-external-secret-stores	
             - --enable-realtime-compositions
             - --enable-ssa-claims
