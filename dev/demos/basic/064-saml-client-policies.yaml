@@ -1,0 +1,21 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientClientPolicy
+metadata:
+  name: my-saml-client-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-saml-client-policy
+    oidcClientsRefs:
+      - name: "test"
+    samlClientsRefs:
+      - name: "saml-client"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev"
+---

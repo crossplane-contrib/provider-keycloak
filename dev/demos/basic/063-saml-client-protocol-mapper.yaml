@@ -1,0 +1,42 @@
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: saml-client-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "role list"
+    protocol: "saml"
+    samlClientIdRef:
+      name: "saml-client"
+    realmIdRef:
+      name: "dev"
+    protocolMapper: "saml-role-list-mapper"
+    config:
+      attribute.name: "Role"
+      attribute.nameformat: "Basic"
+      single: "false"
+---
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: saml-client-scope-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "X500 surname"
+    protocol: "saml"
+    samlClientScopeIdRef:
+      name: "saml-client-scopes"
+    realmIdRef:
+      name: "dev"
+    protocolMapper: "saml-user-property-mapper"
+    config:
+      attribute.name: "urn:oid:2.5.4.4"
+      attribute.nameformat: "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      friendly.name: "surname"
+      user.attribute: "lastName"

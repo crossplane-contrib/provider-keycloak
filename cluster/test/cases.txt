@@ -28,6 +28,8 @@
 ./dev/demos/basic/060-saml-client.yaml
 ./dev/demos/basic/061-saml-client-scopes.yaml
 ./dev/demos/basic/062-saml-client-default-scopes.yaml
+./dev/demos/basic/063-saml-client-protocol-mapper.yaml
+./dev/demos/basic/064-saml-client-policies.yaml
 ./dev/demos/basic/070-authentication-flows.yaml
 ./dev/demos/basic/071-authentication-subflow.yaml
 ./dev/demos/basic/072-authentication-execution.yaml
