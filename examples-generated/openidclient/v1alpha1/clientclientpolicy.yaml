@@ -8,8 +8,6 @@ metadata:
   name: token-exchange
 spec:
   forProvider:
-    clientsRefs:
-    - name: openid_client
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     name: my-policy
