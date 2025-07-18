@@ -190,6 +190,25 @@ func (mg *IdentityProvider) ResolveReferences(ctx context.Context, c client.Read
 	mg.Spec.ForProvider.FirstBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.FirstBrokerLoginFlowAliasRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("organization.keycloak.crossplane.io", "v1alpha1", "Organization", "OrganizationList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OrganizationID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.ForProvider.OrganizationIDRef,
+			Selector:     mg.Spec.ForProvider.OrganizationIDSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OrganizationID")
+	}
+	mg.Spec.ForProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OrganizationIDRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -246,6 +265,25 @@ func (mg *IdentityProvider) ResolveReferences(ctx context.Context, c client.Read
 	}
 	mg.Spec.InitProvider.FirstBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.FirstBrokerLoginFlowAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("organization.keycloak.crossplane.io", "v1alpha1", "Organization", "OrganizationList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OrganizationID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.InitProvider.OrganizationIDRef,
+			Selector:     mg.Spec.InitProvider.OrganizationIDSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OrganizationID")
+	}
+	mg.Spec.InitProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OrganizationIDRef = rsp.ResolvedReference
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {

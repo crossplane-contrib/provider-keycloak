@@ -48,6 +48,7 @@ import (
 	clientserviceaccountrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientserviceaccountrole"
 	clientuserpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientuserpolicy"
 	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidgroup/groupmembershipprotocolmapper"
+	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/organization/organization"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/providerconfig"
 	defaultclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/defaultclientscopes"
 	keystorersa "github.com/crossplane-contrib/provider-keycloak/internal/controller/realm/keystorersa"
@@ -110,6 +111,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientserviceaccountrole.Setup,
 		clientuserpolicy.Setup,
 		groupmembershipprotocolmapper.Setup,
+		organization.Setup,
 		providerconfig.Setup,
 		defaultclientscopes.Setup,
 		keystorersa.Setup,
