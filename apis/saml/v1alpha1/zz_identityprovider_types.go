@@ -86,6 +86,16 @@ type IdentityProviderInitParameters struct {
 	// Name ID Policy Format.
 	NameIDPolicyFormat *string `json:"nameIdPolicyFormat,omitempty" tf:"name_id_policy_format,omitempty"`
 
+	// The organization domain to associate this identity provider with. It is used to map users to an organization based on their email domain and to authenticate them accordingly in the scope of the organization.
+	OrgDomain *string `json:"orgDomain,omitempty" tf:"org_domain,omitempty"`
+
+	// Indicates whether to automatically redirect users to this identity provider when email domain matches domain.
+	OrgRedirectModeEmailMatches *bool `json:"orgRedirectModeEmailMatches,omitempty" tf:"org_redirect_mode_email_matches,omitempty"`
+
+	// The ID of the organization to link this identity provider to.
+	// ID of organization with which this identity is linked.
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
 	// Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
 	// Post Binding Authn Request.
 	PostBindingAuthnRequest *bool `json:"postBindingAuthnRequest,omitempty" tf:"post_binding_authn_request,omitempty"`
@@ -249,6 +259,16 @@ type IdentityProviderObservation struct {
 	// Specifies the URI reference corresponding to a name identifier format. Defaults to empty.
 	// Name ID Policy Format.
 	NameIDPolicyFormat *string `json:"nameIdPolicyFormat,omitempty" tf:"name_id_policy_format,omitempty"`
+
+	// The organization domain to associate this identity provider with. It is used to map users to an organization based on their email domain and to authenticate them accordingly in the scope of the organization.
+	OrgDomain *string `json:"orgDomain,omitempty" tf:"org_domain,omitempty"`
+
+	// Indicates whether to automatically redirect users to this identity provider when email domain matches domain.
+	OrgRedirectModeEmailMatches *bool `json:"orgRedirectModeEmailMatches,omitempty" tf:"org_redirect_mode_email_matches,omitempty"`
+
+	// The ID of the organization to link this identity provider to.
+	// ID of organization with which this identity is linked.
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
 
 	// Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
 	// Post Binding Authn Request.
@@ -417,6 +437,19 @@ type IdentityProviderParameters struct {
 	// Name ID Policy Format.
 	// +kubebuilder:validation:Optional
 	NameIDPolicyFormat *string `json:"nameIdPolicyFormat,omitempty" tf:"name_id_policy_format,omitempty"`
+
+	// The organization domain to associate this identity provider with. It is used to map users to an organization based on their email domain and to authenticate them accordingly in the scope of the organization.
+	// +kubebuilder:validation:Optional
+	OrgDomain *string `json:"orgDomain,omitempty" tf:"org_domain,omitempty"`
+
+	// Indicates whether to automatically redirect users to this identity provider when email domain matches domain.
+	// +kubebuilder:validation:Optional
+	OrgRedirectModeEmailMatches *bool `json:"orgRedirectModeEmailMatches,omitempty" tf:"org_redirect_mode_email_matches,omitempty"`
+
+	// The ID of the organization to link this identity provider to.
+	// ID of organization with which this identity is linked.
+	// +kubebuilder:validation:Optional
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
 
 	// Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
 	// Post Binding Authn Request.
