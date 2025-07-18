@@ -16,7 +16,7 @@ import (
 type RolesInitParameters struct {
 
 	// Realm level roles assigned to new users by default.
-	// Realm level roles assigned to new users.
+	// Realm level roles (name) assigned to new users.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)
 	// +listType=set
@@ -46,7 +46,7 @@ type RolesInitParameters struct {
 type RolesObservation struct {
 
 	// Realm level roles assigned to new users by default.
-	// Realm level roles assigned to new users.
+	// Realm level roles (name) assigned to new users.
 	// +listType=set
 	DefaultRoles []*string `json:"defaultRoles,omitempty" tf:"default_roles,omitempty"`
 
@@ -59,7 +59,7 @@ type RolesObservation struct {
 type RolesParameters struct {
 
 	// Realm level roles assigned to new users by default.
-	// Realm level roles assigned to new users.
+	// Realm level roles (name) assigned to new users.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/role/v1alpha1.Role
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)
 	// +kubebuilder:validation:Optional

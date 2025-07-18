@@ -88,10 +88,29 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}
-	out.ClientSecretSecretRef = in.ClientSecretSecretRef
+	if in.ClientSecretSecretRef != nil {
+		in, out := &in.ClientSecretSecretRef, &out.ClientSecretSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecretWoSecretRef != nil {
+		in, out := &in.ClientSecretWoSecretRef, &out.ClientSecretWoSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecretWoVersion != nil {
+		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
+		*out = new(float64)
+		**out = **in
+	}
 	if in.DefaultScopes != nil {
 		in, out := &in.DefaultScopes, &out.DefaultScopes
 		*out = new(string)
+		**out = **in
+	}
+	if in.DisableTypeClaimCheck != nil {
+		in, out := &in.DisableTypeClaimCheck, &out.DisableTypeClaimCheck
+		*out = new(bool)
 		**out = **in
 	}
 	if in.DisableUserInfo != nil {
@@ -174,6 +193,31 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		in, out := &in.LogoutURL, &out.LogoutURL
 		*out = new(string)
 		**out = **in
+	}
+	if in.OrgDomain != nil {
+		in, out := &in.OrgDomain, &out.OrgDomain
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrgRedirectModeEmailMatches != nil {
+		in, out := &in.OrgRedirectModeEmailMatches, &out.OrgRedirectModeEmailMatches
+		*out = new(bool)
+		**out = **in
+	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrganizationIDRef != nil {
+		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.OrganizationIDSelector != nil {
+		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
 		in, out := &in.PostBrokerLoginFlowAlias, &out.PostBrokerLoginFlowAlias
@@ -317,9 +361,19 @@ func (in *IdentityProviderObservation) DeepCopyInto(out *IdentityProviderObserva
 		*out = new(string)
 		**out = **in
 	}
+	if in.ClientSecretWoVersion != nil {
+		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
+		*out = new(float64)
+		**out = **in
+	}
 	if in.DefaultScopes != nil {
 		in, out := &in.DefaultScopes, &out.DefaultScopes
 		*out = new(string)
+		**out = **in
+	}
+	if in.DisableTypeClaimCheck != nil {
+		in, out := &in.DisableTypeClaimCheck, &out.DisableTypeClaimCheck
+		*out = new(bool)
 		**out = **in
 	}
 	if in.DisableUserInfo != nil {
@@ -400,6 +454,21 @@ func (in *IdentityProviderObservation) DeepCopyInto(out *IdentityProviderObserva
 	}
 	if in.LogoutURL != nil {
 		in, out := &in.LogoutURL, &out.LogoutURL
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrgDomain != nil {
+		in, out := &in.OrgDomain, &out.OrgDomain
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrgRedirectModeEmailMatches != nil {
+		in, out := &in.OrgRedirectModeEmailMatches, &out.OrgRedirectModeEmailMatches
+		*out = new(bool)
+		**out = **in
+	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
 		*out = new(string)
 		**out = **in
 	}
@@ -513,10 +582,29 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}
-	out.ClientSecretSecretRef = in.ClientSecretSecretRef
+	if in.ClientSecretSecretRef != nil {
+		in, out := &in.ClientSecretSecretRef, &out.ClientSecretSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecretWoSecretRef != nil {
+		in, out := &in.ClientSecretWoSecretRef, &out.ClientSecretWoSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecretWoVersion != nil {
+		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
+		*out = new(float64)
+		**out = **in
+	}
 	if in.DefaultScopes != nil {
 		in, out := &in.DefaultScopes, &out.DefaultScopes
 		*out = new(string)
+		**out = **in
+	}
+	if in.DisableTypeClaimCheck != nil {
+		in, out := &in.DisableTypeClaimCheck, &out.DisableTypeClaimCheck
+		*out = new(bool)
 		**out = **in
 	}
 	if in.DisableUserInfo != nil {
@@ -599,6 +687,31 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 		in, out := &in.LogoutURL, &out.LogoutURL
 		*out = new(string)
 		**out = **in
+	}
+	if in.OrgDomain != nil {
+		in, out := &in.OrgDomain, &out.OrgDomain
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrgRedirectModeEmailMatches != nil {
+		in, out := &in.OrgRedirectModeEmailMatches, &out.OrgRedirectModeEmailMatches
+		*out = new(bool)
+		**out = **in
+	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrganizationIDRef != nil {
+		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.OrganizationIDSelector != nil {
+		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
 		in, out := &in.PostBrokerLoginFlowAlias, &out.PostBrokerLoginFlowAlias
