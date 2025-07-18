@@ -26,6 +26,7 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/oidc"
 	"github.com/crossplane-contrib/provider-keycloak/config/openidclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/openidgroup"
+	"github.com/crossplane-contrib/provider-keycloak/config/organization"
 	"github.com/crossplane-contrib/provider-keycloak/config/realm"
 	"github.com/crossplane-contrib/provider-keycloak/config/role"
 	"github.com/crossplane-contrib/provider-keycloak/config/saml"
@@ -98,6 +99,7 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 		role.Configure,
 		openidclient.Configure,
 		openidgroup.Configure,
+		organization.Configure,
 		mapper.Configure,
 		user.Configure,
 		defaults.Configure,
