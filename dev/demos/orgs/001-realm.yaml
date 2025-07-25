@@ -1,0 +1,13 @@
+# Example 1: Basic Realm Configuration
+# This example demonstrates the minimum required fields to create a realm.
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: orgs  # The name of the realm in Kubernetes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: "orgs"  # The name of the realm in Keycloak
+    organizationsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the ProviderConfig resource

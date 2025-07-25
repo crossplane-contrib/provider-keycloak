@@ -83,6 +83,8 @@ spec:
                   adminUrl:
                     description: URL to the admin interface of the client.
                     type: string
+                  allowRefreshTokenInStandardTokenExchange:
+                    type: string
                   alwaysDisplayInConsole:
                     description: Always list this client in the Account UI, even if
                       the user does not have an active session.
@@ -395,6 +397,14 @@ spec:
                       are invalidated when a client session is expired. If not set,
                       it uses the standard SSO Session Max value.
                     type: string
+                  clientSecretRegenerateWhenChanged:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Arbitrary map of values that, when changed, will trigger rotation of the secret. NOTE! Conflicts with client_secret, client_secret_wo and client_secret_wo_version attribute and can't be used together
+                      Arbitrary map of values that, when changed, will trigger rotation of the secret
+                    type: object
+                    x-kubernetes-map-type: granular
                   clientSecretSecretRef:
                     description: The secret for clients with an access_type of CONFIDENTIAL
                       or BEARER-ONLY. This value is sensitive and should be treated
@@ -415,6 +425,30 @@ spec:
                     - name
                     - namespace
                     type: object
+                  clientSecretWoSecretRef:
+                    description: |-
+                      The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+                      Client Secret as write-only argument
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  clientSecretWoVersion:
+                    description: |-
+                      The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
+                      Version of the Client secret write-only argument
+                    type: number
                   clientSessionIdleTimeout:
                     description: Time a client offline session is allowed to be idle
                       before it expires. Offline tokens are invalidated when a client
@@ -611,6 +645,10 @@ spec:
                   standardFlowEnabled:
                     description: When true, the OAuth2 Authorization Code Grant will
                       be enabled for this client. Defaults to false.
+                    type: boolean
+                  standardTokenExchangeEnabled:
+                    description: When false, this client will not be able to initiate
+                      a login or obtain access tokens. Defaults to true.
                     type: boolean
                   useRefreshTokens:
                     description: If this is true, a refresh_token will be created
@@ -674,6 +712,8 @@ spec:
                   adminUrl:
                     description: URL to the admin interface of the client.
                     type: string
+                  allowRefreshTokenInStandardTokenExchange:
+                    type: string
                   alwaysDisplayInConsole:
                     description: Always list this client in the Account UI, even if
                       the user does not have an active session.
@@ -986,6 +1026,14 @@ spec:
                       are invalidated when a client session is expired. If not set,
                       it uses the standard SSO Session Max value.
                     type: string
+                  clientSecretRegenerateWhenChanged:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Arbitrary map of values that, when changed, will trigger rotation of the secret. NOTE! Conflicts with client_secret, client_secret_wo and client_secret_wo_version attribute and can't be used together
+                      Arbitrary map of values that, when changed, will trigger rotation of the secret
+                    type: object
+                    x-kubernetes-map-type: granular
                   clientSecretSecretRef:
                     description: The secret for clients with an access_type of CONFIDENTIAL
                       or BEARER-ONLY. This value is sensitive and should be treated
@@ -1006,6 +1054,30 @@ spec:
                     - name
                     - namespace
                     type: object
+                  clientSecretWoSecretRef:
+                    description: |-
+                      The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+                      Client Secret as write-only argument
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  clientSecretWoVersion:
+                    description: |-
+                      The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
+                      Version of the Client secret write-only argument
+                    type: number
                   clientSessionIdleTimeout:
                     description: Time a client offline session is allowed to be idle
                       before it expires. Offline tokens are invalidated when a client
@@ -1202,6 +1274,10 @@ spec:
                   standardFlowEnabled:
                     description: When true, the OAuth2 Authorization Code Grant will
                       be enabled for this client. Defaults to false.
+                    type: boolean
+                  standardTokenExchangeEnabled:
+                    description: When false, this client will not be able to initiate
+                      a login or obtain access tokens. Defaults to true.
                     type: boolean
                   useRefreshTokens:
                     description: If this is true, a refresh_token will be created
@@ -1429,6 +1505,8 @@ spec:
                   adminUrl:
                     description: URL to the admin interface of the client.
                     type: string
+                  allowRefreshTokenInStandardTokenExchange:
+                    type: string
                   alwaysDisplayInConsole:
                     description: Always list this client in the Account UI, even if
                       the user does not have an active session.
@@ -1513,6 +1591,19 @@ spec:
                       are invalidated when a client session is expired. If not set,
                       it uses the standard SSO Session Max value.
                     type: string
+                  clientSecretRegenerateWhenChanged:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Arbitrary map of values that, when changed, will trigger rotation of the secret. NOTE! Conflicts with client_secret, client_secret_wo and client_secret_wo_version attribute and can't be used together
+                      Arbitrary map of values that, when changed, will trigger rotation of the secret
+                    type: object
+                    x-kubernetes-map-type: granular
+                  clientSecretWoVersion:
+                    description: |-
+                      The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
+                      Version of the Client secret write-only argument
+                    type: number
                   clientSessionIdleTimeout:
                     description: Time a client offline session is allowed to be idle
                       before it expires. Offline tokens are invalidated when a client
@@ -1647,6 +1738,10 @@ spec:
                   standardFlowEnabled:
                     description: When true, the OAuth2 Authorization Code Grant will
                       be enabled for this client. Defaults to false.
+                    type: boolean
+                  standardTokenExchangeEnabled:
+                    description: When false, this client will not be able to initiate
+                      a login or obtain access tokens. Defaults to true.
                     type: boolean
                   useRefreshTokens:
                     description: If this is true, a refresh_token will be created

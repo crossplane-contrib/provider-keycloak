@@ -14,18 +14,18 @@ import (
 	"github.com/crossplane/upjet/pkg/resource/json"
 )
 
-// GetTerraformResourceType returns Terraform resource type for this Client
-func (mg *Client) GetTerraformResourceType() string {
-	return "keycloak_openid_client"
+// GetTerraformResourceType returns Terraform resource type for this Organization
+func (mg *Organization) GetTerraformResourceType() string {
+	return "keycloak_organization"
 }
 
-// GetConnectionDetailsMapping for this Client
-func (tr *Client) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"client_secret": "clientSecretSecretRef", "client_secret_wo": "clientSecretWoSecretRef"}
+// GetConnectionDetailsMapping for this Organization
+func (tr *Organization) GetConnectionDetailsMapping() map[string]string {
+	return nil
 }
 
-// GetObservation of this Client
-func (tr *Client) GetObservation() (map[string]any, error) {
+// GetObservation of this Organization
+func (tr *Organization) GetObservation() (map[string]any, error) {
 	o, err := json.TFParser.Marshal(tr.Status.AtProvider)
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func (tr *Client) GetObservation() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(o, &base)
 }
 
-// SetObservation for this Client
-func (tr *Client) SetObservation(obs map[string]any) error {
+// SetObservation for this Organization
+func (tr *Organization) SetObservation(obs map[string]any) error {
 	p, err := json.TFParser.Marshal(obs)
 	if err != nil {
 		return err
@@ -43,16 +43,16 @@ func (tr *Client) SetObservation(obs map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Status.AtProvider)
 }
 
-// GetID returns ID of underlying Terraform resource of this Client
-func (tr *Client) GetID() string {
+// GetID returns ID of underlying Terraform resource of this Organization
+func (tr *Organization) GetID() string {
 	if tr.Status.AtProvider.ID == nil {
 		return ""
 	}
 	return *tr.Status.AtProvider.ID
 }
 
-// GetParameters of this Client
-func (tr *Client) GetParameters() (map[string]any, error) {
+// GetParameters of this Organization
+func (tr *Organization) GetParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.ForProvider)
 	if err != nil {
 		return nil, err
@@ -61,8 +61,8 @@ func (tr *Client) GetParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// SetParameters for this Client
-func (tr *Client) SetParameters(params map[string]any) error {
+// SetParameters for this Organization
+func (tr *Organization) SetParameters(params map[string]any) error {
 	p, err := json.TFParser.Marshal(params)
 	if err != nil {
 		return err
@@ -70,8 +70,8 @@ func (tr *Client) SetParameters(params map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Spec.ForProvider)
 }
 
-// GetInitParameters of this Client
-func (tr *Client) GetInitParameters() (map[string]any, error) {
+// GetInitParameters of this Organization
+func (tr *Organization) GetInitParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.InitProvider)
 	if err != nil {
 		return nil, err
@@ -80,8 +80,8 @@ func (tr *Client) GetInitParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// GetInitParameters of this Client
-func (tr *Client) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
+// GetInitParameters of this Organization
+func (tr *Organization) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
 	params, err := tr.GetParameters()
 	if err != nil {
 		return nil, errors.Wrapf(err, "cannot get parameters for resource '%q'", tr.GetName())
@@ -110,10 +110,10 @@ func (tr *Client) GetMergedParameters(shouldMergeInitProvider bool) (map[string]
 	return params, nil
 }
 
-// LateInitialize this Client using its observed tfState.
+// LateInitialize this Organization using its observed tfState.
 // returns True if there are any spec changes for the resource.
-func (tr *Client) LateInitialize(attrs []byte) (bool, error) {
-	params := &ClientParameters{}
+func (tr *Organization) LateInitialize(attrs []byte) (bool, error) {
+	params := &OrganizationParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}
@@ -124,6 +124,6 @@ func (tr *Client) LateInitialize(attrs []byte) (bool, error) {
 }
 
 // GetTerraformSchemaVersion returns the associated Terraform schema version
-func (tr *Client) GetTerraformSchemaVersion() int {
+func (tr *Organization) GetTerraformSchemaVersion() int {
 	return 0
 }
