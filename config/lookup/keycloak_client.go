@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
+
 	"github.com/crossplane/upjet/pkg/terraform"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
-	"strconv"
 )
 
 // Component is a generic keycloak data model
@@ -32,6 +33,8 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 	username := tryGetString(c, "username", "")
 	password := tryGetString(c, "password", "")
 	realm := tryGetString(c, "realm", "master")
+	jwtSigningAlg := tryGetString(c, "jwt_signing_alg", "RS256")
+	jwtSigningKey := tryGetString(c, "jwt_signing_key", "")
 	initialLogin := tryGetBool(c, "initial_login", true)
 	clientTimeout := tryGetInt(c, "client_timeout", 15)
 	tlsInsecureSkipVerify := tryGetBool(c, "tls_insecure_skip_verify", false)
@@ -40,7 +43,24 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 	additionalHeaders := tryGetMap(c, "additional_headers")
 	userAgent := "Crossplane Keycloak Provider"
 
-	keycloakClient, err := keycloak.NewKeycloakClient(ctx, url, basePath, clientID, clientSecret, realm, username, password, initialLogin, clientTimeout, rootCaCertificate, tlsInsecureSkipVerify, userAgent, redHatSSO, additionalHeaders)
+	keycloakClient, err := keycloak.NewKeycloakClient(
+		ctx,
+		url,
+		basePath,
+		clientID,
+		clientSecret,
+		realm,
+		username,
+		password,
+		jwtSigningAlg,
+		jwtSigningKey,
+		initialLogin,
+		clientTimeout,
+		rootCaCertificate,
+		tlsInsecureSkipVerify,
+		userAgent,
+		redHatSSO,
+		additionalHeaders)
 	if err != nil {
 		return nil, err
 	}

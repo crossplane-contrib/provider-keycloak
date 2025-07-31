@@ -52,13 +52,25 @@ type IdentityProviderInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
-	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
+	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
 	// Client Secret.
-	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef *v1.SecretKeySelector `json:"clientSecretSecretRef,omitempty" tf:"-"`
+
+	// The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+	// Client Secret as write-only argument
+	ClientSecretWoSecretRef *v1.SecretKeySelector `json:"clientSecretWoSecretRef,omitempty" tf:"-"`
+
+	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
+	// Version of the Client secret write-only argument
+	ClientSecretWoVersion *float64 `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
 
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
 	DefaultScopes *string `json:"defaultScopes,omitempty" tf:"default_scopes,omitempty"`
+
+	// When true, disables the check for the typ claim of tokens received from the identity provider. Defaults to false.
+	// Disables the validation of the `typ` claim of tokens received from the Identity Provider. If this is `off` the type claim is validated (default).
+	DisableTypeClaimCheck *bool `json:"disableTypeClaimCheck,omitempty" tf:"disable_type_claim_check,omitempty"`
 
 	// When true, disables the usage of the user info service to obtain additional user information. Defaults to false.
 	// Disable usage of User Info service to obtain additional user information?  Default is to use this OIDC service.
@@ -117,6 +129,16 @@ type IdentityProviderInitParameters struct {
 	// The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
 	// Logout URL
 	LogoutURL *string `json:"logoutUrl,omitempty" tf:"logout_url,omitempty"`
+
+	// The organization domain to associate this identity provider with. it is used to map users to an organization based on their email domain and to authenticate them accordingly in the scope of the organization.
+	OrgDomain *string `json:"orgDomain,omitempty" tf:"org_domain,omitempty"`
+
+	// Indicates whether to automatically redirect user to this identity provider when email domain matches domain.
+	OrgRedirectModeEmailMatches *bool `json:"orgRedirectModeEmailMatches,omitempty" tf:"org_redirect_mode_email_matches,omitempty"`
+
+	// The ID of the organization to link this identity provider to.
+	// ID of organization with which this identity is linked.
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -197,9 +219,17 @@ type IdentityProviderObservation struct {
 	// Client ID.
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
+	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
+	// Version of the Client secret write-only argument
+	ClientSecretWoVersion *float64 `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
+
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
 	DefaultScopes *string `json:"defaultScopes,omitempty" tf:"default_scopes,omitempty"`
+
+	// When true, disables the check for the typ claim of tokens received from the identity provider. Defaults to false.
+	// Disables the validation of the `typ` claim of tokens received from the Identity Provider. If this is `off` the type claim is validated (default).
+	DisableTypeClaimCheck *bool `json:"disableTypeClaimCheck,omitempty" tf:"disable_type_claim_check,omitempty"`
 
 	// When true, disables the usage of the user info service to obtain additional user information. Defaults to false.
 	// Disable usage of User Info service to obtain additional user information?  Default is to use this OIDC service.
@@ -254,6 +284,16 @@ type IdentityProviderObservation struct {
 	// The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
 	// Logout URL
 	LogoutURL *string `json:"logoutUrl,omitempty" tf:"logout_url,omitempty"`
+
+	// The organization domain to associate this identity provider with. it is used to map users to an organization based on their email domain and to authenticate them accordingly in the scope of the organization.
+	OrgDomain *string `json:"orgDomain,omitempty" tf:"org_domain,omitempty"`
+
+	// Indicates whether to automatically redirect user to this identity provider when email domain matches domain.
+	OrgRedirectModeEmailMatches *bool `json:"orgRedirectModeEmailMatches,omitempty" tf:"org_redirect_mode_email_matches,omitempty"`
+
+	// The ID of the organization to link this identity provider to.
+	// ID of organization with which this identity is linked.
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -342,15 +382,30 @@ type IdentityProviderParameters struct {
 	// +kubebuilder:validation:Optional
 	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
-	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
+	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
 	// Client Secret.
 	// +kubebuilder:validation:Optional
-	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef *v1.SecretKeySelector `json:"clientSecretSecretRef,omitempty" tf:"-"`
+
+	// The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+	// Client Secret as write-only argument
+	// +kubebuilder:validation:Optional
+	ClientSecretWoSecretRef *v1.SecretKeySelector `json:"clientSecretWoSecretRef,omitempty" tf:"-"`
+
+	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
+	// Version of the Client secret write-only argument
+	// +kubebuilder:validation:Optional
+	ClientSecretWoVersion *float64 `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
 
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
 	// +kubebuilder:validation:Optional
 	DefaultScopes *string `json:"defaultScopes,omitempty" tf:"default_scopes,omitempty"`
+
+	// When true, disables the check for the typ claim of tokens received from the identity provider. Defaults to false.
+	// Disables the validation of the `typ` claim of tokens received from the Identity Provider. If this is `off` the type claim is validated (default).
+	// +kubebuilder:validation:Optional
+	DisableTypeClaimCheck *bool `json:"disableTypeClaimCheck,omitempty" tf:"disable_type_claim_check,omitempty"`
 
 	// When true, disables the usage of the user info service to obtain additional user information. Defaults to false.
 	// Disable usage of User Info service to obtain additional user information?  Default is to use this OIDC service.
@@ -421,6 +476,19 @@ type IdentityProviderParameters struct {
 	// Logout URL
 	// +kubebuilder:validation:Optional
 	LogoutURL *string `json:"logoutUrl,omitempty" tf:"logout_url,omitempty"`
+
+	// The organization domain to associate this identity provider with. it is used to map users to an organization based on their email domain and to authenticate them accordingly in the scope of the organization.
+	// +kubebuilder:validation:Optional
+	OrgDomain *string `json:"orgDomain,omitempty" tf:"org_domain,omitempty"`
+
+	// Indicates whether to automatically redirect user to this identity provider when email domain matches domain.
+	// +kubebuilder:validation:Optional
+	OrgRedirectModeEmailMatches *bool `json:"orgRedirectModeEmailMatches,omitempty" tf:"org_redirect_mode_email_matches,omitempty"`
+
+	// The ID of the organization to link this identity provider to.
+	// ID of organization with which this identity is linked.
+	// +kubebuilder:validation:Optional
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -520,7 +588,6 @@ type IdentityProvider struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.alias) || (has(self.initProvider) && has(self.initProvider.alias))",message="spec.forProvider.alias is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.authorizationUrl) || (has(self.initProvider) && has(self.initProvider.authorizationUrl))",message="spec.forProvider.authorizationUrl is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clientSecretSecretRef)",message="spec.forProvider.clientSecretSecretRef is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.tokenUrl) || (has(self.initProvider) && has(self.initProvider.tokenUrl))",message="spec.forProvider.tokenUrl is a required parameter"
 	Spec   IdentityProviderSpec   `json:"spec"`
 	Status IdentityProviderStatus `json:"status,omitempty"`

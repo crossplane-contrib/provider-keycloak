@@ -168,6 +168,21 @@ spec:
                       Specifies the URI reference corresponding to a name identifier format. Defaults to empty.
                       Name ID Policy Format.
                     type: string
+                  orgDomain:
+                    description: The organization domain to associate this identity
+                      provider with. It is used to map users to an organization based
+                      on their email domain and to authenticate them accordingly in
+                      the scope of the organization.
+                    type: string
+                  orgRedirectModeEmailMatches:
+                    description: Indicates whether to automatically redirect users
+                      to this identity provider when email domain matches domain.
+                    type: boolean
+                  organizationId:
+                    description: |-
+                      The ID of the organization to link this identity provider to.
+                      ID of organization with which this identity is linked.
+                    type: string
                   postBindingAuthnRequest:
                     description: |-
                       Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
@@ -446,6 +461,21 @@ spec:
                     description: |-
                       Specifies the URI reference corresponding to a name identifier format. Defaults to empty.
                       Name ID Policy Format.
+                    type: string
+                  orgDomain:
+                    description: The organization domain to associate this identity
+                      provider with. It is used to map users to an organization based
+                      on their email domain and to authenticate them accordingly in
+                      the scope of the organization.
+                    type: string
+                  orgRedirectModeEmailMatches:
+                    description: Indicates whether to automatically redirect users
+                      to this identity provider when email domain matches domain.
+                    type: boolean
+                  organizationId:
+                    description: |-
+                      The ID of the organization to link this identity provider to.
+                      ID of organization with which this identity is linked.
                     type: string
                   postBindingAuthnRequest:
                     description: |-
@@ -902,6 +932,21 @@ spec:
                     description: |-
                       Specifies the URI reference corresponding to a name identifier format. Defaults to empty.
                       Name ID Policy Format.
+                    type: string
+                  orgDomain:
+                    description: The organization domain to associate this identity
+                      provider with. It is used to map users to an organization based
+                      on their email domain and to authenticate them accordingly in
+                      the scope of the organization.
+                    type: string
+                  orgRedirectModeEmailMatches:
+                    description: Indicates whether to automatically redirect users
+                      to this identity provider when email domain matches domain.
+                    type: boolean
+                  organizationId:
+                    description: |-
+                      The ID of the organization to link this identity provider to.
+                      ID of organization with which this identity is linked.
                     type: string
                   postBindingAuthnRequest:
                     description: |-

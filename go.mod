@@ -13,7 +13,7 @@ require (
 	github.com/hashicorp/terraform-json v0.25.0
 	github.com/hashicorp/terraform-plugin-framework v1.13.0 // indirect
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.37.0
-	github.com/keycloak/terraform-provider-keycloak v0.0.0-20250724131112-0f2af8ce8184
+	github.com/keycloak/terraform-provider-keycloak v0.0.0-20250728114223-a0870aaee5d5
 	github.com/pkg/errors v0.9.1
 	k8s.io/api v0.29.3
 	k8s.io/apimachinery v0.29.3
@@ -22,6 +22,8 @@ require (
 	sigs.k8s.io/controller-tools v0.14.0
 
 )
+
+require github.com/golang-jwt/jwt/v5 v5.2.3 // indirect
 
 require (
 	github.com/ProtonMail/go-crypto v1.1.6 // indirect

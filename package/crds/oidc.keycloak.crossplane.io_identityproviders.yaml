@@ -183,7 +183,7 @@ spec:
                     type: object
                   clientSecretSecretRef:
                     description: |-
-                      The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
+                      The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
                       Client Secret.
                     properties:
                       key:
@@ -200,11 +200,40 @@ spec:
                     - name
                     - namespace
                     type: object
+                  clientSecretWoSecretRef:
+                    description: |-
+                      The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+                      Client Secret as write-only argument
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  clientSecretWoVersion:
+                    description: |-
+                      The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
+                      Version of the Client secret write-only argument
+                    type: number
                   defaultScopes:
                     description: |-
                       The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
                       The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
                     type: string
+                  disableTypeClaimCheck:
+                    description: |-
+                      When true, disables the check for the typ claim of tokens received from the identity provider. Defaults to false.
+                      Disables the validation of the `typ` claim of tokens received from the Identity Provider. If this is `off` the type claim is validated (default).
+                    type: boolean
                   disableUserInfo:
                     description: |-
                       When true, disables the usage of the user info service to obtain additional user information. Defaults to false.
@@ -344,6 +373,21 @@ spec:
                     description: |-
                       The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
                       Logout URL
+                    type: string
+                  orgDomain:
+                    description: The organization domain to associate this identity
+                      provider with. it is used to map users to an organization based
+                      on their email domain and to authenticate them accordingly in
+                      the scope of the organization.
+                    type: string
+                  orgRedirectModeEmailMatches:
+                    description: Indicates whether to automatically redirect user
+                      to this identity provider when email domain matches domain.
+                    type: boolean
+                  organizationId:
+                    description: |-
+                      The ID of the organization to link this identity provider to.
+                      ID of organization with which this identity is linked.
                     type: string
                   postBrokerLoginFlowAlias:
                     description: |-
@@ -594,7 +638,7 @@ spec:
                     type: object
                   clientSecretSecretRef:
                     description: |-
-                      The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
+                      The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
                       Client Secret.
                     properties:
                       key:
@@ -611,11 +655,40 @@ spec:
                     - name
                     - namespace
                     type: object
+                  clientSecretWoSecretRef:
+                    description: |-
+                      The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+                      Client Secret as write-only argument
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  clientSecretWoVersion:
+                    description: |-
+                      The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
+                      Version of the Client secret write-only argument
+                    type: number
                   defaultScopes:
                     description: |-
                       The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
                       The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
                     type: string
+                  disableTypeClaimCheck:
+                    description: |-
+                      When true, disables the check for the typ claim of tokens received from the identity provider. Defaults to false.
+                      Disables the validation of the `typ` claim of tokens received from the Identity Provider. If this is `off` the type claim is validated (default).
+                    type: boolean
                   disableUserInfo:
                     description: |-
                       When true, disables the usage of the user info service to obtain additional user information. Defaults to false.
@@ -756,6 +829,21 @@ spec:
                       The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
                       Logout URL
                     type: string
+                  orgDomain:
+                    description: The organization domain to associate this identity
+                      provider with. it is used to map users to an organization based
+                      on their email domain and to authenticate them accordingly in
+                      the scope of the organization.
+                    type: string
+                  orgRedirectModeEmailMatches:
+                    description: Indicates whether to automatically redirect user
+                      to this identity provider when email domain matches domain.
+                    type: boolean
+                  organizationId:
+                    description: |-
+                      The ID of the organization to link this identity provider to.
+                      ID of organization with which this identity is linked.
+                    type: string
                   postBrokerLoginFlowAlias:
                     description: |-
                       The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
@@ -880,8 +968,6 @@ spec:
                       Enable/disable signature validation of external IDP signatures. Defaults to false.
                       Enable/disable signature validation of external IDP signatures.
                     type: boolean
-                required:
-                - clientSecretSecretRef
                 type: object
               managementPolicies:
                 default:
@@ -1059,9 +1145,6 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.authorizationUrl)
                 || (has(self.initProvider) && has(self.initProvider.authorizationUrl))'
-            - message: spec.forProvider.clientSecretSecretRef is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.clientSecretSecretRef)'
             - message: spec.forProvider.tokenUrl is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.tokenUrl)
@@ -1104,11 +1187,21 @@ spec:
                       The client or client identifier registered within the identity provider.
                       Client ID.
                     type: string
+                  clientSecretWoVersion:
+                    description: |-
+                      The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
+                      Version of the Client secret write-only argument
+                    type: number
                   defaultScopes:
                     description: |-
                       The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
                       The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
                     type: string
+                  disableTypeClaimCheck:
+                    description: |-
+                      When true, disables the check for the typ claim of tokens received from the identity provider. Defaults to false.
+                      Disables the validation of the `typ` claim of tokens received from the Identity Provider. If this is `off` the type claim is validated (default).
+                    type: boolean
                   disableUserInfo:
                     description: |-
                       When true, disables the usage of the user info service to obtain additional user information. Defaults to false.
@@ -1179,6 +1272,21 @@ spec:
                     description: |-
                       The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.
                       Logout URL
+                    type: string
+                  orgDomain:
+                    description: The organization domain to associate this identity
+                      provider with. it is used to map users to an organization based
+                      on their email domain and to authenticate them accordingly in
+                      the scope of the organization.
+                    type: string
+                  orgRedirectModeEmailMatches:
+                    description: Indicates whether to automatically redirect user
+                      to this identity provider when email domain matches domain.
+                    type: boolean
+                  organizationId:
+                    description: |-
+                      The ID of the organization to link this identity provider to.
+                      ID of organization with which this identity is linked.
                     type: string
                   postBrokerLoginFlowAlias:
                     description: |-
