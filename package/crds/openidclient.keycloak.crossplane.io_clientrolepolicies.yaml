@@ -77,6 +77,8 @@ spec:
                     type: string
                   description:
                     type: string
+                  fetchRoles:
+                    type: boolean
                   logic:
                     type: string
                   name:
@@ -338,6 +340,8 @@ spec:
                     type: string
                   description:
                     type: string
+                  fetchRoles:
+                    type: boolean
                   logic:
                     type: string
                   name:
@@ -775,6 +779,8 @@ spec:
                     type: string
                   description:
                     type: string
+                  fetchRoles:
+                    type: boolean
                   id:
                     type: string
                   logic:

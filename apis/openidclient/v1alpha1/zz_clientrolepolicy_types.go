@@ -18,6 +18,8 @@ type ClientRolePolicyInitParameters struct {
 
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	FetchRoles *bool `json:"fetchRoles,omitempty" tf:"fetch_roles,omitempty"`
+
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
@@ -55,6 +57,8 @@ type ClientRolePolicyObservation struct {
 
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	FetchRoles *bool `json:"fetchRoles,omitempty" tf:"fetch_roles,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
@@ -77,6 +81,9 @@ type ClientRolePolicyParameters struct {
 
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	FetchRoles *bool `json:"fetchRoles,omitempty" tf:"fetch_roles,omitempty"`
 
 	// +kubebuilder:validation:Optional
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`

@@ -360,6 +360,14 @@ resources:
                       "enabled": true,
                       "realm": "my-realm"
                     }
+            - name: groups
+              manifest: |-
+                {
+                  "name": "group-mapper",
+                  "realm": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm: keycloak_realm.realm.id
         argumentDocs:
             extra_config: '- (Optional) Key/value attributes to add to the identity provider mapper model that is persisted to Keycloak. This can be used to extend the base model with new Keycloak features.'
             identity_provider_alias: '- (Required) The alias of the associated identity provider.'
@@ -2130,6 +2138,29 @@ resources:
                       "enabled": true,
                       "realm": "my-realm"
                     }
+            - name: realm_identity_provider
+              manifest: |-
+                {
+                  "alias": "my-idp",
+                  "authorization_url": "https://authorizationurl.com",
+                  "client_id": "clientID",
+                  "client_secret_wo": "${ephemeral.random_password.openid_client_secret.result}",
+                  "client_secret_wo_version": 1,
+                  "extra_config": {
+                    "clientAuthMethod": "client_secret_post"
+                  },
+                  "realm": "${keycloak_realm.realm.id}",
+                  "token_url": "https://tokenurl.com"
+                }
+              references:
+                client_secret_wo: ephemeral.random_password.openid_client_secret.result
+                realm: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
         argumentDocs:
             accepts_prompt_none_forward_from_client: (Optional) When true, the IDP will accept forwarded authentication requests that contain the prompt=none query parameter. Defaults to false.
             add_read_token_role_on_create: '- (Optional) When true, new users will be able to read stored tokens. This will automatically assign the broker.read-token role. Defaults to false.'
@@ -2137,9 +2168,12 @@ resources:
             authorization_url: '- (Required) The Authorization Url.'
             backchannel_supported: '- (Optional) Does the external IDP support backchannel logout? Defaults to true.'
             client_id: '- (Required) The client or client identifier registered within the identity provider.'
-            client_secret: '- (Required) The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.'
+            client_secret: '- (Optional) The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.'
+            client_secret_wo: '- (Optional, Write-Only) The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. This is a write-only argument and Terraform does not store them in state or plan files. If omitted, this will fallback to use client_secret.'
+            client_secret_wo_version: '- (Optional) Functions as a flag and/or trigger to indicate Terraform when to use the input value in client_secret_wo to execute a Create or Update operation. The value of this argument is stored in the state and plan files. Required when using client_secret_wo.'
             clientAuthMethod: (Optional) The client authentication method. Since Keycloak 8, this is a required attribute if OIDC provider is created using the Keycloak GUI. It accepts the values client_secret_post (Client secret sent as post), client_secret_basic (Client secret sent as basic auth), client_secret_jwt (Client secret as jwt) and private_key_jwt  (JTW signed with private key)
             default_scopes: '- (Optional) The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.'
+            disable_type_claim_check: '- (Optional) When true, disables the check for the typ claim of tokens received from the identity provider. Defaults to false.'
             disable_user_info: '- (Optional) When true, disables the usage of the user info service to obtain additional user information. Defaults to false.'
             display_name: '- (Optional) Display name for the identity provider in the GUI.'
             enabled: '- (Optional) When true, users will be able to log in to this realm using this identity provider. Defaults to true.'
@@ -2153,6 +2187,9 @@ resources:
             link_only: '- (Optional) When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.'
             login_hint: '- (Optional) Pass login hint to identity provider.'
             logout_url: '- (Optional) The Logout URL is the end session endpoint to use to sign-out the user from external identity provider.'
+            org_domain: '- (Optional) The organization domain to associate this identity provider with. it is used to map users to an organization based on their email domain and to authenticate them accordingly in the scope of the organization.'
+            org_redirect_mode_email_matches: '- (Optional) Indicates whether to automatically redirect user to this identity provider when email domain matches domain.'
+            organization_id: '- (Optional) The ID of the organization to link this identity provider to.'
             post_broker_login_flow_alias: '- (Optional) The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.'
             provider_id: '- (Optional) The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation.'
             realm: '- (Required) The name of the realm. This is unique across Keycloak.'
@@ -2297,6 +2334,58 @@ resources:
                       "enabled": true,
                       "realm": "my-realm"
                     }
+            - name: openid_client
+              manifest: |-
+                {
+                  "access_type": "CONFIDENTIAL",
+                  "client_id": "test-client",
+                  "client_secret_wo": "${ephemeral.random_password.openid_client_secret.result}",
+                  "client_secret_wo_version": 1,
+                  "enabled": true,
+                  "extra_config": {
+                    "key1": "value1",
+                    "key2": "value2"
+                  },
+                  "login_theme": "keycloak",
+                  "name": "test client",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "valid_redirect_uris": [
+                    "http://localhost:8080/openid-callback"
+                  ]
+                }
+              references:
+                client_secret_wo: ephemeral.random_password.openid_client_secret.result
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+            - name: openid_client
+              manifest: |-
+                {
+                  "access_type": "CONFIDENTIAL",
+                  "client_id": "test-client",
+                  "client_secret_regenerate_when_changed": {
+                    "rotation": "${time_rotating.rotate.rotation_rfc3339}"
+                  },
+                  "enabled": true,
+                  "name": "test client",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+                time_rotating.rotate: |-
+                    {
+                      "rotation_days": 10
+                    }
         argumentDocs:
             BEARER-ONLY: '- Used for services that never initiate a login. This client will only allow bearer token requests.'
             CONFIDENTIAL: |-
@@ -2329,6 +2418,9 @@ resources:
             client_offline_session_idle_timeout: '- (Optional) Time a client session is allowed to be idle before it expires. Tokens are invalidated when a client session is expired. If not set it uses the standard SSO Session Idle value.'
             client_offline_session_max_lifespan: '- (Optional) Max time before a client session is expired. Tokens are invalidated when a client session is expired. If not set, it uses the standard SSO Session Max value.'
             client_secret: '- (Optional) The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. This value is sensitive and should be treated with the same care as a password. If omitted, this will be generated by Keycloak.'
+            client_secret_regenerate_when_changed: '- (Optional) Arbitrary map of values that, when changed, will trigger rotation of the secret. NOTE! Conflicts with client_secret, client_secret_wo and client_secret_wo_version attribute and can''t be used together'
+            client_secret_wo: '- (Optional, Write-Only) The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. This is a write-only argument and Terraform does not store them in state or plan files. If omitted, this will fallback to use client_secret.'
+            client_secret_wo_version: '- (Optional) Functions as a flag and/or trigger to indicate Terraform when to use the input value in client_secret_wo to execute a Create or Update operation. The value of this argument is stored in the state and plan files. Required when using client_secret_wo.'
             client_session_idle_timeout: '- (Optional) Time a client offline session is allowed to be idle before it expires. Offline tokens are invalidated when a client offline session is expired. If not set it uses the Offline Session Idle value.'
             client_session_max_lifespan: '- (Optional) Max time before a client offline session is expired. Offline tokens are invalidated when a client offline session is expired. If not set, it uses the Offline Session Max value.'
             consent_required: '- (Optional) When true, users have to consent to client access. Defaults to false.'
@@ -3484,6 +3576,7 @@ resources:
         argumentDocs:
             add_to_access_token: '- (Optional) Indicates if the property should be added as a claim to the access token. Defaults to true.'
             add_to_id_token: '- (Optional) Indicates if the property should be added as a claim to the id token. Defaults to true.'
+            add_to_token_introspection: '- (Optional) Indicates if the property should be added as a claim to the Token Introspection response body. Defaults to true.'
             add_to_userinfo: '- (Optional) Indicates if the property should be added as a claim to the UserInfo response body. Defaults to true.'
             claim_name: '- (Required) The name of the claim to insert into a token.'
             claim_value_type: '- (Optional) The claim type used when serializing JSON tokens. Can be one of String, JSON, long, int, or boolean. Defaults to String.'
@@ -3564,6 +3657,54 @@ resources:
             realm_id: '- (Required) The realm this protocol mapper exists within.'
             session_note: '- (Optional) String value being the name of stored user session note within the UserSessionModel.note map.'
             session_note_label: '- (Optional) Deprecated Use session_note instead.'
+        importStatements: []
+    keycloak_organization:
+        subCategory: ""
+        name: keycloak_organization
+        title: keycloak_organization Resource
+        examples:
+            - name: this
+              manifest: |-
+                {
+                  "alias": "org",
+                  "domain": [
+                    {
+                      "name": "example.com"
+                    }
+                  ],
+                  "enabled": true,
+                  "name": "org",
+                  "realm": "${keycloak_realm.realm.name}"
+                }
+              references:
+                realm: keycloak_realm.realm.name
+              dependencies:
+                keycloak_oidc_identity_provider.this: |-
+                    {
+                      "alias": "my-idp",
+                      "authorization_url": "https://authorizationurl.com",
+                      "client_id": "clientID",
+                      "client_secret": "clientSecret",
+                      "org_domain": "example.com",
+                      "org_redirect_mode_email_matches": true,
+                      "organization_id": "${keycloak_organization.this.id}",
+                      "realm": "${keycloak_realm.realm.name}",
+                      "token_url": "https://tokenurl.com"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            alias: '- (Optional) The alias unique identifies the organization. Same as the name if not specified. The alias cannot be changed after the organization has been created.'
+            attributes: '- (Optional) A map representing attributes for the group. In order to add multivalued attributes, use ## to separate the values. Max length for each value is 255 chars.'
+            description: '- (Optional) The description of the organization.'
+            domain: '- (Required) A list of domains. At least one domain is required.'
+            name: '- (Required) The name of the organization.'
+            realm: '- (Required) The realm this organization exists in.'
+            redirect_url: '- (Optional) The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.'
+            verified: '- (Optional) Whether domain is verified or not. Default is false.'
         importStatements: []
     keycloak_realm:
         subCategory: ""
@@ -3744,6 +3885,106 @@ resources:
             verify_email: '- (Optional) When true, users are required to verify their email address after registration and after email address changes.'
             web_authn_passwordless_policy: '- (Optional) Configuration for WebAuthn Passwordless Policy authentication.'
             web_authn_policy: '- (Optional) Configuration for WebAuthn Policy authentication.'
+        importStatements: []
+    keycloak_realm_client_policy_profile:
+        subCategory: ""
+        name: keycloak_realm_client_policy_profile
+        title: keycloak_realm_client_policy_profile Resource
+        examples:
+            - name: profile
+              manifest: |-
+                {
+                  "executor": [
+                    {
+                      "configuration": {
+                        "auto-configure": true
+                      },
+                      "name": "intent-client-bind-checker"
+                    },
+                    {
+                      "name": "secure-session"
+                    }
+                  ],
+                  "name": "my-profile",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            configuration: '- (Optional) - A map of configuration values'
+            executor: '- (Optional) An ordered list of executors'
+            name: '- (Required) The name of the attribute.'
+            realm_id: '- (Required) The realm id.'
+        importStatements: []
+    keycloak_realm_client_policy_profile_policy:
+        subCategory: ""
+        name: keycloak_realm_client_policy_profile_policy
+        title: keycloak_realm_client_policy_profile_policy Resource
+        examples:
+            - name: policy
+              manifest: |-
+                {
+                  "condition": [
+                    {
+                      "configuration": {
+                        "protocol": "openid-connect"
+                      },
+                      "name": "client-type"
+                    },
+                    {
+                      "configuration": {
+                        "attributes": "${jsonencode([{ \"key\" : \"test-key\", \"value\" : \"test-value\" }])}",
+                        "is-negative-logic": false
+                      },
+                      "name": "client-attributes"
+                    }
+                  ],
+                  "description": "Some desc",
+                  "name": "my-profile",
+                  "profiles": [
+                    "${keycloak_realm_client_policy_profile.profile.name}"
+                  ],
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "realm": "my-realm"
+                    }
+                keycloak_realm_client_policy_profile.profile: |-
+                    {
+                      "description": "Some desc",
+                      "executor": [
+                        {
+                          "configuration": {
+                            "auto-configure": "true"
+                          },
+                          "name": "intent-client-bind-checker"
+                        },
+                        {
+                          "configuration": {
+                            "expiration-period": 2505600,
+                            "remaining-rotation-period": 864000,
+                            "rotated-expiration-period": 172800
+                          },
+                          "name": "secret-rotation"
+                        }
+                      ],
+                      "name": "my-profile",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+        argumentDocs:
+            condition: '- (Optional) An ordered list of condition'
+            configuration: '- (Optional) - A map of configuration values'
+            name: '- (Required) The name of the attribute.'
+            realm_id: '- (Required) The realm id.'
         importStatements: []
     keycloak_realm_default_client_scopes:
         subCategory: ""
@@ -4650,6 +4891,9 @@ resources:
             hide_on_login_page: '- (Optional) If hidden, then login with this provider is possible only if requested explicitly, e.g. using the ''kc_idp_hint'' parameter.'
             link_only: '- (Optional) When true, users cannot log in using this provider, but their existing accounts will be linked when possible. Defaults to false.'
             name_id_policy_format: '- (Optional) Specifies the URI reference corresponding to a name identifier format. Defaults to empty.'
+            org_domain: '- (Optional) The organization domain to associate this identity provider with. It is used to map users to an organization based on their email domain and to authenticate them accordingly in the scope of the organization.'
+            org_redirect_mode_email_matches: '- (Optional) Indicates whether to automatically redirect users to this identity provider when email domain matches domain.'
+            organization_id: '- (Optional) The ID of the organization to link this identity provider to.'
             post_binding_authn_request: '- (Optional) Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.'
             post_binding_logout: '- (Optional) Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.'
             post_binding_response: '- (Optional) Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.'

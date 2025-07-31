@@ -156,6 +156,21 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(string)
 		**out = **in
 	}
+	if in.OrgDomain != nil {
+		in, out := &in.OrgDomain, &out.OrgDomain
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrgRedirectModeEmailMatches != nil {
+		in, out := &in.OrgRedirectModeEmailMatches, &out.OrgRedirectModeEmailMatches
+		*out = new(bool)
+		**out = **in
+	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
+		*out = new(string)
+		**out = **in
+	}
 	if in.PostBindingAuthnRequest != nil {
 		in, out := &in.PostBindingAuthnRequest, &out.PostBindingAuthnRequest
 		*out = new(bool)
@@ -431,6 +446,21 @@ func (in *IdentityProviderObservation) DeepCopyInto(out *IdentityProviderObserva
 		*out = new(string)
 		**out = **in
 	}
+	if in.OrgDomain != nil {
+		in, out := &in.OrgDomain, &out.OrgDomain
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrgRedirectModeEmailMatches != nil {
+		in, out := &in.OrgRedirectModeEmailMatches, &out.OrgRedirectModeEmailMatches
+		*out = new(bool)
+		**out = **in
+	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
+		*out = new(string)
+		**out = **in
+	}
 	if in.PostBindingAuthnRequest != nil {
 		in, out := &in.PostBindingAuthnRequest, &out.PostBindingAuthnRequest
 		*out = new(bool)
@@ -651,6 +681,21 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 	}
 	if in.NameIDPolicyFormat != nil {
 		in, out := &in.NameIDPolicyFormat, &out.NameIDPolicyFormat
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrgDomain != nil {
+		in, out := &in.OrgDomain, &out.OrgDomain
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrgRedirectModeEmailMatches != nil {
+		in, out := &in.OrgRedirectModeEmailMatches, &out.OrgRedirectModeEmailMatches
+		*out = new(bool)
+		**out = **in
+	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
 		*out = new(string)
 		**out = **in
 	}

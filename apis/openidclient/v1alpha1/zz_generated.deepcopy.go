@@ -1166,6 +1166,11 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowRefreshTokenInStandardTokenExchange != nil {
+		in, out := &in.AllowRefreshTokenInStandardTokenExchange, &out.AllowRefreshTokenInStandardTokenExchange
+		*out = new(string)
+		**out = **in
+	}
 	if in.AlwaysDisplayInConsole != nil {
 		in, out := &in.AlwaysDisplayInConsole, &out.AlwaysDisplayInConsole
 		*out = new(bool)
@@ -1235,9 +1240,35 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ClientSecretRegenerateWhenChanged != nil {
+		in, out := &in.ClientSecretRegenerateWhenChanged, &out.ClientSecretRegenerateWhenChanged
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.ClientSecretSecretRef != nil {
 		in, out := &in.ClientSecretSecretRef, &out.ClientSecretSecretRef
 		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecretWoSecretRef != nil {
+		in, out := &in.ClientSecretWoSecretRef, &out.ClientSecretWoSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecretWoVersion != nil {
+		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
+		*out = new(float64)
 		**out = **in
 	}
 	if in.ClientSessionIdleTimeout != nil {
@@ -1391,6 +1422,11 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.StandardTokenExchangeEnabled != nil {
+		in, out := &in.StandardTokenExchangeEnabled, &out.StandardTokenExchangeEnabled
+		*out = new(bool)
+		**out = **in
+	}
 	if in.UseRefreshTokens != nil {
 		in, out := &in.UseRefreshTokens, &out.UseRefreshTokens
 		*out = new(bool)
@@ -1496,6 +1532,11 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowRefreshTokenInStandardTokenExchange != nil {
+		in, out := &in.AllowRefreshTokenInStandardTokenExchange, &out.AllowRefreshTokenInStandardTokenExchange
+		*out = new(string)
+		**out = **in
+	}
 	if in.AlwaysDisplayInConsole != nil {
 		in, out := &in.AlwaysDisplayInConsole, &out.AlwaysDisplayInConsole
 		*out = new(bool)
@@ -1553,6 +1594,27 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 	if in.ClientOfflineSessionMaxLifespan != nil {
 		in, out := &in.ClientOfflineSessionMaxLifespan, &out.ClientOfflineSessionMaxLifespan
 		*out = new(string)
+		**out = **in
+	}
+	if in.ClientSecretRegenerateWhenChanged != nil {
+		in, out := &in.ClientSecretRegenerateWhenChanged, &out.ClientSecretRegenerateWhenChanged
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
+	if in.ClientSecretWoVersion != nil {
+		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
+		*out = new(float64)
 		**out = **in
 	}
 	if in.ClientSessionIdleTimeout != nil {
@@ -1708,6 +1770,11 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 	}
 	if in.StandardFlowEnabled != nil {
 		in, out := &in.StandardFlowEnabled, &out.StandardFlowEnabled
+		*out = new(bool)
+		**out = **in
+	}
+	if in.StandardTokenExchangeEnabled != nil {
+		in, out := &in.StandardTokenExchangeEnabled, &out.StandardTokenExchangeEnabled
 		*out = new(bool)
 		**out = **in
 	}
@@ -2031,6 +2098,11 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowRefreshTokenInStandardTokenExchange != nil {
+		in, out := &in.AllowRefreshTokenInStandardTokenExchange, &out.AllowRefreshTokenInStandardTokenExchange
+		*out = new(string)
+		**out = **in
+	}
 	if in.AlwaysDisplayInConsole != nil {
 		in, out := &in.AlwaysDisplayInConsole, &out.AlwaysDisplayInConsole
 		*out = new(bool)
@@ -2100,9 +2172,35 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ClientSecretRegenerateWhenChanged != nil {
+		in, out := &in.ClientSecretRegenerateWhenChanged, &out.ClientSecretRegenerateWhenChanged
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.ClientSecretSecretRef != nil {
 		in, out := &in.ClientSecretSecretRef, &out.ClientSecretSecretRef
 		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecretWoSecretRef != nil {
+		in, out := &in.ClientSecretWoSecretRef, &out.ClientSecretWoSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecretWoVersion != nil {
+		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
+		*out = new(float64)
 		**out = **in
 	}
 	if in.ClientSessionIdleTimeout != nil {
@@ -2253,6 +2351,11 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 	}
 	if in.StandardFlowEnabled != nil {
 		in, out := &in.StandardFlowEnabled, &out.StandardFlowEnabled
+		*out = new(bool)
+		**out = **in
+	}
+	if in.StandardTokenExchangeEnabled != nil {
+		in, out := &in.StandardTokenExchangeEnabled, &out.StandardTokenExchangeEnabled
 		*out = new(bool)
 		**out = **in
 	}
@@ -2722,6 +2825,11 @@ func (in *ClientRolePolicyInitParameters) DeepCopyInto(out *ClientRolePolicyInit
 		*out = new(string)
 		**out = **in
 	}
+	if in.FetchRoles != nil {
+		in, out := &in.FetchRoles, &out.FetchRoles
+		*out = new(bool)
+		**out = **in
+	}
 	if in.Logic != nil {
 		in, out := &in.Logic, &out.Logic
 		*out = new(string)
@@ -2831,6 +2939,11 @@ func (in *ClientRolePolicyObservation) DeepCopyInto(out *ClientRolePolicyObserva
 		*out = new(string)
 		**out = **in
 	}
+	if in.FetchRoles != nil {
+		in, out := &in.FetchRoles, &out.FetchRoles
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ID != nil {
 		in, out := &in.ID, &out.ID
 		*out = new(string)
@@ -2891,6 +3004,11 @@ func (in *ClientRolePolicyParameters) DeepCopyInto(out *ClientRolePolicyParamete
 	if in.Description != nil {
 		in, out := &in.Description, &out.Description
 		*out = new(string)
+		**out = **in
+	}
+	if in.FetchRoles != nil {
+		in, out := &in.FetchRoles, &out.FetchRoles
+		*out = new(bool)
 		**out = **in
 	}
 	if in.Logic != nil {
