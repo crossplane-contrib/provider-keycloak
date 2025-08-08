@@ -1,0 +1,38 @@
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: GoogleIdentityProvider
+metadata:
+  name: google
+spec:
+  forProvider:
+    alias: google-idp
+    clientId: "a"
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+      namespace: dev
+    hostedDomain: example.com
+    realmRef:
+      name: "dev"
+    syncMode: IMPORT
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: IdentityProviderMapper
+metadata:
+  name: google-identity-provider-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    extraConfig:
+      Claim: my-email-claim
+      UserAttribute: email
+      syncMode: INHERIT
+    identityProviderAlias: google-idp
+    identityProviderMapper: '%s-user-attribute-idp-mapper'
+    name: email-attribute-importer
+    realmRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"
