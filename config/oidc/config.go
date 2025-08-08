@@ -21,6 +21,18 @@ func Configure(p *config.Provider) {
 			Extractor: common.PathAuthenticationFlowAliasExtractor,
 		}
 	})
+
+	p.AddResourceConfigurator("keycloak_oidc_google_identity_provider", func(r *config.Resource) {
+		// We need to override the default group that upjet generated for
+		r.ShortGroup = "oidc"
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+		r.References["first_broker_login_flow_alias"] = config.Reference{
+			Type:      "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow",
+			Extractor: common.PathAuthenticationFlowAliasExtractor,
+		}
+	})
 }
 
 var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{

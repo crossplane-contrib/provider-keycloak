@@ -1,0 +1,40 @@
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: GoogleIdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: oidc/v1alpha1/googleidentityprovider
+  labels:
+    testing.upbound.io/example-name: google
+  name: google
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    extraConfig:
+      myCustomConfigKey: myValue
+    hostedDomain: example.com
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    syncMode: IMPORT
+    trustEmail: true
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: oidc/v1alpha1/googleidentityprovider
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

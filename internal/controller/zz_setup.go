@@ -34,6 +34,7 @@ import (
 	rolemapperldap "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/rolemapper"
 	userattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/userattributemapper"
 	userfederation "github.com/crossplane-contrib/provider-keycloak/internal/controller/ldap/userfederation"
+	googleidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/oidc/googleidentityprovider"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/oidc/identityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/client"
 	clientclientpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/openidclient/clientclientpolicy"
@@ -95,6 +96,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		rolemapperldap.Setup,
 		userattributemapper.Setup,
 		userfederation.Setup,
+		googleidentityprovider.Setup,
 		identityprovider.Setup,
 		client.Setup,
 		clientclientpolicy.Setup,
