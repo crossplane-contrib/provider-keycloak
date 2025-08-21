@@ -2,7 +2,9 @@ package mapper
 
 import (
 	"context"
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+	"github.com/crossplane-contrib/provider-keycloak/config/multitypes"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 )
@@ -11,9 +13,36 @@ import (
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_generic_protocol_mapper", func(r *config.Resource) {
 		r.ShortGroup = "client"
-		r.References["client_scope_id"] = config.Reference{
-			TerraformName: "keycloak_openid_client_scope",
-		}
+
+		multitypes.ApplyTo(r, "client_id",
+			multitypes.Instance{
+				Name: "saml_client_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_saml_client",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "oidc_client_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			})
+
+		multitypes.ApplyTo(r, "client_scope_id",
+			multitypes.Instance{
+				Name: "saml_client_scope_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_saml_client_scope",
+				},
+			},
+			multitypes.Instance{
+				Name: "oidc_client_scope_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_scope",
+				},
+			})
 	})
 
 	p.AddResourceConfigurator("keycloak_generic_role_mapper", func(r *config.Resource) {
