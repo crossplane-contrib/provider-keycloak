@@ -360,6 +360,14 @@ resources:
                       "enabled": true,
                       "realm": "my-realm"
                     }
+            - name: groups
+              manifest: |-
+                {
+                  "name": "group-mapper",
+                  "realm": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm: keycloak_realm.realm.id
         argumentDocs:
             extra_config: '- (Optional) Key/value attributes to add to the identity provider mapper model that is persisted to Keycloak. This can be used to extend the base model with new Keycloak features.'
             identity_provider_alias: '- (Required) The alias of the associated identity provider.'
