@@ -186,8 +186,8 @@ github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnr
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
 github.com/kevinburke/ssh_config v1.2.0 h1:x584FjTGwHzMwvHx18PXxbBVzfnxogHaAReU4gf13a4=
 github.com/kevinburke/ssh_config v1.2.0/go.mod h1:CT57kijsi8u/K/BOFA39wgDQJ9CxiF4nAY/ojJ6r6mM=
-github.com/keycloak/terraform-provider-keycloak v0.0.0-20250825094331-dfbbce822e4b h1:1XtYNuVRXTulLP5DTBOQDau0LU7fP1RSUv3cQKD6yjo=
-github.com/keycloak/terraform-provider-keycloak v0.0.0-20250825094331-dfbbce822e4b/go.mod h1:5m/2skvqSdQfrxPk6Ga0IUepahTTa+YzBJae0Xc2H9M=
+github.com/keycloak/terraform-provider-keycloak v0.0.0-20250825134032-3a4773b4c13f h1:F2UssxpCWOlHf5hoHE3fxWg/y7RfJ04+Z1U0xe0jkoI=
+github.com/keycloak/terraform-provider-keycloak v0.0.0-20250825134032-3a4773b4c13f/go.mod h1:5m/2skvqSdQfrxPk6Ga0IUepahTTa+YzBJae0Xc2H9M=
 github.com/kisielk/errcheck v1.5.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI2bnpBCr8=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
