@@ -67,7 +67,16 @@ type OrganizationInitParameters struct {
 
 	// The realm this organization exists in.
 	// Realm ID.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// Reference to a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.
 	// Landing page after successful login.
@@ -139,8 +148,17 @@ type OrganizationParameters struct {
 
 	// The realm this organization exists in.
 	// Realm ID.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// Reference to a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+
+	// Selector for a Realm in realm to populate realm.
+	// +kubebuilder:validation:Optional
+	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.
 	// Landing page after successful login.
@@ -186,7 +204,6 @@ type Organization struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.domain) || (has(self.initProvider) && has(self.initProvider.domain))",message="spec.forProvider.domain is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.realm) || (has(self.initProvider) && has(self.initProvider.realm))",message="spec.forProvider.realm is a required parameter"
 	Spec   OrganizationSpec   `json:"spec"`
 	Status OrganizationStatus `json:"status,omitempty"`
 }

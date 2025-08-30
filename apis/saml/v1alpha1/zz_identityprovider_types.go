@@ -94,7 +94,16 @@ type IdentityProviderInitParameters struct {
 
 	// The ID of the organization to link this identity provider to.
 	// ID of organization with which this identity is linked.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/organization/v1alpha1.Organization
 	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
+	// Reference to a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDRef *v1.Reference `json:"organizationIdRef,omitempty" tf:"-"`
+
+	// Selector for a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDSelector *v1.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
 	// Post Binding Authn Request.
@@ -448,8 +457,17 @@ type IdentityProviderParameters struct {
 
 	// The ID of the organization to link this identity provider to.
 	// ID of organization with which this identity is linked.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/organization/v1alpha1.Organization
 	// +kubebuilder:validation:Optional
 	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
+	// Reference to a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDRef *v1.Reference `json:"organizationIdRef,omitempty" tf:"-"`
+
+	// Selector for a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDSelector *v1.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
 	// Post Binding Authn Request.

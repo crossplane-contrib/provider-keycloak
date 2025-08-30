@@ -9,6 +9,7 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 import (
+	"github.com/crossplane/crossplane-runtime/apis/common/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -164,6 +165,16 @@ func (in *OrganizationInitParameters) DeepCopyInto(out *OrganizationInitParamete
 		in, out := &in.Realm, &out.Realm
 		*out = new(string)
 		**out = **in
+	}
+	if in.RealmRef != nil {
+		in, out := &in.RealmRef, &out.RealmRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmSelector != nil {
+		in, out := &in.RealmSelector, &out.RealmSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.RedirectURL != nil {
 		in, out := &in.RedirectURL, &out.RedirectURL
@@ -337,6 +348,16 @@ func (in *OrganizationParameters) DeepCopyInto(out *OrganizationParameters) {
 		in, out := &in.Realm, &out.Realm
 		*out = new(string)
 		**out = **in
+	}
+	if in.RealmRef != nil {
+		in, out := &in.RealmRef, &out.RealmRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmSelector != nil {
+		in, out := &in.RealmSelector, &out.RealmSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.RedirectURL != nil {
 		in, out := &in.RedirectURL, &out.RedirectURL

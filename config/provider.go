@@ -132,6 +132,10 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 				r.References["realm_id"] = config.Reference{
 					TerraformName: "keycloak_realm",
 				}
+			case "organization_id":
+				r.References["organization_id"] = config.Reference{
+					TerraformName: "keycloak_organization",
+				}
 			case "client_id":
 				r.References["client_id"] = config.Reference{
 					TerraformName: "keycloak_openid_client",
