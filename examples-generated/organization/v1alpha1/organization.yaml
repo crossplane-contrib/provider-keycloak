@@ -13,7 +13,9 @@ spec:
     - name: example.com
     enabled: true
     name: org
-    realm: ${keycloak_realm.realm.name}
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
 
 ---
 

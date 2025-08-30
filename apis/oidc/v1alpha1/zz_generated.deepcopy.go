@@ -165,6 +165,16 @@ func (in *GoogleIdentityProviderInitParameters) DeepCopyInto(out *GoogleIdentity
 		*out = new(string)
 		**out = **in
 	}
+	if in.OrganizationIDRef != nil {
+		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.OrganizationIDSelector != nil {
+		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.PostBrokerLoginFlowAlias != nil {
 		in, out := &in.PostBrokerLoginFlowAlias, &out.PostBrokerLoginFlowAlias
 		*out = new(string)
@@ -549,6 +559,16 @@ func (in *GoogleIdentityProviderParameters) DeepCopyInto(out *GoogleIdentityProv
 		in, out := &in.OrganizationID, &out.OrganizationID
 		*out = new(string)
 		**out = **in
+	}
+	if in.OrganizationIDRef != nil {
+		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.OrganizationIDSelector != nil {
+		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
 		in, out := &in.PostBrokerLoginFlowAlias, &out.PostBrokerLoginFlowAlias
