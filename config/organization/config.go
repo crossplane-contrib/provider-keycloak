@@ -2,10 +2,11 @@ package organization
 
 import (
 	"context"
+	"strings"
+
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
-	"strings"
 )
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
@@ -13,6 +14,9 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_organization", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = "organization"
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
 	})
 }
 
