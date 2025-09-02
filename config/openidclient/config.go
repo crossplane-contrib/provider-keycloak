@@ -45,7 +45,7 @@ func Configure(p *config.Provider) {
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_service_account_role", func(r *config.Resource) {
-		r.ShortGroup = Group
+		r.ShortGroup = "role"
 		//  The id of the client that provides the role.
 		r.References["client_id"] = config.Reference{
 
