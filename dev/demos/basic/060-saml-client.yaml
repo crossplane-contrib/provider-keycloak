@@ -13,8 +13,13 @@ spec:
       name: "dev"
     signAssertions: true
     signDocuments: false
-    signingCertificate: ${file("saml-cert.pem")}
-    signingPrivateKey: ${file("saml-key.pem")}
+    signingCertificateSecretRef:
+      name: rsa-key
+      namespace: dev
+      key: cert
+    signingPrivateKeySecretRef:
+      name: saml-cliet-cert
+      namespace: dev
+      key: priv
   providerConfigRef:
     name: "keycloak-provider-config"
----
