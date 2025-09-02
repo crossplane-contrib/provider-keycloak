@@ -12,6 +12,7 @@ metadata:
 type: Opaque
 stringData:
   client-secret: "xyz"
+  client-id: a
 ---
 apiVersion: v1
 kind: Secret
