@@ -21,7 +21,7 @@ func (mg *GoogleIdentityProvider) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this GoogleIdentityProvider
 func (tr *GoogleIdentityProvider) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"client_secret": "clientSecretSecretRef"}
+	return map[string]string{"client_id": "clientIdSecretRef", "client_secret": "clientSecretSecretRef"}
 }
 
 // GetObservation of this GoogleIdentityProvider

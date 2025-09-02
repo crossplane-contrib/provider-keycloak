@@ -32,17 +32,7 @@ type GoogleIdentityProviderInitParameters struct {
 
 	// The client or client identifier registered within the identity provider.
 	// Client ID.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
-	// Reference to a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
-
-	// Selector for a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSecretRef v1.SecretKeySelector `json:"clientIdSecretRef" tf:"-"`
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
 	// Client Secret.
@@ -173,10 +163,6 @@ type GoogleIdentityProviderObservation struct {
 	// Enable/disable authenticate users by default.
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
 
-	// The client or client identifier registered within the identity provider.
-	// Client ID.
-	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid profile email.
 	// The scopes to be sent when asking for authorization. See the documentation for possible values, separator and default value'. Default: 'openid profile email'
 	DefaultScopes *string `json:"defaultScopes,omitempty" tf:"default_scopes,omitempty"`
@@ -286,18 +272,8 @@ type GoogleIdentityProviderParameters struct {
 
 	// The client or client identifier registered within the identity provider.
 	// Client ID.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/openidclient/v1alpha1.Client
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
-	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
-	// Reference to a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
-
-	// Selector for a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSecretRef v1.SecretKeySelector `json:"clientIdSecretRef" tf:"-"`
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
 	// Client Secret.
@@ -469,6 +445,7 @@ type GoogleIdentityProviderStatus struct {
 type GoogleIdentityProvider struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clientIdSecretRef)",message="spec.forProvider.clientIdSecretRef is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clientSecretSecretRef)",message="spec.forProvider.clientSecretSecretRef is a required parameter"
 	Spec   GoogleIdentityProviderSpec   `json:"spec"`
 	Status GoogleIdentityProviderStatus `json:"status,omitempty"`
