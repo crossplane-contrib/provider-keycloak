@@ -92,6 +92,9 @@ echo "All dependencies are installed."
 if ! docker ps >/dev/null 2>&1; then
   echo "Sudo required for docker."
   sudo_prefix='sudo'
+# if using rootless podman, wrap call into own cgroup - runRoot: /run/user/
+elif [[ "$KIND_EXPERIMENTAL_PROVIDER" = podman ]] && podman info | grep -q 'runRoot: /run/user/'; then
+  sudo_prefix="systemd-run --user --scope -p Delegate=yes"
 else
   sudo_prefix=''
 fi
