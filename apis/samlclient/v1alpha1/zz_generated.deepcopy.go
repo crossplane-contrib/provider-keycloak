@@ -437,9 +437,9 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(bool)
 		**out = **in
 	}
-	if in.EncryptionCertificate != nil {
-		in, out := &in.EncryptionCertificate, &out.EncryptionCertificate
-		*out = new(string)
+	if in.EncryptionCertificateSecretRef != nil {
+		in, out := &in.EncryptionCertificateSecretRef, &out.EncryptionCertificateSecretRef
+		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
 	if in.ExtraConfig != nil {
@@ -563,14 +563,14 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.SigningCertificate != nil {
-		in, out := &in.SigningCertificate, &out.SigningCertificate
-		*out = new(string)
+	if in.SigningCertificateSecretRef != nil {
+		in, out := &in.SigningCertificateSecretRef, &out.SigningCertificateSecretRef
+		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
-	if in.SigningPrivateKey != nil {
-		in, out := &in.SigningPrivateKey, &out.SigningPrivateKey
-		*out = new(string)
+	if in.SigningPrivateKeySecretRef != nil {
+		in, out := &in.SigningPrivateKeySecretRef, &out.SigningPrivateKeySecretRef
+		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
 	if in.ValidRedirectUris != nil {
@@ -691,11 +691,6 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 	if in.EncryptAssertions != nil {
 		in, out := &in.EncryptAssertions, &out.EncryptAssertions
 		*out = new(bool)
-		**out = **in
-	}
-	if in.EncryptionCertificate != nil {
-		in, out := &in.EncryptionCertificate, &out.EncryptionCertificate
-		*out = new(string)
 		**out = **in
 	}
 	if in.EncryptionCertificateSha1 != nil {
@@ -819,18 +814,8 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.SigningCertificate != nil {
-		in, out := &in.SigningCertificate, &out.SigningCertificate
-		*out = new(string)
-		**out = **in
-	}
 	if in.SigningCertificateSha1 != nil {
 		in, out := &in.SigningCertificateSha1, &out.SigningCertificateSha1
-		*out = new(string)
-		**out = **in
-	}
-	if in.SigningPrivateKey != nil {
-		in, out := &in.SigningPrivateKey, &out.SigningPrivateKey
 		*out = new(string)
 		**out = **in
 	}
@@ -937,9 +922,9 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 		*out = new(bool)
 		**out = **in
 	}
-	if in.EncryptionCertificate != nil {
-		in, out := &in.EncryptionCertificate, &out.EncryptionCertificate
-		*out = new(string)
+	if in.EncryptionCertificateSecretRef != nil {
+		in, out := &in.EncryptionCertificateSecretRef, &out.EncryptionCertificateSecretRef
+		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
 	if in.ExtraConfig != nil {
@@ -1063,14 +1048,14 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.SigningCertificate != nil {
-		in, out := &in.SigningCertificate, &out.SigningCertificate
-		*out = new(string)
+	if in.SigningCertificateSecretRef != nil {
+		in, out := &in.SigningCertificateSecretRef, &out.SigningCertificateSecretRef
+		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
-	if in.SigningPrivateKey != nil {
-		in, out := &in.SigningPrivateKey, &out.SigningPrivateKey
-		*out = new(string)
+	if in.SigningPrivateKeySecretRef != nil {
+		in, out := &in.SigningPrivateKeySecretRef, &out.SigningPrivateKeySecretRef
+		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
 	if in.ValidRedirectUris != nil {

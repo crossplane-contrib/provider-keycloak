@@ -2,11 +2,12 @@ package samlclient
 
 import (
 	"context"
+	"strings"
+
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
-	"strings"
 )
 
 const (
@@ -19,6 +20,16 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_saml_client", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = Group
+
+		if s, ok := r.TerraformResource.Schema["encryption_certificate"]; ok {
+			s.Sensitive = true
+		}
+		if s, ok := r.TerraformResource.Schema["signing_certificate"]; ok {
+			s.Sensitive = true
+		}
+		if s, ok := r.TerraformResource.Schema["signing_private_key"]; ok {
+			s.Sensitive = true
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_saml_client_default_scopes", func(r *config.Resource) {

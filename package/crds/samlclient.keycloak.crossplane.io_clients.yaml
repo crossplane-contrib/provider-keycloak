@@ -206,10 +206,24 @@ spec:
                     description: When true, the SAML assertions will be encrypted
                       by Keycloak using the client's public key. Defaults to false.
                     type: boolean
-                  encryptionCertificate:
+                  encryptionCertificateSecretRef:
                     description: If assertions for the client are encrypted, this
                       certificate will be used for encryption.
-                    type: string
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                   extraConfig:
                     additionalProperties:
                       type: string
@@ -368,14 +382,42 @@ spec:
                       SAML document. Should be one of "NONE", "KEY_ID", or "CERT_SUBJECT".
                       Defaults to "KEY_ID".
                     type: string
-                  signingCertificate:
+                  signingCertificateSecretRef:
                     description: If documents or assertions from the client are signed,
                       this certificate will be used to verify the signature.
-                    type: string
-                  signingPrivateKey:
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  signingPrivateKeySecretRef:
                     description: If documents or assertions from the client are signed,
                       this private key will be used to verify the signature.
-                    type: string
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                   validRedirectUris:
                     description: When specified, Keycloak will use this list to validate
                       given Assertion Consumer URLs specified in the authentication
@@ -532,10 +574,24 @@ spec:
                     description: When true, the SAML assertions will be encrypted
                       by Keycloak using the client's public key. Defaults to false.
                     type: boolean
-                  encryptionCertificate:
+                  encryptionCertificateSecretRef:
                     description: If assertions for the client are encrypted, this
                       certificate will be used for encryption.
-                    type: string
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                   extraConfig:
                     additionalProperties:
                       type: string
@@ -694,14 +750,42 @@ spec:
                       SAML document. Should be one of "NONE", "KEY_ID", or "CERT_SUBJECT".
                       Defaults to "KEY_ID".
                     type: string
-                  signingCertificate:
+                  signingCertificateSecretRef:
                     description: If documents or assertions from the client are signed,
                       this certificate will be used to verify the signature.
-                    type: string
-                  signingPrivateKey:
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  signingPrivateKeySecretRef:
                     description: If documents or assertions from the client are signed,
                       this private key will be used to verify the signature.
-                    type: string
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                   validRedirectUris:
                     description: When specified, Keycloak will use this list to validate
                       given Assertion Consumer URLs specified in the authentication
@@ -941,10 +1025,6 @@ spec:
                     description: When true, the SAML assertions will be encrypted
                       by Keycloak using the client's public key. Defaults to false.
                     type: boolean
-                  encryptionCertificate:
-                    description: If assertions for the client are encrypted, this
-                      certificate will be used for encryption.
-                    type: string
                   encryptionCertificateSha1:
                     description: (Computed) The sha1sum fingerprint of the encryption
                       certificate. If the encryption certificate is not in correct
@@ -1036,18 +1116,10 @@ spec:
                       SAML document. Should be one of "NONE", "KEY_ID", or "CERT_SUBJECT".
                       Defaults to "KEY_ID".
                     type: string
-                  signingCertificate:
-                    description: If documents or assertions from the client are signed,
-                      this certificate will be used to verify the signature.
-                    type: string
                   signingCertificateSha1:
                     description: (Computed) The sha1sum fingerprint of the signing
                       certificate. If the signing certificate is not in correct base64
                       format, this will be left empty.
-                    type: string
-                  signingPrivateKey:
-                    description: If documents or assertions from the client are signed,
-                      this private key will be used to verify the signature.
                     type: string
                   signingPrivateKeySha1:
                     description: (Computed) The sha1sum fingerprint of the signing
