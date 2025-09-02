@@ -12,18 +12,29 @@ import (
 )
 
 // A ProviderConfigSpec defines the desired state of a ProviderConfig.
-type ProviderConfigSpec struct {
+type ClusterProviderConfigSpec struct {
 	// Credentials required to authenticate to this provider.
-	Credentials ProviderCredentials `json:"credentials"`
+	Credentials ClusterProviderCredentials `json:"credentials"`
+}
+
+// A ProviderConfigSpec defines the desired state of a ProviderConfig.
+type ProviderConfigSpec struct {
+	// CredentialsSecretRef required to authenticate to this provider.
+	CredentialsSecretRef ProviderCredentials `json:"credentialsSecretRef"`
 }
 
 // ProviderCredentials required to authenticate.
-type ProviderCredentials struct {
+type ClusterProviderCredentials struct {
 	// Source of the provider credentials.
 	// +kubebuilder:validation:Enum=None;Secret;InjectedIdentity;Environment;Filesystem;Kubernetes
 	Source xpv1.CredentialsSource `json:"source"`
 
 	xpv1.CommonCredentialSelectors `json:",inline"`
+}
+
+// ProviderCredentials required to authenticate.
+type ProviderCredentials struct {
+	xpv1.LocalSecretKeySelector `json:",inline"`
 }
 
 // A ProviderConfigStatus reflects the observed state of a ProviderConfig.
@@ -92,7 +103,7 @@ type ClusterProviderConfig struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   ProviderConfigSpec   `json:"spec"`
+	Spec   ClusterProviderConfigSpec   `json:"spec"`
 	Status ProviderConfigStatus `json:"status,omitempty"`
 }
 

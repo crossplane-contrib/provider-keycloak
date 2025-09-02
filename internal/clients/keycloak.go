@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/crossplane/crossplane-runtime/v2/apis/common"
 	xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
 	"github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 	"github.com/pkg/errors"
@@ -149,7 +150,7 @@ func configureNoForkKeycloakClient(ctx context.Context, ps *terraform.Setup) err
 	return nil
 }
 
-func legacyToModernProviderConfigSpec(pc *clusterv1beta1.ProviderConfig) (*namespacedv1beta1.ProviderConfigSpec, error) {
+func legacyToModernProviderConfigSpec(pc *clusterv1beta1.ProviderConfig) (*namespacedv1beta1.ClusterProviderConfigSpec, error) {
 	// TODO(erhan): this is hacky and potentially lossy, generate or manually implement
 	if pc == nil {
 		return nil, nil
@@ -159,12 +160,12 @@ func legacyToModernProviderConfigSpec(pc *clusterv1beta1.ProviderConfig) (*names
 		return nil, err
 	}
 
-	var mSpec namespacedv1beta1.ProviderConfigSpec
+	var mSpec namespacedv1beta1.ClusterProviderConfigSpec
 	err = json.Unmarshal(data, &mSpec)
 	return &mSpec, err
 }
 
-func resolveProviderConfig(ctx context.Context, crClient client.Client, mg resource.Managed) (*namespacedv1beta1.ProviderConfigSpec, error) {
+func resolveProviderConfig(ctx context.Context, crClient client.Client, mg resource.Managed) (*namespacedv1beta1.ClusterProviderConfigSpec, error) {
 	switch managed := mg.(type) {
 	case resource.LegacyManaged:
 		return resolveProviderConfigLegacy(ctx, crClient, managed)
@@ -175,7 +176,7 @@ func resolveProviderConfig(ctx context.Context, crClient client.Client, mg resou
 	}
 }
 
-func resolveProviderConfigLegacy(ctx context.Context, client client.Client, mg resource.LegacyManaged) (*namespacedv1beta1.ProviderConfigSpec, error) {
+func resolveProviderConfigLegacy(ctx context.Context, client client.Client, mg resource.LegacyManaged) (*namespacedv1beta1.ClusterProviderConfigSpec, error) {
 	configRef := mg.GetProviderConfigReference()
 	if configRef == nil {
 		return nil, errors.New(errNoProviderConfig)
@@ -193,7 +194,7 @@ func resolveProviderConfigLegacy(ctx context.Context, client client.Client, mg r
 	return legacyToModernProviderConfigSpec(pc)
 }
 
-func resolveProviderConfigModern(ctx context.Context, crClient client.Client, mg resource.ModernManaged) (*namespacedv1beta1.ProviderConfigSpec, error) {
+func resolveProviderConfigModern(ctx context.Context, crClient client.Client, mg resource.ModernManaged) (*namespacedv1beta1.ClusterProviderConfigSpec, error) {
 	configRef := mg.GetProviderConfigReference()
 	if configRef == nil {
 		return nil, errors.New(errNoProviderConfig)
@@ -213,12 +214,22 @@ func resolveProviderConfigModern(ctx context.Context, crClient client.Client, mg
 		return nil, errors.Wrap(err, errGetProviderConfig)
 	}
 
-	var pcSpec namespacedv1beta1.ProviderConfigSpec
+	var pcSpec namespacedv1beta1.ClusterProviderConfigSpec
 	switch pc := pcObj.(type) {
 	case *namespacedv1beta1.ProviderConfig:
-		pcSpec = pc.Spec
-		if pcSpec.Credentials.CommonCredentialSelectors.SecretRef != nil {
-			pcSpec.Credentials.CommonCredentialSelectors.SecretRef.Namespace = mg.GetNamespace()
+		pcSpec = namespacedv1beta1.ClusterProviderConfigSpec{
+			Credentials: namespacedv1beta1.ClusterProviderCredentials{
+				Source: "Secret",
+				CommonCredentialSelectors: common.CommonCredentialSelectors{
+					SecretRef: &common.SecretKeySelector{
+						Key: pc.Spec.CredentialsSecretRef.Key,
+						SecretReference: common.SecretReference{
+							Name: pc.Spec.CredentialsSecretRef.Name,
+							Namespace: mg.GetNamespace(),
+						},
+					},
+				},
+			},
 		}
 	case *namespacedv1beta1.ClusterProviderConfig:
 		pcSpec = pc.Spec
