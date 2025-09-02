@@ -102,7 +102,7 @@ xpkg.build.upjet-provider-template: do.build.images
 
 # NOTE(hasheddan): we ensure up is installed prior to running platform-specific
 # build steps in parallel to avoid encountering an installation race condition.
-build.init: $(UP) check-terraform-version
+build.init: $(UP) check-terraform-version $(CROSSPLANE_CLI)
 
 # ====================================================================================
 # Setup Terraform for fetching provider schema
@@ -193,6 +193,7 @@ run: go.build
 # End to End Testing
 CHAINSAW_VERSION = 0.2.12
 CROSSPLANE_VERSION = 2.0.2
+CROSSPLANE_CLI_VERSION ?= v2.0.2
 CROSSPLANE_NAMESPACE = crossplane-system
 -include build/makelib/local.xpkg.mk
 -include build/makelib/controlplane.mk
