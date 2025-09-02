@@ -2,6 +2,7 @@ package oidc
 
 import (
 	"context"
+
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	"github.com/crossplane/upjet/pkg/config"
@@ -35,6 +36,14 @@ func Configure(p *config.Provider) {
 			Type:      "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow",
 			Extractor: common.PathAuthenticationFlowAliasExtractor,
 		}
+
+		if s, ok := r.TerraformResource.Schema["client_id"]; ok {
+			s.Sensitive = true
+		}
+		if s, ok := r.TerraformResource.Schema["client_secret"]; ok {
+			s.Sensitive = true
+		}
+
 	})
 }
 
