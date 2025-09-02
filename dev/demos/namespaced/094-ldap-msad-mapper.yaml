@@ -1,0 +1,31 @@
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: MsadUserAccountControlMapper
+metadata:
+  name: msad-user-account-control-mapper
+  namespace: dev-ns
+spec:
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    name: msad-user-account-control-mapper
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: MsadLdsUserAccountControlMapper
+metadata:
+  name: msad-lds-user-account-control-mapper
+  namespace: dev-ns
+spec:
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    name: msad-lds-user-account-control-mapper
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

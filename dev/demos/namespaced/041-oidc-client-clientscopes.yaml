@@ -1,0 +1,57 @@
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientScope
+metadata:
+  name: openid-client-scope
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    description: When requested, this scope will map a user's group memberships to a claim
+    guiOrder: 1
+    includeInTokenScope: true
+    name: my-groups
+    realmIdRef:
+      name: "dev-ns"
+---
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: client-default-scopes
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientIdRef:
+      name: "test"
+    defaultScopes:
+      - profile
+      - email
+      - roles
+      - web-origins
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientOptionalScopes
+metadata:
+  name: client-optional-scopes
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientIdRef:
+      name: "test"
+    optionalScopes:
+      - address
+      - phone
+      - offline_access
+      - microprofile-jwt
+      - my-groups
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

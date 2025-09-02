@@ -1,0 +1,12 @@
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: existing-master
+  namespace: dev-ns
+spec:
+  forProvider:
+    realm: master
+    displayName: Customized Keycloak
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

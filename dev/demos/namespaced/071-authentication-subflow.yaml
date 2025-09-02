@@ -1,0 +1,34 @@
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: Subflow
+metadata:
+  name: subflow
+  namespace: dev-ns
+spec:
+  forProvider:
+    alias: my-subflow-alias-1
+    parentFlowAliasRef:
+      name: flow
+    providerId: basic-flow
+    realmIdRef:
+      name: "dev-ns"
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: Subflow
+metadata:
+  name: subflow-of-subflow
+  namespace: dev-ns
+spec:
+  forProvider:
+    alias: my-subflow-alias-99
+    parentFlowAlias: my-subflow-alias-1
+    providerId: basic-flow
+    realmIdRef:
+      name: "dev-ns"
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

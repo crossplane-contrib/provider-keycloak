@@ -1,0 +1,14 @@
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: Bindings
+metadata:
+  name: browser-authentication-binding
+  namespace: dev-ns
+spec:
+  forProvider:
+    dockerAuthenticationFlowRef:
+      name: "flow"
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

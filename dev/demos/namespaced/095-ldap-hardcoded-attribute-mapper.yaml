@@ -1,0 +1,17 @@
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: HardcodedAttributeMapper
+metadata:
+  name: assign-bar-to-foo
+  namespace: dev-ns
+spec:
+  forProvider:
+    attributeName: foo
+    attributeValue: bar
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    name: assign-foo-to-bar
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

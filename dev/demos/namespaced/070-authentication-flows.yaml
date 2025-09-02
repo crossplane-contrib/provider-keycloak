@@ -1,0 +1,13 @@
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: Flow
+metadata:
+  name: flow
+  namespace: dev-ns
+spec:
+  forProvider:
+    alias: my-flow-alias
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

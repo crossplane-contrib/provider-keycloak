@@ -1,0 +1,16 @@
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: group-roles
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmIdRef:
+      name: "dev-ns"
+    groupIdRef:
+      name: test
+    roleIdsRefs:
+      - name: "test-client"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

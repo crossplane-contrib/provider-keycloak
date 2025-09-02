@@ -1,0 +1,15 @@
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: test-members
+  namespace: dev-ns
+spec:
+  forProvider:
+    groupIdRef:
+      name: test
+    members:
+      - bree
+    realmId: dev-ns
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

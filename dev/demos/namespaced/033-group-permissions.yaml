@@ -1,0 +1,14 @@
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  name: my-group-permission
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmIdRef:
+      name: "dev-ns"
+    groupIdRef:
+      name: "test"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

@@ -1,0 +1,14 @@
+apiVersion: defaults.keycloak.m.crossplane.io/v1alpha1
+kind: DefaultGroups
+metadata:
+  name: my-default-groups
+  namespace: dev-ns
+spec:
+  forProvider:
+    groupIdsRefs:
+      - name: test
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

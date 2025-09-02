@@ -1,0 +1,33 @@
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: GroupMembershipProtocolMapper
+metadata:
+  name: openid-client-group-membership-protocol-mapper
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    name: "my-mapper"
+    clientIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev-ns"
+    claimName: "test"
+---
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: GroupMembershipProtocolMapper
+metadata:
+  name: openid-client-scope-group-membership-protocol-mapper
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    name: "my-mapper"
+    clientScopeIdRef:
+      name: "openid-client-scope"
+    realmIdRef:
+      name: "dev-ns"
+    claimName: "test"

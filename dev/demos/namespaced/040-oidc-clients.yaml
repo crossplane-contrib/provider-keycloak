@@ -1,0 +1,66 @@
+---
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: test
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmIdRef:
+      name: "dev-ns"
+    accessType: "CONFIDENTIAL"
+    clientId: "test"
+    fullScopeAllowed: false
+    serviceAccountsEnabled: true
+    authorization:
+      - policyEnforcementMode: "ENFORCING"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: account
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmIdRef:
+      name: "dev-ns"
+    accessType: "CONFIDENTIAL"
+    clientId: "account"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: service-acc-1
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmIdRef:
+      name: "dev-ns"
+    accessType: "CONFIDENTIAL"
+    clientId: "service-acc-1"
+    serviceAccountsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: role.keycloak.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: svc-role
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmId: "dev-ns"
+    name: "svc-role"
+    clientIdRef:
+      name: "test"
+    description: "Role that svc account uses"
+  providerConfigRef:
+    name: "keycloak-provider-config" # Reference to the provider configuration
+    kind: ProviderConfig

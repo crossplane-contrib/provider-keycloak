@@ -1,0 +1,19 @@
+apiVersion: identityprovider.keycloak.m.crossplane.io/v1alpha1
+kind: IdentityProviderMapper
+metadata:
+  name: oidc-identity-provider-mapper
+  namespace: dev-ns
+spec:
+  forProvider:
+    extraConfig:
+      Claim: my-email-claim
+      UserAttribute: email
+      syncMode: INHERIT
+    identityProviderAlias: my-idp
+    identityProviderMapper: '%s-user-attribute-idp-mapper'
+    name: email-attribute-importer
+    realmRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
