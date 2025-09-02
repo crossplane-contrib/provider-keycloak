@@ -1,7 +1,7 @@
 # find ./dev/demos/basic/  -print | grep .yaml | sort
 # Use this as prefix for comments
 # We need to order those test cases, so that they are deleted in order!
-./dev/demos/basic/080-defaults-groups.yaml
+./dev/demos/basic/001-realm.yaml
 ./dev/demos/basic/002-realm-clientscopes.yaml
 ./dev/demos/basic/003-realm-required-action.yaml
 ./dev/demos/basic/004-realm-keystore-rsa.yaml
@@ -12,8 +12,11 @@
 ./dev/demos/basic/020-user.yaml
 ./dev/demos/basic/021-user-roles.yaml
 ./dev/demos/basic/022-users-groups.yaml
+./dev/demos/basic/023-user-permissions.yaml
 ./dev/demos/basic/030-groups.yaml
+./dev/demos/basic/031-group-memberships.yaml
 ./dev/demos/basic/032-groups-roles.yaml
+./dev/demos/basic/033-group-permissions.yaml
 ./dev/demos/basic/040-oidc-clients.yaml
 ./dev/demos/basic/041-oidc-client-clientscopes.yaml
 ./dev/demos/basic/042-oidc-client-permissions.yaml
@@ -34,6 +37,7 @@
 ./dev/demos/basic/072-authentication-execution.yaml
 ./dev/demos/basic/073-authentication-execution-config.yaml
 ./dev/demos/basic/074-authentication-execution-binding.yaml
+./dev/demos/basic/080-defaults-groups.yaml
 ./dev/demos/basic/081-defaults-roles.yaml
 ./dev/demos/basic/090-ldap-user-federation.yaml
 ./dev/demos/basic/091-ldap-user-attribute-mapper.yaml
@@ -43,7 +47,3 @@
 ./dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml
 ./dev/demos/basic/096-ldap-full-name-mapper.yaml
 ./dev/demos/basic/097-ldap-custom-mapper.yaml
-./dev/demos/basic/031-group-memberships.yaml
-./dev/demos/basic/033-group-permissions.yaml
-./dev/demos/basic/023-user-permissions.yaml
-./dev/demos/basic/001-realm.yaml

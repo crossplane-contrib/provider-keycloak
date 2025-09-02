@@ -1,0 +1,35 @@
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: RequiredAction
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/requiredaction
+  labels:
+    testing.upbound.io/example-name: required_action
+  name: required-action
+  namespace: upbound-system
+spec:
+  forProvider:
+    alias: UPDATE_PASSWORD
+    config:
+      max_auth_age: "600"
+    enabled: true
+    name: Update Password
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/requiredaction
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

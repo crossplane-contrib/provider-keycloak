@@ -1,0 +1,76 @@
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientOptionalScopes
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientoptionalscopes
+  labels:
+    testing.upbound.io/example-name: client_optional_scopes
+  name: client-optional-scopes
+  namespace: upbound-system
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: client
+    optionalScopes:
+    - address
+    - phone
+    - offline_access
+    - microprofile-jwt
+    - ${keycloak_openid_client_scope.client_scope.name}
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientoptionalscopes
+  labels:
+    testing.upbound.io/example-name: client
+  name: client
+  namespace: upbound-system
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientId: test-client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientScope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientoptionalscopes
+  labels:
+    testing.upbound.io/example-name: client_scope
+  name: client-scope
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: test-client-scope
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientoptionalscopes
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

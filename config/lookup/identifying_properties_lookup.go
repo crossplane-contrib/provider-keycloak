@@ -3,7 +3,7 @@ package lookup
 import (
 	"context"
 	"errors"
-	"github.com/crossplane/upjet/pkg/config"
+	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 	"strconv"
 )

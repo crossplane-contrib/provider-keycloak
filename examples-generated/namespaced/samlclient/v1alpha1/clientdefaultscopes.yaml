@@ -1,0 +1,84 @@
+apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  annotations:
+    meta.upbound.io/example-id: samlclient/v1alpha1/clientdefaultscopes
+  labels:
+    testing.upbound.io/example-name: client_default_scopes
+  name: client-default-scopes
+  namespace: upbound-system
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: client
+    defaultScopes:
+    - role_list
+    - ${keycloak_saml_client_scope.client_scope.name}
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: samlclient/v1alpha1/clientdefaultscopes
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: samlclient/v1alpha1/clientdefaultscopes
+  labels:
+    testing.upbound.io/example-name: saml_client
+  name: saml-client
+  namespace: upbound-system
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    includeAuthnStatement: true
+    name: saml-client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    signAssertions: true
+    signDocuments: false
+    signingCertificateSecretRef:
+      key: attribute.saml-cert.pem
+      name: example-secret
+    signingPrivateKeySecretRef:
+      key: attribute.saml-key.pem
+      name: example-secret
+
+---
+
+apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientScope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: samlclient/v1alpha1/clientdefaultscopes
+  labels:
+    testing.upbound.io/example-name: client_scope
+  name: client-scope
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: client-scope
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm

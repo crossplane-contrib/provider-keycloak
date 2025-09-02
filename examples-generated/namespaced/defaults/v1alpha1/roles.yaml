@@ -1,0 +1,32 @@
+apiVersion: defaults.keycloak.m.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  annotations:
+    meta.upbound.io/example-id: defaults/v1alpha1/roles
+  labels:
+    testing.upbound.io/example-name: default_roles
+  name: default-roles
+  namespace: upbound-system
+spec:
+  forProvider:
+    defaultRolesRefs:
+    - name: example
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: defaults/v1alpha1/roles
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

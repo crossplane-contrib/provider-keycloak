@@ -1,0 +1,66 @@
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: UserAttributeMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ldap/v1alpha1/userattributemapper
+  labels:
+    testing.upbound.io/example-name: ldap_user_attribute_mapper
+  name: ldap-user-attribute-mapper
+  namespace: upbound-system
+spec:
+  forProvider:
+    ldapAttribute: bar
+    ldapUserFederationIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: ldap_user_federation
+    name: user-attribute-mapper
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    userModelAttribute: foo
+
+---
+
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ldap/v1alpha1/userattributemapper
+  labels:
+    testing.upbound.io/example-name: ldap_user_federation
+  name: ldap-user-federation
+  namespace: upbound-system
+spec:
+  forProvider:
+    bindCredentialSecretRef:
+      key: example-key
+      name: example-secret
+    bindDn: cn=admin,dc=example,dc=org
+    connectionUrl: ldap://openldap
+    name: openldap
+    rdnLdapAttribute: cn
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    userObjectClasses:
+    - simpleSecurityObject
+    - organizationalRole
+    usernameLdapAttribute: cn
+    usersDn: dc=example,dc=org
+    uuidLdapAttribute: entryDN
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ldap/v1alpha1/userattributemapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

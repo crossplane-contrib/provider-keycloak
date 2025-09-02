@@ -1,0 +1,75 @@
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: ExecutionConfig
+metadata:
+  annotations:
+    meta.upbound.io/example-id: authenticationflow/v1alpha1/executionconfig
+  labels:
+    testing.upbound.io/example-name: config
+  name: config
+  namespace: upbound-system
+spec:
+  forProvider:
+    alias: my-config-alias
+    config:
+      defaultProvider: my-config-default-idp
+    executionIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: execution
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  annotations:
+    meta.upbound.io/example-id: authenticationflow/v1alpha1/executionconfig
+  labels:
+    testing.upbound.io/example-name: execution
+  name: execution
+  namespace: upbound-system
+spec:
+  forProvider:
+    authenticator: identity-provider-redirector
+    parentFlowAliasSelector:
+      matchLabels:
+        testing.upbound.io/example-name: flow
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: Flow
+metadata:
+  annotations:
+    meta.upbound.io/example-id: authenticationflow/v1alpha1/executionconfig
+  labels:
+    testing.upbound.io/example-name: flow
+  name: flow
+  namespace: upbound-system
+spec:
+  forProvider:
+    alias: my-flow-alias
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: authenticationflow/v1alpha1/executionconfig
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
