@@ -5,7 +5,7 @@ import (
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
-	"github.com/crossplane/upjet/pkg/config"
+	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 )
 
@@ -21,7 +21,7 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_organization",
 		}
 		r.References["first_broker_login_flow_alias"] = config.Reference{
-			Type:      "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow",
+			TerraformName: "keycloak_authentication_flow",
 			Extractor: common.PathAuthenticationFlowAliasExtractor,
 		}
 	})
@@ -33,7 +33,7 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_realm",
 		}
 		r.References["first_broker_login_flow_alias"] = config.Reference{
-			Type:      "github.com/crossplane-contrib/provider-keycloak/apis/authenticationflow/v1alpha1.Flow",
+			TerraformName: "keycloak_authentication_flow",
 			Extractor: common.PathAuthenticationFlowAliasExtractor,
 		}
 
