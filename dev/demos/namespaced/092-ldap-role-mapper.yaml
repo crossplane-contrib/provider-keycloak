@@ -1,0 +1,42 @@
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: ldap-role-mapper
+  namespace: dev-ns
+spec:
+  forProvider:
+    ldapRolesDn: dc=example,dc=org
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    memberofLdapAttribute: memberOf
+    membershipAttributeType: DN
+    membershipLdapAttribute: member
+    membershipUserLdapAttribute: cn
+    name: role-mapper
+    realmIdRef:
+      name: "dev-ns"
+    roleNameLdapAttribute: cn
+    roleObjectClasses:
+      - groupOfNames
+    userRolesRetrieveStrategy: GET_ROLES_FROM_USER_MEMBEROF_ATTRIBUTE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: HardcodedRoleMapper
+metadata:
+  name: assign-test-role-to-all-users
+  namespace: dev-ns
+spec:
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    name: assign-test-role-to-all-users
+    realmIdRef:
+      name: "dev-ns"
+    roleRef:
+      name: test
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

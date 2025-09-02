@@ -1,0 +1,17 @@
+
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: FullNameMapper
+metadata:
+  name: ldap-full-name-mapper
+  namespace: dev-ns
+spec:
+  forProvider:
+    ldapFullNameAttribute: cn
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    name: full-name-mapper
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

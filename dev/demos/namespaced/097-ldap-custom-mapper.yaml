@@ -1,0 +1,19 @@
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: CustomMapper
+metadata:
+  name: custom-mapper
+  namespace: dev-ns
+spec:
+  forProvider:
+    config:
+      ldap.full.name.attribute: cn
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    name: custom-mapper
+    providerId: "full-name-ldap-mapper"
+    providerType: "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

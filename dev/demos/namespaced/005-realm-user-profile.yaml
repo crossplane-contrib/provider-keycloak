@@ -1,0 +1,67 @@
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: UserProfile
+metadata:
+  name: userprofile
+  namespace: dev-ns
+spec:
+  forProvider:
+    attribute:
+      - displayName: ""
+        group: ""
+        multiValued: false
+        name: username
+      - displayName: ""
+        group: ""
+        multiValued: false
+        name: email
+      - annotations:
+          foo: bar
+        displayName: Field 1
+        enabledWhenScope:
+          - offline_access
+        group: group1
+        multiValued: false
+        name: field1
+        permissions:
+          - edit:
+              - admin
+              - user
+            view:
+              - admin
+              - user
+        requiredForRoles:
+          - user
+        requiredForScopes:
+          - offline_access
+        validator:
+          - name: person-name-prohibited-characters
+          - config:
+              error-message: Nope
+              pattern: ^[a-z]+$
+            name: pattern
+      - annotations:
+          foo: '{"key":"val"}'
+        displayName: ""
+        group: ""
+        multiValued: false
+        name: field2
+        validator:
+          - config:
+              options: '["opt1"]'
+            name: options
+    group:
+      - annotations:
+          foo: bar
+          foo2: '{"key":"val"}'
+        displayDescription: A first group
+        displayHeader: Group 1
+        name: group1
+      - displayDescription: ""
+        displayHeader: ""
+        name: group2
+    realmIdRef:
+      name: "dev-ns"
+    unmanagedAttributePolicy: ENABLED
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

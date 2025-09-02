@@ -1,0 +1,17 @@
+---
+apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: saml-client-default-scopes
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientIdRef:
+      name: saml-client
+    defaultScopes:
+      - role_list
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

@@ -1,0 +1,148 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-ns
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: dev-ns
+  name: client-secret
+type: Opaque
+stringData:
+  client-secret: "xyz"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: dev-ns
+  name: bind-credential-secret
+type: Opaque
+stringData:
+  secret: "admin"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: dev-ns
+  name: rsa-key
+type: Opaque
+stringData:
+  priv: |
+    -----BEGIN PRIVATE KEY-----
+    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
+    hWxwnsSUC1vg3AIwHK7eGYuKHTBCPBg=
+    -----END PRIVATE KEY-----
+  cert: |
+    -----BEGIN CERTIFICATE-----
+    MIIF7zCCA9egAwIBAgIUb524clJkesN7U852IHtU91rygMkwDQYJKoZIhvcNAQEL
+    BQAwgYYxCzAJBgNVBAYTAlhYMRIwEAYDVQQIDAlTdGF0ZU5hbWUxETAPBgNVBAcM
+    CENpdHlOYW1lMRQwEgYDVQQKDAtDb21wYW55TmFtZTEbMBkGA1UECwwSQ29tcGFu
+    eVNlY3Rpb25OYW1lMR0wGwYDVQQDDBRDb21tb25OYW1lT3JIb3N0bmFtZTAeFw0y
+    NTAyMDcyMjM4NTVaFw0zNTAyMDUyMjM4NTVaMIGGMQswCQYDVQQGEwJYWDESMBAG
+    A1UECAwJU3RhdGVOYW1lMREwDwYDVQQHDAhDaXR5TmFtZTEUMBIGA1UECgwLQ29t
+    cGFueU5hbWUxGzAZBgNVBAsMEkNvbXBhbnlTZWN0aW9uTmFtZTEdMBsGA1UEAwwU
+    Q29tbW9uTmFtZU9ySG9zdG5hbWUwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+    AoICAQDTgHd4ifcPhPHw5rhfjXV3Hpm0SHH070Rhj+pa1ty5bVrw8ARP6rO3uTre
+    UqsKcF7WnGuycNIfImjJa9u+E+NJUm3X3QF7AU1q3vSz0AxKbbKZFIqlX9mphIkN
+    CQ/OSxTKh3dMcseKolyjiNVPHKFGzGfU0Y82fD8YulycR+qAZBV+h3iMNIVflK0z
+    LiA5Yifput+w0HYkiVssQyfW1OHDMP3OcHnN8L5JdWTYy7V98rDXz/HH4DR+YyiH
+    OXbjwIhve1PqjIvKu8qzbouMgl7F75eSZruX+gwoUN4oVSxxczA+/H5qekdjZRbT
+    jxk9U5HL3AzVppk5mDRpe2WpEsk4B87xXLHZOIvrETjNiZQV8DiFwPeultuYM0pK
+    UUwy47TetK47+5ZlY00ilLPYIq2IlKLeAr86Bks0uYbVd3y0EsTl3HxN9KGY4ytf
+    /t4AG233G62KSvDU4mlpZjgEXR6VzMMjN9b7sHVwcjJwTHyE7UK6v3IfniEkbXXh
+    6NBTuddfebBbjSYdSWAgH9xqOrKwjJtHuWq2afkdSz3MrXPBEx8rIA/Cy9npOIhp
+    JmUFUVU02MmULIQNVr/FSnl7NJwPqUh6SWZBTpS+678+QzEwh2mLAf5oHetBMh6n
+    8g5iGIjN4zeIHdaLCfmCLnDLowt1sv4EFAzOn0ga6gEjpESwPwIDAQABo1MwUTAd
+    BgNVHQ4EFgQUaTvuxF9+C6asaqA+aC6yhxxy8wswHwYDVR0jBBgwFoAUaTvuxF9+
+    C6asaqA+aC6yhxxy8wswDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOC
+    AgEAkjbmhRv04JoMouSkuveVRz6VphOO7P0itMWKShrqsu7r6OBzTG7x2DWqWVVs
+    5LDPXXRT1uwj45xUrYRSnbQeblOOAuI9zzqcrwF8re+SMsU2dDhEhwK618CzZna3
+    jKCVa7IECthrF1ONGyORqOazcQ20wRXJp6PjaY50Oa3PKcMeqEkTtvMvO/yGZhEZ
+    7zjLInFF1FWrGBzpeiYLDl+I5l3pLunOFoFAC8fXpR97JTLdtAJ1PegRRt3oEwAH
+    XqvNhg6ROYRLbVh21uYT7IB1iTB69pW4DVYQUZgP4rMxJ345BMPL9F+i/mZ7aLc2
+    H0Ct4Cxtperl9w34EzyTh12xpfyyjuC27E2cncywWSoF3fJI04GtLde3oXDTNF4s
+    vQ5zrl99/fect/Ui3dydYvYYZcVVnns4uCUZFu3PWom9o8AJMtV2+9bnBeEc6iuR
+    +2aZJwFj6yq99RnEQ7jWyo616fwaQuVmLsRsJxA1xYqaiFIqW+BWnlWo3r2cKDnX
+    A4T3vnlUEHz5Ct+B9zSkHYi8zzH0f0mMDj/5y3Z82BFiLowCc3bpa/LVm9I0S88p
+    EpGf0SL0QBnijAkbavIzu2+5U2RqfFRX+57M9z8Adv0YfYHg0nCK+0suPLyQJRWx
+    /YtOGTlPQ0G0eZinOgXSA5eyZnWJnu/TefhBVS8qph5k0OQ=
+    -----END CERTIFICATE-----
+---
+apiVersion: keycloak.m.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-provider-config
+  namespace: dev-ns
+spec:
+  credentialsSecretRef:
+      name: keycloak-credentials
+      key: credentials
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-credentials
+  namespace: dev-ns
+  labels:
+    type: provider-credentials
+type: Opaque
+stringData:
+  credentials: |
+    {
+      "client_id":"admin-cli",
+      "username": "admin",
+      "password": "admin",
+      "url": "http://keycloak-keycloakx-http.keycloak.svc:80",
+      "base_path": "",
+      "realm": "master"
+    }

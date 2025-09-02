@@ -1,0 +1,41 @@
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: GroupMapper
+metadata:
+  name: ldap-group-mapper
+  namespace: dev-ns
+spec:
+  forProvider:
+    groupNameLdapAttribute: cn
+    groupObjectClasses:
+      - groupOfNames
+    ldapGroupsDn: dc=example,dc=org
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    memberofLdapAttribute: memberOf
+    membershipAttributeType: DN
+    membershipLdapAttribute: member
+    membershipUserLdapAttribute: cn
+    name: group-mapper
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: HardcodedGroupMapper
+metadata:
+  name: assign-group-to-users
+  namespace: dev-ns
+spec:
+  forProvider:
+    groupRef:
+      name: test
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+    name: assign-group-to-users
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

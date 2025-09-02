@@ -1,0 +1,30 @@
+---
+# Example 1: Basic User
+# This is a basic user with the minimum required fields.
+apiVersion: user.keycloak.m.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: bree
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmId: "dev-ns" # The realm to which this user belongs
+    username: "bree" # The username for this user
+  providerConfigRef:
+    name: "keycloak-provider-config" # Reference to the provider configuration
+    kind: ProviderConfig
+---
+# Example 1: Basic User
+# This is a basic user with the minimum required fields.
+apiVersion: user.keycloak.m.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: tim-tester
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmId: "dev-ns" # The realm to which this user belongs
+    username: "tim-tester" # The username for this user
+  providerConfigRef:
+    name: "keycloak-provider-config" # Reference to the provider configuration
+    kind: ProviderConfig

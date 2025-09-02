@@ -1,0 +1,23 @@
+apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  name: oidc-identity-provider
+  namespace: dev-ns
+spec:
+  forProvider:
+    alias: my-idp
+    authorizationUrl: https://authorizationurl.com
+    clientIdSecretRef:
+      key: client-secret
+      name: client-secret
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+    extraConfig:
+      clientAuthMethod: client_secret_post
+    realmRef:
+      name: "dev-ns"
+    tokenUrl: https://tokenurl.com
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

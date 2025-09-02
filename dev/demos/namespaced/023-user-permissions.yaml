@@ -1,0 +1,12 @@
+apiVersion: user.keycloak.m.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  name: my-user-permission
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

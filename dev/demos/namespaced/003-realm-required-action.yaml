@@ -1,0 +1,15 @@
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: RequiredAction
+metadata:
+  name: required-action
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    alias: webauthn-register
+    enabled: true
+    name: Webauthn Register
+    realmIdRef:
+      name: "dev-ns"

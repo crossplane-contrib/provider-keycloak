@@ -1,0 +1,32 @@
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: DefaultClientScopes
+metadata:
+  name: dev-ns-default-scopes
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmId: "dev-ns"
+    defaultScopes:
+      - profile
+      - email
+      - roles
+      - web-origins
+      - phone
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: OptionalClientScopes
+metadata:
+  name: dev-ns-optional-scopes
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmId: "dev-ns"
+    optionalScopes:
+      - acr
+      - role_list
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

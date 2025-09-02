@@ -1,0 +1,14 @@
+apiVersion: defaults.keycloak.m.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: default-roles
+  namespace: dev-ns
+spec:
+  forProvider:
+    defaultRolesRefs:
+      - name: test
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

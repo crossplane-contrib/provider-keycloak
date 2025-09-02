@@ -1,0 +1,43 @@
+---
+apiVersion: role.keycloak.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: test-client
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmId: "dev-ns"
+    name: "test-client"
+    clientIdRef:
+      name: "test"
+    description: "abc"
+  providerConfigRef:
+    name: "keycloak-provider-config" # Reference to the provider configuration
+    kind: ProviderConfig
+---
+apiVersion: role.keycloak.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: test
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmId: "dev-ns"
+    name: "test"
+    description: "abc"
+  providerConfigRef:
+    name: "keycloak-provider-config" # Reference to the provider configuration
+    kind: ProviderConfig
+---
+apiVersion: role.keycloak.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: offline-access
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmId: "dev-ns"
+    name: "offline_access"
+  providerConfigRef:
+    name: "keycloak-provider-config" # Reference to the provider configuration
+    kind: ProviderConfig

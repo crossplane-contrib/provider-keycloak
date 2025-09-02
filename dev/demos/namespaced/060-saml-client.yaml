@@ -1,0 +1,24 @@
+---
+apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: saml-client
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientId: saml-client-id
+    includeAuthnStatement: true
+    name: saml-client
+    realmIdRef:
+      name: "dev-ns"
+    signAssertions: true
+    signDocuments: false
+    signingCertificateSecretRef:
+      name: rsa-key
+      key: cert
+    signingPrivateKeySecretRef:
+      name: saml-cliet-cert
+      key: priv
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

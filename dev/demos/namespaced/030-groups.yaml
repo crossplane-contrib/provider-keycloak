@@ -1,0 +1,12 @@
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: test
+  namespace: dev-ns
+spec:
+  forProvider:
+    name: test
+    realmId: dev-ns
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

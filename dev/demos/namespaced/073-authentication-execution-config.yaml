@@ -1,0 +1,17 @@
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: ExecutionConfig
+metadata:
+  name: execution-identity-redirect-config
+  namespace: dev-ns
+spec:
+  forProvider:
+    alias: my-config-alias
+    config:
+      defaultProvider: my-config-default-idp
+    executionIdRef:
+      name: execution-identity-redirect
+    realmIdRef:
+      name: "dev-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

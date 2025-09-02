@@ -1,0 +1,33 @@
+apiVersion: client.keycloak.m.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: openid-client-role-mapper
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    clientIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev-ns"
+    roleIdRef:
+      name: "test-client"
+---
+apiVersion: client.keycloak.m.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: openid-client-scope-role-mapper
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    clientScopeIdRef:
+      name: "openid-client-scope"
+    realmIdRef:
+      name: "dev-ns"
+    roleIdRef:
+      name: "test-client"
