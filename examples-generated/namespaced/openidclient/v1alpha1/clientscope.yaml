@@ -1,0 +1,35 @@
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientScope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientscope
+  labels:
+    testing.upbound.io/example-name: openid_client_scope
+  name: openid-client-scope
+  namespace: upbound-system
+spec:
+  forProvider:
+    description: When requested, this scope will map a user's group memberships to
+      a claim
+    guiOrder: 1
+    includeInTokenScope: true
+    name: groups
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientscope
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

@@ -18,7 +18,7 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/saml"
 	"github.com/crossplane-contrib/provider-keycloak/config/samlclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
-	"github.com/crossplane/upjet/pkg/config"
+	"github.com/crossplane/upjet/v2/pkg/config"
 )
 
 // ExternalNameConfigs contains all external name configurations for this

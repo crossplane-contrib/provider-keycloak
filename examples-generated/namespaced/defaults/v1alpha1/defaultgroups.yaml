@@ -1,0 +1,50 @@
+apiVersion: defaults.keycloak.m.crossplane.io/v1alpha1
+kind: DefaultGroups
+metadata:
+  annotations:
+    meta.upbound.io/example-id: defaults/v1alpha1/defaultgroups
+  labels:
+    testing.upbound.io/example-name: default
+  name: default
+  namespace: upbound-system
+spec:
+  forProvider:
+    groupIdsRefs:
+    - name: group
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  annotations:
+    meta.upbound.io/example-id: defaults/v1alpha1/defaultgroups
+  labels:
+    testing.upbound.io/example-name: group
+  name: group
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: my-group
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: defaults/v1alpha1/defaultgroups
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

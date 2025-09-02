@@ -1,0 +1,41 @@
+apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: oidc/v1alpha1/identityprovider
+  labels:
+    testing.upbound.io/example-name: realm_identity_provider
+  name: realm-identity-provider
+  namespace: upbound-system
+spec:
+  forProvider:
+    alias: my-idp
+    authorizationUrl: https://authorizationurl.com
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+    extraConfig:
+      clientAuthMethod: client_secret_post
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    tokenUrl: https://tokenurl.com
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: oidc/v1alpha1/identityprovider
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

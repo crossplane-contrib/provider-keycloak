@@ -8,9 +8,9 @@ import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
 
-	"github.com/crossplane/upjet/pkg/config"
-	ujconfig "github.com/crossplane/upjet/pkg/config"
-	conversiontfjson "github.com/crossplane/upjet/pkg/types/conversion/tfjson"
+	"github.com/crossplane/upjet/v2/pkg/config"
+	ujconfig "github.com/crossplane/upjet/v2/pkg/config"
+	conversiontfjson "github.com/crossplane/upjet/v2/pkg/types/conversion/tfjson"
 	tfjson "github.com/hashicorp/terraform-json"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	keycloakProvider "github.com/keycloak/terraform-provider-keycloak/provider"
@@ -38,6 +38,7 @@ const (
 	resourcePrefix = "keycloak"
 	modulePath     = "github.com/crossplane-contrib/provider-keycloak"
 	rootGroup      = "keycloak.crossplane.io"
+	rootGroupNamespaced = "keycloak.m.crossplane.io"
 )
 
 //go:embed schema.json
@@ -114,6 +115,61 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 	}
 
 	pc.ConfigureResources()
+	return pc, nil
+}
+
+// GetProviderNamespaced returns provider configuration
+func GetProviderNamespaced(generationProvider bool) (*ujconfig.Provider, error) {
+	var p *schema.Provider
+	var err error
+	if generationProvider {
+		p, err = getProviderSchema(providerSchema)
+	} else {
+		p = keycloakProvider.KeycloakProvider(nil)
+	}
+	if err != nil {
+		return nil, errors.Wrapf(err, "cannot get the Terraform provider schema with generation mode set to %t", generationProvider)
+	}
+
+	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
+		ujconfig.WithShortName("keycloak"),
+		ujconfig.WithIncludeList([]string{}),
+		ujconfig.WithTerraformPluginSDKIncludeList(ExternalNameConfigured()),
+		ujconfig.WithTerraformPluginFrameworkIncludeList([]string{}), // For future resources
+		ujconfig.WithTerraformProvider(p),
+		ujconfig.WithFeaturesPackage("internal/features"),
+		ujconfig.WithDefaultResourceOptions(
+			ExternalNameConfigurations(),
+			KnownReferencers(),
+		),
+		ujconfig.WithRootGroup(rootGroupNamespaced))
+
+	for _, configure := range []func(provider *ujconfig.Provider){
+		// add custom config functions
+		realm.Configure,
+		group.Configure,
+		role.Configure,
+		openidclient.Configure,
+		openidgroup.Configure,
+		organization.Configure,
+		mapper.Configure,
+		user.Configure,
+		defaults.Configure,
+		oidc.Configure,
+		saml.Configure,
+		identityprovider.Configure,
+		ldap.Configure,
+		samlclient.Configure,
+		authentication.Configure,
+	} {
+		configure(pc)
+	}
+
+	pc.ConfigureResources()
+
+	// unset reference, this as reference - it is not reference and it creates import cycle
+	delete(pc.Resources["keycloak_openid_client"].References, "client_id")
+
 	return pc, nil
 }
 

@@ -1,0 +1,66 @@
+apiVersion: organization.keycloak.m.crossplane.io/v1alpha1
+kind: Organization
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/organization
+  labels:
+    testing.upbound.io/example-name: this
+  name: this
+  namespace: upbound-system
+spec:
+  forProvider:
+    alias: org
+    domain:
+    - name: example.com
+    enabled: true
+    name: org
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/organization
+  labels:
+    testing.upbound.io/example-name: this
+  name: this
+  namespace: upbound-system
+spec:
+  forProvider:
+    alias: my-idp
+    authorizationUrl: https://authorizationurl.com
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+    orgDomain: example.com
+    orgRedirectModeEmailMatches: true
+    organizationIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: this
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    tokenUrl: https://tokenurl.com
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/organization
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

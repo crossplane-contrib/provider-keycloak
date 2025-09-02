@@ -1,0 +1,76 @@
+apiVersion: client.keycloak.m.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: client/v1alpha1/rolemapper
+  labels:
+    testing.upbound.io/example-name: client_role_mapper
+  name: client-role-mapper
+  namespace: upbound-system
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    roleIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm_role
+
+---
+
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: client/v1alpha1/rolemapper
+  labels:
+    testing.upbound.io/example-name: client
+  name: client
+  namespace: upbound-system
+spec:
+  forProvider:
+    accessType: BEARER-ONLY
+    clientId: client
+    enabled: true
+    name: client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: client/v1alpha1/rolemapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: role.keycloak.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  annotations:
+    meta.upbound.io/example-id: client/v1alpha1/rolemapper
+  labels:
+    testing.upbound.io/example-name: realm_role
+  name: realm-role
+  namespace: upbound-system
+spec:
+  forProvider:
+    description: My Realm Role
+    name: my-realm-role
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm

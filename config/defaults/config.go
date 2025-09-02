@@ -1,6 +1,6 @@
 package defaults
 
-import "github.com/crossplane/upjet/pkg/config"
+import "github.com/crossplane/upjet/v2/pkg/config"
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
@@ -9,7 +9,7 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "defaults"
 		r.References["default_roles"] = config.Reference{
 			TerraformName: "keycloak_role",
-			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
+			Extractor:     `github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("name", false)`,
 		}
 
 	})

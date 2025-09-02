@@ -3,7 +3,7 @@ package ldap
 import (
 	"context"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
-	"github.com/crossplane/upjet/pkg/config"
+	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 )
 
@@ -47,7 +47,7 @@ func Configure(p *config.Provider) {
 		}
 		r.References["role"] = config.Reference{
 			TerraformName: "keycloak_role",
-			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
+			Extractor:     `github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("name", false)`,
 		}
 
 	})
@@ -59,7 +59,7 @@ func Configure(p *config.Provider) {
 		}
 		r.References["group"] = config.Reference{
 			TerraformName: "keycloak_group",
-			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name", false)`,
+			Extractor:     `github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("name", false)`,
 		}
 	})
 

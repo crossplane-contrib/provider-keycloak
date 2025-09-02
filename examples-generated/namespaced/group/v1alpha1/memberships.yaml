@@ -1,0 +1,71 @@
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  annotations:
+    meta.upbound.io/example-id: group/v1alpha1/memberships
+  labels:
+    testing.upbound.io/example-name: group_members
+  name: group-members
+  namespace: upbound-system
+spec:
+  forProvider:
+    groupIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: group
+    members:
+    - ${keycloak_user.user.username}
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  annotations:
+    meta.upbound.io/example-id: group/v1alpha1/memberships
+  labels:
+    testing.upbound.io/example-name: group
+  name: group
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: my-group
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: group/v1alpha1/memberships
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: user.keycloak.m.crossplane.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: group/v1alpha1/memberships
+  labels:
+    testing.upbound.io/example-name: user
+  name: user
+  namespace: upbound-system
+spec:
+  forProvider:
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    username: my-user

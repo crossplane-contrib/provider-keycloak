@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/crossplane/upjet/pkg/pipeline"
+	"github.com/crossplane/upjet/v2/pkg/pipeline"
 
 	"github.com/crossplane-contrib/provider-keycloak/config"
 )
@@ -25,7 +25,11 @@ func main() {
 	}
 	provider, err := config.GetProvider(true)
 	if err != nil {
-		panic(fmt.Sprintf("cannot get provider configuration: %s", err))
+		panic(fmt.Sprintf("cannot get cluster provider configuration: %s", err))
 	}
-	pipeline.Run(provider, absRootDir)
+	providerNs, err := config.GetProviderNamespaced(true)
+	if err != nil {
+		panic(fmt.Sprintf("cannot get namespaced provider configuration: %s", err))
+	}
+	pipeline.Run(provider, providerNs, absRootDir)
 }

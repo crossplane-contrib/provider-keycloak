@@ -1,0 +1,86 @@
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: HardcodedRoleMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ldap/v1alpha1/hardcodedrolemapper
+  labels:
+    testing.upbound.io/example-name: assign_admin_role_to_all_users
+  name: assign-admin-role-to-all-users
+  namespace: upbound-system
+spec:
+  forProvider:
+    ldapUserFederationIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: ldap_user_federation
+    name: assign-admin-role-to-all-users
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    roleSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm_admin_role
+
+---
+
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ldap/v1alpha1/hardcodedrolemapper
+  labels:
+    testing.upbound.io/example-name: ldap_user_federation
+  name: ldap-user-federation
+  namespace: upbound-system
+spec:
+  forProvider:
+    bindCredentialSecretRef:
+      key: example-key
+      name: example-secret
+    bindDn: cn=admin,dc=example,dc=org
+    connectionUrl: ldap://openldap
+    name: openldap
+    rdnLdapAttribute: cn
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    userObjectClasses:
+    - simpleSecurityObject
+    - organizationalRole
+    usernameLdapAttribute: cn
+    usersDn: dc=example,dc=org
+    uuidLdapAttribute: entryDN
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ldap/v1alpha1/hardcodedrolemapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: role.keycloak.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ldap/v1alpha1/hardcodedrolemapper
+  labels:
+    testing.upbound.io/example-name: realm_admin_role
+  name: realm-admin-role
+  namespace: upbound-system
+spec:
+  forProvider:
+    description: My Realm Role
+    name: my-admin-role
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm

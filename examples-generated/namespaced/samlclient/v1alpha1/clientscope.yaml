@@ -1,0 +1,33 @@
+apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientScope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: samlclient/v1alpha1/clientscope
+  labels:
+    testing.upbound.io/example-name: saml_client_scope
+  name: saml-client-scope
+  namespace: upbound-system
+spec:
+  forProvider:
+    description: This scope will map a user's group memberships to SAML assertion
+    guiOrder: 1
+    name: groups
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: samlclient/v1alpha1/clientscope
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

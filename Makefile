@@ -53,7 +53,7 @@ GO_REQUIRED_VERSION ?= 1.19
 GOLANGCILINT_VERSION ?= 1.50.0
 GO_STATIC_PACKAGES = $(GO_PROJECT)/cmd/provider $(GO_PROJECT)/cmd/generator
 GO_LDFLAGS += -X $(GO_PROJECT)/internal/version.Version=$(VERSION)
-GO_SUBDIRS += cmd internal apis
+GO_SUBDIRS += cmd internal apis generate
 -include build/makelib/golang.mk
 
 # ====================================================================================
@@ -64,13 +64,6 @@ UP_VERSION = v0.38.4
 UP_CHANNEL = stable
 UPTEST_VERSION = v1.3.0
 -include build/makelib/k8s_tools.mk
-
-# Workaround until https://github.com/crossplane/build/pull/27 is merged
-$(KUBECTL):
-	@$(INFO) installing kubectl $(KUBECTL_VERSION)
-	@curl -fsSLo $(KUBECTL) --create-dirs https://dl.k8s.io/$(KUBECTL_VERSION)/bin/$(HOSTOS)/$(SAFEHOSTARCH)/kubectl || $(FAIL)
-	@chmod +x $(KUBECTL)
-	@$(OK) installing kubectl $(KUBECTL_VERSION)
 
 # ====================================================================================
 # Setup Images
@@ -199,7 +192,7 @@ run: go.build
 # ====================================================================================
 # End to End Testing
 CHAINSAW_VERSION = 0.2.12
-CROSSPLANE_VERSION = 1.16.0
+CROSSPLANE_VERSION = 2.0.2
 CROSSPLANE_NAMESPACE = crossplane-system
 -include build/makelib/local.xpkg.mk
 -include build/makelib/controlplane.mk

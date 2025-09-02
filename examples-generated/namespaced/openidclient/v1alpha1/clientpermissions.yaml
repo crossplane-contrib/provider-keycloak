@@ -1,0 +1,84 @@
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientPermissions
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientpermissions
+  labels:
+    testing.upbound.io/example-name: my_permission
+  name: my-permission
+  namespace: upbound-system
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: my_openid_client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    viewScope:
+    - decisionStrategy: UNANIMOUS
+      description: my description
+      policies:
+      - ${keycloak_openid_client_user_policy.test.id}
+
+---
+
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientpermissions
+  labels:
+    testing.upbound.io/example-name: my_openid_client
+  name: my-openid-client
+  namespace: upbound-system
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientId: my_openid_client
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+    name: my_openid_client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    standardFlowEnabled: true
+    validRedirectUris:
+    - http://localhost:8080/*
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientpermissions
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    realm: realm
+
+---
+
+apiVersion: user.keycloak.m.crossplane.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientpermissions
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: upbound-system
+spec:
+  forProvider:
+    email: test-user@fakedomain.com
+    firstName: Testy
+    lastName: Tester
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    username: test-user
