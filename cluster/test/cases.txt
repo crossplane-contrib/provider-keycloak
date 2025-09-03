@@ -1,7 +1,6 @@
 # find ./dev/demos/basic/  -print | grep .yaml | sort
 # Use this as prefix for comments
 # We need to order those test cases, so that they are deleted in order!
-./dev/demos/basic/001-realm.yaml
 ./dev/demos/basic/002-realm-clientscopes.yaml
 ./dev/demos/basic/003-realm-required-action.yaml
 ./dev/demos/basic/004-realm-keystore-rsa.yaml
@@ -47,3 +46,4 @@
 ./dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml
 ./dev/demos/basic/096-ldap-full-name-mapper.yaml
 ./dev/demos/basic/097-ldap-custom-mapper.yaml
+./dev/demos/basic/001-realm.yaml
