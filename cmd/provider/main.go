@@ -36,6 +36,7 @@ import (
 
 	apisCluster "github.com/crossplane-contrib/provider-keycloak/apis/cluster"
 	apisNamespaced "github.com/crossplane-contrib/provider-keycloak/apis/namespaced"
+	resolverapis "github.com/crossplane-contrib/provider-keycloak/internal/apis"
 	"github.com/crossplane-contrib/provider-keycloak/config"
 	// resolverapis "github.com/crossplane-contrib/provider-keycloak/internal/apis"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
@@ -151,7 +152,10 @@ func main() {
 	})
 	kingpin.FatalIfError(err, "Cannot create controller manager")
 	kingpin.FatalIfError(apisCluster.AddToScheme(mgr.GetScheme()), "Cannot add Keycloak APIs to scheme")
+	kingpin.FatalIfError(resolverapis.BuildScheme(apisCluster.AddToSchemes), "Cannot register cluster scoped APIs with the API resolver's runtime scheme")
+
 	kingpin.FatalIfError(apisNamespaced.AddToScheme(mgr.GetScheme()), "Cannot add Keycloak APIs to scheme")
+	kingpin.FatalIfError(resolverapis.BuildScheme(apisNamespaced.AddToSchemes), "Cannot register namespace scoped APIs with the API resolver's runtime scheme")
 	kingpin.FatalIfError(apiextensionsv1.AddToScheme(mgr.GetScheme()), "Cannot add api-extensions APIs to scheme")
 
 	metricRecorder := managed.NewMRMetricRecorder()
