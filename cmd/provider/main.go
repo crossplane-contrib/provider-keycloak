@@ -38,7 +38,6 @@ import (
 	apisNamespaced "github.com/crossplane-contrib/provider-keycloak/apis/namespaced"
 	resolverapis "github.com/crossplane-contrib/provider-keycloak/internal/apis"
 	"github.com/crossplane-contrib/provider-keycloak/config"
-	// resolverapis "github.com/crossplane-contrib/provider-keycloak/internal/apis"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
 	controllerCluster "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster"
 	controllerNamespaced "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced"
