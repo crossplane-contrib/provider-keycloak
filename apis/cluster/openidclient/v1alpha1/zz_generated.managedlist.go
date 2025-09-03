@@ -25,6 +25,15 @@ func (l *ClientDefaultScopesList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this ClientGroupPolicyList.
+func (l *ClientGroupPolicyList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this ClientList.
 func (l *ClientList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -52,6 +61,15 @@ func (l *ClientPermissionsList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this ClientRolePolicyList.
+func (l *ClientRolePolicyList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this ClientScopeList.
 func (l *ClientScopeList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -63,6 +81,24 @@ func (l *ClientScopeList) GetItems() []resource.Managed {
 
 // GetItems of this ClientServiceAccountRealmRoleList.
 func (l *ClientServiceAccountRealmRoleList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientServiceAccountRoleList.
+func (l *ClientServiceAccountRoleList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientUserPolicyList.
+func (l *ClientUserPolicyList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

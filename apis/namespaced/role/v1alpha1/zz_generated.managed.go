@@ -7,46 +7,6 @@ package v1alpha1
 
 import xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
 
-// GetCondition of this ClientServiceAccountRole.
-func (mg *ClientServiceAccountRole) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
-	return mg.Status.GetCondition(ct)
-}
-
-// GetManagementPolicies of this ClientServiceAccountRole.
-func (mg *ClientServiceAccountRole) GetManagementPolicies() xpv1.ManagementPolicies {
-	return mg.Spec.ManagementPolicies
-}
-
-// GetProviderConfigReference of this ClientServiceAccountRole.
-func (mg *ClientServiceAccountRole) GetProviderConfigReference() *xpv1.ProviderConfigReference {
-	return mg.Spec.ProviderConfigReference
-}
-
-// GetWriteConnectionSecretToReference of this ClientServiceAccountRole.
-func (mg *ClientServiceAccountRole) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
-	return mg.Spec.WriteConnectionSecretToReference
-}
-
-// SetConditions of this ClientServiceAccountRole.
-func (mg *ClientServiceAccountRole) SetConditions(c ...xpv1.Condition) {
-	mg.Status.SetConditions(c...)
-}
-
-// SetManagementPolicies of this ClientServiceAccountRole.
-func (mg *ClientServiceAccountRole) SetManagementPolicies(r xpv1.ManagementPolicies) {
-	mg.Spec.ManagementPolicies = r
-}
-
-// SetProviderConfigReference of this ClientServiceAccountRole.
-func (mg *ClientServiceAccountRole) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
-	mg.Spec.ProviderConfigReference = r
-}
-
-// SetWriteConnectionSecretToReference of this ClientServiceAccountRole.
-func (mg *ClientServiceAccountRole) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
-	mg.Spec.WriteConnectionSecretToReference = r
-}
-
 // GetCondition of this Role.
 func (mg *Role) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)

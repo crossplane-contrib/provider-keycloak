@@ -17,3 +17,69 @@ spec:
       name: "test"
     realmIdRef:
       name: "dev-ns"
+---
+apiVersion: openidclient.m.crossplane.io/v1alpha1
+kind: ClientGroupPolicy
+metadata:
+  name: my-group-policy
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    name: my-group-policy
+    groups:
+      - path: /test
+        extendChildren: false
+        idRef:
+          name: "test"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev-ns"
+---
+apiVersion: openidclient.m.crossplane.io/v1alpha1
+kind: ClientRolePolicy
+metadata:
+  name: my-role-policy
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    name: my-role-policy
+    role:
+      - required: true
+        idRef:
+          name: "test"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev-ns"
+    type: "role"
+---
+apiVersion: openidclient.m.crossplane.io/v1alpha1
+kind: ClientUserPolicy
+metadata:
+  name: my-user-policy
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    name: my-user-policy
+    usersRefs:
+      - name: "tim-tester"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev-ns"
