@@ -7,9 +7,10 @@ spec:
   forProvider:
     alias: my-idp
     authorizationUrl: https://authorizationurl.com
-    clientIdSecretRef:
-      key: client-secret
-      name: client-secret
+    clientId: a
+    # clientIdSecretRef:
+    #   key: client-secret
+    #   name: client-secret
     clientSecretSecretRef:
       key: client-secret
       name: client-secret
