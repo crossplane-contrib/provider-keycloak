@@ -18,7 +18,7 @@ spec:
     realmIdRef:
       name: "dev-ns"
 ---
-apiVersion: openidclient.m.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientGroupPolicy
 metadata:
   name: my-group-policy
@@ -41,7 +41,7 @@ spec:
     realmIdRef:
       name: "dev-ns"
 ---
-apiVersion: openidclient.m.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientRolePolicy
 metadata:
   name: my-role-policy
@@ -64,7 +64,7 @@ spec:
       name: "dev-ns"
     type: "role"
 ---
-apiVersion: openidclient.m.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientUserPolicy
 metadata:
   name: my-user-policy
