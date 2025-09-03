@@ -67,6 +67,7 @@ func Configure(p *config.Provider) {
 		r.LateInitializer = config.LateInitializer{
 			IgnoredFields: []string{"service_account_user_id"},
 		}
+
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_service_account_realm_role", func(r *config.Resource) {
@@ -78,6 +79,63 @@ func Configure(p *config.Provider) {
 
 		r.References["clients"] = config.Reference{
 			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+
+		if s, ok := r.TerraformResource.Schema["decisionStrategy"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+
+		if s, ok := r.TerraformResource.Schema["logic"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_group_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+
+		r.References["groups.id"] = config.Reference{
+			TerraformName: "keycloak_group",
+			Extractor:     common.PathUUIDExtractor,
+		}
+
+		if s, ok := r.TerraformResource.Schema["decisionStrategy"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+
+		if s, ok := r.TerraformResource.Schema["logic"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_role_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+
+		r.References["role.id"] = config.Reference{
+			TerraformName: "keycloak_role",
+			Extractor:     common.PathUUIDExtractor,
+		}
+
+		if s, ok := r.TerraformResource.Schema["decisionStrategy"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+
+		if s, ok := r.TerraformResource.Schema["logic"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_user_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+
+		r.References["users"] = config.Reference{
+			TerraformName: "keycloak_user",
 			Extractor:     common.PathUUIDExtractor,
 		}
 
