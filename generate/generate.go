@@ -29,8 +29,15 @@ Copyright 2021 Upbound Inc.
 // Generate deepcopy methodsets and CRD manifests
 //go:generate go run -tags generate sigs.k8s.io/controller-tools/cmd/controller-gen object:headerFile=../hack/boilerplate.go.txt paths=../apis/... crd:allowDangerousTypes=true,crdVersions=v1 output:artifacts:config=../package/crds
 
+
 // Generate crossplane-runtime methodsets (resource.Claim, etc)
 //go:generate go run -tags generate github.com/crossplane/crossplane-tools/cmd/angryjet generate-methodsets --header-file=../hack/boilerplate.go.txt ../apis/...
+
+// Run upjet's transformer for the generated resolvers to get rid of the cross
+// API-group imports and to prevent import cycles
+//go:generate go run github.com/crossplane/upjet/v2/cmd/resolver -g keycloak.crossplane.io -a github.com/crossplane-contrib/provider-keycloak/internal/apis -s -p ../apis/cluster/...
+//go:generate go run github.com/crossplane/upjet/v2/cmd/resolver -g keycloak.m.crossplane.io -a github.com/crossplane-contrib/provider-keycloak/internal/apis -s -p ../apis/namespaced/...
+
 
 package generate
 
@@ -40,4 +47,6 @@ import (
 	_ "github.com/crossplane/crossplane-tools/cmd/angryjet" //nolint:typecheck
 
 	_ "github.com/crossplane/upjet/v2/cmd/scraper"
+
+	_ "github.com/crossplane/upjet/v2/cmd/resolver"
 )

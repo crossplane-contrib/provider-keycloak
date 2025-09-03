@@ -16,13 +16,25 @@ func (tr *ClientClientPolicy) Hub() {}
 func (tr *ClientDefaultScopes) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *ClientGroupPolicy) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *ClientOptionalScopes) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *ClientPermissions) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *ClientRolePolicy) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *ClientScope) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *ClientServiceAccountRealmRole) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ClientServiceAccountRole) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ClientUserPolicy) Hub() {}

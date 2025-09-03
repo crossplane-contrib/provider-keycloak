@@ -36,16 +36,17 @@ import (
 	userfederation "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/userfederation"
 	googleidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/googleidentityprovider"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/identityprovider"
-	clientgrouppolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openid/clientgrouppolicy"
-	clientrolepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openid/clientrolepolicy"
-	clientuserpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openid/clientuserpolicy"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/client"
 	clientclientpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientclientpolicy"
 	clientdefaultscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientdefaultscopes"
+	clientgrouppolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientgrouppolicy"
 	clientoptionalscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientoptionalscopes"
 	clientpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientpermissions"
+	clientrolepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientrolepolicy"
 	clientscope "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientscope"
 	clientserviceaccountrealmrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientserviceaccountrealmrole"
+	clientserviceaccountrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientserviceaccountrole"
+	clientuserpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientuserpolicy"
 	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/groupmembershipprotocolmapper"
 	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/organization/organization"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/providerconfig"
@@ -56,7 +57,6 @@ import (
 	realmevents "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/realmevents"
 	requiredaction "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/requiredaction"
 	userprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/userprofile"
-	clientserviceaccountrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/role/clientserviceaccountrole"
 	role "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/role/role"
 	identityprovidersaml "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/saml/identityprovider"
 	clientsamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/client"
@@ -99,16 +99,17 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		userfederation.Setup,
 		googleidentityprovider.Setup,
 		identityprovider.Setup,
-		clientgrouppolicy.Setup,
-		clientrolepolicy.Setup,
-		clientuserpolicy.Setup,
 		client.Setup,
 		clientclientpolicy.Setup,
 		clientdefaultscopes.Setup,
+		clientgrouppolicy.Setup,
 		clientoptionalscopes.Setup,
 		clientpermissions.Setup,
+		clientrolepolicy.Setup,
 		clientscope.Setup,
 		clientserviceaccountrealmrole.Setup,
+		clientserviceaccountrole.Setup,
+		clientuserpolicy.Setup,
 		groupmembershipprotocolmapper.Setup,
 		organization.Setup,
 		providerconfig.Setup,
@@ -119,7 +120,6 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		realmevents.Setup,
 		requiredaction.Setup,
 		userprofile.Setup,
-		clientserviceaccountrole.Setup,
 		role.Setup,
 		identityprovidersaml.Setup,
 		clientsamlclient.Setup,
@@ -168,16 +168,17 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		userfederation.SetupGated,
 		googleidentityprovider.SetupGated,
 		identityprovider.SetupGated,
-		clientgrouppolicy.SetupGated,
-		clientrolepolicy.SetupGated,
-		clientuserpolicy.SetupGated,
 		client.SetupGated,
 		clientclientpolicy.SetupGated,
 		clientdefaultscopes.SetupGated,
+		clientgrouppolicy.SetupGated,
 		clientoptionalscopes.SetupGated,
 		clientpermissions.SetupGated,
+		clientrolepolicy.SetupGated,
 		clientscope.SetupGated,
 		clientserviceaccountrealmrole.SetupGated,
+		clientserviceaccountrole.SetupGated,
+		clientuserpolicy.SetupGated,
 		groupmembershipprotocolmapper.SetupGated,
 		organization.SetupGated,
 		providerconfig.SetupGated,
@@ -188,7 +189,6 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		realmevents.SetupGated,
 		requiredaction.SetupGated,
 		userprofile.SetupGated,
-		clientserviceaccountrole.SetupGated,
 		role.SetupGated,
 		identityprovidersaml.SetupGated,
 		clientsamlclient.SetupGated,
