@@ -5,6 +5,7 @@ SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 echo "Run Setup..."
 
 ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/basic/000-init.yaml
+${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/namespaced/000-init.yaml
 
 # Uptest creates by default these chainsaw test files in following folder /tmp/uptest-e2e/case/
 # * 00-apply.yaml

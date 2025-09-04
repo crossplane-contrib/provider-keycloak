@@ -9,3 +9,4 @@ spec:
     displayName: Customized Keycloak
   providerConfigRef:
     name: "keycloak-provider-config"
+  managementPolicies: [Observe, Update]

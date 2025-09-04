@@ -6,7 +6,7 @@ metadata:
 spec:
   forProvider:
     realm: master
-    displayName: Customized Keycloak
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig
+  managementPolicies: [Observe]
