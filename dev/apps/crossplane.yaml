@@ -8,7 +8,7 @@ spec:
   project: default
   sources:
     - repoURL: https://charts.crossplane.io/stable
-      targetRevision: 2.0.2
+      targetRevision: 1.20.0
       chart: crossplane
       helm:
         values: | 
