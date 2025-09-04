@@ -24,6 +24,13 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_authentication_flow",
 			Extractor: common.PathAuthenticationFlowAliasExtractor,
 		}
+
+		if s, ok := r.TerraformResource.Schema["client_id"]; ok {
+			s.Sensitive = true
+		}
+		if s, ok := r.TerraformResource.Schema["client_secret"]; ok {
+			s.Sensitive = true
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_oidc_google_identity_provider", func(r *config.Resource) {
