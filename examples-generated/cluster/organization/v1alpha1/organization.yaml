@@ -31,9 +31,10 @@ spec:
   forProvider:
     alias: my-idp
     authorizationUrl: https://authorizationurl.com
-    clientIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: example
+    clientIdSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
     clientSecretSecretRef:
       key: example-key
       name: example-secret

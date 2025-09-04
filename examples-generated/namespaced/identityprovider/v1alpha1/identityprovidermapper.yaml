@@ -35,9 +35,9 @@ spec:
   forProvider:
     alias: oidc
     authorizationUrl: https://example.com/auth
-    clientIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: example
+    clientIdSecretRef:
+      key: example-key
+      name: example-secret
     clientSecretSecretRef:
       key: example-key
       name: example-secret
