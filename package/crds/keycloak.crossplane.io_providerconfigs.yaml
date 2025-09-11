@@ -11,7 +11,7 @@ spec:
     categories:
     - crossplane
     - provider
-    - vault
+    - keycloak
     kind: ProviderConfig
     listKind: ProviderConfigList
     plural: providerconfigs
@@ -29,7 +29,7 @@ spec:
     name: v1beta1
     schema:
       openAPIV3Schema:
-        description: A ProviderConfig configures a Vault provider.
+        description: A ProviderConfig configures a keycloak provider.
         properties:
           apiVersion:
             description: |-

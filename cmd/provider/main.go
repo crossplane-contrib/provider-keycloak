@@ -62,7 +62,7 @@ func deprecationAction(flagName string) kingpin.Action {
 
 func main() {
 	var (
-		app                     = kingpin.New(filepath.Base(os.Args[0]), "Terraform based Crossplane provider for Vault").DefaultEnvars()
+		app                     = kingpin.New(filepath.Base(os.Args[0]), "Terraform based Crossplane provider for keycloak").DefaultEnvars()
 		debug                   = app.Flag("debug", "Run with debug logging.").Short('d').Bool()
 		syncPeriod              = app.Flag("sync", "Controller manager sync period such as 300ms, 1.5h, or 2h45m").Short('s').Default("1h").Duration()
 		pollInterval            = app.Flag("poll", "Poll interval controls how often an individual resource should be checked for drift.").Default("10m").Duration()
@@ -91,7 +91,7 @@ func main() {
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 
 	zl := zap.New(zap.UseDevMode(*debug))
-	log := logging.NewLogrLogger(zl.WithName("provider-vault"))
+	log := logging.NewLogrLogger(zl.WithName("provider-keycloak"))
 	if *debug {
 		// The controller-runtime runs with a no-op logger by default. It is
 		// *very* verbose even at info level, so we only provide it a real
@@ -218,12 +218,12 @@ func main() {
 		optsCluster.Gate = crdGate
 		optsNamespaced.Gate = crdGate
 		kingpin.FatalIfError(customresourcesgate.Setup(mgr, optsNamespaced.Options), "Cannot setup CRD gate")
-		kingpin.FatalIfError(controllerCluster.SetupGated(mgr, optsCluster), "Cannot setup Vault controllers")
-		kingpin.FatalIfError(controllerNamespaced.SetupGated(mgr, optsNamespaced), "Cannot setup Vault controllers")
+		kingpin.FatalIfError(controllerCluster.SetupGated(mgr, optsCluster), "Cannot setup Keycloak controllers")
+		kingpin.FatalIfError(controllerNamespaced.SetupGated(mgr, optsNamespaced), "Cannot setup Keycloak controllers")
 	} else {
 		log.Info("Provider has missing RBAC permissions for watching CRDs, controller SafeStart capability will be disabled")
-		kingpin.FatalIfError(controllerCluster.Setup(mgr, optsCluster), "Cannot setup Vault controllers")
-		kingpin.FatalIfError(controllerNamespaced.Setup(mgr, optsNamespaced), "Cannot setup Vault controllers")
+		kingpin.FatalIfError(controllerCluster.Setup(mgr, optsCluster), "Cannot setup Keycloak controllers")
+		kingpin.FatalIfError(controllerNamespaced.Setup(mgr, optsNamespaced), "Cannot setup Keycloak controllers")
 	}
 
 	kingpin.FatalIfError(mgr.Start(ctrl.SetupSignalHandler()), "Cannot start controller manager")
