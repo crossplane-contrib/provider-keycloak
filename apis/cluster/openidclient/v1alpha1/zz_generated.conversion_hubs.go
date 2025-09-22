@@ -10,6 +10,12 @@ package v1alpha1
 func (tr *Client) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *ClientAuthorizationPermission) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ClientAuthorizationResource) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *ClientClientPolicy) Hub() {}
 
 // Hub marks this type as a conversion hub.

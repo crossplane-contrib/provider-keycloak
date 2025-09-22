@@ -7,6 +7,24 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 
+// GetItems of this ClientAuthorizationPermissionList.
+func (l *ClientAuthorizationPermissionList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientAuthorizationResourceList.
+func (l *ClientAuthorizationResourceList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this ClientClientPolicyList.
 func (l *ClientClientPolicyList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))

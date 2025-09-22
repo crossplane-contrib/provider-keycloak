@@ -37,6 +37,8 @@ import (
 	googleidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/googleidentityprovider"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/identityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/client"
+	clientauthorizationpermission "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientauthorizationpermission"
+	clientauthorizationresource "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientauthorizationresource"
 	clientclientpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientclientpolicy"
 	clientdefaultscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientdefaultscopes"
 	clientgrouppolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientgrouppolicy"
@@ -101,6 +103,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		googleidentityprovider.Setup,
 		identityprovider.Setup,
 		client.Setup,
+		clientauthorizationpermission.Setup,
+		clientauthorizationresource.Setup,
 		clientclientpolicy.Setup,
 		clientdefaultscopes.Setup,
 		clientgrouppolicy.Setup,
@@ -171,6 +175,8 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		googleidentityprovider.SetupGated,
 		identityprovider.SetupGated,
 		client.SetupGated,
+		clientauthorizationpermission.SetupGated,
+		clientauthorizationresource.SetupGated,
 		clientclientpolicy.SetupGated,
 		clientdefaultscopes.SetupGated,
 		clientgrouppolicy.SetupGated,
