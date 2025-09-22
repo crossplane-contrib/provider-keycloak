@@ -66,6 +66,7 @@ import (
 	permissionsuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/user/permissions"
 	rolesuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/user/roles"
 	user "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/user/user"
+	userfederationuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/user/userfederation"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
@@ -129,6 +130,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		permissionsuser.Setup,
 		rolesuser.Setup,
 		user.Setup,
+		userfederationuser.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
@@ -198,6 +200,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		permissionsuser.SetupGated,
 		rolesuser.SetupGated,
 		user.SetupGated,
+		userfederationuser.SetupGated,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err

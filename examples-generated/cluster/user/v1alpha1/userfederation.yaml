@@ -1,0 +1,35 @@
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/userfederation
+  labels:
+    testing.upbound.io/example-name: custom_user_federation
+  name: custom-user-federation
+spec:
+  forProvider:
+    config:
+      dummyBool: true
+      dummyString: foobar
+      multivalue: value1##value2
+    enabled: true
+    name: custom
+    providerId: custom
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: user/v1alpha1/userfederation
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: test
