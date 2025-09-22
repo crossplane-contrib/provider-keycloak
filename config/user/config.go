@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
@@ -39,6 +40,10 @@ func Configure(p *config.Provider) {
 	})
 
 	p.AddResourceConfigurator("keycloak_users_permissions", func(r *config.Resource) {
+		r.ShortGroup = "user"
+	})
+
+	p.AddResourceConfigurator("keycloak_custom_user_federation", func(r *config.Resource) {
 		r.ShortGroup = "user"
 	})
 }

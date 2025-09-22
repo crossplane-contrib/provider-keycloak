@@ -22,7 +22,7 @@ func Configure(p *config.Provider) {
 		}
 		r.References["first_broker_login_flow_alias"] = config.Reference{
 			TerraformName: "keycloak_authentication_flow",
-			Extractor: common.PathAuthenticationFlowAliasExtractor,
+			Extractor:     common.PathAuthenticationFlowAliasExtractor,
 		}
 
 		if s, ok := r.TerraformResource.Schema["client_id"]; ok {
@@ -41,7 +41,7 @@ func Configure(p *config.Provider) {
 		}
 		r.References["first_broker_login_flow_alias"] = config.Reference{
 			TerraformName: "keycloak_authentication_flow",
-			Extractor: common.PathAuthenticationFlowAliasExtractor,
+			Extractor:     common.PathAuthenticationFlowAliasExtractor,
 		}
 
 		if s, ok := r.TerraformResource.Schema["client_id"]; ok {
@@ -51,6 +51,10 @@ func Configure(p *config.Provider) {
 			s.Sensitive = true
 		}
 
+	})
+
+	p.AddResourceConfigurator("keycloak_user_template_importer_identity_provider_mapper", func(r *config.Resource) {
+		r.ShortGroup = "oidc"
 	})
 }
 
