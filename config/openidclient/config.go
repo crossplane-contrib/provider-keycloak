@@ -2,11 +2,12 @@ package openidclient
 
 import (
 	"context"
+	"strings"
+
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
-	"strings"
 )
 
 const (
@@ -151,6 +152,14 @@ func Configure(p *config.Provider) {
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_permissions", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_authorization_resource", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_authorization_permission", func(r *config.Resource) {
 		r.ShortGroup = Group
 	})
 }
