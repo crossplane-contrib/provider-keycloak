@@ -113,5 +113,5 @@ type ClusterProviderConfig struct {
 type ClusterProviderConfigList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []ProviderConfig `json:"items"`
+	Items           []ClusterProviderConfig `json:"items"`
 }
