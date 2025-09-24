@@ -61,7 +61,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.5.0
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v2.7.2
 + runtimeConfigRef:
 +   name: runtimeconfig-provider-keycloak
 ```
