@@ -2,10 +2,11 @@ package lookup
 
 import (
 	"context"
-	"errors"
+	"strconv"
+
+	"github.com/crossplane/crossplane-runtime/v2/pkg/errors"
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
-	"strconv"
 )
 
 type IdentifyingPropertiesLookupConfig struct {

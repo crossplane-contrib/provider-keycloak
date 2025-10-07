@@ -9,21 +9,21 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/crossplane/crossplane-runtime/v2/apis/common"
-	xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	"github.com/crossplane/crossplane-runtime/v2/pkg/resource"
-	"github.com/pkg/errors"
+	terraformSDK "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/crossplane/upjet/v2/pkg/terraform"
+	"github.com/crossplane/crossplane-runtime/v2/apis/common"
+	xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	"github.com/crossplane/crossplane-runtime/v2/pkg/errors"
+	"github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 
-	terraformSDK "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/crossplane/upjet/v2/pkg/terraform"
+	keycloakProvider "github.com/keycloak/terraform-provider-keycloak/provider"
 
 	clusterv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/v1beta1"
 	namespacedv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/namespaced/v1beta1"
-	keycloakProvider "github.com/keycloak/terraform-provider-keycloak/provider"
 )
 
 const (
@@ -103,7 +103,6 @@ func TerraformSetupBuilder() terraform.SetupFn {
 			"failed to configure the no-fork client")
 	}
 }
-
 
 // ExtractCredentials Function that extracts credentials from the secret provided to providerconfig
 func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, client client.Client, selector xpv1.CommonCredentialSelectors) (map[string]string, error) {
@@ -224,7 +223,7 @@ func resolveProviderConfigModern(ctx context.Context, crClient client.Client, mg
 					SecretRef: &common.SecretKeySelector{
 						Key: pc.Spec.CredentialsSecretRef.Key,
 						SecretReference: common.SecretReference{
-							Name: pc.Spec.CredentialsSecretRef.Name,
+							Name:      pc.Spec.CredentialsSecretRef.Name,
 							Namespace: mg.GetNamespace(),
 						},
 					},

@@ -2,9 +2,11 @@ package saml
 
 import (
 	"context"
-	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 )
 
 // Group is the short group name for the resources in this package

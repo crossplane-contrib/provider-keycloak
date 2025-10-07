@@ -5,9 +5,6 @@ Copyright 2021 Upbound Inc.
 package config
 
 import (
-	// Note(turkenh): we are importing this to embed provider schema document
-	_ "embed"
-
 	"github.com/crossplane/upjet/v2/pkg/config"
 	ujconfig "github.com/crossplane/upjet/v2/pkg/config"
 	conversiontfjson "github.com/crossplane/upjet/v2/pkg/types/conversion/tfjson"
@@ -32,12 +29,15 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/saml"
 	"github.com/crossplane-contrib/provider-keycloak/config/samlclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
+
+	// Note(turkenh): we are importing this to embed provider schema document
+	_ "embed"
 )
 
 const (
-	resourcePrefix = "keycloak"
-	modulePath     = "github.com/crossplane-contrib/provider-keycloak"
-	rootGroup      = "keycloak.crossplane.io"
+	resourcePrefix      = "keycloak"
+	modulePath          = "github.com/crossplane-contrib/provider-keycloak"
+	rootGroup           = "keycloak.crossplane.io"
 	rootGroupNamespaced = "keycloak.m.crossplane.io"
 )
 

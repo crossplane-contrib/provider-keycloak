@@ -2,10 +2,10 @@ package lookup
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strconv"
 
+	"github.com/crossplane/crossplane-runtime/v2/pkg/errors"
 	"github.com/crossplane/upjet/v2/pkg/terraform"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 )

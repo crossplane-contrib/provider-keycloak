@@ -5,6 +5,8 @@ Copyright 2022 Upbound Inc.
 package config
 
 import (
+	"github.com/crossplane/upjet/v2/pkg/config"
+
 	"github.com/crossplane-contrib/provider-keycloak/config/authentication"
 	"github.com/crossplane-contrib/provider-keycloak/config/group"
 	"github.com/crossplane-contrib/provider-keycloak/config/identityprovider"
@@ -18,7 +20,6 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/saml"
 	"github.com/crossplane-contrib/provider-keycloak/config/samlclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
-	"github.com/crossplane/upjet/v2/pkg/config"
 )
 
 // ExternalNameConfigs contains all external name configurations for this

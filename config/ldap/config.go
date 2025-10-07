@@ -2,13 +2,17 @@ package ldap
 
 import (
 	"context"
-	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 )
 
 // Group is the short group name for the resources in this package
 var Group = "ldap"
+
+const ldapStorageMapperType = "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
@@ -155,7 +159,7 @@ func getUserAttributeMapperIDByExternalName(ctx context.Context, id string, para
 }
 
 func getUserAttributeMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	typ := "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+	typ := ldapStorageMapperType
 	parentId := parameters["ldap_user_federation_id"].(string)
 	name := parameters["name"].(string)
 
@@ -193,7 +197,7 @@ func getRoleMapperIDByExternalName(ctx context.Context, id string, parameters ma
 }
 
 func getRoleMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	typ := "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+	typ := ldapStorageMapperType
 	providerId := "role-ldap-mapper"
 	parentId := parameters["ldap_user_federation_id"].(string)
 	name := parameters["name"].(string)
@@ -219,7 +223,7 @@ func getGroupMapperIDByExternalName(ctx context.Context, id string, parameters m
 }
 
 func getGroupMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	typ := "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+	typ := ldapStorageMapperType
 	providerId := "group-ldap-mapper"
 	parentId := parameters["ldap_user_federation_id"].(string)
 	name := parameters["name"].(string)
@@ -245,7 +249,7 @@ func getHardcodedRoleMapperIDByExternalName(ctx context.Context, id string, para
 }
 
 func getHardcodedRoleMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	typ := "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+	typ := ldapStorageMapperType
 	providerId := "hardcoded-ldap-role-mapper"
 	parentId := parameters["ldap_user_federation_id"].(string)
 	name := parameters["name"].(string)
@@ -271,7 +275,7 @@ func getHardcodedGroupMapperIDByExternalName(ctx context.Context, id string, par
 }
 
 func getHardcodedGroupMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	typ := "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+	typ := ldapStorageMapperType
 	providerId := "hardcoded-ldap-group-mapper"
 	parentId := parameters["ldap_user_federation_id"].(string)
 	name := parameters["name"].(string)
@@ -297,7 +301,7 @@ func getMsadUserAccountControlMapperIDByExternalName(ctx context.Context, id str
 }
 
 func getMsadUserAccountControlMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	typ := "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+	typ := ldapStorageMapperType
 	providerId := "msad-user-account-control-mapper"
 	parentId := parameters["ldap_user_federation_id"].(string)
 	name := parameters["name"].(string)
@@ -323,7 +327,7 @@ func getMsadLdsUserAccountControlMapperIDByExternalName(ctx context.Context, id 
 }
 
 func getMsadLdsUserAccountControlMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	typ := "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+	typ := ldapStorageMapperType
 	providerId := "msad-lds-user-account-control-mapper"
 	parentId := parameters["ldap_user_federation_id"].(string)
 	name := parameters["name"].(string)
@@ -349,7 +353,7 @@ func getHardcodedAttributeMapperIDByExternalName(ctx context.Context, id string,
 }
 
 func getHardcodedAttributeMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	typ := "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+	typ := ldapStorageMapperType
 	providerId := "hardcoded-ldap-attribute-mapper"
 	parentId := parameters["ldap_user_federation_id"].(string)
 	name := parameters["name"].(string)
@@ -375,7 +379,7 @@ func getFullNameMapperIDByExternalName(ctx context.Context, id string, parameter
 }
 
 func getFullNameMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	typ := "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+	typ := ldapStorageMapperType
 	providerId := "full-name-ldap-mapper"
 	parentId := parameters["ldap_user_federation_id"].(string)
 	name := parameters["name"].(string)

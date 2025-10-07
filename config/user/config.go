@@ -3,15 +3,18 @@ package user
 import (
 	"context"
 
-	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 )
+
+const shortGroup = "user"
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_user", func(r *config.Resource) {
-		r.ShortGroup = "user"
+		r.ShortGroup = shortGroup
 
 		r.LateInitializer = config.LateInitializer{
 			IgnoredFields: []string{"required_actions", "initial_password.value", "initial_password.value", "initial_password.temporary"},
@@ -20,7 +23,7 @@ func Configure(p *config.Provider) {
 	})
 
 	p.AddResourceConfigurator("keycloak_user_groups", func(r *config.Resource) {
-		r.ShortGroup = "user"
+		r.ShortGroup = shortGroup
 
 		r.References["user_id"] = config.Reference{
 			TerraformName: "keycloak_user",
@@ -32,7 +35,7 @@ func Configure(p *config.Provider) {
 	})
 
 	p.AddResourceConfigurator("keycloak_user_roles", func(r *config.Resource) {
-		r.ShortGroup = "user"
+		r.ShortGroup = shortGroup
 
 		r.References["user_id"] = config.Reference{
 			TerraformName: "keycloak_user",
@@ -40,11 +43,11 @@ func Configure(p *config.Provider) {
 	})
 
 	p.AddResourceConfigurator("keycloak_users_permissions", func(r *config.Resource) {
-		r.ShortGroup = "user"
+		r.ShortGroup = shortGroup
 	})
 
 	p.AddResourceConfigurator("keycloak_custom_user_federation", func(r *config.Resource) {
-		r.ShortGroup = "user"
+		r.ShortGroup = shortGroup
 	})
 }
 
