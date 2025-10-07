@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: openldap
-          image: bitnami/openldap:2.6
+          image: cleanstart/openldap:2.6
           env:
             - name: LDAP_PORT_NUMBER
               value: "389"
