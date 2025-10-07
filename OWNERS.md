@@ -8,6 +8,8 @@ organization](https://github.com/upbound/) will list their repository maintainer
 ## Maintainers
 
 * [Breee](https://github.com/Breee)
+* [haarchri](https://github.com/haarchri)
+* [denniskniep](https://github.com/denniskniep)
 
 
 See [CODEOWNERS](./CODEOWNERS) for automatic PR assignment.
