@@ -2,11 +2,13 @@ package authentication
 
 import (
 	"context"
-	"github.com/crossplane-contrib/provider-keycloak/config/common"
-	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+	"strings"
+
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
-	"strings"
+
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 )
 
 const (

@@ -2,8 +2,11 @@ package identityprovider
 
 import (
 	"context"
-	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+
 	"github.com/crossplane/upjet/v2/pkg/config"
+
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 )
 

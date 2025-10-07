@@ -1,38 +1,13 @@
 run:
-  # Timeout for analysis, e.g. 30s, 5m, 5m30s.
-  # If the value is lower or equal to 0, the timeout is disabled.
-  # Default: 1m
-  timeout: 10m
+  timeout: 90m
+  concurrency: 1
 
 output:
-  # The formats used to render issues.
-  # Formats:
-  # - `colored-line-number`
-  # - `line-number`
-  # - `json`
-  # - `colored-tab`
-  # - `tab`
-  # - `html`
-  # - `checkstyle`
-  # - `code-climate`
-  # - `junit-xml`
-  # - `junit-xml-extended`
-  # - `github-actions`
-  # - `teamcity`
-  # - `sarif`
-  # Output path can be either `stdout`, `stderr` or path to the file to write to.
-  #
-  # For the CLI flag (`--out-format`), multiple formats can be specified by separating them by comma.
-  # The output can be specified for each of them by separating format name and path by colon symbol.
-  # Example: "--out-format=checkstyle:report.xml,json:stdout,colored-line-number"
-  # The CLI flag (`--out-format`) override the configuration file.
-  #
-  # Default:
-  #   formats:
-  #     - format: colored-line-number
-  #       path: stdout
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
   formats:
     - format: colored-line-number
+  print-linter-name: true
+  show-stats: true
 
 linters-settings:
   errcheck:
@@ -44,20 +19,13 @@ linters-settings:
     # default is false: such cases aren't reported by default.
     check-blank: false
 
-    # List of functions to exclude from checking, where each entry is a single function to exclude.
-    # See https://github.com/kisielk/errcheck#excluding-functions for details.
     exclude-functions:
-      - fmt:.*,io/ioutil:^Read.*
-
-  govet:
-    # Check for possible unintended shadowing of variables.
-    enable:
-      - shadow
+      - io/ioutil.ReadFile
+      - io/ioutil.ReadDir
+      - io/ioutil.ReadAll
 
   revive:
-    # Sets the default failure confidence.
-    # This means that linting errors with less than 0.8 confidence will be ignored.
-    # Default: 0.8
+    # confidence for issues, default is 0.8
     confidence: 0.8
 
   gofmt:
@@ -67,11 +35,11 @@ linters-settings:
   goimports:
     # put imports beginning with prefix after 3rd-party packages;
     # it's a comma-separated list of prefixes
-    local-prefixes: github.com/crossplane/upjet-provider-template
+    local-prefixes: github.com/crossplane-contrib/provider-keycloak
 
   gocyclo:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
-    min-complexity: 10
+    min-complexity: 15
 
   dupl:
     # tokens count to trigger issue, 150 by default
@@ -86,13 +54,6 @@ linters-settings:
   lll:
     # tab width in spaces. Default to 1.
     tab-width: 1
-
-  unused:
-    # treat code as a program (not a library) and report unused exported identifiers; default is false.
-    # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
-    # if it's called for subdir of a project it can't find funcs usages. All text editor integrations
-    # with golangci-lint call it on a directory with the changed file.
-    exported-fields-are-used: false
 
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
@@ -135,22 +96,19 @@ linters:
     - goconst
     - goimports
     - gofmt  # We enable this as well as goimports for its simplify mode.
+    - gosimple
     - prealloc
+    - revive
+    - staticcheck
     - unconvert
+    - unused
     - misspell
     - nakedret
-    - gosimple
-    - staticcheck
-    - unused
-    - revive
-    - gosec
-    - ineffassign
 
   presets:
     - bugs
     - unused
   fast: false
-
 
 issues:
   # Excluding configuration per-path and per-linter
@@ -164,7 +122,7 @@ issues:
         - gosec
         - scopelint
         - unparam
-    
+
     # Ease some gocritic warnings on test files.
     - path: _test\.go
       text: "(unnamedResult|exitAfterDefer)"
@@ -201,8 +159,7 @@ issues:
       linters:
       - gosec
       - gas
-  exclude-files:
-    - "zz_\\..+\\.go$"
+
   # Independently from option `exclude` we use default exclude patterns,
   # it can be disabled by this option. To list all
   # excluded by default patterns execute `golangci-lint run --help`.

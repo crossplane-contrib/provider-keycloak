@@ -2,9 +2,11 @@ package role
 
 import (
 	"context"
-	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 )
 
 // Configure configures individual resources by adding custom ResourceConfigurators.

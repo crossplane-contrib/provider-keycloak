@@ -2,8 +2,10 @@ package lookup
 
 import (
 	"context"
-	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+
 	_ "unsafe"
+
+	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 )
 
 // This needs to be removed in the future. See comments on GetComponents method
