@@ -59,6 +59,10 @@ var optionalKeycloakConfigKeys = []string{
 	"base_path",
 	"additional_headers",
 	"red_hat_sso",
+	"admin_url",
+	"access_token",
+	"tls_client_certificate",
+	"tls_client_private_key",
 }
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
