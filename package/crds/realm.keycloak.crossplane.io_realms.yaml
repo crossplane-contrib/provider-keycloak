@@ -400,8 +400,9 @@ spec:
                     items:
                       properties:
                         auth:
-                          description: 'Enables authentication to the SMTP server.  This
-                            block supports the following arguments:'
+                          description: 'Enables authentication to the SMTP server.
+                            Cannot be set alongside token_auth. This block supports
+                            the following arguments:'
                           items:
                             properties:
                               passwordSecretRef:
@@ -453,6 +454,43 @@ spec:
                         starttls:
                           description: When true, enables StartTLS. Defaults to false.
                           type: boolean
+                        tokenAuth:
+                          description: 'Enables authentication to the SMTP server
+                            through OAUTH2. Cannot be set alongside auth. This block
+                            supports the following arguments:'
+                          items:
+                            properties:
+                              clientId:
+                                description: The auth token client ID.
+                                type: string
+                              clientSecretSecretRef:
+                                description: The auth token client secret.
+                                properties:
+                                  key:
+                                    description: The key to select.
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                  namespace:
+                                    description: Namespace of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                - namespace
+                                type: object
+                              scope:
+                                description: The auth token scope.
+                                type: string
+                              url:
+                                description: The auth token URL.
+                                type: string
+                              username:
+                                description: The SMTP server username.
+                                type: string
+                            type: object
+                          type: array
                       type: object
                     type: array
                   sslRequired:
@@ -956,8 +994,9 @@ spec:
                     items:
                       properties:
                         auth:
-                          description: 'Enables authentication to the SMTP server.  This
-                            block supports the following arguments:'
+                          description: 'Enables authentication to the SMTP server.
+                            Cannot be set alongside token_auth. This block supports
+                            the following arguments:'
                           items:
                             properties:
                               passwordSecretRef:
@@ -1011,6 +1050,45 @@ spec:
                         starttls:
                           description: When true, enables StartTLS. Defaults to false.
                           type: boolean
+                        tokenAuth:
+                          description: 'Enables authentication to the SMTP server
+                            through OAUTH2. Cannot be set alongside auth. This block
+                            supports the following arguments:'
+                          items:
+                            properties:
+                              clientId:
+                                description: The auth token client ID.
+                                type: string
+                              clientSecretSecretRef:
+                                description: The auth token client secret.
+                                properties:
+                                  key:
+                                    description: The key to select.
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                  namespace:
+                                    description: Namespace of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                - namespace
+                                type: object
+                              scope:
+                                description: The auth token scope.
+                                type: string
+                              url:
+                                description: The auth token URL.
+                                type: string
+                              username:
+                                description: The SMTP server username.
+                                type: string
+                            required:
+                            - clientSecretSecretRef
+                            type: object
+                          type: array
                       type: object
                     type: array
                   sslRequired:
@@ -1599,8 +1677,9 @@ spec:
                     items:
                       properties:
                         auth:
-                          description: 'Enables authentication to the SMTP server.  This
-                            block supports the following arguments:'
+                          description: 'Enables authentication to the SMTP server.
+                            Cannot be set alongside token_auth. This block supports
+                            the following arguments:'
                           items:
                             properties:
                               username:
@@ -1635,6 +1714,26 @@ spec:
                         starttls:
                           description: When true, enables StartTLS. Defaults to false.
                           type: boolean
+                        tokenAuth:
+                          description: 'Enables authentication to the SMTP server
+                            through OAUTH2. Cannot be set alongside auth. This block
+                            supports the following arguments:'
+                          items:
+                            properties:
+                              clientId:
+                                description: The auth token client ID.
+                                type: string
+                              scope:
+                                description: The auth token scope.
+                                type: string
+                              url:
+                                description: The auth token URL.
+                                type: string
+                              username:
+                                description: The SMTP server username.
+                                type: string
+                            type: object
+                          type: array
                       type: object
                     type: array
                   sslRequired:

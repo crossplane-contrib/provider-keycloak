@@ -70,6 +70,8 @@ spec:
                     description: URL to the admin interface of the client.
                     type: string
                   allowRefreshTokenInStandardTokenExchange:
+                    description: Defines whether to allow refresh token in Standard
+                      Token Exchange. Possible values are NO (default) and SAME_SESSION.
                     type: string
                   alwaysDisplayInConsole:
                     description: Always list this client in the Account UI, even if
@@ -565,8 +567,7 @@ spec:
                       be enabled for this client. Defaults to false.
                     type: boolean
                   standardTokenExchangeEnabled:
-                    description: When false, this client will not be able to initiate
-                      a login or obtain access tokens. Defaults to true.
+                    description: Enables support for Standard Token Exchange
                     type: boolean
                   useRefreshTokens:
                     description: If this is true, a refresh_token will be created
@@ -631,6 +632,8 @@ spec:
                     description: URL to the admin interface of the client.
                     type: string
                   allowRefreshTokenInStandardTokenExchange:
+                    description: Defines whether to allow refresh token in Standard
+                      Token Exchange. Possible values are NO (default) and SAME_SESSION.
                     type: string
                   alwaysDisplayInConsole:
                     description: Always list this client in the Account UI, even if
@@ -1126,8 +1129,7 @@ spec:
                       be enabled for this client. Defaults to false.
                     type: boolean
                   standardTokenExchangeEnabled:
-                    description: When false, this client will not be able to initiate
-                      a login or obtain access tokens. Defaults to true.
+                    description: Enables support for Standard Token Exchange
                     type: boolean
                   useRefreshTokens:
                     description: If this is true, a refresh_token will be created
@@ -1251,6 +1253,8 @@ spec:
                     description: URL to the admin interface of the client.
                     type: string
                   allowRefreshTokenInStandardTokenExchange:
+                    description: Defines whether to allow refresh token in Standard
+                      Token Exchange. Possible values are NO (default) and SAME_SESSION.
                     type: string
                   alwaysDisplayInConsole:
                     description: Always list this client in the Account UI, even if
@@ -1485,8 +1489,7 @@ spec:
                       be enabled for this client. Defaults to false.
                     type: boolean
                   standardTokenExchangeEnabled:
-                    description: When false, this client will not be able to initiate
-                      a login or obtain access tokens. Defaults to true.
+                    description: Enables support for Standard Token Exchange
                     type: boolean
                   useRefreshTokens:
                     description: If this is true, a refresh_token will be created

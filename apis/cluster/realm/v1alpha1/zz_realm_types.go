@@ -928,7 +928,7 @@ type RealmParameters struct {
 
 type SMTPServerInitParameters struct {
 
-	// Enables authentication to the SMTP server.  This block supports the following arguments:
+	// Enables authentication to the SMTP server. Cannot be set alongside token_auth. This block supports the following arguments:
 	Auth []AuthInitParameters `json:"auth,omitempty" tf:"auth,omitempty"`
 
 	// The email address uses for bounces.
@@ -957,11 +957,14 @@ type SMTPServerInitParameters struct {
 
 	// When true, enables StartTLS. Defaults to false.
 	Starttls *bool `json:"starttls,omitempty" tf:"starttls,omitempty"`
+
+	// Enables authentication to the SMTP server through OAUTH2. Cannot be set alongside auth. This block supports the following arguments:
+	TokenAuth []TokenAuthInitParameters `json:"tokenAuth,omitempty" tf:"token_auth,omitempty"`
 }
 
 type SMTPServerObservation struct {
 
-	// Enables authentication to the SMTP server.  This block supports the following arguments:
+	// Enables authentication to the SMTP server. Cannot be set alongside token_auth. This block supports the following arguments:
 	Auth []AuthObservation `json:"auth,omitempty" tf:"auth,omitempty"`
 
 	// The email address uses for bounces.
@@ -990,11 +993,14 @@ type SMTPServerObservation struct {
 
 	// When true, enables StartTLS. Defaults to false.
 	Starttls *bool `json:"starttls,omitempty" tf:"starttls,omitempty"`
+
+	// Enables authentication to the SMTP server through OAUTH2. Cannot be set alongside auth. This block supports the following arguments:
+	TokenAuth []TokenAuthObservation `json:"tokenAuth,omitempty" tf:"token_auth,omitempty"`
 }
 
 type SMTPServerParameters struct {
 
-	// Enables authentication to the SMTP server.  This block supports the following arguments:
+	// Enables authentication to the SMTP server. Cannot be set alongside token_auth. This block supports the following arguments:
 	// +kubebuilder:validation:Optional
 	Auth []AuthParameters `json:"auth,omitempty" tf:"auth,omitempty"`
 
@@ -1033,6 +1039,10 @@ type SMTPServerParameters struct {
 	// When true, enables StartTLS. Defaults to false.
 	// +kubebuilder:validation:Optional
 	Starttls *bool `json:"starttls,omitempty" tf:"starttls,omitempty"`
+
+	// Enables authentication to the SMTP server through OAUTH2. Cannot be set alongside auth. This block supports the following arguments:
+	// +kubebuilder:validation:Optional
+	TokenAuth []TokenAuthParameters `json:"tokenAuth,omitempty" tf:"token_auth,omitempty"`
 }
 
 type SecurityDefensesInitParameters struct {
@@ -1054,6 +1064,62 @@ type SecurityDefensesParameters struct {
 
 	// +kubebuilder:validation:Optional
 	Headers []HeadersParameters `json:"headers,omitempty" tf:"headers,omitempty"`
+}
+
+type TokenAuthInitParameters struct {
+
+	// The auth token client ID.
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// The auth token client secret.
+	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+
+	// The auth token scope.
+	Scope *string `json:"scope,omitempty" tf:"scope,omitempty"`
+
+	// The auth token URL.
+	URL *string `json:"url,omitempty" tf:"url,omitempty"`
+
+	// The SMTP server username.
+	Username *string `json:"username,omitempty" tf:"username,omitempty"`
+}
+
+type TokenAuthObservation struct {
+
+	// The auth token client ID.
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// The auth token scope.
+	Scope *string `json:"scope,omitempty" tf:"scope,omitempty"`
+
+	// The auth token URL.
+	URL *string `json:"url,omitempty" tf:"url,omitempty"`
+
+	// The SMTP server username.
+	Username *string `json:"username,omitempty" tf:"username,omitempty"`
+}
+
+type TokenAuthParameters struct {
+
+	// The auth token client ID.
+	// +kubebuilder:validation:Optional
+	ClientID *string `json:"clientId" tf:"client_id,omitempty"`
+
+	// The auth token client secret.
+	// +kubebuilder:validation:Optional
+	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+
+	// The auth token scope.
+	// +kubebuilder:validation:Optional
+	Scope *string `json:"scope" tf:"scope,omitempty"`
+
+	// The auth token URL.
+	// +kubebuilder:validation:Optional
+	URL *string `json:"url" tf:"url,omitempty"`
+
+	// The SMTP server username.
+	// +kubebuilder:validation:Optional
+	Username *string `json:"username" tf:"username,omitempty"`
 }
 
 type WebAuthnPasswordlessPolicyInitParameters struct {

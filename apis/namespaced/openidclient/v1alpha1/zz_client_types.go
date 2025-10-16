@@ -139,6 +139,7 @@ type ClientInitParameters struct {
 	// URL to the admin interface of the client.
 	AdminURL *string `json:"adminUrl,omitempty" tf:"admin_url,omitempty"`
 
+	// Defines whether to allow refresh token in Standard Token Exchange. Possible values are NO (default) and SAME_SESSION.
 	AllowRefreshTokenInStandardTokenExchange *string `json:"allowRefreshTokenInStandardTokenExchange,omitempty" tf:"allow_refresh_token_in_standard_token_exchange,omitempty"`
 
 	// Always list this client in the Account UI, even if the user does not have an active session.
@@ -278,7 +279,7 @@ type ClientInitParameters struct {
 	// When true, the OAuth2 Authorization Code Grant will be enabled for this client. Defaults to false.
 	StandardFlowEnabled *bool `json:"standardFlowEnabled,omitempty" tf:"standard_flow_enabled,omitempty"`
 
-	// When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.
+	// Enables support for Standard Token Exchange
 	StandardTokenExchangeEnabled *bool `json:"standardTokenExchangeEnabled,omitempty" tf:"standard_token_exchange_enabled,omitempty"`
 
 	// If this is true, a refresh_token will be created and added to the token response. If this is false then no refresh_token will be generated.  Defaults to true.
@@ -313,6 +314,7 @@ type ClientObservation struct {
 	// URL to the admin interface of the client.
 	AdminURL *string `json:"adminUrl,omitempty" tf:"admin_url,omitempty"`
 
+	// Defines whether to allow refresh token in Standard Token Exchange. Possible values are NO (default) and SAME_SESSION.
 	AllowRefreshTokenInStandardTokenExchange *string `json:"allowRefreshTokenInStandardTokenExchange,omitempty" tf:"allow_refresh_token_in_standard_token_exchange,omitempty"`
 
 	// Always list this client in the Account UI, even if the user does not have an active session.
@@ -444,7 +446,7 @@ type ClientObservation struct {
 	// When true, the OAuth2 Authorization Code Grant will be enabled for this client. Defaults to false.
 	StandardFlowEnabled *bool `json:"standardFlowEnabled,omitempty" tf:"standard_flow_enabled,omitempty"`
 
-	// When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.
+	// Enables support for Standard Token Exchange
 	StandardTokenExchangeEnabled *bool `json:"standardTokenExchangeEnabled,omitempty" tf:"standard_token_exchange_enabled,omitempty"`
 
 	// If this is true, a refresh_token will be created and added to the token response. If this is false then no refresh_token will be generated.  Defaults to true.
@@ -482,6 +484,7 @@ type ClientParameters struct {
 	// +kubebuilder:validation:Optional
 	AdminURL *string `json:"adminUrl,omitempty" tf:"admin_url,omitempty"`
 
+	// Defines whether to allow refresh token in Standard Token Exchange. Possible values are NO (default) and SAME_SESSION.
 	// +kubebuilder:validation:Optional
 	AllowRefreshTokenInStandardTokenExchange *string `json:"allowRefreshTokenInStandardTokenExchange,omitempty" tf:"allow_refresh_token_in_standard_token_exchange,omitempty"`
 
@@ -663,7 +666,7 @@ type ClientParameters struct {
 	// +kubebuilder:validation:Optional
 	StandardFlowEnabled *bool `json:"standardFlowEnabled,omitempty" tf:"standard_flow_enabled,omitempty"`
 
-	// When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.
+	// Enables support for Standard Token Exchange
 	// +kubebuilder:validation:Optional
 	StandardTokenExchangeEnabled *bool `json:"standardTokenExchangeEnabled,omitempty" tf:"standard_token_exchange_enabled,omitempty"`
 

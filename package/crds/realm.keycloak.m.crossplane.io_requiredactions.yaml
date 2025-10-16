@@ -60,6 +60,7 @@ spec:
                 properties:
                   alias:
                     description: The alias of the action to attach as a required action.
+                      Case sensitive.
                     type: string
                   config:
                     additionalProperties:
@@ -77,10 +78,11 @@ spec:
                       new users. Defaults to false.
                     type: boolean
                   name:
-                    description: The name of the required action.
+                    description: The name of the required action to use in the UI.
                     type: string
                   priority:
-                    description: The priority of the required action.
+                    description: An integer to specify the running order of required
+                      actions with lower numbers meaning higher precedence.
                     type: number
                   realmId:
                     description: The realm the required action exists in.
@@ -181,6 +183,7 @@ spec:
                 properties:
                   alias:
                     description: The alias of the action to attach as a required action.
+                      Case sensitive.
                     type: string
                   config:
                     additionalProperties:
@@ -198,10 +201,11 @@ spec:
                       new users. Defaults to false.
                     type: boolean
                   name:
-                    description: The name of the required action.
+                    description: The name of the required action to use in the UI.
                     type: string
                   priority:
-                    description: The priority of the required action.
+                    description: An integer to specify the running order of required
+                      actions with lower numbers meaning higher precedence.
                     type: number
                   realmId:
                     description: The realm the required action exists in.
@@ -357,6 +361,7 @@ spec:
                 properties:
                   alias:
                     description: The alias of the action to attach as a required action.
+                      Case sensitive.
                     type: string
                   config:
                     additionalProperties:
@@ -376,10 +381,11 @@ spec:
                   id:
                     type: string
                   name:
-                    description: The name of the required action.
+                    description: The name of the required action to use in the UI.
                     type: string
                   priority:
-                    description: The priority of the required action.
+                    description: An integer to specify the running order of required
+                      actions with lower numbers meaning higher precedence.
                     type: number
                   realmId:
                     description: The realm the required action exists in.
