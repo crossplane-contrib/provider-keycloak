@@ -28,10 +28,12 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 
 	url := tryGetString(c, "url", "")
 	basePath := tryGetString(c, "base_path", "")
+	adminUrl := tryGetString(c, "admin_url", "")
 	clientID := tryGetString(c, "client_id", "")
 	clientSecret := tryGetString(c, "client_secret", "")
 	username := tryGetString(c, "username", "")
 	password := tryGetString(c, "password", "")
+	accessToken := tryGetString(c, "access_token", "")
 	realm := tryGetString(c, "realm", "master")
 	jwtSigningAlg := tryGetString(c, "jwt_signing_alg", "RS256")
 	jwtSigningKey := tryGetString(c, "jwt_signing_key", "")
@@ -39,7 +41,9 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 	clientTimeout := tryGetInt(c, "client_timeout", 15)
 	tlsInsecureSkipVerify := tryGetBool(c, "tls_insecure_skip_verify", false)
 	rootCaCertificate := tryGetString(c, "root_ca_certificate", "")
-	redHatSSO := tryGetBool(c, "initial_login", false)
+	tlsClientCert := tryGetString(c, "tls_client_certificate", "")
+	tlsClientPrivateKey := tryGetString(c, "tls_client_private_key", "")
+	redHatSSO := tryGetBool(c, "red_hat_sso", false)
 	additionalHeaders := tryGetMap(c, "additional_headers")
 	userAgent := "Crossplane Keycloak Provider"
 
@@ -47,17 +51,21 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 		ctx,
 		url,
 		basePath,
+		adminUrl,
 		clientID,
 		clientSecret,
 		realm,
 		username,
 		password,
+		accessToken,
 		jwtSigningAlg,
 		jwtSigningKey,
 		initialLogin,
 		clientTimeout,
 		rootCaCertificate,
 		tlsInsecureSkipVerify,
+		tlsClientCert,
+		tlsClientPrivateKey,
 		userAgent,
 		redHatSSO,
 		additionalHeaders)
