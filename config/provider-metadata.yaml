@@ -465,8 +465,25 @@ resources:
                       "enabled": true,
                       "realm": "my-realm"
                     }
+            - name: default_roles
+              manifest: |-
+                {
+                  "default_roles": [
+                    "account/manage-account",
+                    "account/view-groups"
+                  ],
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
         argumentDocs:
-            default_roles: '- (Required) Realm level roles assigned to new users by default.'
+            default_roles: '- (Required) Roles assigned to new users by default.'
             realm_id: '- (Required) The realm this role exists within.'
         importStatements: []
     keycloak_generic_client_protocol_mapper:
@@ -2065,6 +2082,58 @@ resources:
             validate_password_policy: '- (Optional) When true, Keycloak will validate passwords using the realm policy before updating it.'
             vendor: '- (Optional) Can be one of OTHER, EDIRECTORY, AD, RHDS, or TIVOLI. When this is selected in the GUI, it provides reasonable defaults for other fields. When used with the Keycloak API, this attribute does nothing, but is still required. Defaults to OTHER.'
         importStatements: []
+    keycloak_oidc_github_identity_provider:
+        subCategory: ""
+        name: keycloak_oidc_github_identity_provider
+        title: keycloak_oidc_github_identity_provider Resource
+        examples:
+            - name: github
+              manifest: |-
+                {
+                  "client_id": "${var.github_identity_provider_client_id}",
+                  "client_secret": "${var.github_identity_provider_client_secret}",
+                  "extra_config": {
+                    "myCustomConfigKey": "myValue"
+                  },
+                  "realm": "${keycloak_realm.realm.id}",
+                  "sync_mode": "IMPORT",
+                  "trust_email": true
+                }
+              references:
+                client_id: var.github_identity_provider_client_id
+                client_secret: var.github_identity_provider_client_secret
+                realm: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            add_read_token_role_on_create: '- (Optional) When true, new users will be able to read stored tokens. This will automatically assign the broker.read-token role. Defaults to false.'
+            alias: '- (Optional) The alias for the GitHub identity provider.'
+            api_url: '- (Optional) The GitHub API URL, defaults to https://api.github.com.'
+            base_url: '- (Optional) The GitHub base URL, defaults to https://github.com'
+            client_id: '- (Required) The client or client identifier registered within the identity provider.'
+            client_secret: '- (Required) The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.'
+            default_scopes: '- (Optional) The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to user:email.'
+            disable_user_info: '- (Optional) When true, disables the usage of the user info service to obtain additional user information. Defaults to false.'
+            display_name: '- (Optional) Display name for the GitHub identity provider in the GUI.'
+            enabled: '- (Optional) When true, users will be able to log in to this realm using this identity provider. Defaults to true.'
+            extra_config: '- (Optional) A map of key/value pairs to add extra configuration to this identity provider. This can be used for custom oidc provider implementations, or to add configuration that is not yet supported by this Terraform provider. Use this attribute at your own risk, as custom attributes may conflict with top-level configuration attributes in future provider updates.'
+            first_broker_login_flow_alias: '- (Optional) The authentication flow to use when users log in for the first time through this identity provider. Defaults to first broker login.'
+            github_json_format: (Optional) When true, GitHub API is told explicitly to accept JSON during token authentication requests. Defaults to false.
+            gui_order: '- (Optional) A number defining the order of this identity provider in the GUI.'
+            hide_on_login_page: '- (Optional) When true, this identity provider will be hidden on the login page. Defaults to false.'
+            internal_id: '- (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.'
+            link_only: '- (Optional) When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.'
+            post_broker_login_flow_alias: '- (Optional) The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.'
+            provider_id: '- (Optional) The ID of the identity provider to use. Defaults to github, which should be used unless you have extended Keycloak and provided your own implementation.'
+            realm: '- (Required) The name of the realm. This is unique across Keycloak.'
+            store_token: '- (Optional) When true, tokens will be stored after authenticating users. Defaults to true.'
+            sync_mode: '- (Optional) The default sync mode to use for all mappers attached to this identity provider. Can be once of IMPORT, FORCE, or LEGACY.'
+            trust_email: '- (Optional) When true, email addresses for users in this provider will automatically be verified regardless of the realm''s email verification policy. Defaults to false.'
+        importStatements: []
     keycloak_oidc_google_identity_provider:
         subCategory: ""
         name: keycloak_oidc_google_identity_provider
@@ -2329,6 +2398,7 @@ resources:
                   "login_theme": "keycloak",
                   "name": "test client",
                   "realm_id": "${keycloak_realm.realm.id}",
+                  "standard_flow_enabled": true,
                   "valid_redirect_uris": [
                     "http://localhost:8080/openid-callback"
                   ]
@@ -2356,6 +2426,7 @@ resources:
                   "login_theme": "keycloak",
                   "name": "test client",
                   "realm_id": "${keycloak_realm.realm.id}",
+                  "standard_flow_enabled": true,
                   "valid_redirect_uris": [
                     "http://localhost:8080/openid-callback"
                   ]
@@ -2404,6 +2475,7 @@ resources:
             access_token_lifespan: '- (Optional) The amount of time in seconds before an access token expires. This will override the default for the realm.'
             access_type: '- (Required) Specifies the type of client, which can be one of the following:'
             admin_url: '- (Optional) URL to the admin interface of the client.'
+            allow_refresh_token_in_standard_token_exchange: '- (Optional) Defines whether to allow refresh token in Standard Token Exchange. Possible values are NO (default) and SAME_SESSION.'
             always_display_in_console: '- (Optional) Always list this client in the Account UI, even if the user does not have an active session.'
             authentication_flow_binding_overrides: '- (Optional) Override realm authentication flow bindings'
             authorization: '- (Optional) When this block is present, fine-grained authorization will be enabled for this client. The client''s access_type must be CONFIDENTIAL, and service_accounts_enabled must be true. This block has the following arguments:'
@@ -2457,6 +2529,7 @@ resources:
             service_account_user_id: '- (Computed) When service accounts are enabled for this client, this attribute is the unique ID for the Keycloak user that represents this service account.'
             service_accounts_enabled: '- (Optional) When true, the OAuth2 Client Credentials grant will be enabled for this client. Defaults to false.'
             standard_flow_enabled: '- (Optional) When true, the OAuth2 Authorization Code Grant will be enabled for this client. Defaults to false.'
+            standard_token_exchange_enabled: '- (Optional) Enables support for Standard Token Exchange'
             use_refresh_tokens: '- (Optional) If this is true, a refresh_token will be created and added to the token response. If this is false then no refresh_token will be generated.  Defaults to true.'
             use_refresh_tokens_client_credentials: '- (Optional) If this is true, a refresh_token will be created and added to the token response if the client_credentials grant is used and a user session will be created. If this is false then no refresh_token will be generated and the associated user session will be removed, in accordance with OAuth 2.0 RFC6749 Section 4.4.3. Defaults to false.'
             valid_post_logout_redirect_uris: '- (Optional) A list of valid URIs a browser is permitted to redirect to after a successful logout.'
@@ -3320,6 +3393,67 @@ resources:
             realm_id: '- (Required) The realm this protocol mapper exists within.'
             script: '- (Required) JavaScript code to compute the claim value.'
         importStatements: []
+    keycloak_openid_sub_protocol_mapper:
+        subCategory: ""
+        name: keycloak_openid_sub_protocol_mapper
+        title: keycloak_openid_sub_protocol_mapper Resource
+        examples:
+            - name: sub_mapper
+              manifest: |-
+                {
+                  "client_id": "${keycloak_openid_client.openid_client.id}",
+                  "name": "sub-mapper",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                client_id: keycloak_openid_client.openid_client.id
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_openid_client.openid_client: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "client_id": "client",
+                      "enabled": true,
+                      "name": "client",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "valid_redirect_uris": [
+                        "http://localhost:8080/openid-callback"
+                      ]
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+            - name: sub_mapper
+              manifest: |-
+                {
+                  "client_scope_id": "${keycloak_openid_client_scope.client_scope.id}",
+                  "name": "sub-mapper",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                client_scope_id: keycloak_openid_client_scope.client_scope.id
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_openid_client_scope.client_scope: |-
+                    {
+                      "name": "client-scope",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            add_to_access_token: '- (Optional) Indicates if the sub claim should be added to the access token. Defaults to true.'
+            add_to_token_introspection: '- (Optional) Indicates if the sub claim should be added to the token introspection response. Defaults to true.'
+            client_id: '- (Optional) The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.'
+            client_scope_id: '- (Optional) The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.'
+            name: '- (Required) The display name of this protocol mapper in the GUI.'
+            realm_id: '- (Required) The realm this protocol mapper exists within.'
+        importStatements: []
     keycloak_openid_user_attribute_protocol_mapper:
         subCategory: ""
         name: keycloak_openid_user_attribute_protocol_mapper
@@ -3819,6 +3953,8 @@ resources:
             brute_force_detection.quick_login_check_milli_seconds: '- (Optional) Configures the amount of time, in milliseconds, for consecutive failures to lock a user out.'
             brute_force_detection.wait_increment_seconds: '- (Optional) This represents the amount of time a user should be locked out when the login failure threshold has been met.'
             client_authentication_flow: '- (Optional) The desired flow for client authentication. Defaults to clients.'
+            client_id: '- (Required) The auth token client ID.'
+            client_secret: '- (Required) The auth token client secret.'
             client_session_idle_timeout: '- (Optional) The amount of time a session can be idle before it expires. Users can override it for individual clients.'
             client_session_max_lifespan: '- (Optional) The maximum amount of time before a session expires regardless of activity. Users can override it for individual clients.'
             create_timeout: '- (Optional) The timeout value for creating a user''s public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.'
@@ -3874,8 +4010,9 @@ resources:
             reset_credentials_flow: '- (Optional) The desired flow to use when a user attempts to reset their credentials. Defaults to reset credentials.'
             reset_password_allowed: '- (Optional) When true, a "forgot password" link will be displayed on the login page.'
             revoke_refresh_token: '- (Optional) If enabled a refresh token can only be used number of times specified in ''refresh_token_max_reuse'' before they are revoked. If unspecified, refresh tokens can be reused.'
+            scope: '- (Required) The auth token scope.'
             signature_algorithms: '- (Optional) A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.'
-            smtp_server.auth: '- (Optional) Enables authentication to the SMTP server.  This block supports the following arguments:'
+            smtp_server.auth: '- (Optional) Enables authentication to the SMTP server. Cannot be set alongside token_auth. This block supports the following arguments:'
             smtp_server.envelope_from: '- (Optional) The email address uses for bounces.'
             smtp_server.from: '- (Required) The email address for the sender.'
             smtp_server.from_display_name: '- (Optional) The display name of the sender email address.'
@@ -3885,11 +4022,13 @@ resources:
             smtp_server.reply_to_display_name: '- (Optional) The display name of the "reply to" email address.'
             smtp_server.ssl: '- (Optional) When true, enables SSL. Defaults to false.'
             smtp_server.starttls: '- (Optional) When true, enables StartTLS. Defaults to false.'
+            smtp_server.token_auth: '- (Optional) Enables authentication to the SMTP server through OAUTH2. Cannot be set alongside auth. This block supports the following arguments:'
             ssl_required: '- (Optional) Can be one of following values: ''none, ''external'' or ''all'''
             sso_session_idle_timeout: '- (Optional) The amount of time a session can be idle before it expires.'
             sso_session_idle_timeout_remember_me: '- (Optional) Similar to sso_session_idle_timeout, but used when a user clicks "Remember Me". If not set, Keycloak will default to the value of sso_session_idle_timeout.'
             sso_session_max_lifespan: '- (Optional) The maximum amount of time before a session expires regardless of activity.'
             sso_session_max_lifespan_remember_me: '- (Optional) Similar to sso_session_max_lifespan, but used when a user clicks "Remember Me". If not set, Keycloak will default to the value of sso_session_max_lifespan.'
+            url: '- (Required) The auth token URL.'
             user_managed_access: '- (Optional) When true, users are allowed to manage their own resources. Defaults to false.'
             user_verification_requirement: '- (Optional) Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.'
             username: '- (Required) The SMTP server username.'
@@ -4465,12 +4604,12 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
-            alias: '- (Required) The alias of the action to attach as a required action.'
+            alias: '- (Required) The alias of the action to attach as a required action. Case sensitive.'
             config: '- (Optional) The configuration. Keys are specific to each configurable required action and not checked when applying.'
             default_action: '- (Optional) When true, the required action is set as the default action for new users. Defaults to false.'
             enabled: '- (Optional) When false, the required action is not enabled for new users. Defaults to false.'
-            name: '- (Optional) The name of the required action.'
-            priority: '- (Optional) The priority of the required action.'
+            name: '- (Optional) The name of the required action to use in the UI.'
+            priority: '- (Optional) An integer to specify the running order of required actions with lower numbers meaning higher precedence.'
             realm_id: '- (Required) The realm the required action exists in.'
         importStatements: []
     keycloak_role:
