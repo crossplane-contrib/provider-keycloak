@@ -16,7 +16,7 @@ import (
 
 type RequiredActionInitParameters struct {
 
-	// The alias of the action to attach as a required action.
+	// The alias of the action to attach as a required action. Case sensitive.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
 	// The configuration. Keys are specific to each configurable required action and not checked when applying.
@@ -29,10 +29,10 @@ type RequiredActionInitParameters struct {
 	// When false, the required action is not enabled for new users. Defaults to false.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
-	// The name of the required action.
+	// The name of the required action to use in the UI.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The priority of the required action.
+	// An integer to specify the running order of required actions with lower numbers meaning higher precedence.
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
 
 	// The realm the required action exists in.
@@ -50,7 +50,7 @@ type RequiredActionInitParameters struct {
 
 type RequiredActionObservation struct {
 
-	// The alias of the action to attach as a required action.
+	// The alias of the action to attach as a required action. Case sensitive.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
 	// The configuration. Keys are specific to each configurable required action and not checked when applying.
@@ -65,10 +65,10 @@ type RequiredActionObservation struct {
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// The name of the required action.
+	// The name of the required action to use in the UI.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The priority of the required action.
+	// An integer to specify the running order of required actions with lower numbers meaning higher precedence.
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
 
 	// The realm the required action exists in.
@@ -77,7 +77,7 @@ type RequiredActionObservation struct {
 
 type RequiredActionParameters struct {
 
-	// The alias of the action to attach as a required action.
+	// The alias of the action to attach as a required action. Case sensitive.
 	// +kubebuilder:validation:Optional
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
@@ -94,11 +94,11 @@ type RequiredActionParameters struct {
 	// +kubebuilder:validation:Optional
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
-	// The name of the required action.
+	// The name of the required action to use in the UI.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The priority of the required action.
+	// An integer to specify the running order of required actions with lower numbers meaning higher precedence.
 	// +kubebuilder:validation:Optional
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
 

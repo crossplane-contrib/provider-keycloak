@@ -21,7 +21,7 @@ func (mg *Realm) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this Realm
 func (tr *Realm) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"smtp_server[*].auth[*].password": "smtpServer[*].auth[*].passwordSecretRef"}
+	return map[string]string{"smtp_server[*].auth[*].password": "smtpServer[*].auth[*].passwordSecretRef", "smtp_server[*].token_auth[*].client_secret": "smtpServer[*].tokenAuth[*].clientSecretSecretRef"}
 }
 
 // GetObservation of this Realm
