@@ -13,7 +13,7 @@ spec:
     helm:
       values: |
         image:
-          tag: "26.1.2"
+          tag: "26.4.0"
         http:
           relativePath: "/"
         command:
