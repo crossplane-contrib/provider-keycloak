@@ -77,7 +77,7 @@ func getRealmIDByIdentifyingProperties(ctx context.Context, parameters map[strin
 }
 
 var keystoreRsaIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
-	RequiredParameters:           []string{"realm_id", "name"},
+	RequiredParameters:           []string{"realm_id", "name", "provider_id"},
 	GetIDByExternalName:          getKeystoreRsaIDByExternalName,
 	GetIDByIdentifyingProperties: getKeystoreRsaIDByIdentifyingProperties,
 }
@@ -95,10 +95,11 @@ func getKeystoreRsaIDByExternalName(ctx context.Context, id string, parameters m
 
 func getKeystoreRsaIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
 	typ := "org.keycloak.keys.KeyProvider"
-	providerId := "rsa"
+	providerId := parameters["provider_id"].(string)
 	name := parameters["name"].(string)
+	realmId := parameters["realm_id"].(string)
 
-	return lookup.GetComponentId(kcClient, ctx, parameters["realm_id"].(string), &typ, nil, &providerId, &name)
+	return lookup.GetComponentId(kcClient, ctx, realmId, &typ, nil, &providerId, &name)
 }
 
 var eventsRealmIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
