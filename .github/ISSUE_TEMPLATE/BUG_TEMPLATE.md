@@ -4,6 +4,7 @@ about: Use this template to track bugs
 title: "[BUG]"
 labels: bug, needs triage
 assignees: 
+type: bug
 ---
 
 ## Metadata
