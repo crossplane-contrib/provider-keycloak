@@ -1,4 +1,10 @@
-# Title 
+---
+name: Bug Report
+about: Use this template to track bugs
+title: "[BUG]"
+labels: bug, needs triage
+assignees: 
+---
 
 ## Metadata
 - keycloak version: `<your keycloak version>`
