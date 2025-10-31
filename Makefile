@@ -191,8 +191,8 @@ run: go.build
 # ====================================================================================
 # End to End Testing
 CHAINSAW_VERSION = 0.2.12
-CROSSPLANE_VERSION = 1.20.0
-CROSSPLANE_CLI_VERSION = v1.20.0
+CROSSPLANE_VERSION = 2.0.2
+CROSSPLANE_CLI_VERSION = v2.0.2
 CROSSPLANE_NAMESPACE = crossplane-system
 -include build/makelib/local.xpkg.mk
 -include build/makelib/controlplane.mk
