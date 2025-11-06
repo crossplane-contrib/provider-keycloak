@@ -9,7 +9,7 @@ spec:
     kind: ProviderConfig
   forProvider:
     name: my-client-policy
-    clientsRefs:
+    oidcClientsRefs:
       - name: "test"
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
