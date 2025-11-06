@@ -397,19 +397,19 @@ func (mg *ClientClientPolicy) ResolveReferences(ctx context.Context, c client.Re
 		}
 
 		mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
-			CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.Clients),
+			CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.OidcClients),
 			Extract:       common.UUIDExtractor(),
 			Namespace:     mg.GetNamespace(),
-			References:    mg.Spec.ForProvider.ClientsRefs,
-			Selector:      mg.Spec.ForProvider.ClientsSelector,
+			References:    mg.Spec.ForProvider.OidcClientsRefs,
+			Selector:      mg.Spec.ForProvider.OidcClientsSelector,
 			To:            reference.To{List: l, Managed: m},
 		})
 	}
 	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.Clients")
+		return errors.Wrap(err, "mg.Spec.ForProvider.OidcClients")
 	}
-	mg.Spec.ForProvider.Clients = reference.ToPtrValues(mrsp.ResolvedValues)
-	mg.Spec.ForProvider.ClientsRefs = mrsp.ResolvedReferences
+	mg.Spec.ForProvider.OidcClients = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.ForProvider.OidcClientsRefs = mrsp.ResolvedReferences
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
@@ -451,25 +451,45 @@ func (mg *ClientClientPolicy) ResolveReferences(ctx context.Context, c client.Re
 	mg.Spec.ForProvider.ResourceServerID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.ResourceServerIDRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("samlclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.SAMLClients),
+			Extract:       common.UUIDExtractor(),
+			Namespace:     mg.GetNamespace(),
+			References:    mg.Spec.ForProvider.SAMLClientsRefs,
+			Selector:      mg.Spec.ForProvider.SAMLClientsSelector,
+			To:            reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLClients")
+	}
+	mg.Spec.ForProvider.SAMLClients = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.ForProvider.SAMLClientsRefs = mrsp.ResolvedReferences
+	{
 		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
 
 		mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
-			CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.Clients),
+			CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.OidcClients),
 			Extract:       common.UUIDExtractor(),
 			Namespace:     mg.GetNamespace(),
-			References:    mg.Spec.InitProvider.ClientsRefs,
-			Selector:      mg.Spec.InitProvider.ClientsSelector,
+			References:    mg.Spec.InitProvider.OidcClientsRefs,
+			Selector:      mg.Spec.InitProvider.OidcClientsSelector,
 			To:            reference.To{List: l, Managed: m},
 		})
 	}
 	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.Clients")
+		return errors.Wrap(err, "mg.Spec.InitProvider.OidcClients")
 	}
-	mg.Spec.InitProvider.Clients = reference.ToPtrValues(mrsp.ResolvedValues)
-	mg.Spec.InitProvider.ClientsRefs = mrsp.ResolvedReferences
+	mg.Spec.InitProvider.OidcClients = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.InitProvider.OidcClientsRefs = mrsp.ResolvedReferences
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
@@ -510,6 +530,26 @@ func (mg *ClientClientPolicy) ResolveReferences(ctx context.Context, c client.Re
 	}
 	mg.Spec.InitProvider.ResourceServerID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.ResourceServerIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("samlclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.SAMLClients),
+			Extract:       common.UUIDExtractor(),
+			Namespace:     mg.GetNamespace(),
+			References:    mg.Spec.InitProvider.SAMLClientsRefs,
+			Selector:      mg.Spec.InitProvider.SAMLClientsSelector,
+			To:            reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLClients")
+	}
+	mg.Spec.InitProvider.SAMLClients = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.InitProvider.SAMLClientsRefs = mrsp.ResolvedReferences
 
 	return nil
 }
