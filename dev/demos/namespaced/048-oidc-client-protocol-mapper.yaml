@@ -10,7 +10,7 @@ spec:
   forProvider:
     name: "picture"
     protocol: "openid-connect"
-    clientIdRef:
+    oidcClientIdRef:
       name: "test"
     realmIdRef:
       name: "dev-ns"
@@ -36,7 +36,7 @@ spec:
   forProvider:
     name: "client roles"
     protocol: "openid-connect"
-    clientScopeIdRef:
+    oidcClientScopeIdRef:
       name: "openid-client-scope"
     realmIdRef:
       name: "dev-ns"
