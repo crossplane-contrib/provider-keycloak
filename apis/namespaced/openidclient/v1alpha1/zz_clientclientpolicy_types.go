@@ -16,20 +16,6 @@ import (
 
 type ClientClientPolicyInitParameters struct {
 
-	// The clients allowed by this client policy.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +listType=set
-	Clients []*string `json:"clients,omitempty" tf:"clients,omitempty"`
-
-	// References to Client in openidclient to populate clients.
-	// +kubebuilder:validation:Optional
-	ClientsRefs []v1.NamespacedReference `json:"clientsRefs,omitempty" tf:"-"`
-
-	// Selector for a list of Client in openidclient to populate clients.
-	// +kubebuilder:validation:Optional
-	ClientsSelector *v1.NamespacedSelector `json:"clientsSelector,omitempty" tf:"-"`
-
 	// (Computed) Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -41,6 +27,20 @@ type ClientClientPolicyInitParameters struct {
 
 	// The name of this client policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// The clients allowed by this client policy.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +listType=set
+	OidcClients []*string `json:"oidcClients,omitempty" tf:"oidc_clients,omitempty"`
+
+	// References to Client in openidclient to populate oidcClients.
+	// +kubebuilder:validation:Optional
+	OidcClientsRefs []v1.NamespacedReference `json:"oidcClientsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Client in openidclient to populate oidcClients.
+	// +kubebuilder:validation:Optional
+	OidcClientsSelector *v1.NamespacedSelector `json:"oidcClientsSelector,omitempty" tf:"-"`
 
 	// The realm this client policy exists within.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
@@ -66,6 +66,20 @@ type ClientClientPolicyInitParameters struct {
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+
+	// The clients allowed by this client policy.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +listType=set
+	SAMLClients []*string `json:"samlClients,omitempty" tf:"saml_clients,omitempty"`
+
+	// References to Client in samlclient to populate samlClients.
+	// +kubebuilder:validation:Optional
+	SAMLClientsRefs []v1.NamespacedReference `json:"samlClientsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Client in samlclient to populate samlClients.
+	// +kubebuilder:validation:Optional
+	SAMLClientsSelector *v1.NamespacedSelector `json:"samlClientsSelector,omitempty" tf:"-"`
 }
 
 type ClientClientPolicyObservation struct {
@@ -88,29 +102,22 @@ type ClientClientPolicyObservation struct {
 	// The name of this client policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The clients allowed by this client policy.
+	// +listType=set
+	OidcClients []*string `json:"oidcClients,omitempty" tf:"oidc_clients,omitempty"`
+
 	// The realm this client policy exists within.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// The ID of the resource server this client policy is attached to.
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
+
+	// The clients allowed by this client policy.
+	// +listType=set
+	SAMLClients []*string `json:"samlClients,omitempty" tf:"saml_clients,omitempty"`
 }
 
 type ClientClientPolicyParameters struct {
-
-	// The clients allowed by this client policy.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	// +listType=set
-	Clients []*string `json:"clients,omitempty" tf:"clients,omitempty"`
-
-	// References to Client in openidclient to populate clients.
-	// +kubebuilder:validation:Optional
-	ClientsRefs []v1.NamespacedReference `json:"clientsRefs,omitempty" tf:"-"`
-
-	// Selector for a list of Client in openidclient to populate clients.
-	// +kubebuilder:validation:Optional
-	ClientsSelector *v1.NamespacedSelector `json:"clientsSelector,omitempty" tf:"-"`
 
 	// (Computed) Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
 	// +kubebuilder:validation:Optional
@@ -127,6 +134,21 @@ type ClientClientPolicyParameters struct {
 	// The name of this client policy.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// The clients allowed by this client policy.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +kubebuilder:validation:Optional
+	// +listType=set
+	OidcClients []*string `json:"oidcClients,omitempty" tf:"oidc_clients,omitempty"`
+
+	// References to Client in openidclient to populate oidcClients.
+	// +kubebuilder:validation:Optional
+	OidcClientsRefs []v1.NamespacedReference `json:"oidcClientsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Client in openidclient to populate oidcClients.
+	// +kubebuilder:validation:Optional
+	OidcClientsSelector *v1.NamespacedSelector `json:"oidcClientsSelector,omitempty" tf:"-"`
 
 	// The realm this client policy exists within.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
@@ -154,6 +176,21 @@ type ClientClientPolicyParameters struct {
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+
+	// The clients allowed by this client policy.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +kubebuilder:validation:Optional
+	// +listType=set
+	SAMLClients []*string `json:"samlClients,omitempty" tf:"saml_clients,omitempty"`
+
+	// References to Client in samlclient to populate samlClients.
+	// +kubebuilder:validation:Optional
+	SAMLClientsRefs []v1.NamespacedReference `json:"samlClientsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Client in samlclient to populate samlClients.
+	// +kubebuilder:validation:Optional
+	SAMLClientsSelector *v1.NamespacedSelector `json:"samlClientsSelector,omitempty" tf:"-"`
 }
 
 // ClientClientPolicySpec defines the desired state of ClientClientPolicy

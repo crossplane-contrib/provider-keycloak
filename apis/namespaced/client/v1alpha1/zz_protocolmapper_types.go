@@ -16,33 +16,6 @@ import (
 
 type ProtocolMapperInitParameters struct {
 
-	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
-	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
-	// Reference to a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
-
-	// Selector for a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
-
-	// The ID of the client scope this protocol mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
-	// The mapper's associated client scope. Cannot be used at the same time as client_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientScope
-	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
-
-	// Reference to a ClientScope in openidclient to populate clientScopeId.
-	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
-
-	// Selector for a ClientScope in openidclient to populate clientScopeId.
-	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
-
 	// A map with key / value pairs for configuring the protocol mapper. The supported keys depends on the protocol mapper.
 	// +mapType=granular
 	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
@@ -50,6 +23,33 @@ type ProtocolMapperInitParameters struct {
 	// The display name of this protocol mapper in the GUI.
 	// A human-friendly name that will appear in the Keycloak console.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
+	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	OidcClientID *string `json:"oidcClientId,omitempty" tf:"oidc_client_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate oidcClientId.
+	// +kubebuilder:validation:Optional
+	OidcClientIDRef *v1.NamespacedReference `json:"oidcClientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate oidcClientId.
+	// +kubebuilder:validation:Optional
+	OidcClientIDSelector *v1.NamespacedSelector `json:"oidcClientIdSelector,omitempty" tf:"-"`
+
+	// The ID of the client scope this protocol mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
+	// The mapper's associated client scope. Cannot be used at the same time as client_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientScope
+	OidcClientScopeID *string `json:"oidcClientScopeId,omitempty" tf:"oidc_client_scope_id,omitempty"`
+
+	// Reference to a ClientScope in openidclient to populate oidcClientScopeId.
+	// +kubebuilder:validation:Optional
+	OidcClientScopeIDRef *v1.NamespacedReference `json:"oidcClientScopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClientScope in openidclient to populate oidcClientScopeId.
+	// +kubebuilder:validation:Optional
+	OidcClientScopeIDSelector *v1.NamespacedSelector `json:"oidcClientScopeIdSelector,omitempty" tf:"-"`
 
 	// The type of client (either openid-connect or saml). The type must match the type of the client.
 	// The protocol of the client (openid-connect / saml).
@@ -71,6 +71,33 @@ type ProtocolMapperInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
+	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
+
+	// Reference to a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDRef *v1.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDSelector *v1.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
+
+	// The ID of the client scope this protocol mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
+	// The mapper's associated client scope. Cannot be used at the same time as client_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.ClientScope
+	SAMLClientScopeID *string `json:"samlClientScopeId,omitempty" tf:"saml_client_scope_id,omitempty"`
+
+	// Reference to a ClientScope in samlclient to populate samlClientScopeId.
+	// +kubebuilder:validation:Optional
+	SAMLClientScopeIDRef *v1.NamespacedReference `json:"samlClientScopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClientScope in samlclient to populate samlClientScopeId.
+	// +kubebuilder:validation:Optional
+	SAMLClientScopeIDSelector *v1.NamespacedSelector `json:"samlClientScopeIdSelector,omitempty" tf:"-"`
 }
 
 type ProtocolMapperObservation struct {
@@ -93,6 +120,14 @@ type ProtocolMapperObservation struct {
 	// A human-friendly name that will appear in the Keycloak console.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
+	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
+	OidcClientID *string `json:"oidcClientId,omitempty" tf:"oidc_client_id,omitempty"`
+
+	// The ID of the client scope this protocol mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
+	// The mapper's associated client scope. Cannot be used at the same time as client_id.
+	OidcClientScopeID *string `json:"oidcClientScopeId,omitempty" tf:"oidc_client_scope_id,omitempty"`
+
 	// The type of client (either openid-connect or saml). The type must match the type of the client.
 	// The protocol of the client (openid-connect / saml).
 	Protocol *string `json:"protocol,omitempty" tf:"protocol,omitempty"`
@@ -104,38 +139,17 @@ type ProtocolMapperObservation struct {
 	// The realm this protocol mapper exists within.
 	// The realm id where the associated client or client scope exists.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
-}
-
-type ProtocolMapperParameters struct {
 
 	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
-	// Reference to a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
-
-	// Selector for a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
 
 	// The ID of the client scope this protocol mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
 	// The mapper's associated client scope. Cannot be used at the same time as client_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientScope
-	// +kubebuilder:validation:Optional
-	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
+	SAMLClientScopeID *string `json:"samlClientScopeId,omitempty" tf:"saml_client_scope_id,omitempty"`
+}
 
-	// Reference to a ClientScope in openidclient to populate clientScopeId.
-	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
-
-	// Selector for a ClientScope in openidclient to populate clientScopeId.
-	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+type ProtocolMapperParameters struct {
 
 	// A map with key / value pairs for configuring the protocol mapper. The supported keys depends on the protocol mapper.
 	// +kubebuilder:validation:Optional
@@ -146,6 +160,35 @@ type ProtocolMapperParameters struct {
 	// A human-friendly name that will appear in the Keycloak console.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
+	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +kubebuilder:validation:Optional
+	OidcClientID *string `json:"oidcClientId,omitempty" tf:"oidc_client_id,omitempty"`
+
+	// Reference to a Client in openidclient to populate oidcClientId.
+	// +kubebuilder:validation:Optional
+	OidcClientIDRef *v1.NamespacedReference `json:"oidcClientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in openidclient to populate oidcClientId.
+	// +kubebuilder:validation:Optional
+	OidcClientIDSelector *v1.NamespacedSelector `json:"oidcClientIdSelector,omitempty" tf:"-"`
+
+	// The ID of the client scope this protocol mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
+	// The mapper's associated client scope. Cannot be used at the same time as client_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientScope
+	// +kubebuilder:validation:Optional
+	OidcClientScopeID *string `json:"oidcClientScopeId,omitempty" tf:"oidc_client_scope_id,omitempty"`
+
+	// Reference to a ClientScope in openidclient to populate oidcClientScopeId.
+	// +kubebuilder:validation:Optional
+	OidcClientScopeIDRef *v1.NamespacedReference `json:"oidcClientScopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClientScope in openidclient to populate oidcClientScopeId.
+	// +kubebuilder:validation:Optional
+	OidcClientScopeIDSelector *v1.NamespacedSelector `json:"oidcClientScopeIdSelector,omitempty" tf:"-"`
 
 	// The type of client (either openid-connect or saml). The type must match the type of the client.
 	// The protocol of the client (openid-connect / saml).
@@ -170,6 +213,35 @@ type ProtocolMapperParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
+	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +kubebuilder:validation:Optional
+	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
+
+	// Reference to a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDRef *v1.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDSelector *v1.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
+
+	// The ID of the client scope this protocol mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
+	// The mapper's associated client scope. Cannot be used at the same time as client_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.ClientScope
+	// +kubebuilder:validation:Optional
+	SAMLClientScopeID *string `json:"samlClientScopeId,omitempty" tf:"saml_client_scope_id,omitempty"`
+
+	// Reference to a ClientScope in samlclient to populate samlClientScopeId.
+	// +kubebuilder:validation:Optional
+	SAMLClientScopeIDRef *v1.NamespacedReference `json:"samlClientScopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClientScope in samlclient to populate samlClientScopeId.
+	// +kubebuilder:validation:Optional
+	SAMLClientScopeIDSelector *v1.NamespacedSelector `json:"samlClientScopeIdSelector,omitempty" tf:"-"`
 }
 
 // ProtocolMapperSpec defines the desired state of ProtocolMapper
