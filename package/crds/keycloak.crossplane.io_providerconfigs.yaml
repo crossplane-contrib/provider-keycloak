@@ -102,10 +102,8 @@ spec:
                     enum:
                     - None
                     - Secret
-                    - InjectedIdentity
                     - Environment
                     - Filesystem
-                    - Kubernetes
                     type: string
                 required:
                 - source
