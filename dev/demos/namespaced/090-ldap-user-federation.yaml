@@ -11,7 +11,7 @@ spec:
     bindDn: cn=admin,dc=example,dc=org
     connectionTimeout: 5s
     connectionUrl: ldap://openldap
-    enabled: true
+    enabled: false
     kerberos:
       - kerberosRealm: FOO.LOCAL
         keyTab: /etc/host.keytab
