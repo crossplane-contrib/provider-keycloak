@@ -17,10 +17,12 @@ ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/namespaced/000-init.yaml
 # 2. test if it finds the resource if the external name is not set
 
 cp ${SCRIPT_DIR}/hack/patchIncorrectExternalName.sh /tmp/patchIncorrectExternalName.sh
-sed "s/patch.sh/patchIncorrectExternalName.sh/g" 02-import.yaml | sed "s/curl/#curl/g" > 02-import-IncorrectExtName.yaml
+cp ${SCRIPT_DIR}/hack/patchIncorrectExternalName-ns.sh /tmp/patchIncorrectExternalName-ns.sh
+sed "s/patch.sh/patchIncorrectExternalName.sh/g" 02-import.yaml | sed "s/patch-ns.sh/patchIncorrectExternalName-ns.sh/g" | sed "s/curl/#curl/g" > 02-import-IncorrectExtName.yaml
 
 cp ${SCRIPT_DIR}/hack/patchRemoveExternalName.sh /tmp/patchRemoveExternalName.sh
-sed "s/patch.sh/patchRemoveExternalName.sh/g" 02-import.yaml | sed "s/curl/#curl/g" > 02-import-NoExtName.yaml
+cp ${SCRIPT_DIR}/hack/patchRemoveExternalName-ns.sh /tmp/patchRemoveExternalName-ns.sh
+sed "s/patch.sh/patchRemoveExternalName.sh/g" 02-import.yaml | sed "s/patch-ns.sh/patchRemoveExternalName-ns.sh/g" | sed "s/curl/#curl/g" > 02-import-NoExtName.yaml
 
 echo "---" >> 02-import.yaml
 cat 02-import-IncorrectExtName.yaml >> 02-import.yaml

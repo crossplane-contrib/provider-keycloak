@@ -61,7 +61,7 @@ KUBECTL_VERSION ?= v1.32.2
 KIND_VERSION = v0.27.0
 UP_VERSION = v0.38.4
 UP_CHANNEL = stable
-UPTEST_VERSION = v1.3.0
+UPTEST_VERSION = v2.2.0
 -include build/makelib/k8s_tools.mk
 
 # ====================================================================================
