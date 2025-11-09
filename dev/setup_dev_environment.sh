@@ -5,6 +5,7 @@ SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 
 # Default variable values
 CLUSTER_NAME="fenrir-1"
+KEYCLOAK_VERSION="26.4.4"
 skipmetallb=false
 runcloudproviderkind=false
 uselocalprovider=false
@@ -19,6 +20,7 @@ usage() {
  echo " -p, --start-cloud-provider-kind  Run 'cloud-provider-kind' with sudo as Background task due to rootless docker (metal lb wont work) + mounting user docker socket to root docker socket"
  echo " -l, --use-local-provider         Use local provider (Scales down 'provider-keycloak')"
  echo " -d, --deploy-local-provider      Deploy local provider"
+ echo " -k, --keycloak-version           Keycloak Version"
 }
 
 has_argument() {
@@ -60,6 +62,17 @@ handle_options() {
 
         shift
         ;;
+      -k | --keycloak-version*)
+        if ! has_argument $@; then
+          echo "Keycloakversion not specified." >&2
+          usage
+          exit 1
+        fi
+
+        KEYCLOAK_VERSION=$(extract_argument $@)
+
+        shift
+        ;;
       *)
         echo "Invalid option: $1" >&2
         usage
@@ -74,6 +87,7 @@ handle_options() {
 handle_options "$@"
 
 echo "Cluster name: $CLUSTER_NAME"
+echo "Keycloak version: $KEYCLOAK_VERSION"
 
 echo "########### Checking dependencies ###########"
 command -v docker >/dev/null 2>&1 || { echo >&2 "Docker is required but not installed.  Aborting."; exit 1; }
@@ -192,7 +206,8 @@ $kubectl_cmd wait pod --all --for=condition=Ready --namespace argocd --timeout=3
 
 echo "########### Installing Keycloak & OpenLdap ###########"
 $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/open-ldap.yaml
-$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak.yaml
+sed "s/{{keycloak-version}}/${KEYCLOAK_VERSION}/g" ${SCRIPT_DIR}/apps/keycloak.yaml | $kubectl_cmd apply -f -
+
 
 echo "* Waiting for Keycloak to be ready"
 $kubectl_cmd wait applications.argoproj.io  --namespace argocd keycloak --for=create --for=jsonpath='{.status.health.status}'=Healthy --for=jsonpath='{.status.sync.status}'=Synced  --timeout=300s

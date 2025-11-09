@@ -13,7 +13,7 @@ spec:
     helm:
       values: |
         image:
-          tag: "26.4.4"
+          tag: "{{keycloak-version}}"
         http:
           relativePath: "/"
         command:

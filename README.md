@@ -289,6 +289,9 @@ make uptest
 New TestCases are added to this file `cluster/test/cases.txt`.
 Every resource that is necessary (i.e. Secrets) but no ManagedResource has to be created within this file `dev/demos/basic/000-init.yaml`
 
+### Troubleshoot Tests
+See more details [here](https://github.com/crossplane/uptest?tab=readme-ov-file#troubleshooting)
+
 ## Report a Bug
 
 For filing bugs, suggesting improvements, or requesting new features, please
