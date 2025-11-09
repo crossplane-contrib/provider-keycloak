@@ -13,7 +13,7 @@ spec:
     helm:
       values: |
         image:
-          tag: "26.4.0"
+          tag: "26.4.4"
         http:
           relativePath: "/"
         command:
@@ -22,7 +22,7 @@ spec:
           - "--http-enabled=true"
           - "--http-port=8080"
           - "--hostname-strict=false"
-          - "--features=admin-fine-grained-authz"
+          - "--features=admin-fine-grained-authz:v1"
         extraEnv: |
           - name: KC_BOOTSTRAP_ADMIN_USERNAME
             value: admin
