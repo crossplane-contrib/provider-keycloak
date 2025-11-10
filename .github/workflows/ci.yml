@@ -275,13 +275,28 @@ jobs:
         run: make vendor vendor.check
 
       - name: Starting testsetup for E2E Tests
-        run: ./dev/setup_dev_environment.sh --deploy-local-provider --keycloak-version ${{ matrix.keycloak-version }}
+        run: |
+          mkdir logs
+          ./dev/setup_dev_environment.sh --deploy-local-provider --keycloak-version ${{ matrix.keycloak-version }} | tee logs/setup-environment.log
 
       - name: Set kind cluster as context
         run: kind export kubeconfig --name fenrir-1
 
       - name: Running E2E Tests
-        run: make uptest
+        id: e2eTests
+        run: make uptest | tee logs/uptest.log
+
+      - name: Collect logs
+        if: steps.e2eTests.outcome == 'failure'
+        run: ./dev/collect-logs.sh
+
+      - name: Upload logs
+        if: steps.e2eTests.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-logs-${{ matrix.keycloak-version }}
+          path: |
+            logs/
 
   publish-artifacts:
     runs-on: ubuntu-24.04
