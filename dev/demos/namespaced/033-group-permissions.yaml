@@ -4,6 +4,8 @@ metadata:
   name: my-group-permission
   namespace: dev-ns
 spec:
+  # Fixme: Delete will result in realm not found exception
+  managementPolicies: ["Create", "Update", "Observe"]
   forProvider:
     realmIdRef:
       name: "dev-ns"

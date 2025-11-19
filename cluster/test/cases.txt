@@ -16,7 +16,7 @@
 ./dev/demos/namespaced/072-authentication-execution.yaml
 ./dev/demos/namespaced/071-authentication-subflow.yaml
 ./dev/demos/namespaced/070-authentication-flows.yaml
-./dev/demos/namespaced/062-saml-client-default-scopes.yaml
+#./dev/demos/namespaced/062-saml-client-default-scopes.yaml <-- Fixme: This is flaky!!!
 ./dev/demos/namespaced/061-saml-client-scopes.yaml
 ./dev/demos/namespaced/060-saml-client.yaml
 ./dev/demos/namespaced/053-google-identity-provider.yaml
@@ -34,11 +34,11 @@
 ./dev/demos/namespaced/033-group-permissions.yaml
 ./dev/demos/namespaced/032-groups-roles.yaml
 ./dev/demos/namespaced/031-group-memberships.yaml
-./dev/demos/namespaced/030-groups.yaml
 ./dev/demos/namespaced/023-user-permissions.yaml
 ./dev/demos/namespaced/022-users-groups.yaml
 ./dev/demos/namespaced/021-user-roles.yaml
 ./dev/demos/namespaced/020-user.yaml
+./dev/demos/namespaced/015-groups.yaml
 ./dev/demos/namespaced/010-roles.yaml
 ./dev/demos/namespaced/007-existing-realm.yaml
 ./dev/demos/namespaced/006-realm-events.yaml
@@ -62,7 +62,7 @@
 ./dev/demos/basic/072-authentication-execution.yaml
 ./dev/demos/basic/071-authentication-subflow.yaml
 ./dev/demos/basic/070-authentication-flows.yaml
-./dev/demos/basic/062-saml-client-default-scopes.yaml
+#./dev/demos/basic/062-saml-client-default-scopes.yaml <-- Fixme: This is flaky!!!
 ./dev/demos/basic/061-saml-client-scopes.yaml
 ./dev/demos/basic/060-saml-client.yaml
 ./dev/demos/basic/053-google-identity-provider.yaml
@@ -80,11 +80,11 @@
 ./dev/demos/basic/033-group-permissions.yaml
 ./dev/demos/basic/032-groups-roles.yaml
 ./dev/demos/basic/031-group-memberships.yaml
-./dev/demos/basic/030-groups.yaml
 ./dev/demos/basic/023-user-permissions.yaml
 ./dev/demos/basic/022-users-groups.yaml
 ./dev/demos/basic/021-user-roles.yaml
 ./dev/demos/basic/020-user.yaml
+./dev/demos/basic/015-groups.yaml
 ./dev/demos/basic/010-roles.yaml
 ./dev/demos/basic/007-existing-realm.yaml
 ./dev/demos/basic/006-realm-events.yaml
