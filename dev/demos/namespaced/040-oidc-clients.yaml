@@ -24,6 +24,8 @@ metadata:
   name: account
   namespace: dev-ns
 spec:
+  # Client Account can not be deleted - Bad Request will be returned!
+  managementPolicies: ["Create", "Update", "Observe"]
   forProvider:
     realmIdRef:
       name: "dev-ns"

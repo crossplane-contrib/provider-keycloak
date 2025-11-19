@@ -31,3 +31,9 @@ cat 02-import-NoExtName.yaml >> 02-import.yaml
 
 rm 02-import-IncorrectExtName.yaml
 rm 02-import-NoExtName.yaml
+
+cp ${SCRIPT_DIR}/hack/deleteOrdered.sh /tmp/deleteOrdered.sh
+sed 's/retry_kubectl "/eval "\/tmp\/deleteOrdered.sh /g' 03-delete.yaml | sed "s/exec: 20m0s/exec: 35m0s/g"  > 03-delete-new.yaml
+rm 03-delete.yaml
+mv 03-delete-new.yaml  03-delete.yaml
+

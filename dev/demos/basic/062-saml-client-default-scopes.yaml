@@ -3,8 +3,6 @@ apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
 kind: ClientDefaultScopes
 metadata:
   name: saml-client-default-scopes
-  annotations:
-    "uptest.upbound.io/pre-assert-hook": "../../../cluster/test/hack/pre-assert-hook.sh"
 spec:
   deletionPolicy: Delete
   forProvider:
