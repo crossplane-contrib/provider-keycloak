@@ -3,7 +3,8 @@ kind: Permissions
 metadata:
   name: my-group-permission
 spec:
-  deletionPolicy: Delete
+  # Fixme: Delete will result in realm not found exception
+  managementPolicies: ["Create", "Update", "Observe"]
   forProvider:
     realmIdRef:
       name: "dev"

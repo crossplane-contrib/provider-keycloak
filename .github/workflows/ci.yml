@@ -284,7 +284,12 @@ jobs:
 
       - name: Running E2E Tests
         id: e2eTests
-        run: make uptest | tee logs/uptest.log
+        continue-on-error: true
+        run:
+          #!/bin/bash
+          set -o pipefail;
+          make uptest | tee logs/uptest.log;
+          exit $?;
 
       - name: Collect logs
         if: steps.e2eTests.outcome == 'failure'
@@ -298,9 +303,13 @@ jobs:
           path: |
             logs/
 
+      - name: Fail on error
+        if: steps.e2eTests.outcome == 'failure'
+        run: exit 1
+
   publish-artifacts:
     runs-on: ubuntu-24.04
-    needs: detect-noop
+    needs:  [lint, check-diff, unit-tests, local-deploy, e2e-tests]
     if: needs.detect-noop.outputs.noop != 'true'
     outputs:
       version: ${{ steps.version.outputs.VERSION }}

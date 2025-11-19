@@ -14,7 +14,11 @@ for crd in $(kubectl get crd -o jsonpath='{.items[*].metadata.name}'); do
 
           touch  logs/$obj.$crd.yaml
           # Get the YAML for the specific object
-          kubectl get $crd $obj --all-namespaces -o yaml >> logs/$obj.$crd.yaml
+          if [[ $crd == *.m.crossplane* ]]; then
+            kubectl get $crd $obj -n dev-ns -o yaml >> logs/$obj.$crd.yaml
+          else
+            kubectl get $crd $obj --all-namespaces -o yaml >> logs/$obj.$crd.yaml
+          fi
           echo "---" >>  logs/$obj.$crd.yaml
           # Get events for the specific object
           kubectl get events --all-namespaces --field-selector involvedObject.name="$obj",involvedObject.apiVersion="$apiVersion" -o yaml >>  logs/$obj.$crd.yaml
