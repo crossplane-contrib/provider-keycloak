@@ -3,6 +3,7 @@ package openidclient
 import (
 	"context"
 	"github.com/crossplane-contrib/provider-keycloak/config/multitypes"
+	"github.com/crossplane/upjet/v2/pkg/config/conversion"
 	"strings"
 
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
@@ -80,6 +81,8 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_openid_client_client_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
+		r.Version = "v1alpha2"
+		r.PreviousVersions = []string{"v1alpha1"}
 
 		multitypes.ApplyToList(r, "clients",
 			multitypes.Instance{
@@ -106,6 +109,9 @@ func Configure(p *config.Provider) {
 			s.Optional = false
 			s.Computed = false
 		}
+
+		r.Conversions = append(r.Conversions, conversion.NewFieldRenameConversion("v1alpha1", "spec.forProvider.clients", "v1alpha2", "spec.forProvider.oidcClients"))
+		r.Conversions = append(r.Conversions, conversion.NewFieldRenameConversion("v1alpha2", "spec.forProvider.oidcClients", "v1alpha1", "spec.forProvider.clients"))
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_group_policy", func(r *config.Resource) {

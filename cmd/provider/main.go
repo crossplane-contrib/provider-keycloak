@@ -7,6 +7,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/crossplane/upjet/v2/pkg/controller/conversion"
 	"os"
 	"path/filepath"
 	"time"
@@ -226,6 +227,7 @@ func main() {
 		kingpin.FatalIfError(controllerNamespaced.Setup(mgr, optsNamespaced), "Cannot setup Keycloak controllers")
 	}
 
+	kingpin.FatalIfError(conversion.RegisterConversions(optsCluster.Provider, optsNamespaced.Provider, mgr.GetScheme()), "Cannot initialize the webhook conversion registry")
 	kingpin.FatalIfError(mgr.Start(ctrl.SetupSignalHandler()), "Cannot start controller manager")
 }
 
