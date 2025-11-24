@@ -3,6 +3,7 @@ package clients
 import (
 	"context"
 	"reflect"
+	"strconv"
 	"testing"
 
 	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
@@ -22,7 +23,7 @@ func TestExtractCredentials(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    map[string]string
+		want    map[string]any
 		wantErr bool
 	}{
 		{
@@ -39,10 +40,12 @@ func TestExtractCredentials(t *testing.T) {
 						},
 						Data: map[string][]byte{
 							"someCredentialsField": []byte(`{
-  "client_id": "test-client",
-  "username":  "tester",
-  "password":  "53cr37",
-  "url":       "my-keycloak.nmspc.svc.cluster.local"
+  "client_id":      "test-client",
+  "username":       "tester",
+  "password":       "53cr37",
+  "url":            "my-keycloak.nmspc.svc.cluster.local",
+  "client_timeout": 30,
+  "tls_insecure_skip_verify": true
 }`)},
 					}).
 					Build(),
@@ -56,11 +59,13 @@ func TestExtractCredentials(t *testing.T) {
 					},
 				},
 			},
-			want: map[string]string{
-				"client_id": "test-client",
-				"username":  "tester",
-				"password":  "53cr37",
-				"url":       "my-keycloak.nmspc.svc.cluster.local",
+			want: map[string]any{
+				"client_id":                "test-client",
+				"username":                 "tester",
+				"password":                 "53cr37",
+				"url":                      "my-keycloak.nmspc.svc.cluster.local",
+				"client_timeout":           30,
+				"tls_insecure_skip_verify": true,
 			},
 		},
 		{
@@ -76,10 +81,12 @@ func TestExtractCredentials(t *testing.T) {
 							Namespace: "crossplane-system",
 						},
 						Data: map[string][]byte{
-							"client_id": []byte("test-client"),
-							"username":  []byte("tester"),
-							"password":  []byte("53cr37"),
-							"url":       []byte("my-keycloak.nmspc.svc.cluster.local"),
+							"client_id":                []byte("test-client"),
+							"username":                 []byte("tester"),
+							"password":                 []byte("53cr37"),
+							"url":                      []byte("my-keycloak.nmspc.svc.cluster.local"),
+							"client_timeout":           []byte(strconv.Itoa(30)),
+							"tls_insecure_skip_verify": []byte(strconv.FormatBool(true)),
 						},
 					}).
 					Build(),
@@ -93,11 +100,13 @@ func TestExtractCredentials(t *testing.T) {
 					},
 				},
 			},
-			want: map[string]string{
-				"client_id": "test-client",
-				"username":  "tester",
-				"password":  "53cr37",
-				"url":       "my-keycloak.nmspc.svc.cluster.local",
+			want: map[string]any{
+				"client_id":                "test-client",
+				"username":                 "tester",
+				"password":                 "53cr37",
+				"url":                      "my-keycloak.nmspc.svc.cluster.local",
+				"client_timeout":           30,
+				"tls_insecure_skip_verify": true,
 			},
 		},
 	}
