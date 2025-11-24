@@ -8,6 +8,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math"
+	"strconv"
 
 	terraformSDK "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	corev1 "k8s.io/api/core/v1"
@@ -28,13 +30,15 @@ import (
 
 const (
 	// error messages
-	errNoProviderConfig     = "no providerConfigRef provided"
-	errGetProviderConfig    = "cannot get referenced ProviderConfig"
-	errTrackUsage           = "cannot track ProviderConfig usage"
-	errExtractCredentials   = "cannot extract credentials"
-	errUnmarshalCredentials = "cannot unmarshal keycloak credentials as JSON"
-	errExtractSecretKey     = "cannot extract from secret key when none specified"
-	errGetCredentialsSecret = "cannot get credentials secret"
+	errNoProviderConfig             = "no providerConfigRef provided"
+	errGetProviderConfig            = "cannot get referenced ProviderConfig"
+	errTrackUsage                   = "cannot track ProviderConfig usage"
+	errExtractCredentials           = "cannot extract credentials"
+	errUnmarshalCredentials         = "cannot unmarshal keycloak credentials as JSON"
+	errExtractSecretKey             = "cannot extract from secret key when none specified"
+	errGetCredentialsSecret         = "cannot get credentials secret"
+	errInvalidClientTimeout         = "invalid client_timeout value in credentials secret"
+	errInvalidTLSInsecureSkipVerify = "invalid tls_insecure_skip_verify value in credentials secret"
 )
 
 // Password and client secret auth parameters  + general config parameters
@@ -109,8 +113,8 @@ func TerraformSetupBuilder() terraform.SetupFn {
 }
 
 // ExtractCredentials Function that extracts credentials from the secret provided to providerconfig
-func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, client client.Client, selector xpv1.CommonCredentialSelectors) (map[string]string, error) {
-	creds := make(map[string]string)
+func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, client client.Client, selector xpv1.CommonCredentialSelectors) (map[string]any, error) {
+	creds := make(map[string]any)
 
 	// first try to see if the secret contains a proper key-value map
 	if selector.SecretRef == nil {
@@ -122,6 +126,22 @@ func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, clie
 	}
 	if _, ok := secret.Data[selector.SecretRef.Key]; !ok {
 		for k, v := range secret.Data {
+			switch k {
+			case "client_timeout":
+				if n, err := strconv.Atoi(string(v)); err == nil {
+					creds[k] = n
+				} else {
+					return nil, errors.Wrap(err, errInvalidClientTimeout)
+				}
+				continue
+			case "tls_insecure_skip_verify":
+				if b, err := strconv.ParseBool(string(v)); err == nil {
+					creds[k] = b
+				} else {
+					return nil, errors.Wrap(err, errInvalidTLSInsecureSkipVerify)
+				}
+				continue
+			}
 			creds[k] = string(v)
 		}
 		return creds, nil
@@ -134,6 +154,16 @@ func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, clie
 	}
 	if err := json.Unmarshal(rawData, &creds); err != nil {
 		return nil, errors.Wrap(err, errUnmarshalCredentials)
+	}
+
+	// Normalize numeric types from JSON (numbers are float64 by default)
+	for k, v := range creds {
+		switch n := v.(type) {
+		case float64:
+			if math.Trunc(n) == n {
+				creds[k] = int(n)
+			}
+		}
 	}
 
 	return creds, nil
