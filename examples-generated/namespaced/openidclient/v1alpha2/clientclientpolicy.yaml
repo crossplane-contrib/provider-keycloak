@@ -1,11 +1,12 @@
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha2
 kind: ClientClientPolicy
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientclientpolicy
+    meta.upbound.io/example-id: openidclient/v1alpha2/clientclientpolicy
   labels:
     testing.upbound.io/example-name: token_exchange
   name: token-exchange
+  namespace: upbound-system
 spec:
   forProvider:
     decisionStrategy: UNANIMOUS
@@ -20,20 +21,19 @@ spec:
 
 ---
 
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: Client
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientclientpolicy
+    meta.upbound.io/example-id: openidclient/v1alpha2/clientclientpolicy
   labels:
     testing.upbound.io/example-name: openid_client
   name: openid-client
+  namespace: upbound-system
 spec:
   forProvider:
     accessType: CONFIDENTIAL
-    clientIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: example
+    clientId: openid_client
     name: openid_client
     realmIdSelector:
       matchLabels:
@@ -42,14 +42,15 @@ spec:
 
 ---
 
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientPermissions
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientclientpolicy
+    meta.upbound.io/example-id: openidclient/v1alpha2/clientclientpolicy
   labels:
     testing.upbound.io/example-name: my_permission
   name: my-permission
+  namespace: upbound-system
 spec:
   forProvider:
     clientIdSelector:
@@ -61,14 +62,15 @@ spec:
 
 ---
 
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
 kind: Realm
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientclientpolicy
+    meta.upbound.io/example-id: openidclient/v1alpha2/clientclientpolicy
   labels:
     testing.upbound.io/example-name: realm
   name: realm
+  namespace: upbound-system
 spec:
   forProvider:
     enabled: true
