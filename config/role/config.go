@@ -64,8 +64,7 @@ func getIDByIdentifyingProperties(ctx context.Context, parameters map[string]any
 		// will retry, and if the role still doesn't exist after references are resolved, it
 		// will proceed with creation (if import=false) or fail with a clear error (if import=true).
 		if clientID == "" {
-			var apiErr *keycloak.ApiError
-			if errors.As(err, &apiErr) && apiErr.Code == 404 {
+			if apiErr := (*keycloak.ApiError)(nil); errors.As(err, &apiErr) && apiErr != nil && apiErr.Code == 404 {
 				// Return empty to indicate the resource cannot be found/identified yet
 				return "", nil
 			}
