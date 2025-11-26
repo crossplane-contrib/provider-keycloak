@@ -45,7 +45,7 @@ func getIDByIdentifyingProperties(ctx context.Context, parameters map[string]any
 	clientID, clientIDOk := parameters["client_id"].(string)
 	realmID, realmIDOk := parameters["realm_id"].(string)
 	name, nameOk := parameters["name"].(string)
-	
+
 	// Validate required parameters
 	if !realmIDOk || !nameOk {
 		return "", errors.New("realm_id and name parameters must be strings")
@@ -54,7 +54,7 @@ func getIDByIdentifyingProperties(ctx context.Context, parameters map[string]any
 	if !clientIDOk {
 		clientID = ""
 	}
-	
+
 	found, err := kcClient.GetRoleByName(ctx, realmID, clientID, name)
 	if err != nil {
 		// If client_id is empty and we get a 404 error, this could mean:
