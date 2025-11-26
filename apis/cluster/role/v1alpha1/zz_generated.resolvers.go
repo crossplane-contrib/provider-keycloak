@@ -53,7 +53,7 @@ func (mg *Role) ResolveReferences( // ResolveReferences of this Role.
 
 		mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
 			CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.CompositeRoles),
-			Extract:       reference.ExternalName(),
+			Extract:       common.UUIDExtractor(),
 			Namespace:     mg.GetNamespace(),
 			References:    mg.Spec.ForProvider.CompositeRolesRefs,
 			Selector:      mg.Spec.ForProvider.CompositeRolesSelector,
@@ -113,7 +113,7 @@ func (mg *Role) ResolveReferences( // ResolveReferences of this Role.
 
 		mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
 			CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.CompositeRoles),
-			Extract:       reference.ExternalName(),
+			Extract:       common.UUIDExtractor(),
 			Namespace:     mg.GetNamespace(),
 			References:    mg.Spec.InitProvider.CompositeRolesRefs,
 			Selector:      mg.Spec.InitProvider.CompositeRolesSelector,

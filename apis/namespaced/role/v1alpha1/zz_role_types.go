@@ -35,6 +35,7 @@ type RoleInitParameters struct {
 
 	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
 	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
 
@@ -119,6 +120,7 @@ type RoleParameters struct {
 
 	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
