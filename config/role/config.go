@@ -7,6 +7,7 @@ import (
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 )
 
@@ -18,6 +19,7 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "role"
 		r.References["composite_roles"] = config.Reference{
 			TerraformName: "keycloak_role",
+			Extractor:     common.PathUUIDExtractor,
 		}
 	})
 }
