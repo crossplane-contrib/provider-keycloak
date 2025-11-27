@@ -18,7 +18,7 @@ type Options struct {
 	KeepOriginalField bool
 }
 
-func apply(r *config.Resource, name string, opts *Options, types ...Instance) {
+func apply(r *config.Resource, name string, types ...Instance) {
 	// Check if any instance reuses the original field name (for backward compatibility)
 	hasOriginalName := false
 	for _, t := range types {
@@ -57,7 +57,7 @@ func ApplyTo(r *config.Resource, name string, types ...Instance) {
 }
 
 func ApplyToWithOptions(r *config.Resource, name string, opts *Options, types ...Instance) {
-	apply(r, name, opts, types...)
+	apply(r, name, types...)
 
 	r.TerraformConfigurationInjector = wrapFuncAndConsolidate(r.TerraformConfigurationInjector, name, types)
 }
@@ -104,11 +104,10 @@ func wrapFuncAndConsolidate(ci config.ConfigurationInjector, name string, types 
 					delete(jsonMap, t.Name)
 				}
 			}
-		} else if jsonMap[name] == nil {
-			// If no synthetic field has a value and the original field is also nil,
-			// this might be a case where the resource hasn't resolved references yet
-			// Don't error, just let it continue
 		}
+		// If no synthetic field has a value and the original field is also nil,
+		// this might be a case where the resource hasn't resolved references yet.
+		// Don't error, just let it continue.
 
 		return nil
 	}
