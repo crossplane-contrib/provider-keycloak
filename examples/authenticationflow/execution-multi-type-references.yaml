@@ -33,7 +33,6 @@ spec:
   forProvider:
     alias: example-main-flow
     description: "Main authentication flow demonstrating multi-type references"
-    providerType: basic-flow
     realmIdRef:
       name: example-realm
   providerConfigRef:
@@ -98,7 +97,7 @@ spec:
   forProvider:
     alias: example-subflow
     description: "Subflow for demonstrating issue #163 fix"
-    providerType: basic-flow
+    providerId: basic-flow
     parentFlowAliasRef:
       name: example-main-flow
     priority: 30
