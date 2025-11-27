@@ -1,0 +1,48 @@
+# Example: Realm with Timeout/Lifespan Configuration
+# This test verifies the fix for issue #434 where timeout fields accept integer seconds (matching Keycloak API)
+# All timeout/lifespan fields use integer seconds directly - no string conversion needed
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: dev-durations
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: "dev-durations"
+    enabled: true
+    
+    # All duration/timeout fields accept duration strings (e.g., "5m", "1h", "300s")
+    # These are converted to integer seconds internally before being sent to Keycloak
+    
+    # Access token lifespans
+    accessTokenLifespan: "5m0s"                        # 5 minutes
+    accessTokenLifespanForImplicitFlow: "1800s"        # 15 minutes
+    
+    # SSO session timeouts
+    ssoSessionIdleTimeout: "30m0s"                     # 30 minutes
+    ssoSessionMaxLifespan: "10h0m0s"                   # 10 hours
+    ssoSessionIdleTimeoutRememberMe: "0s"              # 0 (disabled)
+    ssoSessionMaxLifespanRememberMe: "0s"              # 0 (disabled)
+    
+    # Offline session timeouts
+    offlineSessionIdleTimeout: "720h0m0s"              # 30 days
+    offlineSessionMaxLifespan: "1440h0m0s"             # 60 days
+    
+    # Client session timeouts
+    clientSessionIdleTimeout: "0s"                     # 0 (disabled)
+    clientSessionMaxLifespan: "0s"                     # 0 (disabled)
+    
+    # Access code lifespans
+    accessCodeLifespan: "1m0s"                         # 1 minute
+    accessCodeLifespanUserAction: "5m0s"               # 5 minutes
+    accessCodeLifespanLogin: "30m0s"                   # 30 minutes
+    
+    # Action token lifespans
+    actionTokenGeneratedByAdminLifespan: "12h0m0s"     # 12 hours
+    actionTokenGeneratedByUserLifespan: "5m0s"         # 5 minutes
+    
+    # OAuth2 device flow
+    oauth2DeviceCodeLifespan: "10m0s"                  # 10 minutes
+    oauth2DevicePollingInterval: 5
+  providerConfigRef:
+    name: "keycloak-provider-config"

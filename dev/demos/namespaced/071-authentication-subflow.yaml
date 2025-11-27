@@ -3,6 +3,8 @@ kind: Subflow
 metadata:
   name: subflow
   namespace: dev-ns
+  labels:
+    subflow-type: test-subflow
 spec:
   forProvider:
     alias: my-subflow-alias-1

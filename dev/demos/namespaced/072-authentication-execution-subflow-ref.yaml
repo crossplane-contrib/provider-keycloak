@@ -1,0 +1,42 @@
+# This test case demonstrates issue #163 fix: Execution resources can now reference Subflow resources
+# using parentSubflowAliasRef and parentSubflowAliasSelector
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-in-subflow-ref
+  namespace: dev-ns
+  labels:
+    test-type: subflow-reference
+spec:
+  forProvider:
+    authenticator: auth-username-password-form
+    # NEW: Using parentSubflowAliasRef to reference a Subflow resource
+    parentSubflowAliasRef:
+      name: subflow
+    realmIdRef:
+      name: "dev-ns"
+    requirement: REQUIRED
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-in-subflow-selector
+  namespace: dev-ns
+  labels:
+    test-type: subflow-reference
+spec:
+  forProvider:
+    authenticator: auth-otp-form
+    # NEW: Using parentSubflowAliasSelector to reference a Subflow resource by labels
+    parentSubflowAliasSelector:
+      matchLabels:
+        subflow-type: test-subflow
+    realmIdRef:
+      name: "dev-ns"
+    requirement: REQUIRED
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
