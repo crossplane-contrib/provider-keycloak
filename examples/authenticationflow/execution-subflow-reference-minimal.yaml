@@ -1,0 +1,73 @@
+---
+# Minimal example for issue #163: Execution resources can now reference Subflow resources
+#
+# This example shows the simplest case of the fix - an Execution referencing a Subflow
+# which was not possible before the fix.
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: minimal-example-realm
+  labels:
+    example: issue-163-minimal
+spec:
+  forProvider:
+    realm: minimal-example
+    enabled: true
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Flow
+metadata:
+  name: minimal-main-flow
+  labels:
+    example: issue-163-minimal
+spec:
+  forProvider:
+    alias: minimal-main-flow
+    providerType: basic-flow
+    realmIdRef:
+      name: minimal-example-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Subflow
+metadata:
+  name: minimal-subflow
+  labels:
+    example: issue-163-minimal
+spec:
+  forProvider:
+    alias: minimal-subflow
+    providerType: basic-flow
+    parentFlowAliasRef:
+      name: minimal-main-flow
+    priority: 10
+    realmIdRef:
+      name: minimal-example-realm
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# This is the key resource demonstrating the fix:
+# An Execution that references a Subflow using parentSubflowAliasRef
+# Before the fix, this would fail with selector errors
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: minimal-execution-in-subflow
+  labels:
+    example: issue-163-minimal
+spec:
+  forProvider:
+    authenticator: auth-username-password-form
+    # NEW: parentSubflowAliasRef can now reference Subflow resources
+    parentSubflowAliasRef:
+      name: minimal-subflow
+    priority: 10
+    realmIdRef:
+      name: minimal-example-realm
+    requirement: REQUIRED
+  providerConfigRef:
+    name: keycloak-provider-config
