@@ -18,6 +18,9 @@ const (
 	// PathAuthenticationFlowAliasExtractor is the golang path to ARNExtractor function
 	// in this package.
 	PathAuthenticationFlowAliasExtractor = SelfPackagePath + ".AuthenticationFlowAliasExtractor()"
+	// PathAuthenticationFlowOrSubflowAliasExtractor is the golang path to extractor function
+	// that can handle both Flow and Subflow resources
+	PathAuthenticationFlowOrSubflowAliasExtractor = SelfPackagePath + ".AuthenticationFlowOrSubflowAliasExtractor()"
 	// PathUUIDExtractor is the golang path to UUIDExtractor function
 	PathUUIDExtractor = SelfPackagePath + ".UUIDExtractor()"
 )
@@ -55,6 +58,14 @@ func AuthenticationFlowAliasExtractor() reference.ExtractValueFn {
 		}
 		return r
 	}
+}
+
+// AuthenticationFlowOrSubflowAliasExtractor extracts Alias from either AuthenticationFlow or Subflow Ref
+// Both Flow and Subflow resources have an "alias" field in status.atProvider
+func AuthenticationFlowOrSubflowAliasExtractor() reference.ExtractValueFn {
+	// Both Flow and Subflow use the same alias field structure,
+	// so we can use the same extraction logic
+	return AuthenticationFlowAliasExtractor()
 }
 
 // UUIDExtractor returns a reference.ExtractValueFn that can be used to extract the UUID from a managed resource.

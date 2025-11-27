@@ -9,6 +9,7 @@ import (
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+	"github.com/crossplane-contrib/provider-keycloak/config/multitypes"
 )
 
 const (
@@ -32,12 +33,32 @@ func Configure(p *config.Provider) {
 	})
 	p.AddResourceConfigurator("keycloak_authentication_execution", func(r *config.Resource) {
 		r.ShortGroup = Group
-		r.References["parent_flow_alias"] = config.Reference{
-			TerraformName:     "keycloak_authentication_flow",
-			Extractor:         common.PathAuthenticationFlowAliasExtractor,
-			RefFieldName:      "ParentFlowAliasRef",
-			SelectorFieldName: "ParentFlowAliasSelector",
-		}
+		
+		// Issue #163: parent_flow_alias can reference either a Flow or a Subflow in Keycloak.
+		// For backward compatibility, we keep parentFlowAlias/Ref/Selector for Flow references.
+		// We add parentSubflowAlias/Ref/Selector for the new Subflow reference capability.
+		// The multitypes pattern ensures only one can be set, and both map to parent_flow_alias in Terraform.
+		multitypes.ApplyTo(r, "parent_flow_alias",
+			multitypes.Instance{
+				// Use "parent_flow_alias" as the name so it generates "parentFlowAlias" in the API
+				Name: "parent_flow_alias",
+				Reference: config.Reference{
+					TerraformName:     "keycloak_authentication_flow",
+					Extractor:         common.PathAuthenticationFlowAliasExtractor,
+					RefFieldName:      "ParentFlowAliasRef",
+					SelectorFieldName: "ParentFlowAliasSelector",
+				},
+			},
+			multitypes.Instance{
+				Name: "parent_subflow_alias",
+				Reference: config.Reference{
+					TerraformName:     "keycloak_authentication_subflow",
+					Extractor:         common.PathAuthenticationFlowAliasExtractor,
+					RefFieldName:      "ParentSubflowAliasRef",
+					SelectorFieldName: "ParentSubflowAliasSelector",
+				},
+			},
+		)
 	})
 	p.AddResourceConfigurator("keycloak_authentication_execution_config", func(r *config.Resource) {
 		r.ShortGroup = Group
