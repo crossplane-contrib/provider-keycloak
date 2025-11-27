@@ -275,6 +275,13 @@ Start local dev cluster
 ```console
 ./dev/setup_dev_environment.sh --deploy-local-provider
 ```
+
+depending on your environment you might need: 
+
+``` 
+KUBECONFIG=$HOME/.kube/fenrir-1 KIND_CLUSTER_NAME=fenrir-1 ./dev/setup_dev_environment.sh --deploy-local-provider
+``` 
+
 **Hint**: If you are using rootless docker you can add the flags `--skip-metal-lb`
 and `--start-cloud-provider-kind` (how to install cloud-provider-kind [see here](https://github.com/kubernetes-sigs/cloud-provider-kind))
 
