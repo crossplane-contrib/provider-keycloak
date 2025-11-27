@@ -33,7 +33,7 @@ func Configure(p *config.Provider) {
 	})
 	p.AddResourceConfigurator("keycloak_authentication_execution", func(r *config.Resource) {
 		r.ShortGroup = Group
-		
+
 		// Issue #163: parent_flow_alias can reference either a Flow or a Subflow in Keycloak.
 		// For backward compatibility, we keep parentFlowAlias/Ref/Selector for Flow references.
 		// We add parentSubflowAlias/Ref/Selector for the new Subflow reference capability.
