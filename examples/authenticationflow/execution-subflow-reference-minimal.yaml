@@ -25,7 +25,6 @@ metadata:
 spec:
   forProvider:
     alias: minimal-main-flow
-    providerType: basic-flow
     realmIdRef:
       name: minimal-example-realm
   providerConfigRef:
@@ -40,7 +39,7 @@ metadata:
 spec:
   forProvider:
     alias: minimal-subflow
-    providerType: basic-flow
+    providerId: basic-flow
     parentFlowAliasRef:
       name: minimal-main-flow
     priority: 10
