@@ -2,6 +2,8 @@ apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
 kind: Subflow
 metadata:
   name: subflow
+  labels:
+    subflow-type: test-subflow
 spec:
   deletionPolicy: Delete
   forProvider:
