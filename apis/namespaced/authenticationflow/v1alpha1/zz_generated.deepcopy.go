@@ -744,6 +744,21 @@ func (in *ExecutionInitParameters) DeepCopyInto(out *ExecutionInitParameters) {
 		*out = new(v1.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.ParentSubflowAlias != nil {
+		in, out := &in.ParentSubflowAlias, &out.ParentSubflowAlias
+		*out = new(string)
+		**out = **in
+	}
+	if in.ParentSubflowAliasRef != nil {
+		in, out := &in.ParentSubflowAliasRef, &out.ParentSubflowAliasRef
+		*out = new(v1.NamespacedReference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ParentSubflowAliasSelector != nil {
+		in, out := &in.ParentSubflowAliasSelector, &out.ParentSubflowAliasSelector
+		*out = new(v1.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Priority != nil {
 		in, out := &in.Priority, &out.Priority
 		*out = new(float64)
@@ -831,6 +846,11 @@ func (in *ExecutionObservation) DeepCopyInto(out *ExecutionObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ParentSubflowAlias != nil {
+		in, out := &in.ParentSubflowAlias, &out.ParentSubflowAlias
+		*out = new(string)
+		**out = **in
+	}
 	if in.Priority != nil {
 		in, out := &in.Priority, &out.Priority
 		*out = new(float64)
@@ -878,6 +898,21 @@ func (in *ExecutionParameters) DeepCopyInto(out *ExecutionParameters) {
 	}
 	if in.ParentFlowAliasSelector != nil {
 		in, out := &in.ParentFlowAliasSelector, &out.ParentFlowAliasSelector
+		*out = new(v1.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ParentSubflowAlias != nil {
+		in, out := &in.ParentSubflowAlias, &out.ParentSubflowAlias
+		*out = new(string)
+		**out = **in
+	}
+	if in.ParentSubflowAliasRef != nil {
+		in, out := &in.ParentSubflowAliasRef, &out.ParentSubflowAliasRef
+		*out = new(v1.NamespacedReference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ParentSubflowAliasSelector != nil {
+		in, out := &in.ParentSubflowAliasSelector, &out.ParentSubflowAliasSelector
 		*out = new(v1.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
