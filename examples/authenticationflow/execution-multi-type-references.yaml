@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -152,25 +153,3 @@ spec:
     requirement: REQUIRED
   providerConfigRef:
     name: keycloak-provider-config
----
-# Summary of the fix:
-# 
-# BEFORE (issue #163):
-# - Execution resources could only use parentFlowAlias/Ref/Selector
-# - These could only reference Flow resources
-# - Attempting to reference a Subflow would fail
-# 
-# AFTER (with this fix):
-# - Execution resources now support TWO types of parent references:
-#   1. parentFlowAlias/Ref/Selector - References a Flow resource (backward compatible)
-#   2. parentSubflowAlias/Ref/Selector - References a Subflow resource (NEW)
-# 
-# - Both field sets map to the same Terraform field (parent_flow_alias)
-# - The multitypes pattern ensures only one can be set at a time
-# - Full backward compatibility is maintained
-# 
-# This example demonstrates:
-# 1. execution-in-main-flow: Classic Flow reference using Ref
-# 2. execution-in-main-flow-selector: Classic Flow reference using Selector
-# 3. execution-in-subflow-ref: NEW Subflow reference using Ref
-# 4. execution-in-subflow-selector: NEW Subflow reference using Selector
