@@ -75,7 +75,7 @@ func wrapFuncAndConsolidate(ci config.ConfigurationInjector, name string, types 
 		// jsonMap might use either snake_case (tf tag) or the field is in tfMap
 		// Check both jsonMap and tfMap for the synthetic field values
 		var selectedValue any
-		
+
 		for _, t := range types {
 			// Try jsonMap first (might use snake_case tf tags)
 			if val := jsonMap[t.Name]; val != nil {
@@ -95,7 +95,7 @@ func wrapFuncAndConsolidate(ci config.ConfigurationInjector, name string, types 
 			// Both maps use the original Terraform field name (snake_case)
 			tfMap[name] = selectedValue
 			jsonMap[name] = selectedValue
-			
+
 			// Clean up: delete all synthetic field entries from both maps
 			for _, t := range types {
 				// Skip if this is the original field name (we just set it)
