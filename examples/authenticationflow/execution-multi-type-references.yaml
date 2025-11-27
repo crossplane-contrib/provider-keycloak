@@ -1,0 +1,177 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: example-execution-references
+---
+# Example demonstrating issue #163 fix: Execution resources can now reference both Flow and Subflow resources
+# This showcases the multi-type reference capability where parentFlowAlias can reference either a Flow or Subflow
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: example-realm
+  namespace: example-execution-references
+  labels:
+    example: execution-multi-type-references
+spec:
+  forProvider:
+    realm: example-realm
+    enabled: true
+    displayName: "Example Realm for Multi-Type References"
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Create a main authentication flow
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Flow
+metadata:
+  name: example-main-flow
+  namespace: example-execution-references
+  labels:
+    example: execution-multi-type-references
+    flow-type: main
+spec:
+  forProvider:
+    alias: example-main-flow
+    description: "Main authentication flow demonstrating multi-type references"
+    providerType: basic-flow
+    realmIdRef:
+      name: example-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Execution directly in the Flow (backward compatible - uses parentFlowAlias)
+# This demonstrates the original functionality that must remain working
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-in-main-flow
+  namespace: example-execution-references
+  labels:
+    example: execution-multi-type-references
+    execution-type: flow-level
+spec:
+  forProvider:
+    authenticator: auth-cookie
+    # Using parentFlowAliasRef - backward compatible, references a Flow
+    parentFlowAliasRef:
+      name: example-main-flow
+    priority: 10
+    realmIdRef:
+      name: example-realm
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Execution using selector instead of ref (also backward compatible)
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-in-main-flow-selector
+  namespace: example-execution-references
+  labels:
+    example: execution-multi-type-references
+    execution-type: flow-level-selector
+spec:
+  forProvider:
+    authenticator: identity-provider-redirector
+    # Using parentFlowAliasSelector - backward compatible, references a Flow
+    parentFlowAliasSelector:
+      matchLabels:
+        flow-type: main
+    priority: 20
+    realmIdRef:
+      name: example-realm
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Create a subflow within the main flow
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Subflow
+metadata:
+  name: example-subflow
+  namespace: example-execution-references
+  labels:
+    example: execution-multi-type-references
+    flow-type: sub
+spec:
+  forProvider:
+    alias: example-subflow
+    description: "Subflow for demonstrating issue #163 fix"
+    providerType: basic-flow
+    parentFlowAliasRef:
+      name: example-main-flow
+    priority: 30
+    realmIdRef:
+      name: example-realm
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# NEW CAPABILITY (issue #163 fix): Execution in a Subflow using parentSubflowAliasRef
+# Before the fix, this would fail because Executions could only reference Flows, not Subflows
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-in-subflow-ref
+  namespace: example-execution-references
+  labels:
+    example: execution-multi-type-references
+    execution-type: subflow-level
+spec:
+  forProvider:
+    authenticator: auth-username-password-form
+    # Using parentSubflowAliasRef - NEW capability, references a Subflow
+    parentSubflowAliasRef:
+      name: example-subflow
+    priority: 10
+    realmIdRef:
+      name: example-realm
+    requirement: REQUIRED
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# NEW CAPABILITY (issue #163 fix): Execution in a Subflow using parentSubflowAliasSelector
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-in-subflow-selector
+  namespace: example-execution-references
+  labels:
+    example: execution-multi-type-references
+    execution-type: subflow-level-selector
+spec:
+  forProvider:
+    authenticator: auth-otp-form
+    # Using parentSubflowAliasSelector - NEW capability, references a Subflow
+    parentSubflowAliasSelector:
+      matchLabels:
+        flow-type: sub
+    priority: 20
+    realmIdRef:
+      name: example-realm
+    requirement: REQUIRED
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+# Summary of the fix:
+# 
+# BEFORE (issue #163):
+# - Execution resources could only use parentFlowAlias/Ref/Selector
+# - These could only reference Flow resources
+# - Attempting to reference a Subflow would fail
+# 
+# AFTER (with this fix):
+# - Execution resources now support TWO types of parent references:
+#   1. parentFlowAlias/Ref/Selector - References a Flow resource (backward compatible)
+#   2. parentSubflowAlias/Ref/Selector - References a Subflow resource (NEW)
+# 
+# - Both field sets map to the same Terraform field (parent_flow_alias)
+# - The multitypes pattern ensures only one can be set at a time
+# - Full backward compatibility is maintained
+# 
+# This example demonstrates:
+# 1. execution-in-main-flow: Classic Flow reference using Ref
+# 2. execution-in-main-flow-selector: Classic Flow reference using Selector
+# 3. execution-in-subflow-ref: NEW Subflow reference using Ref
+# 4. execution-in-subflow-selector: NEW Subflow reference using Selector
