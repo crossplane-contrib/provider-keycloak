@@ -292,6 +292,12 @@ Run tests
 make uptest
 ```
 
+depending on your environment you might need: 
+
+```console
+KUBECONFIG=$HOME/.kube/fenrir-1 KIND_CLUSTER_NAME=fenrir-1 make uptest
+``` 
+
 ### Add Tests
 New TestCases are added to this file `cluster/test/cases.txt`.
 Every resource that is necessary (i.e. Secrets) but no ManagedResource has to be created within this file `dev/demos/basic/000-init.yaml`

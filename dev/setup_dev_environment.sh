@@ -234,6 +234,7 @@ $kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane-
 
 echo "########### Installing Keycloak Provider ###########"
 
+$kubectl_cmd create namespace dev -o yaml --dry-run=client | $kubectl_cmd apply -f -
 if [[ "$deploylocalprovider" == "false" ]]; then
   cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply -f -
   $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider.yaml
