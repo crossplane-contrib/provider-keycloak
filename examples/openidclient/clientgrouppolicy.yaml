@@ -1,0 +1,60 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: example-grouppolicy-realm
+spec:
+  forProvider:
+    realm: example-grouppolicy
+    enabled: true
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: example-grouppolicy-group
+spec:
+  forProvider:
+    name: example-grouppolicy-group
+    realmIdRef:
+      name: example-grouppolicy-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: example-grouppolicy-client
+spec:
+  forProvider:
+    clientId: example-grouppolicy-client
+    enabled: true
+    accessType: CONFIDENTIAL
+    serviceAccountsEnabled: true
+    realmIdRef:
+      name: example-grouppolicy-realm
+    authorization:
+      - policyEnforcementMode: PERMISSIVE
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientGroupPolicy
+metadata:
+  name: example-group-policy
+spec:
+  forProvider:
+    name: example-group-policy
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    realmIdRef:
+      name: example-grouppolicy-realm
+    resourceServerIdRef:
+      name: example-grouppolicy-client
+    groups:
+      - path: /example-grouppolicy-group
+        extendChildren: false
+        idRef:
+          name: example-grouppolicy-group
+  providerConfigRef:
+    name: keycloak-provider-config
