@@ -36,7 +36,7 @@ spec:
   forProvider:
     accessType: CONFIDENTIAL
     authorization:
-    - policyEnforcementMode: ENFORCING
+    - policyEnforcementMode: PERMISSIVE
     clientId: client_id
     realmIdSelector:
       matchLabels:

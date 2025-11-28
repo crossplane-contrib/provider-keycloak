@@ -34,7 +34,7 @@ spec:
   forProvider:
     accessType: CONFIDENTIAL
     authorization:
-    - policyEnforcementMode: ENFORCING
+    - policyEnforcementMode: PERMISSIVE
     clientIdSelector:
       matchLabels:
         testing.upbound.io/example-name: example

@@ -13,7 +13,7 @@ spec:
     fullScopeAllowed: false
     serviceAccountsEnabled: true
     authorization:
-      - policyEnforcementMode: "ENFORCING"
+      - policyEnforcementMode: "PERMISSIVE"
   providerConfigRef:
     name: "keycloak-provider-config"
 ---
