@@ -9,10 +9,14 @@ spec:
       ldap.full.name.attribute: cn
     ldapUserFederationIdRef:
       name: ldap-user-federation
+      policy:
+        resolve: Always
     name: custom-mapper
     providerId: "full-name-ldap-mapper"
     providerType: "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"

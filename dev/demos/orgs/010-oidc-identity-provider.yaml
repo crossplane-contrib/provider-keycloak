@@ -16,10 +16,14 @@ spec:
       clientAuthMethod: client_secret_post
     realmRef:
       name: "orgs"
+      policy:
+        resolve: Always
     tokenUrl: https://tokenurl.com
     orgDomain: example.com
     orgRedirectModeEmailMatches: true
     organizationIdRef:
       name: example
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"

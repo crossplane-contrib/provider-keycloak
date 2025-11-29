@@ -114,9 +114,6 @@ func Configure(p *config.Provider) {
 			s.Computed = false
 		}
 
-		r.LateInitializer = config.LateInitializer{
-			IgnoredFields: []string{"groups.id"},
-		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_role_policy", func(r *config.Resource) {
@@ -135,10 +132,6 @@ func Configure(p *config.Provider) {
 		if s, ok := r.TerraformResource.Schema["logic"]; ok {
 			s.Optional = false
 			s.Computed = false
-		}
-
-		r.LateInitializer = config.LateInitializer{
-			IgnoredFields: []string{"role.id"},
 		}
 	})
 

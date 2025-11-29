@@ -9,8 +9,12 @@ spec:
   forProvider:
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     groupIdRef:
       name: "test"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig

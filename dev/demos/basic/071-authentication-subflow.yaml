@@ -13,6 +13,8 @@ spec:
     providerId: basic-flow
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
     requirement: ALTERNATIVE
   providerConfigRef:
     name: "keycloak-provider-config"
@@ -29,6 +31,8 @@ spec:
     providerId: basic-flow
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
     requirement: ALTERNATIVE
   providerConfigRef:
     name: "keycloak-provider-config"

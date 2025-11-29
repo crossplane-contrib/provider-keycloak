@@ -8,6 +8,8 @@ spec:
     alias: my-flow-alias
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
 ---

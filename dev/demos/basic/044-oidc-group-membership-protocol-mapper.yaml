@@ -10,8 +10,12 @@ spec:
     name: "my-mapper"
     clientIdRef:
       name: "test"
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
     claimName: "test"
 ---
 apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
@@ -28,4 +32,6 @@ spec:
       name: "openid-client-scope"
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
     claimName: "test"

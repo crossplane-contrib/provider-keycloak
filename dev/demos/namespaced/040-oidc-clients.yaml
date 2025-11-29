@@ -8,6 +8,8 @@ spec:
   forProvider:
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     accessType: "CONFIDENTIAL"
     clientId: "test"
     fullScopeAllowed: false
@@ -29,6 +31,8 @@ spec:
   forProvider:
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     accessType: "CONFIDENTIAL"
     clientId: "account"
   providerConfigRef:
@@ -44,6 +48,8 @@ spec:
   forProvider:
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     accessType: "CONFIDENTIAL"
     clientId: "service-acc-1"
     serviceAccountsEnabled: true
@@ -62,6 +68,8 @@ spec:
     name: "svc-role"
     clientIdRef:
       name: "test"
+      policy:
+        resolve: Always
     description: "Role that svc account uses"
   providerConfigRef:
     name: "keycloak-provider-config" # Reference to the provider configuration
