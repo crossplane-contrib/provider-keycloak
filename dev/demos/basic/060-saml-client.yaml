@@ -11,6 +11,8 @@ spec:
     name: saml-client
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
     signAssertions: true
     signDocuments: false
     signingCertificateSecretRef:

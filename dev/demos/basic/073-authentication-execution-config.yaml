@@ -12,5 +12,7 @@ spec:
       name: execution-identity-redirect
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"

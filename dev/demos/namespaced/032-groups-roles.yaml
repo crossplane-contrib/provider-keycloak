@@ -7,8 +7,12 @@ spec:
   forProvider:
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     groupIdRef:
       name: test
+      policy:
+        resolve: Always
     roleIdsRefs:
       - name: "test-client"
   providerConfigRef:

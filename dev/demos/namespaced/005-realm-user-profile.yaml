@@ -61,6 +61,8 @@ spec:
         name: group2
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     unmanagedAttributePolicy: ENABLED
   providerConfigRef:
     name: "keycloak-provider-config"

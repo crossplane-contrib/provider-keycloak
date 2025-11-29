@@ -10,6 +10,8 @@ spec:
     name: "test-client"
     clientIdRef:
       name: "test"
+      policy:
+        resolve: Always
     description: "abc"
   providerConfigRef:
     name: "keycloak-provider-config"  # Reference to the provider configuration

@@ -337,6 +337,26 @@ func (mg *Execution) ResolveReferences(ctx context.Context, c client.Reader) err
 	mg.Spec.ForProvider.ParentFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.ParentFlowAliasRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("authenticationflow.keycloak.m.crossplane.io", "v1alpha1", "Subflow", "SubflowList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ParentSubflowAlias),
+			Extract:      common.AuthenticationFlowAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.ParentSubflowAliasRef,
+			Selector:     mg.Spec.ForProvider.ParentSubflowAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ParentSubflowAlias")
+	}
+	mg.Spec.ForProvider.ParentSubflowAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ParentSubflowAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -376,6 +396,26 @@ func (mg *Execution) ResolveReferences(ctx context.Context, c client.Reader) err
 	}
 	mg.Spec.InitProvider.ParentFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.ParentFlowAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("authenticationflow.keycloak.m.crossplane.io", "v1alpha1", "Subflow", "SubflowList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ParentSubflowAlias),
+			Extract:      common.AuthenticationFlowAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.ParentSubflowAliasRef,
+			Selector:     mg.Spec.InitProvider.ParentSubflowAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ParentSubflowAlias")
+	}
+	mg.Spec.InitProvider.ParentSubflowAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ParentSubflowAliasRef = rsp.ResolvedReference
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {

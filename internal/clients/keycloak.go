@@ -158,8 +158,7 @@ func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, clie
 
 	// Normalize numeric types from JSON (numbers are float64 by default)
 	for k, v := range creds {
-		switch n := v.(type) {
-		case float64:
+		if n, ok := v.(float64); ok {
 			if math.Trunc(n) == n {
 				creds[k] = int(n)
 			}

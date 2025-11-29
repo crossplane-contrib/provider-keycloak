@@ -14,5 +14,7 @@ spec:
     name: email-attribute-importer
     realmRef:
       name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"

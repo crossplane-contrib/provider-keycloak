@@ -4,6 +4,10 @@ set -aeuo pipefail
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 echo "Run Setup..."
 
+# Apply CRDs first to ensure they're available for test resources
+echo "Applying CRDs..."
+${KUBECTL} apply -f ${SCRIPT_DIR}/../../package/crds
+
 ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/basic/000-init.yaml
 ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/namespaced/000-init.yaml
 

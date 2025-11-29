@@ -11,6 +11,8 @@ spec:
     ldapGroupsDn: dc=example,dc=org
     ldapUserFederationIdRef:
       name: ldap-user-federation
+      policy:
+        resolve: Always
     memberofLdapAttribute: memberOf
     membershipAttributeType: DN
     membershipLdapAttribute: member
@@ -18,6 +20,8 @@ spec:
     name: group-mapper
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig
@@ -33,9 +37,13 @@ spec:
       name: test
     ldapUserFederationIdRef:
       name: ldap-user-federation
+      policy:
+        resolve: Always
     name: assign-group-to-users
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig

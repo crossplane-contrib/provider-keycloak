@@ -9,5 +9,10 @@ spec:
   forProvider:
     clientIdRef:
       name: "test"
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
+

@@ -9,9 +9,13 @@ spec:
     attributeValue: bar
     ldapUserFederationIdRef:
       name: ldap-user-federation
+      policy:
+        resolve: Always
     name: assign-foo-to-bar
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig

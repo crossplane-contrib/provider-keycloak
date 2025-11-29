@@ -102,7 +102,7 @@ spec:
     directAccessGrantsEnabled: true
     serviceAccountsEnabled: true
     authorization:
-      - policyEnforcementMode: ENFORCING
+      - policyEnforcementMode: PERMISSIVE
     validRedirectUris:
       - http://localhost:18000
       - http://localhost:8000

@@ -8,6 +8,8 @@ spec:
     ldapRolesDn: dc=example,dc=org
     ldapUserFederationIdRef:
       name: ldap-user-federation
+      policy:
+        resolve: Always
     memberofLdapAttribute: memberOf
     membershipAttributeType: DN
     membershipLdapAttribute: member
@@ -15,6 +17,8 @@ spec:
     name: role-mapper
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
     roleNameLdapAttribute: cn
     roleObjectClasses:
       - groupOfNames
@@ -31,9 +35,13 @@ spec:
   forProvider:
     ldapUserFederationIdRef:
       name: ldap-user-federation
+      policy:
+        resolve: Always
     name: assign-test-role-to-all-users
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
     roleRef:
       name: test
   providerConfigRef:

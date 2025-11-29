@@ -33,6 +33,20 @@ type ExecutionInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ParentFlowAliasSelector *v1.Selector `json:"parentFlowAliasSelector,omitempty" tf:"-"`
 
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/authenticationflow/v1alpha1.Subflow
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.AuthenticationFlowAliasExtractor()
+	// +crossplane:generate:reference:refFieldName=ParentSubflowAliasRef
+	// +crossplane:generate:reference:selectorFieldName=ParentSubflowAliasSelector
+	ParentSubflowAlias *string `json:"parentSubflowAlias,omitempty" tf:"parent_subflow_alias,omitempty"`
+
+	// Reference to a Subflow in authenticationflow to populate parentSubflowAlias.
+	// +kubebuilder:validation:Optional
+	ParentSubflowAliasRef *v1.Reference `json:"parentSubflowAliasRef,omitempty" tf:"-"`
+
+	// Selector for a Subflow in authenticationflow to populate parentSubflowAlias.
+	// +kubebuilder:validation:Optional
+	ParentSubflowAliasSelector *v1.Selector `json:"parentSubflowAliasSelector,omitempty" tf:"-"`
+
 	// The authenticator priority. Lower values will be executed prior higher values (Only supported by Keycloak >= 25).
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
 
@@ -61,6 +75,8 @@ type ExecutionObservation struct {
 
 	// The alias of the flow this execution is attached to.
 	ParentFlowAlias *string `json:"parentFlowAlias,omitempty" tf:"parent_flow_alias,omitempty"`
+
+	ParentSubflowAlias *string `json:"parentSubflowAlias,omitempty" tf:"parent_subflow_alias,omitempty"`
 
 	// The authenticator priority. Lower values will be executed prior higher values (Only supported by Keycloak >= 25).
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
@@ -93,6 +109,21 @@ type ExecutionParameters struct {
 	// Selector for a Flow in authenticationflow to populate parentFlowAlias.
 	// +kubebuilder:validation:Optional
 	ParentFlowAliasSelector *v1.Selector `json:"parentFlowAliasSelector,omitempty" tf:"-"`
+
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/authenticationflow/v1alpha1.Subflow
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.AuthenticationFlowAliasExtractor()
+	// +crossplane:generate:reference:refFieldName=ParentSubflowAliasRef
+	// +crossplane:generate:reference:selectorFieldName=ParentSubflowAliasSelector
+	// +kubebuilder:validation:Optional
+	ParentSubflowAlias *string `json:"parentSubflowAlias,omitempty" tf:"parent_subflow_alias,omitempty"`
+
+	// Reference to a Subflow in authenticationflow to populate parentSubflowAlias.
+	// +kubebuilder:validation:Optional
+	ParentSubflowAliasRef *v1.Reference `json:"parentSubflowAliasRef,omitempty" tf:"-"`
+
+	// Selector for a Subflow in authenticationflow to populate parentSubflowAlias.
+	// +kubebuilder:validation:Optional
+	ParentSubflowAliasSelector *v1.Selector `json:"parentSubflowAliasSelector,omitempty" tf:"-"`
 
 	// The authenticator priority. Lower values will be executed prior higher values (Only supported by Keycloak >= 25).
 	// +kubebuilder:validation:Optional

@@ -10,10 +10,16 @@ spec:
   forProvider:
     clientIdRef:
       name: "test"
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     roleIdRef:
       name: "test-client"
+      policy:
+        resolve: Always
 ---
 apiVersion: client.keycloak.m.crossplane.io/v1alpha1
 kind: RoleMapper
@@ -29,5 +35,10 @@ spec:
       name: "openid-client-scope"
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     roleIdRef:
       name: "test-client"
+      policy:
+        resolve: Always
+---

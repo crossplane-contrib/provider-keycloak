@@ -234,19 +234,35 @@ $kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane-
 
 echo "########### Installing Keycloak Provider ###########"
 
+$kubectl_cmd create namespace dev -o yaml --dry-run=client | $kubectl_cmd apply -f -
 if [[ "$deploylocalprovider" == "false" ]]; then
-  cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
+  cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply -f -
   $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider.yaml
 else
   export OLD_KEYCLOAK_IP=$KEYCLOAK_IP
   export KEYCLOAK_IP=keycloak-keycloakx-http.keycloak.svc.cluster.local
-  cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply --namespace crossplane-system  -f -
+  cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply  -f -
   export KEYCLOAK_IP=$OLD_KEYCLOAK_IP
 
   echo "Deploy local source code as provider 'provider-keycloak'"
 
+  # Debug output
+  echo "DEBUG: setup script - KUBECONFIG=${KUBECONFIG}"
+  echo "DEBUG: setup script - CLUSTER_NAME=${CLUSTER_NAME}"
+  if [ -f "${KUBECONFIG}" ]; then
+    echo "DEBUG: KUBECONFIG file exists: ${KUBECONFIG}"
+  else
+    echo "DEBUG: KUBECONFIG file DOES NOT exist: ${KUBECONFIG}"
+  fi
+
   # Hint: crossplane pod´s filesystem based cache for providers is patched with local built provider
-  KIND_CLUSTER_NAME=$CLUSTER_NAME make local-deploy-provider
+  echo "DEBUG: About to call: KUBECONFIG=${KUBECONFIG} KIND_CLUSTER_NAME=${CLUSTER_NAME} make local-deploy-provider"
+  KUBECONFIG="${KUBECONFIG}" KIND_CLUSTER_NAME=$CLUSTER_NAME make local-deploy-provider
+  echo "DEBUG: After make local-deploy-provider, exit code: $?"
+  
+  echo "* Restarting provider pod to pick up changes"
+  $kubectl_cmd delete pods -n crossplane-system -l pkg.crossplane.io/provider=provider-keycloak --ignore-not-found=true
+  sleep 5
 fi
 
 echo "* Waiting for Keycloak Provider to be ready"

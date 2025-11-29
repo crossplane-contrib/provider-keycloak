@@ -13,6 +13,7 @@
 ./dev/demos/namespaced/080-defaults-groups.yaml
 ./dev/demos/namespaced/074-authentication-execution-binding.yaml
 ./dev/demos/namespaced/073-authentication-execution-config.yaml
+./dev/demos/namespaced/072-authentication-execution-subflow-ref.yaml
 ./dev/demos/namespaced/072-authentication-execution.yaml
 ./dev/demos/namespaced/071-authentication-subflow.yaml
 ./dev/demos/namespaced/070-authentication-flows.yaml
@@ -59,6 +60,7 @@
 ./dev/demos/basic/080-defaults-groups.yaml
 ./dev/demos/basic/074-authentication-execution-binding.yaml
 ./dev/demos/basic/073-authentication-execution-config.yaml
+./dev/demos/basic/072-authentication-execution-subflow-ref.yaml
 ./dev/demos/basic/072-authentication-execution.yaml
 ./dev/demos/basic/071-authentication-subflow.yaml
 ./dev/demos/basic/070-authentication-flows.yaml

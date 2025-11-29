@@ -113,6 +113,7 @@ func Configure(p *config.Provider) {
 			s.Optional = false
 			s.Computed = false
 		}
+
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_role_policy", func(r *config.Resource) {

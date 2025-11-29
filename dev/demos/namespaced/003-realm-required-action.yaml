@@ -13,3 +13,6 @@ spec:
     name: Webauthn Register
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
+
