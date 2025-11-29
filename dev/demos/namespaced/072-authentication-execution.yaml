@@ -10,6 +10,8 @@ spec:
       name: flow
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     requirement: ALTERNATIVE
   providerConfigRef:
     name: "keycloak-provider-config"
@@ -26,6 +28,8 @@ spec:
     parentFlowAlias: my-subflow-alias-1
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     requirement: ALTERNATIVE
   providerConfigRef:
     name: "keycloak-provider-config"
@@ -42,6 +46,8 @@ spec:
     parentFlowAlias: my-subflow-alias-99
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     requirement: ALTERNATIVE
   providerConfigRef:
     name: "keycloak-provider-config"
@@ -59,6 +65,8 @@ spec:
       name: flow
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     requirement: ALTERNATIVE
   providerConfigRef:
     name: "keycloak-provider-config"

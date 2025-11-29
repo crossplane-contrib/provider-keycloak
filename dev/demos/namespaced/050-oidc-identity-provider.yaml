@@ -17,6 +17,8 @@ spec:
       clientAuthMethod: client_secret_post
     realmRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     tokenUrl: https://tokenurl.com
   providerConfigRef:
     name: "keycloak-provider-config"

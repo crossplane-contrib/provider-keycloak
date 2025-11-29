@@ -14,6 +14,8 @@ spec:
     name: my-groups
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
 ---
 apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientDefaultScopes
@@ -24,6 +26,8 @@ spec:
   forProvider:
     clientIdRef:
       name: "test"
+      policy:
+        resolve: Always
     defaultScopes:
       - profile
       - email
@@ -31,6 +35,8 @@ spec:
       - web-origins
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig
@@ -44,6 +50,8 @@ spec:
   forProvider:
     clientIdRef:
       name: "test"
+      policy:
+        resolve: Always
     optionalScopes:
       - address
       - phone
@@ -52,6 +60,8 @@ spec:
       - my-groups
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig

@@ -22,6 +22,8 @@ spec:
     readTimeout: 10s
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
     userObjectClasses:
       - simpleSecurityObject
       - organizationalRole

@@ -12,8 +12,12 @@ spec:
     protocol: "openid-connect"
     clientIdRef:
       name: "test"
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     protocolMapper: "oidc-usermodel-attribute-mapper"
     config:
       userinfo.token.claim: "true"
@@ -40,6 +44,8 @@ spec:
       name: "openid-client-scope"
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     protocolMapper: "oidc-usermodel-client-role-mapper"
     config:
       multivalued: "true"

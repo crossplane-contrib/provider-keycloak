@@ -7,9 +7,13 @@ spec:
   forProvider:
     ldapUserFederationIdRef:
       name: ldap-user-federation
+      policy:
+        resolve: Always
     name: msad-user-account-control-mapper
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig
@@ -23,9 +27,13 @@ spec:
   forProvider:
     ldapUserFederationIdRef:
       name: ldap-user-federation
+      policy:
+        resolve: Always
     name: msad-lds-user-account-control-mapper
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig

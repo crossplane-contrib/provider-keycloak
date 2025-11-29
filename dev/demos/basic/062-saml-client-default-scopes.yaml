@@ -8,10 +8,14 @@ spec:
   forProvider:
     clientIdRef:
       name: saml-client
+      policy:
+        resolve: Always
     defaultScopes:
       - role_list
     realmIdRef:
       name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
 ---

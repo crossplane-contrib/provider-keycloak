@@ -7,6 +7,8 @@ spec:
   forProvider:
     groupIdRef:
       name: test
+      policy:
+        resolve: Always
     members:
       - bree
     realmId: dev

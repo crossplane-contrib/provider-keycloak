@@ -8,9 +8,13 @@ spec:
     ldapAttribute: bar
     ldapUserFederationIdRef:
       name: ldap-user-federation
+      policy:
+        resolve: Always
     name: user-attribute-mapper
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     userModelAttribute: foo
   providerConfigRef:
     name: "keycloak-provider-config"

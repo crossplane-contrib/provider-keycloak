@@ -246,8 +246,19 @@ else
 
   echo "Deploy local source code as provider 'provider-keycloak'"
 
+  # Debug output
+  echo "DEBUG: setup script - KUBECONFIG=${KUBECONFIG}"
+  echo "DEBUG: setup script - CLUSTER_NAME=${CLUSTER_NAME}"
+  if [ -f "${KUBECONFIG}" ]; then
+    echo "DEBUG: KUBECONFIG file exists: ${KUBECONFIG}"
+  else
+    echo "DEBUG: KUBECONFIG file DOES NOT exist: ${KUBECONFIG}"
+  fi
+
   # Hint: crossplane pod´s filesystem based cache for providers is patched with local built provider
-  KIND_CLUSTER_NAME=$CLUSTER_NAME make local-deploy-provider
+  echo "DEBUG: About to call: KUBECONFIG=${KUBECONFIG} KIND_CLUSTER_NAME=${CLUSTER_NAME} make local-deploy-provider"
+  KUBECONFIG="${KUBECONFIG}" KIND_CLUSTER_NAME=$CLUSTER_NAME make local-deploy-provider
+  echo "DEBUG: After make local-deploy-provider, exit code: $?"
   
   echo "* Restarting provider pod to pick up changes"
   $kubectl_cmd delete pods -n crossplane-system -l pkg.crossplane.io/provider=provider-keycloak --ignore-not-found=true

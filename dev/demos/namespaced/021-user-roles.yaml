@@ -7,10 +7,14 @@ spec:
   forProvider:
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
     roleIdsRefs:
       - name: test
     userIdRef:
       name: "tim-tester"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig

@@ -17,6 +17,8 @@ spec:
       name: "test"
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
 ---
 apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientGroupPolicy
@@ -34,12 +36,16 @@ spec:
         extendChildren: false
         idRef:
           name: "test"
+          policy:
+            resolve: Always
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
       name: "test"
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
 ---
 apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientRolePolicy
@@ -52,17 +58,21 @@ spec:
     kind: ProviderConfig
   forProvider:
     name: my-role-policy
+    type: ROLE
     role:
       - required: true
         idRef:
           name: "test"
+          policy:
+            resolve: Always
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
       name: "test"
     realmIdRef:
       name: "dev-ns"
-    type: "role"
+      policy:
+        resolve: Always
 ---
 apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientUserPolicy
@@ -83,3 +93,5 @@ spec:
       name: "test"
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always

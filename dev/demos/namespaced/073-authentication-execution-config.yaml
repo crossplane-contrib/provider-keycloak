@@ -12,6 +12,8 @@ spec:
       name: execution-identity-redirect
     realmIdRef:
       name: "dev-ns"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig
