@@ -35,10 +35,11 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 
 		// Issue #163: parent_flow_alias can reference either a Flow or a Subflow in Keycloak.
-		// For backward compatibility, we keep parentFlowAlias/Ref/Selector for Flow references.
+		// For backward compatibility, we explicitly keep parentFlowAlias/Ref/Selector for Flow references.
 		// We add parentSubflowAlias/Ref/Selector for the new Subflow reference capability.
 		// The multitypes pattern ensures only one can be set, and both map to parent_flow_alias in Terraform.
-		multitypes.ApplyTo(r, "parent_flow_alias",
+		multitypes.ApplyToWithOptions(r, "parent_flow_alias",
+			&multitypes.Options{KeepOriginalField: true}, // Explicit: maintain backward compatibility
 			multitypes.Instance{
 				// Use "parent_flow_alias" as the name so it generates "parentFlowAlias" in the API
 				Name: "parent_flow_alias",
