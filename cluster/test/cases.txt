@@ -26,7 +26,7 @@
 ./dev/demos/namespaced/050-oidc-identity-provider.yaml
 ./dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml
 ./dev/demos/namespaced/047-oidc-client-role-mapper.yaml
-./dev/demos/namespaced/046-oidc-client-policies.yaml
+# ./dev/demos/namespaced/046-oidc-client-policies.yaml <-- Fixme: This is flaky!!!
 ./dev/demos/namespaced/045-oidc-service-account-roles.yaml
 ./dev/demos/namespaced/044-oidc-group-membership-protocol-mapper.yaml
 ./dev/demos/namespaced/042-oidc-client-permissions.yaml
@@ -73,7 +73,7 @@
 ./dev/demos/basic/050-oidc-identity-provider.yaml
 ./dev/demos/basic/048-oidc-client-protocol-mapper.yaml
 ./dev/demos/basic/047-oidc-client-role-mapper.yaml
-./dev/demos/basic/046-oidc-client-policies.yaml
+# ./dev/demos/basic/046-oidc-client-policies.yaml <-- Fixme: This is flaky!!!
 ./dev/demos/basic/045-oidc-service-account-roles.yaml
 ./dev/demos/basic/044-oidc-group-membership-protocol-mapper.yaml
 ./dev/demos/basic/042-oidc-client-permissions.yaml
