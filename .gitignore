@@ -9,3 +9,5 @@ cover.out
 # ignore IDE folders
 .vscode/
 .idea/
+Makefile
+dev/e2e-broken
