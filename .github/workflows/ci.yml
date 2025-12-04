@@ -226,7 +226,7 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-24.04
     needs: detect-noop
-    if: needs.detect-noop.outputs.noop != 'true' && needs.detect-noop.outputs.skip-e2e != 'true'
+    if: needs.detect-noop.outputs.noop != 'true'
     concurrency:
       group: ${{ github.head_ref || github.run_id }}-${{ matrix.keycloak-version }}
       cancel-in-progress: true
