@@ -192,7 +192,7 @@ jobs:
           BUILD_REGISTRY: ${{ env.CROSSPLANE_REGORG }}
 
       - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@7f0b6a5eea9451419f6dd4f1e62d82bebe7fb2eb # v2
+        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
         with:
           subject-name: ${{ env.CROSSPLANE_REGORG }}/${{ env.PROVIDER_REPO }}
           subject-digest: ${{ steps.digest.outputs.digest }}
