@@ -34,6 +34,7 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       noop: ${{ steps.noop.outputs.should_skip }}
+      skip-e2e: ${{ steps.skip-e2e.outputs.skip }}
     steps:
       - name: Detect No-op Changes
         id: noop
@@ -42,6 +43,23 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           paths_ignore: '["**.md", "**.png", "**.jpg"]'
           do_not_skip: '["workflow_dispatch", "schedule", "push"]'
+
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          fetch-depth: 0
+
+      - name: Check for skip e2e in commit message
+        id: skip-e2e
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          if echo "$COMMIT_MESSAGE" | grep -iq "\[skip e2e\]"; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Found [skip e2e] in commit message, will skip e2e tests"
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "No [skip e2e] found in commit message"
+          fi
 
 
   lint:
@@ -226,7 +244,7 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-24.04
     needs: detect-noop
-    if: needs.detect-noop.outputs.noop != 'true'
+    if: needs.detect-noop.outputs.noop != 'true' && needs.detect-noop.outputs.skip-e2e != 'true'
     concurrency:
       group: ${{ github.head_ref || github.run_id }}-${{ matrix.keycloak-version }}
       cancel-in-progress: true
