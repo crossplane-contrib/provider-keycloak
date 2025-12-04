@@ -1,0 +1,250 @@
+name: Quick Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip-tests:
+        description: 'Skip all tests (lint, unit, e2e)'
+        required: false
+        type: boolean
+        default: true
+      push-to-upbound:
+        description: 'Mirror to Upbound registry'
+        required: false
+        type: boolean
+        default: true
+
+env:
+  # Common versions
+  GO_VERSION: '1.24'
+  GOLANGCI_VERSION: 'v2.0.0'
+  DOCKER_BUILDX_VERSION: 'v0.22.0'
+  UP_VERSION: 'v0.38.4'
+
+  # Registry/Org names
+  CROSSPLANE_REGORG: 'ghcr.io/crossplane-contrib'
+  UPBOUND_REGORG: 'xpkg.upbound.io/crossplane-contrib'
+  PROVIDER_REPO: provider-keycloak
+
+  # Upbound registry specific variables
+  UP_DOMAIN: "https://upbound.io"
+  UPBOUND_MARKETPLACE_PUSH_ROBOT_USR: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    if: ${{ !inputs.skip-tests }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          submodules: true
+
+      - name: Setup Go
+        uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Find the Go Build Cache
+        id: go
+        run: echo "cache=$(make go.cachedir)" >> $GITHUB_OUTPUT
+
+      - name: Cache the Go Build Cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ${{ steps.go.outputs.cache }}
+          key: ${{ runner.os }}-build-lint-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-build-lint-
+
+      - name: Cache Go Dependencies
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .work/pkg
+          key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-pkg-
+
+      - name: Vendor Dependencies
+        run: make vendor vendor.check
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9
+        with:
+          version: ${{ env.GOLANGCI_VERSION }}
+
+  unit-tests:
+    runs-on: ubuntu-24.04
+    if: ${{ !inputs.skip-tests }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          submodules: true
+
+      - name: Fetch History
+        run: git fetch --prune --unshallow
+
+      - name: Setup Go
+        uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Find the Go Build Cache
+        id: go
+        run: echo "cache=$(make go.cachedir)" >> $GITHUB_OUTPUT
+
+      - name: Cache the Go Build Cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ${{ steps.go.outputs.cache }}
+          key: ${{ runner.os }}-build-unit-tests-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-build-unit-tests-
+
+      - name: Cache Go Dependencies
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .work/pkg
+          key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-pkg-
+
+      - name: Vendor Dependencies
+        run: make vendor vendor.check
+
+      - name: Run Unit Tests
+        run: make -j2 test
+
+  build-and-publish:
+    runs-on: ubuntu-24.04
+    needs: [lint, unit-tests]
+    if: always() && (needs.lint.result == 'success' || needs.lint.result == 'skipped') && (needs.unit-tests.result == 'success' || needs.unit-tests.result == 'skipped')
+    outputs:
+      version: ${{ steps.version.outputs.VERSION }}
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
+        with:
+          platforms: all
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
+        with:
+          version: ${{ env.DOCKER_BUILDX_VERSION }}
+          install: true
+
+      - name: Login to GHCR
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Find the Go Build Cache
+        id: go
+        run: echo "cache=$(make go.cachedir)" >> $GITHUB_OUTPUT
+
+      - name: Cache the Go Build Cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ${{ steps.go.outputs.cache }}
+          key: ${{ runner.os }}-build-publish-artifacts-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-build-publish-artifacts-
+
+      - name: Cache Go Dependencies
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .work/pkg
+          key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-pkg-
+
+      - name: Vendor Dependencies
+        run: make vendor vendor.check
+
+      - name: Get version
+        id: version
+        run: echo "VERSION=$(git describe --dirty --always --tags | sed 's/-/./2' | sed 's/-/./2' )" >> $GITHUB_OUTPUT
+
+      - name: Build and Push Artifacts
+        run: make build.all
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          PLATFORMS: linux_amd64,linux_arm64
+
+      - name: Build and Push Provider Package
+        run: make xpkg.build xpkg.push XPKG_REG_ORGS=${{ env.CROSSPLANE_REGORG }} XPKG_REG_ORGS_NO_PROMOTE=${{ env.CROSSPLANE_REGORG }}
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          XPKG_PUSH_ARGS: --verbose
+          BUILD_REGISTRY: ${{ env.CROSSPLANE_REGORG }}
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@7f0b6a5eea9451419f6dd4f1e62d82bebe7fb2eb # v2
+        with:
+          subject-name: ${{ env.CROSSPLANE_REGORG }}/${{ env.PROVIDER_REPO }}
+          subject-digest: ${{ steps.digest.outputs.digest }}
+          push-to-registry: true
+
+  mirror-to-upbound:
+    runs-on: ubuntu-24.04
+    needs: build-and-publish
+    if: ${{ inputs.push-to-upbound && needs.build-and-publish.result == 'success' }}
+    steps:
+      - name: Setup up
+        uses: upbound/up-action@v1
+        with:
+          up-version: ${{ env.UP_VERSION }}
+          up-channel: stable
+
+      - name: Login to Upbound
+        env:
+          UP_DOMAIN: ${{ env.UP_DOMAIN }}
+          UPBOUND_MARKETPLACE_PUSH_ROBOT_USR: ${{ env.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR }}
+        run: |
+          up login --token="${UPBOUND_MARKETPLACE_PUSH_ROBOT_USR}" --account=crossplane-contrib
+          up organization get
+
+      - name: Install crane
+        uses: imjasonh/setup-crane@31b88efe9de28ae0ffa220711af4b60be9435f6e # v0.4
+
+      - name: Mirror to Upbound Registry
+        run: |
+          crane copy ${{ env.CROSSPLANE_REGORG }}/${{ env.PROVIDER_REPO }}:${{ needs.build-and-publish.outputs.version }} ${{ env.UPBOUND_REGORG }}/${{ env.PROVIDER_REPO }}:${{ needs.build-and-publish.outputs.version }} --allow-nondistributable-artifacts
+
+  summary:
+    runs-on: ubuntu-24.04
+    needs: [build-and-publish, mirror-to-upbound]
+    if: always()
+    steps:
+      - name: Summary
+        run: |
+          echo "## Quick Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ needs.build-and-publish.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Published Artifacts:" >> $GITHUB_STEP_SUMMARY
+          echo "- **GHCR:** \`${{ env.CROSSPLANE_REGORG }}/${{ env.PROVIDER_REPO }}:${{ needs.build-and-publish.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.mirror-to-upbound.result }}" == "success" ]]; then
+            echo "- **Upbound:** \`${{ env.UPBOUND_REGORG }}/${{ env.PROVIDER_REPO }}:${{ needs.build-and-publish.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Upbound:** ⚠️ Skipped or Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Job Results:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Lint:** ${{ needs.lint.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Unit Tests:** ${{ needs.unit-tests.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build & Publish:** ${{ needs.build-and-publish.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Mirror to Upbound:** ${{ needs.mirror-to-upbound.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
