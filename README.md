@@ -270,32 +270,40 @@ make local-deploy
 ### Run Tests
 Follow the following steps to run end to end tests:
 
-
-Start local dev cluster
+Create and setup local dev cluster (creates a KIND cluster with Crossplane, Keycloak, and ArgoCD):
 ```console
 ./dev/setup_dev_environment.sh --deploy-local-provider
 ```
 
-depending on your environment you might need: 
+Or with a custom cluster name (default is `fenrir-1`):
 
-``` 
-KUBECONFIG=$HOME/.kube/fenrir-1 KIND_CLUSTER_NAME=fenrir-1 ./dev/setup_dev_environment.sh --deploy-local-provider
-``` 
+```console
+./dev/setup_dev_environment.sh --cluster-name my-cluster --deploy-local-provider
+```
+
+**What the script does:**
+- Creates a KIND cluster with the specified name
+- Installs MetalLB for LoadBalancer services
+- Installs ArgoCD
+- Installs Keycloak and OpenLDAP
+- Installs Crossplane
+- Builds and deploys the local provider code (with `--deploy-local-provider` flag)
+- Sets `KUBECONFIG` to `$HOME/.kube/<cluster-name>` and passes it to all commands
 
 **Hint**: If you are using rootless docker you can add the flags `--skip-metal-lb`
 and `--start-cloud-provider-kind` (how to install cloud-provider-kind [see here](https://github.com/kubernetes-sigs/cloud-provider-kind))
-
-Use created file from KIND as kubeconfig `~/.kube/<clustername>`
 
 Run tests
 ```console
 make uptest
 ```
 
-depending on your environment you might need: 
+Or with a custom cluster:
 
 ```console
-KUBECONFIG=$HOME/.kube/fenrir-1 KIND_CLUSTER_NAME=fenrir-1 make uptest
+export KUBECONFIG=$HOME/.kube/fenrir-1
+export KIND_CLUSTER_NAME=fenrir-1
+make uptest
 ``` 
 
 ### Add Tests
