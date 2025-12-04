@@ -330,7 +330,7 @@ jobs:
     needs:  [detect-noop, lint, check-diff, unit-tests, local-deploy, e2e-tests]
     if: |
       needs.detect-noop.outputs.noop != 'true' &&
-      (always() && (needs.e2e-tests.result == 'success' || needs.e2e-tests.result == 'skipped'))
+      (always() && (needs.e2e-tests.result == 'success' || needs.e2e-tests.result == 'skipped' || needs.detect-noop.outputs.skip-e2e == 'true'))
     outputs:
       version: ${{ steps.version.outputs.VERSION }}
     permissions:
