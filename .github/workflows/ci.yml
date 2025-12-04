@@ -226,7 +226,7 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-24.04
     needs: detect-noop
-    if: needs.detect-noop.outputs.noop != 'true'
+    if: needs.detect-noop.outputs.noop != 'true' && needs.detect-noop.outputs.skip-e2e != 'true'
     concurrency:
       group: ${{ github.head_ref || github.run_id }}-${{ matrix.keycloak-version }}
       cancel-in-progress: true
@@ -309,8 +309,10 @@ jobs:
 
   publish-artifacts:
     runs-on: ubuntu-24.04
-    needs:  [lint, check-diff, unit-tests, local-deploy, e2e-tests]
-    if: needs.detect-noop.outputs.noop != 'true'
+    needs:  [detect-noop, lint, check-diff, unit-tests, local-deploy, e2e-tests]
+    if: |
+      needs.detect-noop.outputs.noop != 'true' &&
+      (always() && (needs.e2e-tests.result == 'success' || needs.e2e-tests.result == 'skipped'))
     outputs:
       version: ${{ steps.version.outputs.VERSION }}
     permissions:
