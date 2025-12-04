@@ -11,7 +11,7 @@ on:
 env:
   # Common versions
   GO_VERSION: '1.24'
-  GOLANGCI_VERSION: 'v1.62.2'
+  GOLANGCI_VERSION: 'v1.63.4'
   DOCKER_BUILDX_VERSION: 'v0.22.0'
   UP_VERSION: 'v0.38.4'
 
@@ -296,7 +296,7 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p logs
-          ./dev/setup_dev_environment.sh --deploy-local-provider --keycloak-version ${{ matrix.keycloak-version }} | tee logs/setup-environment.log
+          ./dev/setup_dev_environment.sh --cluster-name fenrir-1 --deploy-local-provider --keycloak-version ${{ matrix.keycloak-version }} | tee logs/setup-environment.log
 
       - name: Verify kind cluster exists
         run: |
