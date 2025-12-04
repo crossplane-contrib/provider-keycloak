@@ -416,7 +416,7 @@ jobs:
   mirror-to-xpkg-upbound-io:
     needs: publish-artifacts
     runs-on: ubuntu-24.04
-    if: env.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR != ''
+    if: secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR != ''
     steps:
       - name: Setup QEMU
         uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
