@@ -128,10 +128,14 @@ else
 fi
 
 echo "Running some commands to make sure the cluster is ready"
-export KUBECONFIG=$HOME/.kube/$CLUSTER_NAME
+# Don't override KUBECONFIG if cluster already exists in default kubeconfig
+# Instead, just set the context and ensure it's available
 kubectl_cmd="kubectl --context=kind-$CLUSTER_NAME"
 $kubectl_cmd cluster-info
 $kubectl_cmd get nodes
+
+# Switch to this context so kubectl commands without --context will work
+kubectl config use-context kind-$CLUSTER_NAME
 
 if [[ "$skipmetallb" == "true" ]]; then
 echo "Skipping MetalLB"
@@ -256,9 +260,26 @@ else
   fi
 
   # Hint: crossplane pod´s filesystem based cache for providers is patched with local built provider
-  echo "DEBUG: About to call: KUBECONFIG=${KUBECONFIG} KIND_CLUSTER_NAME=${CLUSTER_NAME} make local-deploy-provider"
-  KUBECONFIG="${KUBECONFIG}" KIND_CLUSTER_NAME=$CLUSTER_NAME make local-deploy-provider
-  echo "DEBUG: After make local-deploy-provider, exit code: $?"
+  # The context is already switched above, kubectl in Makefile will use current context
+  echo "DEBUG: About to call: make local-deploy-provider"
+  echo "DEBUG: Current kubectl context: $(kubectl config current-context)"
+  echo "DEBUG: KIND_CLUSTER_NAME=${CLUSTER_NAME}"
+  echo "DEBUG: Testing kubectl access..."
+  kubectl cluster-info || echo "WARNING: kubectl cannot access cluster"
+  
+  export KIND_CLUSTER_NAME="${CLUSTER_NAME}"
+  
+  # Save current directory and change to repo root
+  pushd "${SCRIPT_DIR}/.." > /dev/null
+  make local-deploy-provider
+  exit_code=$?
+  popd > /dev/null
+  
+  echo "DEBUG: After make local-deploy-provider, exit code: ${exit_code}"
+  if [ ${exit_code} -ne 0 ]; then
+    echo "ERROR: make local-deploy-provider failed with exit code ${exit_code}"
+    exit ${exit_code}
+  fi
   
   echo "* Restarting provider pod to pick up changes"
   $kubectl_cmd delete pods -n crossplane-system -l pkg.crossplane.io/provider=provider-keycloak --ignore-not-found=true
