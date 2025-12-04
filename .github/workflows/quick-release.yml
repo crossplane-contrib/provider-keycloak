@@ -121,8 +121,6 @@ jobs:
     permissions:
       packages: write
       contents: read
-      attestations: write
-      id-token: write
     steps:
       - name: Setup QEMU
         uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
@@ -174,29 +172,27 @@ jobs:
       - name: Vendor Dependencies
         run: make vendor vendor.check
 
-      - name: Get version
+      - name: Find the version
         id: version
-        run: echo "VERSION=$(git describe --dirty --always --tags | sed 's/-/./2' | sed 's/-/./2' )" >> $GITHUB_OUTPUT
+        run: make common.buildvars >> $GITHUB_OUTPUT
 
-      - name: Build and Push Artifacts
-        run: make build.all
+      - name: Build Artifacts
+        run: |-
+          make -j2 XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" VERSION="${{ steps.version.outputs.VERSION }}" build.all
         env:
-          VERSION: ${{ steps.version.outputs.VERSION }}
-          PLATFORMS: linux_amd64,linux_arm64
+          # We're using docker buildx, which doesn't actually load the images it
+          # builds by default. Specifying --load does so.
+          BUILD_ARGS: "--load"
 
-      - name: Build and Push Provider Package
-        run: make xpkg.build xpkg.push XPKG_REG_ORGS=${{ env.CROSSPLANE_REGORG }} XPKG_REG_ORGS_NO_PROMOTE=${{ env.CROSSPLANE_REGORG }}
-        env:
-          VERSION: ${{ steps.version.outputs.VERSION }}
-          XPKG_PUSH_ARGS: --verbose
-          BUILD_REGISTRY: ${{ env.CROSSPLANE_REGORG }}
-
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@7f0b6a5eea9451419f6dd4f1e62d82bebe7fb2eb # v2
+      - name: Upload Artifacts to GitHub
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
-          subject-name: ${{ env.CROSSPLANE_REGORG }}/${{ env.PROVIDER_REPO }}
-          subject-digest: ${{ steps.digest.outputs.digest }}
-          push-to-registry: true
+          name: output
+          path: _output/**
+
+      - name: Publish Artifacts
+        run: |-
+          make -j2 XPKG_REG_ORGS="${{ env.CROSSPLANE_REGORG }}" XPKG_REG_ORGS_NO_PROMOTE="${{ env.CROSSPLANE_REGORG }}" BRANCH_NAME="main" VERSION="${{ steps.version.outputs.VERSION }}" publish
 
   mirror-to-upbound:
     runs-on: ubuntu-24.04
