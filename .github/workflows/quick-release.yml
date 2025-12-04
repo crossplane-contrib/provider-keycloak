@@ -24,6 +24,7 @@ env:
   # Upbound registry specific variables
   UP_DOMAIN: "https://upbound.io"
   UPBOUND_MARKETPLACE_PUSH_ROBOT_USR: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR }}
+  UPBOUND_MARKETPLACE_PUSH_ROBOT_PSW: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_PSW }}
 
 jobs:
   build-and-publish:
@@ -109,7 +110,7 @@ jobs:
   mirror-to-upbound:
     runs-on: ubuntu-24.04
     needs: build-and-publish
-    if: ${{ inputs.push-to-upbound && needs.build-and-publish.result == 'success' }}
+    if: ${{ inputs.push-to-upbound && needs.build-and-publish.result == 'success' && env.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR != '' && env.UPBOUND_MARKETPLACE_PUSH_ROBOT_PSW != '' }}
     steps:
       - name: Setup up
         uses: upbound/up-action@v1
@@ -121,8 +122,9 @@ jobs:
         env:
           UP_DOMAIN: ${{ env.UP_DOMAIN }}
           UPBOUND_MARKETPLACE_PUSH_ROBOT_USR: ${{ env.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR }}
+          UPBOUND_MARKETPLACE_PUSH_ROBOT_PSW: ${{ env.UPBOUND_MARKETPLACE_PUSH_ROBOT_PSW }}
         run: |
-          up login --token="${UPBOUND_MARKETPLACE_PUSH_ROBOT_USR}" --account=crossplane-contrib
+          up login --token="${UPBOUND_MARKETPLACE_PUSH_ROBOT_PSW}" --account=crossplane-contrib
           up organization get
 
       - name: Install crane
