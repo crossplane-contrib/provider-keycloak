@@ -128,8 +128,8 @@ else
 fi
 
 echo "Running some commands to make sure the cluster is ready"
-# Don't override KUBECONFIG if cluster already exists in default kubeconfig
-# Instead, just set the context and ensure it's available
+# Use the kubeconfig created by kind
+export KUBECONFIG=$HOME/.kube/$CLUSTER_NAME
 kubectl_cmd="kubectl --context=kind-$CLUSTER_NAME"
 $kubectl_cmd cluster-info
 $kubectl_cmd get nodes
