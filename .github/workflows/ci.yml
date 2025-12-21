@@ -11,7 +11,7 @@ on:
 env:
   # Common versions
   GO_VERSION: '1.24'
-  GOLANGCI_VERSION: 'v1.62.2'
+  GOLANGCI_VERSION: 'v1.64.6'
   DOCKER_BUILDX_VERSION: 'v0.22.0'
   UP_VERSION: 'v0.38.4'
 
@@ -102,7 +102,7 @@ jobs:
       # We could run 'make lint' but we prefer this action because it leaves
       # 'annotations' (i.e. it comments on PRs to point out linter violations).
       - name: Lint
-        uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9
+        uses: golangci/golangci-lint-action@55c2c1448f86e01eaae002a5a3a9624417608d84 # v6
         with:
           version: ${{ env.GOLANGCI_VERSION }}
 
@@ -294,8 +294,18 @@ jobs:
 
       - name: Starting testsetup for E2E Tests
         run: |
-          mkdir logs
-          ./dev/setup_dev_environment.sh --deploy-local-provider --keycloak-version ${{ matrix.keycloak-version }} | tee logs/setup-environment.log
+          set -o pipefail
+          mkdir -p logs
+          ./dev/setup_dev_environment.sh --cluster-name fenrir-1 --deploy-local-provider --keycloak-version ${{ matrix.keycloak-version }} | tee logs/setup-environment.log
+
+      - name: Verify kind cluster exists
+        run: |
+          echo "Checking for kind cluster fenrir-1..."
+          kind get clusters
+          if ! kind get clusters | grep -q "fenrir-1"; then
+            echo "ERROR: kind cluster fenrir-1 was not created"
+            exit 1
+          fi
 
       - name: Set kind cluster as context
         run: kind export kubeconfig --name fenrir-1
