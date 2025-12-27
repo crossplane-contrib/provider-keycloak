@@ -40,12 +40,12 @@ github.com/cloudflare/circl v1.6.1 h1:zqIqSPIndyBh1bjLVVDHMPpVKqp8Su/V+6MeDzzQBQ
 github.com/cloudflare/circl v1.6.1/go.mod h1:uddAzsPgqdMAYatqJ0lsjX1oECcQLIlRpzZh3pJrofs=
 github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod h1:oOW0eioCTA6cOiMLiUPZOpcVxMig6NIQQ7OS05n1F4g=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
-github.com/crossplane/crossplane-runtime/v2 v2.0.0 h1:PK2pTKfshdDZ5IfoiMRiCi0PBnIjqbS0KGXEJgRdrb4=
-github.com/crossplane/crossplane-runtime/v2 v2.0.0/go.mod h1:pkd5UzmE8esaZAApevMutR832GjJ1Qgc5Ngr78ByxrI=
+github.com/crossplane/crossplane-runtime/v2 v2.1.0 h1:JBMhL9T+/PfyjLAQEdZWlKLvA3jJVtza8zLLwd9Gs4k=
+github.com/crossplane/crossplane-runtime/v2 v2.1.0/go.mod h1:j78pmk0qlI//Ur7zHhqTr8iePHFcwJKrZnzZB+Fg4t0=
 github.com/crossplane/crossplane-tools v0.0.0-20251017183449-dd4517244339 h1:MPbMxSlY+82UsjrLUAGyXlh/iX1tL5WNj8W9SOaq/nk=
 github.com/crossplane/crossplane-tools v0.0.0-20251017183449-dd4517244339/go.mod h1:8etxwmP4cZwJDwen4+PQlnc1tggltAhEfyyigmdHulQ=
-github.com/crossplane/upjet/v2 v2.0.0 h1:8yC2pFTD3UiYjp+3Cdp8RTXFpM+inznVZm0hSb95mkU=
-github.com/crossplane/upjet/v2 v2.0.0/go.mod h1:nXboF68y9ZQRu39kZirQQiPL/BA4Afic17rEdHE+VQo=
+github.com/crossplane/upjet/v2 v2.2.0 h1:ZWRG9weBklrA3hRG8CjxYql7ffEE5sYnIH3UsyxsSTA=
+github.com/crossplane/upjet/v2 v2.2.0/go.mod h1:jDCqvAFLrVEzqE+pywmQ5u18HbJK5j5Jj4cTQpqOLqY=
 github.com/cyphar/filepath-securejoin v0.4.1 h1:JyxxyPEaktOD+GAnqIqTf9A8tHyAG22rowi7HkoSU1s=
 github.com/cyphar/filepath-securejoin v0.4.1/go.mod h1:Sdj7gXlvMcPZsbhwhQ33GguGLDGQL7h7bg04C/+u9jI=
 github.com/dave/jennifer v1.7.1 h1:B4jJJDHelWcDhlRQxWeo0Npa/pYKBLrirAQoTN45txo=
@@ -245,8 +245,8 @@ github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee h1:W5t00kpgFd
 github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq1c1nUAm88MOHcQC9l5mIlSMApZMrHA=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8mK8HuQTcFwEeznm/DIxMOiR9yIdICNftLE1DvQ=
-github.com/muvaf/typewriter v0.0.0-20220131201631-921e94e8e8d7 h1:CxRHKnh1YJXgNKxcos9rrKL6AcmOl1AS/fygmxFDzh4=
-github.com/muvaf/typewriter v0.0.0-20220131201631-921e94e8e8d7/go.mod h1:SAAdeMEiFXR8LcHffvIdiLI1w243DCH2DuHq7UrA5YQ=
+github.com/muvaf/typewriter v0.0.0-20240614220100-70f9d4a54ea0 h1:05HUfXEb9O/nGF32uKsjjYeGJBZ6PeVHMeqetyXUgR8=
+github.com/muvaf/typewriter v0.0.0-20240614220100-70f9d4a54ea0/go.mod h1:SAAdeMEiFXR8LcHffvIdiLI1w243DCH2DuHq7UrA5YQ=
 github.com/nxadm/tail v1.4.8 h1:nPr65rt6Y5JFSKQO7qToXr7pePgD6Gwiw05lkbyAQTE=
 github.com/nxadm/tail v1.4.8/go.mod h1:+ncqLTQzXmGhMZNUePPaPqPvBxHAIsmXswZKocGu+AU=
 github.com/oklog/run v1.2.0 h1:O8x3yXwah4A73hJdlrwo/2X6J62gE5qTMusH0dvz60E=
