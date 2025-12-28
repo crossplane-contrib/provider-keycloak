@@ -5,7 +5,6 @@ Copyright 2021 Upbound Inc.
 package config
 
 import (
-	"github.com/crossplane/upjet/v2/pkg/config"
 	ujconfig "github.com/crossplane/upjet/v2/pkg/config"
 	conversiontfjson "github.com/crossplane/upjet/v2/pkg/types/conversion/tfjson"
 	tfjson "github.com/hashicorp/terraform-json"
@@ -175,8 +174,8 @@ func GetProviderNamespaced(generationProvider bool) (*ujconfig.Provider, error) 
 
 // KnownReferencers adds referencers for fields that are known and common among
 // more than a few resources.
-func KnownReferencers() config.ResourceOption { //nolint:gocyclo
-	return func(r *config.Resource) {
+func KnownReferencers() ujconfig.ResourceOption { //nolint:gocyclo
+	return func(r *ujconfig.Resource) {
 		for k, s := range r.TerraformResource.Schema {
 			// We shouldn't add referencers for status fields and sensitive fields
 			// since they already have secret referencer.
@@ -185,48 +184,48 @@ func KnownReferencers() config.ResourceOption { //nolint:gocyclo
 			}
 			switch k {
 			case "realm_id":
-				r.References["realm_id"] = config.Reference{
+				r.References["realm_id"] = ujconfig.Reference{
 					TerraformName: "keycloak_realm",
 				}
 			case "organization_id":
-				r.References["organization_id"] = config.Reference{
+				r.References["organization_id"] = ujconfig.Reference{
 					TerraformName: "keycloak_organization",
 				}
 			case "client_id":
-				r.References["client_id"] = config.Reference{
+				r.References["client_id"] = ujconfig.Reference{
 					TerraformName: "keycloak_openid_client",
 					Extractor:     common.PathUUIDExtractor,
 				}
 			case "client_scope_id":
-				r.References["client_scope_id"] = config.Reference{
+				r.References["client_scope_id"] = ujconfig.Reference{
 					TerraformName: "keycloak_openid_client_scope",
 					Extractor:     common.PathUUIDExtractor,
 				}
 			case "service_account_user_id":
-				r.References["service_account_user_id"] = config.Reference{
+				r.References["service_account_user_id"] = ujconfig.Reference{
 					TerraformName:     "keycloak_openid_client",
 					Extractor:         common.PathServiceAccountRoleIDExtractor,
 					RefFieldName:      "ServiceAccountUserClientIDRef",
 					SelectorFieldName: "ServiceAccountUserClientIDSelector",
 				}
-				r.LateInitializer = config.LateInitializer{
+				r.LateInitializer = ujconfig.LateInitializer{
 					IgnoredFields: []string{"service_account_user_id"},
 				}
 
 			case "role_ids":
-				r.References["role_ids"] = config.Reference{
+				r.References["role_ids"] = ujconfig.Reference{
 					TerraformName: "keycloak_role",
 					Extractor:     common.PathUUIDExtractor,
 				}
 
 			case "role_id":
-				r.References["role_id"] = config.Reference{
+				r.References["role_id"] = ujconfig.Reference{
 					TerraformName: "keycloak_role",
 					Extractor:     common.PathUUIDExtractor,
 				}
 
 			case "resource_server_id":
-				r.References["resource_server_id"] = config.Reference{
+				r.References["resource_server_id"] = ujconfig.Reference{
 					TerraformName: "keycloak_openid_client",
 					Extractor:     common.PathUUIDExtractor,
 				}
