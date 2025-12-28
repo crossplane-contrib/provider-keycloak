@@ -22,7 +22,7 @@ export TERRAFORM_DOCS_PATH ?= docs/resources
 export TERRAFORM_FILE_MIRROR ?= .terraform.d/plugins
 export TERRAFORM_FILE_MIRROR_REPO ?= ${TERRAFORM_FILE_MIRROR}/registry.terraform.io
 
-export GOLANGCILINT_VERSION ?= 1.64.6
+export GOLANGCILINT_VERSION ?= 2.7.2
 
 PLATFORMS ?= linux_amd64 linux_arm64
 
@@ -216,7 +216,7 @@ UPTEST_EXAMPLE_LIST := $(shell grep -v '^\#' cluster/test/cases.txt | paste -sd 
 # - Render and inspect the generated chainsaws test cases by using uptest --render-only flag and checking the output directory.
 uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW) $(CROSSPLANE_CLI)
 	@$(INFO) running automated tests
-	@KUBECTL=$(KUBECTL) CHAINSAW=$(CHAINSAW) CROSSPLANE_CLI=$(CROSSPLANE_CLI) CROSSPLANE_NAMESPACE=$(CROSSPLANE_NAMESPACE) $(UPTEST) e2e "$(UPTEST_EXAMPLE_LIST)" --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=cluster/test/setup.sh  --use-library-mode  || $(FAIL)
+	@KUBECTL=$(KUBECTL) CHAINSAW=$(CHAINSAW) CROSSPLANE_CLI=$(CROSSPLANE_CLI) CROSSPLANE_NAMESPACE=$(CROSSPLANE_NAMESPACE) $(UPTEST) e2e "$(UPTEST_EXAMPLE_LIST)" --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=cluster/test/setup.sh  --default-conditions="Test" --use-library-mode  || $(FAIL)
 	@$(OK) running automated tests
 
 local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
