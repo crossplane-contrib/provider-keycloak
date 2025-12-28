@@ -69,7 +69,7 @@ func GetIDFromIdentifyingProperties(ctx context.Context, externalName string, pa
 		foundID, err := lookupConfig.GetIDByExternalName(ctx, externalName, processedParameters, kcClient)
 		if err != nil {
 			var apiErr *keycloak.ApiError
-			if !(errors.As(err, &apiErr) && apiErr.Code == 404) {
+			if !errors.As(err, &apiErr) || apiErr.Code != 404 {
 				return "", err
 			}
 		} else {
