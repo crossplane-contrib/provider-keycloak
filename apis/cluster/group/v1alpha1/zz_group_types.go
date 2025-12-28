@@ -19,6 +19,8 @@ type GroupInitParameters struct {
 	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
+	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
 	// The name of the group.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
@@ -53,6 +55,8 @@ type GroupObservation struct {
 	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
+	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// The name of the group.
@@ -74,6 +78,9 @@ type GroupParameters struct {
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	// The name of the group.
 	// +kubebuilder:validation:Optional

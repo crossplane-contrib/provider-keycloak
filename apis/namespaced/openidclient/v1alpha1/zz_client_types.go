@@ -270,6 +270,9 @@ type ClientInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// Enable support for Demonstrating Proof-of-Possession (DPoP) bound tokens.
+	RequireDpopBoundTokens *bool `json:"requireDpopBoundTokens,omitempty" tf:"require_dpop_bound_tokens,omitempty"`
+
 	// When specified, this URL is prepended to any relative URLs found within valid_redirect_uris, web_origins, and admin_url. NOTE: Due to limitations in the Keycloak API, when the root_url attribute is used, the valid_redirect_uris, web_origins, and admin_url attributes will be required.
 	RootURL *string `json:"rootUrl,omitempty" tf:"root_url,omitempty"`
 
@@ -430,6 +433,9 @@ type ClientObservation struct {
 
 	// The realm this client is attached to.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Enable support for Demonstrating Proof-of-Possession (DPoP) bound tokens.
+	RequireDpopBoundTokens *bool `json:"requireDpopBoundTokens,omitempty" tf:"require_dpop_bound_tokens,omitempty"`
 
 	// (Computed) When authorization is enabled for this client, this attribute is the unique ID for the client (the same value as the .id attribute).
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
@@ -653,6 +659,10 @@ type ClientParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// Enable support for Demonstrating Proof-of-Possession (DPoP) bound tokens.
+	// +kubebuilder:validation:Optional
+	RequireDpopBoundTokens *bool `json:"requireDpopBoundTokens,omitempty" tf:"require_dpop_bound_tokens,omitempty"`
 
 	// When specified, this URL is prepended to any relative URLs found within valid_redirect_uris, web_origins, and admin_url. NOTE: Due to limitations in the Keycloak API, when the root_url attribute is used, the valid_redirect_uris, web_origins, and admin_url attributes will be required.
 	// +kubebuilder:validation:Optional

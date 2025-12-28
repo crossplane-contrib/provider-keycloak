@@ -168,6 +168,10 @@ type UserFederationInitParameters struct {
 	// How frequently Keycloak should sync changed LDAP users, in seconds. Omit this property to disable periodic changed users sync.
 	ChangedSyncPeriod *float64 `json:"changedSyncPeriod,omitempty" tf:"changed_sync_period,omitempty"`
 
+	// When true, LDAP connection pooling is enabled. Defaults to false.
+	// When true, Keycloak will use connection pooling when connecting to LDAP.
+	ConnectionPooling *bool `json:"connectionPooling,omitempty" tf:"connection_pooling,omitempty"`
+
 	// LDAP connection timeout in the format of a Go duration string.
 	// LDAP connection timeout (duration string)
 	ConnectionTimeout *string `json:"connectionTimeout,omitempty" tf:"connection_timeout,omitempty"`
@@ -179,6 +183,10 @@ type UserFederationInitParameters struct {
 	// Additional LDAP filter for filtering searched users. Must begin with ( and end with ).
 	// Additional LDAP filter for filtering searched users. Must begin with '(' and end with ')'.
 	CustomUserSearchFilter *string `json:"customUserSearchFilter,omitempty" tf:"custom_user_search_filter,omitempty"`
+
+	// Can be one of true or false. Will enable/disable logging for Kerberos Authentication. Defaults to false:
+	// true: enables debug logging for Krb5LoginModule. false: disables debug logging for Krb5LoginModule
+	Debug *string `json:"debug,omitempty" tf:"debug,omitempty"`
 
 	// When true, the provider will delete the default mappers which are normally created by Keycloak when creating an LDAP user federation provider. Defaults to false.
 	// When true, the provider will delete the default mappers which are normally created by Keycloak when creating an LDAP user federation provider.
@@ -203,6 +211,10 @@ type UserFederationInitParameters struct {
 	// A block containing the kerberos settings.
 	// Settings regarding kerberos authentication for this realm.
 	Kerberos []KerberosInitParameters `json:"kerberos,omitempty" tf:"kerberos,omitempty"`
+
+	// Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+	// Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+	KrbPrincipalAttribute *string `json:"krbPrincipalAttribute,omitempty" tf:"krb_principal_attribute,omitempty"`
 
 	// Display name of the provider when displayed in the console.
 	// Display name of the provider when displayed in the console.
@@ -303,6 +315,10 @@ type UserFederationObservation struct {
 	// How frequently Keycloak should sync changed LDAP users, in seconds. Omit this property to disable periodic changed users sync.
 	ChangedSyncPeriod *float64 `json:"changedSyncPeriod,omitempty" tf:"changed_sync_period,omitempty"`
 
+	// When true, LDAP connection pooling is enabled. Defaults to false.
+	// When true, Keycloak will use connection pooling when connecting to LDAP.
+	ConnectionPooling *bool `json:"connectionPooling,omitempty" tf:"connection_pooling,omitempty"`
+
 	// LDAP connection timeout in the format of a Go duration string.
 	// LDAP connection timeout (duration string)
 	ConnectionTimeout *string `json:"connectionTimeout,omitempty" tf:"connection_timeout,omitempty"`
@@ -314,6 +330,10 @@ type UserFederationObservation struct {
 	// Additional LDAP filter for filtering searched users. Must begin with ( and end with ).
 	// Additional LDAP filter for filtering searched users. Must begin with '(' and end with ')'.
 	CustomUserSearchFilter *string `json:"customUserSearchFilter,omitempty" tf:"custom_user_search_filter,omitempty"`
+
+	// Can be one of true or false. Will enable/disable logging for Kerberos Authentication. Defaults to false:
+	// true: enables debug logging for Krb5LoginModule. false: disables debug logging for Krb5LoginModule
+	Debug *string `json:"debug,omitempty" tf:"debug,omitempty"`
 
 	// When true, the provider will delete the default mappers which are normally created by Keycloak when creating an LDAP user federation provider. Defaults to false.
 	// When true, the provider will delete the default mappers which are normally created by Keycloak when creating an LDAP user federation provider.
@@ -340,6 +360,10 @@ type UserFederationObservation struct {
 	// A block containing the kerberos settings.
 	// Settings regarding kerberos authentication for this realm.
 	Kerberos []KerberosObservation `json:"kerberos,omitempty" tf:"kerberos,omitempty"`
+
+	// Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+	// Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+	KrbPrincipalAttribute *string `json:"krbPrincipalAttribute,omitempty" tf:"krb_principal_attribute,omitempty"`
 
 	// Display name of the provider when displayed in the console.
 	// Display name of the provider when displayed in the console.
@@ -440,6 +464,11 @@ type UserFederationParameters struct {
 	// +kubebuilder:validation:Optional
 	ChangedSyncPeriod *float64 `json:"changedSyncPeriod,omitempty" tf:"changed_sync_period,omitempty"`
 
+	// When true, LDAP connection pooling is enabled. Defaults to false.
+	// When true, Keycloak will use connection pooling when connecting to LDAP.
+	// +kubebuilder:validation:Optional
+	ConnectionPooling *bool `json:"connectionPooling,omitempty" tf:"connection_pooling,omitempty"`
+
 	// LDAP connection timeout in the format of a Go duration string.
 	// LDAP connection timeout (duration string)
 	// +kubebuilder:validation:Optional
@@ -454,6 +483,11 @@ type UserFederationParameters struct {
 	// Additional LDAP filter for filtering searched users. Must begin with '(' and end with ')'.
 	// +kubebuilder:validation:Optional
 	CustomUserSearchFilter *string `json:"customUserSearchFilter,omitempty" tf:"custom_user_search_filter,omitempty"`
+
+	// Can be one of true or false. Will enable/disable logging for Kerberos Authentication. Defaults to false:
+	// true: enables debug logging for Krb5LoginModule. false: disables debug logging for Krb5LoginModule
+	// +kubebuilder:validation:Optional
+	Debug *string `json:"debug,omitempty" tf:"debug,omitempty"`
 
 	// When true, the provider will delete the default mappers which are normally created by Keycloak when creating an LDAP user federation provider. Defaults to false.
 	// When true, the provider will delete the default mappers which are normally created by Keycloak when creating an LDAP user federation provider.
@@ -484,6 +518,11 @@ type UserFederationParameters struct {
 	// Settings regarding kerberos authentication for this realm.
 	// +kubebuilder:validation:Optional
 	Kerberos []KerberosParameters `json:"kerberos,omitempty" tf:"kerberos,omitempty"`
+
+	// Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+	// Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+	// +kubebuilder:validation:Optional
+	KrbPrincipalAttribute *string `json:"krbPrincipalAttribute,omitempty" tf:"krb_principal_attribute,omitempty"`
 
 	// Display name of the provider when displayed in the console.
 	// Display name of the provider when displayed in the console.

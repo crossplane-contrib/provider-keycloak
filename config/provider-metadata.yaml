@@ -2045,20 +2045,24 @@ resources:
             cache: '- (Optional) A block containing the cache settings.'
             cache_policy: '- (Optional) Deprecated Can be one of DEFAULT, EVICT_DAILY, EVICT_WEEKLY, MAX_LIFESPAN, or NO_CACHE. Defaults to DEFAULT.'
             changed_sync_period: '- (Optional) How frequently Keycloak should sync changed LDAP users, in seconds. Omit this property to disable periodic changed users sync.'
+            connection_pooling: '- (Optional) When true, LDAP connection pooling is enabled. Defaults to false.'
             connection_timeout: '- (Optional) LDAP connection timeout in the format of a Go duration string.'
             connection_url: '- (Required) Connection URL to the LDAP server.'
             custom_user_search_filter: '- (Optional) Additional LDAP filter for filtering searched users. Must begin with ( and end with ).'
+            debug: '- (Optional) Can be one of true or false. Will enable/disable logging for Kerberos Authentication. Defaults to false:'
             delete_default_mappers: '- (Optional) When true, the provider will delete the default mappers which are normally created by Keycloak when creating an LDAP user federation provider. Defaults to false.'
             edit_mode: '- (Optional) Can be one of READ_ONLY, WRITABLE, or UNSYNCED. UNSYNCED allows user data to be imported but not synced back to LDAP. Defaults to READ_ONLY.'
             enabled: '- (Optional) When false, this provider will not be used when performing queries for users. Defaults to true.'
             eviction_day: '- (Optional) Day of the week the entry will become invalid on'
             eviction_hour: '- (Optional) Hour of day the entry will become invalid on.'
             eviction_minute: '- (Optional) Minute of day the entry will become invalid on.'
+            "false": ': Will disable logging for Krb5LoginModule.'
             full_sync_period: '- (Optional) How frequently Keycloak should sync all LDAP users, in seconds. Omit this property to disable periodic full sync.'
             import_enabled: '- (Optional) When true, LDAP users will be imported into the Keycloak database. Defaults to true.'
             kerberos: '- (Optional) A block containing the kerberos settings.'
             kerberos_realm: '- (Required) The name of the kerberos realm, e.g. FOO.LOCAL.'
             key_tab: '- (Required) Path to the kerberos keytab file on the server with credentials of the service principal.'
+            krb_principal_attribute: '- (Optional) Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal ''john@KEYCLOAK.ORG'', it will assume that LDAP username is ''john''.'
             max_lifespan: '- (Optional) Max lifespan of cache entry (duration string).'
             name: '- (Required) Display name of the provider when displayed in the console.'
             pagination: '- (Optional) When true, Keycloak assumes the LDAP server supports pagination. Defaults to true.'
@@ -2071,6 +2075,7 @@ resources:
             server_principal: '- (Required) The kerberos server principal, e.g. ''HTTP/host.foo.com@FOO.LOCAL''.'
             start_tls: '- (Optional) When true, Keycloak will encrypt the connection to LDAP using STARTTLS, which will disable connection pooling.'
             sync_registrations: '- (Optional) When true, newly created users will be synced back to LDAP. Defaults to false.'
+            "true": ': Will enable logging for Krb5LoginModule.'
             trust_email: '- (Optional) If enabled, email provided by this provider is not verified even if verification is enabled for the realm.'
             use_kerberos_for_password_authentication: '- (Optional) Use kerberos login module instead of ldap service api. Defaults to false.'
             use_password_modify_extended_op: '- (Optional) When true, use the LDAPv3 Password Modify Extended Operation (RFC-3062).'
@@ -2081,6 +2086,58 @@ resources:
             uuid_ldap_attribute: '- (Required) Name of the LDAP attribute to use as a unique object identifier for objects in LDAP.'
             validate_password_policy: '- (Optional) When true, Keycloak will validate passwords using the realm policy before updating it.'
             vendor: '- (Optional) Can be one of OTHER, EDIRECTORY, AD, RHDS, or TIVOLI. When this is selected in the GUI, it provides reasonable defaults for other fields. When used with the Keycloak API, this attribute does nothing, but is still required. Defaults to OTHER.'
+        importStatements: []
+    keycloak_oidc_facebook_identity_provider:
+        subCategory: ""
+        name: keycloak_oidc_facebook_identity_provider
+        title: keycloak_oidc_facebook_identity_provider Resource
+        examples:
+            - name: facebook
+              manifest: |-
+                {
+                  "client_id": "${var.facebook_identity_provider_client_id}",
+                  "client_secret": "${var.facebook_identity_provider_client_secret}",
+                  "extra_config": {
+                    "myCustomConfigKey": "myValue"
+                  },
+                  "fetched_fields": "picture",
+                  "realm": "${keycloak_realm.realm.id}",
+                  "sync_mode": "IMPORT",
+                  "trust_email": true
+                }
+              references:
+                client_id: var.facebook_identity_provider_client_id
+                client_secret: var.facebook_identity_provider_client_secret
+                realm: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            accepts_prompt_none_forward_from_client: '- (Optional) When true, unauthenticated requests with prompt=none will be forwarded to Google instead of returning an error. Defaults to false.'
+            add_read_token_role_on_create: '- (Optional) When true, new users will be able to read stored tokens. This will automatically assign the broker.read-token role. Defaults to false.'
+            alias: '- (Optional) The alias for the Facebook identity provider.'
+            client_id: '- (Required) The client or client identifier registered within the identity provider.'
+            client_secret: '- (Required) The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.'
+            default_scopes: '- (Optional) The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid profile email.'
+            disable_user_info: '- (Optional) When true, disables the usage of the user info service to obtain additional user information. Defaults to false.'
+            display_name: '- (Optional) Display name for the Facebook identity provider in the GUI.'
+            enabled: '- (Optional) When true, users will be able to log in to this realm using this identity provider. Defaults to true.'
+            extra_config: '- (Optional) A map of key/value pairs to add extra configuration to this identity provider. This can be used for custom oidc provider implementations, or to add configuration that is not yet supported by this Terraform provider. Use this attribute at your own risk, as custom attributes may conflict with top-level configuration attributes in future provider updates.'
+            fetched_fields: '- (Optional) Provide additional fields which would be fetched using the profile request. This will be appended to the default set of id,name,email,first_name,last_name.'
+            first_broker_login_flow_alias: '- (Optional) The authentication flow to use when users log in for the first time through this identity provider. Defaults to first broker login.'
+            gui_order: '- (Optional) A number defining the order of this identity provider in the GUI.'
+            hide_on_login_page: '- (Optional) When true, this identity provider will be hidden on the login page. Defaults to false.'
+            internal_id: '- (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.'
+            link_only: '- (Optional) When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.'
+            post_broker_login_flow_alias: '- (Optional) The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.'
+            provider_id: '- (Optional) The ID of the identity provider to use. Defaults to facebook, which should be used unless you have extended Keycloak and provided your own implementation.'
+            realm: '- (Required) The name of the realm. This is unique across Keycloak.'
+            store_token: '- (Optional) When true, tokens will be stored after authenticating users. Defaults to true.'
+            sync_mode: '- (Optional) The default sync mode to use for all mappers attached to this identity provider. Can be once of IMPORT, FORCE, or LEGACY.'
+            trust_email: '- (Optional) When true, email addresses for users in this provider will automatically be verified regardless of the realm''s email verification policy. Defaults to false.'
         importStatements: []
     keycloak_oidc_github_identity_provider:
         subCategory: ""
@@ -2524,6 +2581,7 @@ resources:
             oauth2_device_polling_interval: '- (Optional) The minimum amount of time in seconds that the client should wait between polling requests to the token endpoint.'
             pkce_code_challenge_method: '- (Optional) The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value ``.'
             realm_id: '- (Required) The realm this client is attached to.'
+            require_dpop_bound_tokens: '- (Optional) Enable support for Demonstrating Proof-of-Possession (DPoP) bound tokens.'
             resource_server_id: '- (Computed) When authorization is enabled for this client, this attribute is the unique ID for the client (the same value as the .id attribute).'
             root_url: '- (Optional) When specified, this URL is prepended to any relative URLs found within valid_redirect_uris, web_origins, and admin_url. NOTE: Due to limitations in the Keycloak API, when the root_url attribute is used, the valid_redirect_uris, web_origins, and admin_url attributes will be required.'
             service_account_user_id: '- (Computed) When service accounts are enabled for this client, this attribute is the unique ID for the Keycloak user that represents this service account.'
@@ -2538,6 +2596,145 @@ resources:
                 wildcards in the form of an asterisk can be used here. This attribute must be set if either standard_flow_enabled or implicit_flow_enabled
                 is set to true.
             web_origins: '- (Optional) A list of allowed CORS origins. To permit all valid redirect URIs, add +. Note that this will not include the * wildcard. To permit all origins, explicitly add *.'
+        importStatements: []
+    keycloak_openid_client_authorization_aggregate_policy:
+        subCategory: ""
+        name: keycloak_openid_client_authorization_aggregate_policy
+        title: keycloak_openid_client_authorization_aggregate_policy Resource
+        examples:
+            - name: test
+              manifest: |-
+                {
+                  "decision_strategy": "AFFIRMATIVE",
+                  "logic": "POSITIVE",
+                  "name": "aggregate_policy",
+                  "policies": [
+                    "${keycloak_openid_client_authorization_role_policy.role_policy.id}",
+                    "${keycloak_openid_client_authorization_user_policy.user_policy.id}"
+                  ],
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                }
+              references:
+                policies: keycloak_openid_client_authorization_role_policy.role_policy.id
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_openid_client_authorization_role_policy.role_policy: |-
+                    {
+                      "decision_strategy": "UNANIMOUS",
+                      "logic": "POSITIVE",
+                      "name": "role_policy",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "resource_server_id": "${keycloak_openid_client.test.resource_server_id}",
+                      "role": [
+                        {
+                          "id": "${keycloak_role.test.id}",
+                          "required": true
+                        }
+                      ]
+                    }
+                keycloak_openid_client_authorization_user_policy.user_policy: |-
+                    {
+                      "decision_strategy": "UNANIMOUS",
+                      "logic": "POSITIVE",
+                      "name": "user_policy",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "resource_server_id": "${keycloak_openid_client.test.resource_server_id}",
+                      "users": [
+                        "${keycloak_user.test.id}"
+                      ]
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            decision_strategy: '- (Required) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.'
+            description: '- (Optional) A description for the authorization policy.'
+            id: '- Policy ID representing the aggregate policy.'
+            logic: '- (Optional) The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.'
+            name: '- (Required) The name of the policy.'
+            policies: '- (Required) A list of policy IDs to aggregate.'
+            realm_id: '- (Required) The realm this policy exists in.'
+            resource_server_id: '- (Required) The ID of the resource server.'
+        importStatements: []
+    keycloak_openid_client_authorization_client_policy:
+        subCategory: ""
+        name: keycloak_openid_client_authorization_client_policy
+        title: keycloak_openid_client_authorization_client_policy Resource
+        examples:
+            - name: test
+              manifest: |-
+                {
+                  "clients": [
+                    "${keycloak_openid_client.client1.id}",
+                    "${keycloak_openid_client.client2.id}"
+                  ],
+                  "decision_strategy": "UNANIMOUS",
+                  "logic": "POSITIVE",
+                  "name": "client_policy",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                }
+              references:
+                clients: keycloak_openid_client.client1.id
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_openid_client.client1: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "client_id": "client1",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_openid_client.client2: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "client_id": "client2",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            clients: '- (Required) A list of client IDs that this policy applies to.'
+            decision_strategy: '- (Optional) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.'
+            description: '- (Optional) A description for the authorization policy.'
+            id: '- Policy ID representing the client policy.'
+            logic: '- (Optional) The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.'
+            name: '- (Required) The name of the policy.'
+            realm_id: '- (Required) The realm this policy exists in.'
+            resource_server_id: '- (Required) The ID of the resource server.'
         importStatements: []
     keycloak_openid_client_authorization_client_scope_policy:
         subCategory: ""
@@ -2659,6 +2856,125 @@ resources:
             resource_server_id: '- (Required) The ID of the resource server.'
             scope: '- An client scope to add client scope. At least one should be defined.'
         importStatements: []
+    keycloak_openid_client_authorization_group_policy:
+        subCategory: ""
+        name: keycloak_openid_client_authorization_group_policy
+        title: keycloak_openid_client_authorization_group_policy Resource
+        examples:
+            - name: test
+              manifest: |-
+                {
+                  "decision_strategy": "UNANIMOUS",
+                  "groups": [
+                    {
+                      "extend_children": false,
+                      "id": "${keycloak_group.group1.id}",
+                      "path": "${keycloak_group.group1.path}"
+                    },
+                    {
+                      "extend_children": true,
+                      "id": "${keycloak_group.group2.id}",
+                      "path": "${keycloak_group.group2.path}"
+                    }
+                  ],
+                  "logic": "POSITIVE",
+                  "name": "group_policy",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                }
+              references:
+                groups.id: keycloak_group.group2.id
+                groups.path: keycloak_group.group2.path
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_group.group1: |-
+                    {
+                      "name": "group1",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_group.group2: |-
+                    {
+                      "name": "group2",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            decision_strategy: '- (Required) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.'
+            description: '- (Optional) A description for the authorization policy.'
+            extend_children: '- (Required) When true, the policy will also apply to all child groups of this group.'
+            groups: '- (Required) A list of groups group. At least one group must be defined.'
+            groups_claim: '- (Optional) The name of the claim in the token that contains the group information.'
+            id: '- (Required) The ID of the group.'
+            logic: '- (Optional) The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.'
+            name: '- (Required) The name of the policy.'
+            path: '- (Required) The path of the group.'
+            realm_id: '- (Required) The realm this policy exists in.'
+            resource_server_id: '- (Required) The ID of the resource server.'
+        importStatements: []
+    keycloak_openid_client_authorization_js_policy:
+        subCategory: ""
+        name: keycloak_openid_client_authorization_js_policy
+        title: keycloak_openid_client_authorization_js_policy Resource
+        examples:
+            - name: test
+              manifest: |-
+                {
+                  "code": "var context = $evaluation.getContext();\nvar identity = context.getIdentity();\nvar attributes = identity.getAttributes();\nvar email = attributes.getValue('email').asString(0);\n\nif (email.endsWith('@example.com')) {\n  $evaluation.grant();\n}\n",
+                  "decision_strategy": "UNANIMOUS",
+                  "logic": "POSITIVE",
+                  "name": "js_policy",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            code: '- (Required) The JavaScript code to execute for this policy.'
+            decision_strategy: '- (Required) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.'
+            description: '- (Optional) A description for the authorization policy.'
+            id: '- Policy ID representing the JavaScript policy.'
+            logic: '- (Optional) The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.'
+            name: '- (Required) The name of the policy.'
+            realm_id: '- (Required) The realm this policy exists in.'
+            resource_server_id: '- (Required) The ID of the resource server.'
+            type: '- (Optional) The type of the policy. Defaults to js.'
+        importStatements: []
     keycloak_openid_client_authorization_permission:
         subCategory: ""
         name: keycloak_openid_client_authorization_permission
@@ -2727,6 +3043,440 @@ resources:
             resources: '- (Optional) A list of resource IDs that this permission must be applied to. Conflicts with resource_type.'
             scopes: '- (Optional) A list of scope IDs that this permission must be applied to.'
             type: '- (Optional) The type of permission, can be one of resource or scope.'
+        importStatements: []
+    keycloak_openid_client_authorization_resource:
+        subCategory: ""
+        name: keycloak_openid_client_authorization_resource
+        title: keycloak_openid_client_authorization_resource Resource
+        examples:
+            - name: test
+              manifest: |-
+                {
+                  "attributes": {
+                    "key1": "value1,value2",
+                    "key2": "value3"
+                  },
+                  "display_name": "My Resource",
+                  "name": "my_resource",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}",
+                  "scopes": [
+                    "${keycloak_openid_client_authorization_scope.read_scope.name}",
+                    "${keycloak_openid_client_authorization_scope.write_scope.name}"
+                  ],
+                  "type": "http://example.com/resource-type",
+                  "uris": [
+                    "/api/resource/*",
+                    "/api/resource/**"
+                  ]
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+                scopes: keycloak_openid_client_authorization_scope.read_scope.name
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_openid_client_authorization_scope.read_scope: |-
+                    {
+                      "name": "read",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                    }
+                keycloak_openid_client_authorization_scope.write_scope: |-
+                    {
+                      "name": "write",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            attributes: '- (Optional) A map of attributes for the resource. Values can be comma-separated lists.'
+            display_name: '- (Optional) The display name of the resource.'
+            icon_uri: '- (Optional) An icon URI for the resource.'
+            id: '- Resource ID representing the authorization resource.'
+            name: '- (Required) The name of the resource.'
+            owner_managed_access: '- (Optional) When true, this resource supports user-managed access. Defaults to false.'
+            realm_id: '- (Required) The realm this resource exists in.'
+            resource_server_id: '- (Required) The ID of the resource server.'
+            scopes: '- (Optional) A set of scope names that this resource uses.'
+            type: '- (Optional) The type of this resource (e.g., urn:myapp:resources:default).'
+            uris: '- (Optional) A set of URIs that this resource represents.'
+        importStatements: []
+    keycloak_openid_client_authorization_role_policy:
+        subCategory: ""
+        name: keycloak_openid_client_authorization_role_policy
+        title: keycloak_openid_client_authorization_role_policy Resource
+        examples:
+            - name: test
+              manifest: |-
+                {
+                  "decision_strategy": "UNANIMOUS",
+                  "logic": "POSITIVE",
+                  "name": "role_policy",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}",
+                  "role": [
+                    {
+                      "id": "${keycloak_role.admin_role.id}",
+                      "required": true
+                    },
+                    {
+                      "id": "${keycloak_role.user_role.id}",
+                      "required": false
+                    }
+                  ],
+                  "type": "role"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+                role.id: keycloak_role.user_role.id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+                keycloak_role.admin_role: |-
+                    {
+                      "name": "admin",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_role.user_role: |-
+                    {
+                      "name": "user",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+        argumentDocs:
+            decision_strategy: '- (Optional) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.'
+            description: '- (Optional) A description for the authorization policy.'
+            fetch_roles: '- (Optional) When true, roles will be fetched from the user''s claims. Available in Keycloak 25+.'
+            id: '- (Required) The ID of the role.'
+            logic: '- (Optional) The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.'
+            name: '- (Required) The name of the policy.'
+            realm_id: '- (Required) The realm this policy exists in.'
+            required: '- (Required) When true, this role must be present for the policy to grant access.'
+            resource_server_id: '- (Required) The ID of the resource server.'
+            role: '- (Required) A list of roles role. At least one role must be defined.'
+            type: '- (Required) The type of policy. Must be role.'
+        importStatements: []
+    keycloak_openid_client_authorization_scope:
+        subCategory: ""
+        name: keycloak_openid_client_authorization_scope
+        title: keycloak_openid_client_authorization_scope Resource
+        examples:
+            - name: read
+              manifest: |-
+                {
+                  "display_name": "Read Access",
+                  "icon_uri": "https://example.com/icons/read.png",
+                  "name": "read",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+            - name: write
+              manifest: |-
+                {
+                  "display_name": "Write Access",
+                  "name": "write",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+            - name: delete
+              manifest: |-
+                {
+                  "display_name": "Delete Access",
+                  "name": "delete",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            display_name: '- (Optional) The display name of the scope.'
+            icon_uri: '- (Optional) An icon URI for the scope.'
+            id: '- Scope ID representing the authorization scope.'
+            name: '- (Required) The name of the scope.'
+            realm_id: '- (Required) The realm this scope exists in.'
+            resource_server_id: '- (Required) The ID of the resource server.'
+        importStatements: []
+    keycloak_openid_client_authorization_time_policy:
+        subCategory: ""
+        name: keycloak_openid_client_authorization_time_policy
+        title: keycloak_openid_client_authorization_time_policy Resource
+        examples:
+            - name: business_hours
+              manifest: |-
+                {
+                  "decision_strategy": "UNANIMOUS",
+                  "hour": "09",
+                  "hour_end": "17",
+                  "logic": "POSITIVE",
+                  "name": "business_hours_policy",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+            - name: date_range
+              manifest: |-
+                {
+                  "decision_strategy": "UNANIMOUS",
+                  "logic": "POSITIVE",
+                  "name": "date_range_policy",
+                  "not_before": "2024-01-01 00:00:00",
+                  "not_on_or_after": "2024-12-31 23:59:59",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+            - name: quarter1
+              manifest: |-
+                {
+                  "decision_strategy": "UNANIMOUS",
+                  "logic": "POSITIVE",
+                  "month": "1",
+                  "month_end": "3",
+                  "name": "q1_policy",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            day_month: '- (Optional) Starting day of the month (1-31).'
+            day_month_end: '- (Optional) Ending day of the month (1-31).'
+            decision_strategy: '- (Required) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.'
+            description: '- (Optional) A description for the authorization policy.'
+            hour: '- (Optional) Starting hour (0-23).'
+            hour_end: '- (Optional) Ending hour (0-23).'
+            id: '- Policy ID representing the time policy.'
+            logic: '- (Optional) The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.'
+            minute: '- (Optional) Starting minute (0-59).'
+            minute_end: '- (Optional) Ending minute (0-59).'
+            month: '- (Optional) Starting month (1-12).'
+            month_end: '- (Optional) Ending month (1-12).'
+            name: '- (Required) The name of the policy.'
+            not_before: '- (Optional) The policy is valid only after this date/time (format: YYYY-MM-DD HH:MM:SS).'
+            not_on_or_after: '- (Optional) The policy is valid only before this date/time (format: YYYY-MM-DD HH:MM:SS).'
+            realm_id: '- (Required) The realm this policy exists in.'
+            resource_server_id: '- (Required) The ID of the resource server.'
+            year: '- (Optional) Starting year.'
+            year_end: '- (Optional) Ending year.'
+        importStatements: []
+    keycloak_openid_client_authorization_user_policy:
+        subCategory: ""
+        name: keycloak_openid_client_authorization_user_policy
+        title: keycloak_openid_client_authorization_user_policy Resource
+        examples:
+            - name: test
+              manifest: |-
+                {
+                  "decision_strategy": "UNANIMOUS",
+                  "logic": "POSITIVE",
+                  "name": "user_policy",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}",
+                  "users": [
+                    "${keycloak_user.alice.id}",
+                    "${keycloak_user.bob.id}"
+                  ]
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+                users: keycloak_user.alice.id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+                keycloak_user.alice: |-
+                    {
+                      "email": "alice@example.com",
+                      "enabled": true,
+                      "first_name": "Alice",
+                      "last_name": "Smith",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "username": "alice"
+                    }
+                keycloak_user.bob: |-
+                    {
+                      "email": "bob@example.com",
+                      "enabled": true,
+                      "first_name": "Bob",
+                      "last_name": "Jones",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "username": "bob"
+                    }
+        argumentDocs:
+            decision_strategy: '- (Required) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.'
+            description: '- (Optional) A description for the authorization policy.'
+            id: '- Policy ID representing the user policy.'
+            logic: '- (Optional) The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.'
+            name: '- (Required) The name of the policy.'
+            realm_id: '- (Required) The realm this policy exists in.'
+            resource_server_id: '- (Required) The ID of the resource server.'
+            users: '- (Required) A list of user IDs that this policy applies to.'
         importStatements: []
     keycloak_openid_client_client_policy:
         subCategory: ""
@@ -2962,7 +3712,7 @@ resources:
             consent_screen_text: '- (Optional) When set, a consent screen will be displayed to users authenticating to clients with this scope attached. The consent screen will display the string value of this attribute.'
             description: '- (Optional) The description of this client scope in the GUI.'
             gui_order: '- (Optional) Specify order of the client scope in GUI (such as in Consent page) as integer.'
-            include_in_token_scope: '- (Optional) When true, the name of this client scope will be added to the access token property ''scope'' as well as to the Token Introspection Endpoint response.'
+            include_in_token_scope: '- (Optional) When true, the name of this client scope will be added to the access token property ''scope'' as well as to the Token Introspection Endpoint response. When false, this scope will be omitted from the token and from the Token Introspection Endpoint response. Defaults to true.'
             name: '- (Required) The display name of this client scope in the GUI.'
             realm_id: '- (Required) The realm this client scope belongs to.'
         importStatements: []
@@ -3845,7 +4595,7 @@ resources:
             alias: '- (Optional) The alias unique identifies the organization. Same as the name if not specified. The alias cannot be changed after the organization has been created.'
             attributes: '- (Optional) A map representing attributes for the group. In order to add multivalued attributes, use ## to separate the values. Max length for each value is 255 chars.'
             description: '- (Optional) The description of the organization.'
-            domain: '- (Required) A list of domains. At least one domain is required.'
+            domain: '- (Optional) A list of domains.'
             name: '- (Required) The name of the organization.'
             realm: '- (Required) The realm this organization exists in.'
             redirect_url: '- (Optional) The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.'
@@ -3948,6 +4698,7 @@ resources:
             brute_force_detection.failure_reset_time_seconds: '- (Optional) When will failure count be reset?'
             'brute_force_detection.max_failure_wait_seconds ': '- (Optional) Max. time a user will be locked out.'
             brute_force_detection.max_login_failures: '- (Optional) How many failures before wait is triggered.'
+            brute_force_detection.max_temporary_lockouts: '- (Optional) How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0'
             brute_force_detection.minimum_quick_login_wait_seconds: '- (Optional) How long to wait after a quick login failure.'
             brute_force_detection.permanent_lockout: '- (Optional) When true, this will lock the user permanently when the user exceeds the maximum login failures.'
             brute_force_detection.quick_login_check_milli_seconds: '- (Optional) Configures the amount of time, in milliseconds, for consecutive failures to lock a user out.'
@@ -4028,6 +4779,7 @@ resources:
             sso_session_idle_timeout_remember_me: '- (Optional) Similar to sso_session_idle_timeout, but used when a user clicks "Remember Me". If not set, Keycloak will default to the value of sso_session_idle_timeout.'
             sso_session_max_lifespan: '- (Optional) The maximum amount of time before a session expires regardless of activity.'
             sso_session_max_lifespan_remember_me: '- (Optional) Similar to sso_session_max_lifespan, but used when a user clicks "Remember Me". If not set, Keycloak will default to the value of sso_session_max_lifespan.'
+            terraform_deletion_protection: '- (Optional) When set to true, the realm cannot be deleted. Defaults to false.'
             url: '- (Required) The auth token URL.'
             user_managed_access: '- (Optional) When true, users are allowed to manage their own resources. Defaults to false.'
             user_verification_requirement: '- (Optional) Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.'
@@ -4351,6 +5103,9 @@ resources:
                   "algorithm": "RS256",
                   "certificate": "\u003cyour certificate\u003e",
                   "enabled": true,
+                  "extra_config": {
+                    "kid": "my-key-id"
+                  },
                   "keystore_size": 2048,
                   "name": "my-rsa-key",
                   "priority": 100,
@@ -4370,6 +5125,7 @@ resources:
             algorithm: '- (Optional) Intended algorithm for the key. Defaults to RS256. Use RSA-OAEP for encryption keys'
             certificate: '- (Required) X509 Certificate encoded in PEM format.'
             enabled: '- (Optional) When false, key is not accessible in this realm. Defaults to true.'
+            extra_config: '- (Optional) Map of additional provider configuration options passed through to the Keycloak component config. For RSA keystores this can include keys like kid.'
             keystore_size: '- (Optional) Size for the generated keys. Defaults to 2048.'
             name: '- (Required) Display name of provider when linked in admin console.'
             priority: '- (Optional) Priority for the provider. Defaults to 0'
@@ -4895,6 +5651,7 @@ resources:
             direct_grant_id: '- (Optional) Direct grant flow id (flow needs to exist)'
             enabled: '- (Optional) When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.'
             encrypt_assertions: '- (Optional) When true, the SAML assertions will be encrypted by Keycloak using the client''s public key. Defaults to false.'
+            encryption_algorithm: '- (Optional) Algorithm used to encrypt SAML assertions. Allowed values: AES_256_GCM, AES_192_GCM, AES_128_GCM, AES_256_CBC, AES_192_CBC, or AES_128_CBC.'
             encryption_certificate: '- (Optional) If assertions for the client are encrypted, this certificate will be used for encryption.'
             encryption_certificate_sha1: '- (Computed) The sha1sum fingerprint of the encryption certificate. If the encryption certificate is not in correct base64 format, this will be left empty.'
             extra_config: '- (Optional) A map of key/value pairs to add extra configuration attributes to this client. This can be used for custom attributes, or to add configuration attributes that is not yet supported by this Terraform provider. Use this attribute at your own risk, as s may conflict with top-level configuration attributes in future provider updates.'

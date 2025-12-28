@@ -75,7 +75,7 @@ spec:
                     description: The description of the organization.
                     type: string
                   domain:
-                    description: A list of domains. At least one domain is required.
+                    description: A list of domains.
                     items:
                       properties:
                         name:
@@ -216,7 +216,7 @@ spec:
                     description: The description of the organization.
                     type: string
                   domain:
-                    description: A list of domains. At least one domain is required.
+                    description: A list of domains.
                     items:
                       properties:
                         name:
@@ -386,10 +386,6 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.domain is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.domain)
-                || (has(self.initProvider) && has(self.initProvider.domain))'
             - message: spec.forProvider.name is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
@@ -416,7 +412,7 @@ spec:
                     description: The description of the organization.
                     type: string
                   domain:
-                    description: A list of domains. At least one domain is required.
+                    description: A list of domains.
                     items:
                       properties:
                         name:

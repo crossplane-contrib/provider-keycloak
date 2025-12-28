@@ -387,6 +387,11 @@ func (in *BruteForceDetectionInitParameters) DeepCopyInto(out *BruteForceDetecti
 		*out = new(float64)
 		**out = **in
 	}
+	if in.MaxTemporaryLockouts != nil {
+		in, out := &in.MaxTemporaryLockouts, &out.MaxTemporaryLockouts
+		*out = new(float64)
+		**out = **in
+	}
 	if in.MinimumQuickLoginWaitSeconds != nil {
 		in, out := &in.MinimumQuickLoginWaitSeconds, &out.MinimumQuickLoginWaitSeconds
 		*out = new(float64)
@@ -437,6 +442,11 @@ func (in *BruteForceDetectionObservation) DeepCopyInto(out *BruteForceDetectionO
 		*out = new(float64)
 		**out = **in
 	}
+	if in.MaxTemporaryLockouts != nil {
+		in, out := &in.MaxTemporaryLockouts, &out.MaxTemporaryLockouts
+		*out = new(float64)
+		**out = **in
+	}
 	if in.MinimumQuickLoginWaitSeconds != nil {
 		in, out := &in.MinimumQuickLoginWaitSeconds, &out.MinimumQuickLoginWaitSeconds
 		*out = new(float64)
@@ -484,6 +494,11 @@ func (in *BruteForceDetectionParameters) DeepCopyInto(out *BruteForceDetectionPa
 	}
 	if in.MaxLoginFailures != nil {
 		in, out := &in.MaxLoginFailures, &out.MaxLoginFailures
+		*out = new(float64)
+		**out = **in
+	}
+	if in.MaxTemporaryLockouts != nil {
+		in, out := &in.MaxTemporaryLockouts, &out.MaxTemporaryLockouts
 		*out = new(float64)
 		**out = **in
 	}
@@ -1173,6 +1188,22 @@ func (in *KeystoreRsaInitParameters) DeepCopyInto(out *KeystoreRsaInitParameters
 		*out = new(bool)
 		**out = **in
 	}
+	if in.ExtraConfig != nil {
+		in, out := &in.ExtraConfig, &out.ExtraConfig
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
@@ -1266,6 +1297,22 @@ func (in *KeystoreRsaObservation) DeepCopyInto(out *KeystoreRsaObservation) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.ExtraConfig != nil {
+		in, out := &in.ExtraConfig, &out.ExtraConfig
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.ID != nil {
 		in, out := &in.ID, &out.ID
 		*out = new(string)
@@ -1321,6 +1368,22 @@ func (in *KeystoreRsaParameters) DeepCopyInto(out *KeystoreRsaParameters) {
 		in, out := &in.Enabled, &out.Enabled
 		*out = new(bool)
 		**out = **in
+	}
+	if in.ExtraConfig != nil {
+		in, out := &in.ExtraConfig, &out.ExtraConfig
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
 	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
@@ -2233,6 +2296,11 @@ func (in *RealmInitParameters) DeepCopyInto(out *RealmInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.AdminPermissionsEnabled != nil {
+		in, out := &in.AdminPermissionsEnabled, &out.AdminPermissionsEnabled
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AdminTheme != nil {
 		in, out := &in.AdminTheme, &out.AdminTheme
 		*out = new(string)
@@ -2494,6 +2562,11 @@ func (in *RealmInitParameters) DeepCopyInto(out *RealmInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.TerraformDeletionProtection != nil {
+		in, out := &in.TerraformDeletionProtection, &out.TerraformDeletionProtection
+		*out = new(bool)
+		**out = **in
+	}
 	if in.UserManagedAccess != nil {
 		in, out := &in.UserManagedAccess, &out.UserManagedAccess
 		*out = new(bool)
@@ -2603,6 +2676,11 @@ func (in *RealmObservation) DeepCopyInto(out *RealmObservation) {
 	if in.ActionTokenGeneratedByUserLifespan != nil {
 		in, out := &in.ActionTokenGeneratedByUserLifespan, &out.ActionTokenGeneratedByUserLifespan
 		*out = new(string)
+		**out = **in
+	}
+	if in.AdminPermissionsEnabled != nil {
+		in, out := &in.AdminPermissionsEnabled, &out.AdminPermissionsEnabled
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AdminTheme != nil {
@@ -2871,6 +2949,11 @@ func (in *RealmObservation) DeepCopyInto(out *RealmObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.TerraformDeletionProtection != nil {
+		in, out := &in.TerraformDeletionProtection, &out.TerraformDeletionProtection
+		*out = new(bool)
+		**out = **in
+	}
 	if in.UserManagedAccess != nil {
 		in, out := &in.UserManagedAccess, &out.UserManagedAccess
 		*out = new(bool)
@@ -2948,6 +3031,11 @@ func (in *RealmParameters) DeepCopyInto(out *RealmParameters) {
 	if in.ActionTokenGeneratedByUserLifespan != nil {
 		in, out := &in.ActionTokenGeneratedByUserLifespan, &out.ActionTokenGeneratedByUserLifespan
 		*out = new(string)
+		**out = **in
+	}
+	if in.AdminPermissionsEnabled != nil {
+		in, out := &in.AdminPermissionsEnabled, &out.AdminPermissionsEnabled
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AdminTheme != nil {
@@ -3209,6 +3297,11 @@ func (in *RealmParameters) DeepCopyInto(out *RealmParameters) {
 	if in.SsoSessionMaxLifespanRememberMe != nil {
 		in, out := &in.SsoSessionMaxLifespanRememberMe, &out.SsoSessionMaxLifespanRememberMe
 		*out = new(string)
+		**out = **in
+	}
+	if in.TerraformDeletionProtection != nil {
+		in, out := &in.TerraformDeletionProtection, &out.TerraformDeletionProtection
+		*out = new(bool)
 		**out = **in
 	}
 	if in.UserManagedAccess != nil {
@@ -3587,6 +3680,11 @@ func (in *RequiredActionStatus) DeepCopy() *RequiredActionStatus {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *SMTPServerInitParameters) DeepCopyInto(out *SMTPServerInitParameters) {
 	*out = *in
+	if in.AllowUTF8 != nil {
+		in, out := &in.AllowUTF8, &out.AllowUTF8
+		*out = new(bool)
+		**out = **in
+	}
 	if in.Auth != nil {
 		in, out := &in.Auth, &out.Auth
 		*out = make([]AuthInitParameters, len(*in))
@@ -3661,6 +3759,11 @@ func (in *SMTPServerInitParameters) DeepCopy() *SMTPServerInitParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *SMTPServerObservation) DeepCopyInto(out *SMTPServerObservation) {
 	*out = *in
+	if in.AllowUTF8 != nil {
+		in, out := &in.AllowUTF8, &out.AllowUTF8
+		*out = new(bool)
+		**out = **in
+	}
 	if in.Auth != nil {
 		in, out := &in.Auth, &out.Auth
 		*out = make([]AuthObservation, len(*in))
@@ -3735,6 +3838,11 @@ func (in *SMTPServerObservation) DeepCopy() *SMTPServerObservation {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *SMTPServerParameters) DeepCopyInto(out *SMTPServerParameters) {
 	*out = *in
+	if in.AllowUTF8 != nil {
+		in, out := &in.AllowUTF8, &out.AllowUTF8
+		*out = new(bool)
+		**out = **in
+	}
 	if in.Auth != nil {
 		in, out := &in.Auth, &out.Auth
 		*out = make([]AuthParameters, len(*in))

@@ -437,6 +437,11 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.EncryptionAlgorithm != nil {
+		in, out := &in.EncryptionAlgorithm, &out.EncryptionAlgorithm
+		*out = new(string)
+		**out = **in
+	}
 	if in.EncryptionCertificateSecretRef != nil {
 		in, out := &in.EncryptionCertificateSecretRef, &out.EncryptionCertificateSecretRef
 		*out = new(v1.LocalSecretKeySelector)
@@ -693,6 +698,11 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.EncryptionAlgorithm != nil {
+		in, out := &in.EncryptionAlgorithm, &out.EncryptionAlgorithm
+		*out = new(string)
+		**out = **in
+	}
 	if in.EncryptionCertificateSha1 != nil {
 		in, out := &in.EncryptionCertificateSha1, &out.EncryptionCertificateSha1
 		*out = new(string)
@@ -920,6 +930,11 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 	if in.EncryptAssertions != nil {
 		in, out := &in.EncryptAssertions, &out.EncryptAssertions
 		*out = new(bool)
+		**out = **in
+	}
+	if in.EncryptionAlgorithm != nil {
+		in, out := &in.EncryptionAlgorithm, &out.EncryptionAlgorithm
+		*out = new(string)
 		**out = **in
 	}
 	if in.EncryptionCertificateSecretRef != nil {

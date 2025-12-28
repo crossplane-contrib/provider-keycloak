@@ -24,7 +24,7 @@ type ClientScopeInitParameters struct {
 	// Specify order of the client scope in GUI (such as in Consent page) as integer.
 	GuiOrder *float64 `json:"guiOrder,omitempty" tf:"gui_order,omitempty"`
 
-	// When true, the name of this client scope will be added to the access token property 'scope' as well as to the Token Introspection Endpoint response.
+	// When true, the name of this client scope will be added to the access token property 'scope' as well as to the Token Introspection Endpoint response. When false, this scope will be omitted from the token and from the Token Introspection Endpoint response. Defaults to true.
 	IncludeInTokenScope *bool `json:"includeInTokenScope,omitempty" tf:"include_in_token_scope,omitempty"`
 
 	// The display name of this client scope in the GUI.
@@ -56,7 +56,7 @@ type ClientScopeObservation struct {
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// When true, the name of this client scope will be added to the access token property 'scope' as well as to the Token Introspection Endpoint response.
+	// When true, the name of this client scope will be added to the access token property 'scope' as well as to the Token Introspection Endpoint response. When false, this scope will be omitted from the token and from the Token Introspection Endpoint response. Defaults to true.
 	IncludeInTokenScope *bool `json:"includeInTokenScope,omitempty" tf:"include_in_token_scope,omitempty"`
 
 	// The display name of this client scope in the GUI.
@@ -80,7 +80,7 @@ type ClientScopeParameters struct {
 	// +kubebuilder:validation:Optional
 	GuiOrder *float64 `json:"guiOrder,omitempty" tf:"gui_order,omitempty"`
 
-	// When true, the name of this client scope will be added to the access token property 'scope' as well as to the Token Introspection Endpoint response.
+	// When true, the name of this client scope will be added to the access token property 'scope' as well as to the Token Introspection Endpoint response. When false, this scope will be omitted from the token and from the Token Introspection Endpoint response. Defaults to true.
 	// +kubebuilder:validation:Optional
 	IncludeInTokenScope *bool `json:"includeInTokenScope,omitempty" tf:"include_in_token_scope,omitempty"`
 

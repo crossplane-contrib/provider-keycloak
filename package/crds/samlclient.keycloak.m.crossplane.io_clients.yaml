@@ -198,6 +198,11 @@ spec:
                     description: When true, the SAML assertions will be encrypted
                       by Keycloak using the client's public key. Defaults to false.
                     type: boolean
+                  encryptionAlgorithm:
+                    description: 'Algorithm used to encrypt SAML assertions. Allowed
+                      values: AES_256_GCM, AES_192_GCM, AES_128_GCM, AES_256_CBC,
+                      AES_192_CBC, or AES_128_CBC.'
+                    type: string
                   encryptionCertificateSecretRef:
                     description: If assertions for the client are encrypted, this
                       certificate will be used for encryption.
@@ -563,6 +568,11 @@ spec:
                     description: When true, the SAML assertions will be encrypted
                       by Keycloak using the client's public key. Defaults to false.
                     type: boolean
+                  encryptionAlgorithm:
+                    description: 'Algorithm used to encrypt SAML assertions. Allowed
+                      values: AES_256_GCM, AES_192_GCM, AES_128_GCM, AES_256_CBC,
+                      AES_192_CBC, or AES_128_CBC.'
+                    type: string
                   encryptionCertificateSecretRef:
                     description: If assertions for the client are encrypted, this
                       certificate will be used for encryption.
@@ -896,6 +906,11 @@ spec:
                     description: When true, the SAML assertions will be encrypted
                       by Keycloak using the client's public key. Defaults to false.
                     type: boolean
+                  encryptionAlgorithm:
+                    description: 'Algorithm used to encrypt SAML assertions. Allowed
+                      values: AES_256_GCM, AES_192_GCM, AES_128_GCM, AES_256_CBC,
+                      AES_192_CBC, or AES_128_CBC.'
+                    type: string
                   encryptionCertificateSha1:
                     description: (Computed) The sha1sum fingerprint of the encryption
                       certificate. If the encryption certificate is not in correct

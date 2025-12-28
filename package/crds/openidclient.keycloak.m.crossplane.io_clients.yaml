@@ -551,6 +551,10 @@ spec:
                             type: string
                         type: object
                     type: object
+                  requireDpopBoundTokens:
+                    description: Enable support for Demonstrating Proof-of-Possession
+                      (DPoP) bound tokens.
+                    type: boolean
                   rootUrl:
                     description: 'When specified, this URL is prepended to any relative
                       URLs found within valid_redirect_uris, web_origins, and admin_url.
@@ -1113,6 +1117,10 @@ spec:
                             type: string
                         type: object
                     type: object
+                  requireDpopBoundTokens:
+                    description: Enable support for Demonstrating Proof-of-Possession
+                      (DPoP) bound tokens.
+                    type: boolean
                   rootUrl:
                     description: 'When specified, this URL is prepended to any relative
                       URLs found within valid_redirect_uris, web_origins, and admin_url.
@@ -1463,6 +1471,10 @@ spec:
                   realmId:
                     description: The realm this client is attached to.
                     type: string
+                  requireDpopBoundTokens:
+                    description: Enable support for Demonstrating Proof-of-Possession
+                      (DPoP) bound tokens.
+                    type: boolean
                   resourceServerId:
                     description: (Computed) When authorization is enabled for this
                       client, this attribute is the unique ID for the client (the

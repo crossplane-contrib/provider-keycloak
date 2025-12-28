@@ -32,6 +32,10 @@ type KeystoreRsaInitParameters struct {
 	// Set if the keys are enabled
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
+	// Map of additional provider configuration options passed through to the Keycloak component config. For RSA keystores this can include keys like kid.
+	// +mapType=granular
+	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
+
 	// Display name of provider when linked in admin console.
 	// Display name of provider when linked in admin console.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
@@ -75,6 +79,10 @@ type KeystoreRsaObservation struct {
 	// Set if the keys are enabled
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
+	// Map of additional provider configuration options passed through to the Keycloak component config. For RSA keystores this can include keys like kid.
+	// +mapType=granular
+	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// Display name of provider when linked in admin console.
@@ -114,6 +122,11 @@ type KeystoreRsaParameters struct {
 	// Set if the keys are enabled
 	// +kubebuilder:validation:Optional
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+
+	// Map of additional provider configuration options passed through to the Keycloak component config. For RSA keystores this can include keys like kid.
+	// +kubebuilder:validation:Optional
+	// +mapType=granular
+	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// Display name of provider when linked in admin console.
 	// Display name of provider when linked in admin console.

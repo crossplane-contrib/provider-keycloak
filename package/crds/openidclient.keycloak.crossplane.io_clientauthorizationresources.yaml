@@ -35,7 +35,7 @@ spec:
     schema:
       openAPIV3Schema:
         description: ClientAuthorizationResource is the Schema for the ClientAuthorizationResources
-          API. <no value>
+          API.
         properties:
           apiVersion:
             description: |-
@@ -77,17 +77,25 @@ spec:
                   attributes:
                     additionalProperties:
                       type: string
+                    description: A map of attributes for the resource. Values can
+                      be comma-separated lists.
                     type: object
                     x-kubernetes-map-type: granular
                   displayName:
+                    description: The display name of the resource.
                     type: string
                   iconUri:
+                    description: An icon URI for the resource.
                     type: string
                   name:
+                    description: The name of the resource.
                     type: string
                   ownerManagedAccess:
+                    description: When true, this resource supports user-managed access.
+                      Defaults to false.
                     type: boolean
                   realmId:
+                    description: The realm this resource exists in.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -164,6 +172,7 @@ spec:
                         type: object
                     type: object
                   resourceServerId:
+                    description: The ID of the resource server.
                     type: string
                   resourceServerIdRef:
                     description: Reference to a Client in openidclient to populate
@@ -242,13 +251,16 @@ spec:
                         type: object
                     type: object
                   scopes:
+                    description: A set of scope names that this resource uses.
                     items:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
                   type:
+                    description: The type of this resource (e.g., urn:myapp:resources:default).
                     type: string
                   uris:
+                    description: A set of URIs that this resource represents.
                     items:
                       type: string
                     type: array
@@ -270,17 +282,25 @@ spec:
                   attributes:
                     additionalProperties:
                       type: string
+                    description: A map of attributes for the resource. Values can
+                      be comma-separated lists.
                     type: object
                     x-kubernetes-map-type: granular
                   displayName:
+                    description: The display name of the resource.
                     type: string
                   iconUri:
+                    description: An icon URI for the resource.
                     type: string
                   name:
+                    description: The name of the resource.
                     type: string
                   ownerManagedAccess:
+                    description: When true, this resource supports user-managed access.
+                      Defaults to false.
                     type: boolean
                   realmId:
+                    description: The realm this resource exists in.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -357,6 +377,7 @@ spec:
                         type: object
                     type: object
                   resourceServerId:
+                    description: The ID of the resource server.
                     type: string
                   resourceServerIdRef:
                     description: Reference to a Client in openidclient to populate
@@ -435,13 +456,16 @@ spec:
                         type: object
                     type: object
                   scopes:
+                    description: A set of scope names that this resource uses.
                     items:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
                   type:
+                    description: The type of this resource (e.g., urn:myapp:resources:default).
                     type: string
                   uris:
+                    description: A set of URIs that this resource represents.
                     items:
                       type: string
                     type: array
@@ -547,30 +571,43 @@ spec:
                   attributes:
                     additionalProperties:
                       type: string
+                    description: A map of attributes for the resource. Values can
+                      be comma-separated lists.
                     type: object
                     x-kubernetes-map-type: granular
                   displayName:
+                    description: The display name of the resource.
                     type: string
                   iconUri:
+                    description: An icon URI for the resource.
                     type: string
                   id:
+                    description: Resource ID representing the authorization resource.
                     type: string
                   name:
+                    description: The name of the resource.
                     type: string
                   ownerManagedAccess:
+                    description: When true, this resource supports user-managed access.
+                      Defaults to false.
                     type: boolean
                   realmId:
+                    description: The realm this resource exists in.
                     type: string
                   resourceServerId:
+                    description: The ID of the resource server.
                     type: string
                   scopes:
+                    description: A set of scope names that this resource uses.
                     items:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
                   type:
+                    description: The type of this resource (e.g., urn:myapp:resources:default).
                     type: string
                   uris:
+                    description: A set of URIs that this resource represents.
                     items:
                       type: string
                     type: array

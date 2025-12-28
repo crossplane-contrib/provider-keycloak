@@ -56,7 +56,7 @@ type OrganizationInitParameters struct {
 	// The description of the organization.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// A list of domains. At least one domain is required.
+	// A list of domains.
 	Domain []DomainInitParameters `json:"domain,omitempty" tf:"domain,omitempty"`
 
 	// Enable/disable this organization.
@@ -97,7 +97,7 @@ type OrganizationObservation struct {
 	// The description of the organization.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// A list of domains. At least one domain is required.
+	// A list of domains.
 	Domain []DomainObservation `json:"domain,omitempty" tf:"domain,omitempty"`
 
 	// Enable/disable this organization.
@@ -134,7 +134,7 @@ type OrganizationParameters struct {
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// A list of domains. At least one domain is required.
+	// A list of domains.
 	// +kubebuilder:validation:Optional
 	Domain []DomainParameters `json:"domain,omitempty" tf:"domain,omitempty"`
 
@@ -203,7 +203,6 @@ type OrganizationStatus struct {
 type Organization struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.domain) || (has(self.initProvider) && has(self.initProvider.domain))",message="spec.forProvider.domain is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	Spec   OrganizationSpec   `json:"spec"`
 	Status OrganizationStatus `json:"status,omitempty"`
