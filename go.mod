@@ -1,15 +1,15 @@
 module github.com/crossplane-contrib/provider-keycloak
 
-go 1.24.0
+go 1.24.7
 
-toolchain go1.24.6
+toolchain go1.24.11
 
 require (
 	dario.cat/mergo v1.0.2
 	github.com/alecthomas/kingpin/v2 v2.4.0
-	github.com/crossplane/crossplane-runtime/v2 v2.0.0
+	github.com/crossplane/crossplane-runtime/v2 v2.1.0
 	github.com/crossplane/crossplane-tools v0.0.0-20251017183449-dd4517244339
-	github.com/crossplane/upjet/v2 v2.0.0
+	github.com/crossplane/upjet/v2 v2.2.0
 	github.com/hashicorp/terraform-json v0.27.2
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.38.1
 	github.com/keycloak/terraform-provider-keycloak v0.0.0-20251113151306-31116ff9d3a5
@@ -93,7 +93,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
-	github.com/muvaf/typewriter v0.0.0-20220131201631-921e94e8e8d7 // indirect
+	github.com/muvaf/typewriter v0.0.0-20240614220100-70f9d4a54ea0 // indirect
 	github.com/oklog/run v1.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.22.0 // indirect
