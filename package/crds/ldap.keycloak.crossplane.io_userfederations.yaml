@@ -138,6 +138,11 @@ spec:
                       How frequently Keycloak should sync changed LDAP users, in seconds. Omit this property to disable periodic changed users sync.
                       How frequently Keycloak should sync changed LDAP users, in seconds. Omit this property to disable periodic changed users sync.
                     type: number
+                  connectionPooling:
+                    description: |-
+                      When true, LDAP connection pooling is enabled. Defaults to false.
+                      When true, Keycloak will use connection pooling when connecting to LDAP.
+                    type: boolean
                   connectionTimeout:
                     description: |-
                       LDAP connection timeout in the format of a Go duration string.
@@ -152,6 +157,11 @@ spec:
                     description: |-
                       Additional LDAP filter for filtering searched users. Must begin with ( and end with ).
                       Additional LDAP filter for filtering searched users. Must begin with '(' and end with ')'.
+                    type: string
+                  debug:
+                    description: |-
+                      Can be one of true or false. Will enable/disable logging for Kerberos Authentication. Defaults to false:
+                      true: enables debug logging for Krb5LoginModule. false: disables debug logging for Krb5LoginModule
                     type: string
                   deleteDefaultMappers:
                     description: |-
@@ -206,6 +216,11 @@ spec:
                           type: boolean
                       type: object
                     type: array
+                  krbPrincipalAttribute:
+                    description: |-
+                      Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+                      Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+                    type: string
                   name:
                     description: |-
                       Display name of the provider when displayed in the console.
@@ -450,6 +465,11 @@ spec:
                       How frequently Keycloak should sync changed LDAP users, in seconds. Omit this property to disable periodic changed users sync.
                       How frequently Keycloak should sync changed LDAP users, in seconds. Omit this property to disable periodic changed users sync.
                     type: number
+                  connectionPooling:
+                    description: |-
+                      When true, LDAP connection pooling is enabled. Defaults to false.
+                      When true, Keycloak will use connection pooling when connecting to LDAP.
+                    type: boolean
                   connectionTimeout:
                     description: |-
                       LDAP connection timeout in the format of a Go duration string.
@@ -464,6 +484,11 @@ spec:
                     description: |-
                       Additional LDAP filter for filtering searched users. Must begin with ( and end with ).
                       Additional LDAP filter for filtering searched users. Must begin with '(' and end with ')'.
+                    type: string
+                  debug:
+                    description: |-
+                      Can be one of true or false. Will enable/disable logging for Kerberos Authentication. Defaults to false:
+                      true: enables debug logging for Krb5LoginModule. false: disables debug logging for Krb5LoginModule
                     type: string
                   deleteDefaultMappers:
                     description: |-
@@ -518,6 +543,11 @@ spec:
                           type: boolean
                       type: object
                     type: array
+                  krbPrincipalAttribute:
+                    description: |-
+                      Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+                      Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+                    type: string
                   name:
                     description: |-
                       Display name of the provider when displayed in the console.
@@ -850,6 +880,11 @@ spec:
                       How frequently Keycloak should sync changed LDAP users, in seconds. Omit this property to disable periodic changed users sync.
                       How frequently Keycloak should sync changed LDAP users, in seconds. Omit this property to disable periodic changed users sync.
                     type: number
+                  connectionPooling:
+                    description: |-
+                      When true, LDAP connection pooling is enabled. Defaults to false.
+                      When true, Keycloak will use connection pooling when connecting to LDAP.
+                    type: boolean
                   connectionTimeout:
                     description: |-
                       LDAP connection timeout in the format of a Go duration string.
@@ -864,6 +899,11 @@ spec:
                     description: |-
                       Additional LDAP filter for filtering searched users. Must begin with ( and end with ).
                       Additional LDAP filter for filtering searched users. Must begin with '(' and end with ')'.
+                    type: string
+                  debug:
+                    description: |-
+                      Can be one of true or false. Will enable/disable logging for Kerberos Authentication. Defaults to false:
+                      true: enables debug logging for Krb5LoginModule. false: disables debug logging for Krb5LoginModule
                     type: string
                   deleteDefaultMappers:
                     description: |-
@@ -920,6 +960,11 @@ spec:
                           type: boolean
                       type: object
                     type: array
+                  krbPrincipalAttribute:
+                    description: |-
+                      Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+                      Name of the LDAP attribute, which refers to Kerberos principal. This is used to lookup appropriate LDAP user after successful Kerberos/SPNEGO authentication in Keycloak. When this is empty, the LDAP user will be looked based on LDAP username corresponding to the first part of his Kerberos principal. For instance, for principal 'john@KEYCLOAK.ORG', it will assume that LDAP username is 'john'.
+                    type: string
                   name:
                     description: |-
                       Display name of the provider when displayed in the console.

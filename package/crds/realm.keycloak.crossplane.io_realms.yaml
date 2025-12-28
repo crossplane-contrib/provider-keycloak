@@ -104,6 +104,10 @@ spec:
                     description: The maximum time a user has to use a user-generated
                       permit before it expires.
                     type: string
+                  adminPermissionsEnabled:
+                    description: When false, users and clients will not be able to
+                      access this realm. Defaults to true.
+                    type: boolean
                   adminTheme:
                     description: Used for the admin console.
                     type: string
@@ -334,6 +338,11 @@ spec:
                               maxLoginFailures:
                                 description: How many failures before wait is triggered.
                                 type: number
+                              maxTemporaryLockouts:
+                                description: How many temporary lockouts are permitted
+                                  before a user is permanently locked out. permanent_lockout
+                                  needs to be true. Defaults to 0
+                                type: number
                               minimumQuickLoginWaitSeconds:
                                 description: How long to wait after a quick login
                                   failure.
@@ -399,6 +408,8 @@ spec:
                   smtpServer:
                     items:
                       properties:
+                        allowUtf8:
+                          type: boolean
                         auth:
                           description: 'Enables authentication to the SMTP server.
                             Cannot be set alongside token_auth. This block supports
@@ -516,6 +527,10 @@ spec:
                       a user clicks "Remember Me". If not set, Keycloak will default
                       to the value of sso_session_max_lifespan.
                     type: string
+                  terraformDeletionProtection:
+                    description: When set to true, the realm cannot be deleted. Defaults
+                      to false.
+                    type: boolean
                   userManagedAccess:
                     description: When true, users are allowed to manage their own
                       resources. Defaults to false.
@@ -698,6 +713,10 @@ spec:
                     description: The maximum time a user has to use a user-generated
                       permit before it expires.
                     type: string
+                  adminPermissionsEnabled:
+                    description: When false, users and clients will not be able to
+                      access this realm. Defaults to true.
+                    type: boolean
                   adminTheme:
                     description: Used for the admin console.
                     type: string
@@ -928,6 +947,11 @@ spec:
                               maxLoginFailures:
                                 description: How many failures before wait is triggered.
                                 type: number
+                              maxTemporaryLockouts:
+                                description: How many temporary lockouts are permitted
+                                  before a user is permanently locked out. permanent_lockout
+                                  needs to be true. Defaults to 0
+                                type: number
                               minimumQuickLoginWaitSeconds:
                                 description: How long to wait after a quick login
                                   failure.
@@ -993,6 +1017,8 @@ spec:
                   smtpServer:
                     items:
                       properties:
+                        allowUtf8:
+                          type: boolean
                         auth:
                           description: 'Enables authentication to the SMTP server.
                             Cannot be set alongside token_auth. This block supports
@@ -1114,6 +1140,10 @@ spec:
                       a user clicks "Remember Me". If not set, Keycloak will default
                       to the value of sso_session_max_lifespan.
                     type: string
+                  terraformDeletionProtection:
+                    description: When set to true, the realm cannot be deleted. Defaults
+                      to false.
+                    type: boolean
                   userManagedAccess:
                     description: When true, users are allowed to manage their own
                       resources. Defaults to false.
@@ -1379,6 +1409,10 @@ spec:
                     description: The maximum time a user has to use a user-generated
                       permit before it expires.
                     type: string
+                  adminPermissionsEnabled:
+                    description: When false, users and clients will not be able to
+                      access this realm. Defaults to true.
+                    type: boolean
                   adminTheme:
                     description: Used for the admin console.
                     type: string
@@ -1611,6 +1645,11 @@ spec:
                               maxLoginFailures:
                                 description: How many failures before wait is triggered.
                                 type: number
+                              maxTemporaryLockouts:
+                                description: How many temporary lockouts are permitted
+                                  before a user is permanently locked out. permanent_lockout
+                                  needs to be true. Defaults to 0
+                                type: number
                               minimumQuickLoginWaitSeconds:
                                 description: How long to wait after a quick login
                                   failure.
@@ -1676,6 +1715,8 @@ spec:
                   smtpServer:
                     items:
                       properties:
+                        allowUtf8:
+                          type: boolean
                         auth:
                           description: 'Enables authentication to the SMTP server.
                             Cannot be set alongside token_auth. This block supports
@@ -1759,6 +1800,10 @@ spec:
                       a user clicks "Remember Me". If not set, Keycloak will default
                       to the value of sso_session_max_lifespan.
                     type: string
+                  terraformDeletionProtection:
+                    description: When set to true, the realm cannot be deleted. Defaults
+                      to false.
+                    type: boolean
                   userManagedAccess:
                     description: When true, users are allowed to manage their own
                       resources. Defaults to false.

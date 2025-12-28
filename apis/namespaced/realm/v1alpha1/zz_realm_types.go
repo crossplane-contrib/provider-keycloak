@@ -50,6 +50,9 @@ type BruteForceDetectionInitParameters struct {
 	// How many failures before wait is triggered.
 	MaxLoginFailures *float64 `json:"maxLoginFailures,omitempty" tf:"max_login_failures,omitempty"`
 
+	// How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0
+	MaxTemporaryLockouts *float64 `json:"maxTemporaryLockouts,omitempty" tf:"max_temporary_lockouts,omitempty"`
+
 	// How long to wait after a quick login failure.
 	MinimumQuickLoginWaitSeconds *float64 `json:"minimumQuickLoginWaitSeconds,omitempty" tf:"minimum_quick_login_wait_seconds,omitempty"`
 
@@ -72,6 +75,9 @@ type BruteForceDetectionObservation struct {
 
 	// How many failures before wait is triggered.
 	MaxLoginFailures *float64 `json:"maxLoginFailures,omitempty" tf:"max_login_failures,omitempty"`
+
+	// How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0
+	MaxTemporaryLockouts *float64 `json:"maxTemporaryLockouts,omitempty" tf:"max_temporary_lockouts,omitempty"`
 
 	// How long to wait after a quick login failure.
 	MinimumQuickLoginWaitSeconds *float64 `json:"minimumQuickLoginWaitSeconds,omitempty" tf:"minimum_quick_login_wait_seconds,omitempty"`
@@ -98,6 +104,10 @@ type BruteForceDetectionParameters struct {
 	// How many failures before wait is triggered.
 	// +kubebuilder:validation:Optional
 	MaxLoginFailures *float64 `json:"maxLoginFailures,omitempty" tf:"max_login_failures,omitempty"`
+
+	// How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0
+	// +kubebuilder:validation:Optional
+	MaxTemporaryLockouts *float64 `json:"maxTemporaryLockouts,omitempty" tf:"max_temporary_lockouts,omitempty"`
 
 	// How long to wait after a quick login failure.
 	// +kubebuilder:validation:Optional
@@ -338,6 +348,9 @@ type RealmInitParameters struct {
 	// The maximum time a user has to use a user-generated permit before it expires.
 	ActionTokenGeneratedByUserLifespan *string `json:"actionTokenGeneratedByUserLifespan,omitempty" tf:"action_token_generated_by_user_lifespan,omitempty"`
 
+	// When false, users and clients will not be able to access this realm. Defaults to true.
+	AdminPermissionsEnabled *bool `json:"adminPermissionsEnabled,omitempty" tf:"admin_permissions_enabled,omitempty"`
+
 	// Used for the admin console.
 	AdminTheme *string `json:"adminTheme,omitempty" tf:"admin_theme,omitempty"`
 
@@ -484,6 +497,9 @@ type RealmInitParameters struct {
 	// Similar to sso_session_max_lifespan, but used when a user clicks "Remember Me". If not set, Keycloak will default to the value of sso_session_max_lifespan.
 	SsoSessionMaxLifespanRememberMe *string `json:"ssoSessionMaxLifespanRememberMe,omitempty" tf:"sso_session_max_lifespan_remember_me,omitempty"`
 
+	// When set to true, the realm cannot be deleted. Defaults to false.
+	TerraformDeletionProtection *bool `json:"terraformDeletionProtection,omitempty" tf:"terraform_deletion_protection,omitempty"`
+
 	// When true, users are allowed to manage their own resources. Defaults to false.
 	UserManagedAccess *bool `json:"userManagedAccess,omitempty" tf:"user_managed_access,omitempty"`
 
@@ -522,6 +538,9 @@ type RealmObservation struct {
 
 	// The maximum time a user has to use a user-generated permit before it expires.
 	ActionTokenGeneratedByUserLifespan *string `json:"actionTokenGeneratedByUserLifespan,omitempty" tf:"action_token_generated_by_user_lifespan,omitempty"`
+
+	// When false, users and clients will not be able to access this realm. Defaults to true.
+	AdminPermissionsEnabled *bool `json:"adminPermissionsEnabled,omitempty" tf:"admin_permissions_enabled,omitempty"`
 
 	// Used for the admin console.
 	AdminTheme *string `json:"adminTheme,omitempty" tf:"admin_theme,omitempty"`
@@ -671,6 +690,9 @@ type RealmObservation struct {
 	// Similar to sso_session_max_lifespan, but used when a user clicks "Remember Me". If not set, Keycloak will default to the value of sso_session_max_lifespan.
 	SsoSessionMaxLifespanRememberMe *string `json:"ssoSessionMaxLifespanRememberMe,omitempty" tf:"sso_session_max_lifespan_remember_me,omitempty"`
 
+	// When set to true, the realm cannot be deleted. Defaults to false.
+	TerraformDeletionProtection *bool `json:"terraformDeletionProtection,omitempty" tf:"terraform_deletion_protection,omitempty"`
+
 	// When true, users are allowed to manage their own resources. Defaults to false.
 	UserManagedAccess *bool `json:"userManagedAccess,omitempty" tf:"user_managed_access,omitempty"`
 
@@ -717,6 +739,10 @@ type RealmParameters struct {
 	// The maximum time a user has to use a user-generated permit before it expires.
 	// +kubebuilder:validation:Optional
 	ActionTokenGeneratedByUserLifespan *string `json:"actionTokenGeneratedByUserLifespan,omitempty" tf:"action_token_generated_by_user_lifespan,omitempty"`
+
+	// When false, users and clients will not be able to access this realm. Defaults to true.
+	// +kubebuilder:validation:Optional
+	AdminPermissionsEnabled *bool `json:"adminPermissionsEnabled,omitempty" tf:"admin_permissions_enabled,omitempty"`
 
 	// Used for the admin console.
 	// +kubebuilder:validation:Optional
@@ -910,6 +936,10 @@ type RealmParameters struct {
 	// +kubebuilder:validation:Optional
 	SsoSessionMaxLifespanRememberMe *string `json:"ssoSessionMaxLifespanRememberMe,omitempty" tf:"sso_session_max_lifespan_remember_me,omitempty"`
 
+	// When set to true, the realm cannot be deleted. Defaults to false.
+	// +kubebuilder:validation:Optional
+	TerraformDeletionProtection *bool `json:"terraformDeletionProtection,omitempty" tf:"terraform_deletion_protection,omitempty"`
+
 	// When true, users are allowed to manage their own resources. Defaults to false.
 	// +kubebuilder:validation:Optional
 	UserManagedAccess *bool `json:"userManagedAccess,omitempty" tf:"user_managed_access,omitempty"`
@@ -928,6 +958,7 @@ type RealmParameters struct {
 }
 
 type SMTPServerInitParameters struct {
+	AllowUTF8 *bool `json:"allowUtf8,omitempty" tf:"allow_utf8,omitempty"`
 
 	// Enables authentication to the SMTP server. Cannot be set alongside token_auth. This block supports the following arguments:
 	Auth []AuthInitParameters `json:"auth,omitempty" tf:"auth,omitempty"`
@@ -964,6 +995,7 @@ type SMTPServerInitParameters struct {
 }
 
 type SMTPServerObservation struct {
+	AllowUTF8 *bool `json:"allowUtf8,omitempty" tf:"allow_utf8,omitempty"`
 
 	// Enables authentication to the SMTP server. Cannot be set alongside token_auth. This block supports the following arguments:
 	Auth []AuthObservation `json:"auth,omitempty" tf:"auth,omitempty"`
@@ -1000,6 +1032,9 @@ type SMTPServerObservation struct {
 }
 
 type SMTPServerParameters struct {
+
+	// +kubebuilder:validation:Optional
+	AllowUTF8 *bool `json:"allowUtf8,omitempty" tf:"allow_utf8,omitempty"`
 
 	// Enables authentication to the SMTP server. Cannot be set alongside token_auth. This block supports the following arguments:
 	// +kubebuilder:validation:Optional

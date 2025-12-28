@@ -59,6 +59,11 @@ func (in *GroupInitParameters) DeepCopyInto(out *GroupInitParameters) {
 			(*out)[key] = outVal
 		}
 	}
+	if in.Description != nil {
+		in, out := &in.Description, &out.Description
+		*out = new(string)
+		**out = **in
+	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
@@ -157,6 +162,11 @@ func (in *GroupObservation) DeepCopyInto(out *GroupObservation) {
 			(*out)[key] = outVal
 		}
 	}
+	if in.Description != nil {
+		in, out := &in.Description, &out.Description
+		*out = new(string)
+		**out = **in
+	}
 	if in.ID != nil {
 		in, out := &in.ID, &out.ID
 		*out = new(string)
@@ -212,6 +222,11 @@ func (in *GroupParameters) DeepCopyInto(out *GroupParameters) {
 			}
 			(*out)[key] = outVal
 		}
+	}
+	if in.Description != nil {
+		in, out := &in.Description, &out.Description
+		*out = new(string)
+		**out = **in
 	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name

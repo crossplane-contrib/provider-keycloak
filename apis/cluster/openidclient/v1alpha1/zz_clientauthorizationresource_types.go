@@ -15,17 +15,23 @@ import (
 
 type ClientAuthorizationResourceInitParameters struct {
 
+	// A map of attributes for the resource. Values can be comma-separated lists.
 	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
+	// The display name of the resource.
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name,omitempty"`
 
+	// An icon URI for the resource.
 	IconURI *string `json:"iconUri,omitempty" tf:"icon_uri,omitempty"`
 
+	// The name of the resource.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// When true, this resource supports user-managed access. Defaults to false.
 	OwnerManagedAccess *bool `json:"ownerManagedAccess,omitempty" tf:"owner_managed_access,omitempty"`
 
+	// The realm this resource exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -37,6 +43,7 @@ type ClientAuthorizationResourceInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
@@ -49,61 +56,81 @@ type ClientAuthorizationResourceInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
+	// A set of scope names that this resource uses.
 	// +listType=set
 	Scopes []*string `json:"scopes,omitempty" tf:"scopes,omitempty"`
 
+	// The type of this resource (e.g., urn:myapp:resources:default).
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 
+	// A set of URIs that this resource represents.
 	// +listType=set
 	Uris []*string `json:"uris,omitempty" tf:"uris,omitempty"`
 }
 
 type ClientAuthorizationResourceObservation struct {
 
+	// A map of attributes for the resource. Values can be comma-separated lists.
 	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
+	// The display name of the resource.
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name,omitempty"`
 
+	// Resource ID representing the authorization resource.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// An icon URI for the resource.
 	IconURI *string `json:"iconUri,omitempty" tf:"icon_uri,omitempty"`
 
+	// The name of the resource.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// When true, this resource supports user-managed access. Defaults to false.
 	OwnerManagedAccess *bool `json:"ownerManagedAccess,omitempty" tf:"owner_managed_access,omitempty"`
 
+	// The realm this resource exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
+	// The ID of the resource server.
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
 
+	// A set of scope names that this resource uses.
 	// +listType=set
 	Scopes []*string `json:"scopes,omitempty" tf:"scopes,omitempty"`
 
+	// The type of this resource (e.g., urn:myapp:resources:default).
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 
+	// A set of URIs that this resource represents.
 	// +listType=set
 	Uris []*string `json:"uris,omitempty" tf:"uris,omitempty"`
 }
 
 type ClientAuthorizationResourceParameters struct {
 
+	// A map of attributes for the resource. Values can be comma-separated lists.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Attributes map[string]*string `json:"attributes,omitempty" tf:"attributes,omitempty"`
 
+	// The display name of the resource.
 	// +kubebuilder:validation:Optional
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name,omitempty"`
 
+	// An icon URI for the resource.
 	// +kubebuilder:validation:Optional
 	IconURI *string `json:"iconUri,omitempty" tf:"icon_uri,omitempty"`
 
+	// The name of the resource.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// When true, this resource supports user-managed access. Defaults to false.
 	// +kubebuilder:validation:Optional
 	OwnerManagedAccess *bool `json:"ownerManagedAccess,omitempty" tf:"owner_managed_access,omitempty"`
 
+	// The realm this resource exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -116,6 +143,7 @@ type ClientAuthorizationResourceParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
@@ -129,13 +157,16 @@ type ClientAuthorizationResourceParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
+	// A set of scope names that this resource uses.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Scopes []*string `json:"scopes,omitempty" tf:"scopes,omitempty"`
 
+	// The type of this resource (e.g., urn:myapp:resources:default).
 	// +kubebuilder:validation:Optional
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 
+	// A set of URIs that this resource represents.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Uris []*string `json:"uris,omitempty" tf:"uris,omitempty"`
@@ -168,7 +199,7 @@ type ClientAuthorizationResourceStatus struct {
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// ClientAuthorizationResource is the Schema for the ClientAuthorizationResources API. <no value>
+// ClientAuthorizationResource is the Schema for the ClientAuthorizationResources API.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

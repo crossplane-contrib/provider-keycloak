@@ -3422,6 +3422,11 @@ func (in *UserFederationInitParameters) DeepCopyInto(out *UserFederationInitPara
 		*out = new(float64)
 		**out = **in
 	}
+	if in.ConnectionPooling != nil {
+		in, out := &in.ConnectionPooling, &out.ConnectionPooling
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ConnectionTimeout != nil {
 		in, out := &in.ConnectionTimeout, &out.ConnectionTimeout
 		*out = new(string)
@@ -3434,6 +3439,11 @@ func (in *UserFederationInitParameters) DeepCopyInto(out *UserFederationInitPara
 	}
 	if in.CustomUserSearchFilter != nil {
 		in, out := &in.CustomUserSearchFilter, &out.CustomUserSearchFilter
+		*out = new(string)
+		**out = **in
+	}
+	if in.Debug != nil {
+		in, out := &in.Debug, &out.Debug
 		*out = new(string)
 		**out = **in
 	}
@@ -3468,6 +3478,11 @@ func (in *UserFederationInitParameters) DeepCopyInto(out *UserFederationInitPara
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
+	}
+	if in.KrbPrincipalAttribute != nil {
+		in, out := &in.KrbPrincipalAttribute, &out.KrbPrincipalAttribute
+		*out = new(string)
+		**out = **in
 	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
@@ -3644,6 +3659,11 @@ func (in *UserFederationObservation) DeepCopyInto(out *UserFederationObservation
 		*out = new(float64)
 		**out = **in
 	}
+	if in.ConnectionPooling != nil {
+		in, out := &in.ConnectionPooling, &out.ConnectionPooling
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ConnectionTimeout != nil {
 		in, out := &in.ConnectionTimeout, &out.ConnectionTimeout
 		*out = new(string)
@@ -3656,6 +3676,11 @@ func (in *UserFederationObservation) DeepCopyInto(out *UserFederationObservation
 	}
 	if in.CustomUserSearchFilter != nil {
 		in, out := &in.CustomUserSearchFilter, &out.CustomUserSearchFilter
+		*out = new(string)
+		**out = **in
+	}
+	if in.Debug != nil {
+		in, out := &in.Debug, &out.Debug
 		*out = new(string)
 		**out = **in
 	}
@@ -3695,6 +3720,11 @@ func (in *UserFederationObservation) DeepCopyInto(out *UserFederationObservation
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
+	}
+	if in.KrbPrincipalAttribute != nil {
+		in, out := &in.KrbPrincipalAttribute, &out.KrbPrincipalAttribute
+		*out = new(string)
+		**out = **in
 	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
@@ -3834,6 +3864,11 @@ func (in *UserFederationParameters) DeepCopyInto(out *UserFederationParameters) 
 		*out = new(float64)
 		**out = **in
 	}
+	if in.ConnectionPooling != nil {
+		in, out := &in.ConnectionPooling, &out.ConnectionPooling
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ConnectionTimeout != nil {
 		in, out := &in.ConnectionTimeout, &out.ConnectionTimeout
 		*out = new(string)
@@ -3846,6 +3881,11 @@ func (in *UserFederationParameters) DeepCopyInto(out *UserFederationParameters) 
 	}
 	if in.CustomUserSearchFilter != nil {
 		in, out := &in.CustomUserSearchFilter, &out.CustomUserSearchFilter
+		*out = new(string)
+		**out = **in
+	}
+	if in.Debug != nil {
+		in, out := &in.Debug, &out.Debug
 		*out = new(string)
 		**out = **in
 	}
@@ -3880,6 +3920,11 @@ func (in *UserFederationParameters) DeepCopyInto(out *UserFederationParameters) 
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
+	}
+	if in.KrbPrincipalAttribute != nil {
+		in, out := &in.KrbPrincipalAttribute, &out.KrbPrincipalAttribute
+		*out = new(string)
+		**out = **in
 	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name

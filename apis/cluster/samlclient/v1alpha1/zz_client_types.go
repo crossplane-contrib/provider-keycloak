@@ -90,6 +90,9 @@ type ClientInitParameters struct {
 	// When true, the SAML assertions will be encrypted by Keycloak using the client's public key. Defaults to false.
 	EncryptAssertions *bool `json:"encryptAssertions,omitempty" tf:"encrypt_assertions,omitempty"`
 
+	// Algorithm used to encrypt SAML assertions. Allowed values: AES_256_GCM, AES_192_GCM, AES_128_GCM, AES_256_CBC, AES_192_CBC, or AES_128_CBC.
+	EncryptionAlgorithm *string `json:"encryptionAlgorithm,omitempty" tf:"encryption_algorithm,omitempty"`
+
 	// If assertions for the client are encrypted, this certificate will be used for encryption.
 	EncryptionCertificateSecretRef *v1.SecretKeySelector `json:"encryptionCertificateSecretRef,omitempty" tf:"-"`
 
@@ -211,6 +214,9 @@ type ClientObservation struct {
 
 	// When true, the SAML assertions will be encrypted by Keycloak using the client's public key. Defaults to false.
 	EncryptAssertions *bool `json:"encryptAssertions,omitempty" tf:"encrypt_assertions,omitempty"`
+
+	// Algorithm used to encrypt SAML assertions. Allowed values: AES_256_GCM, AES_192_GCM, AES_128_GCM, AES_256_CBC, AES_192_CBC, or AES_128_CBC.
+	EncryptionAlgorithm *string `json:"encryptionAlgorithm,omitempty" tf:"encryption_algorithm,omitempty"`
 
 	// (Computed) The sha1sum fingerprint of the encryption certificate. If the encryption certificate is not in correct base64 format, this will be left empty.
 	EncryptionCertificateSha1 *string `json:"encryptionCertificateSha1,omitempty" tf:"encryption_certificate_sha1,omitempty"`
@@ -348,6 +354,10 @@ type ClientParameters struct {
 	// When true, the SAML assertions will be encrypted by Keycloak using the client's public key. Defaults to false.
 	// +kubebuilder:validation:Optional
 	EncryptAssertions *bool `json:"encryptAssertions,omitempty" tf:"encrypt_assertions,omitempty"`
+
+	// Algorithm used to encrypt SAML assertions. Allowed values: AES_256_GCM, AES_192_GCM, AES_128_GCM, AES_256_CBC, AES_192_CBC, or AES_128_CBC.
+	// +kubebuilder:validation:Optional
+	EncryptionAlgorithm *string `json:"encryptionAlgorithm,omitempty" tf:"encryption_algorithm,omitempty"`
 
 	// If assertions for the client are encrypted, this certificate will be used for encryption.
 	// +kubebuilder:validation:Optional

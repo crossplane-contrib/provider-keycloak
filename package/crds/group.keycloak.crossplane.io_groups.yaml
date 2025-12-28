@@ -80,6 +80,8 @@ spec:
                       values. Max length for each value is 255 chars'
                     type: object
                     x-kubernetes-map-type: granular
+                  description:
+                    type: string
                   name:
                     description: The name of the group.
                     type: string
@@ -260,6 +262,8 @@ spec:
                       values. Max length for each value is 255 chars'
                     type: object
                     x-kubernetes-map-type: granular
+                  description:
+                    type: string
                   name:
                     description: The name of the group.
                     type: string
@@ -523,6 +527,8 @@ spec:
                       values. Max length for each value is 255 chars'
                     type: object
                     x-kubernetes-map-type: granular
+                  description:
+                    type: string
                   id:
                     type: string
                   name:

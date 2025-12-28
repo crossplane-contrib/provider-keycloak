@@ -2188,6 +2188,11 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(v1.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RequireDpopBoundTokens != nil {
+		in, out := &in.RequireDpopBoundTokens, &out.RequireDpopBoundTokens
+		*out = new(bool)
+		**out = **in
+	}
 	if in.RootURL != nil {
 		in, out := &in.RootURL, &out.RootURL
 		*out = new(string)
@@ -2527,6 +2532,11 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 	if in.RealmID != nil {
 		in, out := &in.RealmID, &out.RealmID
 		*out = new(string)
+		**out = **in
+	}
+	if in.RequireDpopBoundTokens != nil {
+		in, out := &in.RequireDpopBoundTokens, &out.RequireDpopBoundTokens
+		*out = new(bool)
 		**out = **in
 	}
 	if in.ResourceServerID != nil {
@@ -3109,6 +3119,11 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v1.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RequireDpopBoundTokens != nil {
+		in, out := &in.RequireDpopBoundTokens, &out.RequireDpopBoundTokens
+		*out = new(bool)
+		**out = **in
 	}
 	if in.RootURL != nil {
 		in, out := &in.RootURL, &out.RootURL

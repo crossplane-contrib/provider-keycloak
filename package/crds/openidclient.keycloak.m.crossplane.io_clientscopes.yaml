@@ -73,7 +73,9 @@ spec:
                   includeInTokenScope:
                     description: When true, the name of this client scope will be
                       added to the access token property 'scope' as well as to the
-                      Token Introspection Endpoint response.
+                      Token Introspection Endpoint response. When false, this scope
+                      will be omitted from the token and from the Token Introspection
+                      Endpoint response. Defaults to true.
                     type: boolean
                   name:
                     description: The display name of this client scope in the GUI.
@@ -190,7 +192,9 @@ spec:
                   includeInTokenScope:
                     description: When true, the name of this client scope will be
                       added to the access token property 'scope' as well as to the
-                      Token Introspection Endpoint response.
+                      Token Introspection Endpoint response. When false, this scope
+                      will be omitted from the token and from the Token Introspection
+                      Endpoint response. Defaults to true.
                     type: boolean
                   name:
                     description: The display name of this client scope in the GUI.
@@ -364,7 +368,9 @@ spec:
                   includeInTokenScope:
                     description: When true, the name of this client scope will be
                       added to the access token property 'scope' as well as to the
-                      Token Introspection Endpoint response.
+                      Token Introspection Endpoint response. When false, this scope
+                      will be omitted from the token and from the Token Introspection
+                      Endpoint response. Defaults to true.
                     type: boolean
                   name:
                     description: The display name of this client scope in the GUI.
