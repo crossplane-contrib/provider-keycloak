@@ -14,9 +14,11 @@
 ./dev/demos/namespaced/074-authentication-execution-binding.yaml
 ./dev/demos/namespaced/073-authentication-execution-config.yaml
 ./dev/demos/namespaced/072-authentication-execution.yaml
+./dev/demos/namespaced/072-authentication-execution-subflow-ref.yaml
 ./dev/demos/namespaced/071-authentication-subflow.yaml
 ./dev/demos/namespaced/070-authentication-flows.yaml
-./dev/demos/namespaced/062-saml-client-default-scopes.yaml
+./dev/demos/namespaced/063-saml-client-policies.yaml
+# ./dev/demos/namespaced/062-saml-client-default-scopes.yaml --> waiting for https://github.com/keycloak/terraform-provider-keycloak/issues/1395
 ./dev/demos/namespaced/061-saml-client-scopes.yaml
 ./dev/demos/namespaced/060-saml-client.yaml
 ./dev/demos/namespaced/053-google-identity-provider.yaml
@@ -47,22 +49,25 @@
 ./dev/demos/namespaced/003-realm-required-action.yaml
 ./dev/demos/namespaced/002-realm-clientscopes.yaml
 ./dev/demos/namespaced/001-realm.yaml
+./dev/demos/namespaced/001-realm-durations.yaml
 ./dev/demos/basic/097-ldap-custom-mapper.yaml
 ./dev/demos/basic/096-ldap-full-name-mapper.yaml
 ./dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml
 ./dev/demos/basic/094-ldap-msad-mapper.yaml
-#./dev/demos/basic/093-ldap-group-mapper.yaml 
+./dev/demos/basic/093-ldap-group-mapper.yaml
 ./dev/demos/basic/092-ldap-role-mapper.yaml
 ./dev/demos/basic/091-ldap-user-attribute-mapper.yaml
 ./dev/demos/basic/090-ldap-user-federation.yaml
 ./dev/demos/basic/081-defaults-roles.yaml
 ./dev/demos/basic/080-defaults-groups.yaml
 ./dev/demos/basic/074-authentication-execution-binding.yaml
-#./dev/demos/basic/073-authentication-execution-config.yaml 
-#./dev/demos/basic/072-authentication-execution.yaml 
-#./dev/demos/basic/071-authentication-subflow.yaml
+./dev/demos/basic/073-authentication-execution-config.yaml
+./dev/demos/basic/072-authentication-execution.yaml
+./dev/demos/basic/072-authentication-execution-subflow-ref.yaml
+./dev/demos/basic/071-authentication-subflow.yaml
 ./dev/demos/basic/070-authentication-flows.yaml
-#./dev/demos/basic/062-saml-client-default-scopes.yaml 
+./dev/demos/basic/063-saml-client-policies.yaml
+#./dev/demos/basic/062-saml-client-default-scopes.yaml  --> waiting for https://github.com/keycloak/terraform-provider-keycloak/issues/1395
 ./dev/demos/basic/061-saml-client-scopes.yaml
 ./dev/demos/basic/060-saml-client.yaml
 ./dev/demos/basic/053-google-identity-provider.yaml
@@ -93,3 +98,4 @@
 ./dev/demos/basic/003-realm-required-action.yaml
 ./dev/demos/basic/002-realm-clientscopes.yaml
 ./dev/demos/basic/001-realm.yaml
+./dev/demos/basic/001-realm-durations.yaml

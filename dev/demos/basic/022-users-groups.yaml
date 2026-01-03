@@ -11,6 +11,8 @@ spec:
         resolve: Always
     groupIdsRefs:
       - name: test
+        policy:
+          resolve: Always
     userIdRef:
       name: "tim-tester"
       policy:

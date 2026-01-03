@@ -411,6 +411,26 @@ func (mg *ClientClientPolicy) ResolveReferences(ctx context.Context, c client.Re
 	mg.Spec.ForProvider.ResourceServerID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.ResourceServerIDRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("samlclient.keycloak.m.crossplane.io", "v1alpha1", "Client", "ClientList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiNamespacedResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.SAMLClients),
+			Extract:       common.UUIDExtractor(),
+			Namespace:     mg.GetNamespace(),
+			References:    mg.Spec.ForProvider.SAMLClientsRefs,
+			Selector:      mg.Spec.ForProvider.SAMLClientsSelector,
+			To:            reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLClients")
+	}
+	mg.Spec.ForProvider.SAMLClients = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.ForProvider.SAMLClientsRefs = mrsp.ResolvedReferences
+	{
 		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -470,6 +490,26 @@ func (mg *ClientClientPolicy) ResolveReferences(ctx context.Context, c client.Re
 	}
 	mg.Spec.InitProvider.ResourceServerID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.ResourceServerIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("samlclient.keycloak.m.crossplane.io", "v1alpha1", "Client", "ClientList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiNamespacedResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.SAMLClients),
+			Extract:       common.UUIDExtractor(),
+			Namespace:     mg.GetNamespace(),
+			References:    mg.Spec.InitProvider.SAMLClientsRefs,
+			Selector:      mg.Spec.InitProvider.SAMLClientsSelector,
+			To:            reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLClients")
+	}
+	mg.Spec.InitProvider.SAMLClients = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.InitProvider.SAMLClientsRefs = mrsp.ResolvedReferences
 
 	return nil
 }

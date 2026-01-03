@@ -8,6 +8,8 @@ spec:
     authenticator: auth-cookie
     parentFlowAliasRef:
       name: flow
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev-ns"
       policy:
@@ -63,6 +65,8 @@ spec:
     authenticator: identity-provider-redirector
     parentFlowAliasRef:
       name: flow
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev-ns"
       policy:

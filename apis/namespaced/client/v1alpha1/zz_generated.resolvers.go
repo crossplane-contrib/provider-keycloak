@@ -32,7 +32,7 @@ func (mg *ProtocolMapper) ResolveReferences( // ResolveReferences of this Protoc
 
 		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-			Extract:      common.UUIDExtractor(),
+			Extract:      reference.ExternalName(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.ForProvider.ClientIDRef,
 			Selector:     mg.Spec.ForProvider.ClientIDSelector,
@@ -85,6 +85,46 @@ func (mg *ProtocolMapper) ResolveReferences( // ResolveReferences of this Protoc
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("samlclient.keycloak.m.crossplane.io", "v1alpha1", "Client", "ClientList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLClientID),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SAMLClientIDRef,
+			Selector:     mg.Spec.ForProvider.SAMLClientIDSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLClientID")
+	}
+	mg.Spec.ForProvider.SAMLClientID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SAMLClientIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("samlclient.keycloak.m.crossplane.io", "v1alpha1", "ClientScope", "ClientScopeList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLClientScopeID),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SAMLClientScopeIDRef,
+			Selector:     mg.Spec.ForProvider.SAMLClientScopeIDSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLClientScopeID")
+	}
+	mg.Spec.ForProvider.SAMLClientScopeID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SAMLClientScopeIDRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -92,7 +132,7 @@ func (mg *ProtocolMapper) ResolveReferences( // ResolveReferences of this Protoc
 
 		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-			Extract:      common.UUIDExtractor(),
+			Extract:      reference.ExternalName(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.InitProvider.ClientIDRef,
 			Selector:     mg.Spec.InitProvider.ClientIDSelector,
@@ -144,6 +184,46 @@ func (mg *ProtocolMapper) ResolveReferences( // ResolveReferences of this Protoc
 	}
 	mg.Spec.InitProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("samlclient.keycloak.m.crossplane.io", "v1alpha1", "Client", "ClientList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLClientID),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SAMLClientIDRef,
+			Selector:     mg.Spec.InitProvider.SAMLClientIDSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLClientID")
+	}
+	mg.Spec.InitProvider.SAMLClientID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SAMLClientIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("samlclient.keycloak.m.crossplane.io", "v1alpha1", "ClientScope", "ClientScopeList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLClientScopeID),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SAMLClientScopeIDRef,
+			Selector:     mg.Spec.InitProvider.SAMLClientScopeIDSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLClientScopeID")
+	}
+	mg.Spec.InitProvider.SAMLClientScopeID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SAMLClientScopeIDRef = rsp.ResolvedReference
 
 	return nil
 }

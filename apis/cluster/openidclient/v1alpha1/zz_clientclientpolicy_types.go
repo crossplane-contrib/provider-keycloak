@@ -65,6 +65,20 @@ type ClientClientPolicyInitParameters struct {
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+
+	// The clients allowed by this client policy.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +listType=set
+	SAMLClients []*string `json:"samlClients,omitempty" tf:"saml_clients,omitempty"`
+
+	// References to Client in samlclient to populate samlClients.
+	// +kubebuilder:validation:Optional
+	SAMLClientsRefs []v1.Reference `json:"samlClientsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Client in samlclient to populate samlClients.
+	// +kubebuilder:validation:Optional
+	SAMLClientsSelector *v1.Selector `json:"samlClientsSelector,omitempty" tf:"-"`
 }
 
 type ClientClientPolicyObservation struct {
@@ -92,6 +106,10 @@ type ClientClientPolicyObservation struct {
 
 	// The ID of the resource server this client policy is attached to.
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
+
+	// The clients allowed by this client policy.
+	// +listType=set
+	SAMLClients []*string `json:"samlClients,omitempty" tf:"saml_clients,omitempty"`
 }
 
 type ClientClientPolicyParameters struct {
@@ -153,6 +171,21 @@ type ClientClientPolicyParameters struct {
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+
+	// The clients allowed by this client policy.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +kubebuilder:validation:Optional
+	// +listType=set
+	SAMLClients []*string `json:"samlClients,omitempty" tf:"saml_clients,omitempty"`
+
+	// References to Client in samlclient to populate samlClients.
+	// +kubebuilder:validation:Optional
+	SAMLClientsRefs []v1.Reference `json:"samlClientsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Client in samlclient to populate samlClients.
+	// +kubebuilder:validation:Optional
+	SAMLClientsSelector *v1.Selector `json:"samlClientsSelector,omitempty" tf:"-"`
 }
 
 // ClientClientPolicySpec defines the desired state of ClientClientPolicy

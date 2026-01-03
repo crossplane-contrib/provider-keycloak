@@ -15,5 +15,7 @@ spec:
         resolve: Always
     roleIdsRefs:
       - name: "test-client"
+        policy:
+          resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"

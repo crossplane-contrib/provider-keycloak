@@ -16,3 +16,30 @@ spec:
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig
+---
+apiVersion: client.keycloak.m.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: saml-client-scope-protocol-mapper
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    kind: ProviderConfig
+    name: "keycloak-provider-config"
+  forProvider:
+    name: "user roles"
+    protocol: "saml"
+    samlClientScopeIdRef:
+      name: "saml-client-scopes"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    protocolMapper: "saml-role-list-mapper"
+    config:
+      attribute.name: "Role"
+      attribute.nameformat: "Basic"
+      friendly.name: "test"
+      single: "true"

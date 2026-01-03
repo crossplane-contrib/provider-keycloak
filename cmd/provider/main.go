@@ -23,6 +23,7 @@ import (
 	"github.com/crossplane/crossplane-runtime/v2/pkg/reconciler/managed"
 	"github.com/crossplane/crossplane-runtime/v2/pkg/statemetrics"
 	tjcontroller "github.com/crossplane/upjet/v2/pkg/controller"
+	"github.com/crossplane/upjet/v2/pkg/controller/conversion"
 	authv1 "k8s.io/api/authorization/v1"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -43,7 +44,6 @@ import (
 	controllerCluster "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster"
 	controllerNamespaced "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced"
 	"github.com/crossplane-contrib/provider-keycloak/internal/features"
-	// "github.com/crossplane-contrib/provider-keycloak/internal/version"
 )
 
 const (
@@ -234,6 +234,7 @@ func main() {
 		kingpin.FatalIfError(controllerNamespaced.Setup(mgr, optsNamespaced), "Cannot setup Keycloak controllers")
 	}
 
+	kingpin.FatalIfError(conversion.RegisterConversions(optsCluster.Provider, optsNamespaced.Provider, mgr.GetScheme()), "Cannot initialize the webhook conversion registry")
 	kingpin.FatalIfError(mgr.Start(ctrl.SetupSignalHandler()), "Cannot start controller manager")
 }
 

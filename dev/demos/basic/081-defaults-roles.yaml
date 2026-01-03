@@ -7,6 +7,8 @@ spec:
   forProvider:
     defaultRolesRefs:
       - name: test
+        policy:
+          resolve: Always
     realmIdRef:
       name: "dev"
       policy:

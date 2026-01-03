@@ -1,5 +1,5 @@
-// Package multitypes provides utilities for creating multiple strongly-typed
-// reference fields from a single Terraform field that accepts different resource types.
+// Package multitypes provides utilities for creating multiple strongly-typed reference fields (synthetic fields)
+// providing the consolidated value for a single Terraform field that accepts different resource types.
 //
 // # Problem Statement
 //
@@ -20,7 +20,7 @@
 //     (e.g., "authenticatorRef" and "flowAliasRef")
 //  2. Configuring cross-resource references on these synthetic fields
 //  3. At runtime, consolidating values from synthetic fields back to the
-//     original Terraform field name before sending to Terraform
+//     original Terraform field before sending to Terraform
 //
 // # Usage Example
 //
@@ -80,10 +80,15 @@
 package multitypes
 
 import (
+	"slices"
+
+	"github.com/crossplane/crossplane-runtime/v2/pkg/errors"
 	"github.com/crossplane/upjet/v2/pkg/config"
+	n "github.com/crossplane/upjet/v2/pkg/types/name"
 )
 
-// Instance represents a single typed variant of a multi-type field.
+// Instance represents one synthetic fields.
+// It represents one possible type option of a multi-type field.
 // Each Instance creates a separate field in the generated CRD with its own
 // cross-resource reference configuration.
 //
@@ -164,6 +169,7 @@ type Options struct {
 // - Optional=true, Computed=true: field in spec, late-initialized from status
 //
 // See: github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema.Schema
+// nolint:gocyclo
 func apply(r *config.Resource, name string, opts *Options, types ...Instance) {
 	// Check if any instance reuses the original field name
 	hasOriginalName := false
@@ -208,6 +214,21 @@ func apply(r *config.Resource, name string, opts *Options, types ...Instance) {
 		}
 	}
 
+	if hasOriginalName && opts != nil && opts.KeepOriginalField {
+		// When original field is kept due to backwards compatibility
+		// then we want to ignore this field for late initialization!
+		//
+		// Explainer: Otherwise spec.forProvider.parentFlowAliasRef would be set automatically
+		// by status.atProvider.parentFlowAliasRef
+		// which is set in turn by spec.forProvider.parentSubflowAliasRef
+		if r.LateInitializer.IgnoredFields == nil {
+			r.LateInitializer.IgnoredFields = []string{}
+		}
+		if !slices.Contains(r.LateInitializer.IgnoredFields, name) {
+			r.LateInitializer.IgnoredFields = append(r.LateInitializer.IgnoredFields, name)
+		}
+	}
+
 	// Determine the fate of the original Terraform field
 	if !hasOriginalName {
 		// No instance reuses the original name, so users will only interact
@@ -223,6 +244,7 @@ func apply(r *config.Resource, name string, opts *Options, types ...Instance) {
 		// it's now observation-only (users can't set it)
 		delete(r.References, name)
 	}
+
 	// else: hasOriginalName is true AND KeepOriginalField was explicitly set,
 	// the original field remains Optional and stays in spec.forProvider for backward compatibility
 }
@@ -320,6 +342,15 @@ func ApplyToWithOptions(r *config.Resource, name string, opts *Options, types ..
 	r.TerraformConfigurationInjector = wrapFuncAndConsolidate(r.TerraformConfigurationInjector, name, types)
 }
 
+func ApplyToAsList(r *config.Resource, name string, types ...Instance) {
+	ApplyToAsListWithOptions(r, name, nil, types...)
+}
+
+func ApplyToAsListWithOptions(r *config.Resource, name string, opts *Options, types ...Instance) {
+	apply(r, name, opts, types...)
+	r.TerraformConfigurationInjector = wrapFuncAndConsolidateList(r.TerraformConfigurationInjector, name, types)
+}
+
 // wrapFuncAndConsolidate returns a ConfigurationInjector that wraps an existing
 // injector and adds logic to consolidate multi-type field values.
 //
@@ -395,62 +426,102 @@ func wrapFuncAndConsolidate(ci config.ConfigurationInjector, name string, types 
 
 		// Find the first non-nil synthetic field value and use it
 		//
-		// We check both maps because:
 		// - jsonMap: Contains values as deserialized from spec.forProvider
 		//   Field names might use the original struct field names
 		// - tfMap: Contains values with Terraform field tags applied
 		//   Field names use snake_case Terraform naming
-		//
-		// At this point, both maps should have the synthetic field names
-		// (e.g., "parent_flow_alias", "parent_subflow_alias") with resolved values
-		// from reference resolution or direct user input.
-		var selectedValue any
+
+		isSetCount := 0
+		allFields := ""
+		setFields := ""
+
+		var consolidatedValue any
 
 		for _, t := range types {
-			// Try jsonMap first (might use snake_case tf tags)
-			if val := jsonMap[t.Name]; val != nil {
-				selectedValue = val
-				break
+			tName := n.NewFromSnake(t.Name)
+
+			if allFields == "" {
+				allFields += tName.LowerCamelComputed
+			} else {
+				allFields += ", " + tName.LowerCamelComputed
 			}
-			// Also try tfMap (definitely uses snake_case)
-			if val := tfMap[t.Name]; val != nil {
-				selectedValue = val
-				break
+
+			if jsonMap[tName.LowerCamelComputed] != nil {
+				if setFields == "" {
+					setFields += tName.LowerCamelComputed
+				} else {
+					setFields += ", " + tName.LowerCamelComputed
+				}
+				isSetCount++
+				consolidatedValue = jsonMap[tName.LowerCamelComputed]
 			}
+		}
+
+		if isSetCount > 1 {
+			return errors.Errorf("Only one of these fields must be present '%s', but following are set '%s'!", allFields, setFields)
 		}
 
 		// Consolidate: copy the selected value to the original Terraform field name
-		if selectedValue != nil {
-			// Set the value in both tfMap and jsonMap using the original field name
-			// This ensures Terraform receives the value under the expected field name
-			//
-			// Both maps are used by upjet when building the Terraform configuration:
-			// - tfMap is the primary source for Terraform HCL generation
-			// - jsonMap is used for certain parameter lookups and validations
-			//
-			// Both maps use snake_case field names (Terraform convention)
-			tfMap[name] = selectedValue
-			jsonMap[name] = selectedValue
-
-			// Clean up: delete all synthetic field entries from both maps
+		if consolidatedValue != nil {
+			// Clean up: delete all synthetic field entries from tfMap
 			// These synthetic fields don't exist in the Terraform schema, so
 			// sending them would cause Terraform to reject the configuration
 			for _, t := range types {
-				// Skip if this is the original field name (we just set it above)
-				if t.Name != name {
-					delete(tfMap, t.Name)
-					delete(jsonMap, t.Name)
-				}
+				tName := n.NewFromSnake(t.Name)
+				delete(tfMap, tName.Snake)
 			}
+
+			// Set the consolidated value into the tfMap
+			// This ensures Terraform receives the value under the expected field name
+			tfMap[name] = consolidatedValue
 		}
-		// If no synthetic field has a value and the original field is also nil,
-		// this might be a case where:
+
+		// If no synthetic field has a value this might be a case where:
 		// - The resource is being created and references haven't resolved yet
 		// - All fields are optional and the user didn't set any
-		// - The field has a default value that will be populated later
 		//
 		// Don't treat this as an error - let Terraform validation handle it
 		// if the field is actually required.
+
+		return nil
+	}
+}
+
+// wrapFuncAndConsolidate returns a ConfigurationInjector that wraps an existing
+// injector and adds logic to consolidate multi-type field list values.
+func wrapFuncAndConsolidateList(ci config.ConfigurationInjector, name string, types []Instance) config.ConfigurationInjector {
+	return func(jsonMap map[string]any, tfMap map[string]any) error {
+
+		// First, call any existing injector that was configured
+		// This preserves the existing behavior and allows chaining injectors
+		if ci != nil {
+			err := ci(jsonMap, tfMap)
+			if err != nil {
+				return err
+			}
+		}
+
+		var union []any
+		// Consolidate: union all synthetic field values into one list
+		// and set it as value of the original Terraform field name
+		for _, t := range types {
+			tName := n.NewFromSnake(t.Name)
+			value := jsonMap[tName.LowerCamelComputed]
+			if value != nil {
+				if list, ok := value.([]any); ok {
+					union = append(union, list...)
+
+					// Clean up: delete all synthetic field entries from tfMap
+					// These synthetic fields don't exist in the Terraform schema, so
+					// sending them would cause Terraform to reject the configuration
+					delete(tfMap, tName.Snake)
+				}
+			}
+		}
+
+		if union != nil {
+			tfMap[name] = union
+		}
 
 		return nil
 	}
