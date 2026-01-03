@@ -28,4 +28,3 @@ spec:
                 - --enable-external-secret-stores
                 - --enable-management-policies
                 - --debug
-

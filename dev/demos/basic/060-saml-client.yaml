@@ -25,3 +25,29 @@ spec:
       key: priv
   providerConfigRef:
     name: "keycloak-provider-config"
+---
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: saml-client-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "user roles"
+    protocol: "saml"
+    samlClientIdRef:
+      name: "saml-client"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    protocolMapper: "saml-role-list-mapper"
+    config:
+      attribute.name: "Role"
+      attribute.nameformat: "Basic"
+      friendly.name: "test"
+      single: "true"

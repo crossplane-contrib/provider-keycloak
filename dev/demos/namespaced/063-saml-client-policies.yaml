@@ -1,0 +1,52 @@
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientClientPolicy
+metadata:
+  name: my-saml-client-policy
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    name: my-saml-client-policy
+    samlClientsRefs:
+      - name: saml-client
+        policy:
+          resolve: Always
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+---
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientClientPolicy
+metadata:
+  name: my-oidc-and-saml-client-policy
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    name: my-oidc-and-saml-client-policy
+    clientsRefs:
+      - name: "test"
+        policy:
+          resolve: Always
+    samlClientsRefs:
+      - name: saml-client
+        policy:
+          resolve: Always
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+---

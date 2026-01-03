@@ -31,6 +31,8 @@ spec:
   forProvider:
     clientScopeIdRef:
       name: "openid-client-scope"
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev"
       policy:

@@ -13,6 +13,8 @@ spec:
     # NEW: Using parentSubflowAliasRef to reference a Subflow resource
     parentSubflowAliasRef:
       name: subflow
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev-ns"
       policy:

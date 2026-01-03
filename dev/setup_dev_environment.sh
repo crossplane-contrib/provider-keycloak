@@ -296,13 +296,19 @@ $kubectl_cmd wait crd/providerconfigs.keycloak.crossplane.io --for condition=est
 $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml
 
 if [[ "$uselocalprovider" == "true" ]]; then
+  cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply -f -
+  $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider.yaml
+
   echo "Scaling down 'provider-keycloak' to use local provider"
   $kubectl_cmd patch DeploymentRuntimeConfig runtimeconfig-provider-keycloak --type='merge' -p '{"spec":{"deploymentTemplate":{"spec":{"replicas":0}}}}'
 
   echo "* Waiting for Keycloak Provider to be removed"
   $kubectl_cmd wait pod --namespace crossplane-system --selector="pkg.crossplane.io/provider=provider-keycloak" --for=delete --timeout=300s
   $kubectl_cmd wait deployment --all --namespace crossplane-system --for=condition=Available
-  $kubectl_cmd apply -f ${SCRIPT_DIR}/../package/crds
+
+  if [[ "$deploylocalprovider" == "false" ]]; then
+    $kubectl_cmd apply -f ${SCRIPT_DIR}/../package/crds
+  fi
 fi
 
 echo "#################################################"
