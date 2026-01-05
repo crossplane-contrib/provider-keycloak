@@ -4,12 +4,12 @@ import (
 	"context"
 	"strings"
 
-	"github.com/keycloak/terraform-provider-keycloak/keycloak"
-
 	"github.com/crossplane/upjet/v2/pkg/config"
+	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+	"github.com/crossplane-contrib/provider-keycloak/config/multitypes"
 )
 
 const (
@@ -80,10 +80,22 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_openid_client_client_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
 
-		r.References["clients"] = config.Reference{
-			TerraformName: "keycloak_openid_client",
-			Extractor:     common.PathUUIDExtractor,
-		}
+		multitypes.ApplyToAsListWithOptions(r, "clients",
+			&multitypes.Options{KeepOriginalField: true}, // Explicit: maintain backward compatibility
+			multitypes.Instance{
+				Name: "saml_clients",
+				Reference: config.Reference{
+					TerraformName: "keycloak_saml_client",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "clients",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			})
 
 		if s, ok := r.TerraformResource.Schema["decisionStrategy"]; ok {
 			s.Optional = false

@@ -10,6 +10,8 @@ spec:
       defaultProvider: my-config-default-idp
     executionIdRef:
       name: execution-identity-redirect
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev-ns"
       policy:

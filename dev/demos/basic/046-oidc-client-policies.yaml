@@ -10,10 +10,14 @@ spec:
     name: my-client-policy
     clientsRefs:
       - name: "test"
+        policy:
+          resolve: Always
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
       name: "test"
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev"
       policy:
@@ -34,12 +38,12 @@ spec:
         extendChildren: false
         idRef:
           name: "test"
-          policy:
-            resolve: Always
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
       name: "test"
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev"
       policy:
@@ -55,17 +59,17 @@ spec:
   deletionPolicy: Delete
   forProvider:
     name: my-role-policy
-    type: ROLE
+    type: role
     role:
       - required: true
         idRef:
           name: "test"
-          policy:
-            resolve: Always
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
       name: "test"
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev"
       policy:
@@ -83,10 +87,14 @@ spec:
     name: my-user-policy
     usersRefs:
       - name: "tim-tester"
+        policy:
+          resolve: Always
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
       name: "test"
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev"
       policy:

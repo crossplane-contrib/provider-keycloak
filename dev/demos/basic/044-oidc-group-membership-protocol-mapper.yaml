@@ -30,6 +30,8 @@ spec:
     name: "my-mapper"
     clientScopeIdRef:
       name: "openid-client-scope"
+      policy:
+        resolve: Always
     realmIdRef:
       name: "dev"
       policy:

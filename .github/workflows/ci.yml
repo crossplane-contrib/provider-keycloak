@@ -313,6 +313,7 @@ jobs:
       - name: Running E2E Tests
         id: e2eTests
         continue-on-error: true
+        shell: bash
         run:
           #!/bin/bash
           set -o pipefail;
@@ -321,6 +322,7 @@ jobs:
 
       - name: Collect logs
         if: steps.e2eTests.outcome == 'failure'
+        shell: bash
         run: ./dev/collect-logs.sh
 
       - name: Upload logs
@@ -339,7 +341,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs:  [detect-noop, lint, check-diff, unit-tests, local-deploy, e2e-tests]
     if: |
-      needs.detect-noop.outputs.noop != 'true' &&
+      needs.detect-noop.outputs.noop != 'true' && needs.lint.result == 'success' && needs.check-diff.result == 'success'  && needs.unit-tests.result == 'success' && needs.local-deploy.result == 'success' &&
       (always() && (needs.e2e-tests.result == 'success' || needs.e2e-tests.result == 'skipped' || needs.detect-noop.outputs.skip-e2e == 'true'))
     outputs:
       version: ${{ steps.version.outputs.VERSION }}
