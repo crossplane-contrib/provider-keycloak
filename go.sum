@@ -197,8 +197,8 @@ github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnr
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
 github.com/kevinburke/ssh_config v1.2.0 h1:x584FjTGwHzMwvHx18PXxbBVzfnxogHaAReU4gf13a4=
 github.com/kevinburke/ssh_config v1.2.0/go.mod h1:CT57kijsi8u/K/BOFA39wgDQJ9CxiF4nAY/ojJ6r6mM=
-github.com/keycloak/terraform-provider-keycloak v0.0.0-20251223153209-a6bac02bcc92 h1:y1H1ylUw1Lpg7nP1W4HRzGElrscgefyY4b/jT58F3+o=
-github.com/keycloak/terraform-provider-keycloak v0.0.0-20251223153209-a6bac02bcc92/go.mod h1:Grs4xrnkLyb+nEYCXO3t/BCOOGGz0HC/vAWXPx3xVLs=
+github.com/keycloak/terraform-provider-keycloak v0.0.0-20260106093105-433be6d33c4f h1:66EVpaYbaA96ukNeV0Pab2P6BkMbosJNsSyf+r2Ztq0=
+github.com/keycloak/terraform-provider-keycloak v0.0.0-20260106093105-433be6d33c4f/go.mod h1:Grs4xrnkLyb+nEYCXO3t/BCOOGGz0HC/vAWXPx3xVLs=
 github.com/klauspost/compress v1.18.0 h1:c/Cqfb0r+Yi+JtIEq73FWXVkRonBlf0CRNYc8Zttxdo=
 github.com/klauspost/compress v1.18.0/go.mod h1:2Pp+KzxcywXVXMr50+X0Q/Lsb43OQHYWRCY2AiWywWQ=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
