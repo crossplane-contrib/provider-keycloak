@@ -42,9 +42,7 @@ spec:
     accessType: CONFIDENTIAL
     authorization:
     - policyEnforcementMode: ENFORCING
-    clientIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: example
+    clientId: client_id
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm

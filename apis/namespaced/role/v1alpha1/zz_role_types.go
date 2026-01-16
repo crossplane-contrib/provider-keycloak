@@ -22,7 +22,6 @@ type RoleInitParameters struct {
 
 	// When specified, this role will be created as a client role attached to the client with the provided ID
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
 	// Reference to a Client in openidclient to populate clientId.
@@ -67,6 +66,18 @@ type RoleInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// When specified, this role will be created as a client role attached to the client with the provided ID
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
+
+	// Reference to a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDRef *v1.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDSelector *v1.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
 }
 
 type RoleObservation struct {
@@ -95,6 +106,9 @@ type RoleObservation struct {
 
 	// The realm this role exists within.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// When specified, this role will be created as a client role attached to the client with the provided ID
+	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
 }
 
 type RoleParameters struct {
@@ -106,7 +120,6 @@ type RoleParameters struct {
 
 	// When specified, this role will be created as a client role attached to the client with the provided ID
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -157,6 +170,19 @@ type RoleParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// When specified, this role will be created as a client role attached to the client with the provided ID
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +kubebuilder:validation:Optional
+	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
+
+	// Reference to a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDRef *v1.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDSelector *v1.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
 }
 
 // RoleSpec defines the desired state of Role

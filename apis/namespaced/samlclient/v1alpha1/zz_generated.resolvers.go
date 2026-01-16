@@ -25,26 +25,6 @@ func (mg *Client) ResolveReferences( // ResolveReferences of this Client.
 	var rsp reference.NamespacedResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "Client", "ClientList")
-		if err != nil {
-			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
-		}
-
-		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
-			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-			Extract:      common.UUIDExtractor(),
-			Namespace:    mg.GetNamespace(),
-			Reference:    mg.Spec.ForProvider.ClientIDRef,
-			Selector:     mg.Spec.ForProvider.ClientIDSelector,
-			To:           reference.To{List: l, Managed: m},
-		})
-	}
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.ClientID")
-	}
-	mg.Spec.ForProvider.ClientID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.ClientIDRef = rsp.ResolvedReference
-	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -64,26 +44,6 @@ func (mg *Client) ResolveReferences( // ResolveReferences of this Client.
 	}
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
-	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "Client", "ClientList")
-		if err != nil {
-			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
-		}
-
-		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
-			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-			Extract:      common.UUIDExtractor(),
-			Namespace:    mg.GetNamespace(),
-			Reference:    mg.Spec.InitProvider.ClientIDRef,
-			Selector:     mg.Spec.InitProvider.ClientIDSelector,
-			To:           reference.To{List: l, Managed: m},
-		})
-	}
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.ClientID")
-	}
-	mg.Spec.InitProvider.ClientID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.ClientIDRef = rsp.ResolvedReference
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {

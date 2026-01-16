@@ -402,16 +402,6 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.ClientIDRef != nil {
-		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.NamespacedReference)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.ClientIDSelector != nil {
-		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.NamespacedSelector)
-		(*in).DeepCopyInto(*out)
-	}
 	if in.ClientSignatureRequired != nil {
 		in, out := &in.ClientSignatureRequired, &out.ClientSignatureRequired
 		*out = new(bool)
@@ -896,16 +886,6 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 		in, out := &in.ClientID, &out.ClientID
 		*out = new(string)
 		**out = **in
-	}
-	if in.ClientIDRef != nil {
-		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.NamespacedReference)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.ClientIDSelector != nil {
-		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.NamespacedSelector)
-		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientSignatureRequired != nil {
 		in, out := &in.ClientSignatureRequired, &out.ClientSignatureRequired
