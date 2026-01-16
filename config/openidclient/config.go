@@ -35,11 +35,19 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_openid_client_default_scopes", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = Group
+		r.References["client_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_optional_scopes", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = Group
+		r.References["client_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_scope", func(r *config.Resource) {
@@ -75,10 +83,24 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_openid_client_service_account_realm_role", func(r *config.Resource) {
 		r.ShortGroup = Group
+		r.References["service_account_user_id"] = config.Reference{
+			TerraformName:     "keycloak_openid_client",
+			Extractor:         common.PathServiceAccountRoleIDExtractor,
+			RefFieldName:      "ServiceAccountUserClientIDRef",
+			SelectorFieldName: "ServiceAccountUserClientIDSelector",
+		}
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{"service_account_user_id"},
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_client_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
+
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
 
 		multitypes.ApplyToAsListWithOptions(r, "clients",
 			&multitypes.Options{KeepOriginalField: true}, // Explicit: maintain backward compatibility
@@ -111,6 +133,11 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_openid_client_group_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
 
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+
 		r.References["groups.id"] = config.Reference{
 			TerraformName: "keycloak_group",
 			Extractor:     common.PathUUIDExtractor,
@@ -131,6 +158,11 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_openid_client_role_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
 
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+
 		r.References["role.id"] = config.Reference{
 			TerraformName: "keycloak_role",
 			Extractor:     common.PathUUIDExtractor,
@@ -150,6 +182,11 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_openid_client_user_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
 
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+
 		r.References["users"] = config.Reference{
 			TerraformName: "keycloak_user",
 			Extractor:     common.PathUUIDExtractor,
@@ -168,14 +205,66 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_openid_client_permissions", func(r *config.Resource) {
 		r.ShortGroup = Group
+		r.References["client_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_authorization_resource", func(r *config.Resource) {
 		r.ShortGroup = Group
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_authorization_permission", func(r *config.Resource) {
 		r.ShortGroup = Group
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_authorization_scope", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_aggregate_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_js_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_time_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_authorization_client_scope_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
 	})
 }
 

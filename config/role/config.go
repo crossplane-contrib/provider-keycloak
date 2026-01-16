@@ -9,6 +9,7 @@ import (
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+	"github.com/crossplane-contrib/provider-keycloak/config/multitypes"
 )
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
@@ -21,6 +22,21 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_role",
 			Extractor:     common.PathUUIDExtractor,
 		}
+
+		multitypes.ApplyToWithOptions(r, "client_id",
+			&multitypes.Options{KeepOriginalField: true}, // Explicit: maintain backward compatibility
+			multitypes.Instance{
+				Name: "saml_client_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_saml_client",
+				},
+			},
+			multitypes.Instance{
+				Name: "client_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client",
+				},
+			})
 	})
 }
 
