@@ -31,6 +31,11 @@ func Configure(p *config.Provider) {
 		if s, ok := r.TerraformResource.Schema["signing_private_key"]; ok {
 			s.Sensitive = true
 		}
+
+		// Avoid removing BrowserIdRef
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{"authentication_flow_binding_overrides"},
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_saml_client_default_scopes", func(r *config.Resource) {
