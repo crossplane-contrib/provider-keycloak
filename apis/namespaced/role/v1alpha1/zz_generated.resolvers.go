@@ -33,7 +33,7 @@ func (mg *Role) ResolveReferences( // ResolveReferences of this Role.
 
 		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClientID),
-			Extract:      reference.ExternalName(),
+			Extract:      common.UUIDExtractor(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.ForProvider.ClientIDRef,
 			Selector:     mg.Spec.ForProvider.ClientIDSelector,
@@ -93,7 +93,7 @@ func (mg *Role) ResolveReferences( // ResolveReferences of this Role.
 
 		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLClientID),
-			Extract:      reference.ExternalName(),
+			Extract:      common.UUIDExtractor(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.ForProvider.SAMLClientIDRef,
 			Selector:     mg.Spec.ForProvider.SAMLClientIDSelector,
@@ -113,7 +113,7 @@ func (mg *Role) ResolveReferences( // ResolveReferences of this Role.
 
 		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClientID),
-			Extract:      reference.ExternalName(),
+			Extract:      common.UUIDExtractor(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.InitProvider.ClientIDRef,
 			Selector:     mg.Spec.InitProvider.ClientIDSelector,
@@ -173,7 +173,7 @@ func (mg *Role) ResolveReferences( // ResolveReferences of this Role.
 
 		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLClientID),
-			Extract:      reference.ExternalName(),
+			Extract:      common.UUIDExtractor(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.InitProvider.SAMLClientIDRef,
 			Selector:     mg.Spec.InitProvider.SAMLClientIDSelector,
