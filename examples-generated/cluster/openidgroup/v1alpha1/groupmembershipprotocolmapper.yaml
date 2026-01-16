@@ -30,9 +30,7 @@ metadata:
 spec:
   forProvider:
     accessType: CONFIDENTIAL
-    clientIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: example
+    clientId: client
     enabled: true
     name: client
     realmIdSelector:

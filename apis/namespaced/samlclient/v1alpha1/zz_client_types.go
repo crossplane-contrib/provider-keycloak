@@ -64,17 +64,7 @@ type ClientInitParameters struct {
 	CanonicalizationMethod *string `json:"canonicalizationMethod,omitempty" tf:"canonicalization_method,omitempty"`
 
 	// The unique ID of this client, referenced in the URI during authentication and in issued tokens.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
-	// Reference to a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
-
-	// Selector for a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// When true, Keycloak will expect that documents originating from a client will be signed using the certificate and/or key configured via signing_certificate and signing_private_key. Defaults to true.
 	ClientSignatureRequired *bool `json:"clientSignatureRequired,omitempty" tf:"client_signature_required,omitempty"`
@@ -323,18 +313,8 @@ type ClientParameters struct {
 	CanonicalizationMethod *string `json:"canonicalizationMethod,omitempty" tf:"canonicalization_method,omitempty"`
 
 	// The unique ID of this client, referenced in the URI during authentication and in issued tokens.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
-
-	// Reference to a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
-
-	// Selector for a Client in openidclient to populate clientId.
-	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// When true, Keycloak will expect that documents originating from a client will be signed using the certificate and/or key configured via signing_certificate and signing_private_key. Defaults to true.
 	// +kubebuilder:validation:Optional
@@ -504,8 +484,9 @@ type ClientStatus struct {
 type Client struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              ClientSpec   `json:"spec"`
-	Status            ClientStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clientId) || (has(self.initProvider) && has(self.initProvider.clientId))",message="spec.forProvider.clientId is a required parameter"
+	Spec   ClientSpec   `json:"spec"`
+	Status ClientStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
