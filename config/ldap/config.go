@@ -6,6 +6,7 @@ import (
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 )
 
@@ -33,6 +34,10 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
 			TerraformName: "keycloak_ldap_user_federation",
+		}
+		r.References["client_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
 		}
 	})
 

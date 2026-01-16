@@ -191,27 +191,11 @@ func KnownReferencers() ujconfig.ResourceOption { //nolint:gocyclo
 				r.References["organization_id"] = ujconfig.Reference{
 					TerraformName: "keycloak_organization",
 				}
-			case "client_id":
-				r.References["client_id"] = ujconfig.Reference{
-					TerraformName: "keycloak_openid_client",
-					Extractor:     common.PathUUIDExtractor,
-				}
 			case "client_scope_id":
 				r.References["client_scope_id"] = ujconfig.Reference{
 					TerraformName: "keycloak_openid_client_scope",
 					Extractor:     common.PathUUIDExtractor,
 				}
-			case "service_account_user_id":
-				r.References["service_account_user_id"] = ujconfig.Reference{
-					TerraformName:     "keycloak_openid_client",
-					Extractor:         common.PathServiceAccountRoleIDExtractor,
-					RefFieldName:      "ServiceAccountUserClientIDRef",
-					SelectorFieldName: "ServiceAccountUserClientIDSelector",
-				}
-				r.LateInitializer = ujconfig.LateInitializer{
-					IgnoredFields: []string{"service_account_user_id"},
-				}
-
 			case "role_ids":
 				r.References["role_ids"] = ujconfig.Reference{
 					TerraformName: "keycloak_role",
@@ -221,12 +205,6 @@ func KnownReferencers() ujconfig.ResourceOption { //nolint:gocyclo
 			case "role_id":
 				r.References["role_id"] = ujconfig.Reference{
 					TerraformName: "keycloak_role",
-					Extractor:     common.PathUUIDExtractor,
-				}
-
-			case "resource_server_id":
-				r.References["resource_server_id"] = ujconfig.Reference{
-					TerraformName: "keycloak_openid_client",
 					Extractor:     common.PathUUIDExtractor,
 				}
 			}
