@@ -67,6 +67,33 @@ type RoleMapperInitParameters struct {
 	// Selector for a Role in role to populate roleId.
 	// +kubebuilder:validation:Optional
 	RoleIDSelector *v1.Selector `json:"roleIdSelector,omitempty" tf:"-"`
+
+	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
+	// The destination client of the role. Cannot be used at the same time as client_scope_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
+
+	// Reference to a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDRef *v1.Reference `json:"samlClientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDSelector *v1.Selector `json:"samlClientIdSelector,omitempty" tf:"-"`
+
+	// The ID of the client scope this role mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
+	// The destination client scope of the role. Cannot be used at the same time as client_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.ClientScope
+	SAMLClientScopeID *string `json:"samlClientScopeId,omitempty" tf:"saml_client_scope_id,omitempty"`
+
+	// Reference to a ClientScope in samlclient to populate samlClientScopeId.
+	// +kubebuilder:validation:Optional
+	SAMLClientScopeIDRef *v1.Reference `json:"samlClientScopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClientScope in samlclient to populate samlClientScopeId.
+	// +kubebuilder:validation:Optional
+	SAMLClientScopeIDSelector *v1.Selector `json:"samlClientScopeIdSelector,omitempty" tf:"-"`
 }
 
 type RoleMapperObservation struct {
@@ -88,6 +115,14 @@ type RoleMapperObservation struct {
 	// The ID of the role to be added to this role mapper.
 	// Id of the role to assign
 	RoleID *string `json:"roleId,omitempty" tf:"role_id,omitempty"`
+
+	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
+	// The destination client of the role. Cannot be used at the same time as client_scope_id.
+	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
+
+	// The ID of the client scope this role mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
+	// The destination client scope of the role. Cannot be used at the same time as client_id.
+	SAMLClientScopeID *string `json:"samlClientScopeId,omitempty" tf:"saml_client_scope_id,omitempty"`
 }
 
 type RoleMapperParameters struct {
@@ -148,6 +183,35 @@ type RoleMapperParameters struct {
 	// Selector for a Role in role to populate roleId.
 	// +kubebuilder:validation:Optional
 	RoleIDSelector *v1.Selector `json:"roleIdSelector,omitempty" tf:"-"`
+
+	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
+	// The destination client of the role. Cannot be used at the same time as client_scope_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +kubebuilder:validation:Optional
+	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
+
+	// Reference to a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDRef *v1.Reference `json:"samlClientIdRef,omitempty" tf:"-"`
+
+	// Selector for a Client in samlclient to populate samlClientId.
+	// +kubebuilder:validation:Optional
+	SAMLClientIDSelector *v1.Selector `json:"samlClientIdSelector,omitempty" tf:"-"`
+
+	// The ID of the client scope this role mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
+	// The destination client scope of the role. Cannot be used at the same time as client_id.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.ClientScope
+	// +kubebuilder:validation:Optional
+	SAMLClientScopeID *string `json:"samlClientScopeId,omitempty" tf:"saml_client_scope_id,omitempty"`
+
+	// Reference to a ClientScope in samlclient to populate samlClientScopeId.
+	// +kubebuilder:validation:Optional
+	SAMLClientScopeIDRef *v1.Reference `json:"samlClientScopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClientScope in samlclient to populate samlClientScopeId.
+	// +kubebuilder:validation:Optional
+	SAMLClientScopeIDSelector *v1.Selector `json:"samlClientScopeIdSelector,omitempty" tf:"-"`
 }
 
 // RoleMapperSpec defines the desired state of RoleMapper
