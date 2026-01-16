@@ -22,12 +22,14 @@ func Configure(p *config.Provider) {
 				Name: "saml_client_id",
 				Reference: config.Reference{
 					TerraformName: "keycloak_saml_client",
+					Extractor:     common.PathUUIDExtractor,
 				},
 			},
 			multitypes.Instance{
 				Name: "client_id",
 				Reference: config.Reference{
 					TerraformName: "keycloak_openid_client",
+					Extractor:     common.PathUUIDExtractor,
 				},
 			})
 
@@ -52,13 +54,38 @@ func Configure(p *config.Provider) {
 		r.References["role_id"] = config.Reference{
 			TerraformName: "keycloak_role",
 		}
-		r.References["client_id"] = config.Reference{
-			TerraformName: "keycloak_openid_client",
-			Extractor:     common.PathUUIDExtractor,
-		}
-		r.References["client_scope_id"] = config.Reference{
-			TerraformName: "keycloak_openid_client_scope",
-		}
+
+		multitypes.ApplyToWithOptions(r, "client_id",
+			&multitypes.Options{KeepOriginalField: true}, // Explicit: maintain backward compatibility
+			multitypes.Instance{
+				Name: "saml_client_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_saml_client",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "client_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			})
+
+		multitypes.ApplyToWithOptions(r, "client_scope_id",
+			&multitypes.Options{KeepOriginalField: true}, // Explicit: maintain backward compatibility
+			multitypes.Instance{
+				Name: "saml_client_scope_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_saml_client_scope",
+				},
+			},
+			multitypes.Instance{
+				Name: "client_scope_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_scope",
+				},
+			})
 	})
 }
 

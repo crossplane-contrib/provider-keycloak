@@ -29,12 +29,14 @@ func Configure(p *config.Provider) {
 				Name: "saml_client_id",
 				Reference: config.Reference{
 					TerraformName: "keycloak_saml_client",
+					Extractor:     common.PathUUIDExtractor,
 				},
 			},
 			multitypes.Instance{
 				Name: "client_id",
 				Reference: config.Reference{
 					TerraformName: "keycloak_openid_client",
+					Extractor:     common.PathUUIDExtractor,
 				},
 			})
 	})
