@@ -30,6 +30,10 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_authentication_flow",
 		}
 
+		// Avoid removing BrowserIdRef
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{"authentication_flow_binding_overrides"},
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_default_scopes", func(r *config.Resource) {
