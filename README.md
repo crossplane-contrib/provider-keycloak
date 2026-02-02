@@ -22,10 +22,11 @@ metadata:
   name: provider-keycloak
   namespace: crossplane-system
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v2.7.2
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:<latest>
 ``` 
 
 This will install the provider in the `crossplane-system` namespace and install CRDs and controllers for the provider.
+Check https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak for the lastet version
 
 #### DeploymentRuntimeConfig
 
