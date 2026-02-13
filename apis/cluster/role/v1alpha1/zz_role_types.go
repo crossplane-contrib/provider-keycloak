@@ -36,11 +36,11 @@ type RoleInitParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/role/v1alpha1.Role
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
-	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
+	CompositeRoles []*string `json:"compositeRoles" tf:"composite_roles"`
 
 	// References to Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
-	CompositeRolesRefs []v1.Reference `json:"compositeRolesRefs,omitempty" tf:"-"`
+	CompositeRolesRefs []v1.Reference `json:"compositeRolesRefs" tf:"-"`
 
 	// Selector for a list of Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
@@ -92,7 +92,7 @@ type RoleObservation struct {
 
 	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
 	// +listType=set
-	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
+	CompositeRoles []*string `json:"compositeRoles" tf:"composite_roles"`
 
 	// The description of the role
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
@@ -138,11 +138,11 @@ type RoleParameters struct {
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set
-	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
+	CompositeRoles []*string `json:"compositeRoles" tf:"composite_roles"`
 
 	// References to Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
-	CompositeRolesRefs []v1.Reference `json:"compositeRolesRefs,omitempty" tf:"-"`
+	CompositeRolesRefs []v1.Reference `json:"compositeRolesRefs" tf:"-"`
 
 	// Selector for a list of Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
