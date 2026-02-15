@@ -193,7 +193,7 @@ fi
 
 echo "########### Installing ArgoCD ###########"
 $kubectl_cmd create namespace argocd || true
-$kubectl_cmd apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+$kubectl_cmd apply --server-side=true -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 echo "* Exposing ArgoCD"
 $kubectl_cmd patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
