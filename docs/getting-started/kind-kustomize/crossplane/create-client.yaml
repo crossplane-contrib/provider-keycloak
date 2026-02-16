@@ -1,0 +1,59 @@
+# The pod for this job should mount a volume that will be created from a config map containing a file with a bash script that it runs
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-client-crossplane
+  namespace: keycloak
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            set -x;
+            echo "Waiting for master realm to become ready..."
+            while [ $(curl -sw '%{http_code}' "http://keycloak.keycloak/realms/master" -o /dev/null) -ne 200 ]; do
+              sleep 15;
+            done;
+
+            echo "$SVC_HOST:$SVC_PORT connection OK ✓"
+          image: dwdraju/alpine-curl-jq
+          imagePullPolicy: IfNotPresent
+          name: svcchecker
+          resources:
+            limits:
+              cpu: 20m
+              memory: 32Mi
+            requests:
+              cpu: 20m
+              memory: 32Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      containers:
+      - name: bash
+        image: dwdraju/alpine-curl-jq
+        command: ["bash"]
+        args: ["/opt/script/create-client.sh"]
+        volumeMounts:
+          - name: client-script
+            mountPath: /opt/script/
+        resources:
+          limits:
+            cpu: 100m
+            memory: 32Mi
+          requests:
+            cpu: 100m
+            memory: 32Mi
+      volumes:
+        - name: client-script
+          configMap:
+            name: client-script
