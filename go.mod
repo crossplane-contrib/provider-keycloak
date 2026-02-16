@@ -9,7 +9,7 @@ require (
 	github.com/crossplane/crossplane-tools v0.0.0-20251017183449-dd4517244339
 	github.com/crossplane/upjet/v2 v2.2.0
 	github.com/hashicorp/terraform-json v0.27.2
-	github.com/hashicorp/terraform-plugin-sdk/v2 v2.38.1
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.38.2
 	github.com/keycloak/terraform-provider-keycloak v0.0.0-20260121083957-a7ffad23fd2a
 	github.com/pkg/errors v0.9.1
 	k8s.io/api v0.35.1
