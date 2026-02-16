@@ -5,6 +5,7 @@ import (
 
 	"github.com/crossplane/upjet/v2/pkg/config"
 
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
@@ -21,6 +22,21 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 		r.References["realm"] = config.Reference{
 			TerraformName: "keycloak_realm",
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_identity_provider_token_exchange_scope_permission", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["realm_id"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+		r.References["provider_alias"] = config.Reference{
+			TerraformName: "keycloak_oidc_identity_provider",
+			Extractor:     `github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("alias",false)`,
+		}
+		r.References["clients"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
 		}
 	})
 }
