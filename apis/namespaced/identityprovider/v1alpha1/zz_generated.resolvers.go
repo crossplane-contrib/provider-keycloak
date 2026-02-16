@@ -12,7 +12,6 @@ import (
 	apisresolver "github.com/crossplane-contrib/provider-keycloak/internal/apis"
 	reference "github.com/crossplane/crossplane-runtime/v2/pkg/reference"
 	xpresource "github.com/crossplane/crossplane-runtime/v2/pkg/resource"
-	resource "github.com/crossplane/upjet/v2/pkg/resource"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -106,7 +105,7 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 
 		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ProviderAlias),
-			Extract:      resource.ExtractParamPath("alias", false),
+			Extract:      common.IdentityProviderAliasExtractor(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.ForProvider.ProviderAliasRef,
 			Selector:     mg.Spec.ForProvider.ProviderAliasSelector,
@@ -166,7 +165,7 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 
 		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ProviderAlias),
-			Extract:      resource.ExtractParamPath("alias", false),
+			Extract:      common.IdentityProviderAliasExtractor(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.InitProvider.ProviderAliasRef,
 			Selector:     mg.Spec.InitProvider.ProviderAliasSelector,

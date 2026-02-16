@@ -36,7 +36,7 @@ type ProviderTokenExchangeScopePermissionInitParameters struct {
 
 	// Alias of the identity provider.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.IdentityProvider
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("alias",false)
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
 	ProviderAlias *string `json:"providerAlias,omitempty" tf:"provider_alias,omitempty"`
 
 	// Reference to a IdentityProvider in oidc to populate providerAlias.
@@ -121,7 +121,7 @@ type ProviderTokenExchangeScopePermissionParameters struct {
 
 	// Alias of the identity provider.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.IdentityProvider
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("alias",false)
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
 	// +kubebuilder:validation:Optional
 	ProviderAlias *string `json:"providerAlias,omitempty" tf:"provider_alias,omitempty"`
 
