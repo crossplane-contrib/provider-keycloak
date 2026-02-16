@@ -1,13 +1,14 @@
 ---
-# Google Identity Provider
+# OIDC Identity Provider
 apiVersion: oidc.keycloak.crossplane.io/v1alpha1
-kind: GoogleIdentityProvider
+kind: IdentityProvider
 metadata:
-  name: token-exchange-test-google-idp
+  name: token-exchange-test-idp
 spec:
   deletionPolicy: Delete
   forProvider:
-    alias: test-google-idp
+    alias: test-idp
+    authorizationUrl: https://example.com/auth
     clientIdSecretRef:
       key: client-id
       name: client-secret
@@ -16,13 +17,11 @@ spec:
       key: client-secret
       name: client-secret
       namespace: dev
-    hostedDomain: example.com
     realmRef:
       name: dev
       policy:
         resolve: Always
-    syncMode: IMPORT
-    trustEmail: true
+    tokenUrl: https://example.com/token
   providerConfigRef:
     name: "keycloak-provider-config"
 ---
@@ -59,7 +58,7 @@ spec:
           resolve: Always
     policyType: client
     providerAliasRef:
-      name: token-exchange-test-google-idp
+      name: token-exchange-test-idp
       policy:
         resolve: Always
     realmIdRef:
