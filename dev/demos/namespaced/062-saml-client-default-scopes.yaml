@@ -11,7 +11,7 @@ spec:
       policy:
         resolve: Always
     defaultScopes:
-      - role_list
+      - groups
     realmIdRef:
       name: "dev-ns"
       policy:
