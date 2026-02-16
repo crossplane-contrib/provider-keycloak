@@ -46,3 +46,43 @@ func (mg *IdentityProviderMapper) SetProviderConfigReference(r *xpv1.ProviderCon
 func (mg *IdentityProviderMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
+
+// GetCondition of this ProviderTokenExchangeScopePermission.
+func (mg *ProviderTokenExchangeScopePermission) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this ProviderTokenExchangeScopePermission.
+func (mg *ProviderTokenExchangeScopePermission) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this ProviderTokenExchangeScopePermission.
+func (mg *ProviderTokenExchangeScopePermission) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this ProviderTokenExchangeScopePermission.
+func (mg *ProviderTokenExchangeScopePermission) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this ProviderTokenExchangeScopePermission.
+func (mg *ProviderTokenExchangeScopePermission) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this ProviderTokenExchangeScopePermission.
+func (mg *ProviderTokenExchangeScopePermission) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this ProviderTokenExchangeScopePermission.
+func (mg *ProviderTokenExchangeScopePermission) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this ProviderTokenExchangeScopePermission.
+func (mg *ProviderTokenExchangeScopePermission) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}

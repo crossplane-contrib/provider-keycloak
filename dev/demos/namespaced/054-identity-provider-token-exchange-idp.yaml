@@ -1,0 +1,45 @@
+---
+# OIDC Identity Provider
+apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  name: token-exchange-test-idp
+  namespace: dev-ns
+spec:
+  forProvider:
+    alias: test-idp
+    authorizationUrl: https://example.com/auth
+    clientIdSecretRef:
+      key: client-id
+      name: client-secret
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+    realmRef:
+      name: dev-ns
+      policy:
+        resolve: Always
+    tokenUrl: https://example.com/token
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+# OpenID Client
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: token-exchange-test-client
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmIdRef:
+      name: dev-ns
+      policy:
+        resolve: Always
+    accessType: "CONFIDENTIAL"
+    clientId: "token-exchange-test-client"
+    fullScopeAllowed: false
+    serviceAccountsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

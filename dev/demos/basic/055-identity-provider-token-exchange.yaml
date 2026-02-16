@@ -1,0 +1,23 @@
+# Token Exchange Scope Permission
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: ProviderTokenExchangeScopePermission
+metadata:
+  name: token-exchange-permission
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    clientsRefs:
+      - name: token-exchange-test-client
+        policy:
+          resolve: Always
+    policyType: client
+    providerAliasRef:
+      name: token-exchange-test-idp
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: dev
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
