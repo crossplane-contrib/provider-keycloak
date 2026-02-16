@@ -1,15 +1,70 @@
+---
+# Google Identity Provider
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: GoogleIdentityProvider
+metadata:
+  name: token-exchange-test-google-idp
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: test-google-idp
+    clientIdSecretRef:
+      key: client-id
+      name: client-secret
+      namespace: dev
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+      namespace: dev
+    hostedDomain: example.com
+    realmRef:
+      name: dev
+      policy:
+        resolve: Always
+    syncMode: IMPORT
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+# OpenID Client
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: token-exchange-test-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: dev
+      policy:
+        resolve: Always
+    accessType: "PUBLIC"
+    clientId: "token-exchange-test-client"
+    fullScopeAllowed: false
+    serviceAccountsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+# Token Exchange Scope Permission
 apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
 kind: ProviderTokenExchangeScopePermission
 metadata:
   name: token-exchange-permission
 spec:
+  deletionPolicy: Delete
   forProvider:
     clientsRefs:
-    - name: webapp-client
+      - name: token-exchange-test-client
+        policy:
+          resolve: Always
     policyType: client
     providerAliasRef:
-      name: oidc-identity-provider
+      name: token-exchange-test-google-idp
+      policy:
+        resolve: Always
     realmIdRef:
-      name: "dev-realm"
+      name: dev
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"

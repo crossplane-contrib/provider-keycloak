@@ -1,3 +1,51 @@
+---
+# Google Identity Provider
+apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+kind: GoogleIdentityProvider
+metadata:
+  name: token-exchange-test-google-idp
+  namespace: dev-ns
+spec:
+  forProvider:
+    alias: test-google-idp
+    clientIdSecretRef:
+      key: client-id
+      name: client-secret
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+    hostedDomain: example.com
+    realmRef:
+      name: dev-ns
+      policy:
+        resolve: Always
+    syncMode: IMPORT
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+# OpenID Client
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: token-exchange-test-client
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmIdRef:
+      name: dev-ns
+      policy:
+        resolve: Always
+    accessType: "PUBLIC"
+    clientId: "token-exchange-test-client"
+    fullScopeAllowed: false
+    serviceAccountsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+# Token Exchange Scope Permission
 apiVersion: identityprovider.keycloak.m.crossplane.io/v1alpha1
 kind: ProviderTokenExchangeScopePermission
 metadata:
@@ -6,14 +54,16 @@ metadata:
 spec:
   forProvider:
     clientsRefs:
-    - name: webapp-client
+      - name: token-exchange-test-client
+        policy:
+          resolve: Always
     policyType: client
     providerAliasRef:
-      name: oidc-identity-provider
+      name: token-exchange-test-google-idp
       policy:
         resolve: Always
     realmIdRef:
-      name: "dev-ns"
+      name: dev-ns
       policy:
         resolve: Always
   providerConfigRef:
