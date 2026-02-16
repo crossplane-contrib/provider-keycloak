@@ -1,0 +1,89 @@
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: ProviderTokenExchangeScopePermission
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/providertokenexchangescopepermission
+  labels:
+    testing.upbound.io/example-name: oidc_idp_permission
+  name: oidc-idp-permission
+spec:
+  forProvider:
+    clientsRefs:
+    - name: token-exchange_webapp_client
+    policyType: client
+    providerAliasSelector:
+      matchLabels:
+        testing.upbound.io/example-name: token_exchange_my_oidc_idp
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: token_exchange_realm
+
+---
+
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/providertokenexchangescopepermission
+  labels:
+    testing.upbound.io/example-name: token_exchange_my_oidc_idp
+  name: token-exchange-my-oidc-idp
+spec:
+  forProvider:
+    alias: myIdp
+    authorizationUrl: http://localhost:8080/auth/realms/someRealm/protocol/openid-connect/auth
+    clientIdSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    defaultScopes: openid
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: token_exchange_realm
+    tokenUrl: http://localhost:8080/auth/realms/someRealm/protocol/openid-connect/token
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/providertokenexchangescopepermission
+  labels:
+    testing.upbound.io/example-name: token-exchange_webapp_client
+  name: token-exchange-webapp-client
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientId: webapp_client
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    description: a webapp client on the destination realm
+    name: webapp_client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: token_exchange_realm
+    standardFlowEnabled: true
+    validRedirectUris:
+    - http://localhost:8080/*
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/providertokenexchangescopepermission
+  labels:
+    testing.upbound.io/example-name: token_exchange_realm
+  name: token-exchange-realm
+spec:
+  forProvider:
+    enabled: true
+    realm: token-exchange_destination_realm
