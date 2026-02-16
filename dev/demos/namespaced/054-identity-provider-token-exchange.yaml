@@ -37,7 +37,7 @@ spec:
       name: dev-ns
       policy:
         resolve: Always
-    accessType: "PUBLIC"
+    accessType: "CONFIDENTIAL"
     clientId: "token-exchange-test-client"
     fullScopeAllowed: false
     serviceAccountsEnabled: true
