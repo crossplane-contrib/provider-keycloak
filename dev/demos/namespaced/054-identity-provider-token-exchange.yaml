@@ -12,7 +12,7 @@ spec:
       name: oidc-identity-provider
       policy:
         resolve: Always
-    realmRef:
+    realmIdRef:
       name: "dev-ns"
       policy:
         resolve: Always

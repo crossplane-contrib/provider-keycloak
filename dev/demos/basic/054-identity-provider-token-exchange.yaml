@@ -9,7 +9,7 @@ spec:
     policyType: client
     providerAliasRef:
       name: oidc-identity-provider
-    realmRef:
+    realmIdRef:
       name: "dev-realm"
   providerConfigRef:
     name: "keycloak-provider-config"
