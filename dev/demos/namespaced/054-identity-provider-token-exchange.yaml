@@ -1,0 +1,21 @@
+apiVersion: identityprovider.keycloak.m.crossplane.io/v1alpha1
+kind: ProviderTokenExchangeScopePermission
+metadata:
+  name: token-exchange-permission
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientsRefs:
+    - name: webapp-client
+    policyType: client
+    providerAliasRef:
+      name: oidc-identity-provider
+      policy:
+        resolve: Always
+    realmRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
