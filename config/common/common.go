@@ -21,6 +21,12 @@ const (
 	// PathAuthenticationFlowOrSubflowAliasExtractor is the golang path to extractor function
 	// that can handle both Flow and Subflow resources
 	PathAuthenticationFlowOrSubflowAliasExtractor = SelfPackagePath + ".AuthenticationFlowOrSubflowAliasExtractor()"
+	// PathIdentityProviderAliasExtractor is the golang path to IdentityProviderAliasExtractor function
+	// in this package.
+	PathIdentityProviderAliasExtractor = SelfPackagePath + ".IdentityProviderAliasExtractor()"
+	// PathAliasExtractor is the golang path to the generic AliasExtractor function
+	// in this package.
+	PathAliasExtractor = SelfPackagePath + ".AliasExtractor()"
 	// PathUUIDExtractor is the golang path to UUIDExtractor function
 	PathUUIDExtractor = SelfPackagePath + ".UUIDExtractor()"
 )
@@ -42,8 +48,9 @@ func ServiceAccountRoleIDExtractor() reference.ExtractValueFn {
 	}
 }
 
-// AuthenticationFlowAliasExtractor extract Alias from AuthenticationFlow Ref
-func AuthenticationFlowAliasExtractor() reference.ExtractValueFn {
+// AliasExtractor is a generic extractor that extracts the alias field from status.atProvider.
+// This is used by multiple resource types that have an "alias" field.
+func AliasExtractor() reference.ExtractValueFn {
 	return func(mg xpresource.Managed) string {
 		paved, err := fieldpath.PaveObject(mg)
 		if err != nil {
@@ -60,12 +67,20 @@ func AuthenticationFlowAliasExtractor() reference.ExtractValueFn {
 	}
 }
 
+// AuthenticationFlowAliasExtractor extracts Alias from AuthenticationFlow Ref
+func AuthenticationFlowAliasExtractor() reference.ExtractValueFn {
+	return AliasExtractor()
+}
+
 // AuthenticationFlowOrSubflowAliasExtractor extracts Alias from either AuthenticationFlow or Subflow Ref
 // Both Flow and Subflow resources have an "alias" field in status.atProvider
 func AuthenticationFlowOrSubflowAliasExtractor() reference.ExtractValueFn {
-	// Both Flow and Subflow use the same alias field structure,
-	// so we can use the same extraction logic
-	return AuthenticationFlowAliasExtractor()
+	return AliasExtractor()
+}
+
+// IdentityProviderAliasExtractor extracts Alias from IdentityProvider Ref
+func IdentityProviderAliasExtractor() reference.ExtractValueFn {
+	return AliasExtractor()
 }
 
 // UUIDExtractor returns a reference.ExtractValueFn that can be used to extract the UUID from a managed resource.
