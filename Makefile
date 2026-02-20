@@ -14,7 +14,7 @@ TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAF
 export TERRAFORM_PROVIDER_SOURCE ?= keycloak/keycloak
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/keycloak/terraform-provider-keycloak
 # renovate: datasource=github-releases depName=keycloak/terraform-provider-keycloak
-export TERRAFORM_PROVIDER_VERSION ?= 5.6.0
+export TERRAFORM_PROVIDER_VERSION ?= 5.7.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-keycloak
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= ${TERRAFORM_PROVIDER_REPO}/releases/download/v$(TERRAFORM_PROVIDER_VERSION)
 export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-keycloak_v$(TERRAFORM_PROVIDER_VERSION)
