@@ -128,7 +128,7 @@ jobs:
         run: crane version
 
       - name: Login to Upbound
-        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2
+        uses: docker/login-action@e46b7e330016f4e853155db7dd370d6b3d4fbdf5
         with:
           registry: "xpkg.upbound.io"
           username: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR }}
