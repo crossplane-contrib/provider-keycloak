@@ -70,6 +70,8 @@ var optionalKeycloakConfigKeys = []string{
 	"tls_client_private_key",
 	"jwt_signing_alg",
 	"jwt_signing_key",
+	"jwt_token",
+	"jwt_token_file",
 }
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
