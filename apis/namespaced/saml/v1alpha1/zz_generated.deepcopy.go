@@ -281,6 +281,11 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(bool)
 		**out = **in
 	}
+	if in.WantAuthnRequestsSigned != nil {
+		in, out := &in.WantAuthnRequestsSigned, &out.WantAuthnRequestsSigned
+		*out = new(bool)
+		**out = **in
+	}
 	if in.XMLSignKeyInfoKeyNameTransformer != nil {
 		in, out := &in.XMLSignKeyInfoKeyNameTransformer, &out.XMLSignKeyInfoKeyNameTransformer
 		*out = new(string)
@@ -561,6 +566,11 @@ func (in *IdentityProviderObservation) DeepCopyInto(out *IdentityProviderObserva
 		*out = new(bool)
 		**out = **in
 	}
+	if in.WantAuthnRequestsSigned != nil {
+		in, out := &in.WantAuthnRequestsSigned, &out.WantAuthnRequestsSigned
+		*out = new(bool)
+		**out = **in
+	}
 	if in.XMLSignKeyInfoKeyNameTransformer != nil {
 		in, out := &in.XMLSignKeyInfoKeyNameTransformer, &out.XMLSignKeyInfoKeyNameTransformer
 		*out = new(string)
@@ -816,6 +826,11 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 	}
 	if in.WantAssertionsSigned != nil {
 		in, out := &in.WantAssertionsSigned, &out.WantAssertionsSigned
+		*out = new(bool)
+		**out = **in
+	}
+	if in.WantAuthnRequestsSigned != nil {
+		in, out := &in.WantAuthnRequestsSigned, &out.WantAuthnRequestsSigned
 		*out = new(bool)
 		**out = **in
 	}

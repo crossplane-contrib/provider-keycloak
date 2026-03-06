@@ -35,7 +35,6 @@ spec:
     schema:
       openAPIV3Schema:
         description: ClientRolePolicy is the Schema for the ClientRolePolicys API.
-          <no value>
         properties:
           apiVersion:
             description: |-
@@ -60,16 +59,25 @@ spec:
               forProvider:
                 properties:
                   decisionStrategy:
+                    description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
+                      or CONSENSUS.
                     type: string
                   description:
+                    description: A description for the authorization policy.
                     type: string
                   fetchRoles:
+                    description: When true, roles will be fetched from the user's
+                      claims. Available in Keycloak 25+.
                     type: boolean
                   logic:
+                    description: The logic, can be one of POSITIVE or NEGATIVE. Defaults
+                      to POSITIVE.
                     type: string
                   name:
+                    description: The name of the policy.
                     type: string
                   realmId:
+                    description: The realm this policy exists in.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -152,6 +160,7 @@ spec:
                         type: object
                     type: object
                   resourceServerId:
+                    description: The ID of the resource server.
                     type: string
                   resourceServerIdRef:
                     description: Reference to a Client in openidclient to populate
@@ -236,9 +245,11 @@ spec:
                         type: object
                     type: object
                   role:
+                    description: A list of roles role. At least one role must be defined.
                     items:
                       properties:
                         id:
+                          description: The ID of the role.
                           type: string
                         idRef:
                           description: Reference to a Role in role to populate id.
@@ -321,10 +332,13 @@ spec:
                               type: object
                           type: object
                         required:
+                          description: When true, this role must be present for the
+                            policy to grant access.
                           type: boolean
                       type: object
                     type: array
                   type:
+                    description: The type of policy. Must be role.
                     type: string
                 type: object
               initProvider:
@@ -341,16 +355,25 @@ spec:
                   autoscaler.
                 properties:
                   decisionStrategy:
+                    description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
+                      or CONSENSUS.
                     type: string
                   description:
+                    description: A description for the authorization policy.
                     type: string
                   fetchRoles:
+                    description: When true, roles will be fetched from the user's
+                      claims. Available in Keycloak 25+.
                     type: boolean
                   logic:
+                    description: The logic, can be one of POSITIVE or NEGATIVE. Defaults
+                      to POSITIVE.
                     type: string
                   name:
+                    description: The name of the policy.
                     type: string
                   realmId:
+                    description: The realm this policy exists in.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -433,6 +456,7 @@ spec:
                         type: object
                     type: object
                   resourceServerId:
+                    description: The ID of the resource server.
                     type: string
                   resourceServerIdRef:
                     description: Reference to a Client in openidclient to populate
@@ -517,9 +541,11 @@ spec:
                         type: object
                     type: object
                   role:
+                    description: A list of roles role. At least one role must be defined.
                     items:
                       properties:
                         id:
+                          description: The ID of the role.
                           type: string
                         idRef:
                           description: Reference to a Role in role to populate id.
@@ -602,10 +628,13 @@ spec:
                               type: object
                           type: object
                         required:
+                          description: When true, this role must be present for the
+                            policy to grant access.
                           type: boolean
                       type: object
                     type: array
                   type:
+                    description: The type of policy. Must be role.
                     type: string
                 type: object
               managementPolicies:
@@ -689,31 +718,47 @@ spec:
               atProvider:
                 properties:
                   decisionStrategy:
+                    description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
+                      or CONSENSUS.
                     type: string
                   description:
+                    description: A description for the authorization policy.
                     type: string
                   fetchRoles:
+                    description: When true, roles will be fetched from the user's
+                      claims. Available in Keycloak 25+.
                     type: boolean
                   id:
+                    description: The ID of the role.
                     type: string
                   logic:
+                    description: The logic, can be one of POSITIVE or NEGATIVE. Defaults
+                      to POSITIVE.
                     type: string
                   name:
+                    description: The name of the policy.
                     type: string
                   realmId:
+                    description: The realm this policy exists in.
                     type: string
                   resourceServerId:
+                    description: The ID of the resource server.
                     type: string
                   role:
+                    description: A list of roles role. At least one role must be defined.
                     items:
                       properties:
                         id:
+                          description: The ID of the role.
                           type: string
                         required:
+                          description: When true, this role must be present for the
+                            policy to grant access.
                           type: boolean
                       type: object
                     type: array
                   type:
+                    description: The type of policy. Must be role.
                     type: string
                 type: object
               conditions:

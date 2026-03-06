@@ -35,7 +35,6 @@ spec:
     schema:
       openAPIV3Schema:
         description: ClientGroupPolicy is the Schema for the ClientGroupPolicys API.
-          <no value>
         properties:
           apiVersion:
             description: |-
@@ -74,15 +73,23 @@ spec:
               forProvider:
                 properties:
                   decisionStrategy:
+                    description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
+                      or CONSENSUS.
                     type: string
                   description:
+                    description: A description for the authorization policy.
                     type: string
                   groups:
+                    description: A list of groups group. At least one group must be
+                      defined.
                     items:
                       properties:
                         extendChildren:
+                          description: When true, the policy will also apply to all
+                            child groups of this group.
                           type: boolean
                         id:
+                          description: The ID of the group.
                           type: string
                         idRef:
                           description: Reference to a Group in group to populate id.
@@ -159,16 +166,23 @@ spec:
                               type: object
                           type: object
                         path:
+                          description: The path of the group.
                           type: string
                       type: object
                     type: array
                   groupsClaim:
+                    description: The name of the claim in the token that contains
+                      the group information.
                     type: string
                   logic:
+                    description: The logic, can be one of POSITIVE or NEGATIVE. Defaults
+                      to POSITIVE.
                     type: string
                   name:
+                    description: The name of the policy.
                     type: string
                   realmId:
+                    description: The realm this policy exists in.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -245,6 +259,7 @@ spec:
                         type: object
                     type: object
                   resourceServerId:
+                    description: The ID of the resource server.
                     type: string
                   resourceServerIdRef:
                     description: Reference to a Client in openidclient to populate
@@ -337,15 +352,23 @@ spec:
                   autoscaler.
                 properties:
                   decisionStrategy:
+                    description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
+                      or CONSENSUS.
                     type: string
                   description:
+                    description: A description for the authorization policy.
                     type: string
                   groups:
+                    description: A list of groups group. At least one group must be
+                      defined.
                     items:
                       properties:
                         extendChildren:
+                          description: When true, the policy will also apply to all
+                            child groups of this group.
                           type: boolean
                         id:
+                          description: The ID of the group.
                           type: string
                         idRef:
                           description: Reference to a Group in group to populate id.
@@ -422,16 +445,23 @@ spec:
                               type: object
                           type: object
                         path:
+                          description: The path of the group.
                           type: string
                       type: object
                     type: array
                   groupsClaim:
+                    description: The name of the claim in the token that contains
+                      the group information.
                     type: string
                   logic:
+                    description: The logic, can be one of POSITIVE or NEGATIVE. Defaults
+                      to POSITIVE.
                     type: string
                   name:
+                    description: The name of the policy.
                     type: string
                   realmId:
+                    description: The realm this policy exists in.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -508,6 +538,7 @@ spec:
                         type: object
                     type: object
                   resourceServerId:
+                    description: The ID of the resource server.
                     type: string
                   resourceServerIdRef:
                     description: Reference to a Client in openidclient to populate
@@ -695,31 +726,48 @@ spec:
               atProvider:
                 properties:
                   decisionStrategy:
+                    description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
+                      or CONSENSUS.
                     type: string
                   description:
+                    description: A description for the authorization policy.
                     type: string
                   groups:
+                    description: A list of groups group. At least one group must be
+                      defined.
                     items:
                       properties:
                         extendChildren:
+                          description: When true, the policy will also apply to all
+                            child groups of this group.
                           type: boolean
                         id:
+                          description: The ID of the group.
                           type: string
                         path:
+                          description: The path of the group.
                           type: string
                       type: object
                     type: array
                   groupsClaim:
+                    description: The name of the claim in the token that contains
+                      the group information.
                     type: string
                   id:
+                    description: The ID of the group.
                     type: string
                   logic:
+                    description: The logic, can be one of POSITIVE or NEGATIVE. Defaults
+                      to POSITIVE.
                     type: string
                   name:
+                    description: The name of the policy.
                     type: string
                   realmId:
+                    description: The realm this policy exists in.
                     type: string
                   resourceServerId:
+                    description: The ID of the resource server.
                     type: string
                 type: object
               conditions:

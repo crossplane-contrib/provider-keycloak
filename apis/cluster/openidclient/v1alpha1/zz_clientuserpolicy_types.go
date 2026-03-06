@@ -14,14 +14,20 @@ import (
 )
 
 type ClientUserPolicyInitParameters struct {
+
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
+	// A description for the authorization policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The realm this policy exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -33,6 +39,7 @@ type ClientUserPolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
@@ -45,6 +52,7 @@ type ClientUserPolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
+	// A list of user IDs that this policy applies to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha1.User
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
@@ -60,38 +68,52 @@ type ClientUserPolicyInitParameters struct {
 }
 
 type ClientUserPolicyObservation struct {
+
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
+	// A description for the authorization policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// Policy ID representing the user policy.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The realm this policy exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
+	// The ID of the resource server.
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
 
+	// A list of user IDs that this policy applies to.
 	// +listType=set
 	Users []*string `json:"users,omitempty" tf:"users,omitempty"`
 }
 
 type ClientUserPolicyParameters struct {
 
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
+	// A description for the authorization policy.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	// +kubebuilder:validation:Optional
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
+	// The name of the policy.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The realm this policy exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -104,6 +126,7 @@ type ClientUserPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
@@ -117,6 +140,7 @@ type ClientUserPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
+	// A list of user IDs that this policy applies to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha1.User
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
@@ -159,7 +183,7 @@ type ClientUserPolicyStatus struct {
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// ClientUserPolicy is the Schema for the ClientUserPolicys API. <no value>
+// ClientUserPolicy is the Schema for the ClientUserPolicys API.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

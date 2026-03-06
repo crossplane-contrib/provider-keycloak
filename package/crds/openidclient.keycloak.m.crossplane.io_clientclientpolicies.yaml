@@ -60,7 +60,7 @@ spec:
               forProvider:
                 properties:
                   clients:
-                    description: The clients allowed by this client policy.
+                    description: A list of client IDs that this policy applies to.
                     items:
                       type: string
                     type: array
@@ -151,23 +151,21 @@ spec:
                         type: object
                     type: object
                   decisionStrategy:
-                    description: (Computed) Dictates how the policies associated with
-                      a given permission are evaluated and how a final decision is
-                      obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS.
-                      Applies to permissions.
+                    description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
+                      or CONSENSUS.
                     type: string
                   description:
-                    description: The description of this client policy.
+                    description: A description for the authorization policy.
                     type: string
                   logic:
-                    description: (Computed) Dictates how the policy decision should
-                      be made. Can be either POSITIVE or NEGATIVE. Applies to policies.
+                    description: The logic, can be one of POSITIVE or NEGATIVE. Defaults
+                      to POSITIVE.
                     type: string
                   name:
-                    description: The name of this client policy.
+                    description: The name of the policy.
                     type: string
                   realmId:
-                    description: The realm this client policy exists within.
+                    description: The realm this policy exists in.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -250,8 +248,7 @@ spec:
                         type: object
                     type: object
                   resourceServerId:
-                    description: The ID of the resource server this client policy
-                      is attached to.
+                    description: The ID of the resource server.
                     type: string
                   resourceServerIdRef:
                     description: Reference to a Client in openidclient to populate
@@ -336,7 +333,7 @@ spec:
                         type: object
                     type: object
                   samlClients:
-                    description: The clients allowed by this client policy.
+                    description: A list of client IDs that this policy applies to.
                     items:
                       type: string
                     type: array
@@ -440,7 +437,7 @@ spec:
                   autoscaler.
                 properties:
                   clients:
-                    description: The clients allowed by this client policy.
+                    description: A list of client IDs that this policy applies to.
                     items:
                       type: string
                     type: array
@@ -531,23 +528,21 @@ spec:
                         type: object
                     type: object
                   decisionStrategy:
-                    description: (Computed) Dictates how the policies associated with
-                      a given permission are evaluated and how a final decision is
-                      obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS.
-                      Applies to permissions.
+                    description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
+                      or CONSENSUS.
                     type: string
                   description:
-                    description: The description of this client policy.
+                    description: A description for the authorization policy.
                     type: string
                   logic:
-                    description: (Computed) Dictates how the policy decision should
-                      be made. Can be either POSITIVE or NEGATIVE. Applies to policies.
+                    description: The logic, can be one of POSITIVE or NEGATIVE. Defaults
+                      to POSITIVE.
                     type: string
                   name:
-                    description: The name of this client policy.
+                    description: The name of the policy.
                     type: string
                   realmId:
-                    description: The realm this client policy exists within.
+                    description: The realm this policy exists in.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -630,8 +625,7 @@ spec:
                         type: object
                     type: object
                   resourceServerId:
-                    description: The ID of the resource server this client policy
-                      is attached to.
+                    description: The ID of the resource server.
                     type: string
                   resourceServerIdRef:
                     description: Reference to a Client in openidclient to populate
@@ -716,7 +710,7 @@ spec:
                         type: object
                     type: object
                   samlClients:
-                    description: The clients allowed by this client policy.
+                    description: A list of client IDs that this policy applies to.
                     items:
                       type: string
                     type: array
@@ -879,38 +873,36 @@ spec:
               atProvider:
                 properties:
                   clients:
-                    description: The clients allowed by this client policy.
+                    description: A list of client IDs that this policy applies to.
                     items:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
                   decisionStrategy:
-                    description: (Computed) Dictates how the policies associated with
-                      a given permission are evaluated and how a final decision is
-                      obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS.
-                      Applies to permissions.
+                    description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
+                      or CONSENSUS.
                     type: string
                   description:
-                    description: The description of this client policy.
+                    description: A description for the authorization policy.
                     type: string
                   id:
+                    description: Policy ID representing the client policy.
                     type: string
                   logic:
-                    description: (Computed) Dictates how the policy decision should
-                      be made. Can be either POSITIVE or NEGATIVE. Applies to policies.
+                    description: The logic, can be one of POSITIVE or NEGATIVE. Defaults
+                      to POSITIVE.
                     type: string
                   name:
-                    description: The name of this client policy.
+                    description: The name of the policy.
                     type: string
                   realmId:
-                    description: The realm this client policy exists within.
+                    description: The realm this policy exists in.
                     type: string
                   resourceServerId:
-                    description: The ID of the resource server this client policy
-                      is attached to.
+                    description: The ID of the resource server.
                     type: string
                   samlClients:
-                    description: The clients allowed by this client policy.
+                    description: A list of client IDs that this policy applies to.
                     items:
                       type: string
                     type: array

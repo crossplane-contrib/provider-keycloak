@@ -187,6 +187,10 @@ type IdentityProviderInitParameters struct {
 	// Want Assertions Signed.
 	WantAssertionsSigned *bool `json:"wantAssertionsSigned,omitempty" tf:"want_assertions_signed,omitempty"`
 
+	// Indicates whether this service provider expects authentication requests to be signed (defaults to true if signature_algorithm is set and this isn't).
+	// Want Authn Requests Signed.
+	WantAuthnRequestsSigned *bool `json:"wantAuthnRequestsSigned,omitempty" tf:"want_authn_requests_signed,omitempty"`
+
 	// The SAML signature key name. Can be one of NONE, KEY_ID, or CERT_SUBJECT.
 	// Sign Key Transformer.
 	XMLSignKeyInfoKeyNameTransformer *string `json:"xmlSignKeyInfoKeyNameTransformer,omitempty" tf:"xml_sign_key_info_key_name_transformer,omitempty"`
@@ -351,6 +355,10 @@ type IdentityProviderObservation struct {
 	// Indicates whether this service provider expects a signed Assertion.
 	// Want Assertions Signed.
 	WantAssertionsSigned *bool `json:"wantAssertionsSigned,omitempty" tf:"want_assertions_signed,omitempty"`
+
+	// Indicates whether this service provider expects authentication requests to be signed (defaults to true if signature_algorithm is set and this isn't).
+	// Want Authn Requests Signed.
+	WantAuthnRequestsSigned *bool `json:"wantAuthnRequestsSigned,omitempty" tf:"want_authn_requests_signed,omitempty"`
 
 	// The SAML signature key name. Can be one of NONE, KEY_ID, or CERT_SUBJECT.
 	// Sign Key Transformer.
@@ -568,6 +576,11 @@ type IdentityProviderParameters struct {
 	// Want Assertions Signed.
 	// +kubebuilder:validation:Optional
 	WantAssertionsSigned *bool `json:"wantAssertionsSigned,omitempty" tf:"want_assertions_signed,omitempty"`
+
+	// Indicates whether this service provider expects authentication requests to be signed (defaults to true if signature_algorithm is set and this isn't).
+	// Want Authn Requests Signed.
+	// +kubebuilder:validation:Optional
+	WantAuthnRequestsSigned *bool `json:"wantAuthnRequestsSigned,omitempty" tf:"want_authn_requests_signed,omitempty"`
 
 	// The SAML signature key name. Can be one of NONE, KEY_ID, or CERT_SUBJECT.
 	// Sign Key Transformer.

@@ -1,19 +1,27 @@
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: ClientClientPolicy
+kind: ClientGroupPolicy
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientclientpolicy
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientgrouppolicy
   labels:
     testing.upbound.io/example-name: test
   name: test
 spec:
   forProvider:
-    clientsRefs:
-    - name: client1
-    - name: client2
     decisionStrategy: UNANIMOUS
+    groups:
+    - extendChildren: false
+      idSelector:
+        matchLabels:
+          testing.upbound.io/example-name: group1
+      path: ${keycloak_group.group1.path}
+    - extendChildren: true
+      idSelector:
+        matchLabels:
+          testing.upbound.io/example-name: group2
+      path: ${keycloak_group.group2.path}
     logic: POSITIVE
-    name: client_policy
+    name: group_policy
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
@@ -23,22 +31,37 @@ spec:
 
 ---
 
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: Client
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientclientpolicy
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientgrouppolicy
   labels:
-    testing.upbound.io/example-name: client1
-  name: client1
+    testing.upbound.io/example-name: group1
+  name: group1
 spec:
   forProvider:
-    accessType: CONFIDENTIAL
-    clientId: client1
+    name: group1
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
-    serviceAccountsEnabled: true
+
+---
+
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientgrouppolicy
+  labels:
+    testing.upbound.io/example-name: group2
+  name: group2
+spec:
+  forProvider:
+    name: group2
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
 
 ---
 
@@ -46,26 +69,7 @@ apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: Client
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientclientpolicy
-  labels:
-    testing.upbound.io/example-name: client2
-  name: client2
-spec:
-  forProvider:
-    accessType: CONFIDENTIAL
-    clientId: client2
-    realmIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: realm
-    serviceAccountsEnabled: true
-
----
-
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: Client
-metadata:
-  annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientclientpolicy
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientgrouppolicy
   labels:
     testing.upbound.io/example-name: test
   name: test
@@ -86,7 +90,7 @@ apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientclientpolicy
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientgrouppolicy
   labels:
     testing.upbound.io/example-name: realm
   name: realm

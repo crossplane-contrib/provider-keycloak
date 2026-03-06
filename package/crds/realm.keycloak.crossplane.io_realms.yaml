@@ -105,8 +105,7 @@ spec:
                       permit before it expires.
                     type: string
                   adminPermissionsEnabled:
-                    description: When false, users and clients will not be able to
-                      access this realm. Defaults to true.
+                    description: Enables the use of fine grained permissions v2
                     type: boolean
                   adminTheme:
                     description: Used for the admin console.
@@ -714,8 +713,7 @@ spec:
                       permit before it expires.
                     type: string
                   adminPermissionsEnabled:
-                    description: When false, users and clients will not be able to
-                      access this realm. Defaults to true.
+                    description: Enables the use of fine grained permissions v2
                     type: boolean
                   adminTheme:
                     description: Used for the admin console.
@@ -1410,8 +1408,7 @@ spec:
                       permit before it expires.
                     type: string
                   adminPermissionsEnabled:
-                    description: When false, users and clients will not be able to
-                      access this realm. Defaults to true.
+                    description: Enables the use of fine grained permissions v2
                     type: boolean
                   adminTheme:
                     description: Used for the admin console.

@@ -1,0 +1,100 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientUserPolicy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientuserpolicy
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    name: user_policy
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+    usersRefs:
+    - name: alice
+    - name: bob
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientuserpolicy
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    authorization:
+    - policyEnforcementMode: ENFORCING
+    clientId: client_id
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    serviceAccountsEnabled: true
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientuserpolicy
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientuserpolicy
+  labels:
+    testing.upbound.io/example-name: alice
+  name: alice
+spec:
+  forProvider:
+    email: alice@example.com
+    enabled: true
+    firstName: Alice
+    lastName: Smith
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    username: alice
+
+---
+
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientuserpolicy
+  labels:
+    testing.upbound.io/example-name: bob
+  name: bob
+spec:
+  forProvider:
+    email: bob@example.com
+    enabled: true
+    firstName: Bob
+    lastName: Jones
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    username: bob

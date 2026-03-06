@@ -437,6 +437,21 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(v1.LocalSecretKeySelector)
 		**out = **in
 	}
+	if in.EncryptionDigestMethod != nil {
+		in, out := &in.EncryptionDigestMethod, &out.EncryptionDigestMethod
+		*out = new(string)
+		**out = **in
+	}
+	if in.EncryptionKeyAlgorithm != nil {
+		in, out := &in.EncryptionKeyAlgorithm, &out.EncryptionKeyAlgorithm
+		*out = new(string)
+		**out = **in
+	}
+	if in.EncryptionMaskGenerationFunction != nil {
+		in, out := &in.EncryptionMaskGenerationFunction, &out.EncryptionMaskGenerationFunction
+		*out = new(string)
+		**out = **in
+	}
 	if in.ExtraConfig != nil {
 		in, out := &in.ExtraConfig, &out.ExtraConfig
 		*out = make(map[string]*string, len(*in))
@@ -698,6 +713,21 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.EncryptionDigestMethod != nil {
+		in, out := &in.EncryptionDigestMethod, &out.EncryptionDigestMethod
+		*out = new(string)
+		**out = **in
+	}
+	if in.EncryptionKeyAlgorithm != nil {
+		in, out := &in.EncryptionKeyAlgorithm, &out.EncryptionKeyAlgorithm
+		*out = new(string)
+		**out = **in
+	}
+	if in.EncryptionMaskGenerationFunction != nil {
+		in, out := &in.EncryptionMaskGenerationFunction, &out.EncryptionMaskGenerationFunction
+		*out = new(string)
+		**out = **in
+	}
 	if in.ExtraConfig != nil {
 		in, out := &in.ExtraConfig, &out.ExtraConfig
 		*out = make(map[string]*string, len(*in))
@@ -922,6 +952,21 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 		*out = new(v1.LocalSecretKeySelector)
 		**out = **in
 	}
+	if in.EncryptionDigestMethod != nil {
+		in, out := &in.EncryptionDigestMethod, &out.EncryptionDigestMethod
+		*out = new(string)
+		**out = **in
+	}
+	if in.EncryptionKeyAlgorithm != nil {
+		in, out := &in.EncryptionKeyAlgorithm, &out.EncryptionKeyAlgorithm
+		*out = new(string)
+		**out = **in
+	}
+	if in.EncryptionMaskGenerationFunction != nil {
+		in, out := &in.EncryptionMaskGenerationFunction, &out.EncryptionMaskGenerationFunction
+		*out = new(string)
+		**out = **in
+	}
 	if in.ExtraConfig != nil {
 		in, out := &in.ExtraConfig, &out.ExtraConfig
 		*out = make(map[string]*string, len(*in))
@@ -1116,6 +1161,22 @@ func (in *ClientScopeInitParameters) DeepCopyInto(out *ClientScopeInitParameters
 		*out = new(string)
 		**out = **in
 	}
+	if in.ExtraConfig != nil {
+		in, out := &in.ExtraConfig, &out.ExtraConfig
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.GuiOrder != nil {
 		in, out := &in.GuiOrder, &out.GuiOrder
 		*out = new(float64)
@@ -1198,6 +1259,22 @@ func (in *ClientScopeObservation) DeepCopyInto(out *ClientScopeObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ExtraConfig != nil {
+		in, out := &in.ExtraConfig, &out.ExtraConfig
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.GuiOrder != nil {
 		in, out := &in.GuiOrder, &out.GuiOrder
 		*out = new(float64)
@@ -1242,6 +1319,22 @@ func (in *ClientScopeParameters) DeepCopyInto(out *ClientScopeParameters) {
 		in, out := &in.Description, &out.Description
 		*out = new(string)
 		**out = **in
+	}
+	if in.ExtraConfig != nil {
+		in, out := &in.ExtraConfig, &out.ExtraConfig
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
 	}
 	if in.GuiOrder != nil {
 		in, out := &in.GuiOrder, &out.GuiOrder

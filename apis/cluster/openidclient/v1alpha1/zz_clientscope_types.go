@@ -21,6 +21,13 @@ type ClientScopeInitParameters struct {
 	// The description of this client scope in the GUI.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// A map of key/value pairs to add extra configuration attributes to this client scope. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates.
+	// extra_config = {
+	// "myattribute" = "myvalue"
+	// }
+	// +mapType=granular
+	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
+
 	// Specify order of the client scope in GUI (such as in Consent page) as integer.
 	GuiOrder *float64 `json:"guiOrder,omitempty" tf:"gui_order,omitempty"`
 
@@ -51,6 +58,13 @@ type ClientScopeObservation struct {
 	// The description of this client scope in the GUI.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// A map of key/value pairs to add extra configuration attributes to this client scope. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates.
+	// extra_config = {
+	// "myattribute" = "myvalue"
+	// }
+	// +mapType=granular
+	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
+
 	// Specify order of the client scope in GUI (such as in Consent page) as integer.
 	GuiOrder *float64 `json:"guiOrder,omitempty" tf:"gui_order,omitempty"`
 
@@ -75,6 +89,14 @@ type ClientScopeParameters struct {
 	// The description of this client scope in the GUI.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
+	// A map of key/value pairs to add extra configuration attributes to this client scope. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates.
+	// extra_config = {
+	// "myattribute" = "myvalue"
+	// }
+	// +kubebuilder:validation:Optional
+	// +mapType=granular
+	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
 	// Specify order of the client scope in GUI (such as in Consent page) as integer.
 	// +kubebuilder:validation:Optional

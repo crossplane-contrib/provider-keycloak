@@ -134,6 +134,22 @@ spec:
                     - key
                     - name
                     type: object
+                  encryptionDigestMethod:
+                    description: 'Digest method used with SAML encryption. Allowed
+                      values: SHA-512, SHA-256, or SHA-1. Only valid when encryption_key_algorithm
+                      is RSA-OAEP-11 or RSA-OAEP-MGF1P. Default is SHA-256.'
+                    type: string
+                  encryptionKeyAlgorithm:
+                    description: 'Key transport algorithm used by the client to encrypt
+                      the secret key for SAML assertion encryption. Allowed values:
+                      RSA-OAEP-11, RSA-OAEP-MGF1P, or RSA1_5. Default is RSA-OAEP-11.'
+                    type: string
+                  encryptionMaskGenerationFunction:
+                    description: 'Mask generation function used with SAML encryption.
+                      Allowed values: mgf1sha1, mgf1sha224, mgf1sha256, mgf1sha384,
+                      or mgf1sha512. Only valid when encryption_key_algorithm is RSA-OAEP-11.
+                      Default is mgf1sha256.'
+                    type: string
                   extraConfig:
                     additionalProperties:
                       type: string
@@ -422,6 +438,22 @@ spec:
                     - key
                     - name
                     type: object
+                  encryptionDigestMethod:
+                    description: 'Digest method used with SAML encryption. Allowed
+                      values: SHA-512, SHA-256, or SHA-1. Only valid when encryption_key_algorithm
+                      is RSA-OAEP-11 or RSA-OAEP-MGF1P. Default is SHA-256.'
+                    type: string
+                  encryptionKeyAlgorithm:
+                    description: 'Key transport algorithm used by the client to encrypt
+                      the secret key for SAML assertion encryption. Allowed values:
+                      RSA-OAEP-11, RSA-OAEP-MGF1P, or RSA1_5. Default is RSA-OAEP-11.'
+                    type: string
+                  encryptionMaskGenerationFunction:
+                    description: 'Mask generation function used with SAML encryption.
+                      Allowed values: mgf1sha1, mgf1sha224, mgf1sha256, mgf1sha384,
+                      or mgf1sha512. Only valid when encryption_key_algorithm is RSA-OAEP-11.
+                      Default is mgf1sha256.'
+                    type: string
                   extraConfig:
                     additionalProperties:
                       type: string
@@ -756,6 +788,22 @@ spec:
                     description: (Computed) The sha1sum fingerprint of the encryption
                       certificate. If the encryption certificate is not in correct
                       base64 format, this will be left empty.
+                    type: string
+                  encryptionDigestMethod:
+                    description: 'Digest method used with SAML encryption. Allowed
+                      values: SHA-512, SHA-256, or SHA-1. Only valid when encryption_key_algorithm
+                      is RSA-OAEP-11 or RSA-OAEP-MGF1P. Default is SHA-256.'
+                    type: string
+                  encryptionKeyAlgorithm:
+                    description: 'Key transport algorithm used by the client to encrypt
+                      the secret key for SAML assertion encryption. Allowed values:
+                      RSA-OAEP-11, RSA-OAEP-MGF1P, or RSA1_5. Default is RSA-OAEP-11.'
+                    type: string
+                  encryptionMaskGenerationFunction:
+                    description: 'Mask generation function used with SAML encryption.
+                      Allowed values: mgf1sha1, mgf1sha224, mgf1sha256, mgf1sha384,
+                      or mgf1sha512. Only valid when encryption_key_algorithm is RSA-OAEP-11.
+                      Default is mgf1sha256.'
                     type: string
                   extraConfig:
                     additionalProperties:
