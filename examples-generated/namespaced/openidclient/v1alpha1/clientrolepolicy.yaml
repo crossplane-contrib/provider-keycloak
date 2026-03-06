@@ -1,0 +1,104 @@
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientRolePolicy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientrolepolicy
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: upbound-system
+spec:
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    name: role_policy
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+    role:
+    - idSelector:
+        matchLabels:
+          testing.upbound.io/example-name: admin_role
+      required: true
+    - idSelector:
+        matchLabels:
+          testing.upbound.io/example-name: user_role
+      required: false
+    type: role
+
+---
+
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientrolepolicy
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: upbound-system
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    authorization:
+    - policyEnforcementMode: ENFORCING
+    clientId: client_id
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    serviceAccountsEnabled: true
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientrolepolicy
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: role.keycloak.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientrolepolicy
+  labels:
+    testing.upbound.io/example-name: admin_role
+  name: admin-role
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: admin
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: role.keycloak.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientrolepolicy
+  labels:
+    testing.upbound.io/example-name: user_role
+  name: user-role
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: user
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm

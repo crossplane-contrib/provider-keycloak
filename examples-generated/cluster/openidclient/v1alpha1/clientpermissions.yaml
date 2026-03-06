@@ -48,6 +48,30 @@ spec:
 
 ---
 
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientUserPolicy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientpermissions
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    name: client_user_policy_test
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: keycloak_openid_client
+    usersRefs:
+    - name: test
+
+---
+
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:

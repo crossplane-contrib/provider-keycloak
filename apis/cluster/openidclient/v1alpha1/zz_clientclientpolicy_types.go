@@ -15,7 +15,7 @@ import (
 
 type ClientClientPolicyInitParameters struct {
 
-	// The clients allowed by this client policy.
+	// A list of client IDs that this policy applies to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
@@ -29,19 +29,19 @@ type ClientClientPolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ClientsSelector *v1.Selector `json:"clientsSelector,omitempty" tf:"-"`
 
-	// (Computed) Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
-	// The description of this client policy.
+	// A description for the authorization policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// (Computed) Dictates how the policy decision should be made. Can be either POSITIVE or NEGATIVE. Applies to policies.
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
-	// The name of this client policy.
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The realm this client policy exists within.
+	// The realm this policy exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -53,7 +53,7 @@ type ClientClientPolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
-	// The ID of the resource server this client policy is attached to.
+	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
@@ -66,7 +66,7 @@ type ClientClientPolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
-	// The clients allowed by this client policy.
+	// A list of client IDs that this policy applies to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
@@ -83,38 +83,39 @@ type ClientClientPolicyInitParameters struct {
 
 type ClientClientPolicyObservation struct {
 
-	// The clients allowed by this client policy.
+	// A list of client IDs that this policy applies to.
 	// +listType=set
 	Clients []*string `json:"clients,omitempty" tf:"clients,omitempty"`
 
-	// (Computed) Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
-	// The description of this client policy.
+	// A description for the authorization policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// Policy ID representing the client policy.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// (Computed) Dictates how the policy decision should be made. Can be either POSITIVE or NEGATIVE. Applies to policies.
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
-	// The name of this client policy.
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The realm this client policy exists within.
+	// The realm this policy exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
-	// The ID of the resource server this client policy is attached to.
+	// The ID of the resource server.
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
 
-	// The clients allowed by this client policy.
+	// A list of client IDs that this policy applies to.
 	// +listType=set
 	SAMLClients []*string `json:"samlClients,omitempty" tf:"saml_clients,omitempty"`
 }
 
 type ClientClientPolicyParameters struct {
 
-	// The clients allowed by this client policy.
+	// A list of client IDs that this policy applies to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
@@ -129,23 +130,23 @@ type ClientClientPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	ClientsSelector *v1.Selector `json:"clientsSelector,omitempty" tf:"-"`
 
-	// (Computed) Dictates how the policies associated with a given permission are evaluated and how a final decision is obtained. Could be one of AFFIRMATIVE, CONSENSUS, or UNANIMOUS. Applies to permissions.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
-	// The description of this client policy.
+	// A description for the authorization policy.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// (Computed) Dictates how the policy decision should be made. Can be either POSITIVE or NEGATIVE. Applies to policies.
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	// +kubebuilder:validation:Optional
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
-	// The name of this client policy.
+	// The name of the policy.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The realm this client policy exists within.
+	// The realm this policy exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -158,7 +159,7 @@ type ClientClientPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
-	// The ID of the resource server this client policy is attached to.
+	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
@@ -172,7 +173,7 @@ type ClientClientPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
-	// The clients allowed by this client policy.
+	// A list of client IDs that this policy applies to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional

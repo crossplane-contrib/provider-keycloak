@@ -14,16 +14,23 @@ import (
 )
 
 type ClientRolePolicyInitParameters struct {
+
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
+	// A description for the authorization policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// When true, roles will be fetched from the user's claims. Available in Keycloak 25+.
 	FetchRoles *bool `json:"fetchRoles,omitempty" tf:"fetch_roles,omitempty"`
 
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The realm this policy exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -35,6 +42,7 @@ type ClientRolePolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
@@ -47,50 +55,69 @@ type ClientRolePolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
+	// A list of roles role. At least one role must be defined.
 	Role []RoleInitParameters `json:"role,omitempty" tf:"role,omitempty"`
 
+	// The type of policy. Must be role.
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 }
 
 type ClientRolePolicyObservation struct {
+
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
+	// A description for the authorization policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// When true, roles will be fetched from the user's claims. Available in Keycloak 25+.
 	FetchRoles *bool `json:"fetchRoles,omitempty" tf:"fetch_roles,omitempty"`
 
+	// The ID of the role.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The realm this policy exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
+	// The ID of the resource server.
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
 
+	// A list of roles role. At least one role must be defined.
 	Role []RoleObservation `json:"role,omitempty" tf:"role,omitempty"`
 
+	// The type of policy. Must be role.
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 }
 
 type ClientRolePolicyParameters struct {
 
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
+	// A description for the authorization policy.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// When true, roles will be fetched from the user's claims. Available in Keycloak 25+.
 	// +kubebuilder:validation:Optional
 	FetchRoles *bool `json:"fetchRoles,omitempty" tf:"fetch_roles,omitempty"`
 
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	// +kubebuilder:validation:Optional
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
+	// The name of the policy.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The realm this policy exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -103,6 +130,7 @@ type ClientRolePolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
@@ -116,15 +144,18 @@ type ClientRolePolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
+	// A list of roles role. At least one role must be defined.
 	// +kubebuilder:validation:Optional
 	Role []RoleParameters `json:"role,omitempty" tf:"role,omitempty"`
 
+	// The type of policy. Must be role.
 	// +kubebuilder:validation:Optional
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 }
 
 type RoleInitParameters struct {
 
+	// The ID of the role.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/role/v1alpha1.Role
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
@@ -137,17 +168,22 @@ type RoleInitParameters struct {
 	// +kubebuilder:validation:Optional
 	IDSelector *v1.Selector `json:"idSelector,omitempty" tf:"-"`
 
+	// When true, this role must be present for the policy to grant access.
 	Required *bool `json:"required,omitempty" tf:"required,omitempty"`
 }
 
 type RoleObservation struct {
+
+	// The ID of the role.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// When true, this role must be present for the policy to grant access.
 	Required *bool `json:"required,omitempty" tf:"required,omitempty"`
 }
 
 type RoleParameters struct {
 
+	// The ID of the role.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/role/v1alpha1.Role
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
@@ -161,6 +197,7 @@ type RoleParameters struct {
 	// +kubebuilder:validation:Optional
 	IDSelector *v1.Selector `json:"idSelector,omitempty" tf:"-"`
 
+	// When true, this role must be present for the policy to grant access.
 	// +kubebuilder:validation:Optional
 	Required *bool `json:"required" tf:"required,omitempty"`
 }
@@ -192,7 +229,7 @@ type ClientRolePolicyStatus struct {
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// ClientRolePolicy is the Schema for the ClientRolePolicys API. <no value>
+// ClientRolePolicy is the Schema for the ClientRolePolicys API.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

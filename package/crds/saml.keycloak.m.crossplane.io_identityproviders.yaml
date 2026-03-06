@@ -421,6 +421,11 @@ spec:
                       Indicates whether this service provider expects a signed Assertion.
                       Want Assertions Signed.
                     type: boolean
+                  wantAuthnRequestsSigned:
+                    description: |-
+                      Indicates whether this service provider expects authentication requests to be signed (defaults to true if signature_algorithm is set and this isn't).
+                      Want Authn Requests Signed.
+                    type: boolean
                   xmlSignKeyInfoKeyNameTransformer:
                     description: |-
                       The SAML signature key name. Can be one of NONE, KEY_ID, or CERT_SUBJECT.
@@ -803,6 +808,11 @@ spec:
                       Indicates whether this service provider expects a signed Assertion.
                       Want Assertions Signed.
                     type: boolean
+                  wantAuthnRequestsSigned:
+                    description: |-
+                      Indicates whether this service provider expects authentication requests to be signed (defaults to true if signature_algorithm is set and this isn't).
+                      Want Authn Requests Signed.
+                    type: boolean
                   xmlSignKeyInfoKeyNameTransformer:
                     description: |-
                       The SAML signature key name. Can be one of NONE, KEY_ID, or CERT_SUBJECT.
@@ -1090,6 +1100,11 @@ spec:
                     description: |-
                       Indicates whether this service provider expects a signed Assertion.
                       Want Assertions Signed.
+                    type: boolean
+                  wantAuthnRequestsSigned:
+                    description: |-
+                      Indicates whether this service provider expects authentication requests to be signed (defaults to true if signature_algorithm is set and this isn't).
+                      Want Authn Requests Signed.
                     type: boolean
                   xmlSignKeyInfoKeyNameTransformer:
                     description: |-

@@ -3993,6 +3993,22 @@ func (in *ClientScopeInitParameters) DeepCopyInto(out *ClientScopeInitParameters
 		*out = new(string)
 		**out = **in
 	}
+	if in.ExtraConfig != nil {
+		in, out := &in.ExtraConfig, &out.ExtraConfig
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.GuiOrder != nil {
 		in, out := &in.GuiOrder, &out.GuiOrder
 		*out = new(float64)
@@ -4080,6 +4096,22 @@ func (in *ClientScopeObservation) DeepCopyInto(out *ClientScopeObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ExtraConfig != nil {
+		in, out := &in.ExtraConfig, &out.ExtraConfig
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.GuiOrder != nil {
 		in, out := &in.GuiOrder, &out.GuiOrder
 		*out = new(float64)
@@ -4129,6 +4161,22 @@ func (in *ClientScopeParameters) DeepCopyInto(out *ClientScopeParameters) {
 		in, out := &in.Description, &out.Description
 		*out = new(string)
 		**out = **in
+	}
+	if in.ExtraConfig != nil {
+		in, out := &in.ExtraConfig, &out.ExtraConfig
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
 	}
 	if in.GuiOrder != nil {
 		in, out := &in.GuiOrder, &out.GuiOrder

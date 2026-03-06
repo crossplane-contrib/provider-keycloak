@@ -15,18 +15,26 @@ import (
 )
 
 type ClientGroupPolicyInitParameters struct {
+
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
+	// A description for the authorization policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// A list of groups group. At least one group must be defined.
 	Groups []GroupsInitParameters `json:"groups,omitempty" tf:"groups,omitempty"`
 
+	// The name of the claim in the token that contains the group information.
 	GroupsClaim *string `json:"groupsClaim,omitempty" tf:"groups_claim,omitempty"`
 
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The realm this policy exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -38,6 +46,7 @@ type ClientGroupPolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
@@ -52,45 +61,62 @@ type ClientGroupPolicyInitParameters struct {
 }
 
 type ClientGroupPolicyObservation struct {
+
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
+	// A description for the authorization policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// A list of groups group. At least one group must be defined.
 	Groups []GroupsObservation `json:"groups,omitempty" tf:"groups,omitempty"`
 
+	// The name of the claim in the token that contains the group information.
 	GroupsClaim *string `json:"groupsClaim,omitempty" tf:"groups_claim,omitempty"`
 
+	// The ID of the group.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The realm this policy exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
+	// The ID of the resource server.
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
 }
 
 type ClientGroupPolicyParameters struct {
 
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
+	// A description for the authorization policy.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// A list of groups group. At least one group must be defined.
 	// +kubebuilder:validation:Optional
 	Groups []GroupsParameters `json:"groups,omitempty" tf:"groups,omitempty"`
 
+	// The name of the claim in the token that contains the group information.
 	// +kubebuilder:validation:Optional
 	GroupsClaim *string `json:"groupsClaim,omitempty" tf:"groups_claim,omitempty"`
 
+	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	// +kubebuilder:validation:Optional
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
+	// The name of the policy.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The realm this policy exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -103,6 +129,7 @@ type ClientGroupPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
@@ -118,8 +145,11 @@ type ClientGroupPolicyParameters struct {
 }
 
 type GroupsInitParameters struct {
+
+	// When true, the policy will also apply to all child groups of this group.
 	ExtendChildren *bool `json:"extendChildren,omitempty" tf:"extend_children,omitempty"`
 
+	// The ID of the group.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/group/v1alpha1.Group
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
@@ -132,22 +162,29 @@ type GroupsInitParameters struct {
 	// +kubebuilder:validation:Optional
 	IDSelector *v1.NamespacedSelector `json:"idSelector,omitempty" tf:"-"`
 
+	// The path of the group.
 	Path *string `json:"path,omitempty" tf:"path,omitempty"`
 }
 
 type GroupsObservation struct {
+
+	// When true, the policy will also apply to all child groups of this group.
 	ExtendChildren *bool `json:"extendChildren,omitempty" tf:"extend_children,omitempty"`
 
+	// The ID of the group.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// The path of the group.
 	Path *string `json:"path,omitempty" tf:"path,omitempty"`
 }
 
 type GroupsParameters struct {
 
+	// When true, the policy will also apply to all child groups of this group.
 	// +kubebuilder:validation:Optional
 	ExtendChildren *bool `json:"extendChildren" tf:"extend_children,omitempty"`
 
+	// The ID of the group.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/group/v1alpha1.Group
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
@@ -161,6 +198,7 @@ type GroupsParameters struct {
 	// +kubebuilder:validation:Optional
 	IDSelector *v1.NamespacedSelector `json:"idSelector,omitempty" tf:"-"`
 
+	// The path of the group.
 	// +kubebuilder:validation:Optional
 	Path *string `json:"path" tf:"path,omitempty"`
 }
@@ -192,7 +230,7 @@ type ClientGroupPolicyStatus struct {
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// ClientGroupPolicy is the Schema for the ClientGroupPolicys API. <no value>
+// ClientGroupPolicy is the Schema for the ClientGroupPolicys API.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

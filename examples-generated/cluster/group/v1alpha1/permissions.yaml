@@ -40,6 +40,34 @@ spec:
 ---
 
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientGroupPolicy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: group/v1alpha1/permissions
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    groups:
+    - extendChildren: false
+      idSelector:
+        matchLabels:
+          testing.upbound.io/example-name: group
+      path: ${keycloak_group.group.path}
+    logic: POSITIVE
+    name: client_group_policy_test
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: keycloak_openid_client
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientPermissions
 metadata:
   annotations:

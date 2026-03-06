@@ -86,6 +86,15 @@ type ClientInitParameters struct {
 	// If assertions for the client are encrypted, this certificate will be used for encryption.
 	EncryptionCertificateSecretRef *v1.SecretKeySelector `json:"encryptionCertificateSecretRef,omitempty" tf:"-"`
 
+	// Digest method used with SAML encryption. Allowed values: SHA-512, SHA-256, or SHA-1. Only valid when encryption_key_algorithm is RSA-OAEP-11 or RSA-OAEP-MGF1P. Default is SHA-256.
+	EncryptionDigestMethod *string `json:"encryptionDigestMethod,omitempty" tf:"encryption_digest_method,omitempty"`
+
+	// Key transport algorithm used by the client to encrypt the secret key for SAML assertion encryption. Allowed values: RSA-OAEP-11, RSA-OAEP-MGF1P, or RSA1_5. Default is RSA-OAEP-11.
+	EncryptionKeyAlgorithm *string `json:"encryptionKeyAlgorithm,omitempty" tf:"encryption_key_algorithm,omitempty"`
+
+	// Mask generation function used with SAML encryption. Allowed values: mgf1sha1, mgf1sha224, mgf1sha256, mgf1sha384, or mgf1sha512. Only valid when encryption_key_algorithm is RSA-OAEP-11. Default is mgf1sha256.
+	EncryptionMaskGenerationFunction *string `json:"encryptionMaskGenerationFunction,omitempty" tf:"encryption_mask_generation_function,omitempty"`
+
 	// A map of key/value pairs to add extra configuration attributes to this client. Use this attribute at your own risk, as s may conflict with top-level configuration attributes in future provider updates.
 	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
@@ -210,6 +219,15 @@ type ClientObservation struct {
 
 	// (Computed) The sha1sum fingerprint of the encryption certificate. If the encryption certificate is not in correct base64 format, this will be left empty.
 	EncryptionCertificateSha1 *string `json:"encryptionCertificateSha1,omitempty" tf:"encryption_certificate_sha1,omitempty"`
+
+	// Digest method used with SAML encryption. Allowed values: SHA-512, SHA-256, or SHA-1. Only valid when encryption_key_algorithm is RSA-OAEP-11 or RSA-OAEP-MGF1P. Default is SHA-256.
+	EncryptionDigestMethod *string `json:"encryptionDigestMethod,omitempty" tf:"encryption_digest_method,omitempty"`
+
+	// Key transport algorithm used by the client to encrypt the secret key for SAML assertion encryption. Allowed values: RSA-OAEP-11, RSA-OAEP-MGF1P, or RSA1_5. Default is RSA-OAEP-11.
+	EncryptionKeyAlgorithm *string `json:"encryptionKeyAlgorithm,omitempty" tf:"encryption_key_algorithm,omitempty"`
+
+	// Mask generation function used with SAML encryption. Allowed values: mgf1sha1, mgf1sha224, mgf1sha256, mgf1sha384, or mgf1sha512. Only valid when encryption_key_algorithm is RSA-OAEP-11. Default is mgf1sha256.
+	EncryptionMaskGenerationFunction *string `json:"encryptionMaskGenerationFunction,omitempty" tf:"encryption_mask_generation_function,omitempty"`
 
 	// A map of key/value pairs to add extra configuration attributes to this client. Use this attribute at your own risk, as s may conflict with top-level configuration attributes in future provider updates.
 	// +mapType=granular
@@ -342,6 +360,18 @@ type ClientParameters struct {
 	// If assertions for the client are encrypted, this certificate will be used for encryption.
 	// +kubebuilder:validation:Optional
 	EncryptionCertificateSecretRef *v1.SecretKeySelector `json:"encryptionCertificateSecretRef,omitempty" tf:"-"`
+
+	// Digest method used with SAML encryption. Allowed values: SHA-512, SHA-256, or SHA-1. Only valid when encryption_key_algorithm is RSA-OAEP-11 or RSA-OAEP-MGF1P. Default is SHA-256.
+	// +kubebuilder:validation:Optional
+	EncryptionDigestMethod *string `json:"encryptionDigestMethod,omitempty" tf:"encryption_digest_method,omitempty"`
+
+	// Key transport algorithm used by the client to encrypt the secret key for SAML assertion encryption. Allowed values: RSA-OAEP-11, RSA-OAEP-MGF1P, or RSA1_5. Default is RSA-OAEP-11.
+	// +kubebuilder:validation:Optional
+	EncryptionKeyAlgorithm *string `json:"encryptionKeyAlgorithm,omitempty" tf:"encryption_key_algorithm,omitempty"`
+
+	// Mask generation function used with SAML encryption. Allowed values: mgf1sha1, mgf1sha224, mgf1sha256, mgf1sha384, or mgf1sha512. Only valid when encryption_key_algorithm is RSA-OAEP-11. Default is mgf1sha256.
+	// +kubebuilder:validation:Optional
+	EncryptionMaskGenerationFunction *string `json:"encryptionMaskGenerationFunction,omitempty" tf:"encryption_mask_generation_function,omitempty"`
 
 	// A map of key/value pairs to add extra configuration attributes to this client. Use this attribute at your own risk, as s may conflict with top-level configuration attributes in future provider updates.
 	// +kubebuilder:validation:Optional

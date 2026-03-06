@@ -348,7 +348,7 @@ type RealmInitParameters struct {
 	// The maximum time a user has to use a user-generated permit before it expires.
 	ActionTokenGeneratedByUserLifespan *string `json:"actionTokenGeneratedByUserLifespan,omitempty" tf:"action_token_generated_by_user_lifespan,omitempty"`
 
-	// When false, users and clients will not be able to access this realm. Defaults to true.
+	// Enables the use of fine grained permissions v2
 	AdminPermissionsEnabled *bool `json:"adminPermissionsEnabled,omitempty" tf:"admin_permissions_enabled,omitempty"`
 
 	// Used for the admin console.
@@ -539,7 +539,7 @@ type RealmObservation struct {
 	// The maximum time a user has to use a user-generated permit before it expires.
 	ActionTokenGeneratedByUserLifespan *string `json:"actionTokenGeneratedByUserLifespan,omitempty" tf:"action_token_generated_by_user_lifespan,omitempty"`
 
-	// When false, users and clients will not be able to access this realm. Defaults to true.
+	// Enables the use of fine grained permissions v2
 	AdminPermissionsEnabled *bool `json:"adminPermissionsEnabled,omitempty" tf:"admin_permissions_enabled,omitempty"`
 
 	// Used for the admin console.
@@ -740,7 +740,7 @@ type RealmParameters struct {
 	// +kubebuilder:validation:Optional
 	ActionTokenGeneratedByUserLifespan *string `json:"actionTokenGeneratedByUserLifespan,omitempty" tf:"action_token_generated_by_user_lifespan,omitempty"`
 
-	// When false, users and clients will not be able to access this realm. Defaults to true.
+	// Enables the use of fine grained permissions v2
 	// +kubebuilder:validation:Optional
 	AdminPermissionsEnabled *bool `json:"adminPermissionsEnabled,omitempty" tf:"admin_permissions_enabled,omitempty"`
 
