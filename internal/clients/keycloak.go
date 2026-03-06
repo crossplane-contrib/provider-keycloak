@@ -41,10 +41,11 @@ const (
 	errInvalidTLSInsecureSkipVerify = "invalid tls_insecure_skip_verify value in credentials secret"
 )
 
-// Password and client secret auth parameters  + general config parameters
+// Password, client secret, JWT auth parameters + general config parameters
 // https://registry.terraform.io/providers/keycloak/keycloak/latest/docs#argument-reference
 // https://registry.terraform.io/providers/keycloak/keycloak/latest/docs#example-usage-client-credentials-grant
 // https://registry.terraform.io/providers/keycloak/keycloak/latest/docs#example-usage-password-grant
+// https://registry.terraform.io/providers/keycloak/keycloak/latest/docs#example-usage-client-jwt
 
 var requiredKeycloakConfigKeys = []string{
 	"client_id",
@@ -67,6 +68,8 @@ var optionalKeycloakConfigKeys = []string{
 	"access_token",
 	"tls_client_certificate",
 	"tls_client_private_key",
+	"jwt_signing_alg",
+	"jwt_signing_key",
 }
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
