@@ -37,6 +37,8 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 	realm := tryGetString(c, "realm", "master")
 	jwtSigningAlg := tryGetString(c, "jwt_signing_alg", "RS256")
 	jwtSigningKey := tryGetString(c, "jwt_signing_key", "")
+	jwtToken := tryGetString(c, "jwt_token", "")
+	jwtTokenFile := tryGetString(c, "jwt_token_file", "")
 	initialLogin := tryGetBool(c, "initial_login", true)
 	clientTimeout := tryGetInt(c, "client_timeout", 15)
 	tlsInsecureSkipVerify := tryGetBool(c, "tls_insecure_skip_verify", false)
@@ -60,6 +62,8 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 		accessToken,
 		jwtSigningAlg,
 		jwtSigningKey,
+		jwtToken,
+		jwtTokenFile,
 		initialLogin,
 		clientTimeout,
 		rootCaCertificate,
