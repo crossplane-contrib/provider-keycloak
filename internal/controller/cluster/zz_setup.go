@@ -23,6 +23,7 @@ import (
 	permissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/group/permissions"
 	rolesgroup "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/group/roles"
 	identityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/identityprovidermapper"
+	kubernetesidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/kubernetesidentityprovider"
 	providertokenexchangescopepermission "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/providertokenexchangescopepermission"
 	custommapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/custommapper"
 	fullnamemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/fullnamemapper"
@@ -90,6 +91,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		permissions.Setup,
 		rolesgroup.Setup,
 		identityprovidermapper.Setup,
+		kubernetesidentityprovider.Setup,
 		providertokenexchangescopepermission.Setup,
 		custommapper.Setup,
 		fullnamemapper.Setup,
@@ -163,6 +165,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		permissions.SetupGated,
 		rolesgroup.SetupGated,
 		identityprovidermapper.SetupGated,
+		kubernetesidentityprovider.SetupGated,
 		providertokenexchangescopepermission.SetupGated,
 		custommapper.SetupGated,
 		fullnamemapper.SetupGated,
