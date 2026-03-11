@@ -36,6 +36,21 @@ func Configure(p *config.Provider) {
 			Extractor:     common.PathUUIDExtractor,
 		}
 	})
+
+	p.AddResourceConfigurator("keycloak_kubernetes_identity_provider", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.Kind = "KubernetesIdentityProvider"
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+		r.References["organization_id"] = config.Reference{
+			TerraformName: "keycloak_organization",
+		}
+		r.References["first_broker_login_flow_alias"] = config.Reference{
+			TerraformName: "keycloak_authentication_flow",
+			Extractor:     common.PathAuthenticationFlowAliasExtractor,
+		}
+	})
 }
 
 var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{

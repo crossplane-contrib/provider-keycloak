@@ -10,4 +10,7 @@ package v1alpha1
 func (tr *IdentityProviderMapper) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *KubernetesIdentityProvider) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *ProviderTokenExchangeScopePermission) Hub() {}

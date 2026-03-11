@@ -1,0 +1,58 @@
+apiVersion: identityprovider.keycloak.m.crossplane.io/v1alpha1
+kind: KubernetesIdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/kubernetesidentityprovider
+  labels:
+    testing.upbound.io/example-name: kubernetes
+  name: kubernetes
+  namespace: upbound-system
+spec:
+  forProvider:
+    alias: my-k8s-idp
+    issuer: https://example.com/issuer/
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/kubernetesidentityprovider
+  labels:
+    testing.upbound.io/example-name: k8s_client
+  name: k8s-client
+  namespace: upbound-system
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientAuthenticatorType: federated-jwt
+    clientId: k8s-client
+    enabled: true
+    extraConfig:
+      jwt.credential.issuer: my-k8s-idp
+      jwt.credential.sub: system:serviceaccount:<namespace>:<service-account-name>
+    name: K8s Client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    serviceAccountsEnabled: true
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/kubernetesidentityprovider
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

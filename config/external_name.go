@@ -57,6 +57,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_custom_user_federation":                            config.IdentifierFromProvider,                                           // ???
 	"keycloak_oidc_identity_provider":                            oidc.IdentifierFromIdentifyingProperties,                                // {alias}
 	"keycloak_oidc_google_identity_provider":                     oidc.IdentifierFromIdentifyingProperties,                                // {alias}
+	"keycloak_kubernetes_identity_provider":                      oidc.IdentifierFromIdentifyingProperties,                                // {alias}
 	"keycloak_saml_identity_provider":                            saml.IdentifierFromIdentifyingProperties,                                // {alias}
 	"keycloak_custom_identity_provider_mapper":                   identityprovider.IdentifierFromIdentifyingProperties,                    // {UUid}
 	"keycloak_identity_provider_token_exchange_scope_permission": config.IdentifierFromProvider,                                           // {realm}/{provider_alias}
