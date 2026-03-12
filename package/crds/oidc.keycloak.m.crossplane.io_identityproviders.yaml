@@ -86,6 +86,11 @@ spec:
                       Does the external IDP support backchannel logout? Defaults to true.
                       Does the external IDP support backchannel logout?
                     type: boolean
+                  clientId:
+                    description: |-
+                      The client or client identifier registered within the identity provider.
+                      Client ID.
+                    type: string
                   clientIdSecretRef:
                     description: |-
                       The client or client identifier registered within the identity provider.
@@ -100,6 +105,11 @@ spec:
                     - key
                     - name
                     type: object
+                  clientSecret:
+                    description: |-
+                      The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
+                      Client Secret.
+                    type: string
                   clientSecretSecretRef:
                     description: |-
                       The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
@@ -114,6 +124,11 @@ spec:
                     - key
                     - name
                     type: object
+                  clientSecretWo:
+                    description: |-
+                      The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+                      Client Secret as write-only argument
+                    type: string
                   clientSecretWoSecretRef:
                     description: |-
                       The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
@@ -558,6 +573,11 @@ spec:
                       Does the external IDP support backchannel logout? Defaults to true.
                       Does the external IDP support backchannel logout?
                     type: boolean
+                  clientId:
+                    description: |-
+                      The client or client identifier registered within the identity provider.
+                      Client ID.
+                    type: string
                   clientIdSecretRef:
                     description: |-
                       The client or client identifier registered within the identity provider.
@@ -572,6 +592,11 @@ spec:
                     - key
                     - name
                     type: object
+                  clientSecret:
+                    description: |-
+                      The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
+                      Client Secret.
+                    type: string
                   clientSecretSecretRef:
                     description: |-
                       The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
@@ -586,6 +611,11 @@ spec:
                     - key
                     - name
                     type: object
+                  clientSecretWo:
+                    description: |-
+                      The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+                      Client Secret as write-only argument
+                    type: string
                   clientSecretWoSecretRef:
                     description: |-
                       The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
@@ -988,8 +1018,6 @@ spec:
                       Enable/disable signature validation of external IDP signatures. Defaults to false.
                       Enable/disable signature validation of external IDP signatures.
                     type: boolean
-                required:
-                - clientIdSecretRef
                 type: object
               managementPolicies:
                 default:
@@ -1058,9 +1086,12 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.authorizationUrl)
                 || (has(self.initProvider) && has(self.initProvider.authorizationUrl))'
-            - message: spec.forProvider.clientIdSecretRef is a required parameter
+            - message: spec.forProvider.clientId or spec.forProvider.clientIdSecretRef
+                is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.clientIdSecretRef)'
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.clientId)
+                || has(self.forProvider.clientIdSecretRef) || (has(self.initProvider)
+                && (has(self.initProvider.clientId) || has(self.initProvider.clientIdSecretRef)))'
             - message: spec.forProvider.tokenUrl is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.tokenUrl)
@@ -1098,6 +1129,21 @@ spec:
                       Does the external IDP support backchannel logout? Defaults to true.
                       Does the external IDP support backchannel logout?
                     type: boolean
+                  clientId:
+                    description: |-
+                      The client or client identifier registered within the identity provider.
+                      Client ID.
+                    type: string
+                  clientSecret:
+                    description: |-
+                      The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
+                      Client Secret.
+                    type: string
+                  clientSecretWo:
+                    description: |-
+                      The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+                      Client Secret as write-only argument
+                    type: string
                   clientSecretWoVersion:
                     description: |-
                       The value of this argument is stored in the state and plan files. Required when using client_secret_wo.

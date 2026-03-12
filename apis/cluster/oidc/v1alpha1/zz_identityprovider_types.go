@@ -40,11 +40,23 @@ type IdentityProviderInitParameters struct {
 
 	// The client or client identifier registered within the identity provider.
 	// Client ID.
-	ClientIDSecretRef v1.SecretKeySelector `json:"clientIdSecretRef" tf:"-"`
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// The client or client identifier registered within the identity provider.
+	// Client ID.
+	ClientIDSecretRef *v1.SecretKeySelector `json:"clientIdSecretRef,omitempty" tf:"-"`
+
+	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
+	// Client Secret.
+	ClientSecret *string `json:"clientSecret,omitempty" tf:"client_secret,omitempty"`
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
 	// Client Secret.
 	ClientSecretSecretRef *v1.SecretKeySelector `json:"clientSecretSecretRef,omitempty" tf:"-"`
+
+	// The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+	// Client Secret as write-only argument
+	ClientSecretWo *string `json:"clientSecretWo,omitempty" tf:"client_secret_wo,omitempty"`
 
 	// The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
 	// Client Secret as write-only argument
@@ -214,6 +226,18 @@ type IdentityProviderObservation struct {
 	// Does the external IDP support backchannel logout?
 	BackchannelSupported *bool `json:"backchannelSupported,omitempty" tf:"backchannel_supported,omitempty"`
 
+	// The client or client identifier registered within the identity provider.
+	// Client ID.
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
+	// Client Secret.
+	ClientSecret *string `json:"clientSecret,omitempty" tf:"client_secret,omitempty"`
+
+	// The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+	// Client Secret as write-only argument
+	ClientSecretWo *string `json:"clientSecretWo,omitempty" tf:"client_secret_wo,omitempty"`
+
 	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
 	// Version of the Client secret write-only argument
 	ClientSecretWoVersion *float64 `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
@@ -365,12 +389,27 @@ type IdentityProviderParameters struct {
 	// The client or client identifier registered within the identity provider.
 	// Client ID.
 	// +kubebuilder:validation:Optional
-	ClientIDSecretRef v1.SecretKeySelector `json:"clientIdSecretRef" tf:"-"`
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// The client or client identifier registered within the identity provider.
+	// Client ID.
+	// +kubebuilder:validation:Optional
+	ClientIDSecretRef *v1.SecretKeySelector `json:"clientIdSecretRef,omitempty" tf:"-"`
+
+	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
+	// Client Secret.
+	// +kubebuilder:validation:Optional
+	ClientSecret *string `json:"clientSecret,omitempty" tf:"client_secret,omitempty"`
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
 	// Client Secret.
 	// +kubebuilder:validation:Optional
 	ClientSecretSecretRef *v1.SecretKeySelector `json:"clientSecretSecretRef,omitempty" tf:"-"`
+
+	// The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
+	// Client Secret as write-only argument
+	// +kubebuilder:validation:Optional
+	ClientSecretWo *string `json:"clientSecretWo,omitempty" tf:"client_secret_wo,omitempty"`
 
 	// The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
 	// Client Secret as write-only argument
@@ -582,7 +621,7 @@ type IdentityProvider struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.alias) || (has(self.initProvider) && has(self.initProvider.alias))",message="spec.forProvider.alias is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.authorizationUrl) || (has(self.initProvider) && has(self.initProvider.authorizationUrl))",message="spec.forProvider.authorizationUrl is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clientIdSecretRef)",message="spec.forProvider.clientIdSecretRef is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clientId) || has(self.forProvider.clientIdSecretRef) || (has(self.initProvider) && (has(self.initProvider.clientId) || has(self.initProvider.clientIdSecretRef)))",message="spec.forProvider.clientId or spec.forProvider.clientIdSecretRef is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.tokenUrl) || (has(self.initProvider) && has(self.initProvider.tokenUrl))",message="spec.forProvider.tokenUrl is a required parameter"
 	Spec   IdentityProviderSpec   `json:"spec"`
 	Status IdentityProviderStatus `json:"status,omitempty"`

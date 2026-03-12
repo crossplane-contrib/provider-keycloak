@@ -694,10 +694,29 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(bool)
 		**out = **in
 	}
-	in.ClientIDSecretRef.DeepCopyInto(&out.ClientIDSecretRef)
+	if in.ClientID != nil {
+		in, out := &in.ClientID, &out.ClientID
+		*out = new(string)
+		**out = **in
+	}
+	if in.ClientIDSecretRef != nil {
+		in, out := &in.ClientIDSecretRef, &out.ClientIDSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecret != nil {
+		in, out := &in.ClientSecret, &out.ClientSecret
+		*out = new(string)
+		**out = **in
+	}
 	if in.ClientSecretSecretRef != nil {
 		in, out := &in.ClientSecretSecretRef, &out.ClientSecretSecretRef
 		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecretWo != nil {
+		in, out := &in.ClientSecretWo, &out.ClientSecretWo
+		*out = new(string)
 		**out = **in
 	}
 	if in.ClientSecretWoSecretRef != nil {
@@ -963,6 +982,21 @@ func (in *IdentityProviderObservation) DeepCopyInto(out *IdentityProviderObserva
 		*out = new(bool)
 		**out = **in
 	}
+	if in.ClientID != nil {
+		in, out := &in.ClientID, &out.ClientID
+		*out = new(string)
+		**out = **in
+	}
+	if in.ClientSecret != nil {
+		in, out := &in.ClientSecret, &out.ClientSecret
+		*out = new(string)
+		**out = **in
+	}
+	if in.ClientSecretWo != nil {
+		in, out := &in.ClientSecretWo, &out.ClientSecretWo
+		*out = new(string)
+		**out = **in
+	}
 	if in.ClientSecretWoVersion != nil {
 		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
 		*out = new(float64)
@@ -1169,10 +1203,29 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 		*out = new(bool)
 		**out = **in
 	}
-	in.ClientIDSecretRef.DeepCopyInto(&out.ClientIDSecretRef)
+	if in.ClientID != nil {
+		in, out := &in.ClientID, &out.ClientID
+		*out = new(string)
+		**out = **in
+	}
+	if in.ClientIDSecretRef != nil {
+		in, out := &in.ClientIDSecretRef, &out.ClientIDSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecret != nil {
+		in, out := &in.ClientSecret, &out.ClientSecret
+		*out = new(string)
+		**out = **in
+	}
 	if in.ClientSecretSecretRef != nil {
 		in, out := &in.ClientSecretSecretRef, &out.ClientSecretSecretRef
 		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.ClientSecretWo != nil {
+		in, out := &in.ClientSecretWo, &out.ClientSecretWo
+		*out = new(string)
 		**out = **in
 	}
 	if in.ClientSecretWoSecretRef != nil {
