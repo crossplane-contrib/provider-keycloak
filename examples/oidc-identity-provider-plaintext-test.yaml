@@ -1,0 +1,63 @@
+---
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: test-realm-plaintext
+spec:
+  providerConfigRef:
+    name: keycloak-provider-config
+  forProvider:
+    realm: test-plaintext
+    enabled: true
+---
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  name: test-oidc-idp-plaintext
+spec:
+  providerConfigRef:
+    name: keycloak-provider-config
+  forProvider:
+    realmRef:
+      name: test-realm-plaintext
+    alias: test-oidc-plaintext
+    authorizationUrl: https://example.com/oauth/authorize
+    tokenUrl: https://example.com/oauth/token
+    # Using plaintext values (new feature!)
+    clientId: "my-client-id-plaintext"
+    clientSecret: "my-client-secret-plaintext"
+    defaultScopes: "openid profile email"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: oidc-client-secret
+  namespace: crossplane-system
+type: Opaque
+stringData:
+  client_id: "my-secret-client-id"
+  client_secret: "my-secret-client-secret"
+---
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  name: test-oidc-idp-secretref
+spec:
+  providerConfigRef:
+    name: keycloak-provider-config
+  forProvider:
+    realmRef:
+      name: test-realm-plaintext
+    alias: test-oidc-secretref
+    authorizationUrl: https://example.com/oauth/authorize
+    tokenUrl: https://example.com/oauth/token
+    # Using secret references (existing feature)
+    clientIdSecretRef:
+      name: oidc-client-secret
+      namespace: crossplane-system
+      key: client_id
+    clientSecretSecretRef:
+      name: oidc-client-secret
+      namespace: crossplane-system
+      key: client_secret
+    defaultScopes: "openid profile email"
