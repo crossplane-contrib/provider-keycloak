@@ -26,6 +26,9 @@ func Configure(p *config.Provider) {
 			Extractor:     common.PathAuthenticationFlowAliasExtractor,
 		}
 
+		// Allow both plaintext and secret references for sensitive fields
+		r.Sensitive.AllowPlaintextValue = true
+
 		if s, ok := r.TerraformResource.Schema["client_id"]; ok {
 			s.Sensitive = true
 		}
