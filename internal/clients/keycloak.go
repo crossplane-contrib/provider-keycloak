@@ -9,7 +9,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"net/url"
 	"strconv"
+	"strings"
 
 	terraformSDK "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	corev1 "k8s.io/api/core/v1"
@@ -39,6 +41,9 @@ const (
 	errGetCredentialsSecret         = "cannot get credentials secret"
 	errInvalidClientTimeout         = "invalid client_timeout value in credentials secret"
 	errInvalidTLSInsecureSkipVerify = "invalid tls_insecure_skip_verify value in credentials secret"
+	errInvalidURL                   = "invalid url value in credentials secret"
+	errInvalidAdminURL              = "invalid admin_url value in credentials secret"
+	errInvalidBasePath              = "invalid base_path value in credentials secret"
 )
 
 // Password, client secret, JWT auth parameters + general config parameters
@@ -95,13 +100,11 @@ func TerraformSetupBuilder() terraform.SetupFn {
 		ps.Configuration = map[string]any{}
 		// Iterate over the requiredKeycloakConfigKeys, they must be set
 		for _, key := range requiredKeycloakConfigKeys {
-			if value, ok := creds[key]; ok {
-				if !ok {
-					// Return an error if a required key is missing
-					return ps, errors.Errorf("required Keycloak configuration key '%s' is missing", key)
-				}
-				ps.Configuration[key] = value
+			value, ok := creds[key]
+			if !ok {
+				return ps, errors.Errorf("required Keycloak configuration key '%s' is missing", key)
 			}
+			ps.Configuration[key] = value
 		}
 
 		// Iterate over the optionalKeycloakConfigKeys, they can be set and do not have to be in the creds map
@@ -111,10 +114,86 @@ func TerraformSetupBuilder() terraform.SetupFn {
 			}
 		}
 
+		if err := validateAndNormalizeURLAndBasePath(ps.Configuration); err != nil {
+			return ps, err
+		}
+
 		return ps, errors.Wrap(
 			configureNoForkKeycloakClient(ctx, &ps),
 			"failed to configure the no-fork client")
 	}
+}
+
+func validateAndNormalizeURLAndBasePath(config map[string]any) error {
+	if err := normalizeURLField(config, "url", errInvalidURL); err != nil {
+		return err
+	}
+	if _, ok := config["admin_url"]; ok {
+		if err := normalizeURLField(config, "admin_url", errInvalidAdminURL); err != nil {
+			return err
+		}
+	}
+
+	basePathValue, ok := config["base_path"]
+	if !ok {
+		return nil
+	}
+
+	basePath, ok := basePathValue.(string)
+	if !ok {
+		return errors.New(errInvalidBasePath)
+	}
+
+	basePath = strings.TrimSpace(basePath)
+	if basePath == "/" {
+		config["base_path"] = ""
+		return nil
+	}
+
+	if basePath == "" {
+		return nil
+	}
+
+	if !strings.HasPrefix(basePath, "/") || strings.Contains(basePath, "//") {
+		return errors.New(errInvalidBasePath)
+	}
+
+	config["base_path"] = strings.TrimRight(basePath, "/")
+	return nil
+}
+
+func normalizeURLField(config map[string]any, key, errMessage string) error {
+	value, ok := config[key]
+	if !ok {
+		return errors.New(errMessage)
+	}
+
+	raw, ok := value.(string)
+	if !ok {
+		return errors.New(errMessage)
+	}
+
+	raw = strings.TrimSpace(raw)
+	parsed, err := url.Parse(raw)
+	if err != nil {
+		return errors.Wrap(err, errMessage)
+	}
+
+	if parsed.Scheme == "" || parsed.Host == "" || parsed.RawQuery != "" || parsed.Fragment != "" {
+		return errors.New(errMessage)
+	}
+
+	if strings.Contains(parsed.EscapedPath(), "//") {
+		return errors.New(errMessage)
+	}
+
+	parsed.Path = strings.TrimRight(parsed.Path, "/")
+	if parsed.Path == "/" {
+		parsed.Path = ""
+	}
+
+	config[key] = parsed.String()
+	return nil
 }
 
 // ExtractCredentials Function that extracts credentials from the secret provided to providerconfig
