@@ -123,3 +123,79 @@ func TestExtractCredentials(t *testing.T) {
 		})
 	}
 }
+
+func TestValidateAndNormalizeURLAndBasePath(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   map[string]any
+		want    map[string]any
+		wantErr bool
+	}{
+		{
+			name: "normalizes trailing slash in url and root base_path",
+			input: map[string]any{
+				"url":       "https://keycloak.example.com/",
+				"base_path": "/",
+			},
+			want: map[string]any{
+				"url":       "https://keycloak.example.com",
+				"base_path": "",
+			},
+		},
+		{
+			name: "normalizes base_path trailing slash",
+			input: map[string]any{
+				"url":       "https://keycloak.example.com",
+				"base_path": "/auth/",
+			},
+			want: map[string]any{
+				"url":       "https://keycloak.example.com",
+				"base_path": "/auth",
+			},
+		},
+		{
+			name: "rejects url without scheme",
+			input: map[string]any{
+				"url": "keycloak.example.com",
+			},
+			wantErr: true,
+		},
+		{
+			name: "rejects invalid base_path",
+			input: map[string]any{
+				"url":       "https://keycloak.example.com",
+				"base_path": "auth",
+			},
+			wantErr: true,
+		},
+		{
+			name: "rejects url with query",
+			input: map[string]any{
+				"url": "https://keycloak.example.com?x=1",
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg := make(map[string]any, len(tt.input))
+			for k, v := range tt.input {
+				cfg[k] = v
+			}
+
+			err := validateAndNormalizeURLAndBasePath(cfg)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("validateAndNormalizeURLAndBasePath() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if tt.wantErr {
+				return
+			}
+
+			if !reflect.DeepEqual(cfg, tt.want) {
+				t.Fatalf("validateAndNormalizeURLAndBasePath() got = %v, want %v", cfg, tt.want)
+			}
+		})
+	}
+}
