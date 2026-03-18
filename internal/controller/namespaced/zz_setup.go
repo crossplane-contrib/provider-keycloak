@@ -54,6 +54,8 @@ import (
 	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/groupmembershipprotocolmapper"
 	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/organization/organization"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/providerconfig"
+	clientpolicyprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofile"
+	clientpolicyprofilepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofilepolicy"
 	defaultclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/defaultclientscopes"
 	keystorersa "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/keystorersa"
 	optionalclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/optionalclientscopes"
@@ -122,6 +124,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		groupmembershipprotocolmapper.Setup,
 		organization.Setup,
 		providerconfig.Setup,
+		clientpolicyprofile.Setup,
+		clientpolicyprofilepolicy.Setup,
 		defaultclientscopes.Setup,
 		keystorersa.Setup,
 		optionalclientscopes.Setup,
@@ -196,6 +200,8 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		groupmembershipprotocolmapper.SetupGated,
 		organization.SetupGated,
 		providerconfig.SetupGated,
+		clientpolicyprofile.SetupGated,
+		clientpolicyprofilepolicy.SetupGated,
 		defaultclientscopes.SetupGated,
 		keystorersa.SetupGated,
 		optionalclientscopes.SetupGated,
