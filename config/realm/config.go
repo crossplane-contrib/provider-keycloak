@@ -53,6 +53,14 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 		r.Kind = "RealmEvents"
 	})
+
+	p.AddResourceConfigurator("keycloak_realm_client_policy_profile", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
+
+	p.AddResourceConfigurator("keycloak_realm_client_policy_profile_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
 }
 
 var realmIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
