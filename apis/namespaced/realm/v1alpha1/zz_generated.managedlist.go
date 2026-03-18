@@ -7,6 +7,24 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 
+// GetItems of this ClientPolicyProfileList.
+func (l *ClientPolicyProfileList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientPolicyProfilePolicyList.
+func (l *ClientPolicyProfilePolicyList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this DefaultClientScopesList.
 func (l *DefaultClientScopesList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))

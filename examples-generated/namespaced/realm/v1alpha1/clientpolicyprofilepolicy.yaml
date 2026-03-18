@@ -1,0 +1,69 @@
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: ClientPolicyProfilePolicy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/clientpolicyprofilepolicy
+  labels:
+    testing.upbound.io/example-name: policy
+  name: policy
+  namespace: upbound-system
+spec:
+  forProvider:
+    condition:
+    - configuration:
+        protocol: openid-connect
+      name: client-type
+    - configuration:
+        attributes: '${jsonencode([{ "key" : "test-key", "value" : "test-value" }])}'
+        is-negative-logic: false
+      name: client-attributes
+    description: Some desc
+    name: my-profile
+    profiles:
+    - ${keycloak_realm_client_policy_profile.profile.name}
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/clientpolicyprofilepolicy
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    realm: my-realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: ClientPolicyProfile
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/clientpolicyprofilepolicy
+  labels:
+    testing.upbound.io/example-name: profile
+  name: profile
+  namespace: upbound-system
+spec:
+  forProvider:
+    description: Some desc
+    executor:
+    - configuration:
+        auto-configure: "true"
+      name: intent-client-bind-checker
+    - configuration:
+        expiration-period: 2505600
+        remaining-rotation-period: 864000
+        rotated-expiration-period: 172800
+      name: secret-rotation
+    name: my-profile
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
