@@ -1,0 +1,35 @@
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: ClientPolicyProfile
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/clientpolicyprofile
+  labels:
+    testing.upbound.io/example-name: profile
+  name: profile
+  namespace: upbound-system
+spec:
+  forProvider:
+    executor:
+    - configuration:
+        auto-configure: true
+      name: intent-client-bind-checker
+    - name: secure-session
+    name: my-profile
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/clientpolicyprofile
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    realm: my-realm

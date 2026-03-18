@@ -7,6 +7,12 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 // Hub marks this type as a conversion hub.
+func (tr *ClientPolicyProfile) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ClientPolicyProfilePolicy) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *DefaultClientScopes) Hub() {}
 
 // Hub marks this type as a conversion hub.
