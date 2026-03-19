@@ -193,7 +193,7 @@ jobs:
         run: make -j2 test
 
       - name: Publish Unit Test Coverage
-        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6
+        uses: codecov/codecov-action@1af58845a975a7985b0beb0cbe6fbbb71a41dbad # v5
         with:
           flags: unittests
           file: _output/tests/linux_amd64/coverage.txt
@@ -448,7 +448,7 @@ jobs:
         run: crane version
 
       - name: Login to Upbound
-        uses: docker/login-action@bb9683dca29f758cbd6ee832740e9f2dbeb21a3e
+        uses: docker/login-action@c144859092e8e353f3e118b0b329679a62351c3e
         with:
           registry: "xpkg.upbound.io"
           username: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR }}
