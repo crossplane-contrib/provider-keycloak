@@ -18,8 +18,8 @@ spec:
       name: client-attributes
     description: Some desc
     name: my-profile
-    profiles:
-    - ${keycloak_realm_client_policy_profile.profile.name}
+    profilesRefs:
+    - name: profile
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm

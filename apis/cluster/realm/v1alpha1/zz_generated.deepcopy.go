@@ -792,6 +792,18 @@ func (in *ClientPolicyProfilePolicyInitParameters) DeepCopyInto(out *ClientPolic
 			}
 		}
 	}
+	if in.ProfilesRefs != nil {
+		in, out := &in.ProfilesRefs, &out.ProfilesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.ProfilesSelector != nil {
+		in, out := &in.ProfilesSelector, &out.ProfilesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.RealmID != nil {
 		in, out := &in.RealmID, &out.RealmID
 		*out = new(string)
@@ -944,6 +956,18 @@ func (in *ClientPolicyProfilePolicyParameters) DeepCopyInto(out *ClientPolicyPro
 				**out = **in
 			}
 		}
+	}
+	if in.ProfilesRefs != nil {
+		in, out := &in.ProfilesRefs, &out.ProfilesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.ProfilesSelector != nil {
+		in, out := &in.ProfilesSelector, &out.ProfilesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
 		in, out := &in.RealmID, &out.RealmID
