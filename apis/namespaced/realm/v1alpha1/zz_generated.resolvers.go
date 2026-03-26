@@ -8,6 +8,7 @@ package v1alpha1
 
 import (
 	"context"
+	common "github.com/crossplane-contrib/provider-keycloak/config/common"
 	apisresolver "github.com/crossplane-contrib/provider-keycloak/internal/apis"
 	reference "github.com/crossplane/crossplane-runtime/v2/pkg/reference"
 	xpresource "github.com/crossplane/crossplane-runtime/v2/pkg/resource"
@@ -74,7 +75,28 @@ func (mg *ClientPolicyProfilePolicy) ResolveReferences(ctx context.Context, c cl
 	r := reference.NewAPINamespacedResolver(c, mg)
 
 	var rsp reference.NamespacedResolutionResponse
+	var mrsp reference.MultiNamespacedResolutionResponse
 	var err error
+	{
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "ClientPolicyProfile", "ClientPolicyProfileList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiNamespacedResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.Profiles),
+			Extract:       common.NameExtractor(),
+			Namespace:     mg.GetNamespace(),
+			References:    mg.Spec.ForProvider.ProfilesRefs,
+			Selector:      mg.Spec.ForProvider.ProfilesSelector,
+			To:            reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.Profiles")
+	}
+	mg.Spec.ForProvider.Profiles = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.ForProvider.ProfilesRefs = mrsp.ResolvedReferences
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
@@ -95,6 +117,26 @@ func (mg *ClientPolicyProfilePolicy) ResolveReferences(ctx context.Context, c cl
 	}
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "ClientPolicyProfile", "ClientPolicyProfileList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiNamespacedResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.Profiles),
+			Extract:       common.NameExtractor(),
+			Namespace:     mg.GetNamespace(),
+			References:    mg.Spec.InitProvider.ProfilesRefs,
+			Selector:      mg.Spec.InitProvider.ProfilesSelector,
+			To:            reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.Profiles")
+	}
+	mg.Spec.InitProvider.Profiles = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.InitProvider.ProfilesRefs = mrsp.ResolvedReferences
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {

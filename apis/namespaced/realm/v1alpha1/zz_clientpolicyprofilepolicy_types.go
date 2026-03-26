@@ -26,8 +26,18 @@ type ClientPolicyProfilePolicyInitParameters struct {
 	// The name of the attribute.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.ClientPolicyProfile
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.NameExtractor()
 	// +listType=set
 	Profiles []*string `json:"profiles,omitempty" tf:"profiles,omitempty"`
+
+	// References to ClientPolicyProfile in realm to populate profiles.
+	// +kubebuilder:validation:Optional
+	ProfilesRefs []v1.NamespacedReference `json:"profilesRefs,omitempty" tf:"-"`
+
+	// Selector for a list of ClientPolicyProfile in realm to populate profiles.
+	// +kubebuilder:validation:Optional
+	ProfilesSelector *v1.NamespacedSelector `json:"profilesSelector,omitempty" tf:"-"`
 
 	// The realm id.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
@@ -79,9 +89,19 @@ type ClientPolicyProfilePolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.ClientPolicyProfile
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.NameExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Profiles []*string `json:"profiles,omitempty" tf:"profiles,omitempty"`
+
+	// References to ClientPolicyProfile in realm to populate profiles.
+	// +kubebuilder:validation:Optional
+	ProfilesRefs []v1.NamespacedReference `json:"profilesRefs,omitempty" tf:"-"`
+
+	// Selector for a list of ClientPolicyProfile in realm to populate profiles.
+	// +kubebuilder:validation:Optional
+	ProfilesSelector *v1.NamespacedSelector `json:"profilesSelector,omitempty" tf:"-"`
 
 	// The realm id.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
@@ -166,7 +186,6 @@ type ClientPolicyProfilePolicy struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.profiles) || (has(self.initProvider) && has(self.initProvider.profiles))",message="spec.forProvider.profiles is a required parameter"
 	Spec   ClientPolicyProfilePolicySpec   `json:"spec"`
 	Status ClientPolicyProfilePolicyStatus `json:"status,omitempty"`
 }

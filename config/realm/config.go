@@ -6,6 +6,7 @@ import (
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 )
 
@@ -60,6 +61,10 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_realm_client_policy_profile_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
+		r.References["profiles"] = config.Reference{
+			TerraformName: "keycloak_realm_client_policy_profile",
+			Extractor:     common.PathNameExtractor,
+		}
 	})
 }
 

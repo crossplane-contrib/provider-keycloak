@@ -29,6 +29,9 @@ const (
 	PathAliasExtractor = SelfPackagePath + ".AliasExtractor()"
 	// PathUUIDExtractor is the golang path to UUIDExtractor function
 	PathUUIDExtractor = SelfPackagePath + ".UUIDExtractor()"
+
+	// PathNameExtractor is the golang path to NameExtractor function
+	PathNameExtractor = SelfPackagePath + ".NameExtractor()"
 )
 
 // ServiceAccountRoleIDExtractor returns a reference.ExtractValueFn that can be used to extract the ServiceAccountRoleID from a managed resource.
@@ -101,6 +104,21 @@ func UUIDExtractor() reference.ExtractValueFn {
 		split := strings.Split(r, "/")
 		if len(split) == 2 {
 			return split[1]
+		}
+		return r
+	}
+}
+
+func NameExtractor() reference.ExtractValueFn {
+	return func(mg xpresource.Managed) string {
+		paved, err := fieldpath.PaveObject(mg)
+		if err != nil {
+			return ""
+		}
+
+		r, err := paved.GetString("status.atProvider.name")
+		if err != nil {
+			return ""
 		}
 		return r
 	}
