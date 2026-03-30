@@ -1,0 +1,21 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: ClientPolicyProfilePolicy
+metadata:
+  name: client-policy-profile-policy
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    condition:
+      - configuration:
+          protocol: openid-connect
+        name: client-type
+    description: Some desc
+    name: my-policy
+    profilesRefs:
+      - name: client-policy-profile
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"

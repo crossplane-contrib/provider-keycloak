@@ -1,0 +1,22 @@
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: ClientPolicyProfilePolicy
+metadata:
+  name: client-policy-profile-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    condition:
+      - configuration:
+          protocol: openid-connect
+        name: client-type
+    description: Some desc
+    name: my-policy
+    profilesRefs:
+      - name: client-policy-profile
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

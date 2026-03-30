@@ -44,6 +44,8 @@
 ./dev/demos/namespaced/020-user.yaml
 ./dev/demos/namespaced/015-groups.yaml
 ./dev/demos/namespaced/010-roles.yaml
+./dev/demos/namespaced/009-realm-client-policy-profile-policy.yaml
+./dev/demos/namespaced/008-realm-client-policy-profile.yaml
 ./dev/demos/namespaced/007-existing-realm.yaml
 ./dev/demos/namespaced/006-realm-events.yaml
 ./dev/demos/namespaced/005-realm-user-profile.yaml
@@ -95,6 +97,8 @@
 ./dev/demos/basic/020-user.yaml
 ./dev/demos/basic/015-groups.yaml
 ./dev/demos/basic/010-roles.yaml
+./dev/demos/basic/009-realm-client-policy-profile-policy.yaml
+./dev/demos/basic/008-realm-client-policy-profile.yaml
 ./dev/demos/basic/007-existing-realm.yaml
 ./dev/demos/basic/006-realm-events.yaml
 ./dev/demos/basic/005-realm-user-profile.yaml

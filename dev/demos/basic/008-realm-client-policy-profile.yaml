@@ -1,0 +1,19 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: ClientPolicyProfile
+metadata:
+  name: client-policy-profile
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    executor:
+      - configuration:
+          auto-configure: "true"
+        name: intent-client-bind-checker
+      - name: secure-session
+    name: my-profile
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
