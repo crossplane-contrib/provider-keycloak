@@ -363,7 +363,7 @@ jobs:
           install: true
 
       - name: Login to GHCR using PAT
-        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -448,7 +448,7 @@ jobs:
         run: crane version
 
       - name: Login to Upbound
-        uses: docker/login-action@bb555fc48dca4deb5f227b07c7304c673b5708f0
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
         with:
           registry: "xpkg.upbound.io"
           username: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR }}
