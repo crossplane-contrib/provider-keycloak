@@ -1,0 +1,64 @@
+---
+# E2E test for child groups with the same name under different parents.
+# Regression test for https://github.com/crossplane-contrib/provider-keycloak/issues/542
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: test-parent-1
+  labels:
+    role: parent
+    parent: test1
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: test-parent-1
+    realmId: dev
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: test-parent-2
+  labels:
+    role: parent
+    parent: test2
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: test-parent-2
+    realmId: dev
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: test-child-1
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: test-child
+    realmId: dev
+    parentIdSelector:
+      matchLabels:
+        role: parent
+        parent: test1
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: test-child-2
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: test-child
+    realmId: dev
+    parentIdSelector:
+      matchLabels:
+        role: parent
+        parent: test2
+  providerConfigRef:
+    name: "keycloak-provider-config"
