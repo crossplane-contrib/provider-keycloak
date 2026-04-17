@@ -2,7 +2,6 @@ package group
 
 import (
 	"context"
-	"strings"
 
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
@@ -46,6 +45,7 @@ func Configure(p *config.Provider) {
 
 var groupIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
 	RequiredParameters:           []string{"realm_id", "name"},
+	OptionalParameters:           []string{"parent_id"},
 	GetIDByExternalName:          getGroupIDByExternalName,
 	GetIDByIdentifyingProperties: getGroupIDByIdentifyingProperties,
 }
@@ -62,14 +62,36 @@ func getGroupIDByExternalName(ctx context.Context, id string, parameters map[str
 }
 
 func getGroupIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	found, err := kcClient.GetGroupByName(ctx, parameters["realm_id"].(string), parameters["name"].(string))
-	if err != nil {
-		if strings.Contains(err.Error(), "no group with name") {
-			return "", nil
-		}
+	realmID := parameters["realm_id"].(string)
+	name := parameters["name"].(string)
+	parentID, _ := parameters["parent_id"].(string)
 
+	groups, err := kcClient.ListGroupsWithName(ctx, realmID, name)
+	if err != nil {
 		return "", err
 	}
 
-	return found.Id, nil
+	group := findGroupByNameAndParent(name, parentID, groups, "")
+	if group == nil {
+		return "", nil
+	}
+
+	return group.Id, nil
+}
+
+// findGroupByNameAndParent walks the group tree returned by the Keycloak search API
+// and finds the group that matches both the given name and parent ID.
+// For top-level groups, parentID and currentParentID are both empty strings.
+// For child groups, parentID is the expected parent's UUID.
+func findGroupByNameAndParent(name, parentID string, groups []*keycloak.Group, currentParentID string) *keycloak.Group {
+	for _, group := range groups {
+		if group.Name == name && currentParentID == parentID {
+			return group
+		}
+		found := findGroupByNameAndParent(name, parentID, group.SubGroups, group.Id)
+		if found != nil {
+			return found
+		}
+	}
+	return nil
 }
