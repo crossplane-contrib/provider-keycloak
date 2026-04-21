@@ -23,6 +23,16 @@ func Configure(p *config.Provider) {
 			Extractor:     common.PathUUIDExtractor,
 		}
 
+		// composite_roles is Optional+Computed in the Terraform schema, so
+		// late-initialization would copy the server-resolved list back
+		// into spec.forProvider and cause ArgoCD drift. See
+		// docs/assessments/2026-04-client-forprovider-spec-drift.md.
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{
+				"composite_roles",
+			},
+		}
+
 		multitypes.ApplyToWithOptions(r, "client_id",
 			&multitypes.Options{KeepOriginalField: true}, // Explicit: maintain backward compatibility
 			multitypes.Instance{

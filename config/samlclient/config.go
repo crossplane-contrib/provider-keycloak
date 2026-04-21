@@ -31,6 +31,17 @@ func Configure(p *config.Provider) {
 		if s, ok := r.TerraformResource.Schema["signing_private_key"]; ok {
 			s.Sensitive = true
 		}
+
+		// Skip late-initialization for the binding-override IDs so the
+		// observed Terraform state never gets copied back into
+		// spec.forProvider. See
+		// docs/assessments/2026-04-client-forprovider-spec-drift.md.
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{
+				"authentication_flow_binding_overrides.browser_id",
+				"authentication_flow_binding_overrides.direct_grant_id",
+			},
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_saml_client_default_scopes", func(r *config.Resource) {

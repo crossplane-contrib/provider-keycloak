@@ -30,6 +30,17 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_authentication_flow",
 		}
 
+		// Skip late-initialization for the binding-override IDs so the
+		// observed Terraform state never gets copied back into
+		// spec.forProvider. This silences one of the two sources of
+		// ArgoCD reconciliation drift on this field
+		// (see docs/assessments/2026-04-client-forprovider-spec-drift.md).
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{
+				"authentication_flow_binding_overrides.browser_id",
+				"authentication_flow_binding_overrides.direct_grant_id",
+			},
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_default_scopes", func(r *config.Resource) {
