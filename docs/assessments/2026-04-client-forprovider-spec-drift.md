@@ -1,6 +1,9 @@
 # Assessment: `Client.spec.forProvider` drift on `authenticationFlowBindingOverrides` (ArgoCD reconciliation loop)
 
-Tracking issue: *Client forProvider specs added dynamically, breaking deployment with ArgoCD* (provider-keycloak v2.1.0).
+Tracking issue: *Client forProvider specs added dynamically, breaking deployment
+with ArgoCD* — reported against `crossplane-contrib/provider-keycloak` v2.1.0.
+Update the link below to the actual issue URL once known:
+`https://github.com/crossplane-contrib/provider-keycloak/issues/<NN>`.
 
 This document is **research / assessment only** — no code changes are proposed in
 this commit. The intent is to give the maintainers a concrete starting point
@@ -289,12 +292,17 @@ webhook, aligned with the wider Crossplane move to management-policies +
 * `config/samlclient/config.go`
   Same change for `keycloak_saml_client`.
 * Re-run `make generate` to refresh `apis/.../zz_*` and `examples-generated/`.
-* Add an e2e test under `cluster/test/.../openidclient` that:
-  1. Applies a `Client` with `authenticationFlowBindingOverrides.browserIdSelector`.
-  2. Waits for `Synced=True` & `Ready=True`.
-  3. Re-reads the object and asserts that `spec.forProvider` matches the
-     original manifest field-for-field (modulo the `*Ref` field, which
-     remains as the only acceptable write-back).
+* Add a manual verification example under `examples/openidclient/` (this repo
+  currently has no automated e2e harness — only `internal/clients/keycloak_test.go`
+  exists as a Go unit test, and `.github/workflows/e2e.yaml.disabled` is
+  disabled). The example should:
+  1. Apply a `Client` with `authenticationFlowBindingOverrides.browserIdSelector`.
+  2. Wait for `Synced=True` & `Ready=True`.
+  3. Re-read the object and confirm that `spec.forProvider.authenticationFlowBindingOverrides[].browserId`
+     and `directGrantId` are *not* repopulated by LateInit (the only acceptable
+     remaining write-back is the resolver setting `browserIdRef` /
+     `directGrantIdRef`, which can be silenced with the ArgoCD
+     `ignoreDifferences` snippet from §3).
 
 ## 7. References
 
