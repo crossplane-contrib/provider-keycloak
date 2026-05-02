@@ -105,6 +105,24 @@ func Configure(p *config.Provider) {
 			RefFieldName:      "DockerAuthenticationFlowRef",
 			SelectorFieldName: "DockerAuthenticationFlowSelector",
 		}
+
+		// All of these realm-binding flow attributes are Optional+Computed
+		// in the Terraform schema, so the Keycloak server returns the
+		// effective value on every Read. Without this, late-initialization
+		// would copy the server-side default into spec.forProvider on the
+		// first reconcile and cause permanent ArgoCD drift even for users
+		// who never set the field. See
+		// docs/assessments/2026-04-client-forprovider-spec-drift.md.
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{
+				"browser_flow",
+				"registration_flow",
+				"direct_grant_flow",
+				"reset_credentials_flow",
+				"client_authentication_flow",
+				"docker_authentication_flow",
+			},
+		}
 	})
 }
 
