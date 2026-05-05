@@ -118,6 +118,12 @@ func (tr *Bindings) LateInitialize(attrs []byte) (bool, error) {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}
 	opts := []resource.GenericLateInitializerOption{resource.WithZeroValueJSONOmitEmptyFilter(resource.CNameWildcard)}
+	opts = append(opts, resource.WithNameFilter("BrowserFlow"))
+	opts = append(opts, resource.WithNameFilter("ClientAuthenticationFlow"))
+	opts = append(opts, resource.WithNameFilter("DirectGrantFlow"))
+	opts = append(opts, resource.WithNameFilter("DockerAuthenticationFlow"))
+	opts = append(opts, resource.WithNameFilter("RegistrationFlow"))
+	opts = append(opts, resource.WithNameFilter("ResetCredentialsFlow"))
 
 	li := resource.NewGenericLateInitializer(opts...)
 	return li.LateInitialize(&tr.Spec.ForProvider, params)
