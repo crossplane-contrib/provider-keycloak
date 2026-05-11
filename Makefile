@@ -294,10 +294,10 @@ schema-diff: $(TERRAFORM)
 	echo ""; \
 	echo "Comparing schema v$(OLD_PROVIDER_VERSION) -> v$(TERRAFORM_PROVIDER_VERSION):"; \
 	echo ""; \
-	./scripts/version_diff.py config/generated.lst $(WORK_DIR)/schema-diff/old-schema.json config/schema.json; exit 0
+	./scripts/version_diff.py config/generated.lst $(WORK_DIR)/schema-diff/old-schema.json config/schema.json || true
 	@$(OK) Comparing provider schema $(OLD_PROVIDER_VERSION) vs $(TERRAFORM_PROVIDER_VERSION)
 
-.PHONY: cobertura submodules fallthrough run crds.clean schema-diff
+.PHONY: cobertura submodules fallthrough run crds.clean schema-diff schema-version-diff
 
 # ====================================================================================
 # Special Targets
