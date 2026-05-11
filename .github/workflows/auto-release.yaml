@@ -44,6 +44,34 @@ jobs:
           fi
           echo "skip=false" >> "$GITHUB_OUTPUT"
 
+      - name: Verify CI passed on HEAD
+        if: steps.changes.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          HEAD_SHA=$(git rev-parse HEAD)
+          echo "Checking CI status for commit $HEAD_SHA..."
+
+          # Get the most recent CI workflow run conclusion for this commit
+          LATEST_CONCLUSION=$(gh run list \
+            --workflow=ci.yml \
+            --commit="$HEAD_SHA" \
+            --json conclusion,status \
+            --jq '.[0].conclusion // .[0].status')
+
+          if [[ -z "$LATEST_CONCLUSION" ]]; then
+            echo "ERROR: No CI workflow run found for HEAD ($HEAD_SHA). Aborting release."
+            exit 1
+          fi
+
+          if [[ "$LATEST_CONCLUSION" != "success" ]]; then
+            echo "ERROR: Latest CI workflow run on HEAD ($HEAD_SHA) has conclusion '$LATEST_CONCLUSION'. Aborting release."
+            echo "Ensure all CI checks (including e2e tests) pass before releasing."
+            exit 1
+          fi
+
+          echo "CI passed on HEAD ($HEAD_SHA) — proceeding with release."
+
       - name: Determine version
         id: version
         if: steps.changes.outputs.skip != 'true'
