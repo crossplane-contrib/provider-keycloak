@@ -268,7 +268,36 @@ schema-version-diff:
 	./scripts/version_diff.py config/generated.lst "$(WORK_DIR)/schema.json.$${PREV_PROVIDER_VERSION}" config/schema.json
 	@$(OK) Checking for native state schema version changes
 
-.PHONY: cobertura submodules fallthrough run crds.clean
+# Compare the current schema.json against a schema from a specific provider version.
+# Downloads the old provider binary, generates its schema, and diffs the two.
+# Usage:
+#   make schema-diff OLD_PROVIDER_VERSION=5.6.0
+schema-diff: $(TERRAFORM)
+	@if [ -z "$(OLD_PROVIDER_VERSION)" ]; then \
+		echo "Error: OLD_PROVIDER_VERSION is required. Usage: make schema-diff OLD_PROVIDER_VERSION=5.6.0"; \
+		exit 1; \
+	fi
+	@$(INFO) Comparing provider schema $(OLD_PROVIDER_VERSION) vs $(TERRAFORM_PROVIDER_VERSION)
+	@DIFF_OS=$$(uname -s | tr '[:upper:]' '[:lower:]'); \
+	DIFF_ARCH=$$(uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/'); \
+	DIFF_PLATFORM="$${DIFF_OS}_$${DIFF_ARCH}"; \
+	mkdir -p $(WORK_DIR)/schema-diff/old/$(TERRAFORM_FILE_MIRROR_REPO)/$(TERRAFORM_PROVIDER_SOURCE)/$(OLD_PROVIDER_VERSION)/$${DIFF_PLATFORM}; \
+	curl -fsSL $(TERRAFORM_PROVIDER_REPO)/releases/download/v$(OLD_PROVIDER_VERSION)/$(TERRAFORM_PROVIDER_DOWNLOAD_NAME)_$(OLD_PROVIDER_VERSION)_$${DIFF_PLATFORM}.zip \
+		-o $(WORK_DIR)/schema-diff/old/terraform-provider.zip; \
+	unzip -o -qq $(WORK_DIR)/schema-diff/old/terraform-provider.zip \
+		-d $(WORK_DIR)/schema-diff/old/$(TERRAFORM_FILE_MIRROR_REPO)/$(TERRAFORM_PROVIDER_SOURCE)/$(OLD_PROVIDER_VERSION)/$${DIFF_PLATFORM}/; \
+	rm -f $(WORK_DIR)/schema-diff/old/terraform-provider.zip; \
+	echo '{"terraform":[{"required_providers":[{"provider":{"source":"'"$(TERRAFORM_PROVIDER_SOURCE)"'","version":"'"$(OLD_PROVIDER_VERSION)"'"}}],"required_version":"'"$(TERRAFORM_VERSION)"'"}]}' > $(WORK_DIR)/schema-diff/old/main.tf.json; \
+	echo 'provider_installation { filesystem_mirror { path = "$(WORK_DIR)/schema-diff/old/$(TERRAFORM_FILE_MIRROR)" include = ["*/*/*"] } }' > $(WORK_DIR)/schema-diff/old/config.tfrc; \
+	TF_CLI_CONFIG_FILE=$(WORK_DIR)/schema-diff/old/config.tfrc $(TERRAFORM) -chdir=$(WORK_DIR)/schema-diff/old init -no-color > $(WORK_DIR)/schema-diff/old/terraform-logs.txt 2>&1; \
+	TF_CLI_CONFIG_FILE=$(WORK_DIR)/schema-diff/old/config.tfrc $(TERRAFORM) -chdir=$(WORK_DIR)/schema-diff/old providers schema -json=true > $(WORK_DIR)/schema-diff/old-schema.json 2>> $(WORK_DIR)/schema-diff/old/terraform-logs.txt; \
+	echo ""; \
+	echo "Comparing schema v$(OLD_PROVIDER_VERSION) -> v$(TERRAFORM_PROVIDER_VERSION):"; \
+	echo ""; \
+	./scripts/version_diff.py config/generated.lst $(WORK_DIR)/schema-diff/old-schema.json config/schema.json; exit 0
+	@$(OK) Comparing provider schema $(OLD_PROVIDER_VERSION) vs $(TERRAFORM_PROVIDER_VERSION)
+
+.PHONY: cobertura submodules fallthrough run crds.clean schema-diff
 
 # ====================================================================================
 # Special Targets
@@ -278,6 +307,8 @@ Crossplane Targets:
     cobertura             Generate a coverage report for cobertura applying exclusions on generated files.
     submodules            Update the submodules, such as the common build scripts.
     run                   Run crossplane locally, out-of-cluster. Useful for development.
+    schema-diff           Compare provider schema between versions. Usage: make schema-diff OLD_PROVIDER_VERSION=5.6.0
+    schema-version-diff   Check for schema version changes against the base branch (CI).
 
 endef
 # The reason CROSSPLANE_MAKE_HELP is used instead of CROSSPLANE_HELP is because the crossplane
