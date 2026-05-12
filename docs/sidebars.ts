@@ -34,6 +34,7 @@ const sidebars: SidebarsConfig = {
         'guides/kubernetes-oidc',
         'guides/ldap-integration',
         'guides/external-secrets-operator',
+        'guides/end-to-end-oidc-kind',
       ],
     },
     {
