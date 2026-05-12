@@ -181,6 +181,7 @@ spec:
 - [Kubernetes OIDC Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/kubernetes-oidc)
 - [LDAP Integration Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/ldap-integration)
 - [External Secrets Operator Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/external-secrets-operator)
+- [End-to-End OIDC on kind](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/end-to-end-oidc-kind)
 - [ProviderConfig Reference](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/provider-config)
 - [Credentials Reference](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/credentials)
 - [Troubleshooting](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/troubleshooting)

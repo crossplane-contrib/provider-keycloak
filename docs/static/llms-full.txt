@@ -20,6 +20,7 @@
 - [Kubernetes OIDC](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/kubernetes-oidc): K8s API server OIDC auth
 - [LDAP Integration](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/ldap-integration): LDAP/AD setup guide
 - [External Secrets Operator](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/external-secrets-operator): ESO + Helm pattern for client secret management
+- [End-to-End OIDC on kind](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/end-to-end-oidc-kind): Full walkthrough — kind cluster, Keycloak, Traefik OIDC, nginx, role-based access
 - [ProviderConfig](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/provider-config): ProviderConfig reference
 - [Credentials](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/credentials): Credential fields reference
 - [Troubleshooting](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/troubleshooting): Common issues and fixes
