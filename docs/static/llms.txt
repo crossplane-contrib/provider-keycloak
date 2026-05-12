@@ -180,6 +180,7 @@ spec:
 - [SSO with ArgoCD Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/sso-with-argocd)
 - [Kubernetes OIDC Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/kubernetes-oidc)
 - [LDAP Integration Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/ldap-integration)
+- [External Secrets Operator Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/external-secrets-operator)
 - [ProviderConfig Reference](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/provider-config)
 - [Credentials Reference](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/credentials)
 - [Troubleshooting](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/troubleshooting)
