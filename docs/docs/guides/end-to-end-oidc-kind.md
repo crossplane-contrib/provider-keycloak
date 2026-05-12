@@ -394,14 +394,44 @@ spec:
     name: keycloak-provider-config
 ```
 
+Assign users to groups declaratively using the `Memberships` CRD:
+
+```yaml
+# memberships.yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: allowed-group-members
+spec:
+  forProvider:
+    realmId: demo
+    groupIdRef:
+      name: allowed-group
+    members:
+      - alice
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: forbidden-group-members
+spec:
+  forProvider:
+    realmId: demo
+    groupIdRef:
+      name: forbidden-group
+    members:
+      - bob
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
 ```bash
 kubectl apply -f users.yaml
 kubectl apply -f groups.yaml
+kubectl apply -f memberships.yaml
 ```
-
-:::tip
-After users are created in Keycloak, add Alice to the **Allowed Users** group and Bob to the **Forbidden Users** group via the Keycloak Admin UI at `http://localhost:9090/admin` → demo realm → Users → select user → Groups → Join Group. You can also manage group membership with `kubectl` if [group membership CRDs](../resources/groups.md) are available.
-:::
 
 ## Step 8: Deploy nginx (Protected Backend)
 
