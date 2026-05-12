@@ -13,3 +13,8 @@ dev/e2e-broken
 
 # ignore compiled binaries
 /provider
+
+# docs build artifacts
+docs/node_modules/
+docs/build/
+docs/.docusaurus/
