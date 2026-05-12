@@ -33,6 +33,7 @@ const sidebars: SidebarsConfig = {
         'guides/sso-with-argocd',
         'guides/kubernetes-oidc',
         'guides/ldap-integration',
+        'guides/external-secrets-operator',
       ],
     },
     {
