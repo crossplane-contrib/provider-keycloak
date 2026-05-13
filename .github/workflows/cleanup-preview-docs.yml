@@ -3,8 +3,6 @@ name: Clean Up Docs PR Preview
 on:
   pull_request:
     types: [closed]
-    paths:
-      - 'docs/**'
 
 permissions:
   contents: write
