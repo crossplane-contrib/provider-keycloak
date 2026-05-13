@@ -86,6 +86,11 @@ spec:
     name: keycloak-provider-config
 ```
 
+## Related Resources
+
+- **[Realm Settings](./realm-settings.md)** — Manage `RealmEvents`, `RequiredAction`, `UserProfile`, `KeystoreRsa`, `DefaultClientScopes`, `OptionalClientScopes`, `ClientPolicyProfile`, and `ClientPolicyProfilePolicy`
+- **[Default Configuration](./default-config.md)** — Configure default groups and roles for new users
+
 ## Key Fields
 
 | Field | Type | Description |
