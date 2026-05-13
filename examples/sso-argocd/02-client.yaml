@@ -1,0 +1,26 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: argocd-client
+spec:
+  forProvider:
+    name: argocd
+    clientId: argocd
+    realmId: platform
+    accessType: CONFIDENTIAL
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: false
+    rootUrl: "https://argocd.example.com"
+    adminUrl: "https://argocd.example.com"
+    baseUrl: "https://argocd.example.com"
+    webOrigins:
+      - "https://argocd.example.com"
+    validRedirectUris:
+      - "https://argocd.example.com/auth/callback"
+    validPostLogoutRedirectUris:
+      - "https://argocd.example.com"
+  writeConnectionSecretToRef:
+    name: argocd-keycloak-client-secret
+    namespace: crossplane-system
+  providerConfigRef:
+    name: keycloak-provider-config

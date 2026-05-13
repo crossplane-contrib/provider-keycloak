@@ -1,0 +1,20 @@
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: argocd-groups-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: argocd-client
+    realmId: platform
+    protocol: openid-connect
+    protocolMapper: oidc-usermodel-realm-role-mapper
+    name: groups
+    config:
+      "claim.name": "groups"
+      "multivalued": "true"
+      "id.token.claim": "true"
+      "access.token.claim": "true"
+      "userinfo.token.claim": "true"
+  providerConfigRef:
+    name: keycloak-provider-config
