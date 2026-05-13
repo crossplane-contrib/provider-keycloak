@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkprovider_keycloak_docs=self.webpackChunkprovider_keycloak_docs||[]).push([["668"],{6569(e,r,s){s.r(r),s.d(r,{default:()=>l});var c=s(4848);s(6540);var a=s(4164),o=s(4308),d=s(8287),u=s(2831),k=s(816);function l(e){return(0,c.jsx)(o.e3,{className:(0,a.A)(d.G.wrapper.docsPages),children:(0,c.jsx)(k.A,{children:(0,u.v)(e.route.routes)})})}}}]);

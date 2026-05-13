@@ -1,0 +1,187 @@
+# Provider Keycloak
+
+> Crossplane provider for declarative Keycloak management via Kubernetes custom resources.
+
+provider-keycloak is a Crossplane provider that lets you manage Keycloak resources (realms, clients, users, roles, groups, protocol mappers, identity providers, user federation) as Kubernetes custom resources. It continuously reconciles desired state with actual Keycloak state.
+
+## Project Information
+
+- Repository: https://github.com/crossplane-contrib/provider-keycloak
+- Documentation: https://crossplane-contrib.github.io/provider-keycloak/
+- Marketplace: https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak
+- Built with: Upjet (https://github.com/crossplane/upjet) + Keycloak Terraform Provider
+
+## Core Concepts
+
+- **ProviderConfig**: Connection details for a Keycloak instance (URL, credentials)
+- **Managed Resources**: Kubernetes CRDs that map 1:1 to Keycloak objects
+- **Reconciliation**: Controller continuously ensures Keycloak matches desired state
+- **Drift Detection**: Changes made outside the provider are detected and corrected
+
+## API Groups
+
+- `keycloak.crossplane.io` - ProviderConfig
+- `realm.keycloak.crossplane.io` - Realms
+- `openidclient.keycloak.crossplane.io` - OpenID Connect Clients
+- `user.keycloak.crossplane.io` - Users
+- `role.keycloak.crossplane.io` - Roles
+- `group.keycloak.crossplane.io` - Groups, Memberships, Roles assignments
+- `client.keycloak.crossplane.io` - Protocol Mappers
+- `oidc.keycloak.crossplane.io` - OIDC Identity Providers
+- `saml.keycloak.crossplane.io` - SAML Identity Providers / Clients
+- `ldap.keycloak.crossplane.io` - LDAP User Federation
+
+## Installation
+
+```yaml
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-keycloak
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:<version>
+```
+
+## Configuration
+
+Create a Secret with Keycloak credentials and a ProviderConfig referencing it:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-credentials
+  namespace: crossplane-system
+type: Opaque
+stringData:
+  credentials: |
+    {
+      "client_id": "admin-cli",
+      "username": "admin",
+      "password": "admin",
+      "url": "https://keycloak.example.com",
+      "base_path": "/auth",
+      "realm": "master"
+    }
+---
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-provider-config
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-credentials
+      key: credentials
+      namespace: crossplane-system
+```
+
+## Credential Fields
+
+- url (required): Keycloak server URL
+- client_id (required): OAuth2 client ID
+- username: Admin username (for password grant)
+- password: Admin password (for password grant)
+- client_secret: Client secret (for client credentials grant)
+- realm: Authentication realm (defaults to "master")
+- base_path: URL path prefix (e.g., "/auth" for pre-v17 Keycloak)
+- root_ca_certificate: Custom CA certificate for TLS
+
+## Resource Examples
+
+### Realm
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: my-realm
+spec:
+  forProvider:
+    realm: "my-realm"
+    enabled: true
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+### Client (OIDC)
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: my-app
+spec:
+  forProvider:
+    clientId: my-app
+    realmId: my-realm
+    accessType: public
+    standardFlowEnabled: true
+    validRedirectUris:
+      - "http://localhost:3000/callback"
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+### User
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: demo-user
+spec:
+  forProvider:
+    realmId: "my-realm"
+    username: "demo"
+    email: "demo@example.com"
+    enabled: true
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+### Role
+```yaml
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: admin-role
+spec:
+  forProvider:
+    realmId: "my-realm"
+    name: "admin"
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+### Group
+```yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: developers
+spec:
+  forProvider:
+    name: "Developers"
+    realmId: "my-realm"
+```
+
+## Documentation Pages
+
+- [Installation](https://crossplane-contrib.github.io/provider-keycloak/docs/getting-started/installation)
+- [Configuration](https://crossplane-contrib.github.io/provider-keycloak/docs/getting-started/configuration)
+- [First Realm](https://crossplane-contrib.github.io/provider-keycloak/docs/getting-started/first-realm)
+- [Realms](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/realms)
+- [Clients](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/clients)
+- [Users](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/users)
+- [Roles](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/roles)
+- [Groups](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/groups)
+- [Protocol Mappers](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/protocol-mappers)
+- [Identity Providers](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/identity-providers)
+- [User Federation](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/user-federation)
+- [SSO with ArgoCD Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/sso-with-argocd)
+- [Kubernetes OIDC Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/kubernetes-oidc)
+- [LDAP Integration Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/ldap-integration)
+- [External Secrets Operator Guide](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/external-secrets-operator)
+- [End-to-End OIDC on kind](https://crossplane-contrib.github.io/provider-keycloak/docs/guides/end-to-end-oidc-kind)
+- [ProviderConfig Reference](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/provider-config)
+- [Credentials Reference](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/credentials)
+- [Troubleshooting](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/troubleshooting)
