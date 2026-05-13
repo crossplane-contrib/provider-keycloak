@@ -189,6 +189,10 @@ spec:
 
 ## Step 6: Create Test Users and Assign to Groups
 
+:::caution
+The passwords below are for demonstration only. In production, integrate with an existing identity provider (LDAP, SAML, social login) or use Keycloak's self-registration flow instead of static passwords.
+:::
+
 ```yaml title="examples/sso-argocd/06-users.yaml"
 apiVersion: user.keycloak.crossplane.io/v1alpha1
 kind: User
