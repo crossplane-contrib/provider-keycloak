@@ -138,6 +138,13 @@ spec:
 | `pkceCodeChallengeMethod` | string | PKCE method (`S256` recommended) |
 | `authorization` | object | Fine-grained authorization settings |
 
+## Related Resources
+
+- **[OpenID Client Scopes](./openid-client-scopes.md)** — Manage `ClientScope`, `ClientDefaultScopes`, and `ClientOptionalScopes`
+- **[Client Authorization](./client-authorization.md)** — Fine-grained authorization resources, permissions, and policies
+- **[Service Accounts](./service-accounts.md)** — Assign realm and client roles to service accounts
+- **[SAML Clients](./saml-clients.md)** — SAML protocol clients and scopes
+
 ## Deletion Policy
 
 Control what happens when you delete the Kubernetes resource:

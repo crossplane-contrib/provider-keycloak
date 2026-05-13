@@ -83,6 +83,60 @@ spec:
     name: keycloak-provider-config
 ```
 
+## Group Roles
+
+Assign roles to a group so all members inherit them:
+
+```yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: dev-group-roles
+spec:
+  forProvider:
+    realmId: "my-realm"
+    groupIdRef:
+      name: developers
+    exhaustive: true
+    roleIds:
+      - "role-uuid-1"
+      - "role-uuid-2"
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+## Group Permissions
+
+Enable fine-grained permissions on a group:
+
+```yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  name: dev-group-permissions
+spec:
+  forProvider:
+    realmId: "my-realm"
+    groupIdRef:
+      name: developers
+    viewScope:
+      - policies:
+          - "admin-policy-id"
+        description: "View group"
+        decisionStrategy: "UNANIMOUS"
+    manageScope:
+      - policies:
+          - "admin-policy-id"
+        description: "Manage group"
+        decisionStrategy: "UNANIMOUS"
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+## Related Resources
+
+- **[Default Configuration](./default-config.md)** — Configure default groups for new users
+
 ## Key Fields
 
 | Field | Type | Description |
