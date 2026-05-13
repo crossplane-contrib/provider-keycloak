@@ -12,7 +12,7 @@ const config: Config = {
   },
 
   url: 'https://crossplane-contrib.github.io',
-  baseUrl: '/provider-keycloak/',
+  baseUrl: process.env.DOCUSAURUS_BASE_URL || '/provider-keycloak/',
 
   organizationName: 'crossplane-contrib',
   projectName: 'provider-keycloak',
