@@ -43,6 +43,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/build
           destination_dir: pr-preview/pr-${{ github.event.pull_request.number }}
+          keep_files: true
 
       - name: Post or update preview comment
         uses: actions/github-script@v7
