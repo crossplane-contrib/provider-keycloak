@@ -10,8 +10,7 @@ spec:
         Url: "http://host.docker.internal:9090/realms/demo"
       Client:
         ID: "traefik-oidc"
-        # Secret is injected via the setup script from the Crossplane connection secret
-        Secret: "${CLIENT_SECRET}"
+        Secret: "${CLIENT_SECRET}"  # replaced by setup.sh or set manually
       CallbackUri: /oauth2/callback
       Scopes:
         - openid
