@@ -1,0 +1,23 @@
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: allowed-role
+spec:
+  forProvider:
+    realmId: demo
+    name: allowed-role
+    description: "Users with this role may access the protected app"
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: forbidden-role
+spec:
+  forProvider:
+    realmId: demo
+    name: forbidden-role
+    description: "Users with only this role are denied access"
+  providerConfigRef:
+    name: keycloak-provider-config
