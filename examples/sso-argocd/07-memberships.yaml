@@ -1,0 +1,27 @@
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: platform-admin-members
+spec:
+  forProvider:
+    realmId: "platform"
+    groupIdRef:
+      name: platform-admins
+    members:
+      - "admin-user"
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: platform-viewer-members
+spec:
+  forProvider:
+    realmId: "platform"
+    groupIdRef:
+      name: platform-viewers
+    members:
+      - "viewer-user"
+  providerConfigRef:
+    name: keycloak-provider-config
