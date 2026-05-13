@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 title: "End-to-End: OIDC on kind with Traefik"
-description: Set up a kind cluster with Keycloak, Traefik OIDC middleware, and role-based access to a protected nginx app
+description: Set up a kind cluster with Keycloak, Traefik OIDC plugin, and role-based access to a protected nginx app
 ---
 
 # End-to-End: OIDC on kind with Traefik
@@ -10,7 +10,7 @@ This guide walks through a complete, runnable setup on a local [kind](https://ki
 
 1. Deploy **Keycloak** and **Crossplane** with provider-keycloak
 2. Create a realm, confidential client, and two roles (`allowed-role` / `forbidden-role`)
-3. Install **Traefik** with the [OIDC plugin](https://plugins.traefik.io/plugins/6645e1e08f498a0940468951/oidc-authentication) and a **ForwardAuth** middleware
+3. Install **Traefik** with the [`traefik-oidc-auth`](https://github.com/sevensolutions/traefik-oidc-auth) plugin
 4. Protect an **nginx** deployment so only users with `allowed-role` can access it
 
 ```
@@ -19,10 +19,10 @@ This guide walks through a complete, runnable setup on a local [kind](https://ki
                           │   (OIDC IdP) │
                           └──────┬───────┘
                                  │ id_token
-  ┌────────┐    HTTP    ┌────────▼───────┐    forward     ┌───────────┐
-  │  User  │───────────►│    Traefik     │───────────────►│   nginx   │
-  └────────┘            │ (OIDC plugin)  │                │ (backend) │
-                        └────────────────┘                └───────────┘
+  ┌────────┐    HTTP    ┌────────▼───────┐    proxy      ┌───────────┐
+  │  User  │───────────►│    Traefik     │──────────────►│   nginx   │
+  └────────┘            │ (OIDC plugin)  │               │ (backend) │
+                        └────────────────┘               └───────────┘
                                  ▲
                           manages│
                         ┌────────┴───────┐
@@ -30,6 +30,10 @@ This guide walks through a complete, runnable setup on a local [kind](https://ki
                         │  keycloak      │
                         └────────────────┘
 ```
+
+:::tip Quick start
+All manifests and an automated setup script are available in [`examples/oidc-kind-traefik/`](https://github.com/crossplane-contrib/provider-keycloak/tree/main/examples/oidc-kind-traefik). Run `./setup.sh` to deploy everything automatically.
+:::
 
 ## Prerequisites
 
@@ -42,8 +46,7 @@ This guide walks through a complete, runnable setup on a local [kind](https://ki
 
 Create a kind cluster with extra port mappings so Traefik and Keycloak are reachable from the host:
 
-```yaml
-# kind-config.yaml
+```yaml title="examples/oidc-kind-traefik/kind-config.yaml"
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -65,8 +68,7 @@ kind create cluster --name oidc-demo --config kind-config.yaml
 
 Install Keycloak with a NodePort so it is accessible from the host:
 
-```yaml
-# keycloak.yaml
+```yaml title="examples/oidc-kind-traefik/keycloak.yaml"
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -98,8 +100,18 @@ spec:
               value: admin
             - name: KC_HTTP_PORT
               value: "8080"
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
+            - name: KC_PROXY
+              value: "edge"
           ports:
             - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /realms/master
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
@@ -118,7 +130,7 @@ spec:
 
 ```bash
 kubectl apply -f keycloak.yaml
-kubectl -n keycloak rollout status deployment/keycloak --timeout=120s
+kubectl -n keycloak rollout status deployment/keycloak --timeout=180s
 ```
 
 Keycloak is now reachable at `http://localhost:9090`.
@@ -134,8 +146,7 @@ helm install crossplane crossplane/crossplane \
 
 Install provider-keycloak:
 
-```yaml
-# provider.yaml
+```yaml title="examples/oidc-kind-traefik/provider.yaml"
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
@@ -147,15 +158,14 @@ spec:
 ```bash
 kubectl apply -f provider.yaml
 kubectl wait provider.pkg provider-keycloak \
-  --for=condition=Healthy --timeout=120s
+  --for=condition=Healthy --timeout=180s
 ```
 
 ## Step 4: Configure ProviderConfig
 
 Point provider-keycloak at the in-cluster Keycloak instance:
 
-```yaml
-# provider-config.yaml
+```yaml title="examples/oidc-kind-traefik/provider-config.yaml"
 apiVersion: v1
 kind: Secret
 metadata:
@@ -191,8 +201,7 @@ kubectl apply -f provider-config.yaml
 
 ## Step 5: Create the Realm and Client
 
-```yaml
-# realm-client.yaml
+```yaml title="examples/oidc-kind-traefik/realm-client.yaml"
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
@@ -224,7 +233,7 @@ spec:
     webOrigins:
       - "http://localhost:8080"
   writeConnectionSecretToRef:
-    name: traefik-oidc-conn
+    name: traefik-oidc-client-secret
     namespace: crossplane-system
   providerConfigRef:
     name: keycloak-provider-config
@@ -233,17 +242,16 @@ spec:
 ```bash
 kubectl apply -f realm-client.yaml
 kubectl wait realm.realm.keycloak.crossplane.io/demo \
-  --for=condition=Ready --timeout=60s
+  --for=condition=Ready --timeout=120s
 kubectl wait client.openidclient.keycloak.crossplane.io/traefik-oidc \
-  --for=condition=Ready --timeout=60s
+  --for=condition=Ready --timeout=120s
 ```
 
 ## Step 6: Create Roles and a Role Mapper
 
 Create two realm roles — `allowed-role` grants access, `forbidden-role` does not:
 
-```yaml
-# roles.yaml
+```yaml title="examples/oidc-kind-traefik/roles.yaml"
 apiVersion: role.keycloak.crossplane.io/v1alpha1
 kind: Role
 metadata:
@@ -269,12 +277,11 @@ spec:
     name: keycloak-provider-config
 ```
 
-Map realm roles into the `realm_access.roles` claim (included by default) and additionally into a top-level `roles` claim for easier middleware parsing:
+Map realm roles into a top-level `roles` claim in the JWT:
 
-```yaml
-# role-mapper.yaml
-apiVersion: client.keycloak.crossplane.io/v1alpha1
-kind: ProtocolMapper
+```yaml title="examples/oidc-kind-traefik/role-mapper.yaml"
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientProtocolMapper
 metadata:
   name: traefik-roles-mapper
 spec:
@@ -304,8 +311,7 @@ kubectl apply -f role-mapper.yaml
 
 Create two users — one with `allowed-role`, one with `forbidden-role`:
 
-```yaml
-# users.yaml
+```yaml title="examples/oidc-kind-traefik/users.yaml"
 apiVersion: user.keycloak.crossplane.io/v1alpha1
 kind: User
 metadata:
@@ -341,15 +347,14 @@ spec:
 
 Assign roles through groups:
 
-```yaml
-# groups.yaml
+```yaml title="examples/oidc-kind-traefik/groups.yaml"
 apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Group
 metadata:
   name: allowed-group
 spec:
   forProvider:
-    name: "Allowed Users"
+    name: allowed-group
     realmId: demo
   providerConfigRef:
     name: keycloak-provider-config
@@ -360,7 +365,7 @@ metadata:
   name: forbidden-group
 spec:
   forProvider:
-    name: "Forbidden Users"
+    name: forbidden-group
     realmId: demo
   providerConfigRef:
     name: keycloak-provider-config
@@ -396,8 +401,7 @@ spec:
 
 Assign users to groups declaratively using the `Memberships` CRD:
 
-```yaml
-# memberships.yaml
+```yaml title="examples/oidc-kind-traefik/memberships.yaml"
 apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Memberships
 metadata:
@@ -435,8 +439,7 @@ kubectl apply -f memberships.yaml
 
 ## Step 8: Deploy nginx (Protected Backend)
 
-```yaml
-# nginx.yaml
+```yaml title="examples/oidc-kind-traefik/nginx.yaml"
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -480,20 +483,31 @@ spec:
 kubectl apply -f nginx.yaml
 ```
 
-## Step 9: Install Traefik with OIDC ForwardAuth
+## Step 9: Install Traefik with OIDC Plugin
 
-We use Traefik with a lightweight **ForwardAuth** service ([thomseddon/traefik-forward-auth](https://github.com/thomseddon/traefik-forward-auth)) that verifies OIDC tokens and checks roles.
+The [`traefik-oidc-auth`](https://github.com/sevensolutions/traefik-oidc-auth) plugin handles OIDC authentication **and** claim-based authorization natively — no ForwardAuth sidecar needed.
 
-First, retrieve the client secret generated by Keycloak:
+Enable the plugin in the Traefik Helm values:
 
-```bash
-CLIENT_SECRET=$(kubectl get secret traefik-oidc-conn \
-  -n crossplane-system \
-  -o jsonpath='{.data.attribute\.client_secret}' | base64 -d)
-echo "Client secret: $CLIENT_SECRET"
+```yaml title="examples/oidc-kind-traefik/traefik-values.yaml"
+experimental:
+  plugins:
+    traefik-oidc-auth:
+      moduleName: github.com/sevensolutions/traefik-oidc-auth
+      version: v0.19.0
+
+service:
+  type: NodePort
+
+ports:
+  web:
+    nodePort: 30080
+
+providers:
+  kubernetesCRD:
+    enabled: true
+    allowCrossNamespace: true
 ```
-
-Install Traefik via Helm:
 
 ```bash
 helm repo add traefik https://traefik.github.io/charts
@@ -501,113 +515,47 @@ helm repo update
 
 helm install traefik traefik/traefik \
   --namespace traefik --create-namespace \
-  --set ports.web.nodePort=30080 \
-  --set service.type=NodePort \
+  --values traefik-values.yaml \
   --wait
 ```
 
-Deploy the ForwardAuth service that handles OIDC authentication:
+## Step 10: Configure OIDC Middleware and IngressRoute
 
-```yaml
-# forward-auth.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: traefik
-  labels:
-    name: traefik
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: oidc-forward-auth
-  namespace: traefik
-type: Opaque
-stringData:
-  # Replace <CLIENT_SECRET> with the value from the command above
-  CLIENT_SECRET: "<CLIENT_SECRET>"
-  SECRET: "a-random-signing-secret-change-me"
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: traefik-forward-auth
-  namespace: traefik
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: traefik-forward-auth
-  template:
-    metadata:
-      labels:
-        app: traefik-forward-auth
-    spec:
-      containers:
-        - name: forward-auth
-          image: thomseddon/traefik-forward-auth:2
-          env:
-            - name: DEFAULT_PROVIDER
-              value: oidc
-            - name: PROVIDERS_OIDC_ISSUER_URL
-              value: "http://host.docker.internal:9090/realms/demo"
-            - name: PROVIDERS_OIDC_CLIENT_ID
-              value: "traefik-oidc"
-            - name: PROVIDERS_OIDC_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: oidc-forward-auth
-                  key: CLIENT_SECRET
-            - name: SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: oidc-forward-auth
-                  key: SECRET
-            - name: AUTH_HOST
-              value: "localhost:8080"
-            - name: COOKIE_DOMAIN
-              value: "localhost"
-            - name: INSECURE_COOKIE
-              value: "true"
-            - name: LOG_LEVEL
-              value: debug
-          ports:
-            - containerPort: 4181
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: traefik-forward-auth
-  namespace: traefik
-spec:
-  selector:
-    app: traefik-forward-auth
-  ports:
-    - port: 4181
-      targetPort: 4181
-```
+First, retrieve the client secret generated by provider-keycloak:
 
 ```bash
-kubectl apply -f forward-auth.yaml
+CLIENT_SECRET=$(kubectl get secret traefik-oidc-client-secret \
+  -n crossplane-system \
+  -o jsonpath='{.data.attribute\.client_secret}' | base64 -d)
+echo "Client secret: $CLIENT_SECRET"
 ```
 
-## Step 10: Configure Traefik Middleware and IngressRoute
+Create the OIDC middleware and IngressRoute. The `Authorization.AssertClaims` block enforces that only tokens with `allowed-role` in the `roles` claim are granted access:
 
-Create the ForwardAuth middleware and an IngressRoute that protects nginx:
-
-```yaml
-# middleware-ingress.yaml
+```yaml title="examples/oidc-kind-traefik/middleware-ingress.yaml"
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: oidc-auth
   namespace: demo-app
 spec:
-  forwardAuth:
-    address: http://traefik-forward-auth.traefik.svc.cluster.local:4181
-    trustForwardHeader: true
-    authResponseHeaders:
-      - X-Forwarded-User
+  plugin:
+    traefik-oidc-auth:
+      Provider:
+        Url: "http://host.docker.internal:9090/realms/demo"
+      Client:
+        ID: "traefik-oidc"
+        Secret: "<CLIENT_SECRET>"   # replaced by setup.sh or manually
+      CallbackUri: /oauth2/callback
+      Scopes:
+        - openid
+        - profile
+        - email
+      Authorization:
+        AssertClaims:
+          - Name: "roles"
+            AnyOf:
+              - "allowed-role"
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -627,9 +575,15 @@ spec:
           port: 80
 ```
 
+Apply the manifest, substituting the actual client secret:
+
 ```bash
-kubectl apply -f middleware-ingress.yaml
+sed "s/\${CLIENT_SECRET}/${CLIENT_SECRET}/" middleware-ingress.yaml | kubectl apply -f -
 ```
+
+:::note
+The `setup.sh` script automates this substitution. If running manually, replace `<CLIENT_SECRET>` with the value from the previous command.
+:::
 
 ## Step 11: Test It
 
@@ -639,24 +593,30 @@ Open `http://localhost:8080` in your browser. You will be redirected to Keycloak
 
 1. Log in with username `alice`, password `password`
 2. Keycloak issues a token containing the `allowed-role` role
-3. The ForwardAuth middleware validates the token and passes the request through
-4. ✅ You see the default **nginx welcome page**
+3. The OIDC plugin validates the token and checks the `roles` claim for `allowed-role`
+4. ✅ The claim check passes — you see the default **nginx welcome page**
 
 ### Bob (forbidden)
 
 1. Open a private/incognito window and navigate to `http://localhost:8080`
 2. Log in with username `bob`, password `password`
 3. The token contains only `forbidden-role`
-4. ❌ Access is determined by ForwardAuth configuration — you can configure it to deny based on role claim checks
+4. ❌ The OIDC plugin rejects the request because `allowed-role` is not present in the `roles` claim
 
-:::info Role-based denial
-The base `traefik-forward-auth` only handles authentication (valid token = access). To enforce **authorization** (role checking), you can:
+:::info How the authorization works
+The `traefik-oidc-auth` plugin's `Authorization.AssertClaims` feature inspects the JWT claims directly. The configuration:
 
-1. **Use a policy engine**: Deploy [Open Policy Agent (OPA)](https://www.openpolicyagent.org/) or [ORY Oathkeeper](https://www.ory.sh/oathkeeper/) to inspect the `roles` claim and deny if `allowed-role` is absent.
-2. **Custom ForwardAuth logic**: Fork or extend the ForwardAuth service to check `roles` in the JWT.
-3. **Use Traefik Enterprise**: Traefik's commercial OIDC middleware supports claim-based authorization natively.
+```yaml
+Authorization:
+  AssertClaims:
+    - Name: "roles"
+      AnyOf:
+        - "allowed-role"
+```
 
-For a quick test, the roles are visible in the token payload (decode it at [jwt.io](https://jwt.io)):
+requires that the `roles` array in the token contains at least `allowed-role`. This is a built-in feature of the plugin — no external policy engine or ForwardAuth sidecar is needed.
+
+You can verify the token contents at [jwt.io](https://jwt.io):
 
 ```json
 {
@@ -676,8 +636,6 @@ kind delete cluster --name oidc-demo
 
 ## Summary
 
-This guide demonstrated:
-
 | Step | What |
 |------|------|
 | 1-2 | kind cluster + Keycloak deployment |
@@ -685,7 +643,7 @@ This guide demonstrated:
 | 5 | Realm and confidential client creation via CRDs |
 | 6-7 | Two roles (`allowed-role`, `forbidden-role`), role mapper, test users, and group assignments |
 | 8 | nginx backend deployment |
-| 9-10 | Traefik + ForwardAuth OIDC middleware protecting nginx |
-| 11 | Login tests showing role-based access differences |
+| 9-10 | Traefik with OIDC plugin middleware protecting nginx (claim-based authorization) |
+| 11 | Login tests — Alice (allowed) vs Bob (denied) |
 
 All Keycloak configuration is managed declaratively through Kubernetes CRDs — changes in Git are reconciled automatically.

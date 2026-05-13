@@ -1,0 +1,31 @@
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: alice
+spec:
+  forProvider:
+    realmId: demo
+    username: alice
+    email: alice@example.com
+    enabled: true
+    initialPassword:
+      - value: password
+        temporary: false
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: bob
+spec:
+  forProvider:
+    realmId: demo
+    username: bob
+    email: bob@example.com
+    enabled: true
+    initialPassword:
+      - value: password
+        temporary: false
+  providerConfigRef:
+    name: keycloak-provider-config
