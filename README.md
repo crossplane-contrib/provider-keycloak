@@ -50,6 +50,44 @@ spec:
                 - --enable-external-secret-stores
 ```
 
+#### Provider flags
+
+The provider supports the following command-line flags, which can be set via `DeploymentRuntimeConfig`:
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--max-reconcile-rate` | `10` | The global maximum rate per second at which resources may be checked for drift from the desired state. |
+| `--max-concurrent-reconciles` | `1` | The maximum number of concurrent reconcile operations per controller. |
+| `--poll` | `10m` | Poll interval controls how often an individual resource should be checked for drift. |
+| `--sync` | `1h` | Controller manager sync period. |
+| `--leader-election` | `false` | Use leader election for the controller manager. |
+| `--enable-management-policies` | `true` | Enable support for Management Policies. |
+
+##### Concurrency tuning
+
+By default, `--max-concurrent-reconciles` is set to `1` to prevent `concurrent map writes` panics that can occur when multiple goroutines reconcile resources of the same type concurrently (see [#552](https://github.com/crossplane-contrib/provider-keycloak/issues/552)).
+
+If you need higher throughput and are not experiencing crashes, you can increase concurrency:
+
+```yaml
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: runtimeconfig-provider-keycloak
+spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime
+              args:
+                - --max-reconcile-rate=10
+                - --max-concurrent-reconciles=5
+```
+
 which can be used in the provider resource as follows:
 
 ```diff
