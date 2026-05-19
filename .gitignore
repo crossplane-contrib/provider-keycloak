@@ -10,3 +10,6 @@ cover.out
 .vscode/
 .idea/
 dev/e2e-broken
+
+# ignore compiled binaries
+/provider
