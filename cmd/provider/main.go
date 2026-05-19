@@ -70,6 +70,7 @@ func main() {
 		pollStateMetricInterval = app.Flag("poll-state-metric", "State metric recording interval").Default("5s").Duration()
 		leaderElection          = app.Flag("leader-election", "Use leader election for the controller manager.").Short('l').Default("false").OverrideDefaultFromEnvar("LEADER_ELECTION").Bool()
 		maxReconcileRate        = app.Flag("max-reconcile-rate", "The global maximum rate per second at which resources may checked for drift from the desired state.").Default("10").Int()
+		maxConcurrentReconciles = app.Flag("max-concurrent-reconciles", "The maximum number of concurrent reconcile operations per controller. Set to 1 to avoid concurrent map write panics.").Default("1").Int()
 		webhookPort             = app.Flag("webhook-port", "The port the webhook listens on").Default("9443").Envar("WEBHOOK_PORT").Int()
 		metricsBindAddress      = app.Flag("metrics-bind-address", "The address the metrics server listens on").Default(":8080").Envar("METRICS_BIND_ADDRESS").String()
 
@@ -107,12 +108,12 @@ func main() {
 		ctrl.SetLogger(zl)
 	}
 
-	log.Debug("Starting", "sync-period", syncPeriod.String(), "poll-interval", pollInterval.String(), "max-reconcile-rate", *maxReconcileRate)
+	log.Debug("Starting", "sync-period", syncPeriod.String(), "poll-interval", pollInterval.String(), "max-reconcile-rate", *maxReconcileRate, "max-concurrent-reconciles", *maxConcurrentReconciles)
 
 	// currently, we configure the jitter to be the 5% of the poll interval
 	pollJitter := time.Duration(float64(*pollInterval) * 0.05)
 	log.Debug("Starting", "sync-interval", syncPeriod.String(),
-		"poll-interval", pollInterval.String(), "poll-jitter", pollJitter, "max-reconcile-rate", *maxReconcileRate)
+		"poll-interval", pollInterval.String(), "poll-jitter", pollJitter, "max-reconcile-rate", *maxReconcileRate, "max-concurrent-reconciles", *maxConcurrentReconciles)
 
 	cfg, err := ctrl.GetConfig()
 	kingpin.FatalIfError(err, "Cannot get API server rest config")
@@ -181,7 +182,7 @@ func main() {
 			Logger:                  log,
 			GlobalRateLimiter:       ratelimiter.NewGlobal(*maxReconcileRate),
 			PollInterval:            *pollInterval,
-			MaxConcurrentReconciles: *maxReconcileRate,
+			MaxConcurrentReconciles: *maxConcurrentReconciles,
 			Features:                featureFlags,
 			MetricOptions: &xpcontroller.MetricOptions{
 				PollStateMetricInterval: *pollStateMetricInterval,
@@ -199,7 +200,7 @@ func main() {
 			Logger:                  log,
 			GlobalRateLimiter:       ratelimiter.NewGlobal(*maxReconcileRate),
 			PollInterval:            *pollInterval,
-			MaxConcurrentReconciles: *maxReconcileRate,
+			MaxConcurrentReconciles: *maxConcurrentReconciles,
 			Features:                featureFlags,
 			MetricOptions: &xpcontroller.MetricOptions{
 				PollStateMetricInterval: *pollStateMetricInterval,
