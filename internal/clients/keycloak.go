@@ -28,6 +28,7 @@ import (
 
 	clusterv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/v1beta1"
 	namespacedv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/namespaced/v1beta1"
+	"github.com/crossplane-contrib/provider-keycloak/internal/clients/stalerefs"
 )
 
 const (
@@ -85,6 +86,12 @@ var optionalKeycloakConfigKeys = []string{
 func TerraformSetupBuilder() terraform.SetupFn {
 	return func(ctx context.Context, client client.Client, mg resource.Managed) (terraform.Setup, error) {
 		ps := terraform.Setup{}
+
+		if recovered, err := stalerefs.MaybeRecover(ctx, client, mg); err != nil {
+			return terraform.Setup{}, errors.Wrap(err, "stale reference recovery failed")
+		} else if recovered {
+			return terraform.Setup{}, errors.New("cleared stale references; reconciling")
+		}
 
 		pcSpec, err := resolveProviderConfig(ctx, client, mg)
 		if err != nil {
