@@ -1,5 +1,5 @@
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: ClientProtocolMapper
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
 metadata:
   name: traefik-roles-mapper
 spec:
