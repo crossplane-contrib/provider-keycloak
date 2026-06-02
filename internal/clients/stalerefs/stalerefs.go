@@ -24,6 +24,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	"github.com/crossplane/crossplane-runtime/v2/pkg/meta"
 )
 
 // RecoveryAtGenerationAnnotation records the generation at which we last
@@ -40,12 +41,16 @@ type Managed interface {
 }
 
 // MaybeRecover inspects mg's Synced condition. If it signals a stale-reference
-// 404, MaybeRecover clears every value field on mg.Spec.ForProvider (and
-// mg.Spec.InitProvider) whose sibling XRef/XRefs/XSelector is non-nil, then
-// persists the update via kube. It returns true when a clearing was attempted
-// (regardless of whether the update raced with another writer).
+// 404 AND the resource was previously created in Keycloak, MaybeRecover clears
+// every value field on mg.Spec.ForProvider (and mg.Spec.InitProvider) whose
+// sibling XRef/XRefs/XSelector is non-nil, then persists the update via kube.
+// It returns true when a clearing was attempted (regardless of whether the
+// update raced with another writer).
 func MaybeRecover(ctx context.Context, kube client.Client, mg Managed) (bool, error) {
 	if !isStaleRefCondition(mg.GetCondition(xpv1.TypeSynced)) {
+		return false, nil
+	}
+	if !wasCreatedExternally(mg) {
 		return false, nil
 	}
 	if alreadyRecoveredForCurrentGeneration(mg) {
@@ -62,6 +67,15 @@ func MaybeRecover(ctx context.Context, kube client.Client, mg Managed) (bool, er
 		return false, err
 	}
 	return true, nil
+}
+
+// wasCreatedExternally reports whether the managed resource has ever
+// successfully been created in Keycloak, as recorded by crossplane-runtime
+// via the external-create-succeeded annotation. A resource that has never
+// been created cannot hold a stale UUID; any 404 during cold start is a
+// transient parent-not-ready race and must not trigger destructive clearing.
+func wasCreatedExternally(mg Managed) bool {
+	return !meta.GetExternalCreateSucceeded(mg).IsZero()
 }
 
 // alreadyRecoveredForCurrentGeneration returns true when a prior reconcile
