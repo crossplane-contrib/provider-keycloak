@@ -21,7 +21,7 @@ All manifests are available in [`examples/sso-argocd/`](https://github.com/cross
 
 ## Prerequisites
 
-- A running Keycloak instance with provider-keycloak configured (see [Getting Started](/docs/getting-started/installation))
+- A running Keycloak instance with provider-keycloak configured (see [Getting Started](/docs/using/getting-started/installation/))
 - ArgoCD installed in your cluster (see [ArgoCD Getting Started](https://argo-cd.readthedocs.io/en/stable/getting_started/))
 - A `ProviderConfig` named `keycloak-provider-config` pointing at your Keycloak
 

@@ -16,32 +16,30 @@ concurrency:
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: docs
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-go@v5
         with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: docs/package-lock.json
+          go-version: '1.22.x'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.150.0'
+          extended: true
 
       - name: Build documentation (PR preview)
-        run: npm run build
+        working-directory: docs
         env:
-          # Override baseUrl so links work under the preview path
-          DOCUSAURUS_BASE_URL: /provider-keycloak/pr-preview/pr-${{ github.event.pull_request.number }}/
+          GOTOOLCHAIN: local
+        run: hugo --minify --baseURL "https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-${{ github.event.pull_request.number }}/"
 
       - name: Deploy to GitHub Pages (preview)
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/build
+          publish_dir: docs/public
           destination_dir: pr-preview/pr-${{ github.event.pull_request.number }}
           keep_files: true
 

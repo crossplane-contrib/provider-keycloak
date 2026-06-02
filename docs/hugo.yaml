@@ -1,0 +1,43 @@
+baseURL: https://crossplane-contrib.github.io/provider-keycloak/
+title: Provider Keycloak
+languageCode: en-us
+
+module:
+  imports:
+    - path: github.com/imfing/hextra
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+
+menu:
+  main:
+    - name: Documentation
+      pageRef: /docs
+      weight: 1
+    - name: GitHub
+      url: https://github.com/crossplane-contrib/provider-keycloak
+      weight: 2
+    - name: Marketplace
+      url: https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak
+      weight: 3
+
+params:
+  navbar:
+    displayTitle: true
+    displayLogo: true
+    logo:
+      path: /img/logo.svg
+      dark: /img/logo.svg
+      link: /
+  theme:
+    default: system
+    displayToggle: true
+  search:
+    enable: false
+  editURL:
+    enable: true
+    base: https://github.com/crossplane-contrib/provider-keycloak/tree/main/docs/content

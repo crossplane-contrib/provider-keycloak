@@ -1,7 +1,6 @@
 ---
 title: Provider Keycloak Documentation
 description: Crossplane provider for declarative Keycloak management
-hide_table_of_contents: true
 ---
 
 # Provider Keycloak
@@ -24,11 +23,11 @@ Built with [Upjet](https://github.com/crossplane/upjet) on top of the [Keycloak 
 
 | | |
 |---|---|
-| 📦 [Installation](./docs/getting-started/installation) | Install the provider into your Crossplane cluster |
-| ⚙️ [Configuration](./docs/getting-started/configuration) | Connect to your Keycloak instance |
-| 🚀 [First Realm](./docs/getting-started/first-realm) | Create your first realm, client, and user |
-| 📖 [Resources](./docs/resources/realms) | Reference for all managed resource types |
-| 🗺️ [Guides](./docs/guides/sso-with-argocd) | Real-world walkthroughs (ArgoCD SSO, K8s OIDC, LDAP, ESO, end-to-end kind) |
+| 📦 [Installation](/docs/using/getting-started/installation/) | Install the provider into your Crossplane cluster |
+| ⚙️ [Configuration](/docs/using/getting-started/configuration/) | Connect to your Keycloak instance |
+| 🚀 [First Realm](/docs/using/getting-started/first-realm/) | Create your first realm, client, and user |
+| 📖 [Resources](/docs/using/resources/realms/) | Reference for all managed resource types |
+| 🗺️ [Guides](/docs/using/guides/sso-with-argocd/) | Real-world walkthroughs (ArgoCD SSO, K8s OIDC, LDAP, ESO, end-to-end kind) |
 
 ---
 
@@ -46,3 +45,9 @@ Built with [Upjet](https://github.com/crossplane/upjet) on top of the [Keycloak 
 | UserFederation | `ldap.keycloak.crossplane.io` | LDAP/AD federation |
 
 See the full list at the [Upbound Marketplace](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak).
+
+## Documentation Structure
+
+- [Using](/docs/using/) — install, configure, and operate provider-keycloak
+- [Developing](/docs/developing/) — docs and contributor-focused setup
+- [AI Usage](/docs/ai-usage/) — AI-oriented files and entry points
