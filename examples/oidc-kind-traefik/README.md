@@ -65,7 +65,7 @@ After the script completes, open http://localhost:8080 in your browser.
 | `groups.yaml` | Groups and role assignments |
 | `memberships.yaml` | User-to-group memberships |
 | `nginx.yaml` | nginx backend deployment |
-| `traefik-values.yaml` | Traefik Helm values with OIDC plugin enabled |
+| `traefik-values.values` | Traefik Helm values with OIDC plugin enabled |
 | `middleware-ingress.yaml` | OIDC middleware + IngressRoute |
 | `setup.sh` | Automated setup script |
 

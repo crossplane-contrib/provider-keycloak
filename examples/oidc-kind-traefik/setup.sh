@@ -98,7 +98,7 @@ helm repo update
 if ! helm status traefik -n traefik &>/dev/null; then
   helm install traefik traefik/traefik \
     --namespace traefik --create-namespace \
-    --values "${SCRIPT_DIR}/traefik-values.yaml" \
+    --values "${SCRIPT_DIR}/traefik-values.values" \
     --wait
 fi
 
