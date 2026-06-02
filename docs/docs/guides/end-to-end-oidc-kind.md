@@ -489,7 +489,7 @@ The [`traefik-oidc-auth`](https://github.com/sevensolutions/traefik-oidc-auth) p
 
 Enable the plugin in the Traefik Helm values:
 
-```yaml title="examples/oidc-kind-traefik/traefik-values.yaml"
+```yaml title="examples/oidc-kind-traefik/traefik-values.values"
 experimental:
   plugins:
     traefik-oidc-auth:
@@ -515,7 +515,7 @@ helm repo update
 
 helm install traefik traefik/traefik \
   --namespace traefik --create-namespace \
-  --values traefik-values.yaml \
+  --values traefik-values.values \
   --wait
 ```
 
