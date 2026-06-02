@@ -69,7 +69,7 @@ func (f *fakeManaged) GetObjectKind() schema.ObjectKind { return schema.EmptyObj
 
 func (f *fakeManaged) DeepCopyObject() runtime.Object {
 	out := *f
-	out.ObjectMeta = *f.ObjectMeta.DeepCopy()
+	out.ObjectMeta = *f.DeepCopy()
 	return &out
 }
 

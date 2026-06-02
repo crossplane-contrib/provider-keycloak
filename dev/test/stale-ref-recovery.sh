@@ -1,31 +1,29 @@
 #!/usr/bin/env bash
 #
-# End-to-end test for stale-reference recovery
-# (internal/clients/stalerefs).
+# Regression test for stale-reference recovery (internal/clients/stalerefs).
 #
-# Scenario:
-#   1. Apply a Realm + a "target" Role + a Role + a RoleMapper that references
-#      the target Role via roleIdRef.
-#   2. Wait for everything Synced=True.
-#   3. Capture the resolved spec.forProvider.roleId on the RoleMapper (this is
-#      the Keycloak UUID).
-#   4. Delete the target Role directly via the Keycloak Admin API (bypassing
-#      the K8s reconciler so the local Role MR's status doesn't auto-update).
-#   5. Re-create the target Role with the same name. The new Keycloak Role has
-#      a fresh UUID.
-#   6. Watch the Role MR's reconciler observe its own external resource and
-#      pick up the new UUID into status.atProvider.id.
-#   7. Watch the RoleMapper's reconciler hit a 404 from Keycloak, the provider
-#      clear spec.forProvider.roleId via stalerefs.MaybeRecover, and the
-#      runtime resolver repopulate it with the new UUID. Synced=True returns.
-#   8. Assert: the new resolved roleId != the original.
+# What it proves:
+#   When a Keycloak object referenced by another managed resource is deleted
+#   and recreated out-of-band (so its UUID changes), the provider clears the
+#   stored stale UUID on spec.forProvider and the runtime resolver
+#   repopulates it with the new one. Without this fix, the dependent resource
+#   stays Synced=False with a 404 from Keycloak forever.
 #
-# Usage:
-#   dev/test/stale-ref-recovery.sh
+# Scenario (self-contained — creates its own Realm, Client, Role, RoleMapper):
+#   1. Apply Realm, Client, target Role and a RoleMapper that references both.
+#   2. Wait for everything Synced=True. Capture the resolved roleId.
+#   3. Delete the Role directly via the Keycloak Admin API (bypasses
+#      crossplane so the K8s Role MR's reconciler discovers the deletion the
+#      hard way).
+#   4. Re-create the Role with the same name (fresh UUID in Keycloak).
+#   5. Wait for the RoleMapper to recover: spec.forProvider.roleId should
+#      transition to the new UUID and Synced=True should return.
+#   6. Assert: new UUID != original, and the recovery annotation is set.
 #
-# Requires the dev environment from dev/setup_dev_environment.sh to be
-# running. KEYCLOAK_IP, KEYCLOAK_PORT, KEYCLOAK_USER, KEYCLOAK_PASSWORD must
-# be exported (the setup script exports them).
+# Prerequisites:
+#   - dev/setup_dev_environment.sh has been run (kind cluster + Keycloak +
+#     provider-keycloak deployed). Exports KEYCLOAK_IP and KEYCLOAK_PORT.
+#   - jq, curl, kubectl available.
 
 set -euo pipefail
 
@@ -35,10 +33,13 @@ set -euo pipefail
 : "${KEYCLOAK_PASSWORD:=admin}"
 
 KC_BASE="http://${KEYCLOAK_IP}:${KEYCLOAK_PORT}"
-REALM="dev"
-TARGET_ROLE="stale-ref-target-role"
-RM_NAME="stale-ref-rolemapper"
-SOURCE_CLIENT="test"
+
+# Unique suffix so reruns and parallel runs don't collide.
+SUFFIX="${SUFFIX:-$(date +%s)}"
+REALM="staleref-${SUFFIX}"
+CLIENT="staleref-client-${SUFFIX}"
+TARGET_ROLE="staleref-role-${SUFFIX}"
+RM_NAME="staleref-rolemapper-${SUFFIX}"
 
 log() { printf "==> %s\n" "$*"; }
 die() { printf "FAIL: %s\n" "$*" >&2; exit 1; }
@@ -52,41 +53,62 @@ kc_token() {
 }
 
 kc_role_uuid() {
-  local token=$1 name=$2
+  local token=$1
   curl -fsS -H "Authorization: Bearer ${token}" \
-    "${KC_BASE}/admin/realms/${REALM}/roles/${name}" | jq -r '.id'
+    "${KC_BASE}/admin/realms/${REALM}/roles/${TARGET_ROLE}" | jq -r '.id'
 }
 
 kc_delete_role() {
-  local token=$1 name=$2
+  local token=$1
   curl -fsS -X DELETE -H "Authorization: Bearer ${token}" \
-    "${KC_BASE}/admin/realms/${REALM}/roles/${name}"
+    "${KC_BASE}/admin/realms/${REALM}/roles/${TARGET_ROLE}"
 }
 
 kc_create_role() {
-  local token=$1 name=$2
+  local token=$1
   curl -fsS -X POST -H "Authorization: Bearer ${token}" \
     -H "Content-Type: application/json" \
     "${KC_BASE}/admin/realms/${REALM}/roles" \
-    -d "{\"name\":\"${name}\"}"
+    -d "{\"name\":\"${TARGET_ROLE}\"}" > /dev/null
 }
 
 cleanup() {
   log "Cleanup"
-  kubectl delete -f - --ignore-not-found <<EOF || true
-apiVersion: client.keycloak.crossplane.io/v1alpha1
-kind: RoleMapper
-metadata: {name: ${RM_NAME}}
----
-apiVersion: role.keycloak.crossplane.io/v1alpha1
-kind: Role
-metadata: {name: ${TARGET_ROLE}}
-EOF
+  kubectl delete --ignore-not-found \
+    rolemapper.client.keycloak.crossplane.io/${RM_NAME} \
+    role.role.keycloak.crossplane.io/${TARGET_ROLE} \
+    client.openidclient.keycloak.crossplane.io/${CLIENT} \
+    realm.realm.keycloak.crossplane.io/${REALM} >/dev/null 2>&1 || true
 }
 trap cleanup EXIT
 
-log "Applying Role + RoleMapper"
+log "Applying Realm + Client + Role + RoleMapper (suffix=${SUFFIX})"
 kubectl apply -f - <<EOF
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: ${REALM}
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: ${REALM}
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: ${CLIENT}
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: ${REALM}
+    clientId: ${CLIENT}
+    accessType: PUBLIC
+  providerConfigRef:
+    name: keycloak-provider-config
+---
 apiVersion: role.keycloak.crossplane.io/v1alpha1
 kind: Role
 metadata:
@@ -94,7 +116,8 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    realmId: ${REALM}
+    realmIdRef:
+      name: ${REALM}
     name: ${TARGET_ROLE}
   providerConfigRef:
     name: keycloak-provider-config
@@ -108,34 +131,32 @@ spec:
   providerConfigRef:
     name: keycloak-provider-config
   forProvider:
-    realmId: ${REALM}
+    realmIdRef:
+      name: ${REALM}
     clientIdRef:
-      name: ${SOURCE_CLIENT}
+      name: ${CLIENT}
     roleIdRef:
       name: ${TARGET_ROLE}
 EOF
 
-log "Waiting for Role to be Synced=True"
-kubectl wait role.role.keycloak.crossplane.io/${TARGET_ROLE} \
-  --for=condition=Synced=True --timeout=120s
-
-log "Waiting for RoleMapper to be Synced=True"
-kubectl wait rolemapper.client.keycloak.crossplane.io/${RM_NAME} \
-  --for=condition=Synced=True --timeout=120s
+log "Waiting for all resources to be Synced=True"
+kubectl wait realm.realm.keycloak.crossplane.io/${REALM} --for=condition=Synced=True --timeout=120s
+kubectl wait client.openidclient.keycloak.crossplane.io/${CLIENT} --for=condition=Synced=True --timeout=120s
+kubectl wait role.role.keycloak.crossplane.io/${TARGET_ROLE} --for=condition=Synced=True --timeout=120s
+kubectl wait rolemapper.client.keycloak.crossplane.io/${RM_NAME} --for=condition=Synced=True --timeout=180s
 
 ORIGINAL_ROLE_ID=$(kubectl get rolemapper.client.keycloak.crossplane.io/${RM_NAME} \
   -o jsonpath='{.spec.forProvider.roleId}')
 log "Original resolved roleId = ${ORIGINAL_ROLE_ID}"
-
 [[ -n "${ORIGINAL_ROLE_ID}" ]] || die "RoleMapper.spec.forProvider.roleId is empty after Synced"
 
 log "Deleting the Keycloak Role directly via Admin API (bypassing crossplane)"
 TOKEN=$(kc_token)
-kc_delete_role "${TOKEN}" "${TARGET_ROLE}"
+kc_delete_role "${TOKEN}"
 
-log "Recreating the Keycloak Role with the same name (will have a fresh UUID)"
-kc_create_role "${TOKEN}" "${TARGET_ROLE}"
-NEW_KC_UUID=$(kc_role_uuid "${TOKEN}" "${TARGET_ROLE}")
+log "Recreating the Keycloak Role with the same name (fresh UUID)"
+kc_create_role "${TOKEN}"
+NEW_KC_UUID=$(kc_role_uuid "${TOKEN}")
 log "New Keycloak UUID = ${NEW_KC_UUID}"
 
 [[ "${NEW_KC_UUID}" != "${ORIGINAL_ROLE_ID}" ]] \
@@ -143,22 +164,21 @@ log "New Keycloak UUID = ${NEW_KC_UUID}"
 
 log "Waiting up to 3m for the RoleMapper to recover its reference"
 deadline=$(( $(date +%s) + 180 ))
+current=""
+synced=""
 while (( $(date +%s) < deadline )); do
   current=$(kubectl get rolemapper.client.keycloak.crossplane.io/${RM_NAME} \
     -o jsonpath='{.spec.forProvider.roleId}' 2>/dev/null || true)
   synced=$(kubectl get rolemapper.client.keycloak.crossplane.io/${RM_NAME} \
     -o jsonpath='{.status.conditions[?(@.type=="Synced")].status}' 2>/dev/null || true)
   if [[ "${current}" == "${NEW_KC_UUID}" && "${synced}" == "True" ]]; then
-    log "PASS: roleId rewritten to new UUID and Synced=True"
-    log "  before: ${ORIGINAL_ROLE_ID}"
-    log "  after:  ${current}"
-
     anno=$(kubectl get rolemapper.client.keycloak.crossplane.io/${RM_NAME} \
       -o jsonpath='{.metadata.annotations.provider-keycloak\.crossplane\.io/stale-ref-recovery-at-generation}' \
       2>/dev/null || true)
-    if [[ -n "${anno}" ]]; then
-      log "  recovery annotation set to generation ${anno}"
-    fi
+    log "PASS: roleId rewritten and Synced=True"
+    log "  before: ${ORIGINAL_ROLE_ID}"
+    log "  after:  ${current}"
+    [[ -n "${anno}" ]] && log "  recovery annotation set to generation ${anno}"
     exit 0
   fi
   sleep 5

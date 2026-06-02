@@ -185,7 +185,7 @@ func valueFieldName(name string) (string, bool) {
 }
 
 func isNilOrEmpty(v reflect.Value) bool {
-	switch v.Kind() {
+	switch v.Kind() { //nolint:exhaustive // only the kinds upjet uses for ref-paired fields matter
 	case reflect.Ptr, reflect.Interface:
 		return v.IsNil()
 	case reflect.Slice, reflect.Map:
