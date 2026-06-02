@@ -24,13 +24,16 @@ metadata:
   name: github-idp
 spec:
   forProvider:
-    realmId: "my-realm"
+    realm: "my-realm"
     alias: "github"
     displayName: "GitHub"
     enabled: true
     authorizationUrl: "https://github.com/login/oauth/authorize"
     tokenUrl: "https://github.com/login/oauth/access_token"
-    clientId: "github-client-id"
+    clientIdSecretRef:
+      key: "client-id"
+      name: "github-idp-secret"
+      namespace: "crossplane-system"
     clientSecretSecretRef:
       key: "client-secret"
       name: "github-idp-secret"
@@ -51,7 +54,7 @@ metadata:
   name: corporate-saml
 spec:
   forProvider:
-    realmId: "my-realm"
+    realm: "my-realm"
     alias: "corporate-idp"
     displayName: "Corporate SSO"
     enabled: true
@@ -68,13 +71,13 @@ spec:
 Map claims from the external IdP to Keycloak user attributes:
 
 ```yaml
-apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
 kind: IdentityProviderMapper
 metadata:
   name: github-email-mapper
 spec:
   forProvider:
-    realmId: "my-realm"
+    realm: "my-realm"
     identityProviderAlias: "github"
     identityProviderMapper: "oidc-user-attribute-idp-mapper"
     name: "email-mapper"
@@ -90,11 +93,11 @@ spec:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `realmId` | string | Realm for the identity provider |
+| `realm` | string | Realm for the identity provider |
 | `alias` | string | Unique alias for the IdP |
 | `enabled` | bool | Whether the IdP is active |
 | `displayName` | string | Label shown on the login page |
 | `authorizationUrl` | string | OIDC authorization endpoint |
 | `tokenUrl` | string | OIDC token endpoint |
-| `clientId` | string | OAuth2 client ID with the external IdP |
+| `clientIdSecretRef` | object | Secret reference for OAuth2 client ID |
 | `defaultScopes` | string | Scopes to request from the external IdP |

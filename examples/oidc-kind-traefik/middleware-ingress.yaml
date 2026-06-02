@@ -8,9 +8,8 @@ spec:
     traefik-oidc-auth:
       Provider:
         Url: "http://host.docker.internal:9090/realms/demo"
-      Client:
-        ID: "traefik-oidc"
-        Secret: "${CLIENT_SECRET}"  # replaced by setup.sh or set manually
+        ClientId: "traefik-oidc"
+        ClientSecret: "${CLIENT_SECRET}"  # replaced by setup.sh or set manually
       CallbackUri: /oauth2/callback
       Scopes:
         - openid

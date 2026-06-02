@@ -33,7 +33,7 @@ spec:
     includeAuthnStatement: true
     nameIdFormat: "username"
     assertionConsumerPostUrl: "https://saml-app.example.com/saml/acs"
-    singleLogoutServiceUrl: "https://saml-app.example.com/saml/slo"
+    logoutServicePostBindingUrl: "https://saml-app.example.com/saml/slo"
     validRedirectUris:
       - "https://saml-app.example.com/*"
   providerConfigRef:

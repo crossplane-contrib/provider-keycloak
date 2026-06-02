@@ -280,8 +280,8 @@ spec:
 Map realm roles into a top-level `roles` claim in the JWT:
 
 ```yaml title="examples/oidc-kind-traefik/role-mapper.yaml"
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: ClientProtocolMapper
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
 metadata:
   name: traefik-roles-mapper
 spec:
@@ -543,9 +543,8 @@ spec:
     traefik-oidc-auth:
       Provider:
         Url: "http://host.docker.internal:9090/realms/demo"
-      Client:
-        ID: "traefik-oidc"
-        Secret: "<CLIENT_SECRET>"   # replaced by setup.sh or manually
+        ClientId: "traefik-oidc"
+        ClientSecret: "<CLIENT_SECRET>"   # replaced by setup.sh or manually
       CallbackUri: /oauth2/callback
       Scopes:
         - openid
