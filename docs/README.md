@@ -1,21 +1,20 @@
 # Documentation
 
-This directory contains the provider-keycloak documentation site built with [Docusaurus](https://docusaurus.io/).
+This directory contains the provider-keycloak documentation site built with [Hugo](https://gohugo.io/) and the [Hextra](https://github.com/imfing/hextra) theme.
 
 ## Local Development
 
 ```bash
 cd docs
-npm install
-npm start
+hugo server --buildDrafts
 ```
 
-This starts a local development server at `http://localhost:3000/provider-keycloak/`.
+This starts a local development server at `http://localhost:1313/`.
 
 ## Build
 
 ```bash
-npm run build
+hugo --minify
 ```
 
 ## Deployment
