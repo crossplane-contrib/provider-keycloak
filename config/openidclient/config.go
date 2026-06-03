@@ -50,13 +50,6 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_openid_client",
 			Extractor:     common.PathUUIDExtractor,
 		}
-		// Allow empty default_scopes to remove all default scopes from a client.
-		// The Terraform provider handles empty sets correctly, but upjet generates
-		// a required validation rule that rejects empty arrays.
-		if s, ok := r.TerraformResource.Schema["default_scopes"]; ok {
-			s.Required = false
-			s.Optional = true
-		}
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_optional_scopes", func(r *config.Resource) {
@@ -65,13 +58,6 @@ func Configure(p *config.Provider) {
 		r.References["client_id"] = config.Reference{
 			TerraformName: "keycloak_openid_client",
 			Extractor:     common.PathUUIDExtractor,
-		}
-		// Allow empty optional_scopes to remove all optional scopes from a client.
-		// The Terraform provider handles empty sets correctly, but upjet generates
-		// a required validation rule that rejects empty arrays.
-		if s, ok := r.TerraformResource.Schema["optional_scopes"]; ok {
-			s.Required = false
-			s.Optional = true
 		}
 	})
 
