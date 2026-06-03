@@ -105,7 +105,10 @@ build.init: $(UP) check-terraform-version $(CROSSPLANE_CLI)
 
 $(CROSSPLANE_CLI):
 	@$(INFO) installing Crossplane CLI $(CROSSPLANE_CLI_VERSION)
-	@curl -fsSLo $(CROSSPLANE_CLI) --create-dirs https://releases.crossplane.io/$(CROSSPLANE_CLI_CHANNEL)/$(CROSSPLANE_CLI_VERSION)/bin/$(SAFEHOST_PLATFORM)/crank || $(FAIL)
+	@mkdir -p $(TOOLS_HOST_DIR)/tmp-crossplane-cli $(dir $(CROSSPLANE_CLI))
+	@cd $(TOOLS_HOST_DIR)/tmp-crossplane-cli && curl -fsSL "https://raw.githubusercontent.com/crossplane/crossplane/main/install.sh" | XP_CHANNEL=$(CROSSPLANE_CLI_CHANNEL) XP_VERSION=$(CROSSPLANE_CLI_VERSION) sh || $(FAIL)
+	@mv $(TOOLS_HOST_DIR)/tmp-crossplane-cli/crossplane $(CROSSPLANE_CLI)
+	@rm -rf $(TOOLS_HOST_DIR)/tmp-crossplane-cli
 	@chmod +x $(CROSSPLANE_CLI)
 	@$(OK) installing Crossplane CLI $(CROSSPLANE_CLI_VERSION)
 
