@@ -103,6 +103,12 @@ xpkg.build.upjet-provider-template: do.build.images
 # build steps in parallel to avoid encountering an installation race condition.
 build.init: $(UP) check-terraform-version $(CROSSPLANE_CLI)
 
+$(CROSSPLANE_CLI):
+	@$(INFO) installing Crossplane CLI $(CROSSPLANE_CLI_VERSION)
+	@curl -fsSLo $(CROSSPLANE_CLI) --create-dirs https://releases.crossplane.io/$(CROSSPLANE_CLI_CHANNEL)/$(CROSSPLANE_CLI_VERSION)/bin/$(SAFEHOST_PLATFORM)/crank || $(FAIL)
+	@chmod +x $(CROSSPLANE_CLI)
+	@$(OK) installing Crossplane CLI $(CROSSPLANE_CLI_VERSION)
+
 # ====================================================================================
 # Setup Terraform for fetching provider schema
 TERRAFORM := $(TOOLS_HOST_DIR)/terraform-$(TERRAFORM_VERSION)
