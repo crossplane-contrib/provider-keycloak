@@ -232,7 +232,7 @@ echo "########### Installing Crossplane ###########"
 $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/crossplane.yaml
 
 echo "* Waiting for Crossplane to be ready"
-$kubectl_cmd wait applications.argoproj.io  --namespace argocd crossplane-system --for=create --for=jsonpath='{.status.health.status}'=Healthy --for=jsonpath='{.status.sync.status}'=Synced --timeout=300s
+$kubectl_cmd wait applications.argoproj.io  --namespace argocd crossplane-system --for=create --for=jsonpath='{.status.health.status}'=Healthy --for=jsonpath='{.status.sync.status}'=Synced --timeout=600s
 $kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane" --for=condition=Ready --timeout=300s
 $kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane-rbac-manager" --for=condition=Ready --timeout=300s
 
