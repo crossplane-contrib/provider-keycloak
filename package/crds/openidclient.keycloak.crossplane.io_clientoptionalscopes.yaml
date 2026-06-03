@@ -502,11 +502,6 @@ spec:
             required:
             - forProvider
             type: object
-            x-kubernetes-validations:
-            - message: spec.forProvider.optionalScopes is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.optionalScopes)
-                || (has(self.initProvider) && has(self.initProvider.optionalScopes))'
           status:
             description: ClientOptionalScopesStatus defines the observed state of
               ClientOptionalScopes.

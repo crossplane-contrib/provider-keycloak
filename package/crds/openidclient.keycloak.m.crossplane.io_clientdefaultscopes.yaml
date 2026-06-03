@@ -484,11 +484,6 @@ spec:
             required:
             - forProvider
             type: object
-            x-kubernetes-validations:
-            - message: spec.forProvider.defaultScopes is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.defaultScopes)
-                || (has(self.initProvider) && has(self.initProvider.defaultScopes))'
           status:
             description: ClientDefaultScopesStatus defines the observed state of ClientDefaultScopes.
             properties:
