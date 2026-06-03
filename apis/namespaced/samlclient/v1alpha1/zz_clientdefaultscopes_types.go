@@ -132,8 +132,9 @@ type ClientDefaultScopesStatus struct {
 type ClientDefaultScopes struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              ClientDefaultScopesSpec   `json:"spec"`
-	Status            ClientDefaultScopesStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.defaultScopes) || (has(self.initProvider) && has(self.initProvider.defaultScopes))",message="spec.forProvider.defaultScopes is a required parameter"
+	Spec   ClientDefaultScopesSpec   `json:"spec"`
+	Status ClientDefaultScopesStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
