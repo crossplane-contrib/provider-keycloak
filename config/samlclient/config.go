@@ -52,6 +52,13 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_saml_client",
 			Extractor:     common.PathUUIDExtractor,
 		}
+		// Allow empty default_scopes to remove all default scopes from a client.
+		// The Terraform provider handles empty sets correctly, but upjet generates
+		// a required validation rule that rejects empty arrays.
+		if s, ok := r.TerraformResource.Schema["default_scopes"]; ok {
+			s.Required = false
+			s.Optional = true
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_saml_client_scope", func(r *config.Resource) {
