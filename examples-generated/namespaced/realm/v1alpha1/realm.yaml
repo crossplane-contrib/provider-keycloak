@@ -21,7 +21,7 @@ spec:
       - en
       - de
       - es
-    loginTheme: base
+    loginTheme: keycloak
     passwordPolicy: upperCase(1) and length(8) and forceExpiredPasswordChange(365)
       and notUsername
     realm: my-realm

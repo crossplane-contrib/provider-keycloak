@@ -69,6 +69,10 @@ spec:
                             can be a String or a json object.
                           type: object
                           x-kubernetes-map-type: granular
+                        defaultValue:
+                          description: The default value of the attribute. Only applied
+                            with Keycloak 26.4.0 or later.
+                          type: string
                         displayName:
                           description: The display name of the attribute.
                           type: string
@@ -278,6 +282,10 @@ spec:
                             can be a String or a json object.
                           type: object
                           x-kubernetes-map-type: granular
+                        defaultValue:
+                          description: The default value of the attribute. Only applied
+                            with Keycloak 26.4.0 or later.
+                          type: string
                         displayName:
                           description: The display name of the attribute.
                           type: string
@@ -537,6 +545,10 @@ spec:
                             can be a String or a json object.
                           type: object
                           x-kubernetes-map-type: granular
+                        defaultValue:
+                          description: The default value of the attribute. Only applied
+                            with Keycloak 26.4.0 or later.
+                          type: string
                         displayName:
                           description: The display name of the attribute.
                           type: string

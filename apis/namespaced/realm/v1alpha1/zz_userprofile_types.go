@@ -20,6 +20,9 @@ type AttributeInitParameters struct {
 	// +mapType=granular
 	Annotations map[string]*string `json:"annotations,omitempty" tf:"annotations,omitempty"`
 
+	// The default value of the attribute. Only applied with Keycloak 26.4.0 or later.
+	DefaultValue *string `json:"defaultValue,omitempty" tf:"default_value,omitempty"`
+
 	// The display name of the attribute.
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name,omitempty"`
 
@@ -56,6 +59,9 @@ type AttributeObservation struct {
 	// A map of annotations for the attribute. Values can be a String or a json object.
 	// +mapType=granular
 	Annotations map[string]*string `json:"annotations,omitempty" tf:"annotations,omitempty"`
+
+	// The default value of the attribute. Only applied with Keycloak 26.4.0 or later.
+	DefaultValue *string `json:"defaultValue,omitempty" tf:"default_value,omitempty"`
 
 	// The display name of the attribute.
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name,omitempty"`
@@ -94,6 +100,10 @@ type AttributeParameters struct {
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Annotations map[string]*string `json:"annotations,omitempty" tf:"annotations,omitempty"`
+
+	// The default value of the attribute. Only applied with Keycloak 26.4.0 or later.
+	// +kubebuilder:validation:Optional
+	DefaultValue *string `json:"defaultValue,omitempty" tf:"default_value,omitempty"`
 
 	// The display name of the attribute.
 	// +kubebuilder:validation:Optional

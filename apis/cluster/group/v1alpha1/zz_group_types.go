@@ -24,6 +24,18 @@ type GroupInitParameters struct {
 	// The name of the group.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The organization this group exists in. If omitted, this group will be managed as a realm group. Organization groups require Keycloak 26.6.0 or later.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/organization/v1alpha1.Organization
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
+	// Reference to a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDRef *v1.Reference `json:"organizationIdRef,omitempty" tf:"-"`
+
+	// Selector for a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDSelector *v1.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
+
 	// The ID of this group's parent. If omitted, this group will be defined at the root level.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/group/v1alpha1.Group
 	ParentID *string `json:"parentId,omitempty" tf:"parent_id,omitempty"`
@@ -62,6 +74,9 @@ type GroupObservation struct {
 	// The name of the group.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The organization this group exists in. If omitted, this group will be managed as a realm group. Organization groups require Keycloak 26.6.0 or later.
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
 	// The ID of this group's parent. If omitted, this group will be defined at the root level.
 	ParentID *string `json:"parentId,omitempty" tf:"parent_id,omitempty"`
 
@@ -85,6 +100,19 @@ type GroupParameters struct {
 	// The name of the group.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// The organization this group exists in. If omitted, this group will be managed as a realm group. Organization groups require Keycloak 26.6.0 or later.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/organization/v1alpha1.Organization
+	// +kubebuilder:validation:Optional
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
+	// Reference to a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDRef *v1.Reference `json:"organizationIdRef,omitempty" tf:"-"`
+
+	// Selector for a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDSelector *v1.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The ID of this group's parent. If omitted, this group will be defined at the root level.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/group/v1alpha1.Group

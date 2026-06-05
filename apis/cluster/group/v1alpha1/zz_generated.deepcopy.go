@@ -69,6 +69,21 @@ func (in *GroupInitParameters) DeepCopyInto(out *GroupInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrganizationIDRef != nil {
+		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.OrganizationIDSelector != nil {
+		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.ParentID != nil {
 		in, out := &in.ParentID, &out.ParentID
 		*out = new(string)
@@ -177,6 +192,11 @@ func (in *GroupObservation) DeepCopyInto(out *GroupObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ParentID != nil {
 		in, out := &in.ParentID, &out.ParentID
 		*out = new(string)
@@ -232,6 +252,21 @@ func (in *GroupParameters) DeepCopyInto(out *GroupParameters) {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
 		**out = **in
+	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrganizationIDRef != nil {
+		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.OrganizationIDSelector != nil {
+		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.ParentID != nil {
 		in, out := &in.ParentID, &out.ParentID

@@ -40,6 +40,7 @@ type AuthParameters struct {
 }
 
 type BruteForceDetectionInitParameters struct {
+	BruteForceStrategy *string `json:"bruteForceStrategy,omitempty" tf:"brute_force_strategy,omitempty"`
 
 	// When will failure count be reset?
 	FailureResetTimeSeconds *float64 `json:"failureResetTimeSeconds,omitempty" tf:"failure_reset_time_seconds,omitempty"`
@@ -66,6 +67,7 @@ type BruteForceDetectionInitParameters struct {
 }
 
 type BruteForceDetectionObservation struct {
+	BruteForceStrategy *string `json:"bruteForceStrategy,omitempty" tf:"brute_force_strategy,omitempty"`
 
 	// When will failure count be reset?
 	FailureResetTimeSeconds *float64 `json:"failureResetTimeSeconds,omitempty" tf:"failure_reset_time_seconds,omitempty"`
@@ -92,6 +94,9 @@ type BruteForceDetectionObservation struct {
 }
 
 type BruteForceDetectionParameters struct {
+
+	// +kubebuilder:validation:Optional
+	BruteForceStrategy *string `json:"bruteForceStrategy,omitempty" tf:"brute_force_strategy,omitempty"`
 
 	// When will failure count be reset?
 	// +kubebuilder:validation:Optional
@@ -252,6 +257,9 @@ type OtpPolicyInitParameters struct {
 	// What hashing algorithm should be used to generate the OTP.
 	Algorithm *string `json:"algorithm,omitempty" tf:"algorithm,omitempty"`
 
+	// Possibility to use the same OTP code again after successful authentication. Defaults to false.
+	CodeReusable *bool `json:"codeReusable,omitempty" tf:"code_reusable,omitempty"`
+
 	// How many digits the OTP have. Defaults to 6.
 	Digits *float64 `json:"digits,omitempty" tf:"digits,omitempty"`
 
@@ -274,6 +282,9 @@ type OtpPolicyObservation struct {
 	// What hashing algorithm should be used to generate the OTP, Valid options are HmacSHA1,HmacSHA256 and HmacSHA512. Defaults to HmacSHA1.
 	// What hashing algorithm should be used to generate the OTP.
 	Algorithm *string `json:"algorithm,omitempty" tf:"algorithm,omitempty"`
+
+	// Possibility to use the same OTP code again after successful authentication. Defaults to false.
+	CodeReusable *bool `json:"codeReusable,omitempty" tf:"code_reusable,omitempty"`
 
 	// How many digits the OTP have. Defaults to 6.
 	Digits *float64 `json:"digits,omitempty" tf:"digits,omitempty"`
@@ -298,6 +309,10 @@ type OtpPolicyParameters struct {
 	// What hashing algorithm should be used to generate the OTP.
 	// +kubebuilder:validation:Optional
 	Algorithm *string `json:"algorithm,omitempty" tf:"algorithm,omitempty"`
+
+	// Possibility to use the same OTP code again after successful authentication. Defaults to false.
+	// +kubebuilder:validation:Optional
+	CodeReusable *bool `json:"codeReusable,omitempty" tf:"code_reusable,omitempty"`
 
 	// How many digits the OTP have. Defaults to 6.
 	// +kubebuilder:validation:Optional
@@ -957,6 +972,8 @@ type RealmParameters struct {
 }
 
 type SMTPServerInitParameters struct {
+
+	// When true, allows UTF-8 in the local part of the email address. Defaults to false.
 	AllowUTF8 *bool `json:"allowUtf8,omitempty" tf:"allow_utf8,omitempty"`
 
 	// Enables authentication to the SMTP server. Cannot be set alongside token_auth. This block supports the following arguments:
@@ -994,6 +1011,8 @@ type SMTPServerInitParameters struct {
 }
 
 type SMTPServerObservation struct {
+
+	// When true, allows UTF-8 in the local part of the email address. Defaults to false.
 	AllowUTF8 *bool `json:"allowUtf8,omitempty" tf:"allow_utf8,omitempty"`
 
 	// Enables authentication to the SMTP server. Cannot be set alongside token_auth. This block supports the following arguments:
@@ -1032,6 +1051,7 @@ type SMTPServerObservation struct {
 
 type SMTPServerParameters struct {
 
+	// When true, allows UTF-8 in the local part of the email address. Defaults to false.
 	// +kubebuilder:validation:Optional
 	AllowUTF8 *bool `json:"allowUtf8,omitempty" tf:"allow_utf8,omitempty"`
 
@@ -1181,6 +1201,10 @@ type WebAuthnPasswordlessPolicyInitParameters struct {
 	// +listType=set
 	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
 
+	// When true, Keycloak will enable passwordless passkey support. This attribute is only valid inside a web_authn_passwordless_policy block and requires a Keycloak version that supports passwordless passkeys. Defaults to false.
+	// Enable passkeys for passwordless WebAuthn authentication
+	PasswordlessPasskeysEnabled *bool `json:"passwordlessPasskeysEnabled,omitempty" tf:"passwordless_passkeys_enabled,omitempty"`
+
 	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
 
@@ -1224,6 +1248,10 @@ type WebAuthnPasswordlessPolicyObservation struct {
 	// A set of extra origins for non-web applications.
 	// +listType=set
 	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
+
+	// When true, Keycloak will enable passwordless passkey support. This attribute is only valid inside a web_authn_passwordless_policy block and requires a Keycloak version that supports passwordless passkeys. Defaults to false.
+	// Enable passkeys for passwordless WebAuthn authentication
+	PasswordlessPasskeysEnabled *bool `json:"passwordlessPasskeysEnabled,omitempty" tf:"passwordless_passkeys_enabled,omitempty"`
 
 	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	RelyingPartyEntityName *string `json:"relyingPartyEntityName,omitempty" tf:"relying_party_entity_name,omitempty"`
@@ -1274,6 +1302,11 @@ type WebAuthnPasswordlessPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
+
+	// When true, Keycloak will enable passwordless passkey support. This attribute is only valid inside a web_authn_passwordless_policy block and requires a Keycloak version that supports passwordless passkeys. Defaults to false.
+	// Enable passkeys for passwordless WebAuthn authentication
+	// +kubebuilder:validation:Optional
+	PasswordlessPasskeysEnabled *bool `json:"passwordlessPasskeysEnabled,omitempty" tf:"passwordless_passkeys_enabled,omitempty"`
 
 	// A human-readable server name for the WebAuthn Relying Party. Defaults to keycloak.
 	// +kubebuilder:validation:Optional

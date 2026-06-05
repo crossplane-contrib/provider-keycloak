@@ -2225,6 +2225,16 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.Oauth2JwtAuthorizationGrantEnabled != nil {
+		in, out := &in.Oauth2JwtAuthorizationGrantEnabled, &out.Oauth2JwtAuthorizationGrantEnabled
+		*out = new(bool)
+		**out = **in
+	}
+	if in.Oauth2JwtAuthorizationGrantIdp != nil {
+		in, out := &in.Oauth2JwtAuthorizationGrantIdp, &out.Oauth2JwtAuthorizationGrantIdp
+		*out = new(string)
+		**out = **in
+	}
 	if in.PkceCodeChallengeMethod != nil {
 		in, out := &in.PkceCodeChallengeMethod, &out.PkceCodeChallengeMethod
 		*out = new(string)
@@ -2578,6 +2588,16 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 	}
 	if in.Oauth2DevicePollingInterval != nil {
 		in, out := &in.Oauth2DevicePollingInterval, &out.Oauth2DevicePollingInterval
+		*out = new(string)
+		**out = **in
+	}
+	if in.Oauth2JwtAuthorizationGrantEnabled != nil {
+		in, out := &in.Oauth2JwtAuthorizationGrantEnabled, &out.Oauth2JwtAuthorizationGrantEnabled
+		*out = new(bool)
+		**out = **in
+	}
+	if in.Oauth2JwtAuthorizationGrantIdp != nil {
+		in, out := &in.Oauth2JwtAuthorizationGrantIdp, &out.Oauth2JwtAuthorizationGrantIdp
 		*out = new(string)
 		**out = **in
 	}
@@ -3154,6 +3174,16 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 	}
 	if in.Oauth2DevicePollingInterval != nil {
 		in, out := &in.Oauth2DevicePollingInterval, &out.Oauth2DevicePollingInterval
+		*out = new(string)
+		**out = **in
+	}
+	if in.Oauth2JwtAuthorizationGrantEnabled != nil {
+		in, out := &in.Oauth2JwtAuthorizationGrantEnabled, &out.Oauth2JwtAuthorizationGrantEnabled
+		*out = new(bool)
+		**out = **in
+	}
+	if in.Oauth2JwtAuthorizationGrantIdp != nil {
+		in, out := &in.Oauth2JwtAuthorizationGrantIdp, &out.Oauth2JwtAuthorizationGrantIdp
 		*out = new(string)
 		**out = **in
 	}

@@ -475,6 +475,12 @@ spec:
                     description: The minimum amount of time in seconds that the client
                       should wait between polling requests to the token endpoint.
                     type: string
+                  oauth2JwtAuthorizationGrantEnabled:
+                    description: When false, this client will not be able to initiate
+                      a login or obtain access tokens. Defaults to true.
+                    type: boolean
+                  oauth2JwtAuthorizationGrantIdp:
+                    type: string
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
@@ -1033,6 +1039,12 @@ spec:
                     description: The minimum amount of time in seconds that the client
                       should wait between polling requests to the token endpoint.
                     type: string
+                  oauth2JwtAuthorizationGrantEnabled:
+                    description: When false, this client will not be able to initiate
+                      a login or obtain access tokens. Defaults to true.
+                    type: boolean
+                  oauth2JwtAuthorizationGrantIdp:
+                    type: string
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
@@ -1488,6 +1500,12 @@ spec:
                   oauth2DevicePollingInterval:
                     description: The minimum amount of time in seconds that the client
                       should wait between polling requests to the token endpoint.
+                    type: string
+                  oauth2JwtAuthorizationGrantEnabled:
+                    description: When false, this client will not be able to initiate
+                      a login or obtain access tokens. Defaults to true.
+                    type: boolean
+                  oauth2JwtAuthorizationGrantIdp:
                     type: string
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
