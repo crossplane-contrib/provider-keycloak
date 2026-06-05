@@ -239,6 +239,10 @@ spec:
                             What hashing algorithm should be used to generate the OTP, Valid options are HmacSHA1,HmacSHA256 and HmacSHA512. Defaults to HmacSHA1.
                             What hashing algorithm should be used to generate the OTP.
                           type: string
+                        codeReusable:
+                          description: Possibility to use the same OTP code again
+                            after successful authentication. Defaults to false.
+                          type: boolean
                         digits:
                           description: How many digits the OTP have. Defaults to 6.
                           type: number
@@ -315,6 +319,8 @@ spec:
                         bruteForceDetection:
                           items:
                             properties:
+                              bruteForceStrategy:
+                                type: string
                               failureResetTimeSeconds:
                                 description: When will failure count be reset?
                                 type: number
@@ -394,6 +400,8 @@ spec:
                     items:
                       properties:
                         allowUtf8:
+                          description: When true, allows UTF-8 in the local part of
+                            the email address. Defaults to false.
                           type: boolean
                         auth:
                           description: 'Enables authentication to the SMTP server.
@@ -551,6 +559,11 @@ spec:
                             type: string
                           type: array
                           x-kubernetes-list-type: set
+                        passwordlessPasskeysEnabled:
+                          description: |-
+                            When true, Keycloak will enable passwordless passkey support. This attribute is only valid inside a web_authn_passwordless_policy block and requires a Keycloak version that supports passwordless passkeys. Defaults to false.
+                            Enable passkeys for passwordless WebAuthn authentication
+                          type: boolean
                         relyingPartyEntityName:
                           description: A human-readable server name for the WebAuthn
                             Relying Party. Defaults to keycloak.
@@ -837,6 +850,10 @@ spec:
                             What hashing algorithm should be used to generate the OTP, Valid options are HmacSHA1,HmacSHA256 and HmacSHA512. Defaults to HmacSHA1.
                             What hashing algorithm should be used to generate the OTP.
                           type: string
+                        codeReusable:
+                          description: Possibility to use the same OTP code again
+                            after successful authentication. Defaults to false.
+                          type: boolean
                         digits:
                           description: How many digits the OTP have. Defaults to 6.
                           type: number
@@ -913,6 +930,8 @@ spec:
                         bruteForceDetection:
                           items:
                             properties:
+                              bruteForceStrategy:
+                                type: string
                               failureResetTimeSeconds:
                                 description: When will failure count be reset?
                                 type: number
@@ -992,6 +1011,8 @@ spec:
                     items:
                       properties:
                         allowUtf8:
+                          description: When true, allows UTF-8 in the local part of
+                            the email address. Defaults to false.
                           type: boolean
                         auth:
                           description: 'Enables authentication to the SMTP server.
@@ -1153,6 +1174,11 @@ spec:
                             type: string
                           type: array
                           x-kubernetes-list-type: set
+                        passwordlessPasskeysEnabled:
+                          description: |-
+                            When true, Keycloak will enable passwordless passkey support. This attribute is only valid inside a web_authn_passwordless_policy block and requires a Keycloak version that supports passwordless passkeys. Defaults to false.
+                            Enable passkeys for passwordless WebAuthn authentication
+                          type: boolean
                         relyingPartyEntityName:
                           description: A human-readable server name for the WebAuthn
                             Relying Party. Defaults to keycloak.
@@ -1496,6 +1522,10 @@ spec:
                             What hashing algorithm should be used to generate the OTP, Valid options are HmacSHA1,HmacSHA256 and HmacSHA512. Defaults to HmacSHA1.
                             What hashing algorithm should be used to generate the OTP.
                           type: string
+                        codeReusable:
+                          description: Possibility to use the same OTP code again
+                            after successful authentication. Defaults to false.
+                          type: boolean
                         digits:
                           description: How many digits the OTP have. Defaults to 6.
                           type: number
@@ -1572,6 +1602,8 @@ spec:
                         bruteForceDetection:
                           items:
                             properties:
+                              bruteForceStrategy:
+                                type: string
                               failureResetTimeSeconds:
                                 description: When will failure count be reset?
                                 type: number
@@ -1651,6 +1683,8 @@ spec:
                     items:
                       properties:
                         allowUtf8:
+                          description: When true, allows UTF-8 in the local part of
+                            the email address. Defaults to false.
                           type: boolean
                         auth:
                           description: 'Enables authentication to the SMTP server.
@@ -1784,6 +1818,11 @@ spec:
                             type: string
                           type: array
                           x-kubernetes-list-type: set
+                        passwordlessPasskeysEnabled:
+                          description: |-
+                            When true, Keycloak will enable passwordless passkey support. This attribute is only valid inside a web_authn_passwordless_policy block and requires a Keycloak version that supports passwordless passkeys. Defaults to false.
+                            Enable passkeys for passwordless WebAuthn authentication
+                          type: boolean
                         relyingPartyEntityName:
                           description: A human-readable server name for the WebAuthn
                             Relying Party. Defaults to keycloak.

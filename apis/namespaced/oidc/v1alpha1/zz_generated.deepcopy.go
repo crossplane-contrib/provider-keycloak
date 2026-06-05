@@ -136,6 +136,11 @@ func (in *GoogleIdentityProviderInitParameters) DeepCopyInto(out *GoogleIdentity
 		*out = new(bool)
 		**out = **in
 	}
+	if in.LoginHint != nil {
+		in, out := &in.LoginHint, &out.LoginHint
+		*out = new(string)
+		**out = **in
+	}
 	if in.OrgDomain != nil {
 		in, out := &in.OrgDomain, &out.OrgDomain
 		*out = new(string)
@@ -349,6 +354,11 @@ func (in *GoogleIdentityProviderObservation) DeepCopyInto(out *GoogleIdentityPro
 		*out = new(bool)
 		**out = **in
 	}
+	if in.LoginHint != nil {
+		in, out := &in.LoginHint, &out.LoginHint
+		*out = new(string)
+		**out = **in
+	}
 	if in.OrgDomain != nil {
 		in, out := &in.OrgDomain, &out.OrgDomain
 		*out = new(string)
@@ -510,6 +520,11 @@ func (in *GoogleIdentityProviderParameters) DeepCopyInto(out *GoogleIdentityProv
 	if in.LinkOnly != nil {
 		in, out := &in.LinkOnly, &out.LinkOnly
 		*out = new(bool)
+		**out = **in
+	}
+	if in.LoginHint != nil {
+		in, out := &in.LoginHint, &out.LoginHint
+		*out = new(string)
 		**out = **in
 	}
 	if in.OrgDomain != nil {

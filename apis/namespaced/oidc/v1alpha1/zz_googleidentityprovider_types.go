@@ -89,6 +89,10 @@ type GoogleIdentityProviderInitParameters struct {
 	// If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
 	LinkOnly *bool `json:"linkOnly,omitempty" tf:"link_only,omitempty"`
 
+	// Pass login_hint to the Google identity provider. Set to "true" to forward the login_hint query parameter from the inbound OIDC request to Google. The underlying Keycloak attribute loginHint is a boolean string, so the value should be "true" or "false".
+	// Pass login_hint to identity provider. Set to "true" to forward the login_hint client note (the underlying loginHint config attribute is a boolean string).
+	LoginHint *string `json:"loginHint,omitempty" tf:"login_hint,omitempty"`
+
 	OrgDomain *string `json:"orgDomain,omitempty" tf:"org_domain,omitempty"`
 
 	OrgRedirectModeEmailMatches *bool `json:"orgRedirectModeEmailMatches,omitempty" tf:"org_redirect_mode_email_matches,omitempty"`
@@ -209,6 +213,10 @@ type GoogleIdentityProviderObservation struct {
 	// When true, users cannot sign-in using this provider, but their existing accounts will be linked when possible. Defaults to false.
 	// If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
 	LinkOnly *bool `json:"linkOnly,omitempty" tf:"link_only,omitempty"`
+
+	// Pass login_hint to the Google identity provider. Set to "true" to forward the login_hint query parameter from the inbound OIDC request to Google. The underlying Keycloak attribute loginHint is a boolean string, so the value should be "true" or "false".
+	// Pass login_hint to identity provider. Set to "true" to forward the login_hint client note (the underlying loginHint config attribute is a boolean string).
+	LoginHint *string `json:"loginHint,omitempty" tf:"login_hint,omitempty"`
 
 	OrgDomain *string `json:"orgDomain,omitempty" tf:"org_domain,omitempty"`
 
@@ -340,6 +348,11 @@ type GoogleIdentityProviderParameters struct {
 	// If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider
 	// +kubebuilder:validation:Optional
 	LinkOnly *bool `json:"linkOnly,omitempty" tf:"link_only,omitempty"`
+
+	// Pass login_hint to the Google identity provider. Set to "true" to forward the login_hint query parameter from the inbound OIDC request to Google. The underlying Keycloak attribute loginHint is a boolean string, so the value should be "true" or "false".
+	// Pass login_hint to identity provider. Set to "true" to forward the login_hint client note (the underlying loginHint config attribute is a boolean string).
+	// +kubebuilder:validation:Optional
+	LoginHint *string `json:"loginHint,omitempty" tf:"login_hint,omitempty"`
 
 	// +kubebuilder:validation:Optional
 	OrgDomain *string `json:"orgDomain,omitempty" tf:"org_domain,omitempty"`

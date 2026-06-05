@@ -255,6 +255,11 @@ type ClientInitParameters struct {
 	// The minimum amount of time in seconds that the client should wait between polling requests to the token endpoint.
 	Oauth2DevicePollingInterval *string `json:"oauth2DevicePollingInterval,omitempty" tf:"oauth2_device_polling_interval,omitempty"`
 
+	// When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.
+	Oauth2JwtAuthorizationGrantEnabled *bool `json:"oauth2JwtAuthorizationGrantEnabled,omitempty" tf:"oauth2_jwt_authorization_grant_enabled,omitempty"`
+
+	Oauth2JwtAuthorizationGrantIdp *string `json:"oauth2JwtAuthorizationGrantIdp,omitempty" tf:"oauth2_jwt_authorization_grant_idp,omitempty"`
+
 	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value “.
 	PkceCodeChallengeMethod *string `json:"pkceCodeChallengeMethod,omitempty" tf:"pkce_code_challenge_method,omitempty"`
 
@@ -427,6 +432,11 @@ type ClientObservation struct {
 
 	// The minimum amount of time in seconds that the client should wait between polling requests to the token endpoint.
 	Oauth2DevicePollingInterval *string `json:"oauth2DevicePollingInterval,omitempty" tf:"oauth2_device_polling_interval,omitempty"`
+
+	// When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.
+	Oauth2JwtAuthorizationGrantEnabled *bool `json:"oauth2JwtAuthorizationGrantEnabled,omitempty" tf:"oauth2_jwt_authorization_grant_enabled,omitempty"`
+
+	Oauth2JwtAuthorizationGrantIdp *string `json:"oauth2JwtAuthorizationGrantIdp,omitempty" tf:"oauth2_jwt_authorization_grant_idp,omitempty"`
 
 	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value “.
 	PkceCodeChallengeMethod *string `json:"pkceCodeChallengeMethod,omitempty" tf:"pkce_code_challenge_method,omitempty"`
@@ -642,6 +652,13 @@ type ClientParameters struct {
 	// The minimum amount of time in seconds that the client should wait between polling requests to the token endpoint.
 	// +kubebuilder:validation:Optional
 	Oauth2DevicePollingInterval *string `json:"oauth2DevicePollingInterval,omitempty" tf:"oauth2_device_polling_interval,omitempty"`
+
+	// When false, this client will not be able to initiate a login or obtain access tokens. Defaults to true.
+	// +kubebuilder:validation:Optional
+	Oauth2JwtAuthorizationGrantEnabled *bool `json:"oauth2JwtAuthorizationGrantEnabled,omitempty" tf:"oauth2_jwt_authorization_grant_enabled,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	Oauth2JwtAuthorizationGrantIdp *string `json:"oauth2JwtAuthorizationGrantIdp,omitempty" tf:"oauth2_jwt_authorization_grant_idp,omitempty"`
 
 	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value “.
 	// +kubebuilder:validation:Optional
