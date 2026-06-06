@@ -229,10 +229,11 @@ export KEYCLOAK_PASSWORD=admin
 
 
 echo "########### Installing Crossplane ###########"
-$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/crossplane.yaml
+pushd "${SCRIPT_DIR}/.." > /dev/null
+KIND_CLUSTER_NAME="${CLUSTER_NAME}" CROSSPLANE_ARGS="--debug,--enable-deployment-runtime-configs,--enable-realtime-compositions,--enable-ssa-claims,--enable-usages" make controlplane.up
+popd > /dev/null
 
 echo "* Waiting for Crossplane to be ready"
-$kubectl_cmd wait applications.argoproj.io  --namespace argocd crossplane-system --for=create --for=jsonpath='{.status.health.status}'=Healthy --for=jsonpath='{.status.sync.status}'=Synced --timeout=600s
 $kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane" --for=condition=Ready --timeout=300s
 $kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane-rbac-manager" --for=condition=Ready --timeout=300s
 
