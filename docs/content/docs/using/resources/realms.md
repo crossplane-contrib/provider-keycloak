@@ -10,6 +10,8 @@ A Realm in Keycloak is a space where you manage objects like users, applications
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `realm.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kind**: `Realm`
