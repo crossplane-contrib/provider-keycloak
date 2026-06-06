@@ -89,6 +89,12 @@ handle_options "$@"
 echo "Cluster name: $CLUSTER_NAME"
 echo "Keycloak version: $KEYCLOAK_VERSION"
 
+KEYCLOAK_FEATURES="admin-fine-grained-authz:v1"
+if [ "$(printf '%s\n%s' "26.4" "$KEYCLOAK_VERSION" | sort -V | head -n1)" = "26.4" ]; then
+  KEYCLOAK_FEATURES="${KEYCLOAK_FEATURES},workflows,spiffe"
+fi
+echo "Keycloak features: $KEYCLOAK_FEATURES"
+
 echo "########### Checking dependencies ###########"
 command -v docker >/dev/null 2>&1 || { echo >&2 "Docker is required but not installed.  Aborting."; exit 1; }
 command -v kind >/dev/null 2>&1 || { echo >&2 "Kind is required but not installed.  Aborting."; exit 1; }
@@ -210,7 +216,7 @@ $kubectl_cmd wait pod --all --for=condition=Ready --namespace argocd --timeout=3
 
 echo "########### Installing Keycloak & OpenLdap ###########"
 $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/open-ldap.yaml
-sed "s/{{keycloak-version}}/${KEYCLOAK_VERSION}/g" ${SCRIPT_DIR}/apps/keycloak.yaml | $kubectl_cmd apply -f -
+sed -e "s/{{keycloak-version}}/${KEYCLOAK_VERSION}/g" -e "s/{{keycloak-features}}/${KEYCLOAK_FEATURES}/g" ${SCRIPT_DIR}/apps/keycloak.yaml | $kubectl_cmd apply -f -
 
 
 echo "* Waiting for Keycloak to be ready"

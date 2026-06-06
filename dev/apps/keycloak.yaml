@@ -22,7 +22,7 @@ spec:
           - "--http-enabled=true"
           - "--http-port=8080"
           - "--hostname-strict=false"
-          - "--features=admin-fine-grained-authz:v1"
+          - "--features={{keycloak-features}}"
         extraEnv: |
           - name: KC_BOOTSTRAP_ADMIN_USERNAME
             value: admin

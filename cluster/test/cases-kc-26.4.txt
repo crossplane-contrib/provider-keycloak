@@ -1,0 +1,4 @@
+# Test cases that require Keycloak >= 26.4
+# find ./dev/demos/ '(' -path '**/basic/**' -o -path '**/namespaced/**' ')' -name '085-new-resources.yaml' | sort -r
+./dev/demos/namespaced/085-new-resources.yaml
+./dev/demos/basic/085-new-resources.yaml

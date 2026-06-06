@@ -1,0 +1,88 @@
+---
+apiVersion: workflow.keycloak.m.crossplane.io/v1alpha1
+kind: Workflow
+metadata:
+  name: onboarding
+  namespace: dev-ns
+spec:
+  forProvider:
+    enabled: true
+    name: onboarding-new-users
+    "on": user_created
+    realmRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    step:
+      - config:
+          message: "Welcome to ${realm.displayName}!"
+        uses: notify-user
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: identityprovider.keycloak.m.crossplane.io/v1alpha1
+kind: SpiffeIdentityProvider
+metadata:
+  name: spiffe-identity-provider
+  namespace: dev-ns
+spec:
+  forProvider:
+    alias: spiffe-idp
+    bundleEndpoint: https://example.com/spiffe/bundle
+    realmRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    trustDomain: spiffe://test-domain
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: identityprovider.keycloak.m.crossplane.io/v1alpha1
+kind: OidcOpenShiftV4IdentityProvider
+metadata:
+  name: openshift-v4-identity-provider
+  namespace: dev-ns
+spec:
+  forProvider:
+    alias: openshift-v4
+    baseUrl: https://openshift.example.com:8443
+    clientId: openshift-client
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+    defaultScopes: user:full
+    realmRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    syncMode: IMPORT
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientRegexPolicy
+metadata:
+  name: regex-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    name: regex-policy
+    pattern: ^sample.+$
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    targetClaim: sample-claim
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
