@@ -338,7 +338,7 @@ jobs:
         run:
           #!/bin/bash
           set -o pipefail;
-          make uptest | tee logs/uptest.log;
+          make uptest KEYCLOAK_VERSION=${{ matrix.keycloak-version }} | tee logs/uptest.log;
           exit $?;
 
       - name: Collect logs

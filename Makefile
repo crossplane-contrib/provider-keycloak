@@ -216,6 +216,16 @@ endif
 
 UPTEST_EXAMPLE_LIST := $(shell grep -v '^\#' cluster/test/cases.txt | paste -sd ',' -)
 
+KEYCLOAK_VERSION ?=
+MIN_KC_VERSION_26_4 := 26.4
+
+ifneq ($(KEYCLOAK_VERSION),)
+KC_VERSION_GE_26_4 := $(shell printf '%s\n%s' "$(MIN_KC_VERSION_26_4)" "$(KEYCLOAK_VERSION)" | sort -V | head -n1 | grep -q "$(MIN_KC_VERSION_26_4)" && echo true || echo false)
+ifeq ($(KC_VERSION_GE_26_4),true)
+UPTEST_EXAMPLE_LIST := $(shell grep -v '^\#' cluster/test/cases-kc-26.4.txt | paste -sd ',' -),$(UPTEST_EXAMPLE_LIST)
+endif
+endif
+
 # This target requires the following environment variables to be set:
 # - UPTEST_EXAMPLE_LIST, a comma-separated list of examples to test
 #   To ensure the proper functioning of the end-to-end test resource pre-deletion hook, it is crucial to arrange your resources appropriately.
