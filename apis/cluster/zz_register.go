@@ -27,6 +27,7 @@ import (
 	v1alpha1user "github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha1"
 	v1alpha1cluster "github.com/crossplane-contrib/provider-keycloak/apis/cluster/v1alpha1"
 	v1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/v1beta1"
+	v1alpha1workflow "github.com/crossplane-contrib/provider-keycloak/apis/cluster/workflow/v1alpha1"
 )
 
 func init() {
@@ -49,6 +50,7 @@ func init() {
 		v1alpha1user.SchemeBuilder.AddToScheme,
 		v1alpha1cluster.SchemeBuilder.AddToScheme,
 		v1beta1.SchemeBuilder.AddToScheme,
+		v1alpha1workflow.SchemeBuilder.AddToScheme,
 	)
 }
 

@@ -466,3 +466,24 @@ func getAuthzUserPoliciesIDByExternalName(ctx context.Context, id string, parame
 func getAuthzUserPoliciesIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
 	return getAuthzPolicyIDByIdentifyingProperties(ctx, parameters, kcClient)
 }
+
+var authzRegexPoliciesIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "resource_server_id", "name"},
+	GetIDByExternalName:          getAuthzRegexPoliciesIDByExternalName,
+	GetIDByIdentifyingProperties: getAuthzRegexPoliciesIDByIdentifyingProperties,
+}
+
+// AuthzRegexPoliciesIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var AuthzRegexPoliciesIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(authzRegexPoliciesIdentifyingPropertiesLookup)
+
+func getAuthzRegexPoliciesIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetOpenidClientAuthorizationRegexPolicy(ctx, parameters["realm_id"].(string), parameters["resource_server_id"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getAuthzRegexPoliciesIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	return getAuthzPolicyIDByIdentifyingProperties(ctx, parameters, kcClient)
+}

@@ -1,0 +1,50 @@
+apiVersion: workflow.keycloak.m.crossplane.io/v1alpha1
+kind: Workflow
+metadata:
+  annotations:
+    meta.upbound.io/example-id: workflow/v1alpha1/workflow
+  labels:
+    testing.upbound.io/example-name: onboarding
+  name: onboarding
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    name: onboarding-new-users
+    "on": user_created
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    step:
+    - config:
+        message: |
+          <p>Dear ${user.firstName} ${user.lastName}, </p>
+          <p>Welcome to ${realm.displayName}!</p>
+          <p>
+             Best regards,<br/>
+             The Keycloak Team
+          </p>
+      uses: notify-user
+    - after: "2592000000"
+      config:
+        action: UPDATE_PASSWORD
+      uses: set-user-required-action
+    - config:
+        position: "1"
+      uses: restart
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: workflow/v1alpha1/workflow
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

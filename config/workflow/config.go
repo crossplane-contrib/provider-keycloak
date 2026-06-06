@@ -1,6 +1,13 @@
 package workflow
 
-import "github.com/crossplane/upjet/v2/pkg/config"
+import (
+	"context"
+
+	"github.com/crossplane/upjet/v2/pkg/config"
+	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+)
 
 const (
 	// Group is the short group for this provider.
@@ -15,4 +22,29 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_realm",
 		}
 	})
+}
+
+var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm", "name"},
+	GetIDByExternalName:          getIDByExternalName,
+	GetIDByIdentifyingProperties: getIDByIdentifyingProperties,
+}
+
+// IdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var IdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(identifyingPropertiesLookup)
+
+func getIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetWorkflow(ctx, parameters["realm"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetWorkflowByName(ctx, parameters["realm"].(string), parameters["name"].(string))
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
 }

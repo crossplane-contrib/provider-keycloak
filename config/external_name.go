@@ -20,6 +20,7 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/saml"
 	"github.com/crossplane-contrib/provider-keycloak/config/samlclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
+	"github.com/crossplane-contrib/provider-keycloak/config/workflow"
 )
 
 // ExternalNameConfigs contains all external name configurations for this
@@ -37,6 +38,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_openid_client_permissions":                         config.IdentifierFromProvider,                                           // {realm}/{Client.UUid}
 	"keycloak_openid_client_role_policy":                         openidclient.AuthzRolePoliciesIdentifierFromIdentifyingProperties,       // {UUid}
 	"keycloak_openid_client_user_policy":                         openidclient.AuthzUserPoliciesIdentifierFromIdentifyingProperties,       // {UUid}
+	"keycloak_openid_client_regex_policy":                        openidclient.AuthzRegexPoliciesIdentifierFromIdentifyingProperties,      // {UUid}
 	"keycloak_openid_client_default_scopes":                      config.IdentifierFromProvider,                                           // {realm}/{Client.UUid}
 	"keycloak_openid_client_optional_scopes":                     config.IdentifierFromProvider,                                           // {realm}/{Client.UUid}
 	"keycloak_openid_client_scope":                               openidclient.ClientScopeIdentifierFromIdentifyingProperties,             // {UUid}
@@ -58,6 +60,8 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_oidc_identity_provider":                            oidc.IdentifierFromIdentifyingProperties,                                // {alias}
 	"keycloak_oidc_google_identity_provider":                     oidc.IdentifierFromIdentifyingProperties,                                // {alias}
 	"keycloak_kubernetes_identity_provider":                      oidc.IdentifierFromIdentifyingProperties,                                // {alias}
+	"keycloak_oidc_openshift_v4_identity_provider":               oidc.IdentifierFromIdentifyingProperties,                                // {alias}
+	"keycloak_spiffe_identity_provider":                          oidc.IdentifierFromIdentifyingProperties,                                // {alias}
 	"keycloak_saml_identity_provider":                            saml.IdentifierFromIdentifyingProperties,                                // {alias}
 	"keycloak_custom_identity_provider_mapper":                   identityprovider.IdentifierFromIdentifyingProperties,                    // {UUid}
 	"keycloak_identity_provider_token_exchange_scope_permission": config.IdentifierFromProvider,                                           // {realm}/{provider_alias}
@@ -89,6 +93,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_ldap_hardcoded_attribute_mapper":                   ldap.HardcodedAttributeMapperIdentifierFromIdentifyingProperties,        // {UUid}
 	"keycloak_ldap_full_name_mapper":                             ldap.FullNameMapperIdentifierFromIdentifyingProperties,                  // {UUid}
 	"keycloak_ldap_custom_mapper":                                ldap.CustomMapperIdentifierFromIdentifyingProperties,                    // {UUid}
+	"keycloak_workflow":                                          workflow.IdentifierFromIdentifyingProperties,                            // {UUid}
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

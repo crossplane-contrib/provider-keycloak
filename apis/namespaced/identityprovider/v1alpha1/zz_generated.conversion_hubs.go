@@ -13,4 +13,10 @@ func (tr *IdentityProviderMapper) Hub() {}
 func (tr *KubernetesIdentityProvider) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *OidcOpenShiftV4IdentityProvider) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *ProviderTokenExchangeScopePermission) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *SpiffeIdentityProvider) Hub() {}
