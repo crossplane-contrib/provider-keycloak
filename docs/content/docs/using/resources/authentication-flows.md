@@ -10,6 +10,8 @@ Authentication flows define the sequence of steps a user must complete to authen
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `authenticationflow.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kinds**: `Flow`, `Subflow`, `Execution`, `ExecutionConfig`, `Bindings`

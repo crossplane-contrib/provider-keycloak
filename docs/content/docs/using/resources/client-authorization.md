@@ -12,6 +12,8 @@ Keycloak provides fine-grained authorization services for clients. This includes
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `openidclient.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kinds**: `ClientAuthorizationResource`, `ClientAuthorizationPermission`, `ClientClientPolicy`, `ClientGroupPolicy`, `ClientRolePolicy`, `ClientUserPolicy`, `ClientPermissions`

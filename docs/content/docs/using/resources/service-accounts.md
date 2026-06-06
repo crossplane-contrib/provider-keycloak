@@ -12,6 +12,8 @@ When a client has `serviceAccountsEnabled: true`, Keycloak creates a service acc
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `openidclient.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kinds**: `ClientServiceAccountRealmRole`, `ClientServiceAccountRole`

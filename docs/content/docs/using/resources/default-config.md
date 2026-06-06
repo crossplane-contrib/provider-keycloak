@@ -10,6 +10,8 @@ Default configuration resources let you define which groups and roles are automa
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `defaults.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kinds**: `DefaultGroups`, `Roles`

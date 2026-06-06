@@ -10,6 +10,8 @@ Users represent individuals who can authenticate with Keycloak.
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `user.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kind**: `User`

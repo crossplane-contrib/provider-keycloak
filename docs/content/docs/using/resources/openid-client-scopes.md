@@ -10,6 +10,8 @@ Client scopes define sets of protocol mappers and role scope mappings that can b
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `openidclient.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kinds**: `ClientScope`, `ClientDefaultScopes`, `ClientOptionalScopes`

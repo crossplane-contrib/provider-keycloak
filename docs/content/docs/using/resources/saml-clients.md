@@ -10,6 +10,8 @@ SAML (Security Assertion Markup Language) clients enable single sign-on for appl
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `samlclient.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kinds**: `Client`, `ClientScope`, `ClientDefaultScopes`

@@ -10,6 +10,8 @@ Protocol mappers control what information is included in tokens (OIDC) or assert
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `client.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kind**: `ProtocolMapper`
