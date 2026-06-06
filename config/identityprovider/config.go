@@ -51,6 +51,38 @@ func Configure(p *config.Provider) {
 			Extractor:     common.PathAuthenticationFlowAliasExtractor,
 		}
 	})
+
+	p.AddResourceConfigurator("keycloak_spiffe_identity_provider", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.Kind = "SpiffeIdentityProvider"
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+		r.References["first_broker_login_flow_alias"] = config.Reference{
+			TerraformName: "keycloak_authentication_flow",
+			Extractor:     common.PathAuthenticationFlowAliasExtractor,
+		}
+		r.References["post_broker_login_flow_alias"] = config.Reference{
+			TerraformName: "keycloak_authentication_flow",
+			Extractor:     common.PathAuthenticationFlowAliasExtractor,
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_oidc_openshift_v4_identity_provider", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.Kind = "OidcOpenShiftV4IdentityProvider"
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+		r.References["first_broker_login_flow_alias"] = config.Reference{
+			TerraformName: "keycloak_authentication_flow",
+			Extractor:     common.PathAuthenticationFlowAliasExtractor,
+		}
+		r.References["post_broker_login_flow_alias"] = config.Reference{
+			TerraformName: "keycloak_authentication_flow",
+			Extractor:     common.PathAuthenticationFlowAliasExtractor,
+		}
+	})
 }
 
 var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{

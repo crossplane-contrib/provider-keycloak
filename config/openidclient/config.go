@@ -291,6 +291,24 @@ func Configure(p *config.Provider) {
 			Extractor:     common.PathUUIDExtractor,
 		}
 	})
+
+	p.AddResourceConfigurator("keycloak_openid_client_regex_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+
+		if s, ok := r.TerraformResource.Schema["decisionStrategy"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+
+		if s, ok := r.TerraformResource.Schema["logic"]; ok {
+			s.Optional = false
+			s.Computed = false
+		}
+	})
 }
 
 var clientIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{

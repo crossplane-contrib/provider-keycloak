@@ -28,6 +28,7 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/saml"
 	"github.com/crossplane-contrib/provider-keycloak/config/samlclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
+	"github.com/crossplane-contrib/provider-keycloak/config/workflow"
 
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
@@ -109,6 +110,7 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 		ldap.Configure,
 		samlclient.Configure,
 		authentication.Configure,
+		workflow.Configure,
 	} {
 		configure(pc)
 	}
@@ -160,6 +162,7 @@ func GetProviderNamespaced(generationProvider bool) (*ujconfig.Provider, error) 
 		ldap.Configure,
 		samlclient.Configure,
 		authentication.Configure,
+		workflow.Configure,
 	} {
 		configure(pc)
 	}
