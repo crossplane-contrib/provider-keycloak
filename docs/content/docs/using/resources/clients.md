@@ -10,6 +10,8 @@ Clients are applications and services that can request authentication. Keycloak 
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `openidclient.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kind**: `Client`

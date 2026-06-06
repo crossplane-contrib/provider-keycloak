@@ -10,6 +10,8 @@ Organizations provide multi-tenancy support in Keycloak, allowing you to group u
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `organization.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kind**: `Organization`

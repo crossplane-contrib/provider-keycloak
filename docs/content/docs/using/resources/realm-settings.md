@@ -10,6 +10,8 @@ Beyond the core [Realm](./realms.md) resource, Keycloak provides additional real
 
 ## API Reference
 
+> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+
 - **API Group**: `realm.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 - **Kinds**: `RealmEvents`, `RequiredAction`, `UserProfile`, `KeystoreRsa`, `DefaultClientScopes`, `OptionalClientScopes`, `ClientPolicyProfile`, `ClientPolicyProfilePolicy`
