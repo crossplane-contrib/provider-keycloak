@@ -232,9 +232,16 @@ echo "########### Installing Crossplane ###########"
 $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/crossplane.yaml
 
 echo "* Waiting for Crossplane to be ready"
-$kubectl_cmd wait applications.argoproj.io --namespace argocd crossplane-system --for=create --for=jsonpath='{.status.health.status}'=Healthy --for=jsonpath='{.status.sync.status}'=Synced --timeout=600s
-$kubectl_cmd wait pod --namespace crossplane-system --selector="app=crossplane" --for=condition=Ready --timeout=300s
-$kubectl_cmd wait pod --namespace crossplane-system --selector="app=crossplane-rbac-manager" --for=condition=Ready --timeout=300s
+# Wait for the crossplane-system namespace (created by ArgoCD via CreateNamespace=true)
+$kubectl_cmd wait namespace/crossplane-system --for=create --timeout=300s
+# Wait for Crossplane deployments to be created and available.
+# This is more reliable than waiting for the ArgoCD Application sync status, which can
+# oscillate indefinitely when Crossplane CRD status updates trigger ArgoCD's selfHeal
+# reconciliation, preventing the sync.status from stabilizing to "Synced".
+$kubectl_cmd wait deployment/crossplane -n crossplane-system --for=create --timeout=300s
+$kubectl_cmd wait deployment/crossplane -n crossplane-system --for=condition=Available --timeout=300s
+$kubectl_cmd wait deployment/crossplane-rbac-manager -n crossplane-system --for=create --timeout=300s
+$kubectl_cmd wait deployment/crossplane-rbac-manager -n crossplane-system --for=condition=Available --timeout=300s
 
 echo "########### Installing Keycloak Provider ###########"
 
