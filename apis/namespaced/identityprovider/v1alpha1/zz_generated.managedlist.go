@@ -25,8 +25,26 @@ func (l *KubernetesIdentityProviderList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this OidcOpenShiftV4IdentityProviderList.
+func (l *OidcOpenShiftV4IdentityProviderList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this ProviderTokenExchangeScopePermissionList.
 func (l *ProviderTokenExchangeScopePermissionList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this SpiffeIdentityProviderList.
+func (l *SpiffeIdentityProviderList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

@@ -87,6 +87,46 @@ func (mg *KubernetesIdentityProvider) SetWriteConnectionSecretToReference(r *xpv
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this OidcOpenShiftV4IdentityProvider.
+func (mg *OidcOpenShiftV4IdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this OidcOpenShiftV4IdentityProvider.
+func (mg *OidcOpenShiftV4IdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this OidcOpenShiftV4IdentityProvider.
+func (mg *OidcOpenShiftV4IdentityProvider) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this OidcOpenShiftV4IdentityProvider.
+func (mg *OidcOpenShiftV4IdentityProvider) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this OidcOpenShiftV4IdentityProvider.
+func (mg *OidcOpenShiftV4IdentityProvider) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this OidcOpenShiftV4IdentityProvider.
+func (mg *OidcOpenShiftV4IdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this OidcOpenShiftV4IdentityProvider.
+func (mg *OidcOpenShiftV4IdentityProvider) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this OidcOpenShiftV4IdentityProvider.
+func (mg *OidcOpenShiftV4IdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this ProviderTokenExchangeScopePermission.
 func (mg *ProviderTokenExchangeScopePermission) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)
@@ -124,5 +164,45 @@ func (mg *ProviderTokenExchangeScopePermission) SetProviderConfigReference(r *xp
 
 // SetWriteConnectionSecretToReference of this ProviderTokenExchangeScopePermission.
 func (mg *ProviderTokenExchangeScopePermission) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this SpiffeIdentityProvider.
+func (mg *SpiffeIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this SpiffeIdentityProvider.
+func (mg *SpiffeIdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this SpiffeIdentityProvider.
+func (mg *SpiffeIdentityProvider) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this SpiffeIdentityProvider.
+func (mg *SpiffeIdentityProvider) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this SpiffeIdentityProvider.
+func (mg *SpiffeIdentityProvider) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this SpiffeIdentityProvider.
+func (mg *SpiffeIdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this SpiffeIdentityProvider.
+func (mg *SpiffeIdentityProvider) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this SpiffeIdentityProvider.
+func (mg *SpiffeIdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }

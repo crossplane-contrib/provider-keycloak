@@ -1,0 +1,40 @@
+apiVersion: identityprovider.keycloak.m.crossplane.io/v1alpha1
+kind: OidcOpenShiftV4IdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/oidcopenshiftv4identityprovider
+  labels:
+    testing.upbound.io/example-name: openshift_v4
+  name: openshift-v4
+  namespace: upbound-system
+spec:
+  forProvider:
+    baseUrl: https://openshift.example.com:8443
+    clientId: ${var.openshift_client_id}
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+    defaultScopes: user:full
+    extraConfig:
+      myCustomConfigKey: myValue
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    syncMode: IMPORT
+    trustEmail: true
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/oidcopenshiftv4identityprovider
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

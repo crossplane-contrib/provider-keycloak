@@ -200,6 +200,178 @@ func (mg *KubernetesIdentityProvider) ResolveReferences(ctx context.Context, c c
 	return nil
 }
 
+// ResolveReferences of this OidcOpenShiftV4IdentityProvider.
+func (mg *OidcOpenShiftV4IdentityProvider) ResolveReferences(ctx context.Context, c client.Reader) error {
+	var m xpresource.Managed
+	var l xpresource.ManagedList
+	r := reference.NewAPINamespacedResolver(c, mg)
+
+	var rsp reference.NamespacedResolutionResponse
+	var err error
+	{
+		m, l, err = apisresolver.GetManagedResource("authenticationflow.keycloak.m.crossplane.io", "v1alpha1", "Flow", "FlowList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.FirstBrokerLoginFlowAlias),
+			Extract:      common.AuthenticationFlowAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.FirstBrokerLoginFlowAliasRef,
+			Selector:     mg.Spec.ForProvider.FirstBrokerLoginFlowAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.FirstBrokerLoginFlowAlias")
+	}
+	mg.Spec.ForProvider.FirstBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.FirstBrokerLoginFlowAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("organization.keycloak.m.crossplane.io", "v1alpha1", "Organization", "OrganizationList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OrganizationID),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.OrganizationIDRef,
+			Selector:     mg.Spec.ForProvider.OrganizationIDSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OrganizationID")
+	}
+	mg.Spec.ForProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OrganizationIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("authenticationflow.keycloak.m.crossplane.io", "v1alpha1", "Flow", "FlowList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.PostBrokerLoginFlowAlias),
+			Extract:      common.AuthenticationFlowAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.PostBrokerLoginFlowAliasRef,
+			Selector:     mg.Spec.ForProvider.PostBrokerLoginFlowAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.PostBrokerLoginFlowAlias")
+	}
+	mg.Spec.ForProvider.PostBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.PostBrokerLoginFlowAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Realm),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.RealmRef,
+			Selector:     mg.Spec.ForProvider.RealmSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.Realm")
+	}
+	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("authenticationflow.keycloak.m.crossplane.io", "v1alpha1", "Flow", "FlowList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.FirstBrokerLoginFlowAlias),
+			Extract:      common.AuthenticationFlowAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.FirstBrokerLoginFlowAliasRef,
+			Selector:     mg.Spec.InitProvider.FirstBrokerLoginFlowAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.FirstBrokerLoginFlowAlias")
+	}
+	mg.Spec.InitProvider.FirstBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.FirstBrokerLoginFlowAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("organization.keycloak.m.crossplane.io", "v1alpha1", "Organization", "OrganizationList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OrganizationID),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.OrganizationIDRef,
+			Selector:     mg.Spec.InitProvider.OrganizationIDSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OrganizationID")
+	}
+	mg.Spec.InitProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OrganizationIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("authenticationflow.keycloak.m.crossplane.io", "v1alpha1", "Flow", "FlowList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.PostBrokerLoginFlowAlias),
+			Extract:      common.AuthenticationFlowAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.PostBrokerLoginFlowAliasRef,
+			Selector:     mg.Spec.InitProvider.PostBrokerLoginFlowAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.PostBrokerLoginFlowAlias")
+	}
+	mg.Spec.InitProvider.PostBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.PostBrokerLoginFlowAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Realm),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.RealmRef,
+			Selector:     mg.Spec.InitProvider.RealmSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.Realm")
+	}
+	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
+
+	return nil
+}
+
 // ResolveReferences of this ProviderTokenExchangeScopePermission.
 func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Context, c client.Reader) error {
 	var m xpresource.Managed
@@ -329,6 +501,178 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	}
 	mg.Spec.InitProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmIDRef = rsp.ResolvedReference
+
+	return nil
+}
+
+// ResolveReferences of this SpiffeIdentityProvider.
+func (mg *SpiffeIdentityProvider) ResolveReferences(ctx context.Context, c client.Reader) error {
+	var m xpresource.Managed
+	var l xpresource.ManagedList
+	r := reference.NewAPINamespacedResolver(c, mg)
+
+	var rsp reference.NamespacedResolutionResponse
+	var err error
+	{
+		m, l, err = apisresolver.GetManagedResource("authenticationflow.keycloak.m.crossplane.io", "v1alpha1", "Flow", "FlowList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.FirstBrokerLoginFlowAlias),
+			Extract:      common.AuthenticationFlowAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.FirstBrokerLoginFlowAliasRef,
+			Selector:     mg.Spec.ForProvider.FirstBrokerLoginFlowAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.FirstBrokerLoginFlowAlias")
+	}
+	mg.Spec.ForProvider.FirstBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.FirstBrokerLoginFlowAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("organization.keycloak.m.crossplane.io", "v1alpha1", "Organization", "OrganizationList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OrganizationID),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.OrganizationIDRef,
+			Selector:     mg.Spec.ForProvider.OrganizationIDSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OrganizationID")
+	}
+	mg.Spec.ForProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OrganizationIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("authenticationflow.keycloak.m.crossplane.io", "v1alpha1", "Flow", "FlowList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.PostBrokerLoginFlowAlias),
+			Extract:      common.AuthenticationFlowAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.PostBrokerLoginFlowAliasRef,
+			Selector:     mg.Spec.ForProvider.PostBrokerLoginFlowAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.PostBrokerLoginFlowAlias")
+	}
+	mg.Spec.ForProvider.PostBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.PostBrokerLoginFlowAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Realm),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.RealmRef,
+			Selector:     mg.Spec.ForProvider.RealmSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.Realm")
+	}
+	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("authenticationflow.keycloak.m.crossplane.io", "v1alpha1", "Flow", "FlowList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.FirstBrokerLoginFlowAlias),
+			Extract:      common.AuthenticationFlowAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.FirstBrokerLoginFlowAliasRef,
+			Selector:     mg.Spec.InitProvider.FirstBrokerLoginFlowAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.FirstBrokerLoginFlowAlias")
+	}
+	mg.Spec.InitProvider.FirstBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.FirstBrokerLoginFlowAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("organization.keycloak.m.crossplane.io", "v1alpha1", "Organization", "OrganizationList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OrganizationID),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.OrganizationIDRef,
+			Selector:     mg.Spec.InitProvider.OrganizationIDSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OrganizationID")
+	}
+	mg.Spec.InitProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OrganizationIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("authenticationflow.keycloak.m.crossplane.io", "v1alpha1", "Flow", "FlowList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.PostBrokerLoginFlowAlias),
+			Extract:      common.AuthenticationFlowAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.PostBrokerLoginFlowAliasRef,
+			Selector:     mg.Spec.InitProvider.PostBrokerLoginFlowAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.PostBrokerLoginFlowAlias")
+	}
+	mg.Spec.InitProvider.PostBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.PostBrokerLoginFlowAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Realm),
+			Extract:      reference.ExternalName(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.RealmRef,
+			Selector:     mg.Spec.InitProvider.RealmSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.Realm")
+	}
+	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
 
 	return nil
 }

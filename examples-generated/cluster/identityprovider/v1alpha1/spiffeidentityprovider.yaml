@@ -1,0 +1,56 @@
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: SpiffeIdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/spiffeidentityprovider
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    alias: my-spiffe-idp
+    bundleEndpoint: https://example.com/spiffe/bundle
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    trustDomain: spiffe://my-trust-domain
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/spiffeidentityprovider
+  labels:
+    testing.upbound.io/example-name: spiffe_client
+  name: spiffe-client
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientAuthenticatorType: federated-jwt
+    clientId: spiffe-client
+    enabled: true
+    extraConfig:
+      jwt.credential.issuer: my-spiffe-idp
+      jwt.credential.sub: spiffe://my-trust-domain/workload
+    name: SPIFFE Client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    serviceAccountsEnabled: true
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/spiffeidentityprovider
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

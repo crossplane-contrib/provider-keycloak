@@ -79,6 +79,15 @@ func (l *ClientPermissionsList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this ClientRegexPolicyList.
+func (l *ClientRegexPolicyList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this ClientRolePolicyList.
 func (l *ClientRolePolicyList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))

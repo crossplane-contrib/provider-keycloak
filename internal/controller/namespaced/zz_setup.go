@@ -24,7 +24,9 @@ import (
 	rolesgroup "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/group/roles"
 	identityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/identityprovidermapper"
 	kubernetesidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/kubernetesidentityprovider"
+	oidcopenshiftv4identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/oidcopenshiftv4identityprovider"
 	providertokenexchangescopepermission "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/providertokenexchangescopepermission"
+	spiffeidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/spiffeidentityprovider"
 	custommapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/custommapper"
 	fullnamemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/fullnamemapper"
 	groupmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/groupmapper"
@@ -46,6 +48,7 @@ import (
 	clientgrouppolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientgrouppolicy"
 	clientoptionalscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientoptionalscopes"
 	clientpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientpermissions"
+	clientregexpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientregexpolicy"
 	clientrolepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientrolepolicy"
 	clientscope "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientscope"
 	clientserviceaccountrealmrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientserviceaccountrealmrole"
@@ -73,6 +76,7 @@ import (
 	rolesuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/roles"
 	user "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/user"
 	userfederationuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/userfederation"
+	workflow "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/workflow/workflow"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
@@ -94,7 +98,9 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		rolesgroup.Setup,
 		identityprovidermapper.Setup,
 		kubernetesidentityprovider.Setup,
+		oidcopenshiftv4identityprovider.Setup,
 		providertokenexchangescopepermission.Setup,
+		spiffeidentityprovider.Setup,
 		custommapper.Setup,
 		fullnamemapper.Setup,
 		groupmapper.Setup,
@@ -116,6 +122,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientgrouppolicy.Setup,
 		clientoptionalscopes.Setup,
 		clientpermissions.Setup,
+		clientregexpolicy.Setup,
 		clientrolepolicy.Setup,
 		clientscope.Setup,
 		clientserviceaccountrealmrole.Setup,
@@ -143,6 +150,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		rolesuser.Setup,
 		user.Setup,
 		userfederationuser.Setup,
+		workflow.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
@@ -170,7 +178,9 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		rolesgroup.SetupGated,
 		identityprovidermapper.SetupGated,
 		kubernetesidentityprovider.SetupGated,
+		oidcopenshiftv4identityprovider.SetupGated,
 		providertokenexchangescopepermission.SetupGated,
+		spiffeidentityprovider.SetupGated,
 		custommapper.SetupGated,
 		fullnamemapper.SetupGated,
 		groupmapper.SetupGated,
@@ -192,6 +202,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientgrouppolicy.SetupGated,
 		clientoptionalscopes.SetupGated,
 		clientpermissions.SetupGated,
+		clientregexpolicy.SetupGated,
 		clientrolepolicy.SetupGated,
 		clientscope.SetupGated,
 		clientserviceaccountrealmrole.SetupGated,
@@ -219,6 +230,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		rolesuser.SetupGated,
 		user.SetupGated,
 		userfederationuser.SetupGated,
+		workflow.SetupGated,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err

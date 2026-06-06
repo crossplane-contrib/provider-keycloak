@@ -31,6 +31,9 @@ func (tr *ClientOptionalScopes) Hub() {}
 func (tr *ClientPermissions) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *ClientRegexPolicy) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *ClientRolePolicy) Hub() {}
 
 // Hub marks this type as a conversion hub.
