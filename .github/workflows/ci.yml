@@ -293,10 +293,31 @@ jobs:
         run: make vendor vendor.check
 
       - name: Starting testsetup for E2E Tests
+        id: setup
+        continue-on-error: true
         run: |
           set -o pipefail
           mkdir -p logs
           ./dev/setup_dev_environment.sh --cluster-name fenrir-1 --deploy-local-provider --keycloak-version ${{ matrix.keycloak-version }} | tee logs/setup-environment.log
+
+      - name: Collect setup logs
+        if: steps.setup.outcome == 'failure'
+        shell: bash
+        run: |
+          kind export kubeconfig --name fenrir-1 || true
+          ./dev/collect-logs.sh || true
+
+      - name: Upload setup logs
+        if: steps.setup.outcome == 'failure'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: e2e-setup-logs-${{ matrix.keycloak-version }}
+          path: |
+            logs/
+
+      - name: Fail on setup error
+        if: steps.setup.outcome == 'failure'
+        run: exit 1
 
       - name: Verify kind cluster exists
         run: |
