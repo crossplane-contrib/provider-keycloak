@@ -31,6 +31,23 @@ extract_argument() {
   echo "${2:-${1#*=}}"
 }
 
+retry() {
+  local attempts="$1"
+  local delay="$2"
+  shift 2
+
+  local attempt=1
+  until "$@"; do
+    if [[ $attempt -ge $attempts ]]; then
+      return 1
+    fi
+
+    echo "Command failed, retrying in ${delay}s (${attempt}/${attempts})"
+    sleep "$delay"
+    attempt=$((attempt + 1))
+  done
+}
+
 # Function to handle options and arguments
 handle_options() {
   while [ $# -gt 0 ]; do
@@ -236,7 +253,7 @@ export KEYCLOAK_PASSWORD=admin
 
 echo "########### Installing Crossplane ###########"
 pushd "${SCRIPT_DIR}/.." > /dev/null
-KIND_CLUSTER_NAME="${CLUSTER_NAME}" CROSSPLANE_ARGS="--debug,--enable-deployment-runtime-configs,--enable-realtime-compositions,--enable-ssa-claims,--enable-usages" make controlplane.up
+retry 3 10 env KIND_CLUSTER_NAME="${CLUSTER_NAME}" CROSSPLANE_ARGS="--debug,--enable-deployment-runtime-configs,--enable-realtime-compositions,--enable-ssa-claims,--enable-usages" make controlplane.up
 popd > /dev/null
 
 echo "* Waiting for Crossplane to be ready"
