@@ -203,8 +203,32 @@ CHAINSAW_VERSION = 0.2.12
 CROSSPLANE_VERSION = 2.0.2
 CROSSPLANE_CLI_VERSION = v2.0.2
 CROSSPLANE_NAMESPACE = crossplane-system
+CROSSPLANE_CHART_DIR := $(TOOLS_HOST_DIR)/crossplane-chart-$(CROSSPLANE_VERSION)
+CROSSPLANE_CHART := $(CROSSPLANE_CHART_DIR)/Chart.yaml
 -include build/makelib/local.xpkg.mk
 -include build/makelib/controlplane.mk
+
+$(CROSSPLANE_CHART):
+	@$(INFO) downloading Crossplane chart $(CROSSPLANE_VERSION)
+	@rm -rf $(CROSSPLANE_CHART_DIR) $(TOOLS_HOST_DIR)/tmp-crossplane-chart
+	@mkdir -p $(CROSSPLANE_CHART_DIR) $(TOOLS_HOST_DIR)/tmp-crossplane-chart
+	@curl -fsSL https://github.com/crossplane/crossplane/archive/refs/tags/v$(CROSSPLANE_VERSION).tar.gz | tar -xz -C $(TOOLS_HOST_DIR)/tmp-crossplane-chart
+	@cp -R $(TOOLS_HOST_DIR)/tmp-crossplane-chart/*/cluster/charts/crossplane/. $(CROSSPLANE_CHART_DIR)/
+	@rm -rf $(TOOLS_HOST_DIR)/tmp-crossplane-chart
+	@$(OK) downloading Crossplane chart $(CROSSPLANE_VERSION)
+
+controlplane.up: $(HELM) $(KUBECTL) $(KIND) $(CROSSPLANE_CHART)
+	@$(INFO) setting up controlplane
+	@$(KIND) get kubeconfig --name $(KIND_CLUSTER_NAME) >/dev/null 2>&1 || $(KIND) create cluster --name=$(KIND_CLUSTER_NAME)
+	@$(INFO) "setting kubectl context to kind-$(KIND_CLUSTER_NAME)"
+	@$(KUBECTL) config use-context "kind-$(KIND_CLUSTER_NAME)"
+	@if ! $(HELM) get notes -n $(CROSSPLANE_NAMESPACE) crossplane >/dev/null 2>&1; then \
+		if [ -z "$(CROSSPLANE_ARGS)" ]; then \
+			$(HELM) install crossplane --create-namespace --namespace=$(CROSSPLANE_NAMESPACE) --set image.tag=v$(CROSSPLANE_VERSION) $(CROSSPLANE_CHART_DIR); \
+		else \
+			$(HELM) install crossplane --create-namespace --namespace=$(CROSSPLANE_NAMESPACE) --set image.tag=v$(CROSSPLANE_VERSION) --set "args={$(CROSSPLANE_ARGS)}" $(CROSSPLANE_CHART_DIR); \
+		fi; \
+	fi
 
 # Define a variable for the optional flags
 RENDER_ONLY_FLAG :=
