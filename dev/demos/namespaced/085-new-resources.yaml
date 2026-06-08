@@ -34,7 +34,7 @@ spec:
       name: "dev-ns"
       policy:
         resolve: Always
-    trustDomain: spiffe://test-domain
+    trustDomain: spiffe://test-domain.example
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig
