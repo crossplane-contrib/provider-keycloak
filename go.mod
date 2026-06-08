@@ -10,7 +10,7 @@ require (
 	github.com/crossplane/upjet/v2 v2.2.0
 	github.com/hashicorp/terraform-json v0.27.2
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.1
-	github.com/keycloak/terraform-provider-keycloak v0.0.0-20260605172242-6bef9f624bfe
+	github.com/keycloak/terraform-provider-keycloak v0.0.0-20260608085440-209a0abf877d
 	github.com/pkg/errors v0.9.1
 	k8s.io/api v0.35.4
 	k8s.io/apiextensions-apiserver v0.35.4
