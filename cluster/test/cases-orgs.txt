@@ -1,0 +1,5 @@
+# Keycloak >= 26.6 organization test cases
+# These require the organization feature to be enabled in Keycloak
+dev/demos/orgs/010-oidc-identity-provider.yaml
+dev/demos/orgs/030-k8s-federated-identity-provider.yaml
+dev/demos/orgs/031-k8s-federated-client.yaml

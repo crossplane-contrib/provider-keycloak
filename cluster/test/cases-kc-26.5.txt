@@ -1,0 +1,3 @@
+# Keycloak >= 26.5 test cases (Workflow and SpiffeIdentityProvider)
+dev/demos/basic/086-kc-26.5-resources.yaml
+dev/demos/namespaced/086-kc-26.5-resources.yaml

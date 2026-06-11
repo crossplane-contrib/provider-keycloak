@@ -7,6 +7,15 @@ echo "Run Setup..."
 ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/basic/000-init.yaml
 ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/namespaced/000-init.yaml
 
+# Apply org init manifest if KEYCLOAK_VERSION >= 26.6
+if [ -n "${KEYCLOAK_VERSION:-}" ]; then
+  MIN_KC_VERSION_ORGS="26.6"
+  if [ "$(printf '%s\n%s' "$MIN_KC_VERSION_ORGS" "$KEYCLOAK_VERSION" | sort -V | head -n1)" = "$MIN_KC_VERSION_ORGS" ]; then
+    echo "Keycloak version ${KEYCLOAK_VERSION} >= ${MIN_KC_VERSION_ORGS}, applying org init manifests..."
+    ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/orgs/000-init.yaml
+  fi
+fi
+
 # Uptest creates by default these chainsaw test files in following folder /tmp/uptest-e2e/case/
 # * 00-apply.yaml
 # * 02-import.yaml

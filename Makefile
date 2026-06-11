@@ -58,7 +58,7 @@ GO_SUBDIRS += cmd internal apis generate
 # ====================================================================================
 # Setup Kubernetes tools
 KUBECTL_VERSION ?= v1.32.2
-KIND_VERSION = v0.27.0
+KIND_VERSION = v0.32.0
 UP_VERSION = v0.38.4
 UP_CHANNEL = stable
 UPTEST_VERSION = v2.2.0
@@ -103,14 +103,6 @@ xpkg.build.upjet-provider-template: do.build.images
 # build steps in parallel to avoid encountering an installation race condition.
 build.init: $(UP) check-terraform-version $(CROSSPLANE_CLI)
 
-$(CROSSPLANE_CLI):
-	@$(INFO) installing Crossplane CLI $(CROSSPLANE_CLI_VERSION)
-	@mkdir -p $(TOOLS_HOST_DIR)/tmp-crossplane-cli $(dir $(CROSSPLANE_CLI))
-	@cd $(TOOLS_HOST_DIR)/tmp-crossplane-cli && curl -fsSL "https://raw.githubusercontent.com/crossplane/crossplane/main/install.sh" | XP_CHANNEL=$(CROSSPLANE_CLI_CHANNEL) XP_VERSION=$(CROSSPLANE_CLI_VERSION) sh || $(FAIL)
-	@mv $(TOOLS_HOST_DIR)/tmp-crossplane-cli/crossplane $(CROSSPLANE_CLI)
-	@rm -rf $(TOOLS_HOST_DIR)/tmp-crossplane-cli
-	@chmod +x $(CROSSPLANE_CLI)
-	@$(OK) installing Crossplane CLI $(CROSSPLANE_CLI_VERSION)
 
 # ====================================================================================
 # Setup Terraform for fetching provider schema
@@ -242,11 +234,21 @@ UPTEST_EXAMPLE_LIST := $(shell grep -v '^\#' cluster/test/cases.txt | paste -sd 
 
 KEYCLOAK_VERSION ?=
 MIN_KC_VERSION_26_4 := 26.4
+MIN_KC_VERSION_26_5 := 26.5
+MIN_KC_VERSION_ORGS := 26.6
 
 ifneq ($(KEYCLOAK_VERSION),)
 KC_VERSION_GE_26_4 := $(shell printf '%s\n%s' "$(MIN_KC_VERSION_26_4)" "$(KEYCLOAK_VERSION)" | sort -V | head -n1 | grep -q "$(MIN_KC_VERSION_26_4)" && echo true || echo false)
 ifeq ($(KC_VERSION_GE_26_4),true)
 UPTEST_EXAMPLE_LIST := $(shell grep -v '^\#' cluster/test/cases-kc-26.4.txt | paste -sd ',' -),$(UPTEST_EXAMPLE_LIST)
+endif
+KC_VERSION_GE_26_5 := $(shell printf '%s\n%s' "$(MIN_KC_VERSION_26_5)" "$(KEYCLOAK_VERSION)" | sort -V | head -n1 | grep -q "$(MIN_KC_VERSION_26_5)" && echo true || echo false)
+ifeq ($(KC_VERSION_GE_26_5),true)
+UPTEST_EXAMPLE_LIST := $(shell grep -v '^\#' cluster/test/cases-kc-26.5.txt | paste -sd ',' -),$(UPTEST_EXAMPLE_LIST)
+endif
+KC_VERSION_GE_ORGS := $(shell printf '%s\n%s' "$(MIN_KC_VERSION_ORGS)" "$(KEYCLOAK_VERSION)" | sort -V | head -n1 | grep -q "$(MIN_KC_VERSION_ORGS)" && echo true || echo false)
+ifeq ($(KC_VERSION_GE_ORGS),true)
+UPTEST_EXAMPLE_LIST := $(UPTEST_EXAMPLE_LIST),$(shell grep -v '^\#' cluster/test/cases-orgs.txt | paste -sd ',' -)
 endif
 endif
 

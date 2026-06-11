@@ -5,7 +5,7 @@ SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 
 # Default variable values
 CLUSTER_NAME="fenrir-1"
-KEYCLOAK_VERSION="26.4.4"
+KEYCLOAK_VERSION="26.6.2"
 skipmetallb=false
 runcloudproviderkind=false
 uselocalprovider=false
@@ -109,6 +109,9 @@ echo "Keycloak version: $KEYCLOAK_VERSION"
 KEYCLOAK_FEATURES="admin-fine-grained-authz:v1"
 if [ "$(printf '%s\n%s' "26.4" "$KEYCLOAK_VERSION" | sort -V | head -n1)" = "26.4" ]; then
   KEYCLOAK_FEATURES="${KEYCLOAK_FEATURES},workflows,spiffe"
+fi
+if [ "$(printf '%s\n%s' "26.6" "$KEYCLOAK_VERSION" | sort -V | head -n1)" = "26.6" ]; then
+  KEYCLOAK_FEATURES="${KEYCLOAK_FEATURES},organization"
 fi
 echo "Keycloak features: $KEYCLOAK_FEATURES"
 

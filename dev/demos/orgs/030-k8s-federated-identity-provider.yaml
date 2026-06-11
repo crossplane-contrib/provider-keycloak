@@ -1,0 +1,22 @@
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: KubernetesIdentityProvider
+metadata:
+  name: k8s-federated-idp
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: k8s-federated
+    realmRef:
+      name: "orgs"
+      policy:
+        resolve: Always
+    organizationIdRef:
+      name: example
+      policy:
+        resolve: Always
+    issuerUrl: https://kubernetes.default.svc
+    trustEmail: true
+    syncMode: FORCE
+    enabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
