@@ -1,0 +1,23 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: k8s-federated-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientAuthenticatorType: federated-jwt
+    clientId: k8s-federated-client
+    enabled: true
+    name: k8s-federated-client
+    realmRef:
+      name: "orgs"
+      policy:
+        resolve: Always
+    serviceAccountsEnabled: true
+    standardFlowEnabled: false
+    attributes:
+      federated.idp: k8s-federated
+      federated.sub: system:serviceaccount:default:k8s-federated-test-sa
+  providerConfigRef:
+    name: "keycloak-provider-config"

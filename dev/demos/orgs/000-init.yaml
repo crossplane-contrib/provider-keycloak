@@ -24,6 +24,12 @@ stringData:
   secret: "admin"
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-federated-test-sa
+  namespace: default
+---
+apiVersion: v1
 kind: Secret
 metadata:
   namespace: dev
