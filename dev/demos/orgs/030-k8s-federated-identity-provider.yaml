@@ -14,7 +14,7 @@ spec:
       name: example
       policy:
         resolve: Always
-    issuerUrl: https://kubernetes.default.svc
+    issuer: https://kubernetes.default.svc
     trustEmail: true
     syncMode: FORCE
     enabled: true
