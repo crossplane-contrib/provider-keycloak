@@ -4,10 +4,13 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"sync"
 
 	"github.com/crossplane/crossplane-runtime/v2/pkg/errors"
 	"github.com/crossplane/upjet/v2/pkg/terraform"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+
+	"github.com/crossplane-contrib/provider-keycloak/internal/keycloaksession"
 )
 
 // Component is a generic keycloak data model
@@ -21,10 +24,38 @@ type Component struct {
 	Config       map[string][]string `json:"config"`
 }
 
+// cachedKeycloakClient holds a cached *keycloak.KeycloakClient alongside
+// the configuration that produced it, for logout on shutdown.
+type cachedKeycloakClient struct {
+	client *keycloak.KeycloakClient
+	config map[string]any
+}
+
+// keycloakClientCache caches *keycloak.KeycloakClient instances keyed
+// by a SHA-256 hash of the provider configuration to avoid creating a
+// new login session on every lookup call.
+var (
+	keycloakClientCache   sync.Map // map[string]*cachedKeycloakClient
+	keycloakClientCacheMu sync.Mutex
+)
+
 // newKeycloakClient creates a new keycloak client based on the settings in the provider configuration
 // (This can be removed once this issue is resolved: https://github.com/crossplane/upjet/issues/464)
 func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]any) (*keycloak.KeycloakClient, error) {
 	c := terraformProviderConfig["configuration"].(terraform.ProviderConfiguration)
+
+	cacheKey := keycloaksession.ConfigCacheKey(c)
+	if cached, ok := keycloakClientCache.Load(cacheKey); ok {
+		return cached.(*cachedKeycloakClient).client, nil
+	}
+
+	// Not cached yet – create under a mutex so concurrent lookup calls
+	// for the same configuration only log in once.
+	keycloakClientCacheMu.Lock()
+	defer keycloakClientCacheMu.Unlock()
+	if cached, ok := keycloakClientCache.Load(cacheKey); ok {
+		return cached.(*cachedKeycloakClient).client, nil
+	}
 
 	url := tryGetString(c, "url", "")
 	basePath := tryGetString(c, "base_path", "")
@@ -76,6 +107,16 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 	if err != nil {
 		return nil, err
 	}
+
+	// Store a copy of the config alongside the client for logout.
+	cfgCopy := make(map[string]any, len(c))
+	for k, v := range c {
+		cfgCopy[k] = v
+	}
+	keycloakClientCache.Store(cacheKey, &cachedKeycloakClient{
+		client: keycloakClient,
+		config: cfgCopy,
+	})
 	return keycloakClient, nil
 }
 
@@ -236,4 +277,15 @@ func GetGenericProtocolMappers(kcClient *keycloak.KeycloakClient, ctx context.Co
 	}
 
 	return &genericProtocolMappers, nil
+}
+
+// CleanupLookupSessions logs out all cached lookup Keycloak sessions.
+// It should be called during graceful shutdown.
+func CleanupLookupSessions(ctx context.Context) {
+	keycloakClientCache.Range(func(key, value any) bool {
+		entry := value.(*cachedKeycloakClient)
+		keycloaksession.LogoutSession(ctx, entry.config, entry.client)
+		keycloakClientCache.Delete(key)
+		return true
+	})
 }

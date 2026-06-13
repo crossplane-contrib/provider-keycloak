@@ -12,8 +12,10 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 
 	terraformSDK "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -29,6 +31,7 @@ import (
 	clusterv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/v1beta1"
 	namespacedv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/namespaced/v1beta1"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients/stalerefs"
+	"github.com/crossplane-contrib/provider-keycloak/internal/keycloaksession"
 )
 
 const (
@@ -45,6 +48,23 @@ const (
 	errInvalidURL                   = "invalid url value in credentials secret"
 	errInvalidAdminURL              = "invalid admin_url value in credentials secret"
 	errInvalidBasePath              = "invalid base_path value in credentials secret"
+)
+
+// cachedMeta holds the Terraform provider meta alongside the
+// configuration that produced it, so that the session can be logged
+// out on shutdown.
+type cachedMeta struct {
+	meta   interface{}
+	config map[string]any
+}
+
+// metaCache caches the configured Terraform provider meta (keycloak
+// client) keyed by a SHA-256 hash of the provider configuration.
+// This avoids creating a new Keycloak login session on every resource
+// reconciliation.
+var (
+	metaCache   sync.Map // map[string]*cachedMeta
+	metaCacheMu sync.Mutex
 )
 
 // Password, client secret, JWT auth parameters + general config parameters
@@ -125,9 +145,39 @@ func TerraformSetupBuilder() terraform.SetupFn {
 			return ps, err
 		}
 
-		return ps, errors.Wrap(
-			configureNoForkKeycloakClient(ctx, &ps),
-			"failed to configure the no-fork client")
+		// Look up the cached client for this configuration. If found,
+		// reuse it to avoid creating a new Keycloak login session on
+		// every reconciliation.
+		cacheKey := keycloaksession.ConfigCacheKey(ps.Configuration)
+		if cached, ok := metaCache.Load(cacheKey); ok {
+			ps.Meta = cached.(*cachedMeta).meta
+			return ps, nil
+		}
+
+		// Not cached yet – create the client under a mutex so that
+		// concurrent reconciliations for the same configuration only
+		// log in once.
+		metaCacheMu.Lock()
+		defer metaCacheMu.Unlock()
+		if cached, ok := metaCache.Load(cacheKey); ok {
+			ps.Meta = cached.(*cachedMeta).meta
+			return ps, nil
+		}
+
+		if err := configureNoForkKeycloakClient(ctx, &ps); err != nil {
+			return ps, errors.Wrap(err, "failed to configure the no-fork client")
+		}
+
+		// Store a copy of the config so LogoutSession can use it later.
+		cfgCopy := make(map[string]any, len(ps.Configuration))
+		for k, v := range ps.Configuration {
+			cfgCopy[k] = v
+		}
+		metaCache.Store(cacheKey, &cachedMeta{
+			meta:   ps.Meta,
+			config: cfgCopy,
+		})
+		return ps, nil
 	}
 }
 
@@ -271,6 +321,20 @@ func configureNoForkKeycloakClient(ctx context.Context, ps *terraform.Setup) err
 
 	ps.Meta = cb.Meta()
 	return nil
+}
+
+// CleanupSessions logs out all cached Keycloak sessions. It should be
+// called during graceful shutdown to avoid leaving orphaned sessions
+// on the Keycloak server (relevant only for password-grant configs).
+func CleanupSessions(ctx context.Context) {
+	metaCache.Range(func(key, value any) bool {
+		entry := value.(*cachedMeta)
+		if kcClient, ok := entry.meta.(*keycloak.KeycloakClient); ok {
+			keycloaksession.LogoutSession(ctx, entry.config, kcClient)
+		}
+		metaCache.Delete(key)
+		return true
+	})
 }
 
 func legacyToModernProviderConfigSpec(pc *clusterv1beta1.ProviderConfig) (*namespacedv1beta1.ClusterProviderConfigSpec, error) {

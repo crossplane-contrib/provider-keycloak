@@ -39,6 +39,7 @@ import (
 	apisCluster "github.com/crossplane-contrib/provider-keycloak/apis/cluster"
 	apisNamespaced "github.com/crossplane-contrib/provider-keycloak/apis/namespaced"
 	"github.com/crossplane-contrib/provider-keycloak/config"
+	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	resolverapis "github.com/crossplane-contrib/provider-keycloak/internal/apis"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
 	controllerCluster "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster"
@@ -236,6 +237,7 @@ func main() {
 	}
 
 	kingpin.FatalIfError(conversion.RegisterConversions(optsCluster.Provider, optsNamespaced.Provider, mgr.GetScheme()), "Cannot initialize the webhook conversion registry")
+	kingpin.FatalIfError(mgr.Add(sessionCleanupRunnable{}), "Cannot register session cleanup runnable")
 	kingpin.FatalIfError(mgr.Start(ctrl.SetupSignalHandler()), "Cannot start controller manager")
 }
 
@@ -263,4 +265,20 @@ func canWatchCRD(mgr manager.Manager) (bool, error) {
 		}
 	}
 	return true, nil
+}
+
+// sessionCleanupRunnable implements manager.Runnable. It waits for the
+// manager context to be cancelled (i.e. graceful shutdown) and then
+// logs out all cached Keycloak sessions so that password-grant sessions
+// don't linger on the Keycloak server until they expire.
+type sessionCleanupRunnable struct{}
+
+func (sessionCleanupRunnable) Start(ctx context.Context) error {
+	<-ctx.Done()
+	// Use a fresh context because the manager context is already cancelled.
+	cleanupCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	clients.CleanupSessions(cleanupCtx)
+	lookup.CleanupLookupSessions(cleanupCtx)
+	return nil
 }
