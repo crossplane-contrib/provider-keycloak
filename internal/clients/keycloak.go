@@ -6,12 +6,16 @@ package clients
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"math"
 	"net/url"
+	"sort"
 	"strconv"
 	"strings"
+	"sync"
 
 	terraformSDK "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	corev1 "k8s.io/api/core/v1"
@@ -45,6 +49,14 @@ const (
 	errInvalidURL                   = "invalid url value in credentials secret"
 	errInvalidAdminURL              = "invalid admin_url value in credentials secret"
 	errInvalidBasePath              = "invalid base_path value in credentials secret"
+)
+
+// metaCache caches the configured Terraform provider meta (keycloak client)
+// keyed by a hash of the provider configuration. This avoids creating a new
+// Keycloak login session on every resource reconciliation.
+var (
+	metaCache   sync.Map // map[string]interface{}
+	metaCacheMu sync.Mutex
 )
 
 // Password, client secret, JWT auth parameters + general config parameters
@@ -125,10 +137,47 @@ func TerraformSetupBuilder() terraform.SetupFn {
 			return ps, err
 		}
 
-		return ps, errors.Wrap(
-			configureNoForkKeycloakClient(ctx, &ps),
-			"failed to configure the no-fork client")
+		// Look up the cached client for this configuration. If found, reuse it to
+		// avoid creating a new Keycloak login session on every reconciliation.
+		cacheKey := configCacheKey(ps.Configuration)
+		if meta, ok := metaCache.Load(cacheKey); ok {
+			ps.Meta = meta
+			return ps, nil
+		}
+
+		// Not cached yet – create the client under a mutex so that concurrent
+		// reconciliations for the same configuration only log in once.
+		metaCacheMu.Lock()
+		defer metaCacheMu.Unlock()
+		// Re-check after acquiring the lock in case another goroutine raced us.
+		if meta, ok := metaCache.Load(cacheKey); ok {
+			ps.Meta = meta
+			return ps, nil
+		}
+
+		if err := configureNoForkKeycloakClient(ctx, &ps); err != nil {
+			return ps, errors.Wrap(err, "failed to configure the no-fork client")
+		}
+
+		metaCache.Store(cacheKey, ps.Meta)
+		return ps, nil
 	}
+}
+
+// configCacheKey returns a stable SHA-256 hash string for the given provider
+// configuration map. It is used as the key for the metaCache.
+func configCacheKey(config map[string]any) string {
+	keys := make([]string, 0, len(config))
+	for k := range config {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	h := sha256.New()
+	for _, k := range keys {
+		fmt.Fprintf(h, "%s=%v\n", k, config[k])
+	}
+	return hex.EncodeToString(h.Sum(nil))
 }
 
 func validateAndNormalizeURLAndBasePath(config map[string]any) error {

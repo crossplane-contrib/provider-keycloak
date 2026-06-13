@@ -2,8 +2,12 @@ package lookup
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
+	"sort"
 	"strconv"
+	"sync"
 
 	"github.com/crossplane/crossplane-runtime/v2/pkg/errors"
 	"github.com/crossplane/upjet/v2/pkg/terraform"
@@ -21,10 +25,31 @@ type Component struct {
 	Config       map[string][]string `json:"config"`
 }
 
+// keycloakClientCache caches *keycloak.KeycloakClient instances keyed by a
+// hash of the provider configuration to avoid creating a new login session on
+// every lookup call.
+var (
+	keycloakClientCache   sync.Map // map[string]*keycloak.KeycloakClient
+	keycloakClientCacheMu sync.Mutex
+)
+
 // newKeycloakClient creates a new keycloak client based on the settings in the provider configuration
 // (This can be removed once this issue is resolved: https://github.com/crossplane/upjet/issues/464)
 func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]any) (*keycloak.KeycloakClient, error) {
 	c := terraformProviderConfig["configuration"].(terraform.ProviderConfiguration)
+
+	cacheKey := providerConfigCacheKey(c)
+	if cached, ok := keycloakClientCache.Load(cacheKey); ok {
+		return cached.(*keycloak.KeycloakClient), nil
+	}
+
+	// Not cached yet – create under a mutex so concurrent lookup calls for the
+	// same configuration only log in once.
+	keycloakClientCacheMu.Lock()
+	defer keycloakClientCacheMu.Unlock()
+	if cached, ok := keycloakClientCache.Load(cacheKey); ok {
+		return cached.(*keycloak.KeycloakClient), nil
+	}
 
 	url := tryGetString(c, "url", "")
 	basePath := tryGetString(c, "base_path", "")
@@ -76,7 +101,25 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 	if err != nil {
 		return nil, err
 	}
+
+	keycloakClientCache.Store(cacheKey, keycloakClient)
 	return keycloakClient, nil
+}
+
+// providerConfigCacheKey returns a stable SHA-256 hash string for the given
+// provider configuration. It is used as the key for keycloakClientCache.
+func providerConfigCacheKey(c terraform.ProviderConfiguration) string {
+	keys := make([]string, 0, len(c))
+	for k := range c {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	h := sha256.New()
+	for _, k := range keys {
+		fmt.Fprintf(h, "%s=%v\n", k, c[k])
+	}
+	return hex.EncodeToString(h.Sum(nil))
 }
 
 func tryGetString(m map[string]any, key string, defaultValue string) string {
