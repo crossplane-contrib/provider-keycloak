@@ -10,13 +10,13 @@ spec:
     clientId: k8s-federated-client
     enabled: true
     name: k8s-federated-client
-    realmRef:
+    realmIdRef:
       name: "orgs"
       policy:
         resolve: Always
     serviceAccountsEnabled: true
     standardFlowEnabled: false
-    attributes:
+    extraConfig:
       federated.idp: k8s-federated
       federated.sub: system:serviceaccount:default:k8s-federated-test-sa
   providerConfigRef:
