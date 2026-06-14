@@ -101,6 +101,15 @@ func Configure(p *config.Provider) {
 			IgnoredFields: []string{
 				"authentication_flow_binding_overrides.browser_id",
 				"authentication_flow_binding_overrides.direct_grant_id",
+				// Prevent late-init of valid_redirect_uris and web_origins:
+				// these are Optional+Computed fields that the Keycloak server
+				// returns as empty lists. If late-init copies them back into
+				// spec.forProvider, the Terraform provider's CustomizeDiff
+				// rejects them with "valid_redirect_uris cannot be set when
+				// standard or implicit flow is not enabled" (and similarly
+				// for web_origins). See #416.
+				"valid_redirect_uris",
+				"web_origins",
 			},
 		}
 

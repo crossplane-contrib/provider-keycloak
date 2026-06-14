@@ -29,6 +29,8 @@ func TestLateInitIgnoredFields(t *testing.T) {
 		"keycloak_openid_client": {
 			"authentication_flow_binding_overrides.browser_id",
 			"authentication_flow_binding_overrides.direct_grant_id",
+			"valid_redirect_uris",
+			"web_origins",
 		},
 		"keycloak_saml_client": {
 			"authentication_flow_binding_overrides.browser_id",
