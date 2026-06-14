@@ -2,12 +2,9 @@ package openidclient
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/crossplane/upjet/v2/pkg/config"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
@@ -85,7 +82,6 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_openid_client_service_account_role", func(r *config.Resource) {
 		r.ShortGroup = Group
-		wrapClientServiceAccountRole(r.TerraformResource)
 		//  The id of the client that provides the role.
 		r.References["client_id"] = config.Reference{
 
@@ -314,56 +310,6 @@ func Configure(p *config.Provider) {
 			s.Computed = false
 		}
 	})
-}
-
-func wrapClientServiceAccountRole(r *schema.Resource) {
-	if r == nil {
-		return
-	}
-
-	if create := r.CreateContext; create != nil {
-		r.CreateContext = func(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-			if diags := validateClientServiceAccountRole(data); diags.HasError() {
-				return diags
-			}
-			return create(ctx, data, meta)
-		}
-	}
-
-	if read := r.ReadContext; read != nil {
-		r.ReadContext = func(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-			if diags := validateClientServiceAccountRole(data); diags.HasError() {
-				return diags
-			}
-			return read(ctx, data, meta)
-		}
-	}
-
-	if del := r.DeleteContext; del != nil {
-		r.DeleteContext = func(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-			if diags := validateClientServiceAccountRole(data); diags.HasError() {
-				return diags
-			}
-			return del(ctx, data, meta)
-		}
-	}
-}
-
-func validateClientServiceAccountRole(data *schema.ResourceData) diag.Diagnostics {
-	for _, required := range []struct {
-		field string
-		name  string
-	}{
-		{field: "realm_id", name: "realm"},
-		{field: "service_account_user_id", name: "service account user ID"},
-		{field: "client_id", name: "client ID"},
-		{field: "role", name: "role name"},
-	} {
-		if strings.TrimSpace(data.Get(required.field).(string)) == "" {
-			return diag.FromErr(fmt.Errorf("cannot reconcile ClientServiceAccountRole: resolved %s is empty", required.name))
-		}
-	}
-	return nil
 }
 
 var clientIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
