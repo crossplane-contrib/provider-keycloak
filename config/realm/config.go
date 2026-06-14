@@ -2,6 +2,8 @@ package realm
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
@@ -13,12 +15,62 @@ import (
 // Group is the short group name for the resources in this package
 var Group = "realm"
 
+// realmDurationFields lists all Terraform schema field names on the
+// keycloak_realm resource that represent durations. Values must be valid
+// Go duration strings (e.g. "300s", "5m", "1h30m") because the Terraform
+// provider converts them to integer seconds before sending to the Keycloak API.
+var realmDurationFields = []string{
+	"sso_session_idle_timeout",
+	"sso_session_idle_timeout_remember_me",
+	"sso_session_max_lifespan",
+	"sso_session_max_lifespan_remember_me",
+	"offline_session_idle_timeout",
+	"offline_session_max_lifespan",
+	"client_session_idle_timeout",
+	"client_session_max_lifespan",
+	"access_token_lifespan",
+	"access_token_lifespan_for_implicit_flow",
+	"access_code_lifespan",
+	"access_code_lifespan_login",
+	"access_code_lifespan_user_action",
+	"action_token_generated_by_user_lifespan",
+	"action_token_generated_by_admin_lifespan",
+	"oauth2_device_code_lifespan",
+}
+
+// validateDurationString validates that a string value is a valid Go duration
+// (parseable by time.ParseDuration). Empty strings are allowed because the
+// fields are optional/computed.
+func validateDurationString(v interface{}, k string) (warnings []string, errors []error) {
+	value, ok := v.(string)
+	if !ok {
+		errors = append(errors, fmt.Errorf("expected type of %s to be string", k))
+		return warnings, errors
+	}
+	if value == "" {
+		return warnings, errors
+	}
+	if _, err := time.ParseDuration(value); err != nil {
+		errors = append(errors, fmt.Errorf("%q is not a valid duration string for %q: %s (valid examples: \"300s\", \"5m\", \"1h30m\")", value, k, err))
+	}
+	return warnings, errors
+}
+
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_realm", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		// this resource, which would be "github"
 		r.ShortGroup = Group
+
+		// Add validation to duration fields to reject invalid values early,
+		// preventing broken values from reaching the Keycloak API.
+		// See: https://github.com/crossplane-contrib/provider-keycloak/issues/434
+		for _, field := range realmDurationFields {
+			if s, ok := r.TerraformResource.Schema[field]; ok {
+				s.ValidateFunc = validateDurationString
+			}
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_required_action", func(r *config.Resource) {
