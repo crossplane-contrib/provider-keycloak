@@ -128,8 +128,8 @@ func TestLogoutConfig(t *testing.T) {
 	}
 	got := LogoutConfig(full)
 
-	// Should contain only logout-relevant keys
-	expectedKeys := []string{"url", "base_path", "realm", "client_id", "client_secret", "username", "password"}
+	// Should contain only logout-relevant keys (password/username NOT retained)
+	expectedKeys := []string{"url", "base_path", "realm", "client_id", "client_secret", "is_password_grant"}
 	if len(got) != len(expectedKeys) {
 		t.Fatalf("expected %d keys, got %d: %v", len(expectedKeys), len(got), got)
 	}
@@ -138,10 +138,14 @@ func TestLogoutConfig(t *testing.T) {
 			t.Fatalf("expected key %q in logout config", k)
 		}
 	}
-	// Sensitive keys not needed for logout should be absent
-	for _, k := range []string{"access_token", "jwt_token", "additional_headers"} {
+	// Sensitive keys should be absent
+	for _, k := range []string{"access_token", "jwt_token", "additional_headers", "username", "password"} {
 		if _, ok := got[k]; ok {
 			t.Fatalf("key %q should not be in logout config", k)
 		}
+	}
+	// is_password_grant should be true since username+password are set
+	if got["is_password_grant"] != true {
+		t.Fatalf("expected is_password_grant=true, got %v", got["is_password_grant"])
 	}
 }
