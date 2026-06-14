@@ -1,6 +1,9 @@
 name: Quick Release
 
 on:
+  schedule:
+    # Weekly auto release every Monday at 0:00 UTC
+    - cron: '0 0 * * 1'
   workflow_dispatch:
     inputs:
       push-to-upbound:
@@ -108,7 +111,7 @@ jobs:
   mirror-to-upbound:
     runs-on: ubuntu-24.04
     needs: build-and-publish
-    if: ${{ inputs.push-to-upbound && needs.build-and-publish.result == 'success' }}
+    if: ${{ (github.event_name == 'schedule' || inputs.push-to-upbound) && needs.build-and-publish.result == 'success' }}
     steps:
       - name: Setup QEMU
         uses: docker/setup-qemu-action@06116385d9baf250c9f4dcb4858b16962ea869c3 # v4
