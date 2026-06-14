@@ -278,7 +278,7 @@ func (sessionCleanupRunnable) Start(ctx context.Context) error {
 	// Use a fresh context because the manager context is already cancelled.
 	cleanupCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	clients.CleanupSessions(cleanupCtx)
-	lookup.CleanupLookupSessions(cleanupCtx)
+	clients.CleanupSessions(cleanupCtx)        //nolint:contextcheck // ctx is already cancelled; cleanupCtx is intentionally a fresh context
+	lookup.CleanupLookupSessions(cleanupCtx) //nolint:contextcheck // ctx is already cancelled; cleanupCtx is intentionally a fresh context
 	return nil
 }
