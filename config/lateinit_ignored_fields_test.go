@@ -43,6 +43,9 @@ func TestLateInitIgnoredFields(t *testing.T) {
 			"client_authentication_flow",
 			"docker_authentication_flow",
 		},
+		"keycloak_generic_protocol_mapper": {
+			"config",
+		},
 	}
 
 	flavours := map[string]func() (*ujconfig.Provider, error){
