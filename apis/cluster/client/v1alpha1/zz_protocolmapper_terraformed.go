@@ -120,6 +120,7 @@ func (tr *ProtocolMapper) LateInitialize(attrs []byte) (bool, error) {
 	opts := []resource.GenericLateInitializerOption{resource.WithZeroValueJSONOmitEmptyFilter(resource.CNameWildcard)}
 	opts = append(opts, resource.WithNameFilter("ClientID"))
 	opts = append(opts, resource.WithNameFilter("ClientScopeID"))
+	opts = append(opts, resource.WithNameFilter("Config"))
 
 	li := resource.NewGenericLateInitializer(opts...)
 	return li.LateInitialize(&tr.Spec.ForProvider, params)

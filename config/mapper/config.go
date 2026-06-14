@@ -16,6 +16,17 @@ import (
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_generic_protocol_mapper", func(r *config.Resource) {
 		r.ShortGroup = "client"
+
+		// Skip late-initialization for the config map so that
+		// server-side defaults (e.g. "introspection.token.claim",
+		// "multivalued") added by Keycloak are not copied back into
+		// spec.forProvider.config, which would cause perpetual drift.
+		// See https://github.com/crossplane-contrib/provider-keycloak/issues/558
+		if r.LateInitializer.IgnoredFields == nil {
+			r.LateInitializer.IgnoredFields = []string{}
+		}
+		r.LateInitializer.IgnoredFields = append(r.LateInitializer.IgnoredFields, "config")
+
 		multitypes.ApplyToWithOptions(r, "client_id",
 			&multitypes.Options{KeepOriginalField: true}, // Explicit: maintain backward compatibility
 			multitypes.Instance{
