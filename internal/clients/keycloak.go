@@ -168,14 +168,11 @@ func TerraformSetupBuilder() terraform.SetupFn {
 			return ps, errors.Wrap(err, "failed to configure the no-fork client")
 		}
 
-		// Store a copy of the config so LogoutSession can use it later.
-		cfgCopy := make(map[string]any, len(ps.Configuration))
-		for k, v := range ps.Configuration {
-			cfgCopy[k] = v
-		}
+		// Store only the fields needed for logout to reduce sensitive
+		// credential exposure in process memory.
 		metaCache.Store(cacheKey, &cachedMeta{
 			meta:   ps.Meta,
-			config: cfgCopy,
+			config: keycloaksession.LogoutConfig(ps.Configuration),
 		})
 		return ps, nil
 	}

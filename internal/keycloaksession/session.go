@@ -8,6 +8,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -28,8 +29,9 @@ const logoutURLTemplate = "%s/realms/%s/protocol/openid-connect/logout"
 const logoutTimeout = 10 * time.Second
 
 // ConfigCacheKey returns a stable SHA-256 hex digest for the given
-// key-value configuration map. Keys are sorted before hashing so
-// that two maps with identical contents always produce the same key.
+// key-value configuration map. Keys are sorted before hashing and
+// values are JSON-encoded to ensure deterministic output even when
+// values are maps (whose iteration order is randomized in Go).
 func ConfigCacheKey(config map[string]any) string {
 	keys := make([]string, 0, len(config))
 	for k := range config {
@@ -39,7 +41,21 @@ func ConfigCacheKey(config map[string]any) string {
 
 	h := sha256.New()
 	for _, k := range keys {
-		_, _ = fmt.Fprintf(h, "%s=%v\n", k, config[k])
+		v := config[k]
+		// Use JSON marshaling for composite types to guarantee stable
+		// output regardless of map iteration order.
+		var valStr string
+		switch v.(type) {
+		case map[string]any, map[string]string, []any:
+			if b, err := json.Marshal(v); err == nil {
+				valStr = string(b)
+			} else {
+				valStr = fmt.Sprintf("%v", v)
+			}
+		default:
+			valStr = fmt.Sprintf("%v", v)
+		}
+		_, _ = fmt.Fprintf(h, "%s=%s\n", k, valStr)
 	}
 	return hex.EncodeToString(h.Sum(nil))
 }
@@ -51,6 +67,32 @@ func IsPasswordGrant(config map[string]any) bool {
 	username, _ := config["username"].(string)
 	password, _ := config["password"].(string)
 	return username != "" && password != ""
+}
+
+// logoutConfigKeys lists the only configuration keys needed for logout.
+// Storing only these reduces the exposure of sensitive fields (like
+// password, access_token, jwt keys) in process memory.
+var logoutConfigKeys = []string{
+	"url",
+	"base_path",
+	"realm",
+	"client_id",
+	"client_secret",
+	"username",
+	"password",
+}
+
+// LogoutConfig returns a minimal copy of config containing only the
+// fields required to perform a session logout. This avoids retaining
+// unnecessary sensitive credentials in cache for the process lifetime.
+func LogoutConfig(config map[string]any) map[string]any {
+	m := make(map[string]any, len(logoutConfigKeys))
+	for _, k := range logoutConfigKeys {
+		if v, ok := config[k]; ok {
+			m[k] = v
+		}
+	}
+	return m
 }
 
 // ExtractRefreshToken reads the current refresh token from a
@@ -108,7 +150,15 @@ func LogoutSession(ctx context.Context, config map[string]any, kcClient *keycloa
 	clientID, _ := config["client_id"].(string)
 	clientSecret, _ := config["client_secret"].(string)
 
-	logoutURL := fmt.Sprintf(logoutURLTemplate, urlStr+basePath, realm)
+	// Normalize by trimming trailing slash from URL and ensuring
+	// base_path has a leading slash (if non-empty) to avoid double-slash.
+	urlStr = strings.TrimRight(urlStr, "/")
+	if basePath != "" && !strings.HasPrefix(basePath, "/") {
+		basePath = "/" + basePath
+	}
+	basePath = strings.TrimRight(basePath, "/")
+
+	logoutURL := fmt.Sprintf(logoutURLTemplate, urlStr+basePath, url.PathEscape(realm))
 
 	data := url.Values{
 		"client_id":     {clientID},
