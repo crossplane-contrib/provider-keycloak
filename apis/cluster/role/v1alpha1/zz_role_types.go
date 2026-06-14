@@ -36,10 +36,12 @@ type RoleInitParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/role/v1alpha1.Role
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
+	// +nullable
 	CompositeRoles []*string `json:"compositeRoles,omitempty" tf:"composite_roles,omitempty"`
 
 	// References to Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
+	// +nullable
 	CompositeRolesRefs []v1.Reference `json:"compositeRolesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate compositeRoles.
