@@ -39,7 +39,7 @@ func ConfigCacheKey(config map[string]any) string {
 
 	h := sha256.New()
 	for _, k := range keys {
-		fmt.Fprintf(h, "%s=%v\n", k, config[k])
+		_, _ = fmt.Fprintf(h, "%s=%v\n", k, config[k])
 	}
 	return hex.EncodeToString(h.Sum(nil))
 }
@@ -131,5 +131,5 @@ func LogoutSession(ctx context.Context, config map[string]any, kcClient *keycloa
 	if err != nil {
 		return
 	}
-	resp.Body.Close()
+	_ = resp.Body.Close()
 }
