@@ -38,6 +38,25 @@ func TestConfigCacheKey(t *testing.T) {
 			t.Fatal("expected different keys for different configurations")
 		}
 	})
+
+	t.Run("stable with nested map values", func(t *testing.T) {
+		cfg := map[string]any{
+			"url":       "https://keycloak.example.com",
+			"client_id": "admin-cli",
+			"additional_headers": map[string]any{
+				"X-Custom-Header": "value1",
+				"Authorization":   "******",
+				"X-Request-Id":    "12345",
+			},
+		}
+		// Run multiple times to exercise Go's randomized map iteration.
+		first := ConfigCacheKey(cfg)
+		for i := 0; i < 100; i++ {
+			if got := ConfigCacheKey(cfg); got != first {
+				t.Fatalf("iteration %d: expected stable key %q, got %q", i, first, got)
+			}
+		}
+	})
 }
 
 func TestIsPasswordGrant(t *testing.T) {
@@ -89,5 +108,40 @@ func TestIsPasswordGrant(t *testing.T) {
 func TestExtractRefreshToken_nil(t *testing.T) {
 	if token := ExtractRefreshToken(nil); token != "" {
 		t.Fatalf("expected empty token for nil client, got %q", token)
+	}
+}
+
+func TestLogoutConfig(t *testing.T) {
+	full := map[string]any{
+		"url":           "https://keycloak.example.com",
+		"base_path":     "/auth",
+		"realm":         "myrealm",
+		"client_id":     "admin-cli",
+		"client_secret": "secret",
+		"username":      "admin",
+		"password":      "pass",
+		"access_token":  "should-not-be-retained",
+		"jwt_token":     "should-not-be-retained",
+		"additional_headers": map[string]any{
+			"X-Custom": "value",
+		},
+	}
+	got := LogoutConfig(full)
+
+	// Should contain only logout-relevant keys
+	expectedKeys := []string{"url", "base_path", "realm", "client_id", "client_secret", "username", "password"}
+	if len(got) != len(expectedKeys) {
+		t.Fatalf("expected %d keys, got %d: %v", len(expectedKeys), len(got), got)
+	}
+	for _, k := range expectedKeys {
+		if _, ok := got[k]; !ok {
+			t.Fatalf("expected key %q in logout config", k)
+		}
+	}
+	// Sensitive keys not needed for logout should be absent
+	for _, k := range []string{"access_token", "jwt_token", "additional_headers"} {
+		if _, ok := got[k]; ok {
+			t.Fatalf("key %q should not be in logout config", k)
+		}
 	}
 }

@@ -108,14 +108,11 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 		return nil, err
 	}
 
-	// Store a copy of the config alongside the client for logout.
-	cfgCopy := make(map[string]any, len(c))
-	for k, v := range c {
-		cfgCopy[k] = v
-	}
+	// Store only the fields needed for logout to reduce sensitive
+	// credential exposure in process memory.
 	keycloakClientCache.Store(cacheKey, &cachedKeycloakClient{
 		client: keycloakClient,
-		config: cfgCopy,
+		config: keycloaksession.LogoutConfig(c),
 	})
 	return keycloakClient, nil
 }
