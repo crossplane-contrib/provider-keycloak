@@ -69,22 +69,22 @@ func IsPasswordGrant(config map[string]any) bool {
 	return username != "" && password != ""
 }
 
-// logoutConfigKeys lists the only configuration keys needed for logout.
-// Storing only these reduces the exposure of sensitive fields (like
-// password, access_token, jwt keys) in process memory.
+// logoutConfigKeys lists the only configuration keys cached for logout.
+// Notably, "password" is NOT retained—only a pre-computed boolean
+// "is_password_grant" signals that the session needs explicit logout.
 var logoutConfigKeys = []string{
 	"url",
 	"base_path",
 	"realm",
 	"client_id",
 	"client_secret",
-	"username",
-	"password",
+	"is_password_grant",
 }
 
 // LogoutConfig returns a minimal copy of config containing only the
-// fields required to perform a session logout. This avoids retaining
-// unnecessary sensitive credentials in cache for the process lifetime.
+// fields required to perform a session logout. The actual password is
+// not retained; instead, a boolean "is_password_grant" is computed and
+// stored to signal whether the session requires explicit logout.
 func LogoutConfig(config map[string]any) map[string]any {
 	m := make(map[string]any, len(logoutConfigKeys))
 	for _, k := range logoutConfigKeys {
@@ -92,6 +92,9 @@ func LogoutConfig(config map[string]any) map[string]any {
 			m[k] = v
 		}
 	}
+	// Compute and store the grant-type boolean so that password is
+	// never retained in the cache.
+	m["is_password_grant"] = IsPasswordGrant(config)
 	return m
 }
 
@@ -132,7 +135,13 @@ func ExtractRefreshToken(kcClient *keycloak.KeycloakClient) (token string) {
 // silently ignored. It is a no-op for non-password-grant configs or
 // when the refresh token cannot be obtained.
 func LogoutSession(ctx context.Context, config map[string]any, kcClient *keycloak.KeycloakClient) {
-	if !IsPasswordGrant(config) {
+	// Check the pre-computed boolean first (from LogoutConfig), fall
+	// back to computing from username/password for raw configs.
+	if isPwGrant, ok := config["is_password_grant"].(bool); ok {
+		if !isPwGrant {
+			return
+		}
+	} else if !IsPasswordGrant(config) {
 		return
 	}
 
@@ -150,8 +159,11 @@ func LogoutSession(ctx context.Context, config map[string]any, kcClient *keycloa
 	clientID, _ := config["client_id"].(string)
 	clientSecret, _ := config["client_secret"].(string)
 
-	// Normalize by trimming trailing slash from URL and ensuring
-	// base_path has a leading slash (if non-empty) to avoid double-slash.
+	// Normalize by trimming whitespace, trimming trailing slash from
+	// URL, and ensuring base_path has a leading slash (if non-empty)
+	// to avoid double-slash.
+	urlStr = strings.TrimSpace(urlStr)
+	basePath = strings.TrimSpace(basePath)
 	urlStr = strings.TrimRight(urlStr, "/")
 	if basePath != "" && !strings.HasPrefix(basePath, "/") {
 		basePath = "/" + basePath
