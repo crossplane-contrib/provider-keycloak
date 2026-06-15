@@ -364,8 +364,14 @@ else
   
   # Save current directory and change to repo root
   pushd "${SCRIPT_DIR}/.." > /dev/null
-  make local-deploy-provider
-  exit_code=$?
+  if [ "${PROVIDER_PREBUILT:-}" = "true" ]; then
+    echo "DEBUG: Using pre-built provider image (PROVIDER_PREBUILT=true)"
+    make local-deploy-provider-prebuilt BUILD_REGISTRY=ci-build
+    exit_code=$?
+  else
+    make local-deploy-provider
+    exit_code=$?
+  fi
   popd > /dev/null
   
   echo "DEBUG: After make local-deploy-provider, exit code: ${exit_code}"

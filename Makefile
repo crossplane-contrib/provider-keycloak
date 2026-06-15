@@ -284,6 +284,12 @@ local-deploy-provider: build local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(KUBECTL) wait provider.pkg $(PROJECT_NAME) --for condition=Healthy --for condition=Installed --for=create --timeout 5m
 	@$(OK) running locally built provider
 
+local-deploy-provider-prebuilt: local.xpkg.deploy.provider.$(PROJECT_NAME)
+	@$(INFO) running pre-built provider
+	@$(KUBECTL) wait crd providers.pkg.crossplane.io --for=create --timeout 5m
+	@$(KUBECTL) wait provider.pkg $(PROJECT_NAME) --for condition=Healthy --for condition=Installed --for=create --timeout 5m
+	@$(OK) running pre-built provider
+
 e2e: local-deploy uptest
 
 crddiff: $(UPTEST)
