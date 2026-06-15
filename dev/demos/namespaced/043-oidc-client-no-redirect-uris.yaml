@@ -1,0 +1,25 @@
+# Regression test for https://github.com/crossplane-contrib/provider-keycloak/issues/416
+# Ensures that a client with standardFlowEnabled=false and implicitFlowEnabled=false
+# can be created without triggering:
+#   "valid_redirect_uris cannot be set when standard or implicit flow is not enabled"
+---
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: no-redirect-uris
+  namespace: dev-ns
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    accessType: "CONFIDENTIAL"
+    clientId: "no-redirect-uris"
+    standardFlowEnabled: false
+    implicitFlowEnabled: false
+    serviceAccountsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
