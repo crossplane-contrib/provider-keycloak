@@ -107,6 +107,13 @@ jobs:
           key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-pkg-
 
+      - name: Cache Build Tools
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        with:
+          path: .cache/tools
+          key: ${{ runner.os }}-${{ runner.arch }}-tools-${{ hashFiles('Makefile', 'build/makelib/**/*.mk') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-tools-
+
       - name: Vendor Dependencies
         run: make vendor vendor.check
 
@@ -155,6 +162,13 @@ jobs:
           key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-pkg-
 
+      - name: Cache Build Tools
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        with:
+          path: .cache/tools
+          key: ${{ runner.os }}-${{ runner.arch }}-tools-${{ hashFiles('Makefile', 'build/makelib/**/*.mk') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-tools-
+
       - name: Vendor Dependencies
         run: make vendor vendor.check
 
@@ -197,6 +211,13 @@ jobs:
           path: .work/pkg
           key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-pkg-
+
+      - name: Cache Build Tools
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        with:
+          path: .cache/tools
+          key: ${{ runner.os }}-${{ runner.arch }}-tools-${{ hashFiles('Makefile', 'build/makelib/**/*.mk') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-tools-
 
       - name: Vendor Dependencies
         run: make vendor vendor.check
@@ -246,6 +267,13 @@ jobs:
           path: .work/pkg
           key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-pkg-
+
+      - name: Cache Build Tools
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        with:
+          path: .cache/tools
+          key: ${{ runner.os }}-${{ runner.arch }}-tools-${{ hashFiles('Makefile', 'build/makelib/**/*.mk') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-tools-
 
       - name: Vendor Dependencies
         run: make vendor vendor.check
@@ -302,6 +330,13 @@ jobs:
           path: .work/pkg
           key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-pkg-
+
+      - name: Cache Build Tools
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        with:
+          path: .cache/tools
+          key: ${{ runner.os }}-${{ runner.arch }}-tools-${{ hashFiles('Makefile', 'build/makelib/**/*.mk') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-tools-
 
       - name: Vendor Dependencies
         run: make vendor vendor.check
@@ -440,6 +475,13 @@ jobs:
           path: .work/pkg
           key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-pkg-
+
+      - name: Cache Build Tools
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        with:
+          path: .cache/tools
+          key: ${{ runner.os }}-${{ runner.arch }}-tools-${{ hashFiles('Makefile', 'build/makelib/**/*.mk') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-tools-
 
       - name: Vendor Dependencies
         run: make vendor vendor.check
