@@ -12,7 +12,7 @@ Identity providers enable users to authenticate via external systems (e.g., GitH
 
 > **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
 
-- **API Group**: `oidc.keycloak.crossplane.io` / `saml.keycloak.crossplane.io`
+- **API Group**: `oidc.keycloak.crossplane.io` / `saml.keycloak.crossplane.io` / `identityprovider.keycloak.crossplane.io`
 - **API Version**: `v1alpha1`
 
 ## OpenID Connect Identity Provider

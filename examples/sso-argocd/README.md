@@ -12,6 +12,14 @@ to set up single sign-on for ArgoCD using Keycloak, managed by provider-keycloak
 ## Apply in order
 
 ```bash
+# Create user password secrets
+kubectl create secret generic argocd-admin-user-password \
+  --namespace crossplane-system \
+  --from-literal=******
+kubectl create secret generic argocd-viewer-user-password \
+  --namespace crossplane-system \
+  --from-literal=******
+
 # Keycloak resources (via Crossplane)
 kubectl apply -f 01-realm.yaml
 kubectl apply -f 02-client.yaml

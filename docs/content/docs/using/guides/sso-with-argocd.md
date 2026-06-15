@@ -74,9 +74,9 @@ spec:
     name: keycloak-provider-config
 ```
 
-:::note
+{{< callout type="info" >}}
 Replace `https://argocd.example.com` with your actual ArgoCD URL throughout this guide.
-:::
+{{< /callout >}}
 
 ## Step 3: Create Roles
 
@@ -189,9 +189,20 @@ spec:
 
 ## Step 6: Create Test Users and Assign to Groups
 
-:::caution
+{{< callout type="warning" >}}
 The passwords below are for demonstration only. In production, integrate with an existing identity provider (LDAP, SAML, social login) or use Keycloak's self-registration flow instead of static passwords.
-:::
+{{< /callout >}}
+
+First, create password secrets:
+
+```bash
+kubectl create secret generic argocd-admin-user-password \
+  --namespace crossplane-system \
+  --from-literal=******
+kubectl create secret generic argocd-viewer-user-password \
+  --namespace crossplane-system \
+  --from-literal=******
+```
 
 ```yaml title="examples/sso-argocd/06-users.yaml"
 apiVersion: user.keycloak.crossplane.io/v1alpha1
@@ -207,7 +218,10 @@ spec:
     lastName: "User"
     enabled: true
     initialPassword:
-      - value: "changeme"
+      - valueSecretRef:
+          name: argocd-admin-user-password
+          namespace: crossplane-system
+          key: password
         temporary: true
   providerConfigRef:
     name: keycloak-provider-config
@@ -225,7 +239,10 @@ spec:
     lastName: "User"
     enabled: true
     initialPassword:
-      - value: "changeme"
+      - valueSecretRef:
+          name: argocd-viewer-user-password
+          namespace: crossplane-system
+          key: password
         temporary: true
   providerConfigRef:
     name: keycloak-provider-config
@@ -297,9 +314,9 @@ data:
       - email
 ```
 
-:::info
+{{< callout type="info" >}}
 ArgoCD resolves `$oidc.keycloak.clientSecret` from the `argocd-secret` Secret at runtime. See the [ArgoCD OIDC docs](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#existing-oidc-provider) for details.
-:::
+{{< /callout >}}
 
 ### 7c. Configure ArgoCD RBAC
 
@@ -319,9 +336,9 @@ data:
     g, argocd-readonly, role:readonly
 ```
 
-:::warning Important
+{{< callout type="warning" >}}
 The `scopes` field must be set to `[groups]` so ArgoCD reads the `groups` claim from the OIDC token. Without this, RBAC policies won't match.
-:::
+{{< /callout >}}
 
 ## Step 8: Restart ArgoCD
 
