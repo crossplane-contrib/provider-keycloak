@@ -158,7 +158,6 @@ spec:
                     items:
                       type: string
                     type: array
-                    nullable: true
                     x-kubernetes-list-type: set
                   compositeRolesRefs:
                     description: References to Role in role to populate compositeRoles.
@@ -200,7 +199,6 @@ spec:
                       - name
                       type: object
                     type: array
-                    nullable: true
                   compositeRolesSelector:
                     description: Selector for a list of Role in role to populate compositeRoles.
                     properties:
@@ -540,7 +538,6 @@ spec:
                     items:
                       type: string
                     type: array
-                    nullable: true
                     x-kubernetes-list-type: set
                   compositeRolesRefs:
                     description: References to Role in role to populate compositeRoles.
@@ -582,7 +579,6 @@ spec:
                       - name
                       type: object
                     type: array
-                    nullable: true
                   compositeRolesSelector:
                     description: Selector for a list of Role in role to populate compositeRoles.
                     properties:
