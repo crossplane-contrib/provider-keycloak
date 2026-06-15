@@ -101,9 +101,8 @@ spec:
     attribute:
       - name: "username"
         displayName: "Username"
-        required:
-          - roles:
-              - "user"
+        requiredForRoles:
+          - "user"
         permissions:
           - edit:
               - "admin"
@@ -117,9 +116,8 @@ spec:
               max: "64"
       - name: "email"
         displayName: "Email"
-        required:
-          - roles:
-              - "user"
+        requiredForRoles:
+          - "user"
         validator:
           - name: "email"
     group:
@@ -216,10 +214,10 @@ spec:
     description: "Profile enforcing security best practices"
     realmId: "my-realm"
     executor:
-      - executorAlias: "secure-ciba-auth-req-signed"
-        executorId: "secure-ciba-auth-request-signed"
-      - executorAlias: "pkce-enforcer"
-        executorId: "pkce-enforcer"
+      - name: "secure-ciba-auth-request-signed"
+      - name: "pkce-enforcer"
+        configuration:
+          auto-configure: "true"
   providerConfigRef:
     name: keycloak-provider-config
 ```
@@ -242,9 +240,8 @@ spec:
     profiles:
       - "secure-client-profile"
     condition:
-      - conditionAlias: "client-access-type"
-        conditionId: "client-accesstype"
-        config:
+      - name: "client-accesstype"
+        configuration:
           is-confidential-client: "true"
   providerConfigRef:
     name: keycloak-provider-config

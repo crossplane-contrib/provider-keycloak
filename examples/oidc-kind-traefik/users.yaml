@@ -9,7 +9,10 @@ spec:
     email: alice@example.com
     enabled: true
     initialPassword:
-      - value: password
+      - valueSecretRef:
+          name: user-alice-password
+          namespace: crossplane-system
+          key: password
         temporary: false
   providerConfigRef:
     name: keycloak-provider-config
@@ -25,7 +28,10 @@ spec:
     email: bob@example.com
     enabled: true
     initialPassword:
-      - value: password
+      - valueSecretRef:
+          name: user-bob-password
+          namespace: crossplane-system
+          key: password
         temporary: false
   providerConfigRef:
     name: keycloak-provider-config

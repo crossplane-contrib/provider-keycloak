@@ -79,6 +79,16 @@ kubectl apply -f "${SCRIPT_DIR}/role-mapper.yaml"
 sleep 5
 
 # ─── Step 8: Create Users, Groups, Memberships ──────────────────────────────
+info "Creating user password secrets..."
+kubectl create secret generic user-alice-password \
+  --namespace crossplane-system \
+  --from-literal=****** \
+  --dry-run=client -o yaml | kubectl apply -f -
+kubectl create secret generic user-bob-password \
+  --namespace crossplane-system \
+  --from-literal=****** \
+  --dry-run=client -o yaml | kubectl apply -f -
+
 info "Creating Users, Groups, and Memberships..."
 kubectl apply -f "${SCRIPT_DIR}/users.yaml"
 kubectl apply -f "${SCRIPT_DIR}/groups.yaml"

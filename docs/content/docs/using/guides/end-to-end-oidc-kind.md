@@ -31,9 +31,9 @@ This guide walks through a complete, runnable setup on a local [kind](https://ki
                         └────────────────┘
 ```
 
-:::tip Quick start
-All manifests and an automated setup script are available in [`examples/oidc-kind-traefik/`](https://github.com/crossplane-contrib/provider-keycloak/tree/main/examples/oidc-kind-traefik). Run `./setup.sh` to deploy everything automatically.
-:::
+{{< callout type="info" >}}
+**Quick start:** All manifests and an automated setup script are available in [`examples/oidc-kind-traefik/`](https://github.com/crossplane-contrib/provider-keycloak/tree/main/examples/oidc-kind-traefik). Run `./setup.sh` to deploy everything automatically.
+{{< /callout >}}
 
 ## Prerequisites
 
@@ -309,7 +309,20 @@ kubectl apply -f role-mapper.yaml
 
 ## Step 7: Create Test Users
 
-Create two users — one with `allowed-role`, one with `forbidden-role`:
+Create two users — one with `allowed-role`, one with `forbidden-role`.
+
+First, create password secrets for the users:
+
+```bash
+kubectl create secret generic user-alice-password \
+  --namespace crossplane-system \
+  --from-literal=******
+kubectl create secret generic user-bob-password \
+  --namespace crossplane-system \
+  --from-literal=******
+```
+
+Then create the User resources:
 
 ```yaml title="examples/oidc-kind-traefik/users.yaml"
 apiVersion: user.keycloak.crossplane.io/v1alpha1
@@ -323,7 +336,10 @@ spec:
     email: alice@example.com
     enabled: true
     initialPassword:
-      - value: password
+      - valueSecretRef:
+          name: user-alice-password
+          namespace: crossplane-system
+          key: password
         temporary: false
   providerConfigRef:
     name: keycloak-provider-config
@@ -339,7 +355,10 @@ spec:
     email: bob@example.com
     enabled: true
     initialPassword:
-      - value: password
+      - valueSecretRef:
+          name: user-bob-password
+          namespace: crossplane-system
+          key: password
         temporary: false
   providerConfigRef:
     name: keycloak-provider-config
@@ -580,9 +599,9 @@ Apply the manifest, substituting the actual client secret:
 sed "s/\${CLIENT_SECRET}/${CLIENT_SECRET}/" middleware-ingress.yaml | kubectl apply -f -
 ```
 
-:::note
+{{< callout type="info" >}}
 The `setup.sh` script automates this substitution. If running manually, replace `<CLIENT_SECRET>` with the value from the previous command.
-:::
+{{< /callout >}}
 
 ## Step 11: Test It
 
@@ -602,7 +621,8 @@ Open `http://localhost:8080` in your browser. You will be redirected to Keycloak
 3. The token contains only `forbidden-role`
 4. ❌ The OIDC plugin rejects the request because `allowed-role` is not present in the `roles` claim
 
-:::info How the authorization works
+{{< callout type="info" >}}
+**How the authorization works:**
 The `traefik-oidc-auth` plugin's `Authorization.AssertClaims` feature inspects the JWT claims directly. The configuration:
 
 ```yaml
@@ -625,7 +645,7 @@ You can verify the token contents at [jwt.io](https://jwt.io):
   }
 }
 ```
-:::
+{{< /callout >}}
 
 ## Cleanup
 
