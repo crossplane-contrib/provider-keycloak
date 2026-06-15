@@ -26,9 +26,6 @@ Copyright 2021 Upbound Inc.
 // Run Upjet generator
 //go:generate go run ../cmd/generator/main.go ..
 
-// Post-process generated types to add +nullable markers (issue #425)
-//go:generate bash ../hack/nullable_override.sh ..
-
 // Generate deepcopy methodsets and CRD manifests
 //go:generate go run -tags generate sigs.k8s.io/controller-tools/cmd/controller-gen object:headerFile=../hack/boilerplate.go.txt paths=../apis/... crd:allowDangerousTypes=true,crdVersions=v1 output:artifacts:config=../package/crds
 
