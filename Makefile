@@ -200,6 +200,15 @@ CROSSPLANE_CHART := $(CROSSPLANE_CHART_DIR)/Chart.yaml
 -include build/makelib/local.xpkg.mk
 -include build/makelib/controlplane.mk
 
+$(CROSSPLANE_CLI):
+	@$(INFO) installing Crossplane CLI $(CROSSPLANE_CLI_VERSION)
+	@rm -rf $(TOOLS_HOST_DIR)/tmp-crossplane-cli
+	@mkdir -p $(dir $(CROSSPLANE_CLI)) $(TOOLS_HOST_DIR)/tmp-crossplane-cli
+	@GOBIN=$(TOOLS_HOST_DIR)/tmp-crossplane-cli go install github.com/crossplane/crossplane/v2/cmd/crank@$(CROSSPLANE_CLI_VERSION)
+	@mv $(TOOLS_HOST_DIR)/tmp-crossplane-cli/crank $(CROSSPLANE_CLI)
+	@rm -rf $(TOOLS_HOST_DIR)/tmp-crossplane-cli
+	@$(OK) installing Crossplane CLI $(CROSSPLANE_CLI_VERSION)
+
 $(CROSSPLANE_CHART):
 	@$(INFO) downloading Crossplane chart $(CROSSPLANE_VERSION)
 	@rm -rf $(CROSSPLANE_CHART_DIR) $(TOOLS_HOST_DIR)/tmp-crossplane-chart
