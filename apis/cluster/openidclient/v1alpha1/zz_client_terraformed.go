@@ -120,6 +120,8 @@ func (tr *Client) LateInitialize(attrs []byte) (bool, error) {
 	opts := []resource.GenericLateInitializerOption{resource.WithZeroValueJSONOmitEmptyFilter(resource.CNameWildcard)}
 	opts = append(opts, resource.WithNameFilter("AuthenticationFlowBindingOverrides.BrowserID"))
 	opts = append(opts, resource.WithNameFilter("AuthenticationFlowBindingOverrides.DirectGrantID"))
+	opts = append(opts, resource.WithNameFilter("ValidRedirectUris"))
+	opts = append(opts, resource.WithNameFilter("WebOrigins"))
 
 	li := resource.NewGenericLateInitializer(opts...)
 	return li.LateInitialize(&tr.Spec.ForProvider, params)
