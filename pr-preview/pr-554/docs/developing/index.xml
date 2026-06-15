@@ -1,4 +1,41 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Provider Keycloak – Developing</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/</link><description>Recent content in Developing on Provider Keycloak</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/index.xml" rel="self" type="application/rss+xml"/><item><title>Local Docs Development</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/local-docs/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/local-docs/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Provider Keycloak – Developing</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/</link><description>Recent content in Developing on Provider Keycloak</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/index.xml" rel="self" type="application/rss+xml"/><item><title>Documentation Model</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/documentation-model/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/documentation-model/</guid><description>
+&lt;h1&gt;Documentation Model&lt;/h1&gt;&lt;p&gt;Provider Keycloak has a large API surface. Keep the documentation useful by
+separating authored guidance from generated reference material.&lt;/p&gt;
+&lt;h2&gt;Authored content&lt;span class="hx:absolute hx:-mt-20" id="authored-content"&gt;&lt;/span&gt;
+&lt;a href="#authored-content" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Write and review these pages by hand:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Getting started pages that teach the first successful installation and realm.&lt;/li&gt;
+&lt;li&gt;Scenario guides that combine several resources into a working integration.&lt;/li&gt;
+&lt;li&gt;Troubleshooting pages that explain symptoms, causes, and fixes.&lt;/li&gt;
+&lt;li&gt;AI usage pages that describe how to consume the docs.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Authored pages should answer &amp;ldquo;when and why should I use this?&amp;rdquo; and include
+tested examples or links to manifests in &lt;code&gt;examples/&lt;/code&gt;.&lt;/p&gt;
+&lt;h2&gt;Generated or schema-derived content&lt;span class="hx:absolute hx:-mt-20" id="generated-or-schema-derived-content"&gt;&lt;/span&gt;
+&lt;a href="#generated-or-schema-derived-content" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The following content should come from generated artifacts or be checked against
+them:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Complete &lt;code&gt;spec.forProvider&lt;/code&gt; field lists.&lt;/li&gt;
+&lt;li&gt;Reference and selector fields.&lt;/li&gt;
+&lt;li&gt;Status fields and connection secret keys.&lt;/li&gt;
+&lt;li&gt;API group, version, kind, plural name, and scope.&lt;/li&gt;
+&lt;li&gt;Repeated Crossplane fields such as &lt;code&gt;providerConfigRef&lt;/code&gt;, &lt;code&gt;deletionPolicy&lt;/code&gt;, and
+&lt;code&gt;managementPolicies&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The source of truth for this data is &lt;code&gt;package/crds/*.yaml&lt;/code&gt;. When the APIs change,
+regenerate the provider artifacts and update only the curated explanations that
+need human context.&lt;/p&gt;
+&lt;h2&gt;Resource page checklist&lt;span class="hx:absolute hx:-mt-20" id="resource-page-checklist"&gt;&lt;/span&gt;
+&lt;a href="#resource-page-checklist" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Each resource page should include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A short explanation of what the resource manages.&lt;/li&gt;
+&lt;li&gt;A small API reference block.&lt;/li&gt;
+&lt;li&gt;One or more realistic examples.&lt;/li&gt;
+&lt;li&gt;Links to related guides or examples.&lt;/li&gt;
+&lt;li&gt;A pointer back to &lt;code&gt;package/crds/&lt;/code&gt; for exhaustive schema details.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Avoid hand-maintaining complete field tables in Markdown unless they are
+generated from the CRD OpenAPI schema.&lt;/p&gt;</description></item><item><title>Local Docs Development</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/local-docs/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/local-docs/</guid><description>
 &lt;h1&gt;Local Docs Development&lt;/h1&gt;&lt;p&gt;Run the documentation site locally:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; docs

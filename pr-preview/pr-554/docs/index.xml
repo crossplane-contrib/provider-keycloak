@@ -1,7 +1,155 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Provider Keycloak – Documentation</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/</link><description>Recent content in Documentation on Provider Keycloak</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Authentication Flows</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/authentication-flows/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/authentication-flows/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Provider Keycloak – Documentation</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/</link><description>Recent content in Documentation on Provider Keycloak</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Common Patterns</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/reference/common-patterns/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/reference/common-patterns/</guid><description>
+&lt;h1&gt;Common Patterns&lt;/h1&gt;&lt;p&gt;Most provider-keycloak resources follow the same Crossplane manifest structure.
+Use these patterns across guides and examples instead of repeating long
+explanations on every resource page.&lt;/p&gt;
+&lt;h2&gt;ProviderConfig reference&lt;span class="hx:absolute hx:-mt-20" id="providerconfig-reference"&gt;&lt;/span&gt;
+&lt;a href="#providerconfig-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Every managed resource should point at the Keycloak credentials it should use:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;spec&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;providerConfigRef&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;keycloak-provider-config&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;See &lt;a href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/reference/provider-config/"&gt;ProviderConfig&lt;/a&gt; for credential
+setup.&lt;/p&gt;
+&lt;h2&gt;Deletion policy&lt;span class="hx:absolute hx:-mt-20" id="deletion-policy"&gt;&lt;/span&gt;
+&lt;a href="#deletion-policy" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Use &lt;code&gt;deletionPolicy&lt;/code&gt; to control what happens to the external Keycloak object when
+the Kubernetes resource is deleted:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;spec&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;deletionPolicy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Delete&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Delete&lt;/code&gt; removes the external Keycloak object.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Orphan&lt;/code&gt; leaves the external Keycloak object in place.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Use &lt;code&gt;Orphan&lt;/code&gt; for shared or manually managed Keycloak objects that should survive
+GitOps cleanup.&lt;/p&gt;
+&lt;h2&gt;References and selectors&lt;span class="hx:absolute hx:-mt-20" id="references-and-selectors"&gt;&lt;/span&gt;
+&lt;a href="#references-and-selectors" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Many resources can use direct IDs, Crossplane references, or selectors. Prefer
+references when another managed resource owns the target object:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;spec&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;forProvider&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;realmIdRef&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;example-realm&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Use direct IDs when the target object is managed outside Crossplane:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;spec&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;forProvider&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;realmId&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;example&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2&gt;Secret references&lt;span class="hx:absolute hx:-mt-20" id="secret-references"&gt;&lt;/span&gt;
+&lt;a href="#secret-references" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Store credentials in Kubernetes Secrets and reference them from provider
+resources:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;spec&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;forProvider&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;clientSecretSecretRef&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;namespace&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;crossplane-system&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;oidc-client&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;key&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;client-secret&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;See &lt;a href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/reference/credentials/"&gt;Credentials&lt;/a&gt; for secret formats and
+&lt;a href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/guides/external-secrets-operator/"&gt;External Secrets Operator&lt;/a&gt; for a
+templating-based workflow.&lt;/p&gt;
+&lt;h2&gt;Complete schemas&lt;span class="hx:absolute hx:-mt-20" id="complete-schemas"&gt;&lt;/span&gt;
+&lt;a href="#complete-schemas" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Resource pages show common fields and examples. The generated CRDs in
+&lt;code&gt;package/crds/&lt;/code&gt; contain the complete OpenAPI schema for every field, including
+references, selectors, status, and connection details.&lt;/p&gt;</description></item><item><title>Documentation Model</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/documentation-model/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/developing/documentation-model/</guid><description>
+&lt;h1&gt;Documentation Model&lt;/h1&gt;&lt;p&gt;Provider Keycloak has a large API surface. Keep the documentation useful by
+separating authored guidance from generated reference material.&lt;/p&gt;
+&lt;h2&gt;Authored content&lt;span class="hx:absolute hx:-mt-20" id="authored-content"&gt;&lt;/span&gt;
+&lt;a href="#authored-content" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Write and review these pages by hand:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Getting started pages that teach the first successful installation and realm.&lt;/li&gt;
+&lt;li&gt;Scenario guides that combine several resources into a working integration.&lt;/li&gt;
+&lt;li&gt;Troubleshooting pages that explain symptoms, causes, and fixes.&lt;/li&gt;
+&lt;li&gt;AI usage pages that describe how to consume the docs.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Authored pages should answer &amp;ldquo;when and why should I use this?&amp;rdquo; and include
+tested examples or links to manifests in &lt;code&gt;examples/&lt;/code&gt;.&lt;/p&gt;
+&lt;h2&gt;Generated or schema-derived content&lt;span class="hx:absolute hx:-mt-20" id="generated-or-schema-derived-content"&gt;&lt;/span&gt;
+&lt;a href="#generated-or-schema-derived-content" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The following content should come from generated artifacts or be checked against
+them:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Complete &lt;code&gt;spec.forProvider&lt;/code&gt; field lists.&lt;/li&gt;
+&lt;li&gt;Reference and selector fields.&lt;/li&gt;
+&lt;li&gt;Status fields and connection secret keys.&lt;/li&gt;
+&lt;li&gt;API group, version, kind, plural name, and scope.&lt;/li&gt;
+&lt;li&gt;Repeated Crossplane fields such as &lt;code&gt;providerConfigRef&lt;/code&gt;, &lt;code&gt;deletionPolicy&lt;/code&gt;, and
+&lt;code&gt;managementPolicies&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The source of truth for this data is &lt;code&gt;package/crds/*.yaml&lt;/code&gt;. When the APIs change,
+regenerate the provider artifacts and update only the curated explanations that
+need human context.&lt;/p&gt;
+&lt;h2&gt;Resource page checklist&lt;span class="hx:absolute hx:-mt-20" id="resource-page-checklist"&gt;&lt;/span&gt;
+&lt;a href="#resource-page-checklist" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Each resource page should include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A short explanation of what the resource manages.&lt;/li&gt;
+&lt;li&gt;A small API reference block.&lt;/li&gt;
+&lt;li&gt;One or more realistic examples.&lt;/li&gt;
+&lt;li&gt;Links to related guides or examples.&lt;/li&gt;
+&lt;li&gt;A pointer back to &lt;code&gt;package/crds/&lt;/code&gt; for exhaustive schema details.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Avoid hand-maintaining complete field tables in Markdown unless they are
+generated from the CRD OpenAPI schema.&lt;/p&gt;</description></item><item><title>Authentication Flows</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/authentication-flows/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/authentication-flows/</guid><description>
 &lt;h1&gt;Authentication Flows&lt;/h1&gt;&lt;p&gt;Authentication flows define the sequence of steps a user must complete to authenticate. Flows consist of executions (individual authenticator steps), subflows (nested groups of steps), and bindings that attach flows to authentication contexts.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;authenticationflow.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kinds&lt;/strong&gt;: &lt;code&gt;Flow&lt;/code&gt;, &lt;code&gt;Subflow&lt;/code&gt;, &lt;code&gt;Execution&lt;/code&gt;, &lt;code&gt;ExecutionConfig&lt;/code&gt;, &lt;code&gt;Bindings&lt;/code&gt;&lt;/li&gt;
@@ -333,7 +481,10 @@ data-copied-label="Copied!"
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Authorization requires a confidential client with authorization enabled. See &lt;a href="./clients.md"&gt;Clients&lt;/a&gt; for setting up the resource server.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;openidclient.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kinds&lt;/strong&gt;: &lt;code&gt;ClientAuthorizationResource&lt;/code&gt;, &lt;code&gt;ClientAuthorizationPermission&lt;/code&gt;, &lt;code&gt;ClientClientPolicy&lt;/code&gt;, &lt;code&gt;ClientGroupPolicy&lt;/code&gt;, &lt;code&gt;ClientRolePolicy&lt;/code&gt;, &lt;code&gt;ClientUserPolicy&lt;/code&gt;, &lt;code&gt;ClientPermissions&lt;/code&gt;&lt;/li&gt;
@@ -669,7 +820,10 @@ data-copied-label="Copied!"
 &lt;/table&gt;</description></item><item><title>Clients</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/clients/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/clients/</guid><description>
 &lt;h1&gt;Clients&lt;/h1&gt;&lt;p&gt;Clients are applications and services that can request authentication. Keycloak supports OpenID Connect (OIDC) and SAML protocols.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;openidclient.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kind&lt;/strong&gt;: &lt;code&gt;Client&lt;/code&gt;&lt;/li&gt;
@@ -1269,7 +1423,10 @@ data-copied-label="Copied!"
 &lt;/table&gt;</description></item><item><title>Default Configuration</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/default-config/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/default-config/</guid><description>
 &lt;h1&gt;Default Configuration&lt;/h1&gt;&lt;p&gt;Default configuration resources let you define which groups and roles are automatically assigned to new users in a realm.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;defaults.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kinds&lt;/strong&gt;: &lt;code&gt;DefaultGroups&lt;/code&gt;, &lt;code&gt;Roles&lt;/code&gt;&lt;/li&gt;
@@ -2754,7 +2911,10 @@ data-copied-label="Copied!"
 &lt;/ul&gt;</description></item><item><title>Groups</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/groups/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/groups/</guid><description>
 &lt;h1&gt;Groups&lt;/h1&gt;&lt;p&gt;Groups provide a way to organize users and assign roles to multiple users at once.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;group.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kind&lt;/strong&gt;: &lt;code&gt;Group&lt;/code&gt;&lt;/li&gt;
@@ -2960,7 +3120,10 @@ data-copied-label="Copied!"
 &lt;/table&gt;</description></item><item><title>Identity Providers</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/identity-providers/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/identity-providers/</guid><description>
 &lt;h1&gt;Identity Providers&lt;/h1&gt;&lt;p&gt;Identity providers enable users to authenticate via external systems (e.g., GitHub, Google, SAML IdPs).&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;oidc.keycloak.crossplane.io&lt;/code&gt; / &lt;code&gt;saml.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -3677,7 +3840,10 @@ data-copied-label="Copied!"
 &lt;p&gt;The generated site is written to &lt;code&gt;docs/public/&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>OpenID Client Scopes</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/openid-client-scopes/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/openid-client-scopes/</guid><description>
 &lt;h1&gt;OpenID Client Scopes&lt;/h1&gt;&lt;p&gt;Client scopes define sets of protocol mappers and role scope mappings that can be shared across multiple clients. Scopes can be assigned as default (always included) or optional (included on request).&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;openidclient.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kinds&lt;/strong&gt;: &lt;code&gt;ClientScope&lt;/code&gt;, &lt;code&gt;ClientDefaultScopes&lt;/code&gt;, &lt;code&gt;ClientOptionalScopes&lt;/code&gt;&lt;/li&gt;
@@ -3898,7 +4064,10 @@ data-copied-label="Copied!"
 &lt;/table&gt;</description></item><item><title>Organizations</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/organizations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/organizations/</guid><description>
 &lt;h1&gt;Organizations&lt;/h1&gt;&lt;p&gt;Organizations provide multi-tenancy support in Keycloak, allowing you to group users under organizational entities with their own domains and attributes.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;organization.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kind&lt;/strong&gt;: &lt;code&gt;Organization&lt;/code&gt;&lt;/li&gt;
@@ -4017,7 +4186,10 @@ data-copied-label="Copied!"
 &lt;/table&gt;</description></item><item><title>Protocol Mappers</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/protocol-mappers/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/protocol-mappers/</guid><description>
 &lt;h1&gt;Protocol Mappers&lt;/h1&gt;&lt;p&gt;Protocol mappers control what information is included in tokens (OIDC) or assertions (SAML).&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;client.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kind&lt;/strong&gt;: &lt;code&gt;ProtocolMapper&lt;/code&gt;&lt;/li&gt;
@@ -4427,7 +4599,10 @@ data-copied-label="Copied!"
 &lt;/div&gt;</description></item><item><title>Realm Settings</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/realm-settings/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/realm-settings/</guid><description>
 &lt;h1&gt;Realm Settings&lt;/h1&gt;&lt;p&gt;Beyond the core &lt;a href="./realms.md"&gt;Realm&lt;/a&gt; resource, Keycloak provides additional realm-level configuration for events, required actions, user profiles, keystores, default scopes, and client policies.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;realm.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kinds&lt;/strong&gt;: &lt;code&gt;RealmEvents&lt;/code&gt;, &lt;code&gt;RequiredAction&lt;/code&gt;, &lt;code&gt;UserProfile&lt;/code&gt;, &lt;code&gt;KeystoreRsa&lt;/code&gt;, &lt;code&gt;DefaultClientScopes&lt;/code&gt;, &lt;code&gt;OptionalClientScopes&lt;/code&gt;, &lt;code&gt;ClientPolicyProfile&lt;/code&gt;, &lt;code&gt;ClientPolicyProfilePolicy&lt;/code&gt;&lt;/li&gt;
@@ -4879,7 +5054,10 @@ data-copied-label="Copied!"
 &lt;/table&gt;</description></item><item><title>Realms</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/realms/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/realms/</guid><description>
 &lt;h1&gt;Realms&lt;/h1&gt;&lt;p&gt;A Realm in Keycloak is a space where you manage objects like users, applications, roles, and groups. Each realm is isolated from other realms.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;realm.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kind&lt;/strong&gt;: &lt;code&gt;Realm&lt;/code&gt;&lt;/li&gt;
@@ -5042,7 +5220,10 @@ data-copied-label="Copied!"
 &lt;/table&gt;</description></item><item><title>Roles</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/roles/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/roles/</guid><description>
 &lt;h1&gt;Roles&lt;/h1&gt;&lt;p&gt;Roles define permissions and can be assigned to users or groups. Keycloak supports realm roles and client roles.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;role.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kind&lt;/strong&gt;: &lt;code&gt;Role&lt;/code&gt;&lt;/li&gt;
@@ -5224,7 +5405,10 @@ data-copied-label="Copied!"
 &lt;/table&gt;</description></item><item><title>SAML Clients</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/saml-clients/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/saml-clients/</guid><description>
 &lt;h1&gt;SAML Clients&lt;/h1&gt;&lt;p&gt;SAML (Security Assertion Markup Language) clients enable single sign-on for applications that use the SAML 2.0 protocol. This page covers SAML-specific client types and their scopes.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;samlclient.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kinds&lt;/strong&gt;: &lt;code&gt;Client&lt;/code&gt;, &lt;code&gt;ClientScope&lt;/code&gt;, &lt;code&gt;ClientDefaultScopes&lt;/code&gt;&lt;/li&gt;
@@ -5491,7 +5675,10 @@ data-copied-label="Copied!"
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The client must be confidential with service accounts enabled. See &lt;a href="./clients.md"&gt;Clients&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;openidclient.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kinds&lt;/strong&gt;: &lt;code&gt;ClientServiceAccountRealmRole&lt;/code&gt;, &lt;code&gt;ClientServiceAccountRole&lt;/code&gt;&lt;/li&gt;
@@ -6271,7 +6458,10 @@ data-copied-label="Copied!"
 &lt;/ul&gt;</description></item><item><title>User Federation</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/user-federation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/user-federation/</guid><description>
 &lt;h1&gt;User Federation&lt;/h1&gt;&lt;p&gt;User federation allows Keycloak to use external user stores such as LDAP or Active Directory.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;ldap.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kind&lt;/strong&gt;: &lt;code&gt;UserFederation&lt;/code&gt;&lt;/li&gt;
@@ -6461,7 +6651,10 @@ data-copied-label="Copied!"
 &lt;/table&gt;</description></item><item><title>Users</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/users/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/users/</guid><description>
 &lt;h1&gt;Users&lt;/h1&gt;&lt;p&gt;Users represent individuals who can authenticate with Keycloak.&lt;/p&gt;
 &lt;h2&gt;API Reference&lt;span class="hx:absolute hx:-mt-20" id="api-reference"&gt;&lt;/span&gt;
-&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;a href="#api-reference" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Schema source:&lt;/strong&gt; This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;API Group&lt;/strong&gt;: &lt;code&gt;user.keycloak.crossplane.io&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;API Version&lt;/strong&gt;: &lt;code&gt;v1alpha1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kind&lt;/strong&gt;: &lt;code&gt;User&lt;/code&gt;&lt;/li&gt;

@@ -1,1 +1,69 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Provider Keycloak – Using</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/</link><description>Recent content in Using on Provider Keycloak</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting Started</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/getting-started/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/getting-started/</guid><description/></item><item><title>Guides</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/guides/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/guides/</guid><description/></item><item><title>Resources</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/</guid><description/></item><item><title>Reference</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/reference/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/reference/</guid><description/></item></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Provider Keycloak – Using</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/</link><description>Recent content in Using on Provider Keycloak</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting Started</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/getting-started/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/getting-started/</guid><description/></item><item><title>Guides</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/guides/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/guides/</guid><description>
+&lt;h1&gt;Guides&lt;/h1&gt;&lt;p&gt;Guides are authored, scenario-based walkthroughs. They should explain why the
+resources are combined in a specific way and link to runnable manifests in
+&lt;code&gt;examples/&lt;/code&gt; whenever possible.&lt;/p&gt;
+&lt;p&gt;Use guides for end-to-end workflows such as:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;SSO integrations like ArgoCD.&lt;/li&gt;
+&lt;li&gt;Kubernetes API server OIDC configuration.&lt;/li&gt;
+&lt;li&gt;LDAP/Active Directory federation.&lt;/li&gt;
+&lt;li&gt;External Secrets Operator templating.&lt;/li&gt;
+&lt;li&gt;Local kind-based demos with Keycloak, Traefik, and sample applications.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Do not duplicate full CRD schemas in guides. Link to the relevant resource pages
+and keep generated field details in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>Resources</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/</guid><description>
+&lt;h1&gt;Resources&lt;/h1&gt;&lt;p&gt;These pages are curated, human-readable entry points for the provider-keycloak
+managed resources. They focus on when to use each resource, common examples, and
+the fields most users need first.&lt;/p&gt;
+&lt;p&gt;For exhaustive field schemas, default values, references, selectors, and status
+fields, use the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;. Those CRDs are generated from
+the provider APIs and are the source of truth when a resource page and schema
+details differ.&lt;/p&gt;
+&lt;h2&gt;Documentation model&lt;span class="hx:absolute hx:-mt-20" id="documentation-model"&gt;&lt;/span&gt;
+&lt;a href="#documentation-model" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Content type&lt;/th&gt;
+&lt;th&gt;Maintained as&lt;/th&gt;
+&lt;th&gt;Source of truth&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Resource overview pages&lt;/td&gt;
+&lt;td&gt;Curated docs&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;docs/content/docs/using/resources/&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Complete field reference&lt;/td&gt;
+&lt;td&gt;Generated artifact&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;package/crds/*.yaml&lt;/code&gt; OpenAPI schemas&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;API group/version/kind&lt;/td&gt;
+&lt;td&gt;Generated artifact&lt;/td&gt;
+&lt;td&gt;CRD metadata in &lt;code&gt;package/crds/&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Operational walkthroughs&lt;/td&gt;
+&lt;td&gt;Authored guides&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;docs/content/docs/using/guides/&lt;/code&gt; and &lt;code&gt;examples/&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;Recommended automation&lt;span class="hx:absolute hx:-mt-20" id="recommended-automation"&gt;&lt;/span&gt;
+&lt;a href="#recommended-automation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The following sections should be generated or checked automatically from
+&lt;code&gt;package/crds/&lt;/code&gt; to prevent documentation drift:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;API reference blocks: API group, version, kind, and plural name.&lt;/li&gt;
+&lt;li&gt;Field tables for &lt;code&gt;spec.forProvider&lt;/code&gt;, references, selectors, and status.&lt;/li&gt;
+&lt;li&gt;Links from resource pages to their matching CRD files.&lt;/li&gt;
+&lt;li&gt;Shared Crossplane boilerplate such as &lt;code&gt;providerConfigRef&lt;/code&gt;,
+&lt;code&gt;deletionPolicy&lt;/code&gt;, &lt;code&gt;managementPolicies&lt;/code&gt;, and secret references.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Keep the narrative examples and &amp;ldquo;when should I use this?&amp;rdquo; guidance authored by
+humans; generate the exhaustive schema details from the CRDs.&lt;/p&gt;</description></item><item><title>Reference</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/reference/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/reference/</guid><description>
+&lt;h1&gt;Reference&lt;/h1&gt;&lt;p&gt;Reference pages collect reusable provider concepts that apply across many
+resources, such as credentials, ProviderConfig, troubleshooting, and common
+Crossplane manifest patterns.&lt;/p&gt;
+&lt;p&gt;For resource-specific field schemas, use the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;</description></item></channel></rss>
