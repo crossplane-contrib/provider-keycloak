@@ -341,13 +341,19 @@ jobs:
       - name: Vendor Dependencies
         run: make vendor vendor.check
 
+      - name: Pre-pull container images
+        run: |
+          docker pull quay.io/keycloak/keycloak:${{ matrix.keycloak-version }} &
+          docker pull docker.io/cleanstart/openldap:2.6 &
+          wait
+
       - name: Starting testsetup for E2E Tests
         id: setup
         continue-on-error: true
         run: |
           set -o pipefail
           mkdir -p logs
-          ./dev/setup_dev_environment.sh --cluster-name fenrir-1 --deploy-local-provider --keycloak-version ${{ matrix.keycloak-version }} | tee logs/setup-environment.log
+          ./dev/setup_dev_environment.sh --cluster-name fenrir-1 --deploy-local-provider --direct-helm --keycloak-version ${{ matrix.keycloak-version }} | tee logs/setup-environment.log
 
       - name: Collect setup logs
         if: steps.setup.outcome == 'failure'

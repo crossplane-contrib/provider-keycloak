@@ -10,6 +10,7 @@ skipmetallb=false
 runcloudproviderkind=false
 uselocalprovider=false
 deploylocalprovider=false
+directhelm=false
 # Function to display script usage
 usage() {
  echo "Usage: $0 [OPTIONS]"
@@ -20,6 +21,7 @@ usage() {
  echo " -p, --start-cloud-provider-kind  Run 'cloud-provider-kind' with sudo as Background task due to rootless docker (metal lb wont work) + mounting user docker socket to root docker socket"
  echo " -l, --use-local-provider         Use local provider (Scales down 'provider-keycloak')"
  echo " -d, --deploy-local-provider      Deploy local provider"
+ echo " --direct-helm                    Deploy Keycloak directly via Helm instead of ArgoCD (faster for CI)"
  echo " -k, --keycloak-version           Keycloak Version"
 }
 
@@ -67,6 +69,9 @@ handle_options() {
         ;;
       -d | --deploy-local-provider)
         deploylocalprovider=true
+        ;;
+      --direct-helm)
+        directhelm=true
         ;;
       -c | --cluster-name*)
         if ! has_argument $@; then
@@ -125,6 +130,9 @@ command -v base64 >/dev/null 2>&1 || { echo >&2 "base64 is required but not inst
 command -v sed >/dev/null 2>&1 || { echo >&2 "sed is required but not installed.  Aborting."; exit 1; }
 if [[ "$runcloudproviderkind" == "true" ]]; then
 command -v cloud-provider-kind >/dev/null 2>&1 || { echo >&2 "cloud-provider-kind is required but not installed.  Aborting."; exit 1; }
+fi
+if [[ "$directhelm" == "true" ]]; then
+command -v helm >/dev/null 2>&1 || { echo >&2 "Helm is required but not installed.  Aborting."; exit 1; }
 fi
 echo "All dependencies are installed."
 
@@ -217,6 +225,63 @@ cleanup() {
 trap cleanup SIGINT SIGTERM
 fi
 
+if [[ "$directhelm" == "true" ]]; then
+echo "########### Installing Keycloak & OpenLdap (direct Helm) ###########"
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/open-ldap.yaml
+
+# Load pre-pulled images into kind if available on the host
+echo "* Loading pre-pulled images into kind cluster (if available)"
+$sudo_prefix kind load docker-image --name "$CLUSTER_NAME" \
+  "quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}" \
+  "docker.io/cleanstart/openldap:2.6" 2>/dev/null || true
+
+helm repo add codecentric https://codecentric.github.io/helm-charts
+helm repo update codecentric
+
+# Build Helm values matching the ArgoCD Application spec
+cat > /tmp/keycloak-values.yaml <<EOF
+image:
+  tag: "${KEYCLOAK_VERSION}"
+http:
+  relativePath: "/"
+command:
+  - "/opt/keycloak/bin/kc.sh"
+  - "start"
+  - "--http-enabled=true"
+  - "--http-port=8080"
+  - "--hostname-strict=false"
+  - "--features=${KEYCLOAK_FEATURES}"
+extraEnv: |
+  - name: KC_BOOTSTRAP_ADMIN_USERNAME
+    value: admin
+  - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+    value: admin
+  - name: JAVA_OPTS_APPEND
+    value: >-
+      -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+service:
+  type: LoadBalancer
+EOF
+
+echo "* Installing Keycloak via Helm"
+helm install keycloak codecentric/keycloakx --version 7.0.1 \
+  --namespace keycloak --create-namespace \
+  -f /tmp/keycloak-values.yaml \
+  --wait --timeout 300s
+
+rm -f /tmp/keycloak-values.yaml
+
+while [[ -z $($kubectl_cmd get svc -n keycloak keycloak-keycloakx-http -o jsonpath="{.status.loadBalancer.ingress}" 2>/dev/null) ]]; do
+  echo "** still waiting for service keycloak/keycloak-keycloakx-http to get ingress"
+  sleep 1
+done
+
+export KEYCLOAK_IP=$($kubectl_cmd -n keycloak get svc keycloak-keycloakx-http -o json | jq -r .status.loadBalancer.ingress[0].ip)
+export KEYCLOAK_PORT=$($kubectl_cmd -n keycloak get svc keycloak-keycloakx-http -o json | jq -r '.spec.ports[] | select(.name == "http").port')
+export KEYCLOAK_USER=admin
+export KEYCLOAK_PASSWORD=admin
+
+else
 echo "########### Installing ArgoCD ###########"
 $kubectl_cmd create namespace argocd || true
 $kubectl_cmd apply --server-side=true -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -252,6 +317,7 @@ export KEYCLOAK_IP=$($kubectl_cmd -n keycloak get svc keycloak-keycloakx-http -o
 export KEYCLOAK_PORT=$($kubectl_cmd -n keycloak get svc keycloak-keycloakx-http -o json | jq -r '.spec.ports[] | select(.name == "http").port')
 export KEYCLOAK_USER=admin
 export KEYCLOAK_PASSWORD=admin
+fi
 
 
 echo "########### Installing Crossplane ###########"
@@ -340,9 +406,11 @@ fi
 
 echo "#################################################"
 echo "You're ready to go!"
+if [[ "$directhelm" == "false" ]]; then
 echo "ArgoCD is ready at https://$ARGOCD_IP:443"
 echo "ArgoCD login: admin / $($kubectl_cmd -n argocd get secrets argocd-initial-admin-secret -o json | jq -r .data.password | base64 -d)"
 echo "-------------------------------------------------"
+fi
 echo "Keycloak is ready at http://$KEYCLOAK_IP:$KEYCLOAK_PORT/"
 echo "Keycloak login: admin / admin"
 echo "#################################################"
