@@ -26,6 +26,12 @@ Copyright 2021 Upbound Inc.
 // Run Upjet generator
 //go:generate go run ../cmd/generator/main.go ..
 
+// Post-process generated types to add SSA list type markers to *Refs fields
+// whose base Terraform field is a set. This works around an upstream upjet
+// limitation where reference fields don't inherit list merge strategy markers.
+// See: https://github.com/crossplane-contrib/provider-keycloak/issues/594
+//go:generate go run ../cmd/postprocess/main.go ../apis
+
 // Generate deepcopy methodsets and CRD manifests
 //go:generate go run -tags generate sigs.k8s.io/controller-tools/cmd/controller-gen object:headerFile=../hack/boilerplate.go.txt paths=../apis/... crd:allowDangerousTypes=true,crdVersions=v1 output:artifacts:config=../package/crds
 
