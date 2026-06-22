@@ -120,6 +120,9 @@ spec:
                       - name
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   clientsSelector:
                     description: Selector for a list of Client in openidclient to
                       populate clients.
@@ -382,6 +385,9 @@ spec:
                       - name
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   clientsSelector:
                     description: Selector for a list of Client in openidclient to
                       populate clients.

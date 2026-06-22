@@ -26,6 +26,8 @@ type GroupsInitParameters struct {
 
 	// References to Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	GroupIdsRefs []v1.NamespacedReference `json:"groupIdsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Group in group to populate groupIds.
@@ -89,6 +91,8 @@ type GroupsParameters struct {
 
 	// References to Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	GroupIdsRefs []v1.NamespacedReference `json:"groupIdsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Group in group to populate groupIds.

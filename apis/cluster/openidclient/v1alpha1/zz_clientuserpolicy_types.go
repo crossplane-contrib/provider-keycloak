@@ -60,6 +60,8 @@ type ClientUserPolicyInitParameters struct {
 
 	// References to User in user to populate users.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	UsersRefs []v1.Reference `json:"usersRefs,omitempty" tf:"-"`
 
 	// Selector for a list of User in user to populate users.
@@ -149,6 +151,8 @@ type ClientUserPolicyParameters struct {
 
 	// References to User in user to populate users.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	UsersRefs []v1.Reference `json:"usersRefs,omitempty" tf:"-"`
 
 	// Selector for a list of User in user to populate users.

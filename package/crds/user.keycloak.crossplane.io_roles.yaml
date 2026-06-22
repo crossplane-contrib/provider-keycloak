@@ -197,6 +197,9 @@ spec:
                       - name
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   roleIdsSelector:
                     description: Selector for a list of Role in role to populate roleIds.
                     properties:
@@ -454,6 +457,9 @@ spec:
                       - name
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   roleIdsSelector:
                     description: Selector for a list of Role in role to populate roleIds.
                     properties:

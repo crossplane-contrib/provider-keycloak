@@ -41,6 +41,8 @@ type RoleInitParameters struct {
 
 	// References to Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	CompositeRolesRefs []v1.NamespacedReference `json:"compositeRolesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate compositeRoles.
@@ -143,6 +145,8 @@ type RoleParameters struct {
 
 	// References to Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	CompositeRolesRefs []v1.NamespacedReference `json:"compositeRolesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate compositeRoles.

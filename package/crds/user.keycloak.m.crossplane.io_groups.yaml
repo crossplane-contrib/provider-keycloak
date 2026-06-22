@@ -109,6 +109,9 @@ spec:
                       - name
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   groupIdsSelector:
                     description: Selector for a list of Group in group to populate
                       groupIds.
@@ -385,6 +388,9 @@ spec:
                       - name
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   groupIdsSelector:
                     description: Selector for a list of Group in group to populate
                       groupIds.

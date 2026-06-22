@@ -23,6 +23,8 @@ type ClientClientPolicyInitParameters struct {
 
 	// References to Client in openidclient to populate clients.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	ClientsRefs []v1.Reference `json:"clientsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Client in openidclient to populate clients.
@@ -74,6 +76,8 @@ type ClientClientPolicyInitParameters struct {
 
 	// References to Client in samlclient to populate samlClients.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	SAMLClientsRefs []v1.Reference `json:"samlClientsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Client in samlclient to populate samlClients.
@@ -124,6 +128,8 @@ type ClientClientPolicyParameters struct {
 
 	// References to Client in openidclient to populate clients.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	ClientsRefs []v1.Reference `json:"clientsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Client in openidclient to populate clients.
@@ -182,6 +188,8 @@ type ClientClientPolicyParameters struct {
 
 	// References to Client in samlclient to populate samlClients.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	SAMLClientsRefs []v1.Reference `json:"samlClientsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Client in samlclient to populate samlClients.

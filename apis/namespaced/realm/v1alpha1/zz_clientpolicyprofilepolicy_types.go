@@ -33,6 +33,8 @@ type ClientPolicyProfilePolicyInitParameters struct {
 
 	// References to ClientPolicyProfile in realm to populate profiles.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	ProfilesRefs []v1.NamespacedReference `json:"profilesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientPolicyProfile in realm to populate profiles.
@@ -97,6 +99,8 @@ type ClientPolicyProfilePolicyParameters struct {
 
 	// References to ClientPolicyProfile in realm to populate profiles.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	ProfilesRefs []v1.NamespacedReference `json:"profilesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientPolicyProfile in realm to populate profiles.

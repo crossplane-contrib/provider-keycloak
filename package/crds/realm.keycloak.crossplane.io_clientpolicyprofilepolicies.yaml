@@ -139,6 +139,9 @@ spec:
                       - name
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   profilesSelector:
                     description: Selector for a list of ClientPolicyProfile in realm
                       to populate profiles.
@@ -336,6 +339,9 @@ spec:
                       - name
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   profilesSelector:
                     description: Selector for a list of ClientPolicyProfile in realm
                       to populate profiles.

@@ -39,6 +39,8 @@ type RolesInitParameters struct {
 
 	// References to Role in role to populate roleIds.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	RoleIdsRefs []v1.NamespacedReference `json:"roleIdsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate roleIds.
@@ -104,6 +106,8 @@ type RolesParameters struct {
 
 	// References to Role in role to populate roleIds.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	RoleIdsRefs []v1.NamespacedReference `json:"roleIdsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate roleIds.

@@ -25,6 +25,8 @@ type ProviderTokenExchangeScopePermissionInitParameters struct {
 
 	// References to Client in openidclient to populate clients.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	ClientsRefs []v1.NamespacedReference `json:"clientsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Client in openidclient to populate clients.
@@ -109,6 +111,8 @@ type ProviderTokenExchangeScopePermissionParameters struct {
 
 	// References to Client in openidclient to populate clients.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	ClientsRefs []v1.NamespacedReference `json:"clientsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Client in openidclient to populate clients.

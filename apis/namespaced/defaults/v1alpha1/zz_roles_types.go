@@ -25,6 +25,8 @@ type RolesInitParameters struct {
 
 	// References to Role in role to populate defaultRoles.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	DefaultRolesRefs []v1.NamespacedReference `json:"defaultRolesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate defaultRoles.
@@ -69,6 +71,8 @@ type RolesParameters struct {
 
 	// References to Role in role to populate defaultRoles.
 	// +kubebuilder:validation:Optional
+	// +listType=map
+	// +listMapKey=name
 	DefaultRolesRefs []v1.NamespacedReference `json:"defaultRolesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate defaultRoles.

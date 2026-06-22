@@ -286,6 +286,9 @@ spec:
                       - name
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   usersSelector:
                     description: Selector for a list of User in user to populate users.
                     properties:
@@ -571,6 +574,9 @@ spec:
                       - name
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   usersSelector:
                     description: Selector for a list of User in user to populate users.
                     properties:
