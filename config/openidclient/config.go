@@ -17,6 +17,25 @@ const (
 	Group = "openidclient"
 )
 
+// clientConnectionDetails publishes an OpenID client's credentials as connection
+// details under simplified, camelCase keys so consumers (e.g. Argo CD) can mount them
+// directly from the connection secret. client_secret is a computed attribute for
+// CONFIDENTIAL clients, so it is present in the Terraform state. Upjet already
+// publishes the raw attribute.<name> variants; empty values are omitted here.
+func clientConnectionDetails(attr map[string]any) (map[string][]byte, error) {
+	conn := map[string][]byte{}
+	if v, ok := attr["client_secret"].(string); ok && v != "" {
+		conn["clientSecret"] = []byte(v)
+	}
+	if v, ok := attr["client_id"].(string); ok && v != "" {
+		conn["clientID"] = []byte(v)
+	}
+	if v, ok := attr["service_account_user_id"].(string); ok && v != "" {
+		conn["serviceAccountUserId"] = []byte(v)
+	}
+	return conn, nil
+}
+
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_openid_client", func(r *config.Resource) {
@@ -41,6 +60,9 @@ func Configure(p *config.Provider) {
 				"authentication_flow_binding_overrides.direct_grant_id",
 			},
 		}
+
+		// Publish the client's credentials as connection details.
+		r.Sensitive.AdditionalConnectionDetailsFn = clientConnectionDetails
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_default_scopes", func(r *config.Resource) {

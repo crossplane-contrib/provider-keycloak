@@ -1,0 +1,36 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: example-connection-details-realm
+spec:
+  forProvider:
+    realm: example-connection-details
+    enabled: true
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: example-connection-details-client
+spec:
+  forProvider:
+    clientId: example-connection-details-client
+    enabled: true
+    accessType: CONFIDENTIAL
+    standardFlowEnabled: true
+    serviceAccountsEnabled: true
+    realmIdRef:
+      name: example-connection-details-realm
+    validRedirectUris:
+      - "https://app.cluster.local/auth/callback"
+  # For a CONFIDENTIAL client, the connection secret is populated with the
+  # client's credentials under simplified keys:
+  #   - clientSecret
+  #   - clientID
+  #   - serviceAccountUserId  (when serviceAccountsEnabled is true)
+  writeConnectionSecretToRef:
+    name: example-connection-details-secret
+    namespace: crossplane-system
+  providerConfigRef:
+    name: keycloak-provider-config
