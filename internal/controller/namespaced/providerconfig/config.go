@@ -7,6 +7,7 @@ package providerconfig
 import (
 	ctrl "sigs.k8s.io/controller-runtime"
 
+	"github.com/crossplane/crossplane-runtime/v2/pkg/errors"
 	"github.com/crossplane/crossplane-runtime/v2/pkg/event"
 	"github.com/crossplane/crossplane-runtime/v2/pkg/reconciler/providerconfig"
 	"github.com/crossplane/crossplane-runtime/v2/pkg/resource"
@@ -60,6 +61,20 @@ func setupClusterProviderConfig(mgr ctrl.Manager, o controller.Options) error {
 		Complete(providerconfig.NewReconciler(mgr, of,
 			providerconfig.WithLogger(o.Logger.WithValues("controller", name)),
 			providerconfig.WithRecorder(event.NewAPIRecorder(mgr.GetEventRecorderFor(name)))))
+}
+
+// SetupWebhookWithManager registers the conversion webhooks for the
+// ProviderConfig and ClusterProviderConfig kinds.
+func SetupWebhookWithManager(mgr ctrl.Manager) error {
+	if err := ctrl.NewWebhookManagedBy(mgr, &v1beta1.ProviderConfig{}).
+		Complete(); err != nil {
+		return errors.Wrap(err, "cannot register webhook for the kind v1beta1.ProviderConfig")
+	}
+	if err := ctrl.NewWebhookManagedBy(mgr, &v1beta1.ClusterProviderConfig{}).
+		Complete(); err != nil {
+		return errors.Wrap(err, "cannot register webhook for the kind v1beta1.ClusterProviderConfig")
+	}
+	return nil
 }
 
 func SetupGated(mgr ctrl.Manager, o controller.Options) error {
