@@ -51,7 +51,7 @@ func validateDurationString(v interface{}, k string) (warnings []string, errors 
 		return warnings, errors
 	}
 	if _, err := time.ParseDuration(value); err != nil {
-		errors = append(errors, fmt.Errorf("%q is not a valid duration string for %q: %s (valid examples: \"300s\", \"5m\", \"1h30m\")", value, k, err))
+		errors = append(errors, fmt.Errorf("%q is not a valid duration string for %q: %w (valid examples: \"300s\", \"5m\", \"1h30m\")", value, k, err))
 	}
 	return warnings, errors
 }
