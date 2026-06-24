@@ -1,3 +1,20 @@
+# Dedicated group for the user-groups example.
+# It must NOT be a group whose membership is managed authoritatively elsewhere
+# (e.g. group "test" is managed by the Memberships/test-members example in
+# 031-group-memberships.yaml). Two authoritative resources managing the same
+# group's membership fight forever and make e2e tests flaky.
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: user-groups-target
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: user-groups-target
+    realmId: dev
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
 apiVersion: user.keycloak.crossplane.io/v1alpha1
 kind: Groups
 metadata:
@@ -10,7 +27,7 @@ spec:
       policy:
         resolve: Always
     groupIdsRefs:
-      - name: test
+      - name: user-groups-target
         policy:
           resolve: Always
     userIdRef:
