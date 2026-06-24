@@ -351,7 +351,7 @@ func legacyToModernProviderConfigSpec(pc *clusterv1beta1.ProviderConfig) (*names
 
 func resolveProviderConfig(ctx context.Context, crClient client.Client, mg resource.Managed) (*namespacedv1beta1.ClusterProviderConfigSpec, error) {
 	switch managed := mg.(type) {
-	case resource.LegacyManaged:
+	case resource.LegacyManaged: //nolint:staticcheck // intentional: this provider still supports legacy cluster-scoped MRs alongside ModernManaged
 		return resolveProviderConfigLegacy(ctx, crClient, managed)
 	case resource.ModernManaged:
 		return resolveProviderConfigModern(ctx, crClient, managed)
@@ -360,7 +360,7 @@ func resolveProviderConfig(ctx context.Context, crClient client.Client, mg resou
 	}
 }
 
-func resolveProviderConfigLegacy(ctx context.Context, client client.Client, mg resource.LegacyManaged) (*namespacedv1beta1.ClusterProviderConfigSpec, error) {
+func resolveProviderConfigLegacy(ctx context.Context, client client.Client, mg resource.LegacyManaged) (*namespacedv1beta1.ClusterProviderConfigSpec, error) { //nolint:staticcheck // intentional: legacy cluster-scoped MR resolution path
 	configRef := mg.GetProviderConfigReference()
 	if configRef == nil {
 		return nil, errors.New(errNoProviderConfig)
