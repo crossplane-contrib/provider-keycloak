@@ -36,6 +36,12 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 			providerconfig.WithRecorder(event.NewAPIRecorder(mgr.GetEventRecorderFor(name)))))
 }
 
+// SetupWebhookWithManager registers the conversion webhook for ProviderConfig.
+// ProviderConfig does not need conversion webhooks, so this is a no-op.
+func SetupWebhookWithManager(_ ctrl.Manager) error {
+	return nil
+}
+
 // SetupGated adds a controller that reconciles ProviderConfigs by accounting for
 // their current usage.
 func SetupGated(mgr ctrl.Manager, o controller.Options) error {

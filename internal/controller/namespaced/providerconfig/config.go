@@ -62,6 +62,12 @@ func setupClusterProviderConfig(mgr ctrl.Manager, o controller.Options) error {
 			providerconfig.WithRecorder(event.NewAPIRecorder(mgr.GetEventRecorderFor(name)))))
 }
 
+// SetupWebhookWithManager registers the conversion webhook for ProviderConfig.
+// ProviderConfig does not need conversion webhooks, so this is a no-op.
+func SetupWebhookWithManager(_ ctrl.Manager) error {
+	return nil
+}
+
 func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 	o.Gate.Register(func() {
 		if err := Setup(mgr, o); err != nil {
