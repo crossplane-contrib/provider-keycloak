@@ -11,6 +11,7 @@ spec:
         resolve: Always
     members:
       - bree
+      - tim-tester
     realmId: dev
   providerConfigRef:
     name: "keycloak-provider-config"
