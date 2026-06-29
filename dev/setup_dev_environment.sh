@@ -233,7 +233,7 @@ $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/open-ldap.yaml
 echo "* Loading pre-pulled images into kind cluster (if available)"
 $sudo_prefix kind load docker-image --name "$CLUSTER_NAME" \
   "quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}" \
-  "docker.io/cleanstart/openldap:2.6" 2>/dev/null || true
+  "docker.io/bitnamilegacy/openldap:2.6.10" 2>/dev/null || true
 
 helm repo add codecentric https://codecentric.github.io/helm-charts
 helm repo update codecentric
