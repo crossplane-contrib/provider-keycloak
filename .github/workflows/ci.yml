@@ -187,7 +187,7 @@ jobs:
           submodules: true
 
       - name: Fetch History
-        run: git fetch --prune --unshallow
+        run: git fetch --prune --tags --unshallow || git fetch --prune --tags
 
       - name: Setup Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
@@ -243,7 +243,7 @@ jobs:
           submodules: true
 
       - name: Fetch History
-        run: git fetch --prune --unshallow
+        run: git fetch --prune --tags --unshallow || git fetch --prune --tags
 
       - name: Setup Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
@@ -426,7 +426,7 @@ jobs:
       - name: Pre-pull container images
         run: |
           docker pull quay.io/keycloak/keycloak:${{ matrix.keycloak-version }} &
-          docker pull docker.io/cleanstart/openldap:2.6 &
+          docker pull docker.io/bitnamilegacy/openldap:2.6.10 &
           wait
 
       - name: Starting testsetup for E2E Tests
