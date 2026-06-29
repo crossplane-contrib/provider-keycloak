@@ -19,6 +19,10 @@
   "dependencyDashboard": true,
   "recreateWhen": "always",
   "platformAutomerge": true,
+  "ignoreDeps": [
+    "github.com/keycloak/terraform-provider-keycloak",
+    "keycloak/terraform-provider-keycloak"
+  ],
   "packageRules": [
     {
       "groupName": "k8s.io dependencies",
