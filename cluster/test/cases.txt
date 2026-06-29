@@ -27,6 +27,7 @@
 ./dev/demos/namespaced/052-identity-provider-mapper.yaml
 ./dev/demos/namespaced/051-saml-identity-provider.yaml
 ./dev/demos/namespaced/050-oidc-identity-provider.yaml
+./dev/demos/namespaced/049-oidc-client-authorization.yaml
 ./dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml
 ./dev/demos/namespaced/047-oidc-client-role-mapper.yaml
 ./dev/demos/namespaced/046-oidc-client-policies.yaml
@@ -81,6 +82,7 @@
 ./dev/demos/basic/052-identity-provider-mapper.yaml
 ./dev/demos/basic/051-saml-identity-provider.yaml
 ./dev/demos/basic/050-oidc-identity-provider.yaml
+./dev/demos/basic/049-oidc-client-authorization.yaml
 ./dev/demos/basic/048-oidc-client-protocol-mapper.yaml
 ./dev/demos/basic/047-oidc-client-role-mapper.yaml
 ./dev/demos/basic/046-oidc-client-policies.yaml

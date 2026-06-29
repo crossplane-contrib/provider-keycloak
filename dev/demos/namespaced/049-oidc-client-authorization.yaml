@@ -1,0 +1,43 @@
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientAuthorizationResource
+metadata:
+  name: my-authz-resource
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    name: my-authz-resource
+    displayName: My Authorization Resource
+    type: "urn:test:resources:default"
+    uris:
+      - "/protected/resource"
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+---
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientAuthorizationPermission
+metadata:
+  name: my-authz-permission
+  namespace: dev-ns
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+  forProvider:
+    name: my-authz-permission
+    description: Permission covering all resources of a given type
+    type: resource
+    resourceType: "urn:test:resources:default"
+    decisionStrategy: UNANIMOUS
+    resourceServerIdRef:
+      name: "test"
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
