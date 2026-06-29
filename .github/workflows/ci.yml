@@ -339,14 +339,14 @@ jobs:
         with:
           name: provider-image
           path: /tmp/provider-image.tar
-          retention-days: 1
+          retention-days: 7
 
       - name: Upload Provider Package
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: provider-xpkg
           path: _output/xpkg/linux_amd64/
-          retention-days: 1
+          retention-days: 7
 
   e2e-tests:
     runs-on: ubuntu-24.04

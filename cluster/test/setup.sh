@@ -7,6 +7,16 @@ echo "Run Setup..."
 ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/basic/000-init.yaml
 ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/namespaced/000-init.yaml
 
+# Wait for all provider ManagedResourceDefinitions to be established.
+# This ensures all CRDs are available in the API discovery cache before
+# tests attempt to apply resources. Without this, a race condition can
+# cause "no matches for kind" errors for CRDs established just before
+# uptest runs (observed with OidcOpenShiftV4IdentityProvider and
+# ClientRegexPolicy in Keycloak 26.4.x).
+echo "Waiting for all ManagedResourceDefinitions to be established..."
+${KUBECTL} wait managedresourcedefinitions.apiextensions.crossplane.io \
+  --all --for=condition=Established --timeout=10m
+
 # Apply org init manifest if KEYCLOAK_VERSION >= 26.6
 if [ -n "${KEYCLOAK_VERSION:-}" ]; then
   MIN_KC_VERSION_ORGS="26.6"
