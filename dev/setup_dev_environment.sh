@@ -326,8 +326,10 @@ retry 3 10 env KIND_CLUSTER_NAME="${CLUSTER_NAME}" CROSSPLANE_ARGS="--debug,--en
 popd > /dev/null
 
 echo "* Waiting for Crossplane to be ready"
-$kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane" --for=condition=Ready --timeout=300s
-$kubectl_cmd wait pod --namespace crossplane-system  --selector="app=crossplane-rbac-manager" --for=condition=Ready --timeout=300s
+$kubectl_cmd wait deployment/crossplane --namespace crossplane-system --for=create --timeout=300s
+$kubectl_cmd wait deployment/crossplane-rbac-manager --namespace crossplane-system --for=create --timeout=300s
+$kubectl_cmd wait deployment/crossplane --namespace crossplane-system --for=condition=Available --timeout=300s
+$kubectl_cmd wait deployment/crossplane-rbac-manager --namespace crossplane-system --for=condition=Available --timeout=300s
 
 echo "########### Installing Keycloak Provider ###########"
 
