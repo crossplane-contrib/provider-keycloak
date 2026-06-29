@@ -1,0 +1,45 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationResource
+metadata:
+  name: my-authz-resource
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-authz-resource
+    displayName: My Authorization Resource
+    type: "urn:test:resources:default"
+    uris:
+      - "/protected/resource"
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationPermission
+metadata:
+  name: my-authz-permission
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-authz-permission
+    description: Permission covering all resources of a given type
+    type: resource
+    resourceType: "urn:test:resources:default"
+    decisionStrategy: UNANIMOUS
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
