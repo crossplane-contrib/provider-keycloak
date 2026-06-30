@@ -34,7 +34,7 @@ func (mg *Client) ResolveReferences( // ResolveReferences of this Client.
 			}
 			rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 				CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].BrowserID),
-				Extract:      reference.ExternalName(),
+				Extract:      common.UUIDExtractor(),
 				Namespace:    mg.GetNamespace(),
 				Reference:    mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].BrowserIDRef,
 				Selector:     mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].BrowserIDSelector,
@@ -56,7 +56,7 @@ func (mg *Client) ResolveReferences( // ResolveReferences of this Client.
 			}
 			rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 				CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantID),
-				Extract:      reference.ExternalName(),
+				Extract:      common.UUIDExtractor(),
 				Namespace:    mg.GetNamespace(),
 				Reference:    mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantIDRef,
 				Selector:     mg.Spec.ForProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantIDSelector,
@@ -98,7 +98,7 @@ func (mg *Client) ResolveReferences( // ResolveReferences of this Client.
 			}
 			rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 				CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].BrowserID),
-				Extract:      reference.ExternalName(),
+				Extract:      common.UUIDExtractor(),
 				Namespace:    mg.GetNamespace(),
 				Reference:    mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].BrowserIDRef,
 				Selector:     mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].BrowserIDSelector,
@@ -120,7 +120,7 @@ func (mg *Client) ResolveReferences( // ResolveReferences of this Client.
 			}
 			rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 				CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantID),
-				Extract:      reference.ExternalName(),
+				Extract:      common.UUIDExtractor(),
 				Namespace:    mg.GetNamespace(),
 				Reference:    mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantIDRef,
 				Selector:     mg.Spec.InitProvider.AuthenticationFlowBindingOverrides[i3].DirectGrantIDSelector,
