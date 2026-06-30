@@ -4,6 +4,7 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	ujconfig "github.com/crossplane/upjet/v2/pkg/config"
 )
 
@@ -71,6 +72,40 @@ func TestLateInitIgnoredFields(t *testing.T) {
 						t.Errorf("%s: LateInitializer.IgnoredFields missing %q (got %v) — would re-introduce ArgoCD drift on this field",
 							tfName, f, got)
 					}
+				}
+			}
+		})
+	}
+}
+
+func TestOpenIDClientAuthenticationFlowBindingOverrideExtractors(t *testing.T) {
+	flavours := map[string]func() (*ujconfig.Provider, error){
+		"cluster":    func() (*ujconfig.Provider, error) { return GetProvider(true) },
+		"namespaced": func() (*ujconfig.Provider, error) { return GetProviderNamespaced(true) },
+	}
+
+	for flavourName, get := range flavours {
+		t.Run(flavourName, func(t *testing.T) {
+			p, err := get()
+			if err != nil {
+				t.Fatalf("loading provider: %v", err)
+			}
+			r, ok := p.Resources["keycloak_openid_client"]
+			if !ok {
+				t.Fatalf("keycloak_openid_client: resource not registered in provider")
+			}
+
+			for _, field := range []string{
+				"authentication_flow_binding_overrides.browser_id",
+				"authentication_flow_binding_overrides.direct_grant_id",
+			} {
+				ref, ok := r.References[field]
+				if !ok {
+					t.Fatalf("keycloak_openid_client: reference %q not configured", field)
+				}
+				if ref.Extractor != common.PathUUIDExtractor {
+					t.Errorf("keycloak_openid_client: reference %q extractor = %q, want %q",
+						field, ref.Extractor, common.PathUUIDExtractor)
 				}
 			}
 		})

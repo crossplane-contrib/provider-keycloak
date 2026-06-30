@@ -44,9 +44,11 @@ func Configure(p *config.Provider) {
 
 		r.References["authentication_flow_binding_overrides.browser_id"] = config.Reference{
 			TerraformName: "keycloak_authentication_flow",
+			Extractor:     common.PathUUIDExtractor,
 		}
 		r.References["authentication_flow_binding_overrides.direct_grant_id"] = config.Reference{
 			TerraformName: "keycloak_authentication_flow",
+			Extractor:     common.PathUUIDExtractor,
 		}
 
 		// Skip late-initialization for the binding-override IDs so the
