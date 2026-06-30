@@ -17,6 +17,7 @@ type AuthenticationFlowBindingOverridesInitParameters struct {
 
 	// Browser flow id, (flow needs to exist)
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/authenticationflow/v1alpha1.Flow
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	BrowserID *string `json:"browserId,omitempty" tf:"browser_id,omitempty"`
 
 	// Reference to a Flow in authenticationflow to populate browserId.
@@ -29,6 +30,7 @@ type AuthenticationFlowBindingOverridesInitParameters struct {
 
 	// Direct grant flow id (flow needs to exist)
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/authenticationflow/v1alpha1.Flow
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	DirectGrantID *string `json:"directGrantId,omitempty" tf:"direct_grant_id,omitempty"`
 
 	// Reference to a Flow in authenticationflow to populate directGrantId.
@@ -53,6 +55,7 @@ type AuthenticationFlowBindingOverridesParameters struct {
 
 	// Browser flow id, (flow needs to exist)
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/authenticationflow/v1alpha1.Flow
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	BrowserID *string `json:"browserId,omitempty" tf:"browser_id,omitempty"`
 
@@ -66,6 +69,7 @@ type AuthenticationFlowBindingOverridesParameters struct {
 
 	// Direct grant flow id (flow needs to exist)
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/authenticationflow/v1alpha1.Flow
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	DirectGrantID *string `json:"directGrantId,omitempty" tf:"direct_grant_id,omitempty"`
 
