@@ -1,0 +1,39 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oidc-auth
+  namespace: demo-app
+spec:
+  plugin:
+    traefik-oidc-auth:
+      Provider:
+        Url: "http://host.docker.internal:9090/realms/demo"
+        ClientId: "traefik-oidc"
+        ClientSecret: "${CLIENT_SECRET}"  # replaced by setup.sh or set manually
+      CallbackUri: /oauth2/callback
+      Scopes:
+        - openid
+        - profile
+        - email
+      Authorization:
+        AssertClaims:
+          - Name: "roles"
+            AnyOf:
+              - "allowed-role"
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nginx-protected
+  namespace: demo-app
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/`)
+      kind: Rule
+      middlewares:
+        - name: oidc-auth
+      services:
+        - name: nginx
+          port: 80

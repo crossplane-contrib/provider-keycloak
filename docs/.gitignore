@@ -1,0 +1,9 @@
+# Production
+/public
+/resources/_gen
+
+# Hugo
+/.hugo_build.lock
+
+# Misc
+.DS_Store

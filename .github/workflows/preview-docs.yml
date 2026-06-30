@@ -1,0 +1,76 @@
+name: Deploy Docs PR Preview
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.150.0'
+          extended: true
+
+      - name: Build documentation (PR preview)
+        working-directory: docs
+        env:
+          GOTOOLCHAIN: local
+        run: hugo --minify --baseURL "https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-${{ github.event.pull_request.number }}/"
+
+      - name: Deploy to GitHub Pages (preview)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/public
+          destination_dir: pr-preview/pr-${{ github.event.pull_request.number }}
+          keep_files: true
+
+      - name: Post or update preview comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const previewUrl = `https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-${context.payload.pull_request.number}/`;
+            const body = `📖 **Docs preview is ready!**\n\n${previewUrl}\n\n<sub>Built from ${context.sha.substring(0, 7)} — updates automatically on new commits.</sub>`;
+            const tag = '<!-- docs-preview -->';
+            const taggedBody = `${tag}\n${body}`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+            });
+
+            const existing = comments.find(c => c.body.includes(tag));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body: taggedBody,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: taggedBody,
+              });
+            }

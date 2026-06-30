@@ -13,3 +13,8 @@ dev/e2e-broken
 
 # ignore compiled binaries
 /provider
+
+# docs build artifacts
+docs/public/
+docs/resources/_gen/
+docs/.hugo_build.lock

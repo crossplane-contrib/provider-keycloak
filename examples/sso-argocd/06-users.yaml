@@ -1,0 +1,41 @@
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: argocd-admin-user
+spec:
+  forProvider:
+    realmId: "platform"
+    username: "admin-user"
+    email: "admin@example.com"
+    firstName: "Admin"
+    lastName: "User"
+    enabled: true
+    initialPassword:
+      - valueSecretRef:
+          name: argocd-admin-user-password
+          namespace: crossplane-system
+          key: password
+        temporary: true
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: argocd-viewer-user
+spec:
+  forProvider:
+    realmId: "platform"
+    username: "viewer-user"
+    email: "viewer@example.com"
+    firstName: "Viewer"
+    lastName: "User"
+    enabled: true
+    initialPassword:
+      - valueSecretRef:
+          name: argocd-viewer-user-password
+          namespace: crossplane-system
+          key: password
+        temporary: true
+  providerConfigRef:
+    name: keycloak-provider-config
