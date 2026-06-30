@@ -4,8 +4,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	ujconfig "github.com/crossplane/upjet/v2/pkg/config"
+
+	"github.com/crossplane-contrib/provider-keycloak/config/common"
 )
 
 // TestLateInitIgnoredFields locks in the LateInitializer.IgnoredFields
