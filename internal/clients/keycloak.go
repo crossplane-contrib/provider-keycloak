@@ -32,6 +32,7 @@ import (
 	namespacedv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/namespaced/v1beta1"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients/stalerefs"
 	"github.com/crossplane-contrib/provider-keycloak/internal/keycloaksession"
+	"github.com/crossplane-contrib/provider-keycloak/internal/tfconcurrency"
 )
 
 const (
@@ -56,6 +57,7 @@ const (
 type cachedMeta struct {
 	meta   interface{}
 	config map[string]any
+	pool   *tfconcurrency.Pool
 }
 
 // metaCache caches the configured Terraform provider meta (keycloak
@@ -103,7 +105,7 @@ var optionalKeycloakConfigKeys = []string{
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
 // returns Terraform provider setup configuration
 // nolint: gocyclo
-func TerraformSetupBuilder() terraform.SetupFn {
+func TerraformSetupBuilder(poolSize int) terraform.SetupFn {
 	return func(ctx context.Context, client client.Client, mg resource.Managed) (terraform.Setup, error) {
 		ps := terraform.Setup{}
 
@@ -168,11 +170,27 @@ func TerraformSetupBuilder() terraform.SetupFn {
 			return ps, errors.Wrap(err, "failed to configure the no-fork client")
 		}
 
+		primary, ok := ps.Meta.(*keycloak.KeycloakClient)
+		if !ok {
+			return ps, errors.New("configured provider meta is not a *keycloak.KeycloakClient")
+		}
+		// Build a bounded pool of sibling clients for this configuration so that
+		// concurrent reconciliations each borrow their own client instead of
+		// racing on the single shared one. The primary client is seeded into the
+		// pool so it is reused rather than left idle.
+		cfg := ps.Configuration
+		pool := tfconcurrency.NewPool(poolSize, func(fctx context.Context) (*keycloak.KeycloakClient, error) {
+			return newConfiguredKeycloakClient(fctx, cfg)
+		})
+		pool.Seed(primary)
+		tfconcurrency.Register(primary, pool)
+
 		// Store only the fields needed for logout to reduce sensitive
 		// credential exposure in process memory.
 		metaCache.Store(cacheKey, &cachedMeta{
 			meta:   ps.Meta,
 			config: keycloaksession.LogoutConfig(ps.Configuration),
+			pool:   pool,
 		})
 		return ps, nil
 	}
@@ -308,16 +326,28 @@ func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, clie
 
 // Function to setup provider that uses terraform SDK
 func configureNoForkKeycloakClient(ctx context.Context, ps *terraform.Setup) error {
-
-	cb := keycloakProvider.KeycloakProvider(nil)
-
-	diags := cb.Configure(ctx, terraformSDK.NewResourceConfigRaw(ps.Configuration))
-	if diags.HasError() {
-		return fmt.Errorf("failed to configure the Keycloak provider: %v", diags)
+	client, err := newConfiguredKeycloakClient(ctx, ps.Configuration)
+	if err != nil {
+		return err
 	}
-
-	ps.Meta = cb.Meta()
+	ps.Meta = client
 	return nil
+}
+
+// newConfiguredKeycloakClient builds and configures a *keycloak.KeycloakClient
+// from a provider configuration (performing the initial login). It is used both
+// for the primary client and for the additional clients in the per-config pool.
+func newConfiguredKeycloakClient(ctx context.Context, config map[string]any) (*keycloak.KeycloakClient, error) {
+	cb := keycloakProvider.KeycloakProvider(nil)
+	diags := cb.Configure(ctx, terraformSDK.NewResourceConfigRaw(config))
+	if diags.HasError() {
+		return nil, fmt.Errorf("failed to configure the Keycloak provider: %v", diags)
+	}
+	client, ok := cb.Meta().(*keycloak.KeycloakClient)
+	if !ok {
+		return nil, fmt.Errorf("configured provider meta is not a *keycloak.KeycloakClient")
+	}
+	return client, nil
 }
 
 // CleanupSessions logs out all cached Keycloak sessions. It should be
@@ -326,7 +356,14 @@ func configureNoForkKeycloakClient(ctx context.Context, ps *terraform.Setup) err
 func CleanupSessions(ctx context.Context) {
 	metaCache.Range(func(key, value any) bool {
 		entry := value.(*cachedMeta)
-		if kcClient, ok := entry.meta.(*keycloak.KeycloakClient); ok {
+		if entry.pool != nil {
+			for _, c := range entry.pool.Clients() {
+				keycloaksession.LogoutSession(ctx, entry.config, c)
+			}
+			if primary, ok := entry.meta.(*keycloak.KeycloakClient); ok {
+				tfconcurrency.Unregister(primary)
+			}
+		} else if kcClient, ok := entry.meta.(*keycloak.KeycloakClient); ok {
 			keycloaksession.LogoutSession(ctx, entry.config, kcClient)
 		}
 		metaCache.Delete(key)

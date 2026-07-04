@@ -57,7 +57,8 @@ The provider supports the following command-line flags, which can be set via `De
 | Flag | Default | Description |
 |------|---------|-------------|
 | `--max-reconcile-rate` | `10` | The global maximum rate per second at which resources may be checked for drift from the desired state. |
-| `--max-concurrent-reconciles` | `1` | The maximum number of concurrent reconcile operations per controller. |
+| `--max-concurrent-reconciles` | `5` | The maximum number of concurrent reconcile operations per controller. |
+| `--keycloak-client-pool-size` | `5` | The maximum number of Keycloak client connections created per provider configuration to serve concurrent operations safely. |
 | `--poll` | `10m` | Poll interval controls how often an individual resource should be checked for drift. |
 | `--sync` | `1h` | Controller manager sync period. |
 | `--leader-election` | `false` | Use leader election for the controller manager. |
@@ -65,9 +66,14 @@ The provider supports the following command-line flags, which can be set via `De
 
 ##### Concurrency tuning
 
-By default, `--max-concurrent-reconciles` is set to `1` to prevent `concurrent map writes` panics that can occur when multiple goroutines reconcile resources of the same type concurrently (see [#552](https://github.com/crossplane-contrib/provider-keycloak/issues/552)).
+The provider serves concurrent reconciliations safely by giving each in-flight operation its own Keycloak client, borrowed from a small per-configuration pool. The embedded `terraform-provider-keycloak` client is not safe for concurrent use, so a single shared client previously caused `concurrent map writes` panics under load (see [#552](https://github.com/crossplane-contrib/provider-keycloak/issues/552)); the pool removes that race while preserving concurrency.
 
-If you need higher throughput and are not experiencing crashes, you can increase concurrency:
+Two independent knobs control throughput:
+
+- `--max-concurrent-reconciles` (default `5`) sets how many reconcile operations each controller may run at once.
+- `--keycloak-client-pool-size` (default `5`) bounds how many Keycloak connections are opened per provider configuration. This is the effective ceiling on concurrent calls against a single Keycloak instance; raising `--max-concurrent-reconciles` above it only increases queueing, not Keycloak throughput.
+
+To increase throughput, raise both together:
 
 ```yaml
 ---
@@ -85,7 +91,8 @@ spec:
             - name: package-runtime
               args:
                 - --max-reconcile-rate=10
-                - --max-concurrent-reconciles=5
+                - --max-concurrent-reconciles=10
+                - --keycloak-client-pool-size=10
 ```
 
 which can be used in the provider resource as follows:

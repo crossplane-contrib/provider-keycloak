@@ -39,6 +39,21 @@ var (
 	keycloakClientCacheMu sync.Mutex
 )
 
+// lookupClientMu holds a per-configuration mutex that serializes access to the
+// shared lookup client, which is not safe for concurrent use.
+var lookupClientMu sync.Map // map[string]*sync.Mutex
+
+// lockForLookupConfig locks the per-configuration lookup mutex and returns its
+// unlock function.
+func lockForLookupConfig(terraformProviderConfig map[string]any) func() {
+	c := terraformProviderConfig["configuration"].(terraform.ProviderConfiguration)
+	key := keycloaksession.ConfigCacheKey(c)
+	v, _ := lookupClientMu.LoadOrStore(key, &sync.Mutex{})
+	m := v.(*sync.Mutex)
+	m.Lock()
+	return m.Unlock
+}
+
 // newKeycloakClient creates a new keycloak client based on the settings in the provider configuration
 // (This can be removed once this issue is resolved: https://github.com/crossplane/upjet/issues/464)
 func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]any) (*keycloak.KeycloakClient, error) {

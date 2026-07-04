@@ -357,7 +357,15 @@ schema-diff: $(TERRAFORM)
 	./scripts/version_diff.py config/generated.lst $(WORK_DIR)/schema-diff/old-schema.json config/schema.json || true
 	@$(OK) Comparing provider schema $(OLD_PROVIDER_VERSION) vs $(TERRAFORM_PROVIDER_VERSION)
 
-.PHONY: cobertura submodules fallthrough run crds.clean schema-diff schema-version-diff
+# test.race runs the concurrency-safety unit tests with the Go race detector.
+# It is separate from `make test` because the full suite starts kube-apiservers
+# that do not need the race detector.
+test.race:
+	@$(INFO) running race detector tests
+	@CGO_ENABLED=1 go test -race -count=1 ./internal/tfconcurrency/... ./internal/clients/... ./config/...
+	@$(OK) running race detector tests
+
+.PHONY: cobertura submodules fallthrough run crds.clean schema-diff schema-version-diff test.race
 
 # ====================================================================================
 # Special Targets
@@ -369,6 +377,7 @@ Crossplane Targets:
     run                   Run crossplane locally, out-of-cluster. Useful for development.
     schema-diff           Compare provider schema between versions. Usage: make schema-diff OLD_PROVIDER_VERSION=5.6.0
     schema-version-diff   Check for schema version changes against the base branch (CI).
+    test.race             Run the concurrency-safety unit tests with the Go race detector.
 
 endef
 # The reason CROSSPLANE_MAKE_HELP is used instead of CROSSPLANE_HELP is because the crossplane
