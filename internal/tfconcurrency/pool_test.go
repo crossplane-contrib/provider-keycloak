@@ -35,9 +35,7 @@ func newOfflineClientErr(ctx context.Context) (*keycloak.KeycloakClient, error) 
 }
 
 func offlineFactory() ClientFactory {
-	return func(ctx context.Context) (*keycloak.KeycloakClient, error) {
-		return newOfflineClientErr(ctx)
-	}
+	return newOfflineClientErr
 }
 
 func TestPoolReusesReturnedClient(t *testing.T) {
