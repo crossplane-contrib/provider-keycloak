@@ -29,6 +29,7 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/samlclient"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
 	"github.com/crossplane-contrib/provider-keycloak/config/workflow"
+	"github.com/crossplane-contrib/provider-keycloak/internal/tfconcurrency"
 
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
@@ -81,6 +82,11 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 		return nil, errors.Wrapf(err, "cannot get the Terraform provider schema with generation mode set to %t", generationProvider)
 	}
 
+	// Make the shared Terraform SDK resources safe for concurrent use: each
+	// callback borrows a dedicated pooled client instead of racing on the single
+	// shared one (see internal/tfconcurrency).
+	tfconcurrency.WrapProvider(p)
+
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
 		ujconfig.WithIncludeList([]string{}),
 		ujconfig.WithTerraformPluginSDKIncludeList(ExternalNameConfigured()),
@@ -131,6 +137,8 @@ func GetProviderNamespaced(generationProvider bool) (*ujconfig.Provider, error) 
 	if err != nil {
 		return nil, errors.Wrapf(err, "cannot get the Terraform provider schema with generation mode set to %t", generationProvider)
 	}
+
+	tfconcurrency.WrapProvider(p)
 
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
 		ujconfig.WithShortName("keycloak"),

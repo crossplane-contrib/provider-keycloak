@@ -47,6 +47,9 @@ func GetIDFromIdentifyingProperties(ctx context.Context, externalName string, pa
 		return "", err
 	}
 
+	unlock := lockForLookupConfig(terraformProviderConfig)
+	defer unlock()
+
 	processedParameters := make(map[string]any)
 
 	for _, reqParamName := range lookupConfig.RequiredParameters {

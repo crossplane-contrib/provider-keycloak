@@ -71,7 +71,8 @@ func main() {
 		pollStateMetricInterval = app.Flag("poll-state-metric", "State metric recording interval").Default("5s").Duration()
 		leaderElection          = app.Flag("leader-election", "Use leader election for the controller manager.").Short('l').Default("false").OverrideDefaultFromEnvar("LEADER_ELECTION").Bool()
 		maxReconcileRate        = app.Flag("max-reconcile-rate", "The global maximum rate per second at which resources may checked for drift from the desired state.").Default("10").Int()
-		maxConcurrentReconciles = app.Flag("max-concurrent-reconciles", "The maximum number of concurrent reconcile operations per controller. Set to 1 to avoid concurrent map write panics.").Default("1").Int()
+		maxConcurrentReconciles = app.Flag("max-concurrent-reconciles", "The maximum number of concurrent reconcile operations per controller.").Default("5").Int()
+		keycloakClientPoolSize  = app.Flag("keycloak-client-pool-size", "The maximum number of Keycloak client connections created per provider configuration to serve concurrent operations safely.").Default("5").Int()
 		webhookPort             = app.Flag("webhook-port", "The port the webhook listens on").Default("9443").Envar("WEBHOOK_PORT").Int()
 		metricsBindAddress      = app.Flag("metrics-bind-address", "The address the metrics server listens on").Default(":8080").Envar("METRICS_BIND_ADDRESS").String()
 
@@ -192,7 +193,7 @@ func main() {
 			},
 		},
 		Provider:              providerCluster,
-		SetupFn:               clients.TerraformSetupBuilder(),
+		SetupFn:               clients.TerraformSetupBuilder(*keycloakClientPoolSize),
 		PollJitter:            pollJitter,
 		OperationTrackerStore: tjcontroller.NewOperationStore(log),
 	}
@@ -210,7 +211,7 @@ func main() {
 			},
 		},
 		Provider:              providerNamespaced,
-		SetupFn:               clients.TerraformSetupBuilder(),
+		SetupFn:               clients.TerraformSetupBuilder(*keycloakClientPoolSize),
 		PollJitter:            pollJitter,
 		OperationTrackerStore: tjcontroller.NewOperationStore(log),
 	}
