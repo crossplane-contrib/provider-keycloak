@@ -1,149 +1,161 @@
 ---
 sidebar_position: 5
 title: Groups
-description: Manage Keycloak groups for organizing users
+description: Manage Keycloak groups, memberships, role mappings, and permissions
 ---
 
 # Groups
 
-Groups provide a way to organize users and assign roles to multiple users at once.
+Use groups when multiple users should share the same roles or when you need a hierarchical structure such as teams, departments, or environments. Groups let you model organization structure once and then manage access in bulk.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform Resource |
+|------|-----------|-------------------|
+| Group | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group) |
+| Memberships | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_memberships`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_memberships) |
+| Roles | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_roles) |
+| Permissions | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_permissions) |
 
-- **API Group**: `group.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kind**: `Group`
+## Examples
 
-## Basic Group
-
-```yaml
-apiVersion: group.keycloak.crossplane.io/v1alpha1
-kind: Group
-metadata:
-  name: developers
-spec:
-  forProvider:
-    name: "Developers"
-    realmId: "my-realm"
-  deletionPolicy: Delete
-```
-
-## Group with Attributes
+### Basic group
 
 ```yaml
 apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Group
 metadata:
-  name: platform-team
+  name: test
 spec:
-  forProvider:
-    name: "Platform Team"
-    realmId: "my-realm"
-    attributes:
-      department: "engineering"
-      cost-center: "CC-1234"
   deletionPolicy: Delete
+  forProvider:
+    name: test
+    realmId: dev
+  providerConfigRef:
+    name: "keycloak-provider-config"
 ```
 
-## Child Group (Nested Groups)
-
-Create hierarchical group structures:
+### Child groups with the same name under different parents
 
 ```yaml
 apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Group
 metadata:
-  name: frontend-devs
+  name: test-parent-1
+  labels:
+    role: parent
+    parent: test1
 spec:
-  forProvider:
-    name: "Frontend Developers"
-    realmId: "my-realm"
-    parentId: "parent-group-id"
   deletionPolicy: Delete
+  forProvider:
+    name: test-parent-1
+    realmId: dev
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: test-child-1
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: test-child
+    realmId: dev
+    parentIdSelector:
+      matchLabels:
+        role: parent
+        parent: test1
+  providerConfigRef:
+    name: "keycloak-provider-config"
 ```
 
-## Group Memberships
-
-Assign users to groups:
+### Group memberships
 
 ```yaml
 apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Memberships
 metadata:
-  name: dev-team-members
+  name: test-members
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
     groupIdRef:
-      name: developers
+      name: test
+      policy:
+        resolve: Always
     members:
-      - "user-id-1"
-      - "user-id-2"
+      - bree
+      - tim-tester
+    realmId: dev
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Group Roles
-
-Assign roles to a group so all members inherit them:
+### Group roles
 
 ```yaml
 apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Roles
 metadata:
-  name: dev-group-roles
+  name: group-roles
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
     groupIdRef:
-      name: developers
-    exhaustive: true
-    roleIds:
-      - "role-uuid-1"
-      - "role-uuid-2"
+      name: test
+      policy:
+        resolve: Always
+    roleIdsRefs:
+      - name: "test-client"
+        policy:
+          resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Group Permissions
-
-Enable fine-grained permissions on a group:
+### Group permissions
 
 ```yaml
 apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Permissions
 metadata:
-  name: dev-group-permissions
+  name: my-group-permission
 spec:
+  managementPolicies: ["Create", "Update", "Observe"]
   forProvider:
-    realmId: "my-realm"
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
     groupIdRef:
-      name: developers
-    viewScope:
-      - policies:
-          - "admin-policy-id"
-        description: "View group"
-        decisionStrategy: "UNANIMOUS"
-    manageScope:
-      - policies:
-          - "admin-policy-id"
-        description: "Manage group"
-        decisionStrategy: "UNANIMOUS"
+      name: "test"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
-
-## Related Resources
-
-- **[Default Configuration](./default-config.md)** — Configure default groups for new users
 
 ## Key Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Group display name |
-| `realmId` | string | Realm this group belongs to |
-| `parentId` | string | Parent group ID (for nested groups) |
-| `attributes` | map | Custom key-value attributes |
+| Resource | Field | Description |
+|----------|-------|-------------|
+| `Group` | `name` | Group name shown in Keycloak. |
+| `Group` | `realmId` | Realm where the group is created. |
+| `Group` | `parentIdRef` / `parentIdSelector` | Places the group under a parent group for nested hierarchies. |
+| `Memberships` | `groupIdRef` | Targets the group whose members you want to manage. |
+| `Memberships` | `members` | List of usernames to keep in the group. |
+| `Roles` | `groupIdRef` | Targets the group that should receive roles. |
+| `Roles` | `roleIdsRefs` | References the roles assigned to the group. |
+| `Permissions` | `realmIdRef` | Enables fine-grained admin permissions for groups in a realm. |
+| `Permissions` | `groupIdRef` | Targets the group for which permissions are managed. |
+
+## Related Resources
+
+- [Users](./users.md)
+- [Roles](./roles.md)
+- [Default Configuration](./default-config.md)

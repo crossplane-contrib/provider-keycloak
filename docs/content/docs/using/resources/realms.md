@@ -1,106 +1,131 @@
 ---
 sidebar_position: 1
 title: Realms
-description: Manage Keycloak realms declaratively
+description: Create and manage Keycloak realms, the top-level container for every other resource
 ---
 
-# Realms
-
-A Realm in Keycloak is a space where you manage objects like users, applications, roles, and groups. Each realm is isolated from other realms.
+Use a `Realm` when you need an isolated Keycloak boundary for a tenant, environment, or application domain. Because every other Keycloak resource belongs to a realm, this is usually the first resource you create for a new deployment.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+- **`Realm`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm)
 
-- **API Group**: `realm.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kind**: `Realm`
+## Working YAML Examples
 
-## Basic Realm
+### Basic realm
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
-  name: my-realm
+  name: dev
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realm: "my-realm"
-    enabled: true
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-## Realm with Display Settings
-
-```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
-kind: Realm
-metadata:
-  name: production-realm
-spec:
-  forProvider:
-    realm: "production"
-    enabled: true
-    displayName: "Production Realm"
+    realm: "dev"
     attributes:
-      environment: "production"
+      userProfileEnabled: "true"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Realm with Password Policy
+### Realm with timeouts and lifespans
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
-  name: secure-realm
+  name: dev-durations
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realm: "secure-realm"
+    realm: "dev-durations"
     enabled: true
-    passwordPolicy: "length(8) and digits(2) and upperCase(1)"
-    otpPolicy:
-      - algorithm: "HOTP"
-        digits: 6
-        type: "totp"
+    accessTokenLifespan: "5m0s"
+    accessTokenLifespanForImplicitFlow: "1800s"
+    ssoSessionIdleTimeout: "30m0s"
+    ssoSessionMaxLifespan: "10h0m0s"
+    ssoSessionIdleTimeoutRememberMe: "0s"
+    ssoSessionMaxLifespanRememberMe: "0s"
+    offlineSessionIdleTimeout: "720h0m0s"
+    offlineSessionMaxLifespan: "1440h0m0s"
+    clientSessionIdleTimeout: "0s"
+    clientSessionMaxLifespan: "0s"
+    accessCodeLifespan: "1m0s"
+    accessCodeLifespanUserAction: "5m0s"
+    accessCodeLifespanLogin: "30m0s"
+    actionTokenGeneratedByAdminLifespan: "12h0m0s"
+    actionTokenGeneratedByUserLifespan: "5m0s"
+    oauth2DeviceCodeLifespan: "10m0s"
+    oauth2DevicePollingInterval: 5
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Realm with SMTP Configuration
+### Managing an existing realm without deleting it
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
-  name: realm-with-email
+  name: existing-master
 spec:
+  deletionPolicy: Orphan
   forProvider:
-    realm: "email-realm"
-    enabled: true
-    smtpServer:
-      - host: "smtp.example.com"
-        port: "587"
-        from: "noreply@example.com"
+    realm: master
+    displayName: Customized Keycloak
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  managementPolicies: [Observe, Update]
 ```
 
-## Related Resources
+### Realm with organizations enabled
 
-- **[Realm Settings](./realm-settings.md)** — Manage `RealmEvents`, `RequiredAction`, `UserProfile`, `KeystoreRsa`, `DefaultClientScopes`, `OptionalClientScopes`, `ClientPolicyProfile`, and `ClientPolicyProfilePolicy`
-- **[Default Configuration](./default-config.md)** — Configure default groups and roles for new users
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: orgs
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: "orgs"
+    organizationsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
 
 ## Key Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `realm` | string | The realm name (unique identifier) |
-| `enabled` | bool | Whether the realm is active |
-| `displayName` | string | Human-readable display name |
-| `passwordPolicy` | string | Password policy expression |
-| `attributes` | map | Custom key-value attributes |
-| `smtpServer` | object | Email server configuration |
-| `otpPolicy` | object | One-time password configuration |
+| Field | Description |
+| --- | --- |
+| `realm` | Realm ID and top-level container name used by all child resources. |
+| `enabled` | Turns the realm on or off. |
+| `displayName` | Human-friendly name shown in the Keycloak UI. |
+| `passwordPolicy` | Password rules enforced for users in the realm. |
+| `attributes` | Extra realm settings such as feature flags and provider-specific options. |
+| `smtpServer` | Outbound email settings for verification, reset, and notification flows. |
+| `otpPolicy` | Realm-wide OTP settings for MFA behavior. |
+| `organizationsEnabled` | Enables organization features in supported Keycloak versions. |
+| `accessTokenLifespan` | Default lifetime for access tokens. |
+| `accessTokenLifespanForImplicitFlow` | Access token lifetime for implicit flow clients. |
+| `ssoSessionIdleTimeout` | Idle timeout before a normal SSO session expires. |
+| `ssoSessionMaxLifespan` | Maximum duration of a normal SSO session. |
+| `ssoSessionIdleTimeoutRememberMe` | Idle timeout for remember-me SSO sessions. |
+| `ssoSessionMaxLifespanRememberMe` | Maximum duration for remember-me SSO sessions. |
+| `offlineSessionIdleTimeout` | Idle timeout for offline sessions and refresh tokens. |
+| `offlineSessionMaxLifespan` | Maximum duration for offline sessions. |
+| `clientSessionIdleTimeout` | Idle timeout for client sessions. |
+| `clientSessionMaxLifespan` | Maximum duration for client sessions. |
+| `accessCodeLifespan` | Lifetime of authorization codes. |
+| `accessCodeLifespanUserAction` | Lifetime for user action tokens during browser flows. |
+| `accessCodeLifespanLogin` | Maximum time allowed to complete login. |
+| `actionTokenGeneratedByAdminLifespan` | Lifetime for admin-generated action tokens. |
+| `actionTokenGeneratedByUserLifespan` | Lifetime for user-generated action tokens. |
+| `oauth2DeviceCodeLifespan` | Lifetime for OAuth 2.0 device codes. |
+| `oauth2DevicePollingInterval` | Polling interval for device authorization clients. |
+
+## Related Resources
+
+- [Realm Settings](./realm-settings.md)
+- [Default Configuration](./default-config.md)

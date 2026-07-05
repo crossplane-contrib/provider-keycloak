@@ -21,8 +21,8 @@ menu:
     - name: GitHub
       url: https://github.com/crossplane-contrib/provider-keycloak
       weight: 2
-    - name: Marketplace
-      url: https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak
+    - name: Releases
+      url: https://github.com/crossplane-contrib/provider-keycloak/releases
       weight: 3
 
 params:

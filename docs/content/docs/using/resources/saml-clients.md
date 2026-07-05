@@ -1,144 +1,139 @@
 ---
 sidebar_position: 14
 title: SAML Clients
-description: Manage SAML clients and client scopes
+description: Configure SAML 2.0 clients, scopes, and default scopes in Keycloak
 ---
 
 # SAML Clients
 
-SAML (Security Assertion Markup Language) clients enable single sign-on for applications that use the SAML 2.0 protocol. This page covers SAML-specific client types and their scopes.
+Use SAML clients when an application or service provider expects SAML 2.0 instead of OpenID Connect. This is common for legacy enterprise applications and commercial service providers such as Salesforce, Jira, or other platforms that rely on SAML metadata, signed assertions, and SSO endpoints.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform |
+|------|-----------|-----------|
+| `Client` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client) |
+| `ClientScope` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client_scope`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client_scope) |
+| `ClientDefaultScopes` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client_default_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client_default_scopes) |
 
-- **API Group**: `samlclient.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kinds**: `Client`, `ClientScope`, `ClientDefaultScopes`
+## Working YAML examples
 
-## SAML Client
+### SAML Client
+
+Use a SAML client to represent the service provider that trusts Keycloak for SSO.
 
 ```yaml
 apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
 kind: Client
 metadata:
-  name: saml-app
+  name: saml-client
 spec:
+  deletionPolicy: Delete
   forProvider:
-    clientId: "https://saml-app.example.com/saml/metadata"
-    name: "SAML Application"
-    realmId: "my-realm"
-    enabled: true
-    signDocuments: true
-    signAssertions: true
-    clientSignatureRequired: true
+    clientId: saml-client-id
     includeAuthnStatement: true
-    nameIdFormat: "username"
-    assertionConsumerPostUrl: "https://saml-app.example.com/saml/acs"
-    logoutServicePostBindingUrl: "https://saml-app.example.com/saml/slo"
-    validRedirectUris:
-      - "https://saml-app.example.com/*"
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-### SAML Client with Encryption
-
-```yaml
-apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
-kind: Client
-metadata:
-  name: encrypted-saml-app
-spec:
-  forProvider:
-    clientId: "https://secure-app.example.com/saml/metadata"
-    name: "Encrypted SAML Application"
-    realmId: "my-realm"
-    enabled: true
-    signDocuments: true
+    name: saml-client
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
     signAssertions: true
-    encryptAssertions: true
-    encryptionAlgorithm: "AES-256"
-    clientSignatureRequired: true
-    canonicalizationMethod: "EXCLUSIVE"
-    assertionConsumerPostUrl: "https://secure-app.example.com/saml/acs"
+    signDocuments: false
+    signingCertificateSecretRef:
+      name: rsa-key
+      namespace: dev
+      key: cert
+    signingPrivateKeySecretRef:
+      name: saml-cliet-cert
+      namespace: dev
+      key: priv
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## SAML ClientScope
+### SAML Client Scope
 
-Define a reusable SAML scope with protocol mappers.
+Use a SAML client scope to define reusable mapper and assertion behavior that can be shared across clients.
 
 ```yaml
 apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
 kind: ClientScope
 metadata:
-  name: saml-roles-scope
+  name: saml-client-scopes
 spec:
+  deletionPolicy: Delete
   forProvider:
-    name: "saml-roles"
-    description: "Scope for including role information in SAML assertions"
-    realmId: "my-realm"
-    consentScreenText: "Access your roles"
+    description: This scope will map a user's group memberships to SAML assertion
     guiOrder: 1
+    name: groups
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## SAML ClientDefaultScopes
+### SAML Client Default Scopes
 
-Assign default scopes to a SAML client.
+Use default scopes to attach one or more SAML client scopes automatically to a client.
 
 ```yaml
 apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
 kind: ClientDefaultScopes
 metadata:
-  name: saml-app-default-scopes
+  name: saml-client-default-scopes
 spec:
+  deletionPolicy: Delete
   forProvider:
-    clientId: "saml-client-uuid"
-    realmId: "my-realm"
+    clientIdRef:
+      name: saml-client
+      policy:
+        resolve: Always
     defaultScopes:
-      - "saml-roles"
-      - "saml-attributes"
+      - groups
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Key Fields
+## Key fields
 
 ### Client
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `clientId` | string | SAML entity ID (typically a URL) |
-| `name` | string | Display name for the client |
-| `realmId` | string | Realm this client belongs to |
-| `enabled` | bool | Whether the client is active (default `true`) |
-| `signDocuments` | bool | Sign SAML documents |
-| `signAssertions` | bool | Sign SAML assertions |
-| `clientSignatureRequired` | bool | Expect signed documents from client (default `true`) |
-| `encryptAssertions` | bool | Encrypt SAML assertions |
-| `encryptionAlgorithm` | string | Algorithm for assertion encryption |
-| `assertionConsumerPostUrl` | string | SAML POST binding URL for assertions |
-| `assertionConsumerRedirectUrl` | string | SAML Redirect binding URL for assertions |
-| `nameIdFormat` | string | Name ID format (`username`, `email`, `transient`, `persistent`) |
+| Field | Why it matters |
+|-------|----------------|
+| `clientId` | SAML entity ID for the service provider. |
+| `realmIdRef` | Selects the realm that owns the client. |
+| `includeAuthnStatement` | Adds an AuthnStatement to issued assertions when required by the application. |
+| `signAssertions` | Signs SAML assertions sent to the service provider. |
+| `signDocuments` | Signs the SAML document envelope when the integration requires it. |
+| `signingCertificateSecretRef` | Supplies the public certificate used for signing. |
+| `signingPrivateKeySecretRef` | Supplies the private key used for signing. |
 
 ### ClientScope
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Display name of the scope |
-| `description` | string | Description shown in the UI |
-| `realmId` | string | Realm this scope belongs to |
-| `consentScreenText` | string | Text displayed on consent screen |
-| `guiOrder` | number | Order in the GUI |
+| Field | Why it matters |
+|-------|----------------|
+| `name` | Scope name referenced by SAML clients. |
+| `description` | Explains the purpose of the scope in Keycloak. |
+| `guiOrder` | Controls display order in the Keycloak admin UI. |
+| `realmIdRef` | Selects the realm that owns the scope. |
 
 ### ClientDefaultScopes
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `clientId` | string | UUID of the SAML client |
-| `realmId` | string | Realm the client and scopes belong to |
-| `defaultScopes` | []string | List of scope names to assign as default |
+| Field | Why it matters |
+|-------|----------------|
+| `clientIdRef` | Resolves the SAML client that should receive the scopes. |
+| `defaultScopes` | Lists the scope names that are applied automatically. |
+| `realmIdRef` | Ensures the client and scopes are resolved in the right realm. |
+
+## Related Resources
+
+- **[Clients](./clients.md)** — Compare SAML clients with OpenID Connect clients.
+- **[Protocol Mappers](./protocol-mappers.md)** — Add mappers that shape SAML assertions and attributes.
+- **[Realms](./realms.md)** — Create the realm that owns the client and scopes.
+

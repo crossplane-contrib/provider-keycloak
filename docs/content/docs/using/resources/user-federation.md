@@ -1,114 +1,360 @@
 ---
 sidebar_position: 8
 title: User Federation
-description: Integrate LDAP/Active Directory with Keycloak
+description: Connect Keycloak to LDAP, Active Directory, and custom user stores
 ---
 
 # User Federation
 
-User federation allows Keycloak to use external user stores such as LDAP or Active Directory.
+Use user federation when Keycloak should authenticate users against an external directory or user store instead of managing every account in its own database. LDAP and Active Directory federation let users sign in with their existing directory credentials, while mapper resources control how LDAP attributes, groups, and roles are projected into Keycloak. Use the custom user federation CRD when you have a Keycloak user storage SPI provider that is not LDAP-based.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform |
+|------|-----------|-----------|
+| `UserFederation` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_user_federation) |
+| `UserAttributeMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_user_attribute_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_user_attribute_mapper) |
+| `FullNameMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_full_name_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_full_name_mapper) |
+| `GroupMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_group_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_group_mapper) |
+| `RoleMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_role_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_role_mapper) |
+| `HardcodedAttributeMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_hardcoded_attribute_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_hardcoded_attribute_mapper) |
+| `HardcodedGroupMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_hardcoded_group_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_hardcoded_group_mapper) |
+| `HardcodedRoleMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_hardcoded_role_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_hardcoded_role_mapper) |
+| `MsadUserAccountControlMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_msad_user_account_control_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_msad_user_account_control_mapper) |
+| `MsadLdsUserAccountControlMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_msad_lds_user_account_control_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_msad_lds_user_account_control_mapper) |
+| `CustomMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_custom_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_custom_mapper) |
+| `UserFederation` | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_custom_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/custom_user_federation) |
 
-- **API Group**: `ldap.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kind**: `UserFederation`
+## Working YAML examples
 
-## OpenLDAP Integration
-
-```yaml
-apiVersion: ldap.keycloak.crossplane.io/v1alpha1
-kind: UserFederation
-metadata:
-  name: openldap
-spec:
-  forProvider:
-    name: "openldap"
-    realmId: my-realm
-    connectionUrl: "ldap://ldap.example.com:389"
-    startTls: false
-    bindDn: "cn=admin,dc=example,dc=com"
-    bindCredentialSecretRef:
-      key: "password"
-      name: "ldap-password"
-      namespace: "crossplane-system"
-    editMode: "UNSYNCED"
-    usersDn: "ou=users,dc=example,dc=com"
-    usernameLdapAttribute: "uid"
-    rdnLdapAttribute: "uid"
-    uuidLdapAttribute: "entryUUID"
-    userObjectClasses:
-      - "inetOrgPerson"
-      - "shadowAccount"
-    searchScope: "SUBTREE"
-    importEnabled: true
-    batchSizeForSync: 100
-    changedSyncPeriod: 604800
-    trustEmail: true
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-## Active Directory Integration
+### LDAP UserFederation
 
 ```yaml
 apiVersion: ldap.keycloak.crossplane.io/v1alpha1
 kind: UserFederation
 metadata:
-  name: active-directory
+  name: ldap-user-federation
 spec:
+  deletionPolicy: Delete
   forProvider:
-    name: "active-directory"
-    realmId: my-realm
-    connectionUrl: "ldap://ad.corp.example.com:389"
-    startTls: true
-    bindDn: "cn=svc-keycloak,ou=services,dc=corp,dc=example,dc=com"
     bindCredentialSecretRef:
-      key: "password"
-      name: "ad-password"
-      namespace: "crossplane-system"
-    editMode: "UNSYNCED"
-    usersDn: "ou=users,dc=corp,dc=example,dc=com"
-    usernameLdapAttribute: "sAMAccountName"
-    rdnLdapAttribute: "cn"
-    uuidLdapAttribute: "sAMAccountName"
+      key: secret
+      name: bind-credential-secret
+      namespace: dev
+    bindDn: cn=admin,dc=example,dc=org
+    connectionTimeout: 5s
+    connectionUrl: ldap://openldap
+    enabled: false
+    kerberos:
+      - kerberosRealm: FOO.LOCAL
+        keyTab: /etc/host.keytab
+        serverPrincipal: HTTP/host.foo.com@FOO.LOCAL
+    name: openldap
+    rdnLdapAttribute: cn
+    readTimeout: 10s
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
     userObjectClasses:
-      - "person"
-      - "organizationalPerson"
-      - "user"
-    searchScope: "SUBTREE"
-    importEnabled: true
-    batchSizeForSync: 100
-    changedSyncPeriod: 604800
-    trustEmail: true
-    validatePasswordPolicy: false
+      - simpleSecurityObject
+      - organizationalRole
+    usernameLdapAttribute: cn
+    usersDn: dc=example,dc=org
+    uuidLdapAttribute: entryDN
+    deleteDefaultMappers: false
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Key Fields
+### UserAttributeMapper
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Display name for the federation |
-| `realmId` | string | Realm to federate |
-| `connectionUrl` | string | LDAP server URL |
-| `bindDn` | string | LDAP bind DN for authentication |
-| `bindCredentialSecretRef` | object | Reference to bind password secret |
-| `usersDn` | string | DN of the user tree |
-| `usernameLdapAttribute` | string | LDAP attribute for username |
-| `userObjectClasses` | []string | LDAP object classes to search |
-| `editMode` | string | `READ_ONLY`, `WRITABLE`, or `UNSYNCED` |
-| `importEnabled` | bool | Whether to import users on demand |
-| `searchScope` | string | `ONE_LEVEL` or `SUBTREE` |
-| `startTls` | bool | Use StartTLS for connection |
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserAttributeMapper
+metadata:
+  name: ldap-user-attribute-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapAttribute: bar
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: user-attribute-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    userModelAttribute: foo
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
 
-## Edit Modes
+### FullNameMapper
 
-| Mode | Description |
-|------|-------------|
-| `READ_ONLY` | Users are read from LDAP, changes in Keycloak are not synced back |
-| `WRITABLE` | Changes in Keycloak are synced back to LDAP |
-| `UNSYNCED` | Users are imported but Keycloak changes are stored locally only |
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: FullNameMapper
+metadata:
+  name: ldap-full-name-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapFullNameAttribute: cn
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: full-name-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### GroupMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: GroupMapper
+metadata:
+  name: ldap-group-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    groupNameLdapAttribute: cn
+    groupObjectClasses:
+      - groupOfNames
+    ldapGroupsDn: dc=example,dc=org
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    memberofLdapAttribute: memberOf
+    membershipAttributeType: DN
+    membershipLdapAttribute: member
+    membershipUserLdapAttribute: cn
+    name: group-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### RoleMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: ldap-role-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapRolesDn: dc=example,dc=org
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    memberofLdapAttribute: memberOf
+    membershipAttributeType: DN
+    membershipLdapAttribute: member
+    membershipUserLdapAttribute: cn
+    name: role-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleNameLdapAttribute: cn
+    roleObjectClasses:
+      - groupOfNames
+    userRolesRetrieveStrategy: GET_ROLES_FROM_USER_MEMBEROF_ATTRIBUTE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### HardcodedRoleMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: HardcodedRoleMapper
+metadata:
+  name: assign-test-role-to-all-users
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: assign-test-role-to-all-users
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleRef:
+      name: test
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### HardcodedGroupMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: HardcodedGroupMapper
+metadata:
+  name: assign-group-to-users
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    groupRef:
+      name: test
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: assign-group-to-users
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### HardcodedAttributeMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: HardcodedAttributeMapper
+metadata:
+  name: assign-bar-to-foo
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    attributeName: foo
+    attributeValue: bar
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: assign-foo-to-bar
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### MsadUserAccountControlMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: MsadUserAccountControlMapper
+metadata:
+  name: msad-user-account-control-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: msad-user-account-control-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### MsadLdsUserAccountControlMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: MsadLdsUserAccountControlMapper
+metadata:
+  name: msad-lds-user-account-control-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: msad-lds-user-account-control-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### CustomMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: CustomMapper
+metadata:
+  name: custom-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    config:
+      ldap.full.name.attribute: cn
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: custom-mapper
+    providerId: "full-name-ldap-mapper"
+    providerType: "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Custom UserFederation
+
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  name: custom-user-federation
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    config:
+      dummyBool: true
+      dummyString: foobar
+      multivalue: value1##value2
+    enabled: true
+    name: custom
+    providerId: custom
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Related Resources
+
+- [Realms](./realms.md)
+- [Users](./users.md)
+- [Groups](./groups.md)
+- [Roles](./roles.md)
+- [Identity Providers](./identity-providers.md)

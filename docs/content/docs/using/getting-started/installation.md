@@ -25,7 +25,7 @@ spec:
   package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:<version>
 ```
 
-Replace `<version>` with the desired release version from the [Upbound Marketplace](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak).
+Replace `<version>` with the desired release version (e.g., `v2.22.0`). See [GitHub Releases](https://github.com/crossplane-contrib/provider-keycloak/releases) for available versions.
 
 ## Verify Installation
 

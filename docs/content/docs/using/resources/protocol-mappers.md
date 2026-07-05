@@ -1,155 +1,221 @@
 ---
 sidebar_position: 6
 title: Protocol Mappers
-description: Configure token claims and SAML assertions
+description: Manage OIDC and SAML protocol mappers for claims, roles, and group membership
 ---
 
-# Protocol Mappers
-
-Protocol mappers control what information is included in tokens (OIDC) or assertions (SAML).
+Use these resources when you need to control what Keycloak emits in OIDC tokens or SAML assertions. Use `ProtocolMapper` for custom claim mapping, `RoleMapper` to include roles from one client or client scope in another, and `GroupMembershipProtocolMapper` to expose group membership as a JWT claim.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform Resource |
+|------|-----------|-------------------|
+| ProtocolMapper | `client.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_protocol_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_protocol_mapper) |
+| RoleMapper | `client.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_role_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_role_mapper) |
+| GroupMembershipProtocolMapper | `openidgroup.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_group_membership_protocol_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_group_membership_protocol_mapper) |
 
-- **API Group**: `client.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kind**: `ProtocolMapper`
+## Working YAML Examples
 
-## OpenID Connect: User Attribute Mapper
-
-Include a user attribute as a token claim:
+### OIDC user attribute `ProtocolMapper` on a client
 
 ```yaml
 apiVersion: client.keycloak.crossplane.io/v1alpha1
 kind: ProtocolMapper
 metadata:
-  name: department-mapper
+  name: openid-client-protocol-mapper
 spec:
-  forProvider:
-    clientId: my-client
-    realmId: my-realm
-    protocol: openid-connect
-    protocolMapper: oidc-usermodel-attribute-mapper
-    name: department-mapper
-    config:
-      "user.attribute": "department"
-      "claim.name": "department"
-      "id.token.claim": "true"
-      "access.token.claim": "true"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "picture"
+    protocol: "openid-connect"
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    protocolMapper: "oidc-usermodel-attribute-mapper"
+    config:
+      userinfo.token.claim: "true"
+      user.attribute: "picture"
+      id.token.claim: "true"
+      access.token.claim: "true"
+      claim.name: "picture"
+      jsonType.label: "String"
+      introspection.token.claim: "true"
 ```
 
-## OpenID Connect: Role Mapper
-
-Include user roles in the token:
+### OIDC client role `ProtocolMapper` on a client scope
 
 ```yaml
 apiVersion: client.keycloak.crossplane.io/v1alpha1
 kind: ProtocolMapper
 metadata:
-  name: roles-mapper
+  name: openid-client-scope-protocol-mapper
 spec:
-  forProvider:
-    clientId: my-client
-    realmId: my-realm
-    protocol: openid-connect
-    protocolMapper: oidc-usermodel-realm-role-mapper
-    name: roles
-    config:
-      "claim.name": "roles"
-      "multivalued": "true"
-      "id.token.claim": "true"
-      "access.token.claim": "true"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "client roles"
+    protocol: "openid-connect"
+    clientScopeIdRef:
+      name: "openid-client-scope"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    protocolMapper: "oidc-usermodel-client-role-mapper"
+    config:
+      multivalued: "true"
+      user.attribute: "foo"
+      access.token.claim: "true"
+      claim.name: "resource_access.${client_id}.roles"
+      jsonType.label: "String"
+      introspection.token.claim: "true"
 ```
 
-## OpenID Connect: Client Role Mapper
-
-Include client-specific roles in the token:
+### SAML role list `ProtocolMapper`
 
 ```yaml
 apiVersion: client.keycloak.crossplane.io/v1alpha1
 kind: ProtocolMapper
 metadata:
-  name: client-roles-mapper
+  name: saml-client-protocol-mapper
 spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "user roles"
+    protocol: "saml"
+    samlClientIdRef:
+      name: "saml-client"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    protocolMapper: "saml-role-list-mapper"
+    config:
+      attribute.name: "Role"
+      attribute.nameformat: "Basic"
+      friendly.name: "test"
+      single: "true"
+```
+
+### `RoleMapper` on a client
+
+```yaml
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: openid-client-role-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
   forProvider:
     clientIdRef:
-      name: kubernetes
-    realmId: my-realm
-    protocol: openid-connect
-    protocolMapper: oidc-usermodel-client-role-mapper
-    name: roles
-    config:
-      "usermodel.clientRoleMapping.clientId": "kubernetes"
-      "claim.name": "roles"
-      "multivalued": "true"
-      "id.token.claim": "true"
-      "access.token.claim": "true"
-  providerConfigRef:
-    name: keycloak-provider-config
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleIdRef:
+      name: "test-client"
+      policy:
+        resolve: Always
 ```
 
-## OpenID Connect: Audience Mapper
-
-Add an audience claim to the token:
+### `RoleMapper` on a client scope
 
 ```yaml
 apiVersion: client.keycloak.crossplane.io/v1alpha1
-kind: ProtocolMapper
+kind: RoleMapper
 metadata:
-  name: audience-mapper
+  name: openid-client-scope-role-mapper
 spec:
-  forProvider:
-    clientId: my-client
-    realmId: my-realm
-    protocol: openid-connect
-    protocolMapper: oidc-audience-mapper
-    name: audience-mapper
-    config:
-      "included.client.audience": "target-client"
-      "id.token.claim": "true"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    clientScopeIdRef:
+      name: "openid-client-scope"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleIdRef:
+      name: "test-client"
+      policy:
+        resolve: Always
 ```
 
-## SAML: User Property Mapper
-
-Map a user property to a SAML assertion attribute:
+### `GroupMembershipProtocolMapper` on a client
 
 ```yaml
-apiVersion: client.keycloak.crossplane.io/v1alpha1
-kind: ProtocolMapper
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: GroupMembershipProtocolMapper
 metadata:
-  name: saml-email-mapper
+  name: openid-client-group-membership-protocol-mapper
 spec:
-  forProvider:
-    clientId: my-saml-client
-    realmId: my-realm
-    protocol: saml
-    protocolMapper: saml-user-property-mapper
-    name: email-mapper
-    config:
-      "property": "email"
-      "friendly.name": "email"
-      "attribute.name": "email"
-      "attribute.nameformat": "Basic"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "my-mapper"
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    claimName: "test"
 ```
 
-## Common Mapper Types
+### `GroupMembershipProtocolMapper` on a client scope
 
-| Protocol | Mapper Type | Purpose |
-|----------|------------|---------|
-| OIDC | `oidc-usermodel-attribute-mapper` | Map user attribute to claim |
-| OIDC | `oidc-usermodel-realm-role-mapper` | Map realm roles to claim |
-| OIDC | `oidc-usermodel-client-role-mapper` | Map client roles to claim |
-| OIDC | `oidc-audience-mapper` | Add audience claim |
-| OIDC | `oidc-full-name-mapper` | Map full name to claim |
-| SAML | `saml-user-property-mapper` | Map user property to assertion |
-| SAML | `saml-hardcoded-attribute-mapper` | Add static assertion attribute |
-| SAML | `saml-x509-subject-name-mapper` | Map X.509 subject to assertion |
+```yaml
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: GroupMembershipProtocolMapper
+metadata:
+  name: openid-client-scope-group-membership-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "my-mapper"
+    clientScopeIdRef:
+      name: "openid-client-scope"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    claimName: "test"
+```
+
+## Related Resources
+
+- [Clients](./clients.md)
+- [OpenID Client Scopes](./openid-client-scopes.md)
+- [Groups](./groups.md)
+- [Roles](./roles.md)
+- [SAML Clients](./saml-clients.md)
+- [Realms](./realms.md)

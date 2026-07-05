@@ -1,109 +1,67 @@
 ---
 sidebar_position: 16
 title: Default Configuration
-description: Manage default groups and roles for new users
+description: Assign default groups and roles to every new user in a realm
 ---
 
-# Default Configuration
-
-Default configuration resources let you define which groups and roles are automatically assigned to new users in a realm.
+Use these resources when every new user in a realm should start with the same baseline access. `DefaultGroups` adds new users to groups automatically, and `Roles` assigns the realm roles that should always be present.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform Resource |
+|------|-----------|-------------------|
+| DefaultGroups | `defaults.keycloak.crossplane.io/v1alpha1` | [`keycloak_default_groups`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/default_groups) |
+| Roles | `defaults.keycloak.crossplane.io/v1alpha1` | [`keycloak_default_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/default_roles) |
 
-- **API Group**: `defaults.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kinds**: `DefaultGroups`, `Roles`
+## Working YAML Examples
 
-## DefaultGroups
-
-Assign groups that all new users are automatically added to.
-
-```yaml
-apiVersion: defaults.keycloak.crossplane.io/v1alpha1
-kind: DefaultGroups
-metadata:
-  name: realm-default-groups
-spec:
-  forProvider:
-    realmId: "my-realm"
-    groupIds:
-      - "group-uuid-1"
-      - "group-uuid-2"
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-### Using Group References
+### `DefaultGroups`
 
 ```yaml
 apiVersion: defaults.keycloak.crossplane.io/v1alpha1
 kind: DefaultGroups
 metadata:
-  name: realm-default-groups
+  name: my-default-groups
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
     groupIdsRefs:
-      - name: new-users-group
-      - name: basic-access-group
+      - name: test
+        policy:
+          resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Roles
-
-Define realm-level roles assigned to all new users by default.
+### `Roles`
 
 ```yaml
 apiVersion: defaults.keycloak.crossplane.io/v1alpha1
 kind: Roles
 metadata:
-  name: realm-default-roles
+  name: default-roles
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
-    defaultRoles:
-      - "basic-user"
-      - "view-profile"
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-### Using Role References
-
-```yaml
-apiVersion: defaults.keycloak.crossplane.io/v1alpha1
-kind: Roles
-metadata:
-  name: realm-default-roles
-spec:
-  forProvider:
-    realmId: "my-realm"
     defaultRolesRefs:
-      - name: basic-user-role
-      - name: view-profile-role
+      - name: test
+        policy:
+          resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Key Fields
+## Related Resources
 
-### DefaultGroups
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `realmId` | string | Realm to set default groups for |
-| `groupIds` | []string | List of group UUIDs to assign as defaults |
-| `groupIdsRefs` | []ref | References to Group resources |
-| `groupIdsSelector` | selector | Selector to match Group resources |
-
-### Roles
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `realmId` | string | Realm to set default roles for |
-| `defaultRoles` | []string | List of role names to assign as defaults |
-| `defaultRolesRefs` | []ref | References to Role resources |
-| `defaultRolesSelector` | selector | Selector to match Role resources |
+- [Groups](./groups.md)
+- [Roles](./roles.md)
+- [Users](./users.md)
+- [Realms](./realms.md)
