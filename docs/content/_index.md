@@ -27,7 +27,7 @@ Built with [Upjet](https://github.com/crossplane/upjet) on top of the [Keycloak 
 | ⚙️ [Configuration](/docs/using/getting-started/configuration/) | Connect to your Keycloak instance |
 | 🚀 [First Realm](/docs/using/getting-started/first-realm/) | Create your first realm, client, and user |
 | 📖 [Resources](/docs/using/resources/realms/) | Reference for all managed resource types |
-| 🗺️ [Guides](/docs/using/guides/sso-with-argocd/) | Real-world walkthroughs (ArgoCD SSO, K8s OIDC, LDAP, ESO, end-to-end kind) |
+| 🗺️ Guides | Community guides coming soon — see the `docs/guides` branch |
 
 ---
 

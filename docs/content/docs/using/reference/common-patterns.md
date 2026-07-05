@@ -72,9 +72,7 @@ spec:
       key: client-secret
 ```
 
-See [Credentials](/docs/using/reference/credentials/) for secret formats and
-[External Secrets Operator](/docs/using/guides/external-secrets-operator/) for a
-templating-based workflow.
+See [Credentials](/docs/using/reference/credentials/) for secret formats.
 
 ## Complete schemas
 
