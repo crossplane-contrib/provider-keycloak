@@ -1,17 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Provider Keycloak – Using</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/</link><description>Recent content in Using on Provider Keycloak</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting Started</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/getting-started/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/getting-started/</guid><description/></item><item><title>Guides</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/guides/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/guides/</guid><description>
-&lt;h1&gt;Guides&lt;/h1&gt;&lt;p&gt;Guides are authored, scenario-based walkthroughs. They should explain why the
-resources are combined in a specific way and link to runnable manifests in
-&lt;code&gt;examples/&lt;/code&gt; whenever possible.&lt;/p&gt;
-&lt;p&gt;Use guides for end-to-end workflows such as:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;SSO integrations like ArgoCD.&lt;/li&gt;
-&lt;li&gt;Kubernetes API server OIDC configuration.&lt;/li&gt;
-&lt;li&gt;LDAP/Active Directory federation.&lt;/li&gt;
-&lt;li&gt;External Secrets Operator templating.&lt;/li&gt;
-&lt;li&gt;Local kind-based demos with Keycloak, Traefik, and sample applications.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Do not duplicate full CRD schemas in guides. Link to the relevant resource pages
-and keep generated field details in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>Resources</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Provider Keycloak – Using</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/</link><description>Recent content in Using on Provider Keycloak</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting Started</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/getting-started/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/getting-started/</guid><description/></item><item><title>Resources</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/</guid><description>
 &lt;h1&gt;Resources&lt;/h1&gt;&lt;p&gt;Complete reference for all provider-keycloak managed resources. Every CRD is
 documented with working examples taken from the project&amp;rsquo;s end-to-end tests,
 links to the underlying Terraform resource, and guidance on when to use each

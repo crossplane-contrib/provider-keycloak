@@ -311,7 +311,6 @@ data-copied-label="Copied!"
 &lt;a href="#next-steps" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;Learn about &lt;a href="../resources/clients.md"&gt;Clients&lt;/a&gt; for more advanced configurations&lt;/li&gt;
 &lt;li&gt;Set up &lt;a href="../resources/roles.md"&gt;Roles&lt;/a&gt; and &lt;a href="../resources/groups.md"&gt;Groups&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Follow the &lt;a href="../guides/sso-with-argocd.md"&gt;SSO with ArgoCD&lt;/a&gt; guide for a real-world example&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>Installation</title><link>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/getting-started/installation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/getting-started/installation/</guid><description>
 &lt;h1&gt;Installation&lt;/h1&gt;&lt;h2&gt;Prerequisites&lt;span class="hx:absolute hx:-mt-20" id="prerequisites"&gt;&lt;/span&gt;
 &lt;a href="#prerequisites" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;

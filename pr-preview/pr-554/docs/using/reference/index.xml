@@ -100,9 +100,7 @@ data-copied-label="Copied!"
 &lt;/button&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;See &lt;a href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/reference/credentials/"&gt;Credentials&lt;/a&gt; for secret formats and
-&lt;a href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/guides/external-secrets-operator/"&gt;External Secrets Operator&lt;/a&gt; for a
-templating-based workflow.&lt;/p&gt;
+&lt;p&gt;See &lt;a href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/reference/credentials/"&gt;Credentials&lt;/a&gt; for secret formats.&lt;/p&gt;
 &lt;h2&gt;Complete schemas&lt;span class="hx:absolute hx:-mt-20" id="complete-schemas"&gt;&lt;/span&gt;
 &lt;a href="#complete-schemas" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Resource pages show common fields and examples. The generated CRDs in
 &lt;code&gt;package/crds/&lt;/code&gt; contain the complete OpenAPI schema for every field, including
