@@ -339,7 +339,7 @@ data-copied-label="Copied!"
 &lt;/button&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;Replace &lt;code&gt;&amp;lt;version&amp;gt;&lt;/code&gt; with the desired release version from the &lt;a href="https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak"target="_blank" rel="noopener"&gt;Upbound Marketplace&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Replace &lt;code&gt;&amp;lt;version&amp;gt;&lt;/code&gt; with the desired release version (e.g., &lt;code&gt;v2.22.0&lt;/code&gt;). See &lt;a href="https://github.com/crossplane-contrib/provider-keycloak/releases"target="_blank" rel="noopener"&gt;GitHub Releases&lt;/a&gt; for available versions.&lt;/p&gt;
 &lt;h2&gt;Verify Installation&lt;span class="hx:absolute hx:-mt-20" id="verify-installation"&gt;&lt;/span&gt;
 &lt;a href="#verify-installation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check that the provider pod is running&lt;/span&gt;

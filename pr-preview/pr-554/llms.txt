@@ -8,7 +8,7 @@ provider-keycloak is a Crossplane provider that lets you manage Keycloak resourc
 
 - Repository: https://github.com/crossplane-contrib/provider-keycloak
 - Documentation: https://crossplane-contrib.github.io/provider-keycloak/
-- Marketplace: https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak
+- Releases: https://github.com/crossplane-contrib/provider-keycloak/releases
 - Built with: Upjet (https://github.com/crossplane/upjet) + Keycloak Terraform Provider
 
 ## Core Concepts
@@ -21,15 +21,22 @@ provider-keycloak is a Crossplane provider that lets you manage Keycloak resourc
 ## API Groups
 
 - `keycloak.crossplane.io` - ProviderConfig
-- `realm.keycloak.crossplane.io` - Realms
-- `openidclient.keycloak.crossplane.io` - OpenID Connect Clients
-- `user.keycloak.crossplane.io` - Users
+- `realm.keycloak.crossplane.io` - Realms, RealmEvents, RequiredAction, UserProfile, KeystoreRsa, DefaultClientScopes, OptionalClientScopes, ClientPolicyProfile, ClientPolicyProfilePolicy
+- `openidclient.keycloak.crossplane.io` - OpenID Connect Clients, ClientScopes, ClientDefaultScopes, ClientOptionalScopes, ClientPermissions, ClientAuthorizationResource, ClientAuthorizationPermission, ClientClientPolicy, ClientGroupPolicy, ClientRolePolicy, ClientUserPolicy, ClientRegexPolicy, ClientServiceAccountRealmRole, ClientServiceAccountRole
+- `user.keycloak.crossplane.io` - Users, UserGroups, UserRoles, UserPermissions, CustomUserFederation
 - `role.keycloak.crossplane.io` - Roles
-- `group.keycloak.crossplane.io` - Groups, Memberships, Roles assignments
-- `client.keycloak.crossplane.io` - Protocol Mappers
-- `oidc.keycloak.crossplane.io` - OIDC Identity Providers
-- `saml.keycloak.crossplane.io` - SAML Identity Providers / Clients
-- `ldap.keycloak.crossplane.io` - LDAP User Federation
+- `group.keycloak.crossplane.io` - Groups, Memberships, GroupRoles, GroupPermissions
+- `client.keycloak.crossplane.io` - ProtocolMapper, RoleMapper
+- `openidgroup.keycloak.crossplane.io` - GroupMembershipProtocolMapper
+- `oidc.keycloak.crossplane.io` - OIDC IdentityProvider, GoogleIdentityProvider
+- `saml.keycloak.crossplane.io` - SAML IdentityProvider
+- `identityprovider.keycloak.crossplane.io` - IdentityProviderMapper, KubernetesIdentityProvider, OidcOpenShiftV4IdentityProvider, SpiffeIdentityProvider, ProviderTokenExchangeScopePermission
+- `ldap.keycloak.crossplane.io` - UserFederation, UserAttributeMapper, FullNameMapper, GroupMapper, RoleMapper, HardcodedAttributeMapper, HardcodedGroupMapper, HardcodedRoleMapper, MsadUserAccountControlMapper, MsadLdsUserAccountControlMapper, CustomMapper
+- `samlclient.keycloak.crossplane.io` - SAML Client, ClientScope, ClientDefaultScopes
+- `defaults.keycloak.crossplane.io` - DefaultGroups, DefaultRoles
+- `authenticationflow.keycloak.crossplane.io` - Flow, Subflow, Execution, ExecutionConfig, Bindings
+- `organization.keycloak.crossplane.io` - Organization
+- `workflow.keycloak.crossplane.io` - Workflow
 
 ## Installation
 

@@ -622,5 +622,5 @@ data-copied-label="Copied!"
 &lt;a href="#getting-help" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a href="https://github.com/crossplane-contrib/provider-keycloak/issues"target="_blank" rel="noopener"&gt;Open an issue&lt;/a&gt; on GitHub&lt;/li&gt;
 &lt;li&gt;Join the &lt;a href="https://slack.crossplane.io/"target="_blank" rel="noopener"&gt;Crossplane Slack&lt;/a&gt; community&lt;/li&gt;
-&lt;li&gt;Check the &lt;a href="https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak"target="_blank" rel="noopener"&gt;Upbound Marketplace&lt;/a&gt; for CRD documentation&lt;/li&gt;
+&lt;li&gt;Check the &lt;a href="https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-554/docs/using/resources/"&gt;Resource Reference&lt;/a&gt; for CRD documentation and examples&lt;/li&gt;
 &lt;/ul&gt;</description></item></channel></rss>
