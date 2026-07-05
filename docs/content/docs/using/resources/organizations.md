@@ -8,9 +8,9 @@ Use `Organization` when you need Keycloak multi-tenancy support in Keycloak 26.6
 
 ## API Reference
 
-| Kind | API Group | Terraform Resource |
-|------|-----------|-------------------|
-| Organization | `organization.keycloak.crossplane.io/v1alpha1` | [`keycloak_organization`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/organization) |
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| Organization | `organization.keycloak.crossplane.io/v1alpha1` | [`keycloak_organization`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/organization) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/organization.keycloak.crossplane.io/Organization/v1alpha1) |
 
 ## Working YAML Examples
 

@@ -10,9 +10,9 @@ Use roles to define permissions in Keycloak. Create realm roles for permissions 
 
 ## API Reference
 
-| Kind | API Group | Terraform Resource |
-|------|-----------|-------------------|
-| Role | `role.keycloak.crossplane.io/v1alpha1` | [`keycloak_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/role) |
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| Role | `role.keycloak.crossplane.io/v1alpha1` | [`keycloak_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/role) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/role.keycloak.crossplane.io/Role/v1alpha1) |
 
 ## Examples
 

@@ -10,9 +10,9 @@ Use workflows when you want Keycloak 26.5+ to react automatically to realm event
 
 ## API Reference
 
-| Kind | API Group | Terraform |
-|------|-----------|-----------|
-| `Workflow` | `workflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_workflow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/workflow) |
+| Kind | API Group | Terraform | CRD Explorer |
+|------|-----------|-----------|---|
+| `Workflow` | `workflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_workflow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/workflow) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/workflow.keycloak.crossplane.io/Workflow/v1alpha1) |
 
 ## Working YAML examples
 

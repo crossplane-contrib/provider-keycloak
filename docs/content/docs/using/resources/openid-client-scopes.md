@@ -8,11 +8,11 @@ Use these resources when you want to group protocol mappers and role scope mappi
 
 ## API Reference
 
-| Kind | API Group | Terraform Resource |
-|------|-----------|-------------------|
-| ClientScope | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_scope`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_scope) |
-| ClientDefaultScopes | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_default_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_default_scopes) |
-| ClientOptionalScopes | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_optional_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_optional_scopes) |
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| ClientScope | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_scope`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_scope) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientScope/v1alpha1) |
+| ClientDefaultScopes | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_default_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_default_scopes) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientDefaultScopes/v1alpha1) |
+| ClientOptionalScopes | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_optional_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_optional_scopes) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientOptionalScopes/v1alpha1) |
 
 ## Working YAML Examples
 

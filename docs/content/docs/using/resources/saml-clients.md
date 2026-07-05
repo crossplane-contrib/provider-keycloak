@@ -10,11 +10,11 @@ Use SAML clients when an application or service provider expects SAML 2.0 instea
 
 ## API Reference
 
-| Kind | API Group | Terraform |
-|------|-----------|-----------|
-| `Client` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client) |
-| `ClientScope` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client_scope`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client_scope) |
-| `ClientDefaultScopes` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client_default_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client_default_scopes) |
+| Kind | API Group | Terraform | CRD Explorer |
+|------|-----------|-----------|---|
+| `Client` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/samlclient.keycloak.crossplane.io/Client/v1alpha1) |
+| `ClientScope` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client_scope`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client_scope) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/samlclient.keycloak.crossplane.io/ClientScope/v1alpha1) |
+| `ClientDefaultScopes` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client_default_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client_default_scopes) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/samlclient.keycloak.crossplane.io/ClientDefaultScopes/v1alpha1) |
 
 ## Working YAML examples
 

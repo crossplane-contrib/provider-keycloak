@@ -10,9 +10,9 @@ Use a `Client` when an application or service needs Keycloak to authenticate use
 
 ## API Reference
 
-| Kind | API Group | Terraform Resource |
-|------|-----------|-------------------|
-| Client | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client) |
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| Client | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/Client/v1alpha1) |
 
 ## Examples
 
