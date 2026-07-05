@@ -1,0 +1,111 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Provider Keycloak – Using</title><link>https://crossplane-contrib.github.io/provider-keycloak/docs/using/</link><description>Recent content in Using on Provider Keycloak</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://crossplane-contrib.github.io/provider-keycloak/docs/using/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting Started</title><link>https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/</guid><description/></item><item><title>Resources</title><link>https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/</guid><description>
+&lt;h1&gt;Resources&lt;/h1&gt;&lt;p&gt;Complete reference for all provider-keycloak managed resources. Every CRD is
+documented with working examples taken from the project&amp;rsquo;s end-to-end tests,
+links to the underlying Terraform resource, and guidance on when to use each
+resource.&lt;/p&gt;
+&lt;p&gt;For exhaustive field schemas, default values, references, selectors, and status
+fields, see the generated CRDs in
+&lt;a href="https://github.com/crossplane-contrib/provider-keycloak/tree/main/package/crds"target="_blank" rel="noopener"&gt;&lt;code&gt;package/crds/&lt;/code&gt;&lt;/a&gt;
+or browse all CRDs interactively on the
+&lt;a href="https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/crds"target="_blank" rel="noopener"&gt;Upbound Marketplace CRD Explorer&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Resource Pages&lt;span class="hx:absolute hx:-mt-20" id="resource-pages"&gt;&lt;/span&gt;
+&lt;a href="#resource-pages" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Page&lt;/th&gt;
+&lt;th&gt;API Groups&lt;/th&gt;
+&lt;th&gt;Resources&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./realms/"&gt;Realms&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;realm.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Realm&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./realm-settings/"&gt;Realm Settings&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;realm.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;RealmEvents, RequiredAction, UserProfile, KeystoreRsa, DefaultClientScopes, OptionalClientScopes, ClientPolicyProfile, ClientPolicyProfilePolicy&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./clients/"&gt;Clients&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;openidclient.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Client&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./openid-client-scopes/"&gt;OpenID Client Scopes&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;openidclient.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;ClientScope, ClientDefaultScopes, ClientOptionalScopes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./client-authorization/"&gt;Client Authorization&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;openidclient.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;ClientAuthorizationResource, ClientAuthorizationPermission, ClientClientPolicy, ClientGroupPolicy, ClientRolePolicy, ClientUserPolicy, ClientRegexPolicy, ClientPermissions&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./service-accounts/"&gt;Service Accounts&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;openidclient.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;ClientServiceAccountRealmRole, ClientServiceAccountRole&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./saml-clients/"&gt;SAML Clients&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;samlclient.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Client, ClientScope, ClientDefaultScopes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./users/"&gt;Users&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;user.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;User, Groups, Roles, Permissions, UserFederation&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./roles/"&gt;Roles&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;role.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Role&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./groups/"&gt;Groups&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;group.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Group, Memberships, Roles, Permissions&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./protocol-mappers/"&gt;Protocol Mappers&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;client.keycloak.crossplane.io&lt;/code&gt;, &lt;code&gt;openidgroup.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;ProtocolMapper, RoleMapper, GroupMembershipProtocolMapper&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./identity-providers/"&gt;Identity Providers&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;oidc.keycloak.crossplane.io&lt;/code&gt;, &lt;code&gt;saml.keycloak.crossplane.io&lt;/code&gt;, &lt;code&gt;identityprovider.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;IdentityProvider (OIDC), GoogleIdentityProvider, IdentityProvider (SAML), IdentityProviderMapper, KubernetesIdentityProvider, OidcOpenShiftV4IdentityProvider, SpiffeIdentityProvider, ProviderTokenExchangeScopePermission&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./user-federation/"&gt;User Federation&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;ldap.keycloak.crossplane.io&lt;/code&gt;, &lt;code&gt;user.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;UserFederation, UserAttributeMapper, FullNameMapper, GroupMapper, RoleMapper, HardcodedAttributeMapper, HardcodedGroupMapper, HardcodedRoleMapper, MsadUserAccountControlMapper, MsadLdsUserAccountControlMapper, CustomMapper, UserFederation (custom)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./authentication-flows/"&gt;Authentication Flows&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;authenticationflow.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Flow, Subflow, Execution, ExecutionConfig, Bindings&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./default-config/"&gt;Default Config&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;defaults.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;DefaultGroups, Roles&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./organizations/"&gt;Organizations&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;organization.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Organization&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="./workflows/"&gt;Workflows&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;workflow.keycloak.crossplane.io&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Workflow&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</description></item><item><title>Reference</title><link>https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/</guid><description>
+&lt;h1&gt;Reference&lt;/h1&gt;&lt;p&gt;Reference pages collect reusable provider concepts that apply across many
+resources, such as credentials, ProviderConfig, troubleshooting, and common
+Crossplane manifest patterns.&lt;/p&gt;
+&lt;p&gt;For resource-specific field schemas, use the generated CRDs in &lt;code&gt;package/crds/&lt;/code&gt;.&lt;/p&gt;</description></item></channel></rss>

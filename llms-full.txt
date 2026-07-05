@@ -1,0 +1,21 @@
+# provider-keycloak llms.txt
+# See: https://llmstxt.org/
+
+> Provider Keycloak is a Crossplane provider for managing Keycloak resources as Kubernetes custom resources.
+
+## Docs
+
+- [Installation](https://crossplane-contrib.github.io/provider-keycloak/docs/getting-started/installation): Install the provider into Crossplane
+- [Configuration](https://crossplane-contrib.github.io/provider-keycloak/docs/getting-started/configuration): Connect to Keycloak
+- [First Realm](https://crossplane-contrib.github.io/provider-keycloak/docs/getting-started/first-realm): Create your first realm
+- [Realms](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/realms): Realm resource reference
+- [Clients](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/clients): OIDC client resource reference
+- [Users](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/users): User resource reference
+- [Roles](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/roles): Role resource reference
+- [Groups](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/groups): Group resource reference
+- [Protocol Mappers](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/protocol-mappers): Token claim mappers
+- [Identity Providers](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/identity-providers): External IdP federation
+- [User Federation](https://crossplane-contrib.github.io/provider-keycloak/docs/resources/user-federation): LDAP/AD integration
+- [ProviderConfig](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/provider-config): ProviderConfig reference
+- [Credentials](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/credentials): Credential fields reference
+- [Troubleshooting](https://crossplane-contrib.github.io/provider-keycloak/docs/reference/troubleshooting): Common issues and fixes

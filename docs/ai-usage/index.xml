@@ -1,0 +1,6 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Provider Keycloak – AI Usage</title><link>https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/</link><description>Recent content in AI Usage on Provider Keycloak</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/index.xml" rel="self" type="application/rss+xml"/><item><title>LLM Files</title><link>https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/llms/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/llms/</guid><description>
+&lt;h1&gt;LLM Files&lt;/h1&gt;&lt;p&gt;The docs site ships AI-oriented reference files:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://crossplane-contrib.github.io/provider-keycloak/llms.txt"&gt;&lt;code&gt;/llms.txt&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://crossplane-contrib.github.io/provider-keycloak/llms-full.txt"&gt;&lt;code&gt;/llms-full.txt&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>
