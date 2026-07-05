@@ -102,4 +102,3 @@ The provider continuously reconciles your desired state (the YAML manifests) wit
 
 - Learn about [Clients](../resources/clients.md) for more advanced configurations
 - Set up [Roles](../resources/roles.md) and [Groups](../resources/groups.md)
-- Follow the [SSO with ArgoCD](../guides/sso-with-argocd.md) guide for a real-world example
