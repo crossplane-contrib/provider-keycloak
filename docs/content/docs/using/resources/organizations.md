@@ -1,74 +1,41 @@
 ---
 sidebar_position: 13
 title: Organizations
-description: Manage Keycloak organizations for multi-tenancy
+description: Manage Keycloak organizations for multi-tenant realms
 ---
 
-# Organizations
-
-Organizations provide multi-tenancy support in Keycloak, allowing you to group users under organizational entities with their own domains and attributes.
+Use `Organization` when you need Keycloak multi-tenancy support in Keycloak 26.6 and later. Organizations let you group users under tenant-like entities and configure domain-based identity provider routing. The realm must have `organizationsEnabled: true`.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform Resource |
+|------|-----------|-------------------|
+| Organization | `organization.keycloak.crossplane.io/v1alpha1` | [`keycloak_organization`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/organization) |
 
-- **API Group**: `organization.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kind**: `Organization`
+## Working YAML Examples
 
-## Basic Organization
-
-```yaml
-apiVersion: organization.keycloak.crossplane.io/v1alpha1
-kind: Organization
-metadata:
-  name: acme-corp
-spec:
-  forProvider:
-    name: "Acme Corporation"
-    alias: "acme-corp"
-    realm: "my-realm"
-    enabled: true
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-## Organization with Domains and Attributes
+### `Organization`
 
 ```yaml
 apiVersion: organization.keycloak.crossplane.io/v1alpha1
 kind: Organization
 metadata:
-  name: partner-org
+  name: example
 spec:
+  deletionPolicy: Delete
   forProvider:
-    name: "Partner Organization"
-    alias: "partner-org"
-    description: "External partner organization"
-    realm: "my-realm"
+    realm: "orgs"
+    name: example
     enabled: true
     domain:
-      - name: "partner.com"
-        verified: true
-      - name: "partner.org"
-        verified: false
-    attributes:
-      tier: "premium"
-      region: "us-east"
-    redirectUrl: "https://partner.com/welcome"
+      - name: example.com
+      - name: example.org
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Key Fields
+## Related Resources
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Organization display name |
-| `alias` | string | Unique alias identifier |
-| `description` | string | Description of the organization |
-| `realm` | string | Realm this organization belongs to |
-| `enabled` | bool | Whether the organization is active |
-| `domain` | []object | List of domains associated with the organization |
-| `attributes` | map | Custom key-value attributes |
-| `redirectUrl` | string | Landing page URL after registration or invitation |
+- [Realms](./realms.md)
+- [Identity Providers](./identity-providers.md)
+- [Users](./users.md)

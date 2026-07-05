@@ -1,125 +1,72 @@
 ---
 sidebar_position: 4
 title: Roles
-description: Manage Keycloak roles and role assignments
+description: Manage realm roles and client roles in Keycloak
 ---
 
 # Roles
 
-Roles define permissions and can be assigned to users or groups. Keycloak supports realm roles and client roles.
+Use roles to define permissions in Keycloak. Create realm roles for permissions shared across a realm, and client roles when access should be scoped to a specific application or service.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform Resource |
+|------|-----------|-------------------|
+| Role | `role.keycloak.crossplane.io/v1alpha1` | [`keycloak_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/role) |
 
-- **API Group**: `role.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kind**: `Role`
+## Examples
 
-## Realm Role
-
-A role scoped to the entire realm:
+### Realm role
 
 ```yaml
 apiVersion: role.keycloak.crossplane.io/v1alpha1
 kind: Role
 metadata:
-  name: admin-role
+  name: test
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
-    name: "admin"
-    description: "Administrator role with full access"
+    realmId: "dev"
+    name: "test"
+    description: "abc"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Client Role
-
-A role scoped to a specific client:
+### Client role
 
 ```yaml
 apiVersion: role.keycloak.crossplane.io/v1alpha1
 kind: Role
 metadata:
-  name: api-reader
+  name: test-client
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
-    name: "reader"
-    clientId: "my-api-client-id"
-    description: "Read-only access to the API"
+    realmId: "dev"
+    name: "test-client"
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    description: "abc"
   providerConfigRef:
-    name: keycloak-provider-config
-```
-
-## Composite Role
-
-A role that inherits permissions from other roles:
-
-```yaml
-apiVersion: role.keycloak.crossplane.io/v1alpha1
-kind: Role
-metadata:
-  name: super-admin
-spec:
-  forProvider:
-    realmId: "my-realm"
-    name: "super-admin"
-    compositeRoles:
-      - "admin"
-      - "user-manager"
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-## Role with Attributes
-
-```yaml
-apiVersion: role.keycloak.crossplane.io/v1alpha1
-kind: Role
-metadata:
-  name: team-lead
-spec:
-  forProvider:
-    realmId: "my-realm"
-    name: "team-lead"
-    description: "Team lead with elevated permissions"
-    attributes:
-      department: "engineering"
-      level: "senior"
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-## Assign Roles to Groups
-
-Use the `group.keycloak.crossplane.io/Roles` resource to map roles to groups:
-
-```yaml
-apiVersion: group.keycloak.crossplane.io/v1alpha1
-kind: Roles
-metadata:
-  name: admin-group-roles
-spec:
-  forProvider:
-    groupIdRef:
-      name: admin-group
-    roleIdsRefs:
-      - name: k8s-admin
-      - name: argocd-admin
-    realmId: my-realm
-  providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
 ## Key Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `realmId` | string | Realm this role belongs to |
-| `name` | string | Role name |
-| `clientId` | string | Client ID (for client roles) |
-| `description` | string | Human-readable description |
-| `compositeRoles` | []string | Roles to inherit from |
-| `attributes` | map | Custom key-value attributes |
+| Field | Description |
+|-------|-------------|
+| `name` | Role name stored in Keycloak. |
+| `realmId` | Realm where the role is created. |
+| `clientIdRef` | Set this for a client role so the role is scoped to a specific client. Omit it for a realm role. |
+| `description` | Human-readable role description. |
+| `compositeRoles` | Optional list of roles that should be included in this role as composites. |
+
+## Related Resources
+
+- [Groups](./groups.md)
+- [Users](./users.md)
+- [Default Configuration](./default-config.md)
+- [Service Accounts](./service-accounts.md)

@@ -35,16 +35,26 @@ Built with [Upjet](https://github.com/crossplane/upjet) on top of the [Keycloak 
 
 | Resource | API Group | Description |
 |----------|-----------|-------------|
-| Realm | `realm.keycloak.crossplane.io` | Keycloak realms |
-| Client | `openidclient.keycloak.crossplane.io` | OIDC clients |
-| User | `user.keycloak.crossplane.io` | Users |
-| Role | `role.keycloak.crossplane.io` | Realm and client roles |
-| Group | `group.keycloak.crossplane.io` | User groups |
-| ProtocolMapper | `client.keycloak.crossplane.io` | Token/assertion mappers |
-| IdentityProvider | `oidc.keycloak.crossplane.io` | OIDC identity providers |
-| UserFederation | `ldap.keycloak.crossplane.io` | LDAP/AD federation |
+| [Realm](/docs/using/resources/realms/) | `realm.keycloak.crossplane.io` | Keycloak realms and realm settings |
+| [Client](/docs/using/resources/clients/) | `openidclient.keycloak.crossplane.io` | OpenID Connect clients |
+| [SAML Client](/docs/using/resources/saml-clients/) | `samlclient.keycloak.crossplane.io` | SAML 2.0 clients |
+| [User](/docs/using/resources/users/) | `user.keycloak.crossplane.io` | Users, user roles, user groups, permissions |
+| [Role](/docs/using/resources/roles/) | `role.keycloak.crossplane.io` | Realm and client roles |
+| [Group](/docs/using/resources/groups/) | `group.keycloak.crossplane.io` | User groups, memberships, permissions |
+| [Protocol Mapper](/docs/using/resources/protocol-mappers/) | `client.keycloak.crossplane.io` | Token/assertion mappers |
+| [Identity Provider](/docs/using/resources/identity-providers/) | `oidc.keycloak.crossplane.io`, `saml.keycloak.crossplane.io`, `identityprovider.keycloak.crossplane.io` | OIDC, SAML, Google, Kubernetes, OpenShift, SPIFFE identity providers |
+| [User Federation](/docs/using/resources/user-federation/) | `ldap.keycloak.crossplane.io` | LDAP/AD federation and all mapper types |
+| [Client Scopes](/docs/using/resources/openid-client-scopes/) | `openidclient.keycloak.crossplane.io` | OpenID client scopes (default and optional) |
+| [Client Authorization](/docs/using/resources/client-authorization/) | `openidclient.keycloak.crossplane.io` | Fine-grained authorization (resources, permissions, policies) |
+| [Service Accounts](/docs/using/resources/service-accounts/) | `openidclient.keycloak.crossplane.io` | Service account role assignments |
+| [Authentication Flows](/docs/using/resources/authentication-flows/) | `authenticationflow.keycloak.crossplane.io` | Custom authentication flows, executions, bindings |
+| [Default Config](/docs/using/resources/default-config/) | `defaults.keycloak.crossplane.io` | Default groups and roles for new users |
+| [Organization](/docs/using/resources/organizations/) | `organization.keycloak.crossplane.io` | Multi-tenancy organizations (Keycloak 26.6+) |
+| [Workflow](/docs/using/resources/workflows/) | `workflow.keycloak.crossplane.io` | Event-driven automation workflows (Keycloak 26.5+) |
+| [Realm Settings](/docs/using/resources/realm-settings/) | `realm.keycloak.crossplane.io` | Events, required actions, user profiles, keystores, client policies |
+| [Group Membership Mapper](/docs/using/resources/protocol-mappers/) | `openidgroup.keycloak.crossplane.io` | Group membership protocol mapper |
 
-See the full list at the [Upbound Marketplace](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak).
+All CRDs are documented with working examples. For the complete OpenAPI schema of each resource, see the generated CRDs in [`package/crds/`](https://github.com/crossplane-contrib/provider-keycloak/tree/main/package/crds).
 
 ## Documentation Structure
 

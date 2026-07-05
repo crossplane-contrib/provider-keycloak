@@ -1,287 +1,283 @@
 ---
 sidebar_position: 15
 title: Realm Settings
-description: Manage realm-level sub-resources like events, required actions, user profiles, and keystores
+description: Configure realm-level settings such as events, required actions, user profiles, keys, scopes, and client policies
 ---
 
-# Realm Settings
-
-Beyond the core [Realm](./realms.md) resource, Keycloak provides additional realm-level configuration for events, required actions, user profiles, keystores, default scopes, and client policies.
+Use these resources after a `Realm` exists and you need to shape how that realm behaves in production. They cover audit logging, user onboarding requirements, custom profile fields, signing keys, default scopes, and client policy enforcement.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+- **`RealmEvents`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_events`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_events)
+- **`RequiredAction`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_required_action`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/required_action)
+- **`UserProfile`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_user_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_user_profile)
+- **`KeystoreRsa`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_keystore_rsa`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_keystore_rsa)
+- **`DefaultClientScopes`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_default_client_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_default_client_scopes)
+- **`OptionalClientScopes`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_optional_client_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_optional_client_scopes)
+- **`ClientPolicyProfile`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_client_policy_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_client_policy_profile)
+- **`ClientPolicyProfilePolicy`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_client_policy_profile_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_client_policy_profile_policy)
 
-- **API Group**: `realm.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kinds**: `RealmEvents`, `RequiredAction`, `UserProfile`, `KeystoreRsa`, `DefaultClientScopes`, `OptionalClientScopes`, `ClientPolicyProfile`, `ClientPolicyProfilePolicy`
+## Working YAML Examples
 
-## RealmEvents
+### RealmEvents
 
-Configure event logging and listeners for a realm.
+Use `RealmEvents` to configure audit logging for user events such as `LOGIN` and `LOGOUT`, plus admin event tracking.
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: RealmEvents
 metadata:
-  name: my-realm-events
+  name: realm-events
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
-    eventsEnabled: true
-    eventsExpiration: 604800
-    eventsListeners:
-      - "jboss-logging"
-    enabledEventTypes:
-      - "LOGIN"
-      - "LOGIN_ERROR"
-      - "LOGOUT"
-      - "REGISTER"
-    adminEventsEnabled: true
     adminEventsDetailsEnabled: true
+    adminEventsEnabled: true
+    enabledEventTypes:
+      - LOGIN
+      - LOGOUT
+    eventsEnabled: true
+    eventsExpiration: 3600
+    eventsListeners:
+      - jboss-logging
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## RequiredAction
+### RequiredAction
 
-Configure required actions that users must complete (e.g., verify email, configure OTP).
+Use `RequiredAction` to enable tasks users must complete, such as setting a password, verifying email, or registering WebAuthn.
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: RequiredAction
 metadata:
-  name: verify-email-action
+  name: required-action
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
-    alias: "VERIFY_EMAIL"
-    name: "Verify Email"
+    alias: webauthn-register
     enabled: true
-    defaultAction: true
-    priority: 10
+    name: Webauthn Register
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-### Required Action with Config
+### UserProfile
 
-```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
-kind: RequiredAction
-metadata:
-  name: configure-otp-action
-spec:
-  forProvider:
-    realmId: "my-realm"
-    alias: "CONFIGURE_TOTP"
-    name: "Configure OTP"
-    enabled: true
-    defaultAction: false
-    priority: 20
-    config:
-      otpPolicyAlgorithm: "HmacSHA1"
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-## UserProfile
-
-Define the user profile attributes and groups for a realm.
+Use `UserProfile` to define custom user attributes with validation, permissions, and grouping.
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: UserProfile
 metadata:
-  name: my-realm-user-profile
+  name: userprofile
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
-    unmanagedAttributePolicy: "ADMIN_VIEW"
     attribute:
-      - name: "username"
-        displayName: "Username"
-        requiredForRoles:
-          - "user"
+      - displayName: ""
+        group: ""
+        multiValued: false
+        name: username
+      - displayName: ""
+        group: ""
+        multiValued: false
+        name: email
+      - annotations:
+          foo: bar
+        displayName: Field 1
+        enabledWhenScope:
+          - offline_access
+        group: group1
+        multiValued: false
+        name: field1
         permissions:
           - edit:
-              - "admin"
+              - admin
+              - user
             view:
-              - "admin"
-              - "user"
-        validator:
-          - name: "length"
-            config:
-              min: "3"
-              max: "64"
-      - name: "email"
-        displayName: "Email"
+              - admin
+              - user
         requiredForRoles:
-          - "user"
+          - user
+        requiredForScopes:
+          - offline_access
         validator:
-          - name: "email"
+          - name: person-name-prohibited-characters
+          - config:
+              error-message: Nope
+              pattern: ^[a-z]+$
+            name: pattern
     group:
-      - name: "user-metadata"
-        displayHeader: "User Metadata"
-        displayDescription: "Additional user information"
+      - annotations:
+          foo: bar
+          foo2: '{"key":"val"}'
+        displayDescription: A first group
+        displayHeader: Group 1
+        name: group1
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    unmanagedAttributePolicy: ENABLED
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## KeystoreRsa
+### KeystoreRsa
 
-Manage RSA keystores for realm-level signing and encryption.
+Use `KeystoreRsa` to manage RSA signing keys used for token signing and verification.
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: KeystoreRsa
 metadata:
-  name: my-realm-rsa-key
+  name: keystore-rsa
 spec:
+  deletionPolicy: Delete
   forProvider:
-    name: "rsa-signing-key"
-    realmId: "my-realm"
-    enabled: true
     active: true
-    priority: 100
-    algorithm: "RS256"
-    privateKeySecretRef:
-      name: rsa-private-key
-      namespace: crossplane-system
-      key: private-key
+    algorithm: RS256
     certificateSecretRef:
-      name: rsa-certificate
-      namespace: crossplane-system
-      key: certificate
+      key: cert
+      name: rsa-key
+      namespace: dev
+    enabled: true
+    name: my-rsa-key
+    priority: 100
+    privateKeySecretRef:
+      key: priv
+      name: rsa-key
+      namespace: dev
+    providerId: rsa
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## DefaultClientScopes
+### DefaultClientScopes
 
-Define realm-level default client scopes assigned to all new clients.
+Use `DefaultClientScopes` to define which client scopes are assigned automatically to new clients in the realm.
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: DefaultClientScopes
 metadata:
-  name: my-realm-default-scopes
+  name: dev-default-scopes
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
+    realmId: "dev"
     defaultScopes:
-      - "profile"
-      - "email"
-      - "roles"
-      - "web-origins"
+      - profile
+      - email
+      - roles
+      - web-origins
+      - phone
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## OptionalClientScopes
+### OptionalClientScopes
 
-Define realm-level optional client scopes available to all clients.
+Use `OptionalClientScopes` to define which scopes clients may request optionally.
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: OptionalClientScopes
 metadata:
-  name: my-realm-optional-scopes
+  name: dev-optional-scopes
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
+    realmId: "dev"
     optionalScopes:
-      - "address"
-      - "phone"
-      - "offline_access"
-      - "microprofile-jwt"
+      - acr
+      - role_list
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## ClientPolicyProfile
+### ClientPolicyProfile
 
-Define a client policy profile with executors that enforce rules on clients.
+Use `ClientPolicyProfile` to define policy profiles with executors that enforce standards on clients.
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: ClientPolicyProfile
 metadata:
-  name: secure-client-profile
+  name: client-policy-profile
 spec:
+  deletionPolicy: Delete
   forProvider:
-    name: "secure-client-profile"
-    description: "Profile enforcing security best practices"
-    realmId: "my-realm"
     executor:
-      - name: "secure-ciba-auth-request-signed"
-      - name: "pkce-enforcer"
-        configuration:
+      - configuration:
           auto-configure: "true"
+        name: intent-client-bind-checker
+      - name: secure-session
+    name: my-profile
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## ClientPolicyProfilePolicy
+### ClientPolicyProfilePolicy
 
-Define a policy that associates conditions with client policy profiles.
+Use `ClientPolicyProfilePolicy` to define the conditions that trigger one or more client policy profiles.
 
 ```yaml
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: ClientPolicyProfilePolicy
 metadata:
-  name: secure-client-policy
+  name: client-policy-profile-policy
 spec:
+  deletionPolicy: Delete
   forProvider:
-    name: "secure-client-policy"
-    description: "Enforce secure profile on confidential clients"
-    realmId: "my-realm"
-    enabled: true
-    profiles:
-      - "secure-client-profile"
     condition:
-      - name: "client-accesstype"
-        configuration:
-          is-confidential-client: "true"
+      - configuration:
+          protocol: openid-connect
+        name: client-type
+    description: Some desc
+    name: my-policy
+    profilesRefs:
+      - name: client-policy-profile
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
 ## Key Fields
 
-### RealmEvents
+| Resource | Key fields | Description |
+| --- | --- | --- |
+| `RealmEvents` | `realmIdRef`, `eventsEnabled`, `enabledEventTypes`, `eventsListeners`, `adminEventsEnabled`, `adminEventsDetailsEnabled`, `eventsExpiration` | Controls user and admin audit event capture and retention. |
+| `RequiredAction` | `realmIdRef`, `alias`, `name`, `enabled` | Enables built-in actions users must complete during account lifecycle flows. |
+| `UserProfile` | `realmIdRef`, `attribute`, `group`, `unmanagedAttributePolicy` | Defines custom profile schema, validation, permissions, and grouping. |
+| `KeystoreRsa` | `realmIdRef`, `name`, `providerId`, `algorithm`, `active`, `enabled`, `priority`, `privateKeySecretRef`, `certificateSecretRef` | Manages RSA key material used by the realm. |
+| `DefaultClientScopes` | `realmId`, `defaultScopes` | Declares scopes assigned automatically to new clients. |
+| `OptionalClientScopes` | `realmId`, `optionalScopes` | Declares scopes clients can request optionally. |
+| `ClientPolicyProfile` | `realmIdRef`, `name`, `executor` | Defines reusable client policy executors. |
+| `ClientPolicyProfilePolicy` | `realmIdRef`, `name`, `description`, `condition`, `profilesRefs` | Binds policy conditions to one or more client policy profiles. |
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `realmId` | string | Realm to configure events for |
-| `eventsEnabled` | bool | Enable saving login events (default `false`) |
-| `eventsExpiration` | number | Event retention time in seconds |
-| `eventsListeners` | []string | Event listener names |
-| `enabledEventTypes` | []string | Event types to record |
-| `adminEventsEnabled` | bool | Enable saving admin events (default `false`) |
-| `adminEventsDetailsEnabled` | bool | Include details in admin events (default `false`) |
+## Related Resources
 
-### RequiredAction
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `realmId` | string | Realm this action belongs to |
-| `alias` | string | Action alias (e.g., `VERIFY_EMAIL`, `CONFIGURE_TOTP`) |
-| `name` | string | Display name in the UI |
-| `enabled` | bool | Whether the action is available |
-| `defaultAction` | bool | Apply to all new users by default |
-| `priority` | number | Execution order (lower = higher priority) |
-| `config` | map | Action-specific configuration |
-
-### KeystoreRsa
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Display name of the key |
-| `realmId` | string | Realm this keystore belongs to |
-| `active` | bool | Use for signing (default `true`) |
-| `enabled` | bool | Key is accessible (default `true`) |
-| `algorithm` | string | Algorithm (default `RS256`) |
-| `priority` | number | Provider priority (default `0`) |
-| `privateKeySecretRef` | ref | Reference to the private key secret |
-| `certificateSecretRef` | ref | Reference to the certificate secret |
+- [Realms](./realms.md)
+- [Default Configuration](./default-config.md)

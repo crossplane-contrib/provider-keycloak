@@ -1,181 +1,241 @@
 ---
 sidebar_position: 9
 title: Authentication Flows
-description: Manage Keycloak authentication flows declaratively
+description: Customize Keycloak login, MFA, and flow bindings declaratively
 ---
 
 # Authentication Flows
 
-Authentication flows define the sequence of steps a user must complete to authenticate. Flows consist of executions (individual authenticator steps), subflows (nested groups of steps), and bindings that attach flows to authentication contexts.
+Use authentication flow resources when the default Keycloak login process is not enough. They let you define custom browser, registration, direct-grant, or client-authentication flows; nest subflows; add execution steps such as MFA, OTP, WebAuthn, or identity-provider redirects; and bind the finished flow to the realm behavior that should use it.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform |
+|------|-----------|-----------|
+| `Flow` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_flow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_flow) |
+| `Subflow` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_subflow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_subflow) |
+| `Execution` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_execution`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_execution) |
+| `ExecutionConfig` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_execution_config`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_execution_config) |
+| `Bindings` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_bindings`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_bindings) |
 
-- **API Group**: `authenticationflow.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kinds**: `Flow`, `Subflow`, `Execution`, `ExecutionConfig`, `Bindings`
+## Working YAML examples
 
-## Flow
+### Flow
 
-A top-level authentication flow that groups executions and subflows.
+Use a `Flow` to create the top-level container for a custom authentication sequence.
 
 ```yaml
 apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
 kind: Flow
 metadata:
-  name: custom-browser-flow
+  name: flow
 spec:
+  deletionPolicy: Delete
   forProvider:
-    alias: "custom-browser"
-    description: "Custom browser authentication flow"
-    providerId: "basic-flow"
-    realmId: "my-realm"
+    alias: my-flow-alias
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Subflow
+### Subflow
 
-A nested flow within a parent flow, used to group related authentication steps.
+Use a `Subflow` to group steps inside a parent flow and apply its own requirement.
 
 ```yaml
 apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
 kind: Subflow
 metadata:
-  name: mfa-subflow
+  name: subflow
+  labels:
+    subflow-type: test-subflow
 spec:
+  deletionPolicy: Delete
   forProvider:
-    alias: "mfa-subflow"
-    description: "Multi-factor authentication subflow"
-    authenticator: ""
-    parentFlowAlias: "custom-browser"
-    providerId: "basic-flow"
-    priority: 10
-    realmId: "my-realm"
+    alias: my-subflow-alias-1
+    parentFlowAliasRef:
+      name: flow
+      policy:
+        resolve: Always
+    providerId: basic-flow
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    requirement: ALTERNATIVE
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Execution
+### Execution using `parentFlowAliasRef`
 
-An individual authenticator step within a flow or subflow.
+Use an `Execution` directly under a top-level flow when the step should run without an intermediate subflow.
 
 ```yaml
 apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
 kind: Execution
 metadata:
-  name: username-password-form
+  name: execution-one
 spec:
+  deletionPolicy: Delete
   forProvider:
-    authenticator: "auth-username-password-form"
-    parentFlowAlias: "custom-browser"
-    priority: 0
-    realmId: "my-realm"
+    authenticator: auth-cookie
+    parentFlowAliasRef:
+      name: flow
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    requirement: ALTERNATIVE
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-### Execution in a Subflow
+### Execution using `parentSubflowAliasRef`
+
+Use `parentSubflowAliasRef` when the execution should be nested inside a specific subflow object.
 
 ```yaml
 apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
 kind: Execution
 metadata:
-  name: otp-form
+  name: execution-in-subflow-ref
 spec:
+  deletionPolicy: Delete
   forProvider:
-    authenticator: "auth-otp-form"
-    parentSubflowAlias: "mfa-subflow"
-    parentFlowAlias: "custom-browser"
-    priority: 0
-    realmId: "my-realm"
+    authenticator: auth-username-password-form
+    parentSubflowAliasRef:
+      name: subflow
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    requirement: REQUIRED
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## ExecutionConfig
+### Execution using `parentSubflowAliasSelector`
 
-Configuration for a specific execution step.
+Use the selector form when you want to target a subflow by labels instead of by a fixed name.
+
+```yaml
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-in-subflow-selector
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    authenticator: auth-otp-form
+    parentSubflowAliasSelector:
+      matchLabels:
+        subflow-type: test-subflow
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    requirement: REQUIRED
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### ExecutionConfig
+
+Use `ExecutionConfig` when an execution needs extra configuration, such as the default identity provider for an IdP redirector.
 
 ```yaml
 apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
 kind: ExecutionConfig
 metadata:
-  name: idp-redirector-config
+  name: execution-identity-redirect-config
 spec:
+  deletionPolicy: Delete
   forProvider:
-    alias: "google-redirector"
-    executionId: "execution-uuid"
-    realmId: "my-realm"
+    alias: my-config-alias
     config:
-      defaultProvider: "google"
+      defaultProvider: my-config-default-idp
+    executionIdRef:
+      name: execution-identity-redirect
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Bindings
+### Bindings
 
-Bind authentication flows to specific authentication contexts in a realm.
+Use `Bindings` to assign your custom flow to browser, registration, direct grant, or other realm authentication entry points.
 
 ```yaml
 apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
 kind: Bindings
 metadata:
-  name: realm-auth-bindings
+  name: browser-authentication-binding
 spec:
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
-    browserFlow: "custom-browser"
-    directGrantFlow: "direct grant"
-    clientAuthenticationFlow: "clients"
-    dockerAuthenticationFlow: "docker auth"
-    registrationFlow: "registration"
-    resetCredentialsFlow: "reset credentials"
+    dockerAuthenticationFlowRef:
+      name: "flow"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Key Fields
+## Key fields
 
-### Flow
+### Flow and Subflow
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `alias` | string | Unique alias for the flow |
-| `description` | string | Description of the flow |
-| `providerId` | string | `basic-flow` or `client-flow` |
-| `realmId` | string | Realm this flow belongs to |
+| Field | Applies to | Why it matters |
+|-------|------------|----------------|
+| `alias` | `Flow`, `Subflow` | Stable name used by executions and bindings. |
+| `realmIdRef` | `Flow`, `Subflow` | Selects the realm that owns the flow. |
+| `providerId` | `Subflow` | Chooses the Keycloak flow type, typically `basic-flow`. |
+| `parentFlowAliasRef` | `Subflow` | Attaches the subflow to its parent flow. |
+| `requirement` | `Subflow` | Controls whether the subflow is `REQUIRED`, `ALTERNATIVE`, and so on. |
 
-### Subflow
+### Execution and ExecutionConfig
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `alias` | string | Unique alias for the subflow |
-| `authenticator` | string | Authenticator name |
-| `parentFlowAlias` | string | Alias of the parent flow |
-| `providerId` | string | `basic-flow` or `client-flow` |
-| `priority` | number | Execution priority order |
-| `realmId` | string | Realm this subflow belongs to |
-
-### Execution
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `authenticator` | string | Name of the authenticator |
-| `parentFlowAlias` | string | Alias of the parent flow |
-| `parentSubflowAlias` | string | Alias of the parent subflow (optional) |
-| `priority` | number | Execution priority order |
-| `realmId` | string | Realm this execution belongs to |
+| Field | Applies to | Why it matters |
+|-------|------------|----------------|
+| `authenticator` | `Execution` | Selects the actual Keycloak authenticator, such as `auth-cookie` or `auth-otp-form`. |
+| `parentFlowAliasRef` | `Execution` | Places the execution directly under a top-level flow. |
+| `parentSubflowAliasRef` / `parentSubflowAliasSelector` | `Execution` | Places the execution inside a specific subflow. |
+| `requirement` | `Execution` | Determines whether the authenticator is required, optional, or alternative. |
+| `executionIdRef` | `ExecutionConfig` | Resolves the execution that receives the configuration block. |
+| `config` | `ExecutionConfig` | Holds authenticator-specific configuration such as `defaultProvider`. |
 
 ### Bindings
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `realmId` | string | Realm to configure bindings for |
-| `browserFlow` | string | Flow alias for browser authentication |
-| `directGrantFlow` | string | Flow alias for direct grant |
-| `clientAuthenticationFlow` | string | Flow alias for client authentication |
-| `registrationFlow` | string | Flow alias for registration |
-| `resetCredentialsFlow` | string | Flow alias for password reset |
-| `dockerAuthenticationFlow` | string | Flow alias for Docker authentication |
+| Field | Why it matters |
+|-------|----------------|
+| `realmIdRef` | Selects the realm whose authentication bindings are being changed. |
+| `browserAuthenticationFlowRef` | Binds a custom flow to browser logins. |
+| `registrationFlowRef` | Binds a custom flow to self-registration. |
+| `directGrantFlowRef` | Binds a flow to direct access grant authentication. |
+| `resetCredentialsFlowRef` | Binds a flow to reset-credentials behavior. |
+| `clientAuthenticationFlowRef` | Binds a flow to client authentication. |
+| `dockerAuthenticationFlowRef` | Binds a flow to Docker authentication. |
+
+## Related Resources
+
+- **[Identity Providers](./identity-providers.md)** — Combine IdP redirectors and external authentication with custom flows.
+- **[Clients](./clients.md)** — Understand which applications consume the flows you bind.
+- **[Realms](./realms.md)** — Manage the realm that owns the flows and bindings.
+

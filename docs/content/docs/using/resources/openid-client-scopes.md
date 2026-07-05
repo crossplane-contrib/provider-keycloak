@@ -1,130 +1,101 @@
 ---
 sidebar_position: 10
 title: OpenID Client Scopes
-description: Manage OpenID Connect client scopes and scope mappings
+description: Manage reusable OpenID Connect client scopes and assign them as default or optional scopes
 ---
 
-# OpenID Client Scopes
-
-Client scopes define sets of protocol mappers and role scope mappings that can be shared across multiple clients. Scopes can be assigned as default (always included) or optional (included on request).
+Use these resources when you want to group protocol mappers and role scope mappings so they can be reused across multiple clients. Default scopes are always included in tokens, while optional scopes are only added when explicitly requested.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform Resource |
+|------|-----------|-------------------|
+| ClientScope | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_scope`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_scope) |
+| ClientDefaultScopes | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_default_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_default_scopes) |
+| ClientOptionalScopes | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_optional_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_optional_scopes) |
 
-- **API Group**: `openidclient.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kinds**: `ClientScope`, `ClientDefaultScopes`, `ClientOptionalScopes`
+## Working YAML Examples
 
-## ClientScope
-
-Define a reusable scope with protocol mappers and configuration.
+### `ClientScope`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientScope
 metadata:
-  name: custom-scope
+  name: openid-client-scope
 spec:
+  deletionPolicy: Delete
+  providerConfigRef:
+    name: "keycloak-provider-config"
   forProvider:
-    name: "custom-scope"
-    description: "Custom scope for application-specific claims"
-    realmId: "my-realm"
-    includeInTokenScope: true
-    consentScreenText: "Access your custom data"
+    description: When requested, this scope will map a user's group memberships to a claim
     guiOrder: 1
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-### ClientScope with Extra Config
-
-```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: ClientScope
-metadata:
-  name: api-scope
-spec:
-  forProvider:
-    name: "api-access"
-    description: "API access scope"
-    realmId: "my-realm"
     includeInTokenScope: true
-    extraConfig:
-      "display.on.consent.screen": "true"
-      "consent.screen.text": "Access the API"
-  providerConfigRef:
-    name: keycloak-provider-config
+    name: my-groups
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
 ```
 
-## ClientDefaultScopes
-
-Assign scopes that are always included in tokens for a client.
+### `ClientDefaultScopes`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientDefaultScopes
 metadata:
-  name: web-app-default-scopes
+  name: client-default-scopes
 spec:
+  deletionPolicy: Delete
   forProvider:
-    clientId: "client-uuid"
-    realmId: "my-realm"
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
     defaultScopes:
-      - "profile"
-      - "email"
-      - "custom-scope"
+      - profile
+      - email
+      - roles
+      - web-origins
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## ClientOptionalScopes
-
-Assign scopes that clients can request at authentication time.
+### `ClientOptionalScopes`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientOptionalScopes
 metadata:
-  name: web-app-optional-scopes
+  name: client-optional-scopes
 spec:
+  deletionPolicy: Delete
   forProvider:
-    clientId: "client-uuid"
-    realmId: "my-realm"
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
     optionalScopes:
-      - "address"
-      - "phone"
-      - "offline_access"
+      - address
+      - phone
+      - offline_access
+      - microprofile-jwt
+      - my-groups
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
 ```
 
-## Key Fields
+## Related Resources
 
-### ClientScope
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Display name of the scope |
-| `description` | string | Description shown in the UI |
-| `realmId` | string | Realm this scope belongs to |
-| `includeInTokenScope` | bool | Include scope name in access token `scope` claim (default `true`) |
-| `consentScreenText` | string | Text displayed on consent screen |
-| `guiOrder` | number | Order in the GUI |
-| `extraConfig` | map | Additional configuration attributes |
-
-### ClientDefaultScopes
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `clientId` | string | UUID of the client |
-| `realmId` | string | Realm the client and scopes belong to |
-| `defaultScopes` | []string | List of scope names to assign as default |
-
-### ClientOptionalScopes
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `clientId` | string | UUID of the client |
-| `realmId` | string | Realm the client and scopes belong to |
-| `optionalScopes` | []string | List of scope names to assign as optional |
+- [Clients](./clients.md)
+- [Protocol Mappers](./protocol-mappers.md)
+- [Roles](./roles.md)
+- [Realms](./realms.md)

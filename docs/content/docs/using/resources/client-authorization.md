@@ -1,231 +1,287 @@
 ---
 sidebar_position: 11
 title: Client Authorization
-description: Manage fine-grained authorization resources, permissions, and policies
+description: Manage Keycloak authorization resources, permissions, and policies for OpenID clients
 ---
 
-# Client Authorization
-
-Keycloak provides fine-grained authorization services for clients. This includes defining resources, creating policies based on various criteria, and assigning permissions that tie resources to policies.
-
-> **Note:** Authorization requires a confidential client with authorization enabled. See [Clients](./clients.md) for setting up the resource server.
+Use these resources when a client needs Keycloak Authorization Services for fine-grained access control and UMA-style policy evaluation. Define resources, permissions, and policies to protect APIs and services. The client must have `authorization` enabled.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform Resource |
+|------|-----------|-------------------|
+| ClientAuthorizationResource | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_authorization_resource`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_authorization_resource) |
+| ClientAuthorizationPermission | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_authorization_permission`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_authorization_permission) |
+| ClientClientPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_client_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_client_policy) |
+| ClientGroupPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_group_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_group_policy) |
+| ClientRolePolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_role_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_role_policy) |
+| ClientUserPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_user_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_user_policy) |
+| ClientRegexPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_regex_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_regex_policy) |
+| ClientPermissions | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_permissions) |
 
-- **API Group**: `openidclient.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kinds**: `ClientAuthorizationResource`, `ClientAuthorizationPermission`, `ClientClientPolicy`, `ClientGroupPolicy`, `ClientRolePolicy`, `ClientUserPolicy`, `ClientPermissions`
+## Working YAML Examples
 
-## ClientAuthorizationResource
-
-Define a protected resource on a resource server.
+### `ClientAuthorizationResource`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientAuthorizationResource
 metadata:
-  name: api-documents
+  name: my-authz-resource
 spec:
-  forProvider:
-    name: "documents"
-    displayName: "Documents API"
-    realmId: "my-realm"
-    resourceServerId: "client-uuid"
-    ownerManagedAccess: false
-    iconUri: "https://example.com/icons/documents.png"
-    attributes:
-      category: '["api"]'
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-authz-resource
+    displayName: My Authorization Resource
+    type: "urn:test:resources:default"
+    uris:
+      - "/protected/resource"
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
 ```
 
-## ClientAuthorizationPermission
-
-A permission links resources or resource types to authorization policies.
+### `ClientAuthorizationPermission`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientAuthorizationPermission
 metadata:
-  name: view-documents-permission
+  name: my-authz-permission
 spec:
-  forProvider:
-    name: "view-documents"
-    description: "Permission to view documents"
-    realmId: "my-realm"
-    resourceServerId: "client-uuid"
-    decisionStrategy: "UNANIMOUS"
-    policies:
-      - "policy-id-1"
-      - "policy-id-2"
-    resourceType: "documents"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-authz-permission
+    description: Permission covering all resources of a given type
+    type: resource
+    resourceType: "urn:test:resources:default"
+    decisionStrategy: UNANIMOUS
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
 ```
 
-## ClientClientPolicy
-
-A policy that grants access based on which client is making the request.
+### `ClientClientPolicy`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientClientPolicy
 metadata:
-  name: trusted-clients-policy
+  name: my-client-policy
 spec:
-  forProvider:
-    name: "trusted-clients"
-    description: "Allow access from trusted clients"
-    realmId: "my-realm"
-    resourceServerId: "client-uuid"
-    decisionStrategy: "UNANIMOUS"
-    logic: "POSITIVE"
-    clients:
-      - "trusted-client-uuid-1"
-      - "trusted-client-uuid-2"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-client-policy
+    clientsRefs:
+      - name: "test"
+        policy:
+          resolve: Always
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
 ```
 
-## ClientGroupPolicy
+### `ClientClientPolicy` with OIDC and SAML clients
 
-A policy that grants access based on group membership.
+`ClientClientPolicy` also supports SAML clients through `samlClientsRefs`.
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientClientPolicy
+metadata:
+  name: my-oidc-and-saml-client-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-oidc-and-saml-client-policy
+    clientsRefs:
+      - name: "test"
+        policy:
+          resolve: Always
+    samlClientsRefs:
+      - name: saml-client
+        policy:
+          resolve: Always
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+### `ClientGroupPolicy`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientGroupPolicy
 metadata:
-  name: admin-group-policy
+  name: my-group-policy
 spec:
-  forProvider:
-    name: "admin-group-access"
-    description: "Allow access for admin group members"
-    realmId: "my-realm"
-    resourceServerId: "client-uuid"
-    decisionStrategy: "UNANIMOUS"
-    logic: "POSITIVE"
-    groupsClaim: "groups"
-    groups:
-      - id: "group-uuid"
-        extendChildren: true
-        path: "/admins"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-group-policy
+    groups:
+      - path: /test
+        extendChildren: false
+        idRef:
+          name: "test"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
 ```
 
-## ClientRolePolicy
-
-A policy that grants access based on assigned roles.
+### `ClientRolePolicy`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientRolePolicy
 metadata:
-  name: manager-role-policy
+  name: my-role-policy
 spec:
-  forProvider:
-    name: "manager-role-access"
-    description: "Allow access for users with manager role"
-    realmId: "my-realm"
-    resourceServerId: "client-uuid"
-    type: "role"
-    decisionStrategy: "UNANIMOUS"
-    logic: "POSITIVE"
-    role:
-      - id: "role-uuid"
-        required: true
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-role-policy
+    type: role
+    role:
+      - required: true
+        idRef:
+          name: "test"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
 ```
 
-## ClientUserPolicy
-
-A policy that grants access to specific users.
+### `ClientUserPolicy`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientUserPolicy
 metadata:
-  name: specific-users-policy
+  name: my-user-policy
 spec:
-  forProvider:
-    name: "specific-users"
-    description: "Allow access for specific users"
-    realmId: "my-realm"
-    resourceServerId: "client-uuid"
-    decisionStrategy: "AFFIRMATIVE"
-    logic: "POSITIVE"
-    users:
-      - "user-uuid-1"
-      - "user-uuid-2"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-user-policy
+    usersRefs:
+      - name: "tim-tester"
+        policy:
+          resolve: Always
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
 ```
 
-## ClientPermissions
+### `ClientRegexPolicy`
 
-Enable and configure fine-grained permissions on the client itself (e.g., who can manage the client, exchange tokens, etc.).
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientRegexPolicy
+metadata:
+  name: regex-policy
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    name: regex-policy
+    pattern: ^sample.+$
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    targetClaim: sample-claim
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### `ClientPermissions`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientPermissions
 metadata:
-  name: backend-client-permissions
+  name: my-permission
 spec:
-  forProvider:
-    clientId: "client-uuid"
-    realmId: "my-realm"
-    viewScope:
-      - policies:
-          - "admin-group-policy-id"
-        description: "View client"
-        decisionStrategy: "UNANIMOUS"
-    manageScope:
-      - policies:
-          - "admin-group-policy-id"
-        description: "Manage client"
-        decisionStrategy: "UNANIMOUS"
-    configureScope:
-      - policies:
-          - "admin-group-policy-id"
-        description: "Configure client"
-        decisionStrategy: "UNANIMOUS"
-    tokenExchangeScope:
-      - policies:
-          - "trusted-clients-policy-id"
-        description: "Token exchange"
-        decisionStrategy: "UNANIMOUS"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
 ```
 
-## Key Fields
+## Related Resources
 
-### Policy Common Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Policy name |
-| `description` | string | Policy description |
-| `realmId` | string | Realm this policy belongs to |
-| `resourceServerId` | string | UUID of the resource server (client) |
-| `decisionStrategy` | string | `UNANIMOUS`, `AFFIRMATIVE`, or `CONSENSUS` |
-| `logic` | string | `POSITIVE` or `NEGATIVE` (default `POSITIVE`) |
-
-### ClientAuthorizationPermission
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `policies` | []string | List of policy IDs to evaluate |
-| `resourceType` | string | Resource type this permission applies to |
-
-### ClientAuthorizationResource
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `displayName` | string | Display name for the resource |
-| `ownerManagedAccess` | bool | Enable user-managed access (default `false`) |
-| `iconUri` | string | Icon URI for the resource |
-| `attributes` | map | Resource attributes |
+- [Clients](./clients.md)
+- [Groups](./groups.md)
+- [Roles](./roles.md)
+- [Users](./users.md)
+- [SAML Clients](./saml-clients.md)
+- [Realms](./realms.md)

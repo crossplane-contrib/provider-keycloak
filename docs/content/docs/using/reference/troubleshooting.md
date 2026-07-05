@@ -92,4 +92,4 @@ kubectl get managed -l crossplane.io/provider=provider-keycloak
 
 - [Open an issue](https://github.com/crossplane-contrib/provider-keycloak/issues) on GitHub
 - Join the [Crossplane Slack](https://slack.crossplane.io/) community
-- Check the [Upbound Marketplace](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak) for CRD documentation
+- Check the [Resource Reference](/docs/using/resources/) for CRD documentation and examples

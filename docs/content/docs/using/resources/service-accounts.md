@@ -1,113 +1,72 @@
 ---
 sidebar_position: 12
 title: Service Accounts
-description: Manage service account role assignments for clients
+description: Assign realm and client roles to OpenID client service accounts
 ---
 
-# Service Accounts
-
-When a client has `serviceAccountsEnabled: true`, Keycloak creates a service account user for that client. You can assign realm-level and client-level roles to this service account.
-
-> **Note:** The client must be confidential with service accounts enabled. See [Clients](./clients.md).
+Use these resources when a client needs to authenticate as itself for machine-to-machine access. They assign realm or client roles to a client's service account. The client must have `serviceAccountsEnabled: true`.
 
 ## API Reference
 
-> **Schema source:** This page highlights common fields and examples. For the complete OpenAPI schema, including references, selectors, status fields, and connection details, see the generated CRDs in `package/crds/`.
+| Kind | API Group | Terraform Resource |
+|------|-----------|-------------------|
+| ClientServiceAccountRealmRole | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_service_account_realm_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_service_account_realm_role) |
+| ClientServiceAccountRole | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_service_account_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_service_account_role) |
 
-- **API Group**: `openidclient.keycloak.crossplane.io`
-- **API Version**: `v1alpha1`
-- **Kinds**: `ClientServiceAccountRealmRole`, `ClientServiceAccountRole`
+## Working YAML Examples
 
-## ClientServiceAccountRealmRole
-
-Assign a realm-level role to a client's service account.
-
-```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: ClientServiceAccountRealmRole
-metadata:
-  name: backend-admin-role
-spec:
-  forProvider:
-    realmId: "my-realm"
-    serviceAccountUserId: "service-account-user-uuid"
-    role: "admin"
-  providerConfigRef:
-    name: keycloak-provider-config
-```
-
-### Using a Reference to the Client
+### `ClientServiceAccountRealmRole`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientServiceAccountRealmRole
 metadata:
-  name: backend-realm-role
+  name: service-account-realm-role
 spec:
-  forProvider:
-    realmId: "my-realm"
-    serviceAccountUserClientIdRef:
-      name: backend-service
-    role: "realm-management"
   providerConfigRef:
-    name: keycloak-provider-config
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "dev"
+    role: "svc-realm-role"
+    serviceAccountUserClientIdRef:
+      name: "service-acc-1"
+      policy:
+        resolve: Always
 ```
 
-## ClientServiceAccountRole
-
-Assign a client-level role to a client's service account. This is used when one client's service account needs a role defined in another client.
+### `ClientServiceAccountRole`
 
 ```yaml
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientServiceAccountRole
 metadata:
-  name: backend-client-role
+  name: service-account-role
 spec:
-  forProvider:
-    realmId: "my-realm"
-    serviceAccountUserId: "service-account-user-uuid"
-    clientId: "target-client-uuid"
-    role: "manage-users"
   providerConfigRef:
-    name: keycloak-provider-config
-```
-
-### Using References
-
-```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: ClientServiceAccountRole
-metadata:
-  name: backend-manage-role
-spec:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
   forProvider:
-    realmId: "my-realm"
-    serviceAccountUserClientIdRef:
-      name: backend-service
     clientIdRef:
-      name: realm-management-client
-    role: "manage-users"
-  providerConfigRef:
-    name: keycloak-provider-config
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleRef:
+      name: "svc-role"
+      policy:
+        resolve: Always
+    serviceAccountUserClientIdRef:
+      name: "service-acc-1"
+      policy:
+        resolve: Always
 ```
 
-## Key Fields
+## Related Resources
 
-### ClientServiceAccountRealmRole
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `realmId` | string | Realm the client and role belong to |
-| `serviceAccountUserId` | string | UUID of the service account user |
-| `serviceAccountUserClientIdRef` | ref | Reference to the client owning the service account |
-| `role` | string | Realm role name to assign |
-
-### ClientServiceAccountRole
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `realmId` | string | Realm the clients and role belong to |
-| `serviceAccountUserId` | string | UUID of the service account user |
-| `serviceAccountUserClientIdRef` | ref | Reference to the client owning the service account |
-| `clientId` | string | UUID of the client providing the role |
-| `role` | string | Client role name to assign |
+- [Clients](./clients.md)
+- [Roles](./roles.md)
+- [Realms](./realms.md)

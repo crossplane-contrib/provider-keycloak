@@ -152,7 +152,7 @@ kind: Provider
 metadata:
   name: provider-keycloak
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.9.0
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v2.22.0
 ```
 
 ```bash
