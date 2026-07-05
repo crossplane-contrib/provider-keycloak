@@ -8,10 +8,10 @@ Use these resources when every new user in a realm should start with the same ba
 
 ## API Reference
 
-| Kind | API Group | Terraform Resource |
-|------|-----------|-------------------|
-| DefaultGroups | `defaults.keycloak.crossplane.io/v1alpha1` | [`keycloak_default_groups`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/default_groups) |
-| Roles | `defaults.keycloak.crossplane.io/v1alpha1` | [`keycloak_default_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/default_roles) |
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| DefaultGroups | `defaults.keycloak.crossplane.io/v1alpha1` | [`keycloak_default_groups`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/default_groups) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/defaults.keycloak.crossplane.io/DefaultGroups/v1alpha1) |
+| Roles | `defaults.keycloak.crossplane.io/v1alpha1` | [`keycloak_default_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/default_roles) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/defaults.keycloak.crossplane.io/Roles/v1alpha1) |
 
 ## Working YAML Examples
 

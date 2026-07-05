@@ -8,10 +8,10 @@ Use these resources when a client needs to authenticate as itself for machine-to
 
 ## API Reference
 
-| Kind | API Group | Terraform Resource |
-|------|-----------|-------------------|
-| ClientServiceAccountRealmRole | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_service_account_realm_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_service_account_realm_role) |
-| ClientServiceAccountRole | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_service_account_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_service_account_role) |
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| ClientServiceAccountRealmRole | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_service_account_realm_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_service_account_realm_role) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientServiceAccountRealmRole/v1alpha1) |
+| ClientServiceAccountRole | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_service_account_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_service_account_role) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientServiceAccountRole/v1alpha1) |
 
 ## Working YAML Examples
 

@@ -8,11 +8,11 @@ Use these resources when you need to control what Keycloak emits in OIDC tokens 
 
 ## API Reference
 
-| Kind | API Group | Terraform Resource |
-|------|-----------|-------------------|
-| ProtocolMapper | `client.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_protocol_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_protocol_mapper) |
-| RoleMapper | `client.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_role_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_role_mapper) |
-| GroupMembershipProtocolMapper | `openidgroup.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_group_membership_protocol_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_group_membership_protocol_mapper) |
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| ProtocolMapper | `client.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_protocol_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_protocol_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/client.keycloak.crossplane.io/ProtocolMapper/v1alpha1) |
+| RoleMapper | `client.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_role_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_role_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/client.keycloak.crossplane.io/RoleMapper/v1alpha1) |
+| GroupMembershipProtocolMapper | `openidgroup.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_group_membership_protocol_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_group_membership_protocol_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidgroup.keycloak.crossplane.io/GroupMembershipProtocolMapper/v1alpha1) |
 
 ## Working YAML Examples
 

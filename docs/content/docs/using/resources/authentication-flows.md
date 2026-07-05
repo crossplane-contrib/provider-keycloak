@@ -10,13 +10,13 @@ Use authentication flow resources when the default Keycloak login process is not
 
 ## API Reference
 
-| Kind | API Group | Terraform |
-|------|-----------|-----------|
-| `Flow` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_flow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_flow) |
-| `Subflow` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_subflow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_subflow) |
-| `Execution` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_execution`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_execution) |
-| `ExecutionConfig` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_execution_config`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_execution_config) |
-| `Bindings` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_bindings`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_bindings) |
+| Kind | API Group | Terraform | CRD Explorer |
+|------|-----------|-----------|---|
+| `Flow` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_flow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_flow) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/authenticationflow.keycloak.crossplane.io/Flow/v1alpha1) |
+| `Subflow` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_subflow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_subflow) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/authenticationflow.keycloak.crossplane.io/Subflow/v1alpha1) |
+| `Execution` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_execution`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_execution) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/authenticationflow.keycloak.crossplane.io/Execution/v1alpha1) |
+| `ExecutionConfig` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_execution_config`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_execution_config) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/authenticationflow.keycloak.crossplane.io/ExecutionConfig/v1alpha1) |
+| `Bindings` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_bindings`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_bindings) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/authenticationflow.keycloak.crossplane.io/Bindings/v1alpha1) |
 
 ## Working YAML examples
 

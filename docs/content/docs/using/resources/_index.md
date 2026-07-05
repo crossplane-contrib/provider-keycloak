@@ -12,7 +12,9 @@ resource.
 
 For exhaustive field schemas, default values, references, selectors, and status
 fields, see the generated CRDs in
-[`package/crds/`](https://github.com/crossplane-contrib/provider-keycloak/tree/main/package/crds).
+[`package/crds/`](https://github.com/crossplane-contrib/provider-keycloak/tree/main/package/crds)
+or browse all CRDs interactively on the
+[Upbound Marketplace CRD Explorer](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/crds).
 
 ## Resource Pages
 
