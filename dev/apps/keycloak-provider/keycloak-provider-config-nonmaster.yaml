@@ -1,0 +1,24 @@
+---
+# ProviderConfig for the non-master-realm service account used to verify
+# graceful handling of empty systemInfo.version on Keycloak >= 26.4.
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-nonmaster-provider-config
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-nonmaster-credentials
+      key: credentials
+      namespace: crossplane-system
+---
+apiVersion: keycloak.m.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-nonmaster-provider-config
+  namespace: dev-ns
+spec:
+  credentialsSecretRef:
+    name: keycloak-nonmaster-credentials
+    key: credentials

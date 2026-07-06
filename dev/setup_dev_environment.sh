@@ -396,6 +396,52 @@ $kubectl_cmd wait crd/providerconfigs.keycloak.crossplane.io --for condition=est
 
 $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml
 
+echo "########### Setting up non-master-realm service account (KC >= 26.4 empty-version fix) ###########"
+KC_BASE_URL="http://${KEYCLOAK_IP}:${KEYCLOAK_PORT}"
+
+echo "* Obtaining Keycloak admin token..."
+NM_ADMIN_TOKEN=$(curl -sf -X POST "${KC_BASE_URL}/realms/master/protocol/openid-connect/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=admin&password=admin&grant_type=password&client_id=admin-cli" \
+  | jq -r .access_token)
+
+echo "* Creating realm provider-e2e-realm..."
+curl -s -o /dev/null -X POST "${KC_BASE_URL}/admin/realms" \
+  -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"realm":"provider-e2e-realm","enabled":true}' || true
+
+echo "* Creating service account client provider-e2e-client..."
+curl -s -o /dev/null -X POST "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients" \
+  -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"clientId":"provider-e2e-client","serviceAccountsEnabled":true,"secret":"provider-e2e-secret","protocol":"openid-connect","publicClient":false}' || true
+
+echo "* Granting realm-admin role to service account..."
+NM_CLIENT_UUID=$(curl -sf "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients?clientId=provider-e2e-client" \
+  -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" | jq -r '.[0].id')
+NM_SA_USER_ID=$(curl -sf "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients/${NM_CLIENT_UUID}/service-account-user" \
+  -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" | jq -r '.id')
+NM_RM_CLIENT_ID=$(curl -sf "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients?clientId=realm-management" \
+  -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" | jq -r '.[0].id')
+NM_REALM_ADMIN_ROLE=$(curl -sf "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients/${NM_RM_CLIENT_ID}/roles/realm-admin" \
+  -H "Authorization: Bearer ${NM_ADMIN_TOKEN}")
+curl -s -o /dev/null -X POST "${KC_BASE_URL}/admin/realms/provider-e2e-realm/users/${NM_SA_USER_ID}/role-mappings/clients/${NM_RM_CLIENT_ID}" \
+  -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d "[${NM_REALM_ADMIN_ROLE}]" || true
+
+echo "* Applying non-master ProviderConfig credentials secret..."
+if [[ "$deploylocalprovider" == "true" ]]; then
+  export OLD_KEYCLOAK_IP=${KEYCLOAK_IP}
+  export KEYCLOAK_IP=keycloak-keycloakx-http.keycloak.svc.cluster.local
+  cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret-nonmaster.yaml" | envsubst | $kubectl_cmd apply -f -
+  export KEYCLOAK_IP=${OLD_KEYCLOAK_IP}
+else
+  cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret-nonmaster.yaml" | envsubst | $kubectl_cmd apply -f -
+fi
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config-nonmaster.yaml
+
 if [[ "$uselocalprovider" == "true" ]]; then
   cat "${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-secret.yaml" | envsubst | $kubectl_cmd apply -f -
   $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider.yaml
