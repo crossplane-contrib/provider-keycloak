@@ -30,7 +30,7 @@ func newOfflineClientErr(ctx context.Context) (*keycloak.KeycloakClient, error) 
 		ctx,
 		"http://127.0.0.1:1", "", "", "admin-cli", "", "master",
 		"", "", "", "", "", "", "",
-		false, 5, "", true, "", "", "test", false, nil,
+		false, 5, "", true, "", "", "test", false, nil, "",
 	)
 }
 

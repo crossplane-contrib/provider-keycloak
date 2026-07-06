@@ -93,6 +93,7 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 	tlsClientPrivateKey := tryGetString(c, "tls_client_private_key", "")
 	redHatSSO := tryGetBool(c, "red_hat_sso", false)
 	additionalHeaders := tryGetMap(c, "additional_headers")
+	keycloakVersion := tryGetString(c, "keycloak_version", "")
 	userAgent := "Crossplane Keycloak Provider"
 
 	keycloakClient, err := keycloak.NewKeycloakClient(
@@ -118,7 +119,8 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 		tlsClientPrivateKey,
 		userAgent,
 		redHatSSO,
-		additionalHeaders)
+		additionalHeaders,
+		keycloakVersion)
 	if err != nil {
 		return nil, err
 	}
