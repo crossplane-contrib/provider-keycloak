@@ -1,0 +1,16 @@
+# Tests that the provider successfully initialises via a non-master-realm
+# service account on Keycloak >= 26.4, where /admin/serverinfo returns an
+# empty systemInfo.version.  A Group in "provider-e2e-realm" is used because
+# it is a simple resource that forces a full provider initialisation cycle.
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: nonmaster-test-group
+  namespace: dev-ns
+spec:
+  forProvider:
+    name: nonmaster-test-group
+    realmId: provider-e2e-realm
+  providerConfigRef:
+    name: keycloak-nonmaster-provider-config
+    kind: ProviderConfig
