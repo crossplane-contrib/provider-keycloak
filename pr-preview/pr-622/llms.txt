@@ -1,0 +1,47 @@
+# provider-keycloak llms.txt
+# See: https://llmstxt.org/
+
+> provider-keycloak is a Crossplane provider that manages Keycloak (IAM/SSO) resources as Kubernetes custom resources. It is generated with Upjet from the Keycloak Terraform provider. Declare Keycloak realms, clients, users, groups, roles, identity providers, and more as YAML; the provider reconciles them continuously.
+
+## Getting Started
+
+- [Configuration](https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/configuration/): Configure provider-keycloak credentials to connect to Keycloak
+- [First Realm](https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/first-realm/): Create your first Keycloak realm with provider-keycloak
+- [Installation](https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/installation/): Install provider-keycloak into your Crossplane control plane
+
+## Resources
+
+- [Authentication Flows](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/authentication-flows/): Customize Keycloak login, MFA, and flow bindings declaratively
+- [Client Authorization](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/client-authorization/): Manage Keycloak authorization resources, permissions, and policies for OpenID clients
+- [Clients](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/clients/): Manage OpenID Connect clients for applications and services
+- [Default Configuration](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/default-config/): Assign default groups and roles to every new user in a realm
+- [Groups](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/groups/): Manage Keycloak groups, memberships, role mappings, and permissions
+- [Identity Providers](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/identity-providers/): Federate Keycloak login with external identity providers
+- [OpenID Client Scopes](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/openid-client-scopes/): Manage reusable OpenID Connect client scopes and assign them as default or optional scopes
+- [Organizations](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/organizations/): Manage Keycloak organizations for multi-tenant realms
+- [Protocol Mappers](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/protocol-mappers/): Manage OIDC and SAML protocol mappers for claims, roles, and group membership
+- [Realm Settings](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realm-settings/): Configure realm-level settings such as events, required actions, user profiles, keys, scopes, and client policies
+- [Realms](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realms/): Create and manage Keycloak realms, the top-level container for every other resource
+- [Roles](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/roles/): Manage realm roles and client roles in Keycloak
+- [SAML Clients](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/saml-clients/): Configure SAML 2.0 clients, scopes, and default scopes in Keycloak
+- [Service Accounts](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/service-accounts/): Assign realm and client roles to OpenID client service accounts
+- [User Federation](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/user-federation/): Connect Keycloak to LDAP, Active Directory, and custom user stores
+- [Users](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/users/): Manage users, user role mappings, group memberships, permissions, and custom user federation
+- [Workflows](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/workflows/): Automate Keycloak actions in response to realm events
+
+## Reference
+
+- [Common Patterns](https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/common-patterns/)
+- [Credentials](https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/credentials/): All supported credential fields and authentication methods
+- [ProviderConfig](https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/provider-config/): Complete reference for ProviderConfig resource
+- [Troubleshooting](https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/troubleshooting/): Common issues and how to resolve them
+
+## AI
+
+- [Agents](https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/agents/): Complete coding-agent instructions for provider-keycloak: repo layout, build/test commands (make generate, make test, make e2e), key config files (config/external_name.go, config/<group>/config.go), code-generation rules (never edit apis/ or package/crds/ by hand), known constraints, and common task patterns.
+- [LLM Files](https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/llms/): provider-keycloak ships /llms.txt (categorized page index for AI agents) and /llms-full.txt (all doc pages concatenated into one file for full-context ingestion). Both are generated by make docs-gen and CI-gated for freshness.
+
+## Optional
+
+- [Documentation Model](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/documentation-model/)
+- [Local Docs Development](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs/)
