@@ -2,15 +2,18 @@ name: Deploy Docs PR Preview
 
 on:
   pull_request:
-    paths:
-      - 'docs/**'
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
 
 permissions:
   contents: write
   pull-requests: write
 
 concurrency:
-  group: preview-${{ github.event.pull_request.number }}
+  group: preview-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -20,57 +23,28 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
       - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        if: github.event.action != 'closed'
         with:
           go-version: '1.26.x'
 
       - name: Setup Hugo
+        if: github.event.action != 'closed'
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: '0.150.0'
           extended: true
 
       - name: Build documentation (PR preview)
+        if: github.event.action != 'closed'
         working-directory: docs
         env:
           GOTOOLCHAIN: local
         run: hugo --minify --baseURL "https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-${{ github.event.pull_request.number }}/"
 
-      - name: Deploy to GitHub Pages (preview)
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Deploy PR preview
+        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/public
-          destination_dir: pr-preview/pr-${{ github.event.pull_request.number }}
-          keep_files: true
-
-      - name: Post or update preview comment
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
-        with:
-          script: |
-            const previewUrl = `https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-${context.payload.pull_request.number}/`;
-            const body = `📖 **Docs preview is ready!**\n\n${previewUrl}\n\n<sub>Built from ${context.sha.substring(0, 7)} — updates automatically on new commits.</sub>`;
-            const tag = '<!-- docs-preview -->';
-            const taggedBody = `${tag}\n${body}`;
-
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-            });
-
-            const existing = comments.find(c => c.body.includes(tag));
-            if (existing) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: existing.id,
-                body: taggedBody,
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.pull_request.number,
-                body: taggedBody,
-              });
-            }
+          source-dir: docs/public
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: auto
