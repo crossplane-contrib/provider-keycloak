@@ -5,7 +5,7 @@ weight: 2
 
 Development-focused guidance for working on provider-keycloak docs and examples.
 
-- [Local Docs Development](/docs/developing/local-docs/) explains how to build
-  and preview the Hugo site.
-- [Documentation Model](/docs/developing/documentation-model/) explains what
-  should be authored by hand and what should be generated from CRDs.
+{{< cards >}}
+  {{< card link="local-docs/" title="Local Docs" icon="terminal" subtitle="Build and preview the Hugo documentation site locally" >}}
+  {{< card link="documentation-model/" title="Documentation Model" icon="book-open" subtitle="What to author by hand versus generate from CRDs" >}}
+{{< /cards >}}

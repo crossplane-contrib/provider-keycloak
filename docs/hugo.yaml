@@ -13,6 +13,11 @@ markup:
   highlight:
     noClasses: false
 
+outputs:
+  home: [HTML]
+  section: [HTML, markdown]
+  page: [HTML, markdown]
+
 menu:
   main:
     - name: Documentation
@@ -32,12 +37,20 @@ params:
     logo:
       path: /img/logo.svg
       dark: /img/logo.svg
-      link: /
+      width: 24
+      height: 24
   theme:
     default: system
     displayToggle: true
   search:
-    enable: false
+    enable: true
   editURL:
     enable: true
     base: https://github.com/crossplane-contrib/provider-keycloak/tree/main/docs/content
+  page:
+    contextMenu:
+      enable: true
+      links:
+        - name: Open in ChatGPT
+          url: "https://chatgpt.com/?q={markdown_url}"
+          icon: chatgpt

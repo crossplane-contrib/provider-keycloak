@@ -394,3 +394,22 @@ help-special: crossplane.help
 # TODO(negz): Update CI to use these targets.
 vendor: modules.download
 vendor.check: modules.check
+
+# ====================================================================================
+# Documentation targets
+
+# Regenerate docs/static/llms.txt and docs/static/llms-full.txt from the
+# Hugo content tree.
+docs-gen:
+	@echo "==> generating llms.txt and llms-full.txt"
+	@bash docs/scripts/gen-llms.sh
+	@echo "==> done"
+
+# Verify that docs/static/llms.txt and llms-full.txt are up to date with the
+# Hugo content tree. Exits non-zero when the files are stale. Run docs-gen to
+# fix.
+docs-freshness-check:
+	@echo "==> checking llms.txt freshness"
+	@bash docs/scripts/gen-llms.sh --check
+
+.PHONY: docs-gen docs-freshness-check
