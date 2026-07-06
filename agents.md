@@ -11,6 +11,14 @@ manages [Keycloak](https://www.keycloak.org/) resources as Kubernetes custom
 resources. It is generated with [Upjet](https://github.com/crossplane/upjet)
 on top of the [Keycloak Terraform Provider](https://github.com/keycloak/terraform-provider-keycloak).
 
+**One-line flow:**
+```
+Keycloak Terraform Provider  →  Upjet (code generator)  →  Crossplane provider  →  Kubernetes CRDs
+```
+
+Users declare Keycloak resources as YAML (`spec.forProvider` maps to Terraform arguments),
+and the provider reconciles them continuously against a live Keycloak instance.
+
 ## Repository Layout
 
 ```
@@ -51,12 +59,39 @@ scripts/            Utility scripts
 | Add/update an example manifest | `examples/<group>/<resource>.yaml` |
 | Modify CRD generation | `generate/*.go`, run `make generate` |
 | Run e2e tests | `make e2e`, see `cluster/test/cases.txt` for covered resources |
+| Regenerate llms.txt/llms-full.txt | `make docs-gen` |
 
 ## Code Generation
 
 Always run `make generate` after changing `config/` to regenerate CRDs and
 Go types. **Never** edit files in `apis/` or `package/crds/` by hand — they
 are generated outputs.
+
+The generation pipeline:
+1. `generate/main.go` calls Upjet with the Terraform provider schema.
+2. Upjet writes Go types into `apis/<group>/<version>/`.
+3. `make generate` runs `go generate ./...` which invokes controller-gen to write CRDs into `package/crds/`.
+
+## Adding a New Resource
+
+1. Add an entry to `config/external_name.go`.
+2. Create or update `config/<group>/config.go` to configure references.
+3. Run `make generate`.
+4. Add a hand-authored example to `examples/<group>/<resource>.yaml`.
+
+To allow import/observe by identifying properties (avoiding 409 on create), wire
+to `lookup.BuildIdentifyingPropertiesLookup` in the group config (see
+`config/openidclient/config.go` for an example).
+
+## Cross-Resource References
+
+References are wired in `config/<group>/config.go` via `r.References`:
+
+```go
+r.References["realm_id"] = config.Reference{
+    TerraformName: "keycloak_realm",
+}
+```
 
 ## Testing
 
@@ -75,7 +110,7 @@ make docs-gen                          # regenerate llms.txt
 make docs-freshness-check             # CI: verify llms.txt is current
 ```
 
-## Important Constraints
+## Known Constraints and Pitfalls
 
 - Do **not** edit `examples-generated/` by hand.
 - Do **not** edit generated files in `apis/` or `package/crds/` by hand.
@@ -83,6 +118,24 @@ make docs-freshness-check             # CI: verify llms.txt is current
   Renovate — it is explicitly excluded from automated dependency updates
   because upgrading it requires deliberate schema migration.
 - E2E tests only cover resources listed in `cluster/test/cases.txt`.
+- **Upjet does not support `+nullable` markers.** The kubebuilder Options struct
+  only supports Required, Minimum, Maximum, Default.
+- **Membership conflicts:** Never let both a `Memberships` resource (authoritative)
+  and a `Groups` resource with `exhaustive=true` manage the same group — they will
+  fight and cause reconciliation loops.
+- **E2E CI versioning:** Jobs that build or deploy local xpkgs must fetch git tags
+  (`git fetch --tags`) so `build/makelib/common.mk` derives the correct VERSION.
+
+## Troubleshooting
+
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| CRD fields not updating | `make generate` not run | Run `make generate` |
+| `409 Conflict` on create | Resource already exists in Keycloak | Use `lookup.BuildIdentifyingPropertiesLookup` |
+| `llms-full.txt is stale` in CI | Docs changed, `make docs-gen` not run | Run `make docs-gen` and commit |
+| `no matches for kind` in e2e | CRD not established in time | See `cluster/test/setup.sh` MRD wait logic |
+| E2E provider version mismatch | Git tags not fetched before build | Add `git fetch --tags` before `make build` |
+| Reconciliation loop on membership | Both `Memberships` + `Groups` (exhaustive) target same group | Use only one authoritative source |
 
 ## LLM Files
 

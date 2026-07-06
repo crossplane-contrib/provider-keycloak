@@ -1,0 +1,8 @@
+{{- /* Advertise Markdown output so AI agents and tools can discover clean Markdown for any page.
+       Hugo serves Markdown at the same URL with index.md (e.g. /docs/using/resources/realms/index.md).
+       See: https://github.com/Breee/ai-friendly-docs for the rationale. */}}
+{{- range .AlternativeOutputFormats }}
+  {{- if eq .MediaType.SubType "markdown" }}
+<link rel="alternate" type="text/markdown" href="{{ .Permalink }}" title="{{ $.Title }} (Markdown)" />
+  {{- end }}
+{{- end }}

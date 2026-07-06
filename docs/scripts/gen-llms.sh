@@ -20,45 +20,85 @@ if [[ "${1:-}" == "--check" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+# Extract front-matter field value from a markdown file.
+# Strips surrounding YAML quotes if present.
+# Usage: extract_field <file> <field>
+extract_field() {
+  local file="$1" field="$2"
+  awk '/^---/{found++; next} found==1 && /^'"${field}"':/{sub(/^'"${field}"':[[:space:]]*/,""); gsub(/^["'"'"']|["'"'"']$/,""); print; exit}' "$file"
+}
+
+# Emit one llms.txt line for a file.
+# Prefers llmsDescription over description; skips if no title.
+emit_line() {
+  local file="$1"
+  local rel="${file#"${CONTENT_DIR}/"}"
+  rel="${rel%.md}"
+  local url="${BASE_URL}/${rel}/"
+  local title; title=$(extract_field "$file" "title")
+  [[ -z "$title" ]] && return
+  local desc; desc=$(extract_field "$file" "llmsDescription")
+  [[ -z "$desc" ]] && desc=$(extract_field "$file" "description")
+  if [[ -n "$desc" ]]; then
+    echo "- [${title}](${url}): ${desc}"
+  else
+    echo "- [${title}](${url})"
+  fi
+}
+
+# ---------------------------------------------------------------------------
 # Build the llms.txt index
 # ---------------------------------------------------------------------------
 
 generate_llms_txt() {
-  local out=""
-  out+="# provider-keycloak llms.txt"$'\n'
-  out+="# See: https://llmstxt.org/"$'\n'
-  out+=""$'\n'
-  out+="> Provider Keycloak is a Crossplane provider for managing Keycloak resources as Kubernetes custom resources."$'\n'
-  out+=""$'\n'
-  out+="## Docs"$'\n'
-  out+=""$'\n'
+  cat <<'HEADER'
+# provider-keycloak llms.txt
+# See: https://llmstxt.org/
 
-  # Collect pages: parse front matter title from each .md file,
-  # derive URL from its path relative to content dir.
+> provider-keycloak is a Crossplane provider that manages Keycloak (IAM/SSO) resources as Kubernetes custom resources. It is generated with Upjet from the Keycloak Terraform provider. Declare Keycloak realms, clients, users, groups, roles, identity providers, and more as YAML; the provider reconciles them continuously.
+
+## Getting Started
+
+HEADER
+
   while IFS= read -r -d '' file; do
-    # Skip _index.md files (section indexes) — they're navigation, not content
-    [[ "$(basename "$file")" == "_index.md" ]] && continue
+    emit_line "$file"
+  done < <(find "${CONTENT_DIR}/docs/using/getting-started" -name "*.md" ! -name "_index.md" -print0 | sort -z)
 
-    # Derive URL path from file path
-    rel="${file#"${CONTENT_DIR}/"}"
-    rel="${rel%.md}"
-    url="${BASE_URL}/${rel}/"
+  echo ""
+  echo "## Resources"
+  echo ""
 
-    # Extract title from front matter
-    title=$(awk '/^---/{found++; next} found==1 && /^title:/{sub(/^title:[[:space:]]*/,""); print; exit}' "$file")
-    [[ -z "$title" ]] && continue
+  while IFS= read -r -d '' file; do
+    emit_line "$file"
+  done < <(find "${CONTENT_DIR}/docs/using/resources" -name "*.md" ! -name "_index.md" -print0 | sort -z)
 
-    # Extract description from front matter (first line after title, optional)
-    desc=$(awk '/^---/{found++; next} found==1 && /^description:/{sub(/^description:[[:space:]]*/,""); print; exit}' "$file")
+  echo ""
+  echo "## Reference"
+  echo ""
 
-    if [[ -n "$desc" ]]; then
-      out+="- [${title}](${url}): ${desc}"$'\n'
-    else
-      out+="- [${title}](${url})"$'\n'
-    fi
-  done < <(find "${CONTENT_DIR}/docs" -name "*.md" ! -name "_index.md" -print0 | sort -z)
+  while IFS= read -r -d '' file; do
+    emit_line "$file"
+  done < <(find "${CONTENT_DIR}/docs/using/reference" -name "*.md" ! -name "_index.md" -print0 | sort -z)
 
-  echo "$out"
+  echo ""
+  echo "## AI"
+  echo ""
+
+  while IFS= read -r -d '' file; do
+    emit_line "$file"
+  done < <(find "${CONTENT_DIR}/docs/ai-usage" -name "*.md" ! -name "_index.md" -print0 | sort -z)
+
+  echo ""
+  echo "## Optional"
+  echo ""
+
+  while IFS= read -r -d '' file; do
+    emit_line "$file"
+  done < <(find "${CONTENT_DIR}/docs/developing" -name "*.md" ! -name "_index.md" -print0 | sort -z)
 }
 
 # ---------------------------------------------------------------------------
@@ -76,7 +116,7 @@ generate_llms_full_txt() {
     rel="${rel%.md}"
     url="${BASE_URL}/${rel}/"
 
-    title=$(awk '/^---/{found++; next} found==1 && /^title:/{sub(/^title:[[:space:]]*/,""); print; exit}' "$file")
+    title=$(extract_field "$file" "title")
     [[ -z "$title" ]] && title="$(basename "$rel")"
 
     out+="## ${title}"$'\n'
