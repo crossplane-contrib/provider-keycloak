@@ -64,6 +64,7 @@ import (
 	optionalclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/optionalclientscopes"
 	realm "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/realm"
 	realmevents "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/realmevents"
+	realmlocalization "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/realmlocalization"
 	requiredaction "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/requiredaction"
 	userprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/userprofile"
 	role "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/role/role"
@@ -138,6 +139,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		optionalclientscopes.Setup,
 		realm.Setup,
 		realmevents.Setup,
+		realmlocalization.Setup,
 		requiredaction.Setup,
 		userprofile.Setup,
 		role.Setup,
@@ -218,6 +220,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		optionalclientscopes.SetupGated,
 		realm.SetupGated,
 		realmevents.SetupGated,
+		realmlocalization.SetupGated,
 		requiredaction.SetupGated,
 		userprofile.SetupGated,
 		role.SetupGated,
@@ -297,6 +300,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		optionalclientscopes.SetupWebhookWithManager,
 		realm.SetupWebhookWithManager,
 		realmevents.SetupWebhookWithManager,
+		realmlocalization.SetupWebhookWithManager,
 		requiredaction.SetupWebhookWithManager,
 		userprofile.SetupWebhookWithManager,
 		role.SetupWebhookWithManager,

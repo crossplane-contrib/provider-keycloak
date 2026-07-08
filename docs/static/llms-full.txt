@@ -2457,6 +2457,7 @@ Use these resources after a `Realm` exists and you need to shape how that realm 
 - **`RealmEvents`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_events`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_events) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RealmEvents/v1alpha1)
 - **`RequiredAction`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_required_action`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/required_action) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RequiredAction/v1alpha1)
 - **`UserProfile`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_user_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_user_profile) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/UserProfile/v1alpha1)
+- **`RealmLocalization`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_localization`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_localization) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RealmLocalization/v1alpha1)
 - **`KeystoreRsa`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_keystore_rsa`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_keystore_rsa) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/KeystoreRsa/v1alpha1)
 - **`DefaultClientScopes`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_default_client_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_default_client_scopes) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/DefaultClientScopes/v1alpha1)
 - **`OptionalClientScopes`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_optional_client_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_optional_client_scopes) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/OptionalClientScopes/v1alpha1)
@@ -2575,6 +2576,30 @@ spec:
       policy:
         resolve: Always
     unmanagedAttributePolicy: ENABLED
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### RealmLocalization
+
+Use `RealmLocalization` to override the localized message texts a realm serves for a given locale. Each entry in `texts` maps a message key to its translation.
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: RealmLocalization
+metadata:
+  name: realm-localization-de
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    locale: "de"
+    texts:
+      Hello: "Hallo"
+      loginTitle: "Willkommen"
   providerConfigRef:
     name: "keycloak-provider-config"
 ```
@@ -2717,6 +2742,7 @@ spec:
 | `RealmEvents` | `realmIdRef`, `eventsEnabled`, `enabledEventTypes`, `eventsListeners`, `adminEventsEnabled`, `adminEventsDetailsEnabled`, `eventsExpiration` | Controls user and admin audit event capture and retention. |
 | `RequiredAction` | `realmIdRef`, `alias`, `name`, `enabled` | Enables built-in actions users must complete during account lifecycle flows. |
 | `UserProfile` | `realmIdRef`, `attribute`, `group`, `unmanagedAttributePolicy` | Defines custom profile schema, validation, permissions, and grouping. |
+| `RealmLocalization` | `realmIdRef`, `locale`, `texts` | Overrides localized message texts for a realm and locale. |
 | `KeystoreRsa` | `realmIdRef`, `name`, `providerId`, `algorithm`, `active`, `enabled`, `priority`, `privateKeySecretRef`, `certificateSecretRef` | Manages RSA key material used by the realm. |
 | `DefaultClientScopes` | `realmId`, `defaultScopes` | Declares scopes assigned automatically to new clients. |
 | `OptionalClientScopes` | `realmId`, `optionalScopes` | Declares scopes clients can request optionally. |

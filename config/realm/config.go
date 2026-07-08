@@ -94,6 +94,11 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 	})
 
+	p.AddResourceConfigurator("keycloak_realm_localization", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.Kind = "RealmLocalization"
+	})
+
 	p.AddResourceConfigurator("keycloak_realm_default_client_scopes", func(r *config.Resource) {
 		r.ShortGroup = Group
 	})
