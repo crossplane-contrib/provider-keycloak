@@ -28,6 +28,9 @@ func (tr *Realm) Hub() {}
 func (tr *RealmEvents) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *RealmLocalization) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *RequiredAction) Hub() {}
 
 // Hub marks this type as a conversion hub.
