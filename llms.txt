@@ -25,7 +25,7 @@
 - [OpenID Client Scopes](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/openid-client-scopes/): Manage reusable OpenID Connect client scopes and assign them as default or optional scopes
 - [Organizations](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/organizations/): Manage Keycloak organizations for multi-tenant realms
 - [Protocol Mappers](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/protocol-mappers/): Manage OIDC and SAML protocol mappers for claims, roles, and group membership
-- [Realm Settings](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realm-settings/): Configure realm-level settings such as events, required actions, user profiles, keys, scopes, and client policies
+- [Realm Settings](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realm-settings/): Configure realm-level settings such as events, required actions, user profiles, localization, keys, scopes, and client policies
 - [Realms](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realms/): Create and manage Keycloak realms, the top-level container for every other resource
 - [Roles](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/roles/): Manage realm roles and client roles in Keycloak
 - [SAML Clients](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/saml-clients/): Configure SAML 2.0 clients, scopes, and default scopes in Keycloak
