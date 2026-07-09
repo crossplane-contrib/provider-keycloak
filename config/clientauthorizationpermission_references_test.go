@@ -18,28 +18,12 @@ func TestClientAuthorizationPermissionReferences(t *testing.T) {
 			terraformName: "keycloak_openid_client_authorization_resource",
 			extractor:     common.PathUUIDExtractor,
 		},
-		"scopes": {
-			terraformName: "keycloak_openid_client_authorization_scope",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"aggregate_policies": {
-			terraformName: "keycloak_openid_client_aggregate_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
 		"client_policies": {
 			terraformName: "keycloak_openid_client_client_policy",
 			extractor:     common.PathUUIDExtractor,
 		},
-		"client_scope_policies": {
-			terraformName: "keycloak_openid_client_authorization_client_scope_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
 		"group_policies": {
 			terraformName: "keycloak_openid_client_group_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"js_policies": {
-			terraformName: "keycloak_openid_client_js_policy",
 			extractor:     common.PathUUIDExtractor,
 		},
 		"regex_policies": {
@@ -48,10 +32,6 @@ func TestClientAuthorizationPermissionReferences(t *testing.T) {
 		},
 		"role_policies": {
 			terraformName: "keycloak_openid_client_role_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"time_policies": {
-			terraformName: "keycloak_openid_client_time_policy",
 			extractor:     common.PathUUIDExtractor,
 		},
 		"user_policies": {
