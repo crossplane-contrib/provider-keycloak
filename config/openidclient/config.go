@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/crossplane/upjet/v2/pkg/config"
+	n "github.com/crossplane/upjet/v2/pkg/types/name"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
@@ -34,6 +35,46 @@ func clientConnectionDetails(attr map[string]any) (map[string][]byte, error) {
 		conn["serviceAccountUserId"] = []byte(v)
 	}
 	return conn, nil
+}
+
+type syntheticListReference struct {
+	name      string
+	reference config.Reference
+}
+
+func addSyntheticListReferences(r *config.Resource, field string, refs ...syntheticListReference) {
+	for _, ref := range refs {
+		cp := *r.TerraformResource.Schema[field]
+		r.TerraformResource.Schema[ref.name] = &cp
+		r.References[ref.name] = ref.reference
+	}
+
+	ci := r.TerraformConfigurationInjector
+	r.TerraformConfigurationInjector = func(jsonMap, tfMap map[string]any) error {
+		if ci != nil {
+			if err := ci(jsonMap, tfMap); err != nil {
+				return err
+			}
+		}
+
+		var union []any
+		for _, ref := range refs {
+			value := jsonMap[n.NewFromSnake(ref.name).LowerCamelComputed]
+			if value == nil {
+				continue
+			}
+			list, ok := value.([]any)
+			if !ok {
+				continue
+			}
+			union = append(union, list...)
+			delete(tfMap, ref.name)
+		}
+		if union != nil {
+			tfMap[field] = union
+		}
+		return nil
+	}
 }
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
@@ -275,6 +316,81 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_openid_client",
 			Extractor:     common.PathUUIDExtractor,
 		}
+
+		r.References["resources"] = config.Reference{
+			TerraformName: "keycloak_openid_client_authorization_resource",
+			Extractor:     common.PathUUIDExtractor,
+		}
+
+		r.References["scopes"] = config.Reference{
+			TerraformName: "keycloak_openid_client_authorization_scope",
+			Extractor:     common.PathUUIDExtractor,
+		}
+
+		addSyntheticListReferences(r, "policies",
+			syntheticListReference{
+				name: "aggregate_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_aggregate_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "client_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_client_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "client_scope_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_authorization_client_scope_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "group_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_group_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "js_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_js_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "regex_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_regex_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "role_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_role_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "time_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_time_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "user_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_user_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			})
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_authorization_scope", func(r *config.Resource) {
