@@ -25,6 +25,7 @@ type ExecutionConfigInitParameters struct {
 
 	// The authentication execution this configuration is attached to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/authenticationflow/v1alpha1.Execution
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ExecutionID *string `json:"executionId,omitempty" tf:"execution_id,omitempty"`
 
 	// Reference to a Execution in authenticationflow to populate executionId.
@@ -79,6 +80,7 @@ type ExecutionConfigParameters struct {
 
 	// The authentication execution this configuration is attached to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/authenticationflow/v1alpha1.Execution
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ExecutionID *string `json:"executionId,omitempty" tf:"execution_id,omitempty"`
 

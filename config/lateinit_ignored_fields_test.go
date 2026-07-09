@@ -112,3 +112,32 @@ func TestOpenIDClientAuthenticationFlowBindingOverrideExtractors(t *testing.T) {
 		})
 	}
 }
+
+func TestExecutionConfigExecutionIDExtractor(t *testing.T) {
+	flavours := map[string]func() (*ujconfig.Provider, error){
+		"cluster":    func() (*ujconfig.Provider, error) { return GetProvider(true) },
+		"namespaced": func() (*ujconfig.Provider, error) { return GetProviderNamespaced(true) },
+	}
+
+	for flavourName, get := range flavours {
+		t.Run(flavourName, func(t *testing.T) {
+			p, err := get()
+			if err != nil {
+				t.Fatalf("loading provider: %v", err)
+			}
+			r, ok := p.Resources["keycloak_authentication_execution_config"]
+			if !ok {
+				t.Fatalf("keycloak_authentication_execution_config: resource not registered in provider")
+			}
+
+			ref, ok := r.References["execution_id"]
+			if !ok {
+				t.Fatalf("keycloak_authentication_execution_config: reference %q not configured", "execution_id")
+			}
+			if ref.Extractor != common.PathUUIDExtractor {
+				t.Errorf("keycloak_authentication_execution_config: reference %q extractor = %q, want %q",
+					"execution_id", ref.Extractor, common.PathUUIDExtractor)
+			}
+		})
+	}
+}
