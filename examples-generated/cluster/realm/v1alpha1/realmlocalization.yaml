@@ -11,7 +11,7 @@ spec:
     locale: de
     realmIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: my_realm
+        testing.upbound.io/example-name: realm
     texts:
       Hello: Hallo
 

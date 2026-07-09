@@ -80,7 +80,7 @@ spec:
                   realmId:
                     description: |-
                       The ID of the realm the user profile applies to.
-                      The realm in which the texts exists.
+                      The ID of the realm the localization texts apply to.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -186,7 +186,7 @@ spec:
                   realmId:
                     description: |-
                       The ID of the realm the user profile applies to.
-                      The realm in which the texts exists.
+                      The ID of the realm the localization texts apply to.
                     type: string
                   realmIdRef:
                     description: Reference to a Realm in realm to populate realmId.
@@ -377,7 +377,7 @@ spec:
                   realmId:
                     description: |-
                       The ID of the realm the user profile applies to.
-                      The realm in which the texts exists.
+                      The ID of the realm the localization texts apply to.
                     type: string
                   texts:
                     additionalProperties:
