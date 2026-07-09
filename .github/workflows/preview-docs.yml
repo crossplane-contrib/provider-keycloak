@@ -7,6 +7,8 @@ on:
       - reopened
       - synchronize
       - closed
+    paths:
+      - 'docs/**'
 
 permissions:
   contents: write
