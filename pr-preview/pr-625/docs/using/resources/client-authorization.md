@@ -77,15 +77,10 @@ names. If you want to wire managed Keycloak objects together by reference, use
 the generated reference fields instead, for example:
 
 - `resourcesRefs` / `resourcesSelector`
-- `scopesRefs` / `scopesSelector`
-- `aggregatePoliciesRefs`
 - `clientPoliciesRefs`
-- `clientScopePoliciesRefs`
 - `groupPoliciesRefs`
-- `jsPoliciesRefs`
 - `regexPoliciesRefs`
 - `rolePoliciesRefs`
-- `timePoliciesRefs`
 - `userPoliciesRefs`
 
 Supplying names in the raw `policies`, `resources`, or `scopes` lists causes
