@@ -1,0 +1,17 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: RealmLocalization
+metadata:
+  name: realm-localization-de
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    locale: "de"
+    texts:
+      Hello: "Hallo"
+      loginTitle: "Willkommen"
+  providerConfigRef:
+    name: "keycloak-provider-config"

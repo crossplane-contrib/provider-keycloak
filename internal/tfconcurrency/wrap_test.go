@@ -130,7 +130,7 @@ func TestWrapResourceNoRaceUnderConcurrentLogin(t *testing.T) {
 			ctx,
 			srv.URL, "", "", "admin-cli", "", "master",
 			"admin", "admin", "", "", "", "", "",
-			false, 5, "", true, "", "", "test", false, nil,
+			false, 5, "", true, "", "", "test", false, nil, "",
 		)
 	}
 

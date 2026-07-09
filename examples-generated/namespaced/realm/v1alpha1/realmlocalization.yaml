@@ -1,0 +1,32 @@
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: RealmLocalization
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/realmlocalization
+  labels:
+    testing.upbound.io/example-name: german_texts
+  name: german-texts
+  namespace: upbound-system
+spec:
+  forProvider:
+    locale: de
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    texts:
+      Hello: Hallo
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/realmlocalization
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    realm: my-realm

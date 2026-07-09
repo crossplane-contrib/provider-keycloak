@@ -1,0 +1,19 @@
+# Example: Realm Localization
+# This example demonstrates how to override localized message texts for a realm
+# and locale. Each entry in `texts` maps a message key to its translation.
+# The locale must be enabled as a supported locale on the realm
+# (internationalization must be enabled on the Realm resource).
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: RealmLocalization
+metadata:
+  name: german-texts
+spec:
+  forProvider:
+    realmIdRef:
+      name: basic-realm  # Reference to the Realm resource
+    locale: "de"  # The locale these texts apply to
+    texts:
+      Hello: "Hallo"
+      loginTitle: "Willkommen"
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the ProviderConfig resource

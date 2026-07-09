@@ -51,6 +51,7 @@
 ./dev/demos/namespaced/007-existing-realm.yaml
 ./dev/demos/namespaced/006-realm-events.yaml
 ./dev/demos/namespaced/005-realm-user-profile.yaml
+./dev/demos/namespaced/005-realm-localization.yaml
 ./dev/demos/namespaced/004-realm-keystore-rsa.yaml
 ./dev/demos/namespaced/003-realm-required-action.yaml
 ./dev/demos/namespaced/002-realm-clientscopes.yaml
@@ -106,6 +107,7 @@
 ./dev/demos/basic/007-existing-realm.yaml
 ./dev/demos/basic/006-realm-events.yaml
 ./dev/demos/basic/005-realm-user-profile.yaml
+./dev/demos/basic/005-realm-localization.yaml
 ./dev/demos/basic/004-realm-keystore-rsa.yaml
 ./dev/demos/basic/003-realm-required-action.yaml
 ./dev/demos/basic/002-realm-clientscopes.yaml

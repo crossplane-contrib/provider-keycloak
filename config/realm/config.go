@@ -7,6 +7,7 @@ import (
 
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+	"github.com/pkg/errors"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
@@ -92,6 +93,34 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_realm_user_profile", func(r *config.Resource) {
 		r.ShortGroup = Group
+	})
+
+	p.AddResourceConfigurator("keycloak_realm_localization", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.Kind = "RealmLocalization"
+
+		// The upstream Terraform docs example for this resource is inconsistent:
+		// its manifest references keycloak_realm.my_realm while the dependency
+		// block is declared as keycloak_realm.realm. The example generator derives
+		// the realmIdSelector's example-name label from the manifest's reference
+		// value (-> "my_realm") and the dependency Realm's label from the
+		// dependency map key (-> "realm"), so the generated selector never matches
+		// the generated Realm. The generator reads the manifest from the pre-paved
+		// example, so correct the realm_id there to align both sides on "realm"
+		// (matching the keycloak_realm.realm dependency and the other realm
+		// sub-resource examples).
+		for i := range r.MetaResource.Examples {
+			if err := r.MetaResource.Examples[i].Paved.SetValue("realm_id", "${keycloak_realm.realm.id}"); err != nil {
+				panic(errors.Wrapf(err, "cannot normalize realm_id reference in %s example", r.Name))
+			}
+		}
+
+		// Fix the description of the realm_id field to clarify that it is the ID of the realm
+		// the localization texts apply to. Description of the attribute realm_id in the Terraform
+		// provider is wrong in version 5.8.0 ("The ID of the realm the user profile applies to.")
+		if s, ok := r.TerraformResource.Schema["realm_id"]; ok {
+			s.Description = "The ID of the realm the localization texts apply to."
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_realm_default_client_scopes", func(r *config.Resource) {

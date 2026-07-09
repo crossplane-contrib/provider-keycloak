@@ -287,6 +287,46 @@ func (mg *RealmEvents) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretRe
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this RealmLocalization.
+func (mg *RealmLocalization) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this RealmLocalization.
+func (mg *RealmLocalization) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this RealmLocalization.
+func (mg *RealmLocalization) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this RealmLocalization.
+func (mg *RealmLocalization) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this RealmLocalization.
+func (mg *RealmLocalization) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this RealmLocalization.
+func (mg *RealmLocalization) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this RealmLocalization.
+func (mg *RealmLocalization) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this RealmLocalization.
+func (mg *RealmLocalization) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this RequiredAction.
 func (mg *RequiredAction) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)
