@@ -65,6 +65,7 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 		r.References["execution_id"] = config.Reference{
 			TerraformName: "keycloak_authentication_execution",
+			Extractor:     common.PathUUIDExtractor,
 		}
 	})
 	p.AddResourceConfigurator("keycloak_authentication_bindings", func(r *config.Resource) {

@@ -456,7 +456,7 @@ func (mg *ExecutionConfig) ResolveReferences(ctx context.Context, c client.Reade
 
 		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ExecutionID),
-			Extract:      reference.ExternalName(),
+			Extract:      common.UUIDExtractor(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.ForProvider.ExecutionIDRef,
 			Selector:     mg.Spec.ForProvider.ExecutionIDSelector,
@@ -496,7 +496,7 @@ func (mg *ExecutionConfig) ResolveReferences(ctx context.Context, c client.Reade
 
 		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ExecutionID),
-			Extract:      reference.ExternalName(),
+			Extract:      common.UUIDExtractor(),
 			Namespace:    mg.GetNamespace(),
 			Reference:    mg.Spec.InitProvider.ExecutionIDRef,
 			Selector:     mg.Spec.InitProvider.ExecutionIDSelector,
