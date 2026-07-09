@@ -18,8 +18,8 @@ spec:
     resourceServerIdSelector:
       matchLabels:
         testing.upbound.io/example-name: test
-    resources:
-    - ${keycloak_openid_client_authorization_resource.test.id}
+    resourcesRefs:
+    - name: test
 
 ---
 

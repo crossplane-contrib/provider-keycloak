@@ -322,19 +322,7 @@ func Configure(p *config.Provider) {
 			Extractor:     common.PathUUIDExtractor,
 		}
 
-		r.References["scopes"] = config.Reference{
-			TerraformName: "keycloak_openid_client_authorization_scope",
-			Extractor:     common.PathUUIDExtractor,
-		}
-
 		addSyntheticListReferences(r, "policies",
-			syntheticListReference{
-				name: "aggregate_policies",
-				reference: config.Reference{
-					TerraformName: "keycloak_openid_client_aggregate_policy",
-					Extractor:     common.PathUUIDExtractor,
-				},
-			},
 			syntheticListReference{
 				name: "client_policies",
 				reference: config.Reference{
@@ -343,23 +331,9 @@ func Configure(p *config.Provider) {
 				},
 			},
 			syntheticListReference{
-				name: "client_scope_policies",
-				reference: config.Reference{
-					TerraformName: "keycloak_openid_client_authorization_client_scope_policy",
-					Extractor:     common.PathUUIDExtractor,
-				},
-			},
-			syntheticListReference{
 				name: "group_policies",
 				reference: config.Reference{
 					TerraformName: "keycloak_openid_client_group_policy",
-					Extractor:     common.PathUUIDExtractor,
-				},
-			},
-			syntheticListReference{
-				name: "js_policies",
-				reference: config.Reference{
-					TerraformName: "keycloak_openid_client_js_policy",
 					Extractor:     common.PathUUIDExtractor,
 				},
 			},
@@ -374,13 +348,6 @@ func Configure(p *config.Provider) {
 				name: "role_policies",
 				reference: config.Reference{
 					TerraformName: "keycloak_openid_client_role_policy",
-					Extractor:     common.PathUUIDExtractor,
-				},
-			},
-			syntheticListReference{
-				name: "time_policies",
-				reference: config.Reference{
-					TerraformName: "keycloak_openid_client_time_policy",
 					Extractor:     common.PathUUIDExtractor,
 				},
 			},
