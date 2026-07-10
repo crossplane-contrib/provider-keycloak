@@ -50,6 +50,41 @@ spec:
     name: "keycloak-provider-config"
 ```
 
+### Managing a built-in realm role without deleting it
+
+```yaml
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: offline-access
+spec:
+  managementPolicies: [Observe, Update]
+  deletionPolicy: Orphan
+  forProvider:
+    realmId: "dev"
+    name: "offline_access"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Managing a built-in client role without deleting it
+
+```yaml
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: account-view-profile
+spec:
+  managementPolicies: [Observe, Update]
+  deletionPolicy: Orphan
+  forProvider:
+    realmId: "dev"
+    clientId: "account"
+    name: "view-profile"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
 ## Key Fields
 
 | Field | Description |
