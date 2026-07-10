@@ -69,6 +69,11 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_saml_client_default_scopes":                        config.IdentifierFromProvider,                                           // {realm}/{Client.UUid}
 	"keycloak_saml_client_scope":                                 samlclient.ClientScopeIdentifierFromIdentifyingProperties,               // {UUid}
 	"keycloak_realm_keystore_rsa":                                realm.KeystoreRsaIdentifierFromIdentifyingProperties,                    // {UUid}
+	"keycloak_realm_keystore_aes_generated":                      config.IdentifierFromProvider,                                           // {UUid}
+	"keycloak_realm_keystore_ecdsa_generated":                    config.IdentifierFromProvider,                                           // {UUid}
+	"keycloak_realm_keystore_hmac_generated":                     config.IdentifierFromProvider,                                           // {UUid}
+	"keycloak_realm_keystore_rsa_generated":                      config.IdentifierFromProvider,                                           // {UUid}
+	"keycloak_realm_keystore_java_keystore":                      config.IdentifierFromProvider,                                           // {UUid}
 	"keycloak_realm_user_profile":                                config.IdentifierFromProvider,                                           // {realm}
 	"keycloak_realm_localization":                                config.IdentifierFromProvider,                                           // {realm}/{locale}
 	"keycloak_realm_default_client_scopes":                       config.IdentifierFromProvider,                                           // {realm}
