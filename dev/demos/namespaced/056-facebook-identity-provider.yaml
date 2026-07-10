@@ -1,0 +1,23 @@
+apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+kind: FacebookIdentityProvider
+metadata:
+  name: facebook
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientIdSecretRef:
+      key: client-id
+      name: client-secret
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+    fetchedFields: picture
+    realmRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    syncMode: IMPORT
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
