@@ -1,0 +1,77 @@
+---
+# OpenID client authorization scope
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidClientAuthorizationScope
+metadata:
+  name: manage-users-scope
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    name: manage:users
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+# OpenID client aggregate policy
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidClientAggregatePolicyPermission
+metadata:
+  name: aggregate-policy
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    name: aggregate-policy
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    policies:
+      - admin-policy
+      - user-policy
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+# OpenID client authorization scope policy
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidClientAuthorizationClientScopePolicyPermission
+metadata:
+  name: scope-policy
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    name: scope-policy
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    clientScopesRef:
+      - name: manage-users-scope
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+# OpenID client time policy
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidClientTimePolicyPermission
+metadata:
+  name: time-policy
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    name: time-policy
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    expiresInMinutes: 60
+  providerConfigRef:
+    name: "keycloak-provider-config"

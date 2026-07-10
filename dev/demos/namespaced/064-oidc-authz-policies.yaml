@@ -1,0 +1,94 @@
+---
+# OpenID client authorization scope (namespaced)
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidClientAuthorizationScope
+metadata:
+  name: manage-users-scope
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+      namespace: dev-ns
+    name: manage:users
+    realmRef:
+      name: "dev"
+      namespace: dev-ns
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    namespace: dev-ns
+
+---
+# OpenID client aggregate policy (namespaced)
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidClientAggregatePolicyPermission
+metadata:
+  name: aggregate-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+      namespace: dev-ns
+    name: aggregate-policy
+    realmRef:
+      name: "dev"
+      namespace: dev-ns
+      policy:
+        resolve: Always
+    policies:
+      - admin-policy
+      - user-policy
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    namespace: dev-ns
+
+---
+# OpenID client authorization scope policy (namespaced)
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidClientAuthorizationClientScopePolicyPermission
+metadata:
+  name: scope-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+      namespace: dev-ns
+    name: scope-policy
+    realmRef:
+      name: "dev"
+      namespace: dev-ns
+      policy:
+        resolve: Always
+    clientScopesRef:
+      - name: manage-users-scope
+        namespace: dev-ns
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    namespace: dev-ns
+
+---
+# OpenID client time policy (namespaced)
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidClientTimePolicyPermission
+metadata:
+  name: time-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+      namespace: dev-ns
+    name: time-policy
+    realmRef:
+      name: "dev"
+      namespace: dev-ns
+      policy:
+        resolve: Always
+    expiresInMinutes: 60
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    namespace: dev-ns
