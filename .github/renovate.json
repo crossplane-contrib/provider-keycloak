@@ -134,6 +134,22 @@
       "automerge": true
     },
     {
+      "groupName": "makefile dependencies",
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchFileNames": [
+        "Makefile"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
       "description": "Terraform 1.6+ is not allowed due to BSL licensing",
       "matchDepNames": [
         "hashicorp/terraform"
