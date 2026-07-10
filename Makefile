@@ -191,7 +191,7 @@ run: go.build
 
 # ====================================================================================
 # End to End Testing
-CHAINSAW_VERSION = 0.2.12
+CHAINSAW_VERSION = 0.2.15
 CROSSPLANE_VERSION = 2.0.2
 CROSSPLANE_CLI_VERSION = v2.0.2
 CROSSPLANE_NAMESPACE = crossplane-system
