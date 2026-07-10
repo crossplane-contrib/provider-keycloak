@@ -156,3 +156,103 @@ func (mg *ClientScope) SetProviderConfigReference(r *xpv1.Reference) {
 func (mg *ClientScope) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
+
+// GetCondition of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) GetDeletionPolicy() xpv1.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) GetProviderConfigReference() *xpv1.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) SetProviderConfigReference(r *xpv1.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) GetDeletionPolicy() xpv1.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) GetProviderConfigReference() *xpv1.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) SetProviderConfigReference(r *xpv1.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
