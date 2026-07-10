@@ -1,0 +1,211 @@
+---
+# OpenID protocol mappers comprehensive demo
+# All mapper types that configure how user attributes are mapped in tokens
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidAudienceProtocolMapper
+metadata:
+  name: audience-mapper
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    name: audience
+    protocolMapperName: oidc-audience-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidAudienceResolveProtocolMapper
+metadata:
+  name: audience-resolve-mapper
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    name: audience-resolve
+    protocolMapperName: oidc-audience-resolve-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidFullNameProtocolMapper
+metadata:
+  name: full-name-mapper
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    name: full-name
+    protocolMapperName: oidc-full-name-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidHardcodedClaimProtocolMapper
+metadata:
+  name: hardcoded-claim-mapper
+spec:
+  forProvider:
+    claimName: hardcoded-claim
+    claimValue: "true"
+    clientRef:
+      name: my-client
+    name: hardcoded-claim
+    protocolMapperName: oidc-hardcoded-claim-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidHardcodedRoleProtocolMapper
+metadata:
+  name: hardcoded-role-mapper
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    name: hardcoded-role
+    protocolMapperName: oidc-hardcoded-role-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleRef:
+      name: "user"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidSubProtocolMapper
+metadata:
+  name: sub-mapper
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    name: sub
+    protocolMapperName: oidc-sub-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidUserAttributeProtocolMapper
+metadata:
+  name: user-attribute-mapper
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    claimName: email
+    name: user-attribute
+    protocolMapperName: oidc-user-attribute-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    userAttribute: email
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidUserClientRoleProtocolMapper
+metadata:
+  name: user-client-role-mapper
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    claimName: client-roles
+    name: user-client-role
+    protocolMapperName: oidc-user-client-role-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidUserPropertyProtocolMapper
+metadata:
+  name: user-property-mapper
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    claimName: username
+    name: user-property
+    protocolMapperName: oidc-user-property-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    userProperty: username
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidUserRealmRoleProtocolMapper
+metadata:
+  name: user-realm-role-mapper
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    claimName: realm-roles
+    name: user-realm-role
+    protocolMapperName: oidc-user-realm-role-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: OpenidUserSessionNoteProtocolMapper
+metadata:
+  name: user-session-note-mapper
+spec:
+  forProvider:
+    clientRef:
+      name: my-client
+    claimName: session-note
+    name: user-session-note
+    protocolMapperName: oidc-user-session-note-mapper
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    sessionNote: auth_time
+  providerConfigRef:
+    name: "keycloak-provider-config"
