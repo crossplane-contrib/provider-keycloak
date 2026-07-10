@@ -92,6 +92,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_ldap_msad_user_account_control_mapper":             ldap.MsadUserAccountControlMapperIdentifierFromIdentifyingProperties,    // {UUid}
 	"keycloak_ldap_msad_lds_user_account_control_mapper":         ldap.MsadLdsUserAccountControlMapperIdentifierFromIdentifyingProperties, // {UUid}
 	"keycloak_ldap_hardcoded_attribute_mapper":                   ldap.HardcodedAttributeMapperIdentifierFromIdentifyingProperties,        // {UUid}
+	"keycloak_hardcoded_attribute_mapper":                        ldap.UserModelHardcodedAttributeMapperIdentifierFromIdentifyingProperties, // {UUid}
 	"keycloak_ldap_full_name_mapper":                             ldap.FullNameMapperIdentifierFromIdentifyingProperties,                  // {UUid}
 	"keycloak_ldap_custom_mapper":                                ldap.CustomMapperIdentifierFromIdentifyingProperties,                    // {UUid}
 	"keycloak_workflow":                                          workflow.IdentifierFromIdentifyingProperties,                            // {UUid}
