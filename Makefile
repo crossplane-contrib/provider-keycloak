@@ -192,8 +192,8 @@ run: go.build
 # ====================================================================================
 # End to End Testing
 CHAINSAW_VERSION = 0.2.12
-CROSSPLANE_VERSION = 2.0.2
-CROSSPLANE_CLI_VERSION = v2.0.2
+CROSSPLANE_VERSION = 2.3.3
+CROSSPLANE_CLI_VERSION = v2.3.3
 CROSSPLANE_NAMESPACE = crossplane-system
 CROSSPLANE_CHART_DIR := $(TOOLS_HOST_DIR)/crossplane-chart-$(CROSSPLANE_VERSION)
 CROSSPLANE_CHART := $(CROSSPLANE_CHART_DIR)/Chart.yaml
