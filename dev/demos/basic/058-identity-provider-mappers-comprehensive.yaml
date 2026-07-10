@@ -1,74 +1,81 @@
 ---
-# Attribute importer mapper - imports attributes from identity provider
+# Importer mapper - imports IdP claim into user attribute
 apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
-kind: AttributeImporterIdentityProviderMapper
+kind: ImporterIdentityProviderMapper
 metadata:
   name: import-email-attribute
 spec:
   forProvider:
+    claimName: email
+    extraConfig:
+      syncMode: INHERIT
     identityProviderAlias: my-idp
     name: import-email-from-idp
     realmRef:
       name: "dev"
       policy:
         resolve: Always
-    userAttributeName: email
+    userAttribute: email
   providerConfigRef:
     name: "keycloak-provider-config"
 
 ---
-# Attribute to role mapper - maps IdP attributes to Keycloak roles
+# To role mapper - maps IdP claim/value to a realm role
 apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
-kind: AttributeToRoleIdentityProviderMapper
+kind: ToRoleIdentityProviderMapper
 metadata:
   name: map-idp-attribute-to-role
 spec:
   forProvider:
-    attributeValue: admin
+    claimName: role
+    claimValue: admin
+    extraConfig:
+      syncMode: INHERIT
     identityProviderAlias: my-idp
     name: map-attribute-admin-to-role
     realmRef:
       name: "dev"
       policy:
         resolve: Always
-    roleRef:
-      name: admin
-    syncMode: INHERIT
-    userAttributeName: role
+    role: test
   providerConfigRef:
     name: "keycloak-provider-config"
 
 ---
-# Hardcoded attribute mapper - adds hardcoded attributes to user
+# Attribute mapper - adds hardcoded attribute
 apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
-kind: HardcodedAttributeIdentityProviderMapper
+kind: AttributeIdentityProviderMapper
 metadata:
   name: hardcode-department-attribute
 spec:
   forProvider:
     attributeName: department
     attributeValue: engineering
+    extraConfig:
+      syncMode: INHERIT
     identityProviderAlias: my-idp
     name: hardcode-department
     realmRef:
       name: "dev"
       policy:
         resolve: Always
+    userSession: true
   providerConfigRef:
     name: "keycloak-provider-config"
 
 ---
-# Hardcoded group mapper - assigns users to hardcoded group
+# Group mapper - assigns users to an existing group
 apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
-kind: HardcodedGroupIdentityProviderMapper
+kind: GroupIdentityProviderMapper
 metadata:
   name: assign-employees-group
 spec:
   forProvider:
-    groupRef:
-      name: employees
+    extraConfig:
+      syncMode: INHERIT
+    group: test
     identityProviderAlias: my-idp
-    name: assign-to-employees
+    name: assign-to-test-group
     realmRef:
       name: "dev"
       policy:
@@ -77,32 +84,35 @@ spec:
     name: "keycloak-provider-config"
 
 ---
-# Hardcoded role mapper - assigns hardcoded role to users
+# Role mapper - assigns an existing realm role
 apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
-kind: HardcodedRoleIdentityProviderMapper
+kind: RoleIdentityProviderMapper
 metadata:
   name: hardcode-user-role
 spec:
   forProvider:
+    extraConfig:
+      syncMode: INHERIT
     identityProviderAlias: my-idp
     name: hardcode-user-role
     realmRef:
       name: "dev"
       policy:
         resolve: Always
-    roleRef:
-      name: "user"
+    role: test
   providerConfigRef:
     name: "keycloak-provider-config"
 
 ---
 # User template importer - imports user data using template
 apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
-kind: UserTemplateImporterIdentityProviderMapper
+kind: TemplateImporterIdentityProviderMapper
 metadata:
   name: import-user-template
 spec:
   forProvider:
+    extraConfig:
+      syncMode: INHERIT
     identityProviderAlias: my-idp
     name: import-user-template
     realmRef:
