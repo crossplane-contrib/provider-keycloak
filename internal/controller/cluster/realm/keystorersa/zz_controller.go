@@ -18,13 +18,11 @@ import (
 	"github.com/crossplane/upjet/v2/pkg/controller/handler"
 	tjcontroller "github.com/crossplane/upjet/v2/pkg/controller"
 	"github.com/crossplane/upjet/v2/pkg/metrics"
-	"github.com/crossplane/upjet/v2/pkg/terraform"
 	"github.com/pkg/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	features "github.com/crossplane-contrib/provider-keycloak/internal/features"
-v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1"
-
+	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1"
 )
 
 // SetupWebhookWithManager registers the conversion webhook for KeystoreRsa.
