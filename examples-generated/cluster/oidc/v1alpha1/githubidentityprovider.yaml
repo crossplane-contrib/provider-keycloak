@@ -1,0 +1,40 @@
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: GithubIdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: oidc/v1alpha1/githubidentityprovider
+  labels:
+    testing.upbound.io/example-name: github
+  name: github
+spec:
+  forProvider:
+    clientIdSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    extraConfig:
+      myCustomConfigKey: myValue
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    syncMode: IMPORT
+    trustEmail: true
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: oidc/v1alpha1/githubidentityprovider
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
