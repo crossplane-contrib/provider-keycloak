@@ -10,11 +10,13 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 )
 
+const shortGroupOIDC = "oidc"
+
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_oidc_identity_provider", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
-		r.ShortGroup = "oidc"
+		r.ShortGroup = shortGroupOIDC
 		r.References["realm"] = config.Reference{
 			TerraformName: "keycloak_realm",
 		}
@@ -36,7 +38,7 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_oidc_google_identity_provider", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
-		r.ShortGroup = "oidc"
+		r.ShortGroup = shortGroupOIDC
 		r.References["realm"] = config.Reference{
 			TerraformName: "keycloak_realm",
 		}
@@ -93,7 +95,7 @@ func Configure(p *config.Provider) {
 	})
 
 	p.AddResourceConfigurator("keycloak_user_template_importer_identity_provider_mapper", func(r *config.Resource) {
-		r.ShortGroup = "oidc"
+		r.ShortGroup = shortGroupOIDC
 	})
 }
 
