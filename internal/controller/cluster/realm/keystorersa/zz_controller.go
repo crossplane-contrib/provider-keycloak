@@ -15,16 +15,14 @@ import (
 	"github.com/crossplane/crossplane-runtime/v2/pkg/reconciler/managed"
 	xpresource "github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 	"github.com/crossplane/crossplane-runtime/v2/pkg/statemetrics"
-	"github.com/crossplane/upjet/v2/pkg/controller/handler"
 	tjcontroller "github.com/crossplane/upjet/v2/pkg/controller"
+	"github.com/crossplane/upjet/v2/pkg/controller/handler"
 	"github.com/crossplane/upjet/v2/pkg/metrics"
-	"github.com/crossplane/upjet/v2/pkg/terraform"
 	"github.com/pkg/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 
+	v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1"
 	features "github.com/crossplane-contrib/provider-keycloak/internal/features"
-v1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1"
-
 )
 
 // SetupWebhookWithManager registers the conversion webhook for KeystoreRsa.
@@ -54,21 +52,21 @@ func Setup(mgr ctrl.Manager, o tjcontroller.Options) error {
 	ac := tjcontroller.NewAPICallbacks(mgr, xpresource.ManagedKind(v1alpha1.KeystoreRsa_GroupVersionKind), tjcontroller.WithEventHandler(eventHandler), tjcontroller.WithStatusUpdates(false))
 	opts := []managed.ReconcilerOption{
 		managed.WithExternalConnecter(
-              tjcontroller.NewTerraformPluginSDKAsyncConnector(mgr.GetClient(), o.OperationTrackerStore, o.SetupFn, o.Provider.Resources["keycloak_realm_keystore_rsa"],
-                tjcontroller.WithTerraformPluginSDKAsyncLogger(o.Logger),
-                tjcontroller.WithTerraformPluginSDKAsyncConnectorEventHandler(eventHandler),
-                tjcontroller.WithTerraformPluginSDKAsyncCallbackProvider(ac),
-                tjcontroller.WithTerraformPluginSDKAsyncMetricRecorder(metrics.NewMetricRecorder(v1alpha1.KeystoreRsa_GroupVersionKind, mgr, o.PollInterval)),
-                tjcontroller.WithTerraformPluginSDKAsyncManagementPolicies(o.Features.Enabled(features.EnableBetaManagementPolicies)))),
+			tjcontroller.NewTerraformPluginSDKAsyncConnector(mgr.GetClient(), o.OperationTrackerStore, o.SetupFn, o.Provider.Resources["keycloak_realm_keystore_rsa"],
+				tjcontroller.WithTerraformPluginSDKAsyncLogger(o.Logger),
+				tjcontroller.WithTerraformPluginSDKAsyncConnectorEventHandler(eventHandler),
+				tjcontroller.WithTerraformPluginSDKAsyncCallbackProvider(ac),
+				tjcontroller.WithTerraformPluginSDKAsyncMetricRecorder(metrics.NewMetricRecorder(v1alpha1.KeystoreRsa_GroupVersionKind, mgr, o.PollInterval)),
+				tjcontroller.WithTerraformPluginSDKAsyncManagementPolicies(o.Features.Enabled(features.EnableBetaManagementPolicies)))),
 		managed.WithLogger(o.Logger.WithValues("controller", name)),
 		managed.WithRecorder(event.NewAPIRecorder(mgr.GetEventRecorderFor(name))),
 		managed.WithFinalizer(tjcontroller.NewOperationTrackerFinalizer(o.OperationTrackerStore, xpresource.NewAPIFinalizer(mgr.GetClient(), managed.FinalizerName))),
-		managed.WithTimeout(3*time.Minute),
+		managed.WithTimeout(3 * time.Minute),
 		managed.WithInitializers(initializers),
 		managed.WithPollInterval(o.PollInterval),
 	}
 	if o.PollJitter != 0 {
-	    opts = append(opts, managed.WithPollJitterHook(o.PollJitter))
+		opts = append(opts, managed.WithPollJitterHook(o.PollJitter))
 	}
 	if o.Features.Enabled(features.EnableBetaManagementPolicies) {
 		opts = append(opts, managed.WithManagementPolicies())
