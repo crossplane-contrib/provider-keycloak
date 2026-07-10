@@ -60,6 +60,27 @@ spec:
     name: "keycloak-provider-config"
 ```
 
+### Managing another built-in client (account-console)
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: account-console
+spec:
+  managementPolicies: [Observe, Update]
+  deletionPolicy: Orphan
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    accessType: "PUBLIC"
+    clientId: "account-console"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
 ### Service account client
 
 ```yaml
