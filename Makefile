@@ -57,7 +57,7 @@ GO_SUBDIRS += cmd internal apis generate
 
 # ====================================================================================
 # Setup Kubernetes tools
-KUBECTL_VERSION ?= v1.32.2
+KUBECTL_VERSION ?= v1.36.2
 KIND_VERSION = v0.32.0
 UP_VERSION = v0.38.4
 UP_CHANNEL = stable
