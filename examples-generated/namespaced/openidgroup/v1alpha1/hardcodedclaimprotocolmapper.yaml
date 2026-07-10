@@ -1,0 +1,59 @@
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: HardcodedClaimProtocolMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/hardcodedclaimprotocolmapper
+  labels:
+    testing.upbound.io/example-name: hardcoded_claim_mapper
+  name: hardcoded-claim-mapper
+  namespace: upbound-system
+spec:
+  forProvider:
+    claimName: foo
+    claimValue: bar
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: openid_client
+    name: hardcoded-claim-mapper
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/hardcodedclaimprotocolmapper
+  labels:
+    testing.upbound.io/example-name: openid_client
+  name: openid-client
+  namespace: upbound-system
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientId: client
+    enabled: true
+    name: client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    validRedirectUris:
+    - http://localhost:8080/openid-callback
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/hardcodedclaimprotocolmapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
