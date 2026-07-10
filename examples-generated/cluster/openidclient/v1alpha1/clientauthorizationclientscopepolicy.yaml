@@ -1,24 +1,26 @@
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: ClientAuthorizationPermission
+kind: ClientAuthorizationClientScopePolicy
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationpermission
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationclientscopepolicy
   labels:
     testing.upbound.io/example-name: test
   name: test
 spec:
   forProvider:
-    name: permission_name
-    policies:
-    - ${data.keycloak_openid_client_authorization_policy.default.id}
+    decisionStrategy: AFFIRMATIVE
+    description: test
+    logic: POSITIVE
+    name: test_policy_single
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
     resourceServerIdSelector:
       matchLabels:
         testing.upbound.io/example-name: test
-    resourcesRefs:
-    - name: test
+    scope:
+    - id: ${keycloak_openid_client_scope.test1.id}
+      required: false
 
 ---
 
@@ -26,7 +28,7 @@ apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: Client
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationpermission
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationclientscopepolicy
   labels:
     testing.upbound.io/example-name: test
   name: test
@@ -44,44 +46,38 @@ spec:
 ---
 
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: ClientAuthorizationResource
+kind: ClientScope
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationpermission
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationclientscopepolicy
   labels:
-    testing.upbound.io/example-name: test
-  name: test
+    testing.upbound.io/example-name: test1
+  name: test1
 spec:
   forProvider:
-    name: resource_name
+    description: test1
+    name: test1
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
-    resourceServerIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: test
-    uris:
-    - /endpoint/*
 
 ---
 
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: ClientAuthorizationScope
+kind: ClientScope
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationpermission
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationclientscopepolicy
   labels:
-    testing.upbound.io/example-name: test
-  name: test
+    testing.upbound.io/example-name: test2
+  name: test2
 spec:
   forProvider:
-    name: scope_name
+    description: test2
+    name: test2
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
-    resourceServerIdSelector:
-      matchLabels:
-        testing.upbound.io/example-name: test
 
 ---
 
@@ -89,7 +85,7 @@ apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationpermission
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationclientscopepolicy
   labels:
     testing.upbound.io/example-name: realm
   name: realm

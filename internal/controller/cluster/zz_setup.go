@@ -41,8 +41,11 @@ import (
 	googleidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/googleidentityprovider"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/identityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/client"
+	clientaggregatepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientaggregatepolicy"
+	clientauthorizationclientscopepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientauthorizationclientscopepolicy"
 	clientauthorizationpermission "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientauthorizationpermission"
 	clientauthorizationresource "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientauthorizationresource"
+	clientauthorizationscope "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientauthorizationscope"
 	clientclientpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientclientpolicy"
 	clientdefaultscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientdefaultscopes"
 	clientgrouppolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientgrouppolicy"
@@ -53,6 +56,7 @@ import (
 	clientscope "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientscope"
 	clientserviceaccountrealmrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientserviceaccountrealmrole"
 	clientserviceaccountrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientserviceaccountrole"
+	clienttimepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clienttimepolicy"
 	clientuserpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientuserpolicy"
 	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/groupmembershipprotocolmapper"
 	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/organization/organization"
@@ -116,8 +120,11 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		googleidentityprovider.Setup,
 		identityprovider.Setup,
 		client.Setup,
+		clientaggregatepolicy.Setup,
+		clientauthorizationclientscopepolicy.Setup,
 		clientauthorizationpermission.Setup,
 		clientauthorizationresource.Setup,
+		clientauthorizationscope.Setup,
 		clientclientpolicy.Setup,
 		clientdefaultscopes.Setup,
 		clientgrouppolicy.Setup,
@@ -128,6 +135,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientscope.Setup,
 		clientserviceaccountrealmrole.Setup,
 		clientserviceaccountrole.Setup,
+		clienttimepolicy.Setup,
 		clientuserpolicy.Setup,
 		groupmembershipprotocolmapper.Setup,
 		organization.Setup,
@@ -197,8 +205,11 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		googleidentityprovider.SetupGated,
 		identityprovider.SetupGated,
 		client.SetupGated,
+		clientaggregatepolicy.SetupGated,
+		clientauthorizationclientscopepolicy.SetupGated,
 		clientauthorizationpermission.SetupGated,
 		clientauthorizationresource.SetupGated,
+		clientauthorizationscope.SetupGated,
 		clientclientpolicy.SetupGated,
 		clientdefaultscopes.SetupGated,
 		clientgrouppolicy.SetupGated,
@@ -209,6 +220,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientscope.SetupGated,
 		clientserviceaccountrealmrole.SetupGated,
 		clientserviceaccountrole.SetupGated,
+		clienttimepolicy.SetupGated,
 		clientuserpolicy.SetupGated,
 		groupmembershipprotocolmapper.SetupGated,
 		organization.SetupGated,
@@ -277,8 +289,11 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		googleidentityprovider.SetupWebhookWithManager,
 		identityprovider.SetupWebhookWithManager,
 		client.SetupWebhookWithManager,
+		clientaggregatepolicy.SetupWebhookWithManager,
+		clientauthorizationclientscopepolicy.SetupWebhookWithManager,
 		clientauthorizationpermission.SetupWebhookWithManager,
 		clientauthorizationresource.SetupWebhookWithManager,
+		clientauthorizationscope.SetupWebhookWithManager,
 		clientclientpolicy.SetupWebhookWithManager,
 		clientdefaultscopes.SetupWebhookWithManager,
 		clientgrouppolicy.SetupWebhookWithManager,
@@ -289,6 +304,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientscope.SetupWebhookWithManager,
 		clientserviceaccountrealmrole.SetupWebhookWithManager,
 		clientserviceaccountrole.SetupWebhookWithManager,
+		clienttimepolicy.SetupWebhookWithManager,
 		clientuserpolicy.SetupWebhookWithManager,
 		groupmembershipprotocolmapper.SetupWebhookWithManager,
 		organization.SetupWebhookWithManager,

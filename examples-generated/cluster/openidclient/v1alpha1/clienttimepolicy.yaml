@@ -1,0 +1,57 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientTimePolicy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clienttimepolicy
+  labels:
+    testing.upbound.io/example-name: business_hours
+  name: business-hours
+spec:
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    hour: "09"
+    hourEnd: "17"
+    logic: POSITIVE
+    name: business_hours_policy
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clienttimepolicy
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    authorization:
+    - policyEnforcementMode: ENFORCING
+    clientId: client_id
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    serviceAccountsEnabled: true
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clienttimepolicy
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
