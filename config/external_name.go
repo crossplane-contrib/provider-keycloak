@@ -64,6 +64,12 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_spiffe_identity_provider":                          oidc.IdentifierFromIdentifyingProperties,                                // {alias}
 	"keycloak_saml_identity_provider":                            saml.IdentifierFromIdentifyingProperties,                                // {alias}
 	"keycloak_custom_identity_provider_mapper":                   identityprovider.IdentifierFromIdentifyingProperties,                    // {UUid}
+	"keycloak_attribute_importer_identity_provider_mapper":       identityprovider.IdentifierFromIdentifyingProperties,                    // {UUid}
+	"keycloak_attribute_to_role_identity_provider_mapper":        identityprovider.IdentifierFromIdentifyingProperties,                    // {UUid}
+	"keycloak_hardcoded_attribute_identity_provider_mapper":      identityprovider.IdentifierFromIdentifyingProperties,                    // {UUid}
+	"keycloak_hardcoded_group_identity_provider_mapper":          identityprovider.IdentifierFromIdentifyingProperties,                    // {UUid}
+	"keycloak_hardcoded_role_identity_provider_mapper":           identityprovider.IdentifierFromIdentifyingProperties,                    // {UUid}
+	"keycloak_user_template_importer_identity_provider_mapper":   identityprovider.IdentifierFromIdentifyingProperties,                    // {UUid}
 	"keycloak_identity_provider_token_exchange_scope_permission": config.IdentifierFromProvider,                                           // {realm}/{provider_alias}
 	"keycloak_saml_client":                                       samlclient.ClientIdentifierFromIdentifyingProperties,                    // {UUid}
 	"keycloak_saml_client_default_scopes":                        config.IdentifierFromProvider,                                           // {realm}/{Client.UUid}

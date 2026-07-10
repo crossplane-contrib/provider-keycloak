@@ -1,0 +1,63 @@
+apiVersion: identityprovider.keycloak.m.crossplane.io/v1alpha1
+kind: ImporterIdentityProviderMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/importeridentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: oidc
+  name: oidc
+  namespace: upbound-system
+spec:
+  forProvider:
+    claimName: my-email-claim
+    extraConfig:
+      syncMode: INHERIT
+    identityProviderAlias: my-idp
+    name: email-attribute-importer
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    userAttribute: email
+
+---
+
+apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/importeridentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: oidc
+  name: oidc
+  namespace: upbound-system
+spec:
+  forProvider:
+    alias: oidc
+    authorizationUrl: https://example.com/auth
+    clientIdSecretRef:
+      key: example-key
+      name: example-secret
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+    defaultScopes: openid random profile
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    tokenUrl: https://example.com/token
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/importeridentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

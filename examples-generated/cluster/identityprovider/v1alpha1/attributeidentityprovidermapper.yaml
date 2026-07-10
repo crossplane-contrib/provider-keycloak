@@ -1,0 +1,62 @@
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: AttributeIdentityProviderMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/attributeidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: oidc
+  name: oidc
+spec:
+  forProvider:
+    attributeName: attribute
+    attributeValue: value
+    extraConfig:
+      syncMode: INHERIT
+    identityProviderAlias: my-idp
+    name: hardcodedUserSessionAttribute
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    userSession: true
+
+---
+
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/attributeidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: oidc
+  name: oidc
+spec:
+  forProvider:
+    alias: my-idp
+    authorizationUrl: https://authorizationurl.com
+    clientIdSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    tokenUrl: https://tokenurl.com
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/attributeidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

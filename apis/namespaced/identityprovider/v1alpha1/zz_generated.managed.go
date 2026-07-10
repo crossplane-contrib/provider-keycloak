@@ -7,6 +7,86 @@ package v1alpha1
 
 import xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
 
+// GetCondition of this AttributeIdentityProviderMapper.
+func (mg *AttributeIdentityProviderMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this AttributeIdentityProviderMapper.
+func (mg *AttributeIdentityProviderMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this AttributeIdentityProviderMapper.
+func (mg *AttributeIdentityProviderMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this AttributeIdentityProviderMapper.
+func (mg *AttributeIdentityProviderMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this AttributeIdentityProviderMapper.
+func (mg *AttributeIdentityProviderMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this AttributeIdentityProviderMapper.
+func (mg *AttributeIdentityProviderMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this AttributeIdentityProviderMapper.
+func (mg *AttributeIdentityProviderMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this AttributeIdentityProviderMapper.
+func (mg *AttributeIdentityProviderMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this GroupIdentityProviderMapper.
+func (mg *GroupIdentityProviderMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this GroupIdentityProviderMapper.
+func (mg *GroupIdentityProviderMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this GroupIdentityProviderMapper.
+func (mg *GroupIdentityProviderMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this GroupIdentityProviderMapper.
+func (mg *GroupIdentityProviderMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this GroupIdentityProviderMapper.
+func (mg *GroupIdentityProviderMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this GroupIdentityProviderMapper.
+func (mg *GroupIdentityProviderMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this GroupIdentityProviderMapper.
+func (mg *GroupIdentityProviderMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this GroupIdentityProviderMapper.
+func (mg *GroupIdentityProviderMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this IdentityProviderMapper.
 func (mg *IdentityProviderMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)
@@ -44,6 +124,46 @@ func (mg *IdentityProviderMapper) SetProviderConfigReference(r *xpv1.ProviderCon
 
 // SetWriteConnectionSecretToReference of this IdentityProviderMapper.
 func (mg *IdentityProviderMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this ImporterIdentityProviderMapper.
+func (mg *ImporterIdentityProviderMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this ImporterIdentityProviderMapper.
+func (mg *ImporterIdentityProviderMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this ImporterIdentityProviderMapper.
+func (mg *ImporterIdentityProviderMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this ImporterIdentityProviderMapper.
+func (mg *ImporterIdentityProviderMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this ImporterIdentityProviderMapper.
+func (mg *ImporterIdentityProviderMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this ImporterIdentityProviderMapper.
+func (mg *ImporterIdentityProviderMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this ImporterIdentityProviderMapper.
+func (mg *ImporterIdentityProviderMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this ImporterIdentityProviderMapper.
+func (mg *ImporterIdentityProviderMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
@@ -167,6 +287,46 @@ func (mg *ProviderTokenExchangeScopePermission) SetWriteConnectionSecretToRefere
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this RoleIdentityProviderMapper.
+func (mg *RoleIdentityProviderMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this RoleIdentityProviderMapper.
+func (mg *RoleIdentityProviderMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this RoleIdentityProviderMapper.
+func (mg *RoleIdentityProviderMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this RoleIdentityProviderMapper.
+func (mg *RoleIdentityProviderMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this RoleIdentityProviderMapper.
+func (mg *RoleIdentityProviderMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this RoleIdentityProviderMapper.
+func (mg *RoleIdentityProviderMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this RoleIdentityProviderMapper.
+func (mg *RoleIdentityProviderMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this RoleIdentityProviderMapper.
+func (mg *RoleIdentityProviderMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this SpiffeIdentityProvider.
 func (mg *SpiffeIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)
@@ -204,5 +364,85 @@ func (mg *SpiffeIdentityProvider) SetProviderConfigReference(r *xpv1.ProviderCon
 
 // SetWriteConnectionSecretToReference of this SpiffeIdentityProvider.
 func (mg *SpiffeIdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this TemplateImporterIdentityProviderMapper.
+func (mg *TemplateImporterIdentityProviderMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this TemplateImporterIdentityProviderMapper.
+func (mg *TemplateImporterIdentityProviderMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this TemplateImporterIdentityProviderMapper.
+func (mg *TemplateImporterIdentityProviderMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this TemplateImporterIdentityProviderMapper.
+func (mg *TemplateImporterIdentityProviderMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this TemplateImporterIdentityProviderMapper.
+func (mg *TemplateImporterIdentityProviderMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this TemplateImporterIdentityProviderMapper.
+func (mg *TemplateImporterIdentityProviderMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this TemplateImporterIdentityProviderMapper.
+func (mg *TemplateImporterIdentityProviderMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this TemplateImporterIdentityProviderMapper.
+func (mg *TemplateImporterIdentityProviderMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this ToRoleIdentityProviderMapper.
+func (mg *ToRoleIdentityProviderMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this ToRoleIdentityProviderMapper.
+func (mg *ToRoleIdentityProviderMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this ToRoleIdentityProviderMapper.
+func (mg *ToRoleIdentityProviderMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this ToRoleIdentityProviderMapper.
+func (mg *ToRoleIdentityProviderMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this ToRoleIdentityProviderMapper.
+func (mg *ToRoleIdentityProviderMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this ToRoleIdentityProviderMapper.
+func (mg *ToRoleIdentityProviderMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this ToRoleIdentityProviderMapper.
+func (mg *ToRoleIdentityProviderMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this ToRoleIdentityProviderMapper.
+func (mg *ToRoleIdentityProviderMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }

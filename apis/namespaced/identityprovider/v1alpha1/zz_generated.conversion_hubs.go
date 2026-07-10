@@ -7,7 +7,16 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 // Hub marks this type as a conversion hub.
+func (tr *AttributeIdentityProviderMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *GroupIdentityProviderMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *IdentityProviderMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ImporterIdentityProviderMapper) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *KubernetesIdentityProvider) Hub() {}
@@ -19,4 +28,13 @@ func (tr *OidcOpenShiftV4IdentityProvider) Hub() {}
 func (tr *ProviderTokenExchangeScopePermission) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *RoleIdentityProviderMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *SpiffeIdentityProvider) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *TemplateImporterIdentityProviderMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ToRoleIdentityProviderMapper) Hub() {}

@@ -22,11 +22,17 @@ import (
 	memberships "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/group/memberships"
 	permissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/group/permissions"
 	rolesgroup "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/group/roles"
+	attributeidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/attributeidentityprovidermapper"
+	groupidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/groupidentityprovidermapper"
 	identityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/identityprovidermapper"
+	importeridentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/importeridentityprovidermapper"
 	kubernetesidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/kubernetesidentityprovider"
 	oidcopenshiftv4identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/oidcopenshiftv4identityprovider"
 	providertokenexchangescopepermission "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/providertokenexchangescopepermission"
+	roleidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/roleidentityprovidermapper"
 	spiffeidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/spiffeidentityprovider"
+	templateimporteridentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/templateimporteridentityprovidermapper"
+	toroleidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/toroleidentityprovidermapper"
 	custommapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/custommapper"
 	fullnamemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/fullnamemapper"
 	groupmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/groupmapper"
@@ -97,11 +103,17 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		memberships.Setup,
 		permissions.Setup,
 		rolesgroup.Setup,
+		attributeidentityprovidermapper.Setup,
+		groupidentityprovidermapper.Setup,
 		identityprovidermapper.Setup,
+		importeridentityprovidermapper.Setup,
 		kubernetesidentityprovider.Setup,
 		oidcopenshiftv4identityprovider.Setup,
 		providertokenexchangescopepermission.Setup,
+		roleidentityprovidermapper.Setup,
 		spiffeidentityprovider.Setup,
+		templateimporteridentityprovidermapper.Setup,
+		toroleidentityprovidermapper.Setup,
 		custommapper.Setup,
 		fullnamemapper.Setup,
 		groupmapper.Setup,
@@ -178,11 +190,17 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		memberships.SetupGated,
 		permissions.SetupGated,
 		rolesgroup.SetupGated,
+		attributeidentityprovidermapper.SetupGated,
+		groupidentityprovidermapper.SetupGated,
 		identityprovidermapper.SetupGated,
+		importeridentityprovidermapper.SetupGated,
 		kubernetesidentityprovider.SetupGated,
 		oidcopenshiftv4identityprovider.SetupGated,
 		providertokenexchangescopepermission.SetupGated,
+		roleidentityprovidermapper.SetupGated,
 		spiffeidentityprovider.SetupGated,
+		templateimporteridentityprovidermapper.SetupGated,
+		toroleidentityprovidermapper.SetupGated,
 		custommapper.SetupGated,
 		fullnamemapper.SetupGated,
 		groupmapper.SetupGated,
@@ -258,11 +276,17 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		memberships.SetupWebhookWithManager,
 		permissions.SetupWebhookWithManager,
 		rolesgroup.SetupWebhookWithManager,
+		attributeidentityprovidermapper.SetupWebhookWithManager,
+		groupidentityprovidermapper.SetupWebhookWithManager,
 		identityprovidermapper.SetupWebhookWithManager,
+		importeridentityprovidermapper.SetupWebhookWithManager,
 		kubernetesidentityprovider.SetupWebhookWithManager,
 		oidcopenshiftv4identityprovider.SetupWebhookWithManager,
 		providertokenexchangescopepermission.SetupWebhookWithManager,
+		roleidentityprovidermapper.SetupWebhookWithManager,
 		spiffeidentityprovider.SetupWebhookWithManager,
+		templateimporteridentityprovidermapper.SetupWebhookWithManager,
+		toroleidentityprovidermapper.SetupWebhookWithManager,
 		custommapper.SetupWebhookWithManager,
 		fullnamemapper.SetupWebhookWithManager,
 		groupmapper.SetupWebhookWithManager,
