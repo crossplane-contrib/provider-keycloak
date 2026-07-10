@@ -38,6 +38,8 @@ import (
 	rolemapperldap "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/rolemapper"
 	userattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/userattributemapper"
 	userfederation "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/userfederation"
+	facebookidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/facebookidentityprovider"
+	githubidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/githubidentityprovider"
 	googleidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/googleidentityprovider"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/identityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/client"
@@ -113,6 +115,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		rolemapperldap.Setup,
 		userattributemapper.Setup,
 		userfederation.Setup,
+		facebookidentityprovider.Setup,
+		githubidentityprovider.Setup,
 		googleidentityprovider.Setup,
 		identityprovider.Setup,
 		client.Setup,
@@ -194,6 +198,8 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		rolemapperldap.SetupGated,
 		userattributemapper.SetupGated,
 		userfederation.SetupGated,
+		facebookidentityprovider.SetupGated,
+		githubidentityprovider.SetupGated,
 		googleidentityprovider.SetupGated,
 		identityprovider.SetupGated,
 		client.SetupGated,
@@ -274,6 +280,8 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		rolemapperldap.SetupWebhookWithManager,
 		userattributemapper.SetupWebhookWithManager,
 		userfederation.SetupWebhookWithManager,
+		facebookidentityprovider.SetupWebhookWithManager,
+		githubidentityprovider.SetupWebhookWithManager,
 		googleidentityprovider.SetupWebhookWithManager,
 		identityprovider.SetupWebhookWithManager,
 		client.SetupWebhookWithManager,
