@@ -1,0 +1,135 @@
+---
+# Attribute importer mapper - imports attributes from identity provider
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: AttributeImporterIdentityProviderMapper
+metadata:
+  name: import-email-attribute
+  namespace: dev-ns
+spec:
+  forProvider:
+    identityProviderAlias: my-idp
+    name: import-email-from-idp
+    realmRef:
+      name: "dev"
+      namespace: dev-ns
+      policy:
+        resolve: Always
+    userAttributeName: email
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    namespace: dev-ns
+
+---
+# Attribute to role mapper - maps IdP attributes to Keycloak roles
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: AttributeToRoleIdentityProviderMapper
+metadata:
+  name: map-idp-attribute-to-role
+  namespace: dev-ns
+spec:
+  forProvider:
+    attributeValue: admin
+    identityProviderAlias: my-idp
+    name: map-attribute-admin-to-role
+    realmRef:
+      name: "dev"
+      namespace: dev-ns
+      policy:
+        resolve: Always
+    roleRef:
+      name: admin
+      namespace: dev-ns
+    syncMode: INHERIT
+    userAttributeName: role
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    namespace: dev-ns
+
+---
+# Hardcoded attribute mapper - adds hardcoded attributes to user
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: HardcodedAttributeIdentityProviderMapper
+metadata:
+  name: hardcode-department-attribute
+  namespace: dev-ns
+spec:
+  forProvider:
+    attributeName: department
+    attributeValue: engineering
+    identityProviderAlias: my-idp
+    name: hardcode-department
+    realmRef:
+      name: "dev"
+      namespace: dev-ns
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    namespace: dev-ns
+
+---
+# Hardcoded group mapper - assigns users to hardcoded group
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: HardcodedGroupIdentityProviderMapper
+metadata:
+  name: assign-employees-group
+  namespace: dev-ns
+spec:
+  forProvider:
+    groupRef:
+      name: employees
+      namespace: dev-ns
+    identityProviderAlias: my-idp
+    name: assign-to-employees
+    realmRef:
+      name: "dev"
+      namespace: dev-ns
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    namespace: dev-ns
+
+---
+# Hardcoded role mapper - assigns hardcoded role to users
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: HardcodedRoleIdentityProviderMapper
+metadata:
+  name: hardcode-user-role
+  namespace: dev-ns
+spec:
+  forProvider:
+    identityProviderAlias: my-idp
+    name: hardcode-user-role
+    realmRef:
+      name: "dev"
+      namespace: dev-ns
+      policy:
+        resolve: Always
+    roleRef:
+      name: "user"
+      namespace: dev-ns
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    namespace: dev-ns
+
+---
+# User template importer - imports user data using template
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: UserTemplateImporterIdentityProviderMapper
+metadata:
+  name: import-user-template
+  namespace: dev-ns
+spec:
+  forProvider:
+    identityProviderAlias: my-idp
+    name: import-user-template
+    realmRef:
+      name: "dev"
+      namespace: dev-ns
+      policy:
+        resolve: Always
+    template: "user.${CLAIM.sub}"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    namespace: dev-ns
