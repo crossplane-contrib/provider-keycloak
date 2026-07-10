@@ -71,6 +71,22 @@ spec:
         resolve: Always
 ```
 
+`spec.forProvider.policies`, `resources`, and `scopes` map directly to the
+underlying Terraform provider fields, so their raw values are UUIDs / IDs, not
+names. If you want to wire managed Keycloak objects together by reference, use
+the generated reference fields instead, for example:
+
+- `resourcesRefs` / `resourcesSelector`
+- `clientPoliciesRefs`
+- `groupPoliciesRefs`
+- `regexPoliciesRefs`
+- `rolePoliciesRefs`
+- `userPoliciesRefs`
+
+Supplying names in the raw `policies`, `resources`, or `scopes` lists causes
+drift because the Terraform provider reads those attributes back as resolved
+Keycloak IDs.
+
 ### `ClientClientPolicy`
 
 ```yaml
