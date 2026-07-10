@@ -172,6 +172,9 @@ jobs:
       - name: Vendor Dependencies
         run: make vendor vendor.check
 
+      - name: Validate E2E Case Coverage
+        run: make e2e-cases-check
+
       - name: Check Diff
         run: make check-diff
 

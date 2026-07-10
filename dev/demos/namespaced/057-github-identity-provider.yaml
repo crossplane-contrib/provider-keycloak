@@ -1,0 +1,22 @@
+apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+kind: GithubIdentityProvider
+metadata:
+  name: github
+  namespace: dev-ns
+spec:
+  forProvider:
+    clientIdSecretRef:
+      key: client-id
+      name: client-secret
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+    realmRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    syncMode: IMPORT
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
