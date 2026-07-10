@@ -1,73 +1,71 @@
 ---
-# OpenID protocol mappers comprehensive demo (namespaced)
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidAudienceProtocolMapper
+# OpenID group protocol mappers comprehensive demo (namespaced)
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: AudienceProtocolMapper
 metadata:
   name: audience-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
-      name: my-client
-      namespace: dev-ns
-    name: audience
-    protocolMapperName: oidc-audience-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    includedCustomAudience: foo
+    name: audience-mapper
+    realmIdRef:
+      name: "dev-ns"
       policy:
         resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidAudienceResolveProtocolMapper
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: AudienceResolveProtocolMapper
 metadata:
   name: audience-resolve-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
-      name: my-client
-      namespace: dev-ns
-    name: audience-resolve
-    protocolMapperName: oidc-audience-resolve-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    name: audience-resolve-mapper
+    realmIdRef:
+      name: "dev-ns"
       policy:
         resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidFullNameProtocolMapper
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: FullNameProtocolMapper
 metadata:
   name: full-name-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
-      name: my-client
-      namespace: dev-ns
-    name: full-name
-    protocolMapperName: oidc-full-name-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    name: full-name-mapper
+    realmIdRef:
+      name: "dev-ns"
       policy:
         resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidHardcodedClaimProtocolMapper
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: HardcodedClaimProtocolMapper
 metadata:
   name: hardcoded-claim-mapper
   namespace: dev-ns
@@ -75,181 +73,172 @@ spec:
   forProvider:
     claimName: hardcoded-claim
     claimValue: "true"
-    clientRef:
-      name: my-client
-      namespace: dev-ns
-    name: hardcoded-claim
-    protocolMapperName: oidc-hardcoded-claim-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    name: hardcoded-claim-mapper
+    realmIdRef:
+      name: "dev-ns"
       policy:
         resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidHardcodedRoleProtocolMapper
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: HardcodedRoleProtocolMapper
 metadata:
   name: hardcoded-role-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
-      name: my-client
-      namespace: dev-ns
-    name: hardcoded-role
-    protocolMapperName: oidc-hardcoded-role-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    clientIdRef:
+      name: test
       policy:
         resolve: Always
-    roleRef:
-      name: "user"
-      namespace: dev-ns
+    name: hardcoded-role-mapper
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    role: test
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidSubProtocolMapper
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: SubProtocolMapper
 metadata:
   name: sub-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
-      name: my-client
-      namespace: dev-ns
-    name: sub
-    protocolMapperName: oidc-sub-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    name: sub-mapper
+    realmIdRef:
+      name: "dev-ns"
       policy:
         resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidUserAttributeProtocolMapper
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: UserAttributeProtocolMapper
 metadata:
   name: user-attribute-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
-      name: my-client
-      namespace: dev-ns
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
     claimName: email
-    name: user-attribute
-    protocolMapperName: oidc-user-attribute-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    name: user-attribute-mapper
+    realmIdRef:
+      name: "dev-ns"
       policy:
         resolve: Always
     userAttribute: email
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidUserClientRoleProtocolMapper
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: UserClientRoleProtocolMapper
 metadata:
   name: user-client-role-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
-      name: my-client
-      namespace: dev-ns
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
     claimName: client-roles
-    name: user-client-role
-    protocolMapperName: oidc-user-client-role-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    name: user-client-role-mapper
+    realmIdRef:
+      name: "dev-ns"
       policy:
         resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidUserPropertyProtocolMapper
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: UserPropertyProtocolMapper
 metadata:
   name: user-property-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
-      name: my-client
-      namespace: dev-ns
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
     claimName: username
-    name: user-property
-    protocolMapperName: oidc-user-property-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    name: user-property-mapper
+    realmIdRef:
+      name: "dev-ns"
       policy:
         resolve: Always
     userProperty: username
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidUserRealmRoleProtocolMapper
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: UserRealmRoleProtocolMapper
 metadata:
   name: user-realm-role-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
-      name: my-client
-      namespace: dev-ns
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
     claimName: realm-roles
-    name: user-realm-role
-    protocolMapperName: oidc-user-realm-role-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    name: user-realm-role-mapper
+    realmIdRef:
+      name: "dev-ns"
       policy:
         resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: OpenidUserSessionNoteProtocolMapper
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: UserSessionNoteProtocolMapper
 metadata:
   name: user-session-note-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
-      name: my-client
-      namespace: dev-ns
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
     claimName: session-note
-    name: user-session-note
-    protocolMapperName: oidc-user-session-note-mapper
-    realmRef:
-      name: "dev"
-      namespace: dev-ns
+    claimValueType: String
+    name: user-session-note-mapper
+    realmIdRef:
+      name: "dev-ns"
       policy:
         resolve: Always
     sessionNote: auth_time
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
+    kind: ProviderConfig
