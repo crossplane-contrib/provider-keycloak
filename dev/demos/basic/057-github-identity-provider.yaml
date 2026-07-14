@@ -4,6 +4,7 @@ metadata:
   name: github
 spec:
   forProvider:
+    alias: github
     clientIdSecretRef:
       key: client-id
       name: client-secret

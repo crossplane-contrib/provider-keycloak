@@ -5,6 +5,7 @@ metadata:
   namespace: dev-ns
 spec:
   forProvider:
+    alias: github
     clientIdSecretRef:
       key: client-id
       name: client-secret

@@ -4,6 +4,7 @@ metadata:
   name: facebook
 spec:
   forProvider:
+    alias: facebook
     clientIdSecretRef:
       key: client-id
       name: client-secret
