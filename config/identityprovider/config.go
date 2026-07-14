@@ -25,6 +25,48 @@ func Configure(p *config.Provider) {
 		}
 	})
 
+	p.AddResourceConfigurator("keycloak_attribute_importer_identity_provider_mapper", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_attribute_to_role_identity_provider_mapper", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_hardcoded_attribute_identity_provider_mapper", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_hardcoded_group_identity_provider_mapper", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_hardcoded_role_identity_provider_mapper", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_user_template_importer_identity_provider_mapper", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+	})
+
 	p.AddResourceConfigurator("keycloak_identity_provider_token_exchange_scope_permission", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["provider_alias"] = config.Reference{

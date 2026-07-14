@@ -1,0 +1,78 @@
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: GroupIdentityProviderMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/groupidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: oidc
+  name: oidc
+spec:
+  forProvider:
+    extraConfig:
+      syncMode: INHERIT
+    group: my-realm-group
+    identityProviderAlias: my-idp
+    name: hardcodedGroup
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/groupidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: realm_group
+  name: realm-group
+spec:
+  forProvider:
+    description: My Realm Group
+    name: my-realm-group
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/groupidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: oidc
+  name: oidc
+spec:
+  forProvider:
+    alias: my-idp
+    authorizationUrl: https://authorizationurl.com
+    clientIdSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    tokenUrl: https://tokenurl.com
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/groupidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

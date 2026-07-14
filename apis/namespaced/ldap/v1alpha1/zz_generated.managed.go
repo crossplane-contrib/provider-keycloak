@@ -446,3 +446,43 @@ func (mg *UserFederation) SetProviderConfigReference(r *xpv1.ProviderConfigRefer
 func (mg *UserFederation) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
+
+// GetCondition of this UserModelHardcodedAttributeMapper.
+func (mg *UserModelHardcodedAttributeMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this UserModelHardcodedAttributeMapper.
+func (mg *UserModelHardcodedAttributeMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this UserModelHardcodedAttributeMapper.
+func (mg *UserModelHardcodedAttributeMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this UserModelHardcodedAttributeMapper.
+func (mg *UserModelHardcodedAttributeMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this UserModelHardcodedAttributeMapper.
+func (mg *UserModelHardcodedAttributeMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this UserModelHardcodedAttributeMapper.
+func (mg *UserModelHardcodedAttributeMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this UserModelHardcodedAttributeMapper.
+func (mg *UserModelHardcodedAttributeMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this UserModelHardcodedAttributeMapper.
+func (mg *UserModelHardcodedAttributeMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
