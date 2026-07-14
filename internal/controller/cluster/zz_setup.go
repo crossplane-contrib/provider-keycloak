@@ -44,6 +44,7 @@ import (
 	rolemapperldap "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/rolemapper"
 	userattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/userattributemapper"
 	userfederation "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/userfederation"
+	usermodelhardcodedattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/usermodelhardcodedattributemapper"
 	googleidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/googleidentityprovider"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/identityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/client"
@@ -125,6 +126,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		rolemapperldap.Setup,
 		userattributemapper.Setup,
 		userfederation.Setup,
+		usermodelhardcodedattributemapper.Setup,
 		googleidentityprovider.Setup,
 		identityprovider.Setup,
 		client.Setup,
@@ -212,6 +214,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		rolemapperldap.SetupGated,
 		userattributemapper.SetupGated,
 		userfederation.SetupGated,
+		usermodelhardcodedattributemapper.SetupGated,
 		googleidentityprovider.SetupGated,
 		identityprovider.SetupGated,
 		client.SetupGated,
@@ -298,6 +301,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		rolemapperldap.SetupWebhookWithManager,
 		userattributemapper.SetupWebhookWithManager,
 		userfederation.SetupWebhookWithManager,
+		usermodelhardcodedattributemapper.SetupWebhookWithManager,
 		googleidentityprovider.SetupWebhookWithManager,
 		identityprovider.SetupWebhookWithManager,
 		client.SetupWebhookWithManager,

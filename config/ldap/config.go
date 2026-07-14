@@ -96,6 +96,14 @@ func Configure(p *config.Provider) {
 
 	})
 
+	p.AddResourceConfigurator("keycloak_hardcoded_attribute_mapper", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.Kind = "UserModelHardcodedAttributeMapper"
+		r.References["ldap_user_federation_id"] = config.Reference{
+			TerraformName: "keycloak_ldap_user_federation",
+		}
+	})
+
 	p.AddResourceConfigurator("keycloak_ldap_full_name_mapper", func(r *config.Resource) {
 		r.ShortGroup = Group
 		r.References["ldap_user_federation_id"] = config.Reference{
@@ -360,6 +368,32 @@ func getHardcodedAttributeMapperIDByExternalName(ctx context.Context, id string,
 func getHardcodedAttributeMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
 	typ := ldapStorageMapperType
 	providerId := "hardcoded-ldap-attribute-mapper"
+	parentId := parameters["ldap_user_federation_id"].(string)
+	name := parameters["name"].(string)
+
+	return lookup.GetComponentId(kcClient, ctx, parameters["realm_id"].(string), &typ, &parentId, &providerId, &name)
+}
+
+var userModelHardcodedAttributeMapperIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "ldap_user_federation_id", "name"},
+	GetIDByExternalName:          getUserModelHardcodedAttributeMapperIDByExternalName,
+	GetIDByIdentifyingProperties: getUserModelHardcodedAttributeMapperIDByIdentifyingProperties,
+}
+
+// UserModelHardcodedAttributeMapperIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var UserModelHardcodedAttributeMapperIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(userModelHardcodedAttributeMapperIdentifyingPropertiesLookup)
+
+func getUserModelHardcodedAttributeMapperIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetHardcodedAttributeMapper(ctx, parameters["realm_id"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getUserModelHardcodedAttributeMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	typ := ldapStorageMapperType
+	providerId := "hardcoded-attribute-mapper"
 	parentId := parameters["ldap_user_federation_id"].(string)
 	name := parameters["name"].(string)
 
