@@ -24,11 +24,17 @@ import (
 	memberships "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/group/memberships"
 	permissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/group/permissions"
 	rolesgroup "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/group/roles"
+	attributeidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/attributeidentityprovidermapper"
+	groupidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/groupidentityprovidermapper"
 	identityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/identityprovidermapper"
+	importeridentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/importeridentityprovidermapper"
 	kubernetesidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/kubernetesidentityprovider"
 	oidcopenshiftv4identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/oidcopenshiftv4identityprovider"
 	providertokenexchangescopepermission "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/providertokenexchangescopepermission"
+	roleidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/roleidentityprovidermapper"
 	spiffeidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/spiffeidentityprovider"
+	templateimporteridentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/templateimporteridentityprovidermapper"
+	toroleidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/identityprovider/toroleidentityprovidermapper"
 	custommapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/custommapper"
 	fullnamemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/fullnamemapper"
 	groupmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/groupmapper"
@@ -40,6 +46,7 @@ import (
 	rolemapperldap "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/rolemapper"
 	userattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/userattributemapper"
 	userfederation "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/userfederation"
+	usermodelhardcodedattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/usermodelhardcodedattributemapper"
 	googleidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/googleidentityprovider"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/identityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/client"
@@ -103,11 +110,17 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		memberships.Setup,
 		permissions.Setup,
 		rolesgroup.Setup,
+		attributeidentityprovidermapper.Setup,
+		groupidentityprovidermapper.Setup,
 		identityprovidermapper.Setup,
+		importeridentityprovidermapper.Setup,
 		kubernetesidentityprovider.Setup,
 		oidcopenshiftv4identityprovider.Setup,
 		providertokenexchangescopepermission.Setup,
+		roleidentityprovidermapper.Setup,
 		spiffeidentityprovider.Setup,
+		templateimporteridentityprovidermapper.Setup,
+		toroleidentityprovidermapper.Setup,
 		custommapper.Setup,
 		fullnamemapper.Setup,
 		groupmapper.Setup,
@@ -119,6 +132,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		rolemapperldap.Setup,
 		userattributemapper.Setup,
 		userfederation.Setup,
+		usermodelhardcodedattributemapper.Setup,
 		googleidentityprovider.Setup,
 		identityprovider.Setup,
 		client.Setup,
@@ -188,11 +202,17 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		memberships.SetupGated,
 		permissions.SetupGated,
 		rolesgroup.SetupGated,
+		attributeidentityprovidermapper.SetupGated,
+		groupidentityprovidermapper.SetupGated,
 		identityprovidermapper.SetupGated,
+		importeridentityprovidermapper.SetupGated,
 		kubernetesidentityprovider.SetupGated,
 		oidcopenshiftv4identityprovider.SetupGated,
 		providertokenexchangescopepermission.SetupGated,
+		roleidentityprovidermapper.SetupGated,
 		spiffeidentityprovider.SetupGated,
+		templateimporteridentityprovidermapper.SetupGated,
+		toroleidentityprovidermapper.SetupGated,
 		custommapper.SetupGated,
 		fullnamemapper.SetupGated,
 		groupmapper.SetupGated,
@@ -204,6 +224,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		rolemapperldap.SetupGated,
 		userattributemapper.SetupGated,
 		userfederation.SetupGated,
+		usermodelhardcodedattributemapper.SetupGated,
 		googleidentityprovider.SetupGated,
 		identityprovider.SetupGated,
 		client.SetupGated,
@@ -272,11 +293,17 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		memberships.SetupWebhookWithManager,
 		permissions.SetupWebhookWithManager,
 		rolesgroup.SetupWebhookWithManager,
+		attributeidentityprovidermapper.SetupWebhookWithManager,
+		groupidentityprovidermapper.SetupWebhookWithManager,
 		identityprovidermapper.SetupWebhookWithManager,
+		importeridentityprovidermapper.SetupWebhookWithManager,
 		kubernetesidentityprovider.SetupWebhookWithManager,
 		oidcopenshiftv4identityprovider.SetupWebhookWithManager,
 		providertokenexchangescopepermission.SetupWebhookWithManager,
+		roleidentityprovidermapper.SetupWebhookWithManager,
 		spiffeidentityprovider.SetupWebhookWithManager,
+		templateimporteridentityprovidermapper.SetupWebhookWithManager,
+		toroleidentityprovidermapper.SetupWebhookWithManager,
 		custommapper.SetupWebhookWithManager,
 		fullnamemapper.SetupWebhookWithManager,
 		groupmapper.SetupWebhookWithManager,
@@ -288,6 +315,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		rolemapperldap.SetupWebhookWithManager,
 		userattributemapper.SetupWebhookWithManager,
 		userfederation.SetupWebhookWithManager,
+		usermodelhardcodedattributemapper.SetupWebhookWithManager,
 		googleidentityprovider.SetupWebhookWithManager,
 		identityprovider.SetupWebhookWithManager,
 		client.SetupWebhookWithManager,

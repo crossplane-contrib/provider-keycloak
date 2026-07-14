@@ -53,10 +53,6 @@ func Configure(p *config.Provider) {
 		}
 
 	})
-
-	p.AddResourceConfigurator("keycloak_user_template_importer_identity_provider_mapper", func(r *config.Resource) {
-		r.ShortGroup = "oidc"
-	})
 }
 
 var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{

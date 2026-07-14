@@ -1,0 +1,80 @@
+apiVersion: identityprovider.keycloak.m.crossplane.io/v1alpha1
+kind: RoleIdentityProviderMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/roleidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: oidc
+  name: oidc
+  namespace: upbound-system
+spec:
+  forProvider:
+    extraConfig:
+      syncMode: INHERIT
+    identityProviderAlias: my-idp
+    name: hardcodedRole
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    role: my-realm-role
+
+---
+
+apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/roleidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: oidc
+  name: oidc
+  namespace: upbound-system
+spec:
+  forProvider:
+    alias: my-idp
+    authorizationUrl: https://authorizationurl.com
+    clientIdSecretRef:
+      key: example-key
+      name: example-secret
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    tokenUrl: https://tokenurl.com
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/roleidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: role.keycloak.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  annotations:
+    meta.upbound.io/example-id: identityprovider/v1alpha1/roleidentityprovidermapper
+  labels:
+    testing.upbound.io/example-name: realm_role
+  name: realm-role
+  namespace: upbound-system
+spec:
+  forProvider:
+    description: My Realm Role
+    name: my-realm-role
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm

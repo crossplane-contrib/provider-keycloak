@@ -7,8 +7,35 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 
+// GetItems of this AttributeIdentityProviderMapperList.
+func (l *AttributeIdentityProviderMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this GroupIdentityProviderMapperList.
+func (l *GroupIdentityProviderMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this IdentityProviderMapperList.
 func (l *IdentityProviderMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ImporterIdentityProviderMapperList.
+func (l *ImporterIdentityProviderMapperList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]
@@ -43,8 +70,35 @@ func (l *ProviderTokenExchangeScopePermissionList) GetItems() []resource.Managed
 	return items
 }
 
+// GetItems of this RoleIdentityProviderMapperList.
+func (l *RoleIdentityProviderMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this SpiffeIdentityProviderList.
 func (l *SpiffeIdentityProviderList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this TemplateImporterIdentityProviderMapperList.
+func (l *TemplateImporterIdentityProviderMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ToRoleIdentityProviderMapperList.
+func (l *ToRoleIdentityProviderMapperList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]
