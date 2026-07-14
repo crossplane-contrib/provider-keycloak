@@ -1,13 +1,13 @@
 ---
 # Generic client protocol mapper (namespaced)
-apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+apiVersion: client.keycloak.m.crossplane.io/v1alpha1
 kind: GenericClientProtocolMapper
 metadata:
   name: generic-protocol-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
+    samlClientIdRef:
       name: saml-client
       namespace: dev-ns
     config:
@@ -15,8 +15,9 @@ spec:
       attribute.nameformat: urn:oasis:names:tc:SAML:2.0:attrname-format:uri
       single: "false"
     name: generic-protocol-mapper
-    protocolMapperName: saml-user-attribute-mapper
-    realmRef:
+    protocol: saml
+    protocolMapper: saml-user-attribute-mapper
+    realmIdRef:
       name: "dev"
       namespace: dev-ns
       policy:
@@ -27,44 +28,44 @@ spec:
 
 ---
 # Generic client role mapper (namespaced)
-apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+apiVersion: client.keycloak.m.crossplane.io/v1alpha1
 kind: GenericClientRoleMapper
 metadata:
   name: generic-role-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
+    samlClientIdRef:
       name: saml-client
       namespace: dev-ns
-    name: generic-role-mapper
-    realmRef:
+    realmIdRef:
       name: "dev"
       namespace: dev-ns
       policy:
         resolve: Always
-    roleRef:
-      name: "user"
+    roleIdRef:
+      name: "test-client"
       namespace: dev-ns
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
     namespace: dev-ns
 
 ---
 # SAML user attribute protocol mapper (namespaced)
-apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
-kind: SamlUserAttributeProtocolMapper
+apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
+kind: UserAttributeProtocolMapper
 metadata:
   name: saml-user-attr-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    attributeName: email
-    clientRef:
+    clientIdRef:
       name: saml-client
       namespace: dev-ns
     name: saml-user-attribute
-    realmRef:
+    realmIdRef:
       name: "dev"
       namespace: dev-ns
       policy:
@@ -78,18 +79,18 @@ spec:
 
 ---
 # SAML user property protocol mapper (namespaced)
-apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
-kind: SamlUserPropertyProtocolMapper
+apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
+kind: UserPropertyProtocolMapper
 metadata:
   name: saml-user-prop-mapper
   namespace: dev-ns
 spec:
   forProvider:
-    clientRef:
+    clientIdRef:
       name: saml-client
       namespace: dev-ns
     name: saml-user-property
-    realmRef:
+    realmIdRef:
       name: "dev"
       namespace: dev-ns
       policy:

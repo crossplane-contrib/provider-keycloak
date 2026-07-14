@@ -1,20 +1,21 @@
 ---
 # Generic client protocol mapper
-apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+apiVersion: client.keycloak.crossplane.io/v1alpha1
 kind: GenericClientProtocolMapper
 metadata:
   name: generic-protocol-mapper
 spec:
   forProvider:
-    clientRef:
+    samlClientIdRef:
       name: saml-client
     config:
       attribute.name: custom-attribute
       attribute.nameformat: urn:oasis:names:tc:SAML:2.0:attrname-format:uri
       single: "false"
     name: generic-protocol-mapper
-    protocolMapperName: saml-user-attribute-mapper
-    realmRef:
+    protocol: saml
+    protocolMapper: saml-user-attribute-mapper
+    realmIdRef:
       name: "dev"
       policy:
         resolve: Always
@@ -23,37 +24,37 @@ spec:
 
 ---
 # Generic client role mapper
-apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+apiVersion: client.keycloak.crossplane.io/v1alpha1
 kind: GenericClientRoleMapper
 metadata:
   name: generic-role-mapper
 spec:
   forProvider:
-    clientRef:
+    samlClientIdRef:
       name: saml-client
-    name: generic-role-mapper
-    realmRef:
+    realmIdRef:
       name: "dev"
       policy:
         resolve: Always
-    roleRef:
-      name: "user"
+    roleIdRef:
+      name: "test-client"
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
 
 ---
 # SAML user attribute protocol mapper
 apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
-kind: SamlUserAttributeProtocolMapper
+kind: UserAttributeProtocolMapper
 metadata:
   name: saml-user-attr-mapper
 spec:
   forProvider:
-    attributeName: email
-    clientRef:
+    clientIdRef:
       name: saml-client
     name: saml-user-attribute
-    realmRef:
+    realmIdRef:
       name: "dev"
       policy:
         resolve: Always
@@ -66,15 +67,15 @@ spec:
 ---
 # SAML user property protocol mapper
 apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
-kind: SamlUserPropertyProtocolMapper
+kind: UserPropertyProtocolMapper
 metadata:
   name: saml-user-prop-mapper
 spec:
   forProvider:
-    clientRef:
+    clientIdRef:
       name: saml-client
     name: saml-user-property
-    realmRef:
+    realmIdRef:
       name: "dev"
       policy:
         resolve: Always

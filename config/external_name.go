@@ -27,7 +27,7 @@ import (
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
-	"keycloak_generic_client_protocol_mapper":                    mapper.GenericClientProtocolMapperIdentifierFromIdentifyingProperties,   // {UUid}
+	"keycloak_generic_client_protocol_mapper":                    mapper.GenericClientProtocolMapperIdentifierFromIdentifyingProperties,     // {UUid}
 	"keycloak_generic_client_role_mapper":                        config.IdentifierFromProvider,                                             // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
 	"keycloak_generic_protocol_mapper":                           mapper.ProtocolMapperIdentifierFromIdentifyingProperties,                  // {UUid}
 	"keycloak_generic_role_mapper":                               config.IdentifierFromProvider,                                             // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
