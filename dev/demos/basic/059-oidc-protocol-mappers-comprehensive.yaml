@@ -94,7 +94,10 @@ spec:
       name: "dev"
       policy:
         resolve: Always
-    role: test
+    roleIdRef:
+      name: test
+      policy:
+        resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
 
