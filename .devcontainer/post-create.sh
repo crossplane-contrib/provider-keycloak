@@ -27,49 +27,27 @@ echo "==> Installing goimports (used by make generate / check-diff)"
 go install golang.org/x/tools/cmd/goimports@latest
 
 echo "==> Configuring shell completion for kubectl, kind and docker (bash + zsh)"
-# Marker-guarded so container rebuilds don't append the block twice.
+# The snippets live in .devcontainer/completions/; each rc file just sources the
+# matching one. Marker-guarded so container rebuilds don't append it twice.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MARK="# >>> provider-keycloak devcontainer completions >>>"
 END_MARK="# <<< provider-keycloak devcontainer completions <<<"
 
-write_bash_completion() {
-  local rc="$HOME/.bashrc"
+link_completion() {
+  local rc="$1" snippet="$2" always="${3:-}"
+  # Always set up .bashrc (create if missing); only touch .zshrc if it exists.
+  [ "$always" = "always" ] || [ -e "$rc" ] || return 0
   grep -qF "$MARK" "$rc" 2>/dev/null && return 0
-  cat >>"$rc" <<EOF
-
-$MARK
-# kubectl's completion needs bash-completion loaded first.
-if ! type _init_completion &>/dev/null; then
-  [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
-fi
-command -v kubectl &>/dev/null && source <(kubectl completion bash)
-command -v kind    &>/dev/null && source <(kind completion bash)
-command -v docker  &>/dev/null && source <(docker completion bash 2>/dev/null) 2>/dev/null || true
-alias k=kubectl
-command -v kubectl &>/dev/null && complete -o default -F __start_kubectl k
-$END_MARK
-EOF
+  {
+    echo ""
+    echo "$MARK"
+    echo "[ -r \"$snippet\" ] && source \"$snippet\""
+    echo "$END_MARK"
+  } >>"$rc"
 }
 
-write_zsh_completion() {
-  local rc="$HOME/.zshrc"
-  [ -f "$rc" ] || return 0
-  grep -qF "$MARK" "$rc" 2>/dev/null && return 0
-  cat >>"$rc" <<EOF
-
-$MARK
-# Initialize the completion system in case oh-my-zsh hasn't.
-autoload -Uz compinit && compinit -u
-command -v kubectl &>/dev/null && source <(kubectl completion zsh)
-command -v kind    &>/dev/null && source <(kind completion zsh)
-command -v docker  &>/dev/null && source <(docker completion zsh 2>/dev/null) 2>/dev/null || true
-alias k=kubectl
-command -v kubectl &>/dev/null && compdef k=kubectl
-$END_MARK
-EOF
-}
-
-write_bash_completion
-write_zsh_completion
+link_completion "$HOME/.bashrc" "$SCRIPT_DIR/completions/completions.bash" always
+link_completion "$HOME/.zshrc"  "$SCRIPT_DIR/completions/completions.zsh"
 
 echo ""
 echo "==> Versions:"
