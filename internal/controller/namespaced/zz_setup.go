@@ -92,8 +92,8 @@ import (
 	clientsamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/client"
 	clientdefaultscopessamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/clientdefaultscopes"
 	clientscopesamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/clientscope"
-	userattributeprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/userattributeprotocolmapper"
-	userpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/userpropertyprotocolmapper"
+	samluserattributeprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/samluserattributeprotocolmapper"
+	samluserpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/samluserpropertyprotocolmapper"
 	groups "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/groups"
 	permissionsuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/permissions"
 	rolesuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/roles"
@@ -189,8 +189,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientsamlclient.Setup,
 		clientdefaultscopessamlclient.Setup,
 		clientscopesamlclient.Setup,
-		userattributeprotocolmapper.Setup,
-		userpropertyprotocolmapper.Setup,
+		samluserattributeprotocolmapper.Setup,
+		samluserpropertyprotocolmapper.Setup,
 		groups.Setup,
 		permissionsuser.Setup,
 		rolesuser.Setup,
@@ -292,8 +292,8 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientsamlclient.SetupGated,
 		clientdefaultscopessamlclient.SetupGated,
 		clientscopesamlclient.SetupGated,
-		userattributeprotocolmapper.SetupGated,
-		userpropertyprotocolmapper.SetupGated,
+		samluserattributeprotocolmapper.SetupGated,
+		samluserpropertyprotocolmapper.SetupGated,
 		groups.SetupGated,
 		permissionsuser.SetupGated,
 		rolesuser.SetupGated,
@@ -394,8 +394,8 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientsamlclient.SetupWebhookWithManager,
 		clientdefaultscopessamlclient.SetupWebhookWithManager,
 		clientscopesamlclient.SetupWebhookWithManager,
-		userattributeprotocolmapper.SetupWebhookWithManager,
-		userpropertyprotocolmapper.SetupWebhookWithManager,
+		samluserattributeprotocolmapper.SetupWebhookWithManager,
+		samluserpropertyprotocolmapper.SetupWebhookWithManager,
 		groups.SetupWebhookWithManager,
 		permissionsuser.SetupWebhookWithManager,
 		rolesuser.SetupWebhookWithManager,

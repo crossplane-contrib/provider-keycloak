@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
-  name: userattributeprotocolmappers.samlclient.keycloak.crossplane.io
+  name: samluserattributeprotocolmappers.samlclient.keycloak.crossplane.io
 spec:
   group: samlclient.keycloak.crossplane.io
   names:
@@ -12,10 +12,10 @@ spec:
     - crossplane
     - managed
     - keycloak
-    kind: UserAttributeProtocolMapper
-    listKind: UserAttributeProtocolMapperList
-    plural: userattributeprotocolmappers
-    singular: userattributeprotocolmapper
+    kind: SamlUserAttributeProtocolMapper
+    listKind: SamlUserAttributeProtocolMapperList
+    plural: samluserattributeprotocolmappers
+    singular: samluserattributeprotocolmapper
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,7 +34,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: UserAttributeProtocolMapper is the Schema for the UserAttributeProtocolMappers
+        description: SamlUserAttributeProtocolMapper is the Schema for the SamlUserAttributeProtocolMappers
           API.
         properties:
           apiVersion:
@@ -55,8 +55,8 @@ spec:
           metadata:
             type: object
           spec:
-            description: UserAttributeProtocolMapperSpec defines the desired state
-              of UserAttributeProtocolMapper
+            description: SamlUserAttributeProtocolMapperSpec defines the desired state
+              of SamlUserAttributeProtocolMapper
             properties:
               deletionPolicy:
                 default: Delete
@@ -709,8 +709,8 @@ spec:
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.userAttribute)
                 || (has(self.initProvider) && has(self.initProvider.userAttribute))'
           status:
-            description: UserAttributeProtocolMapperStatus defines the observed state
-              of UserAttributeProtocolMapper.
+            description: SamlUserAttributeProtocolMapperStatus defines the observed
+              state of SamlUserAttributeProtocolMapper.
             properties:
               atProvider:
                 properties:

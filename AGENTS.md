@@ -120,9 +120,9 @@ make docs-freshness-check             # CI: verify llms.txt is current
 - E2E tests only cover resources listed in `cluster/test/cases.txt`.
 - **Upjet does not support `+nullable` markers.** The kubebuilder Options struct
   only supports Required, Minimum, Maximum, Default.
-- **Membership conflicts:** Never let both a `Memberships` resource (authoritative)
-  and a `Groups` resource with `exhaustive=true` manage the same group — they will
-  fight and cause reconciliation loops.
+- **Membership ownership:** Avoid managing the same group's membership with both
+  a `Memberships` resource and a `Groups` resource with `exhaustive=true` at the
+  same time; this can cause reconciliation loops.
 - **E2E CI versioning:** Jobs that build or deploy local xpkgs must fetch git tags
   (`git fetch --tags`) so `build/makelib/common.mk` derives the correct VERSION.
 
@@ -134,6 +134,7 @@ make docs-freshness-check             # CI: verify llms.txt is current
 | `409 Conflict` on create | Resource already exists in Keycloak | Use `lookup.BuildIdentifyingPropertiesLookup` |
 | `llms-full.txt is stale` in CI | Docs changed, `make docs-gen` not run | Run `make docs-gen` and commit |
 | `no matches for kind` in e2e | CRD not established in time | See `cluster/test/setup.sh` MRD wait logic |
+| `make generate` produces unexpectedly large/stale diffs | Stale local generator cache/artifacts | Remove `.work/` and `config/schema.json`, then re-run `make generate` |
 | E2E provider version mismatch | Git tags not fetched before build | Add `git fetch --tags` before `make build` |
 | Reconciliation loop on membership | Both `Memberships` + `Groups` (exhaustive) target same group | Use only one authoritative source |
 

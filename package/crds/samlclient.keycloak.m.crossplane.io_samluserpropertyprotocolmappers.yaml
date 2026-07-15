@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
-  name: userpropertyprotocolmappers.samlclient.keycloak.m.crossplane.io
+  name: samluserpropertyprotocolmappers.samlclient.keycloak.m.crossplane.io
 spec:
   group: samlclient.keycloak.m.crossplane.io
   names:
@@ -12,10 +12,10 @@ spec:
     - crossplane
     - managed
     - keycloak
-    kind: UserPropertyProtocolMapper
-    listKind: UserPropertyProtocolMapperList
-    plural: userpropertyprotocolmappers
-    singular: userpropertyprotocolmapper
+    kind: SamlUserPropertyProtocolMapper
+    listKind: SamlUserPropertyProtocolMapperList
+    plural: samluserpropertyprotocolmappers
+    singular: samluserpropertyprotocolmapper
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -34,7 +34,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: UserPropertyProtocolMapper is the Schema for the UserPropertyProtocolMappers
+        description: SamlUserPropertyProtocolMapper is the Schema for the SamlUserPropertyProtocolMappers
           API.
         properties:
           apiVersion:
@@ -55,8 +55,8 @@ spec:
           metadata:
             type: object
           spec:
-            description: UserPropertyProtocolMapperSpec defines the desired state
-              of UserPropertyProtocolMapper
+            description: SamlUserPropertyProtocolMapperSpec defines the desired state
+              of SamlUserPropertyProtocolMapper
             properties:
               forProvider:
                 properties:
@@ -693,8 +693,8 @@ spec:
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.userProperty)
                 || (has(self.initProvider) && has(self.initProvider.userProperty))'
           status:
-            description: UserPropertyProtocolMapperStatus defines the observed state
-              of UserPropertyProtocolMapper.
+            description: SamlUserPropertyProtocolMapperStatus defines the observed
+              state of SamlUserPropertyProtocolMapper.
             properties:
               atProvider:
                 properties:

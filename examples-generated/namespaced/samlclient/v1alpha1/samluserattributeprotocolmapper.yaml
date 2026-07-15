@@ -1,11 +1,12 @@
-apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
-kind: UserAttributeProtocolMapper
+apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
+kind: SamlUserAttributeProtocolMapper
 metadata:
   annotations:
-    meta.upbound.io/example-id: samlclient/v1alpha1/userattributeprotocolmapper
+    meta.upbound.io/example-id: samlclient/v1alpha1/samluserattributeprotocolmapper
   labels:
     testing.upbound.io/example-name: saml_user_attribute_mapper
   name: saml-user-attribute-mapper
+  namespace: upbound-system
 spec:
   forProvider:
     clientIdSelector:
@@ -21,14 +22,15 @@ spec:
 
 ---
 
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
 kind: Realm
 metadata:
   annotations:
-    meta.upbound.io/example-id: samlclient/v1alpha1/userattributeprotocolmapper
+    meta.upbound.io/example-id: samlclient/v1alpha1/samluserattributeprotocolmapper
   labels:
     testing.upbound.io/example-name: realm
   name: realm
+  namespace: upbound-system
 spec:
   forProvider:
     enabled: true
@@ -36,14 +38,15 @@ spec:
 
 ---
 
-apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
 kind: Client
 metadata:
   annotations:
-    meta.upbound.io/example-id: samlclient/v1alpha1/userattributeprotocolmapper
+    meta.upbound.io/example-id: samlclient/v1alpha1/samluserattributeprotocolmapper
   labels:
     testing.upbound.io/example-name: saml_client
   name: saml-client
+  namespace: upbound-system
 spec:
   forProvider:
     clientId: saml-client

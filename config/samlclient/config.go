@@ -70,6 +70,7 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_saml_user_attribute_protocol_mapper", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = Group
+		r.Kind = "SamlUserAttributeProtocolMapper"
 
 		r.References["client_id"] = config.Reference{
 			TerraformName: "keycloak_saml_client",
@@ -83,6 +84,7 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_saml_user_property_protocol_mapper", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = Group
+		r.Kind = "SamlUserPropertyProtocolMapper"
 
 		r.References["client_id"] = config.Reference{
 			TerraformName: "keycloak_saml_client",

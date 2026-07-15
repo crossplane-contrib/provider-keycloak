@@ -1,23 +1,23 @@
 apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
-kind: UserPropertyProtocolMapper
+kind: SamlUserAttributeProtocolMapper
 metadata:
   annotations:
-    meta.upbound.io/example-id: samlclient/v1alpha1/userpropertyprotocolmapper
+    meta.upbound.io/example-id: samlclient/v1alpha1/samluserattributeprotocolmapper
   labels:
-    testing.upbound.io/example-name: saml_user_property_mapper
-  name: saml-user-property-mapper
+    testing.upbound.io/example-name: saml_user_attribute_mapper
+  name: saml-user-attribute-mapper
 spec:
   forProvider:
     clientIdSelector:
       matchLabels:
         testing.upbound.io/example-name: saml_client
-    name: email-user-property-mapper
+    name: displayname-user-attribute-mapper
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm
-    samlAttributeName: email
+    samlAttributeName: displayName
     samlAttributeNameFormat: Unspecified
-    userProperty: email
+    userAttribute: displayName
 
 ---
 
@@ -25,7 +25,7 @@ apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
   annotations:
-    meta.upbound.io/example-id: samlclient/v1alpha1/userpropertyprotocolmapper
+    meta.upbound.io/example-id: samlclient/v1alpha1/samluserattributeprotocolmapper
   labels:
     testing.upbound.io/example-name: realm
   name: realm
@@ -40,7 +40,7 @@ apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
 kind: Client
 metadata:
   annotations:
-    meta.upbound.io/example-id: samlclient/v1alpha1/userpropertyprotocolmapper
+    meta.upbound.io/example-id: samlclient/v1alpha1/samluserattributeprotocolmapper
   labels:
     testing.upbound.io/example-name: saml_client
   name: saml-client
