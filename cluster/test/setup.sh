@@ -47,18 +47,28 @@ fi
 # * 02-import.yaml
 # * 03-delete.yaml
 
+# Chainsaw sometimes runs setup.sh with a working directory different from the
+# generated case directory, so resolve files from either location.
+CASE_DIR="${PWD}"
+if [[ ! -f "${CASE_DIR}/00-apply.yaml" && -f "/tmp/uptest-e2e/case/00-apply.yaml" ]]; then
+  CASE_DIR="/tmp/uptest-e2e/case"
+fi
+
+rewrite_file() {
+  local src="$1"
+  local tmp
+  tmp="${src}.new"
+  sed "s/exec: 20m0s/exec: 60m0s/g" "${src}" | \
+    sed "s/apply: 20m0s/apply: 60m0s/g" | \
+    sed "s/assert: 20m0s/assert: 60m0s/g" > "${tmp}"
+  mv "${tmp}" "${src}"
+}
+
 # Increase timeouts
-sed "s/exec: 20m0s/exec: 60m0s/g" 00-apply.yaml | sed "s/apply: 20m0s/apply: 60m0s/g" | sed "s/assert: 20m0s/assert: 60m0s/g"  > 00-apply-new.yaml
-rm 00-apply.yaml
-mv 00-apply-new.yaml  00-apply.yaml
-
-sed "s/exec: 20m0s/exec: 60m0s/g" 02-import.yaml | sed "s/apply: 20m0s/apply: 60m0s/g" | sed "s/assert: 20m0s/assert: 60m0s/g" > 02-import-new.yaml
-rm 02-import.yaml
-mv 02-import-new.yaml  02-import.yaml
-
-sed "s/exec: 20m0s/exec: 60m0s/g" 03-delete.yaml > 03-delete-new.yaml
-rm 03-delete.yaml
-mv 03-delete-new.yaml  03-delete.yaml
+rewrite_file "${CASE_DIR}/00-apply.yaml"
+rewrite_file "${CASE_DIR}/02-import.yaml"
+sed "s/exec: 20m0s/exec: 60m0s/g" "${CASE_DIR}/03-delete.yaml" > "${CASE_DIR}/03-delete.yaml.new"
+mv "${CASE_DIR}/03-delete.yaml.new" "${CASE_DIR}/03-delete.yaml"
 
 
 # We want to add more import tests that:
@@ -82,7 +92,6 @@ mv 03-delete-new.yaml  03-delete.yaml
 #rm 02-import-NoExtName.yaml
 
 cp ${SCRIPT_DIR}/hack/deleteOrdered.sh /tmp/deleteOrdered.sh
-sed 's/retry_kubectl "/eval "\/tmp\/deleteOrdered.sh /g' 03-delete.yaml > 03-delete-new.yaml
-rm 03-delete.yaml
-mv 03-delete-new.yaml  03-delete.yaml
+sed 's/retry_kubectl "/eval "\/tmp\/deleteOrdered.sh /g' "${CASE_DIR}/03-delete.yaml" > "${CASE_DIR}/03-delete.yaml.new"
+mv "${CASE_DIR}/03-delete.yaml.new" "${CASE_DIR}/03-delete.yaml"
 
