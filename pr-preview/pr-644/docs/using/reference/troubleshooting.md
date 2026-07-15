@@ -1,7 +1,5 @@
 # Troubleshooting
 
-# Troubleshooting
-
 ## Common Issues
 
 ### Resource Stuck in "Creating" State

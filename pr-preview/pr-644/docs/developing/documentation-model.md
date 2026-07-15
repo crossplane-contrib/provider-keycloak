@@ -1,7 +1,5 @@
 # Documentation Model
 
-# Documentation Model
-
 Provider Keycloak has a large API surface. Keep the documentation useful by
 separating authored guidance from generated reference material.
 
