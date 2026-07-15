@@ -14,7 +14,7 @@ import (
 	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
 )
 
-type UserPropertyProtocolMapperInitParameters struct {
+type SamlUserPropertyProtocolMapperInitParameters struct {
 
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
@@ -69,7 +69,7 @@ type UserPropertyProtocolMapperInitParameters struct {
 	UserProperty *string `json:"userProperty,omitempty" tf:"user_property,omitempty"`
 }
 
-type UserPropertyProtocolMapperObservation struct {
+type SamlUserPropertyProtocolMapperObservation struct {
 
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
@@ -98,7 +98,7 @@ type UserPropertyProtocolMapperObservation struct {
 	UserProperty *string `json:"userProperty,omitempty" tf:"user_property,omitempty"`
 }
 
-type UserPropertyProtocolMapperParameters struct {
+type SamlUserPropertyProtocolMapperParameters struct {
 
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
@@ -161,10 +161,10 @@ type UserPropertyProtocolMapperParameters struct {
 	UserProperty *string `json:"userProperty,omitempty" tf:"user_property,omitempty"`
 }
 
-// UserPropertyProtocolMapperSpec defines the desired state of UserPropertyProtocolMapper
-type UserPropertyProtocolMapperSpec struct {
+// SamlUserPropertyProtocolMapperSpec defines the desired state of SamlUserPropertyProtocolMapper
+type SamlUserPropertyProtocolMapperSpec struct {
 	v2.ManagedResourceSpec `json:",inline"`
-	ForProvider            UserPropertyProtocolMapperParameters `json:"forProvider"`
+	ForProvider            SamlUserPropertyProtocolMapperParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -175,53 +175,53 @@ type UserPropertyProtocolMapperSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider UserPropertyProtocolMapperInitParameters `json:"initProvider,omitempty"`
+	InitProvider SamlUserPropertyProtocolMapperInitParameters `json:"initProvider,omitempty"`
 }
 
-// UserPropertyProtocolMapperStatus defines the observed state of UserPropertyProtocolMapper.
-type UserPropertyProtocolMapperStatus struct {
+// SamlUserPropertyProtocolMapperStatus defines the observed state of SamlUserPropertyProtocolMapper.
+type SamlUserPropertyProtocolMapperStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        UserPropertyProtocolMapperObservation `json:"atProvider,omitempty"`
+	AtProvider        SamlUserPropertyProtocolMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// UserPropertyProtocolMapper is the Schema for the UserPropertyProtocolMappers API.
+// SamlUserPropertyProtocolMapper is the Schema for the SamlUserPropertyProtocolMappers API.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Namespaced,categories={crossplane,managed,keycloak}
-type UserPropertyProtocolMapper struct {
+type SamlUserPropertyProtocolMapper struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.samlAttributeName) || (has(self.initProvider) && has(self.initProvider.samlAttributeName))",message="spec.forProvider.samlAttributeName is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.samlAttributeNameFormat) || (has(self.initProvider) && has(self.initProvider.samlAttributeNameFormat))",message="spec.forProvider.samlAttributeNameFormat is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.userProperty) || (has(self.initProvider) && has(self.initProvider.userProperty))",message="spec.forProvider.userProperty is a required parameter"
-	Spec   UserPropertyProtocolMapperSpec   `json:"spec"`
-	Status UserPropertyProtocolMapperStatus `json:"status,omitempty"`
+	Spec   SamlUserPropertyProtocolMapperSpec   `json:"spec"`
+	Status SamlUserPropertyProtocolMapperStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// UserPropertyProtocolMapperList contains a list of UserPropertyProtocolMappers
-type UserPropertyProtocolMapperList struct {
+// SamlUserPropertyProtocolMapperList contains a list of SamlUserPropertyProtocolMappers
+type SamlUserPropertyProtocolMapperList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []UserPropertyProtocolMapper `json:"items"`
+	Items           []SamlUserPropertyProtocolMapper `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	UserPropertyProtocolMapper_Kind             = "UserPropertyProtocolMapper"
-	UserPropertyProtocolMapper_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: UserPropertyProtocolMapper_Kind}.String()
-	UserPropertyProtocolMapper_KindAPIVersion   = UserPropertyProtocolMapper_Kind + "." + CRDGroupVersion.String()
-	UserPropertyProtocolMapper_GroupVersionKind = CRDGroupVersion.WithKind(UserPropertyProtocolMapper_Kind)
+	SamlUserPropertyProtocolMapper_Kind             = "SamlUserPropertyProtocolMapper"
+	SamlUserPropertyProtocolMapper_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: SamlUserPropertyProtocolMapper_Kind}.String()
+	SamlUserPropertyProtocolMapper_KindAPIVersion   = SamlUserPropertyProtocolMapper_Kind + "." + CRDGroupVersion.String()
+	SamlUserPropertyProtocolMapper_GroupVersionKind = CRDGroupVersion.WithKind(SamlUserPropertyProtocolMapper_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&UserPropertyProtocolMapper{}, &UserPropertyProtocolMapperList{})
+	SchemeBuilder.Register(&SamlUserPropertyProtocolMapper{}, &SamlUserPropertyProtocolMapperList{})
 }

@@ -212,8 +212,8 @@ func (mg *ClientScope) ResolveReferences(ctx context.Context, c client.Reader) e
 	return nil
 }
 
-// ResolveReferences of this UserAttributeProtocolMapper.
-func (mg *UserAttributeProtocolMapper) ResolveReferences(ctx context.Context, c client.Reader) error {
+// ResolveReferences of this SamlUserAttributeProtocolMapper.
+func (mg *SamlUserAttributeProtocolMapper) ResolveReferences(ctx context.Context, c client.Reader) error {
 	var m xpresource.Managed
 	var l xpresource.ManagedList
 	r := reference.NewAPINamespacedResolver(c, mg)
@@ -344,8 +344,8 @@ func (mg *UserAttributeProtocolMapper) ResolveReferences(ctx context.Context, c 
 	return nil
 }
 
-// ResolveReferences of this UserPropertyProtocolMapper.
-func (mg *UserPropertyProtocolMapper) ResolveReferences(ctx context.Context, c client.Reader) error {
+// ResolveReferences of this SamlUserPropertyProtocolMapper.
+func (mg *SamlUserPropertyProtocolMapper) ResolveReferences(ctx context.Context, c client.Reader) error {
 	var m xpresource.Managed
 	var l xpresource.ManagedList
 	r := reference.NewAPINamespacedResolver(c, mg)

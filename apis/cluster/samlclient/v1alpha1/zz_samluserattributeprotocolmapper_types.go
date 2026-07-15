@@ -11,39 +11,38 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
 	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
 )
 
-type UserAttributeProtocolMapperInitParameters struct {
+type SamlUserAttributeProtocolMapperInitParameters struct {
 
 	// Indicates whether this attribute is a single value or an array of values. Defaults to false.
 	// Indicates if attribute values should be aggregated within the group attributes
 	AggregateAttributes *bool `json:"aggregateAttributes,omitempty" tf:"aggregate_attributes,omitempty"`
 
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
 	// Reference to a Client in samlclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in samlclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.ClientScope
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.ClientScope
 	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
 
 	// Reference to a ClientScope in samlclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v1.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in samlclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v1.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// An optional human-friendly name for this attribute.
 	FriendlyName *string `json:"friendlyName,omitempty" tf:"friendly_name,omitempty"`
@@ -52,16 +51,16 @@ type UserAttributeProtocolMapperInitParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The realm this protocol mapper exists within.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The name of the SAML attribute.
 	SAMLAttributeName *string `json:"samlAttributeName,omitempty" tf:"saml_attribute_name,omitempty"`
@@ -73,7 +72,7 @@ type UserAttributeProtocolMapperInitParameters struct {
 	UserAttribute *string `json:"userAttribute,omitempty" tf:"user_attribute,omitempty"`
 }
 
-type UserAttributeProtocolMapperObservation struct {
+type SamlUserAttributeProtocolMapperObservation struct {
 
 	// Indicates whether this attribute is a single value or an array of values. Defaults to false.
 	// Indicates if attribute values should be aggregated within the group attributes
@@ -106,7 +105,7 @@ type UserAttributeProtocolMapperObservation struct {
 	UserAttribute *string `json:"userAttribute,omitempty" tf:"user_attribute,omitempty"`
 }
 
-type UserAttributeProtocolMapperParameters struct {
+type SamlUserAttributeProtocolMapperParameters struct {
 
 	// Indicates whether this attribute is a single value or an array of values. Defaults to false.
 	// Indicates if attribute values should be aggregated within the group attributes
@@ -114,31 +113,31 @@ type UserAttributeProtocolMapperParameters struct {
 	AggregateAttributes *bool `json:"aggregateAttributes,omitempty" tf:"aggregate_attributes,omitempty"`
 
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
 	// Reference to a Client in samlclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in samlclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.ClientScope
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.ClientScope
 	// +kubebuilder:validation:Optional
 	ClientScopeID *string `json:"clientScopeId,omitempty" tf:"client_scope_id,omitempty"`
 
 	// Reference to a ClientScope in samlclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v1.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in samlclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v1.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// An optional human-friendly name for this attribute.
 	// +kubebuilder:validation:Optional
@@ -149,17 +148,17 @@ type UserAttributeProtocolMapperParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The realm this protocol mapper exists within.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The name of the SAML attribute.
 	// +kubebuilder:validation:Optional
@@ -174,10 +173,10 @@ type UserAttributeProtocolMapperParameters struct {
 	UserAttribute *string `json:"userAttribute,omitempty" tf:"user_attribute,omitempty"`
 }
 
-// UserAttributeProtocolMapperSpec defines the desired state of UserAttributeProtocolMapper
-type UserAttributeProtocolMapperSpec struct {
-	v2.ManagedResourceSpec `json:",inline"`
-	ForProvider            UserAttributeProtocolMapperParameters `json:"forProvider"`
+// SamlUserAttributeProtocolMapperSpec defines the desired state of SamlUserAttributeProtocolMapper
+type SamlUserAttributeProtocolMapperSpec struct {
+	v1.ResourceSpec `json:",inline"`
+	ForProvider     SamlUserAttributeProtocolMapperParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -188,53 +187,53 @@ type UserAttributeProtocolMapperSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider UserAttributeProtocolMapperInitParameters `json:"initProvider,omitempty"`
+	InitProvider SamlUserAttributeProtocolMapperInitParameters `json:"initProvider,omitempty"`
 }
 
-// UserAttributeProtocolMapperStatus defines the observed state of UserAttributeProtocolMapper.
-type UserAttributeProtocolMapperStatus struct {
+// SamlUserAttributeProtocolMapperStatus defines the observed state of SamlUserAttributeProtocolMapper.
+type SamlUserAttributeProtocolMapperStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        UserAttributeProtocolMapperObservation `json:"atProvider,omitempty"`
+	AtProvider        SamlUserAttributeProtocolMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// UserAttributeProtocolMapper is the Schema for the UserAttributeProtocolMappers API.
+// SamlUserAttributeProtocolMapper is the Schema for the SamlUserAttributeProtocolMappers API.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:resource:scope=Namespaced,categories={crossplane,managed,keycloak}
-type UserAttributeProtocolMapper struct {
+// +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,keycloak}
+type SamlUserAttributeProtocolMapper struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.samlAttributeName) || (has(self.initProvider) && has(self.initProvider.samlAttributeName))",message="spec.forProvider.samlAttributeName is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.samlAttributeNameFormat) || (has(self.initProvider) && has(self.initProvider.samlAttributeNameFormat))",message="spec.forProvider.samlAttributeNameFormat is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.userAttribute) || (has(self.initProvider) && has(self.initProvider.userAttribute))",message="spec.forProvider.userAttribute is a required parameter"
-	Spec   UserAttributeProtocolMapperSpec   `json:"spec"`
-	Status UserAttributeProtocolMapperStatus `json:"status,omitempty"`
+	Spec   SamlUserAttributeProtocolMapperSpec   `json:"spec"`
+	Status SamlUserAttributeProtocolMapperStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// UserAttributeProtocolMapperList contains a list of UserAttributeProtocolMappers
-type UserAttributeProtocolMapperList struct {
+// SamlUserAttributeProtocolMapperList contains a list of SamlUserAttributeProtocolMappers
+type SamlUserAttributeProtocolMapperList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []UserAttributeProtocolMapper `json:"items"`
+	Items           []SamlUserAttributeProtocolMapper `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	UserAttributeProtocolMapper_Kind             = "UserAttributeProtocolMapper"
-	UserAttributeProtocolMapper_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: UserAttributeProtocolMapper_Kind}.String()
-	UserAttributeProtocolMapper_KindAPIVersion   = UserAttributeProtocolMapper_Kind + "." + CRDGroupVersion.String()
-	UserAttributeProtocolMapper_GroupVersionKind = CRDGroupVersion.WithKind(UserAttributeProtocolMapper_Kind)
+	SamlUserAttributeProtocolMapper_Kind             = "SamlUserAttributeProtocolMapper"
+	SamlUserAttributeProtocolMapper_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: SamlUserAttributeProtocolMapper_Kind}.String()
+	SamlUserAttributeProtocolMapper_KindAPIVersion   = SamlUserAttributeProtocolMapper_Kind + "." + CRDGroupVersion.String()
+	SamlUserAttributeProtocolMapper_GroupVersionKind = CRDGroupVersion.WithKind(SamlUserAttributeProtocolMapper_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&UserAttributeProtocolMapper{}, &UserAttributeProtocolMapperList{})
+	SchemeBuilder.Register(&SamlUserAttributeProtocolMapper{}, &SamlUserAttributeProtocolMapperList{})
 }

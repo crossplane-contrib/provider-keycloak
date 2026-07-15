@@ -16,7 +16,7 @@ func (tr *ClientDefaultScopes) Hub() {}
 func (tr *ClientScope) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *UserAttributeProtocolMapper) Hub() {}
+func (tr *SamlUserAttributeProtocolMapper) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *UserPropertyProtocolMapper) Hub() {}
+func (tr *SamlUserPropertyProtocolMapper) Hub() {}

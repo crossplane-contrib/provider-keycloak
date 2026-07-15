@@ -34,8 +34,8 @@ func (l *ClientScopeList) GetItems() []resource.Managed {
 	return items
 }
 
-// GetItems of this UserAttributeProtocolMapperList.
-func (l *UserAttributeProtocolMapperList) GetItems() []resource.Managed {
+// GetItems of this SamlUserAttributeProtocolMapperList.
+func (l *SamlUserAttributeProtocolMapperList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]
@@ -43,8 +43,8 @@ func (l *UserAttributeProtocolMapperList) GetItems() []resource.Managed {
 	return items
 }
 
-// GetItems of this UserPropertyProtocolMapperList.
-func (l *UserPropertyProtocolMapperList) GetItems() []resource.Managed {
+// GetItems of this SamlUserPropertyProtocolMapperList.
+func (l *SamlUserPropertyProtocolMapperList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

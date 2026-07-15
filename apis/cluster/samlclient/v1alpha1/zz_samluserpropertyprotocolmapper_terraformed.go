@@ -14,18 +14,18 @@ import (
 	"github.com/crossplane/upjet/v2/pkg/resource/json"
 )
 
-// GetTerraformResourceType returns Terraform resource type for this UserAttributeProtocolMapper
-func (mg *UserAttributeProtocolMapper) GetTerraformResourceType() string {
-	return "keycloak_saml_user_attribute_protocol_mapper"
+// GetTerraformResourceType returns Terraform resource type for this SamlUserPropertyProtocolMapper
+func (mg *SamlUserPropertyProtocolMapper) GetTerraformResourceType() string {
+	return "keycloak_saml_user_property_protocol_mapper"
 }
 
-// GetConnectionDetailsMapping for this UserAttributeProtocolMapper
-func (tr *UserAttributeProtocolMapper) GetConnectionDetailsMapping() map[string]string {
+// GetConnectionDetailsMapping for this SamlUserPropertyProtocolMapper
+func (tr *SamlUserPropertyProtocolMapper) GetConnectionDetailsMapping() map[string]string {
 	return nil
 }
 
-// GetObservation of this UserAttributeProtocolMapper
-func (tr *UserAttributeProtocolMapper) GetObservation() (map[string]any, error) {
+// GetObservation of this SamlUserPropertyProtocolMapper
+func (tr *SamlUserPropertyProtocolMapper) GetObservation() (map[string]any, error) {
 	o, err := json.TFParser.Marshal(tr.Status.AtProvider)
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func (tr *UserAttributeProtocolMapper) GetObservation() (map[string]any, error) 
 	return base, json.TFParser.Unmarshal(o, &base)
 }
 
-// SetObservation for this UserAttributeProtocolMapper
-func (tr *UserAttributeProtocolMapper) SetObservation(obs map[string]any) error {
+// SetObservation for this SamlUserPropertyProtocolMapper
+func (tr *SamlUserPropertyProtocolMapper) SetObservation(obs map[string]any) error {
 	p, err := json.TFParser.Marshal(obs)
 	if err != nil {
 		return err
@@ -43,16 +43,16 @@ func (tr *UserAttributeProtocolMapper) SetObservation(obs map[string]any) error 
 	return json.TFParser.Unmarshal(p, &tr.Status.AtProvider)
 }
 
-// GetID returns ID of underlying Terraform resource of this UserAttributeProtocolMapper
-func (tr *UserAttributeProtocolMapper) GetID() string {
+// GetID returns ID of underlying Terraform resource of this SamlUserPropertyProtocolMapper
+func (tr *SamlUserPropertyProtocolMapper) GetID() string {
 	if tr.Status.AtProvider.ID == nil {
 		return ""
 	}
 	return *tr.Status.AtProvider.ID
 }
 
-// GetParameters of this UserAttributeProtocolMapper
-func (tr *UserAttributeProtocolMapper) GetParameters() (map[string]any, error) {
+// GetParameters of this SamlUserPropertyProtocolMapper
+func (tr *SamlUserPropertyProtocolMapper) GetParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.ForProvider)
 	if err != nil {
 		return nil, err
@@ -61,8 +61,8 @@ func (tr *UserAttributeProtocolMapper) GetParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// SetParameters for this UserAttributeProtocolMapper
-func (tr *UserAttributeProtocolMapper) SetParameters(params map[string]any) error {
+// SetParameters for this SamlUserPropertyProtocolMapper
+func (tr *SamlUserPropertyProtocolMapper) SetParameters(params map[string]any) error {
 	p, err := json.TFParser.Marshal(params)
 	if err != nil {
 		return err
@@ -70,8 +70,8 @@ func (tr *UserAttributeProtocolMapper) SetParameters(params map[string]any) erro
 	return json.TFParser.Unmarshal(p, &tr.Spec.ForProvider)
 }
 
-// GetInitParameters of this UserAttributeProtocolMapper
-func (tr *UserAttributeProtocolMapper) GetInitParameters() (map[string]any, error) {
+// GetInitParameters of this SamlUserPropertyProtocolMapper
+func (tr *SamlUserPropertyProtocolMapper) GetInitParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.InitProvider)
 	if err != nil {
 		return nil, err
@@ -80,8 +80,8 @@ func (tr *UserAttributeProtocolMapper) GetInitParameters() (map[string]any, erro
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// GetInitParameters of this UserAttributeProtocolMapper
-func (tr *UserAttributeProtocolMapper) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
+// GetInitParameters of this SamlUserPropertyProtocolMapper
+func (tr *SamlUserPropertyProtocolMapper) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
 	params, err := tr.GetParameters()
 	if err != nil {
 		return nil, errors.Wrapf(err, "cannot get parameters for resource \"%s/%s\"", tr.GetNamespace(), tr.GetName())
@@ -110,10 +110,10 @@ func (tr *UserAttributeProtocolMapper) GetMergedParameters(shouldMergeInitProvid
 	return params, nil
 }
 
-// LateInitialize this UserAttributeProtocolMapper using its observed tfState.
+// LateInitialize this SamlUserPropertyProtocolMapper using its observed tfState.
 // returns True if there are any spec changes for the resource.
-func (tr *UserAttributeProtocolMapper) LateInitialize(attrs []byte) (bool, error) {
-	params := &UserAttributeProtocolMapperParameters{}
+func (tr *SamlUserPropertyProtocolMapper) LateInitialize(attrs []byte) (bool, error) {
+	params := &SamlUserPropertyProtocolMapperParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}
@@ -124,6 +124,6 @@ func (tr *UserAttributeProtocolMapper) LateInitialize(attrs []byte) (bool, error
 }
 
 // GetTerraformSchemaVersion returns the associated Terraform schema version
-func (tr *UserAttributeProtocolMapper) GetTerraformSchemaVersion() int {
+func (tr *SamlUserPropertyProtocolMapper) GetTerraformSchemaVersion() int {
 	return 0
 }
