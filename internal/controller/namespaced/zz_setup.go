@@ -61,7 +61,18 @@ import (
 	clientserviceaccountrealmrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientserviceaccountrealmrole"
 	clientserviceaccountrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientserviceaccountrole"
 	clientuserpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientuserpolicy"
+	audienceprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/audienceprotocolmapper"
+	audienceresolveprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/audienceresolveprotocolmapper"
+	fullnameprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/fullnameprotocolmapper"
 	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/groupmembershipprotocolmapper"
+	hardcodedclaimprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/hardcodedclaimprotocolmapper"
+	hardcodedroleprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/hardcodedroleprotocolmapper"
+	subprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/subprotocolmapper"
+	userattributeprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/userattributeprotocolmapper"
+	userclientroleprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/userclientroleprotocolmapper"
+	userpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/userpropertyprotocolmapper"
+	userrealmroleprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/userrealmroleprotocolmapper"
+	usersessionnoteprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/usersessionnoteprotocolmapper"
 	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/organization/organization"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/providerconfig"
 	clientpolicyprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofile"
@@ -143,7 +154,18 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientserviceaccountrealmrole.Setup,
 		clientserviceaccountrole.Setup,
 		clientuserpolicy.Setup,
+		audienceprotocolmapper.Setup,
+		audienceresolveprotocolmapper.Setup,
+		fullnameprotocolmapper.Setup,
 		groupmembershipprotocolmapper.Setup,
+		hardcodedclaimprotocolmapper.Setup,
+		hardcodedroleprotocolmapper.Setup,
+		subprotocolmapper.Setup,
+		userattributeprotocolmapper.Setup,
+		userclientroleprotocolmapper.Setup,
+		userpropertyprotocolmapper.Setup,
+		userrealmroleprotocolmapper.Setup,
+		usersessionnoteprotocolmapper.Setup,
 		organization.Setup,
 		providerconfig.Setup,
 		clientpolicyprofile.Setup,
@@ -231,7 +253,18 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientserviceaccountrealmrole.SetupGated,
 		clientserviceaccountrole.SetupGated,
 		clientuserpolicy.SetupGated,
+		audienceprotocolmapper.SetupGated,
+		audienceresolveprotocolmapper.SetupGated,
+		fullnameprotocolmapper.SetupGated,
 		groupmembershipprotocolmapper.SetupGated,
+		hardcodedclaimprotocolmapper.SetupGated,
+		hardcodedroleprotocolmapper.SetupGated,
+		subprotocolmapper.SetupGated,
+		userattributeprotocolmapper.SetupGated,
+		userclientroleprotocolmapper.SetupGated,
+		userpropertyprotocolmapper.SetupGated,
+		userrealmroleprotocolmapper.SetupGated,
+		usersessionnoteprotocolmapper.SetupGated,
 		organization.SetupGated,
 		providerconfig.SetupGated,
 		clientpolicyprofile.SetupGated,
@@ -318,7 +351,18 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientserviceaccountrealmrole.SetupWebhookWithManager,
 		clientserviceaccountrole.SetupWebhookWithManager,
 		clientuserpolicy.SetupWebhookWithManager,
+		audienceprotocolmapper.SetupWebhookWithManager,
+		audienceresolveprotocolmapper.SetupWebhookWithManager,
+		fullnameprotocolmapper.SetupWebhookWithManager,
 		groupmembershipprotocolmapper.SetupWebhookWithManager,
+		hardcodedclaimprotocolmapper.SetupWebhookWithManager,
+		hardcodedroleprotocolmapper.SetupWebhookWithManager,
+		subprotocolmapper.SetupWebhookWithManager,
+		userattributeprotocolmapper.SetupWebhookWithManager,
+		userclientroleprotocolmapper.SetupWebhookWithManager,
+		userpropertyprotocolmapper.SetupWebhookWithManager,
+		userrealmroleprotocolmapper.SetupWebhookWithManager,
+		usersessionnoteprotocolmapper.SetupWebhookWithManager,
 		organization.SetupWebhookWithManager,
 		providerconfig.SetupWebhookWithManager,
 		clientpolicyprofile.SetupWebhookWithManager,

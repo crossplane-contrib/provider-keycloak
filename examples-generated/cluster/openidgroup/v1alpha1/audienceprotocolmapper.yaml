@@ -1,0 +1,55 @@
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: AudienceProtocolMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/audienceprotocolmapper
+  labels:
+    testing.upbound.io/example-name: audience_mapper
+  name: audience-mapper
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: openid_client
+    includedCustomAudience: foo
+    name: audience-mapper
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/audienceprotocolmapper
+  labels:
+    testing.upbound.io/example-name: openid_client
+  name: openid-client
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientId: client
+    enabled: true
+    name: client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    validRedirectUris:
+    - http://localhost:8080/openid-callback
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/audienceprotocolmapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

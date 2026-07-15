@@ -45,7 +45,18 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_openid_client":                                     openidclient.ClientIdentifierFromIdentifyingProperties,                    // {UUid}
 	"keycloak_openid_client_authorization_resource":              openidclient.AuthzResourceIdentifierFromIdentifyingProperties,             // {realm}/{Client.UUid}
 	"keycloak_openid_client_authorization_permission":            openidclient.AuthzPermissionIdentifierFromIdentifyingProperties,           // {realm}/{Client.UUid}
+	"keycloak_openid_audience_protocol_mapper":                   openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
+	"keycloak_openid_audience_resolve_protocol_mapper":           openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
+	"keycloak_openid_full_name_protocol_mapper":                  openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
 	"keycloak_openid_group_membership_protocol_mapper":           openidgroup.IdentifierFromIdentifyingProperties,                           // {UUid}
+	"keycloak_openid_hardcoded_claim_protocol_mapper":            openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
+	"keycloak_openid_hardcoded_role_protocol_mapper":             openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
+	"keycloak_openid_sub_protocol_mapper":                        openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
+	"keycloak_openid_user_attribute_protocol_mapper":             openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
+	"keycloak_openid_user_client_role_protocol_mapper":           openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
+	"keycloak_openid_user_property_protocol_mapper":              openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
+	"keycloak_openid_user_realm_role_protocol_mapper":            openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
+	"keycloak_openid_user_session_note_protocol_mapper":          openidgroup.OpenidProtocolMapperIdentifierFromIdentifyingProperties,       // {UUid}
 	"keycloak_openid_client_service_account_realm_role":          config.IdentifierFromProvider,                                             // {serviceAccountUserId.UUid}/{role.UUid}
 	"keycloak_openid_client_service_account_role":                config.IdentifierFromProvider,                                             // {serviceAccountUserId.UUid}/{role.UUid}
 	"keycloak_organization":                                      config.IdentifierFromProvider,                                             // {UUid}
