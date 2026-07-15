@@ -4,8 +4,6 @@ title: Users
 description: Manage users, user role mappings, group memberships, permissions, and custom user federation
 ---
 
-# Users
-
 Use `User` to declaratively manage people who can authenticate to Keycloak. Use `Groups`, `Roles`, and `Permissions` to manage access around those users, and `UserFederation` when you need a custom external user store integration.
 
 ## API Reference

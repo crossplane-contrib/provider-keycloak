@@ -4,8 +4,6 @@ title: Troubleshooting
 description: Common issues and how to resolve them
 ---
 
-# Troubleshooting
-
 ## Common Issues
 
 ### Resource Stuck in "Creating" State

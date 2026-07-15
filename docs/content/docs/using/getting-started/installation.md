@@ -4,8 +4,6 @@ title: Installation
 description: Install provider-keycloak into your Crossplane control plane
 ---
 
-# Installation
-
 ## Prerequisites
 
 - A Kubernetes cluster with [Crossplane](https://docs.crossplane.io/latest/software/install/) installed

@@ -169,8 +169,6 @@ consuming individual pages.
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/llms/
 
 
-# LLM Files
-
 The docs site ships AI-oriented reference files:
 
 - [`/llms.txt`](/llms.txt)
@@ -179,8 +177,6 @@ The docs site ships AI-oriented reference files:
 ## Documentation Model
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/documentation-model/
 
-
-# Documentation Model
 
 Provider Keycloak has a large API surface. Keep the documentation useful by
 separating authored guidance from generated reference material.
@@ -230,8 +226,6 @@ generated from the CRD OpenAPI schema.
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs/
 
 
-# Local Docs Development
-
 Run the documentation site locally:
 
 ```bash
@@ -251,8 +245,6 @@ The generated site is written to `docs/public/`.
 ## Configuration
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/configuration/
 
-
-# Configuration
 
 Every Keycloak instance you manage requires a `ProviderConfig` resource that specifies how to connect to the Keycloak API.
 
@@ -467,8 +459,6 @@ The provider continuously reconciles your desired state (the YAML manifests) wit
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/installation/
 
 
-# Installation
-
 ## Prerequisites
 
 - A Kubernetes cluster with [Crossplane](https://docs.crossplane.io/latest/software/install/) installed
@@ -542,8 +532,6 @@ spec:
 ## Common Patterns
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/common-patterns/
 
-
-# Common Patterns
 
 Most provider-keycloak resources follow the same Crossplane manifest structure.
 Use these patterns across guides and examples instead of repeating long
@@ -877,8 +865,6 @@ spec:
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/troubleshooting/
 
 
-# Troubleshooting
-
 ## Common Issues
 
 ### Resource Stuck in "Creating" State
@@ -980,8 +966,6 @@ kubectl get managed -l crossplane.io/provider=provider-keycloak
 ## Authentication Flows
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/authentication-flows/
 
-
-# Authentication Flows
 
 Use authentication flow resources when the default Keycloak login process is not enough. They let you define custom browser, registration, direct-grant, or client-authentication flows; nest subflows; add execution steps such as MFA, OTP, WebAuthn, or identity-provider redirects; and bind the finished flow to the realm behavior that should use it.
 
@@ -1522,8 +1506,6 @@ spec:
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/clients/
 
 
-# Clients
-
 Use a `Client` when an application or service needs Keycloak to authenticate users with OpenID Connect. This is the resource for web apps, SPAs, backend services, service accounts, and federated workloads.
 
 ## API Reference
@@ -1740,8 +1722,6 @@ spec:
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/groups/
 
 
-# Groups
-
 Use groups when multiple users should share the same roles or when you need a hierarchical structure such as teams, departments, or environments. Groups let you model organization structure once and then manage access in bulk.
 
 ## API Reference
@@ -1898,8 +1878,6 @@ spec:
 ## Identity Providers
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/identity-providers/
 
-
-# Identity Providers
 
 Use identity providers when users should sign in to Keycloak with an external identity system instead of local usernames and passwords. This is the right fit for social login, corporate SAML or OIDC federation, Kubernetes or OpenShift workload identity, SPIFFE-based trust, and controlled token exchange between clients and external providers.
 
@@ -3031,8 +3009,6 @@ spec:
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/roles/
 
 
-# Roles
-
 Use roles to define permissions in Keycloak. Create realm roles for permissions shared across a realm, and client roles when access should be scoped to a specific application or service.
 
 ## API Reference
@@ -3136,8 +3112,6 @@ spec:
 ## SAML Clients
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/saml-clients/
 
-
-# SAML Clients
 
 Use SAML clients when an application or service provider expects SAML 2.0 instead of OpenID Connect. This is common for legacy enterprise applications and commercial service providers such as Salesforce, Jira, or other platforms that rely on SAML metadata, signed assertions, and SSO endpoints.
 
@@ -3344,8 +3318,6 @@ spec:
 ## User Federation
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/user-federation/
 
-
-# User Federation
 
 Use user federation when Keycloak should authenticate users against an external directory or user store instead of managing every account in its own database. LDAP and Active Directory federation let users sign in with their existing directory credentials, while mapper resources control how LDAP attributes, groups, and roles are projected into Keycloak. Use the custom user federation CRD when you have a Keycloak user storage SPI provider that is not LDAP-based.
 
@@ -3704,8 +3676,6 @@ spec:
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/users/
 
 
-# Users
-
 Use `User` to declaratively manage people who can authenticate to Keycloak. Use `Groups`, `Roles`, and `Permissions` to manage access around those users, and `UserFederation` when you need a custom external user store integration.
 
 ## API Reference
@@ -3853,8 +3823,6 @@ spec:
 ## Workflows
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/workflows/
 
-
-# Workflows
 
 Use workflows when you want Keycloak 26.5+ to react automatically to realm events. They are a good fit for onboarding notifications, password-policy enforcement, or custom event-driven logic when users are created, updated, or perform specific actions. Key fields are `name`, `enabled`, `on` for the trigger event, `step` for the ordered actions, and `realmRef` for the target realm.
 
