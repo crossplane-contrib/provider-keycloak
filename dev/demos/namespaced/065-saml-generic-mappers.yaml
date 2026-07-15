@@ -24,7 +24,6 @@ spec:
         resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
 
 ---
 # Generic client role mapper (namespaced)
@@ -50,7 +49,6 @@ spec:
         resolve: Always
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
 
 ---
 # SAML user attribute protocol mapper (namespaced)
@@ -75,7 +73,6 @@ spec:
     userAttribute: email
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
 
 ---
 # SAML user property protocol mapper (namespaced)
@@ -100,4 +97,3 @@ spec:
     userProperty: username
   providerConfigRef:
     name: "keycloak-provider-config"
-    namespace: dev-ns
