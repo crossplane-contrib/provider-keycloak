@@ -1,0 +1,60 @@
+apiVersion: openidgroup.keycloak.m.crossplane.io/v1alpha1
+kind: UserSessionNoteProtocolMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/usersessionnoteprotocolmapper
+  labels:
+    testing.upbound.io/example-name: user_session_note_mapper
+  name: user-session-note-mapper
+  namespace: upbound-system
+spec:
+  forProvider:
+    claimName: foo
+    claimValueType: String
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: openid_client
+    name: user-session-note-mapper
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    sessionNote: bar
+
+---
+
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/usersessionnoteprotocolmapper
+  labels:
+    testing.upbound.io/example-name: openid_client
+  name: openid-client
+  namespace: upbound-system
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientId: client
+    enabled: true
+    name: client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    validRedirectUris:
+    - http://localhost:8080/openid-callback
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/usersessionnoteprotocolmapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm

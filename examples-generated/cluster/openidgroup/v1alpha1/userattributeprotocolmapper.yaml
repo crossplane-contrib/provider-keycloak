@@ -1,0 +1,56 @@
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: UserAttributeProtocolMapper
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/userattributeprotocolmapper
+  labels:
+    testing.upbound.io/example-name: user_attribute_mapper
+  name: user-attribute-mapper
+spec:
+  forProvider:
+    claimName: bar
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: openid_client
+    name: user-attribute-mapper
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    userAttribute: foo
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/userattributeprotocolmapper
+  labels:
+    testing.upbound.io/example-name: openid_client
+  name: openid-client
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientId: client
+    enabled: true
+    name: client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    validRedirectUris:
+    - http://localhost:8080/openid-callback
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidgroup/v1alpha1/userattributeprotocolmapper
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
