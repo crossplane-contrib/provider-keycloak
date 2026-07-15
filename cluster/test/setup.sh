@@ -14,8 +14,24 @@ ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/namespaced/000-init.yaml
 # uptest runs (observed with OidcOpenShiftV4IdentityProvider and
 # ClientRegexPolicy in Keycloak 26.4.x).
 echo "Waiting for all ManagedResourceDefinitions to be established..."
-${KUBECTL} wait managedresourcedefinitions.apiextensions.crossplane.io \
-  --all --for=condition=Established --timeout=10m
+if ${KUBECTL} api-resources --api-group=apiextensions.crossplane.io --no-headers | grep -q '^managedresourcedefinitions'; then
+  if ${KUBECTL} get managedresourcedefinitions.apiextensions.crossplane.io --no-headers 2>/dev/null | grep -q .; then
+    ${KUBECTL} wait managedresourcedefinitions.apiextensions.crossplane.io \
+      --all --for=condition=Established --timeout=10m
+  else
+    echo "No ManagedResourceDefinitions found; waiting for Keycloak CRDs instead..."
+    mapfile -t keycloak_crds < <(${KUBECTL} get crd -o name | grep -E 'keycloak\.(crossplane\.io|m\.crossplane\.io)$' || true)
+    if [ "${#keycloak_crds[@]}" -gt 0 ]; then
+      ${KUBECTL} wait --for=condition=Established --timeout=10m "${keycloak_crds[@]}"
+    fi
+  fi
+else
+  echo "ManagedResourceDefinition API is not available; waiting for Keycloak CRDs instead..."
+  mapfile -t keycloak_crds < <(${KUBECTL} get crd -o name | grep -E 'keycloak\.(crossplane\.io|m\.crossplane\.io)$' || true)
+  if [ "${#keycloak_crds[@]}" -gt 0 ]; then
+    ${KUBECTL} wait --for=condition=Established --timeout=10m "${keycloak_crds[@]}"
+  fi
+fi
 
 # Apply org init manifest if KEYCLOAK_VERSION >= 26.6
 if [ -n "${KEYCLOAK_VERSION:-}" ]; then
