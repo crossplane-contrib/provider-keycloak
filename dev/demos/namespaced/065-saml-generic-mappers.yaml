@@ -55,7 +55,7 @@ spec:
 ---
 # SAML user attribute protocol mapper (namespaced)
 apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
-kind: UserAttributeProtocolMapper
+kind: SamlUserAttributeProtocolMapper
 metadata:
   name: saml-user-attr-mapper
   namespace: dev-ns
@@ -80,7 +80,7 @@ spec:
 ---
 # SAML user property protocol mapper (namespaced)
 apiVersion: samlclient.keycloak.m.crossplane.io/v1alpha1
-kind: UserPropertyProtocolMapper
+kind: SamlUserPropertyProtocolMapper
 metadata:
   name: saml-user-prop-mapper
   namespace: dev-ns

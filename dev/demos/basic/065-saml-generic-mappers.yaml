@@ -46,7 +46,7 @@ spec:
 ---
 # SAML user attribute protocol mapper
 apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
-kind: UserAttributeProtocolMapper
+kind: SamlUserAttributeProtocolMapper
 metadata:
   name: saml-user-attr-mapper
 spec:
@@ -67,7 +67,7 @@ spec:
 ---
 # SAML user property protocol mapper
 apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
-kind: UserPropertyProtocolMapper
+kind: SamlUserPropertyProtocolMapper
 metadata:
   name: saml-user-prop-mapper
 spec:
