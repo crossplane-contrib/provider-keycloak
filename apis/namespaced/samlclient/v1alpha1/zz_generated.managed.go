@@ -126,3 +126,83 @@ func (mg *ClientScope) SetProviderConfigReference(r *xpv1.ProviderConfigReferenc
 func (mg *ClientScope) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
+
+// GetCondition of this SamlUserAttributeProtocolMapper.
+func (mg *SamlUserAttributeProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this SamlUserAttributeProtocolMapper.
+func (mg *SamlUserAttributeProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this SamlUserAttributeProtocolMapper.
+func (mg *SamlUserAttributeProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this SamlUserAttributeProtocolMapper.
+func (mg *SamlUserAttributeProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this SamlUserAttributeProtocolMapper.
+func (mg *SamlUserAttributeProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this SamlUserAttributeProtocolMapper.
+func (mg *SamlUserAttributeProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this SamlUserAttributeProtocolMapper.
+func (mg *SamlUserAttributeProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this SamlUserAttributeProtocolMapper.
+func (mg *SamlUserAttributeProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this SamlUserPropertyProtocolMapper.
+func (mg *SamlUserPropertyProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this SamlUserPropertyProtocolMapper.
+func (mg *SamlUserPropertyProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this SamlUserPropertyProtocolMapper.
+func (mg *SamlUserPropertyProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this SamlUserPropertyProtocolMapper.
+func (mg *SamlUserPropertyProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this SamlUserPropertyProtocolMapper.
+func (mg *SamlUserPropertyProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this SamlUserPropertyProtocolMapper.
+func (mg *SamlUserPropertyProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this SamlUserPropertyProtocolMapper.
+func (mg *SamlUserPropertyProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this SamlUserPropertyProtocolMapper.
+func (mg *SamlUserPropertyProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}

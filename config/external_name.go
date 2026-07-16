@@ -27,6 +27,8 @@ import (
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
+	"keycloak_generic_client_protocol_mapper":                    mapper.GenericClientProtocolMapperIdentifierFromIdentifyingProperties,     // {UUid}
+	"keycloak_generic_client_role_mapper":                        config.IdentifierFromProvider,                                             // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
 	"keycloak_generic_protocol_mapper":                           mapper.ProtocolMapperIdentifierFromIdentifyingProperties,                  // {UUid}
 	"keycloak_generic_role_mapper":                               config.IdentifierFromProvider,                                             // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
 	"keycloak_group_memberships":                                 config.IdentifierFromProvider,                                             // {realm}/group-memberships/{Group.UUid}
@@ -85,6 +87,8 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_saml_client":                                       samlclient.ClientIdentifierFromIdentifyingProperties,                      // {UUid}
 	"keycloak_saml_client_default_scopes":                        config.IdentifierFromProvider,                                             // {realm}/{Client.UUid}
 	"keycloak_saml_client_scope":                                 samlclient.ClientScopeIdentifierFromIdentifyingProperties,                 // {UUid}
+	"keycloak_saml_user_attribute_protocol_mapper":               samlclient.SamlProtocolMapperIdentifierFromIdentifyingProperties,          // {UUid}
+	"keycloak_saml_user_property_protocol_mapper":                samlclient.SamlProtocolMapperIdentifierFromIdentifyingProperties,          // {UUid}
 	"keycloak_realm_keystore_rsa":                                realm.KeystoreRsaIdentifierFromIdentifyingProperties,                      // {UUid}
 	"keycloak_realm_user_profile":                                config.IdentifierFromProvider,                                             // {realm}
 	"keycloak_realm_localization":                                config.IdentifierFromProvider,                                             // {realm}/{locale}

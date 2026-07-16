@@ -4,8 +4,6 @@ title: SAML Clients
 description: Configure SAML 2.0 clients, scopes, and default scopes in Keycloak
 ---
 
-# SAML Clients
-
 Use SAML clients when an application or service provider expects SAML 2.0 instead of OpenID Connect. This is common for legacy enterprise applications and commercial service providers such as Salesforce, Jira, or other platforms that rely on SAML metadata, signed assertions, and SSO endpoints.
 
 ## API Reference

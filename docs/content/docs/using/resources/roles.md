@@ -4,8 +4,6 @@ title: Roles
 description: Manage realm roles and client roles in Keycloak
 ---
 
-# Roles
-
 Use roles to define permissions in Keycloak. Create realm roles for permissions shared across a realm, and client roles when access should be scoped to a specific application or service.
 
 ## API Reference

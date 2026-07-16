@@ -62,7 +62,7 @@ func GetIDFromIdentifyingProperties(ctx context.Context, externalName string, pa
 
 	for _, optParamName := range lookupConfig.OptionalParameters {
 		optParam, optParamExists := parameters[optParamName]
-		if !optParamExists {
+		if !optParamExists || optParam == nil {
 			optParam = ""
 		}
 		processedParameters[optParamName] = optParam

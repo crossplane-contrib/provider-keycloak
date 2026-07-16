@@ -14,6 +14,8 @@ import (
 	executionconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/authenticationflow/executionconfig"
 	flow "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/authenticationflow/flow"
 	subflow "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/authenticationflow/subflow"
+	genericclientprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/genericclientprotocolmapper"
+	genericclientrolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/genericclientrolemapper"
 	protocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/protocolmapper"
 	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/rolemapper"
 	defaultgroups "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/defaults/defaultgroups"
@@ -90,6 +92,8 @@ import (
 	clientsamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/samlclient/client"
 	clientdefaultscopessamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/samlclient/clientdefaultscopes"
 	clientscopesamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/samlclient/clientscope"
+	samluserattributeprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/samlclient/samluserattributeprotocolmapper"
+	samluserpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/samlclient/samluserpropertyprotocolmapper"
 	groups "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/user/groups"
 	permissionsuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/user/permissions"
 	rolesuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/user/roles"
@@ -107,6 +111,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		executionconfig.Setup,
 		flow.Setup,
 		subflow.Setup,
+		genericclientprotocolmapper.Setup,
+		genericclientrolemapper.Setup,
 		protocolmapper.Setup,
 		rolemapper.Setup,
 		defaultgroups.Setup,
@@ -183,6 +189,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientsamlclient.Setup,
 		clientdefaultscopessamlclient.Setup,
 		clientscopesamlclient.Setup,
+		samluserattributeprotocolmapper.Setup,
+		samluserpropertyprotocolmapper.Setup,
 		groups.Setup,
 		permissionsuser.Setup,
 		rolesuser.Setup,
@@ -206,6 +214,8 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		executionconfig.SetupGated,
 		flow.SetupGated,
 		subflow.SetupGated,
+		genericclientprotocolmapper.SetupGated,
+		genericclientrolemapper.SetupGated,
 		protocolmapper.SetupGated,
 		rolemapper.SetupGated,
 		defaultgroups.SetupGated,
@@ -282,6 +292,8 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientsamlclient.SetupGated,
 		clientdefaultscopessamlclient.SetupGated,
 		clientscopesamlclient.SetupGated,
+		samluserattributeprotocolmapper.SetupGated,
+		samluserpropertyprotocolmapper.SetupGated,
 		groups.SetupGated,
 		permissionsuser.SetupGated,
 		rolesuser.SetupGated,
@@ -304,6 +316,8 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		executionconfig.SetupWebhookWithManager,
 		flow.SetupWebhookWithManager,
 		subflow.SetupWebhookWithManager,
+		genericclientprotocolmapper.SetupWebhookWithManager,
+		genericclientrolemapper.SetupWebhookWithManager,
 		protocolmapper.SetupWebhookWithManager,
 		rolemapper.SetupWebhookWithManager,
 		defaultgroups.SetupWebhookWithManager,
@@ -380,6 +394,8 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientsamlclient.SetupWebhookWithManager,
 		clientdefaultscopessamlclient.SetupWebhookWithManager,
 		clientscopesamlclient.SetupWebhookWithManager,
+		samluserattributeprotocolmapper.SetupWebhookWithManager,
+		samluserpropertyprotocolmapper.SetupWebhookWithManager,
 		groups.SetupWebhookWithManager,
 		permissionsuser.SetupWebhookWithManager,
 		rolesuser.SetupWebhookWithManager,

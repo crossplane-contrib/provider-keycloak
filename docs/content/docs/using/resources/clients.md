@@ -4,8 +4,6 @@ title: Clients
 description: Manage OpenID Connect clients for applications and services
 ---
 
-# Clients
-
 Use a `Client` when an application or service needs Keycloak to authenticate users with OpenID Connect. This is the resource for web apps, SPAs, backend services, service accounts, and federated workloads.
 
 ## API Reference

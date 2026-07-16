@@ -9,6 +9,7 @@ import (
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+	"github.com/crossplane-contrib/provider-keycloak/config/mapper"
 )
 
 const (
@@ -66,6 +67,34 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 	})
 
+	p.AddResourceConfigurator("keycloak_saml_user_attribute_protocol_mapper", func(r *config.Resource) {
+		// We need to override the default group that upjet generated for
+		r.ShortGroup = Group
+		r.Kind = "SamlUserAttributeProtocolMapper"
+
+		r.References["client_id"] = config.Reference{
+			TerraformName: "keycloak_saml_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+		r.References["client_scope_id"] = config.Reference{
+			TerraformName: "keycloak_saml_client_scope",
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_saml_user_property_protocol_mapper", func(r *config.Resource) {
+		// We need to override the default group that upjet generated for
+		r.ShortGroup = Group
+		r.Kind = "SamlUserPropertyProtocolMapper"
+
+		r.References["client_id"] = config.Reference{
+			TerraformName: "keycloak_saml_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+		r.References["client_scope_id"] = config.Reference{
+			TerraformName: "keycloak_saml_client_scope",
+		}
+	})
+
 }
 
 var clientIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
@@ -105,6 +134,10 @@ var clientScopeIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupC
 
 // ClientScopeIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
 var ClientScopeIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(clientScopeIdentifyingPropertiesLookup)
+
+// SamlProtocolMapperIdentifierFromIdentifyingProperties reuses the generic
+// protocol mapper lookup for SAML client protocol mappers.
+var SamlProtocolMapperIdentifierFromIdentifyingProperties = mapper.ProtocolMapperIdentifierFromIdentifyingProperties
 
 func getClientScopeIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
 	found, err := kcClient.GetSamlClientScope(ctx, parameters["realm_id"].(string), id)
