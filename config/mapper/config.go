@@ -201,11 +201,13 @@ var ProtocolMapperIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingP
 var GenericClientProtocolMapperIdentifierFromIdentifyingProperties = ProtocolMapperIdentifierFromIdentifyingProperties
 
 func getProtocolMapperIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	if parameters["client_id"].(string) == "" && parameters["client_scope_id"].(string) == "" {
+	clientID, _ := parameters["client_id"].(string)
+	clientScopeID, _ := parameters["client_scope_id"].(string)
+	if clientID == "" && clientScopeID == "" {
 		return "", errors.New("Either client_id or client_scope_id must be set")
 	}
 
-	found, err := kcClient.GetGenericProtocolMapper(ctx, parameters["realm_id"].(string), parameters["client_id"].(string), parameters["client_scope_id"].(string), id)
+	found, err := kcClient.GetGenericProtocolMapper(ctx, parameters["realm_id"].(string), clientID, clientScopeID, id)
 	if err != nil {
 		return "", err
 	}
@@ -213,11 +215,13 @@ func getProtocolMapperIDByExternalName(ctx context.Context, id string, parameter
 }
 
 func getProtocolMapperIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
-	if parameters["client_id"].(string) == "" && parameters["client_scope_id"].(string) == "" {
+	clientID, _ := parameters["client_id"].(string)
+	clientScopeID, _ := parameters["client_scope_id"].(string)
+	if clientID == "" && clientScopeID == "" {
 		return "", errors.New("Either client_id or client_scope_id must be set")
 	}
 
-	found, err := lookup.GetGenericProtocolMappers(kcClient, ctx, parameters["realm_id"].(string), parameters["client_id"].(string), parameters["client_scope_id"].(string))
+	found, err := lookup.GetGenericProtocolMappers(kcClient, ctx, parameters["realm_id"].(string), clientID, clientScopeID)
 	if err != nil {
 		return "", err
 	}

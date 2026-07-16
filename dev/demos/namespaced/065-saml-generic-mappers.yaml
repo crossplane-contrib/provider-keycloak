@@ -18,7 +18,7 @@ spec:
     protocol: saml
     protocolMapper: saml-user-attribute-mapper
     realmIdRef:
-      name: "dev"
+      name: "dev-ns"
       namespace: dev-ns
       policy:
         resolve: Always
@@ -39,7 +39,7 @@ spec:
       name: saml-client
       namespace: dev-ns
     realmIdRef:
-      name: "dev"
+      name: "dev-ns"
       namespace: dev-ns
       policy:
         resolve: Always
@@ -66,7 +66,7 @@ spec:
       namespace: dev-ns
     name: saml-user-attribute
     realmIdRef:
-      name: "dev"
+      name: "dev-ns"
       namespace: dev-ns
       policy:
         resolve: Always
@@ -91,7 +91,7 @@ spec:
       namespace: dev-ns
     name: saml-user-property
     realmIdRef:
-      name: "dev"
+      name: "dev-ns"
       namespace: dev-ns
       policy:
         resolve: Always
