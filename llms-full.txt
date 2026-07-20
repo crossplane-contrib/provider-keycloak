@@ -143,9 +143,9 @@ consuming individual pages.
 - **Upjet does not support `+nullable` markers.** Do not add nullable annotations
   to generated types; the `kubebuilder` Options struct only supports Required,
   Minimum, Maximum, Default.
-- **Membership conflicts:** Never let both a `Memberships` resource (authoritative)
-  and a `Groups` resource with `exhaustive=true` manage the same group's membership
-  — they will fight each other and cause reconciliation loops.
+- **Membership ownership:** Avoid managing the same group's membership with both
+  a `Memberships` resource and a `Groups` resource with `exhaustive=true` at the
+  same time; this can cause reconciliation loops.
 - **E2E Crossplane startup:** When waiting for Crossplane to be ready in CI/dev
   scripts, wait on the deployment availability rather than pods by selector — pods
   may not exist yet when the wait command runs.
@@ -161,6 +161,7 @@ consuming individual pages.
 | `409 Conflict` on resource create | External name collision; resource already exists in Keycloak | Use `lookup.BuildIdentifyingPropertiesLookup` to enable import |
 | `llms-full.txt is stale` in CI | Docs changed but `make docs-gen` not run | Run `make docs-gen` and commit |
 | `no matches for kind` in e2e | CRD not yet established when chainsaw runs | `cluster/test/setup.sh` waits for MRDs; check timing |
+| `make generate` produces unexpectedly large/stale diffs | Stale local generator cache/artifacts | Remove `.work/` and `config/schema.json`, then re-run `make generate` |
 | E2E provider version mismatch | Git tags not fetched before build | Add `git fetch --tags` before `make build` |
 | Reconciliation loop on group membership | Both `Memberships` and `Groups` (exhaustive) target same group | Use only one authoritative source per group |
 
@@ -168,18 +169,124 @@ consuming individual pages.
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/llms/
 
 
-# LLM Files
-
 The docs site ships AI-oriented reference files:
 
 - [`/llms.txt`](/llms.txt)
 - [`/llms-full.txt`](/llms-full.txt)
 
+## Dev Container
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/dev-container/
+
+
+# Dev Container
+
+The repository ships a [Dev Container](https://containers.dev/) under
+`.devcontainer/` that provides a ready-to-use environment to **build the
+provider** and **run the end-to-end (uptest) suite** — Go, Docker-in-Docker and
+kind included. Use it to avoid installing the toolchain on your host.
+
+## What's inside
+
+| Tool | Version | Source |
+|------|---------|--------|
+| Go | 1.25 | devcontainer feature |
+| Docker (DinD) | latest | devcontainer feature |
+| kind, kubectl, helm | pinned in the Makefile | `make` (via `post-create.sh`) |
+| make, curl, unzip, jq, envsubst, git, bash-completion | — | provided by the base image |
+| goimports | latest | `post-create.sh` |
+
+`kind`, `kubectl` and `helm` are **not** version-pinned in the container.
+`post-create.sh` downloads them through the repository's existing Makefile
+targets (`build/makelib/k8s_tools.mk`) into `.cache/tools/` and symlinks them
+onto `PATH`, so the Makefile stays the single source of truth for their
+versions. `yq`, `chainsaw`, `uptest`, `crossplane` and `terraform` are consumed
+only by the Makefile and are fetched by it on demand, so they are not placed on
+`PATH` here.
+
+## Getting started
+
+Open the folder in VS Code and **"Reopen in Container"**, or use the
+[`devcontainer` CLI](https://github.com/devcontainers/cli):
+
+```bash
+devcontainer up --workspace-folder .
+devcontainer exec --workspace-folder . make generate
+```
+
+The first build runs `post-create.sh`, which initializes the `build/` git
+submodule, fetches the k8s CLIs via the Makefile, installs `goimports`, and wires
+up shell completion. Everything else comes from the base image and the
+Go / Docker-in-Docker features.
+
+> Recommended host resources: **4 CPUs / 8 GB RAM / 32 GB disk**. The e2e stack
+> (2-node kind cluster + Keycloak + Crossplane + provider) is memory hungry;
+> less than this risks OOM-killed pods.
+
+## Build and code generation
+
+```bash
+make generate   # regenerate CRDs, API types, controllers, examples
+make build      # build provider binary and xpkg package
+make test       # unit tests
+```
+
+`make generate` uses the committed `config/schema.json` (Keycloak Terraform
+provider **v5.8.0**); it does not upgrade the provider dependency.
+
+## End-to-end tests
+
+`make e2e` (= `local-deploy` + `uptest`) builds and deploys the provider into a
+fresh kind cluster but **does not install Keycloak**. For a complete, runnable
+environment use the dev setup script, then run uptest:
+
+```bash
+# 1. kind cluster + Keycloak (via Helm) + Crossplane + locally-built provider
+./dev/setup_dev_environment.sh --direct-helm --deploy-local-provider -k 26.6.2
+
+# 2. point kubectl at the kind cluster (fenrir-1)
+kind export kubeconfig --name fenrir-1
+
+# 3. run the uptest suite
+make uptest KEYCLOAK_VERSION=26.6.2
+
+# 4. clean up
+kind delete cluster --name fenrir-1
+```
+
+The `--direct-helm` flag installs Keycloak straight from the Helm chart (faster,
+no ArgoCD). Drop `--deploy-local-provider` to test the published provider image
+instead of your local build.
+
+Render the test cases without a cluster:
+
+```bash
+make uptest RENDER_ONLY=true KEYCLOAK_VERSION=26.6.2
+```
+
+## Shell completion
+
+`post-create.sh` enables command completion for **kubectl**, **kind** and
+**docker** in both `bash` and `zsh`, and adds a `k` alias for `kubectl`. The
+configuration is appended to `~/.bashrc` / `~/.zshrc` behind a marker, so
+container rebuilds don't duplicate it. It takes effect in any new shell — in your
+current one, run `source ~/.bashrc` (or `source ~/.zshrc`).
+
+## Networking note
+
+The setup script exposes Keycloak through a `LoadBalancer` service. By default it
+uses **MetalLB** to assign an IP from the kind Docker network; Docker-in-Docker
+runs the Docker daemon inside the container, so that IP is reachable and the
+script can `curl` Keycloak directly.
+
+Alternatively, run it with `--skip-metal-lb --start-cloud-provider-kind` to use
+[`cloud-provider-kind`](https://github.com/kubernetes-sigs/cloud-provider-kind) —
+the LoadBalancer implementation for kind clusters — instead of MetalLB. That
+binary is not part of the container image; install it separately (for example
+`go install sigs.k8s.io/cloud-provider-kind@latest`) if you take this path.
+
 ## Documentation Model
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/documentation-model/
 
-
-# Documentation Model
 
 Provider Keycloak has a large API surface. Keep the documentation useful by
 separating authored guidance from generated reference material.
@@ -229,8 +336,6 @@ generated from the CRD OpenAPI schema.
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs/
 
 
-# Local Docs Development
-
 Run the documentation site locally:
 
 ```bash
@@ -250,8 +355,6 @@ The generated site is written to `docs/public/`.
 ## Configuration
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/configuration/
 
-
-# Configuration
 
 Every Keycloak instance you manage requires a `ProviderConfig` resource that specifies how to connect to the Keycloak API.
 
@@ -466,8 +569,6 @@ The provider continuously reconciles your desired state (the YAML manifests) wit
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/installation/
 
 
-# Installation
-
 ## Prerequisites
 
 - A Kubernetes cluster with [Crossplane](https://docs.crossplane.io/latest/software/install/) installed
@@ -541,8 +642,6 @@ spec:
 ## Common Patterns
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/common-patterns/
 
-
-# Common Patterns
 
 Most provider-keycloak resources follow the same Crossplane manifest structure.
 Use these patterns across guides and examples instead of repeating long
@@ -876,8 +975,6 @@ spec:
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/troubleshooting/
 
 
-# Troubleshooting
-
 ## Common Issues
 
 ### Resource Stuck in "Creating" State
@@ -921,6 +1018,16 @@ Look at the `Events` section and `status.conditions` for error messages.
 - Timestamp or ordering differences
 
 **Solution**: Ensure your spec exactly matches the desired state. Use `kubectl describe` to compare `spec.forProvider` with `status.atProvider`.
+
+### Unexpected `make generate` Diffs
+
+**Symptoms**: `make generate` produces unexpectedly large or stale diffs.
+
+**Common cause**: Stale local generator cache/artifacts.
+
+**Solution**:
+1. Remove `.work/` and `config/schema.json`.
+2. Run `make generate` again.
 
 ### Provider Pod CrashLoopBackOff
 
@@ -969,8 +1076,6 @@ kubectl get managed -l crossplane.io/provider=provider-keycloak
 ## Authentication Flows
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/authentication-flows/
 
-
-# Authentication Flows
 
 Use authentication flow resources when the default Keycloak login process is not enough. They let you define custom browser, registration, direct-grant, or client-authentication flows; nest subflows; add execution steps such as MFA, OTP, WebAuthn, or identity-provider redirects; and bind the finished flow to the realm behavior that should use it.
 
@@ -1280,6 +1385,22 @@ spec:
         resolve: Always
 ```
 
+`spec.forProvider.policies`, `resources`, and `scopes` map directly to the
+underlying Terraform provider fields, so their raw values are UUIDs / IDs, not
+names. If you want to wire managed Keycloak objects together by reference, use
+the generated reference fields instead, for example:
+
+- `resourcesRefs` / `resourcesSelector`
+- `clientPoliciesRefs`
+- `groupPoliciesRefs`
+- `regexPoliciesRefs`
+- `rolePoliciesRefs`
+- `userPoliciesRefs`
+
+Supplying names in the raw `policies`, `resources`, or `scopes` lists causes
+drift because the Terraform provider reads those attributes back as resolved
+Keycloak IDs.
+
 ### `ClientClientPolicy`
 
 ```yaml
@@ -1494,8 +1615,6 @@ spec:
 ## Clients
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/clients/
 
-
-# Clients
 
 Use a `Client` when an application or service needs Keycloak to authenticate users with OpenID Connect. This is the resource for web apps, SPAs, backend services, service accounts, and federated workloads.
 
@@ -1713,8 +1832,6 @@ spec:
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/groups/
 
 
-# Groups
-
 Use groups when multiple users should share the same roles or when you need a hierarchical structure such as teams, departments, or environments. Groups let you model organization structure once and then manage access in bulk.
 
 ## API Reference
@@ -1871,8 +1988,6 @@ spec:
 ## Identity Providers
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/identity-providers/
 
-
-# Identity Providers
 
 Use identity providers when users should sign in to Keycloak with an external identity system instead of local usernames and passwords. This is the right fit for social login, corporate SAML or OIDC federation, Kubernetes or OpenShift workload identity, SPIFFE-based trust, and controlled token exchange between clients and external providers.
 
@@ -3004,8 +3119,6 @@ spec:
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/roles/
 
 
-# Roles
-
 Use roles to define permissions in Keycloak. Create realm roles for permissions shared across a realm, and client roles when access should be scoped to a specific application or service.
 
 ## API Reference
@@ -3109,8 +3222,6 @@ spec:
 ## SAML Clients
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/saml-clients/
 
-
-# SAML Clients
 
 Use SAML clients when an application or service provider expects SAML 2.0 instead of OpenID Connect. This is common for legacy enterprise applications and commercial service providers such as Salesforce, Jira, or other platforms that rely on SAML metadata, signed assertions, and SSO endpoints.
 
@@ -3317,8 +3428,6 @@ spec:
 ## User Federation
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/user-federation/
 
-
-# User Federation
 
 Use user federation when Keycloak should authenticate users against an external directory or user store instead of managing every account in its own database. LDAP and Active Directory federation let users sign in with their existing directory credentials, while mapper resources control how LDAP attributes, groups, and roles are projected into Keycloak. Use the custom user federation CRD when you have a Keycloak user storage SPI provider that is not LDAP-based.
 
@@ -3677,8 +3786,6 @@ spec:
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/users/
 
 
-# Users
-
 Use `User` to declaratively manage people who can authenticate to Keycloak. Use `Groups`, `Roles`, and `Permissions` to manage access around those users, and `UserFederation` when you need a custom external user store integration.
 
 ## API Reference
@@ -3826,8 +3933,6 @@ spec:
 ## Workflows
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/workflows/
 
-
-# Workflows
 
 Use workflows when you want Keycloak 26.5+ to react automatically to realm events. They are a good fit for onboarding notifications, password-policy enforcement, or custom event-driven logic when users are created, updated, or perform specific actions. Key fields are `name`, `enabled`, `on` for the trigger event, `step` for the ordered actions, and `realmRef` for the target realm.
 

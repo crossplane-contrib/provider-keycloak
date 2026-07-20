@@ -1,7 +1,5 @@
 # Users
 
-# Users
-
 Use `User` to declaratively manage people who can authenticate to Keycloak. Use `Groups`, `Roles`, and `Permissions` to manage access around those users, and `UserFederation` when you need a custom external user store integration.
 
 ## API Reference

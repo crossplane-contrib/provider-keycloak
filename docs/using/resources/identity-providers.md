@@ -1,7 +1,5 @@
 # Identity Providers
 
-# Identity Providers
-
 Use identity providers when users should sign in to Keycloak with an external identity system instead of local usernames and passwords. This is the right fit for social login, corporate SAML or OIDC federation, Kubernetes or OpenShift workload identity, SPIFFE-based trust, and controlled token exchange between clients and external providers.
 
 ## API Reference

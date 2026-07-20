@@ -1,7 +1,5 @@
 # Common Patterns
 
-# Common Patterns
-
 Most provider-keycloak resources follow the same Crossplane manifest structure.
 Use these patterns across guides and examples instead of repeating long
 explanations on every resource page.
