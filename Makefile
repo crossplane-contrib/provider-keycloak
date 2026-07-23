@@ -22,7 +22,7 @@ export TERRAFORM_DOCS_PATH ?= docs/resources
 export TERRAFORM_FILE_MIRROR ?= .terraform.d/plugins
 export TERRAFORM_FILE_MIRROR_REPO ?= ${TERRAFORM_FILE_MIRROR}/registry.terraform.io
 
-export GOLANGCILINT_VERSION ?= 2.7.2
+export GOLANGCILINT_VERSION ?= 2.12.2
 
 PLATFORMS ?= linux_amd64 linux_arm64
 
@@ -57,7 +57,7 @@ GO_SUBDIRS += cmd internal apis generate
 
 # ====================================================================================
 # Setup Kubernetes tools
-KUBECTL_VERSION ?= v1.32.2
+KUBECTL_VERSION ?= v1.36.3
 KIND_VERSION = v0.32.0
 UP_VERSION = v0.38.4
 UP_CHANNEL = stable
@@ -192,8 +192,8 @@ run: go.build
 # ====================================================================================
 # End to End Testing
 CHAINSAW_VERSION = 0.2.15
-CROSSPLANE_VERSION = 2.0.2
-CROSSPLANE_CLI_VERSION = v2.0.2
+CROSSPLANE_VERSION = 2.3.4
+CROSSPLANE_CLI_VERSION = v2.3.4
 CROSSPLANE_NAMESPACE = crossplane-system
 CROSSPLANE_CHART_DIR := $(TOOLS_HOST_DIR)/crossplane-chart-$(CROSSPLANE_VERSION)
 CROSSPLANE_CHART := $(CROSSPLANE_CHART_DIR)/Chart.yaml
