@@ -34,6 +34,7 @@
 - [Common Patterns](https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/common-patterns/)
 - [Credentials](https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/credentials/): All supported credential fields and authentication methods
 - [ProviderConfig](https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/provider-config/): Complete reference for ProviderConfig resource
+- [Terraform Migration](https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/terraform-migration/)
 - [Troubleshooting](https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/troubleshooting/): Common issues and how to resolve them
 
 ## AI

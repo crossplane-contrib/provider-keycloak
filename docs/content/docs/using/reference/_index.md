@@ -14,4 +14,5 @@ For resource-specific field schemas, use the generated CRDs in `package/crds/`.
   {{< card link="credentials/" title="Credentials" icon="lock-closed" subtitle="All supported credential fields and authentication methods" >}}
   {{< card link="common-patterns/" title="Common Patterns" icon="puzzle" subtitle="Cross-cutting Crossplane patterns: references, selectors, policies" >}}
   {{< card link="troubleshooting/" title="Troubleshooting" icon="support" subtitle="Diagnose and resolve common issues" >}}
+  {{< card link="terraform-migration/" title="Terraform Migration" icon="switch-horizontal" subtitle="Convert Terraform HCL into Crossplane manifests with tf2crossplane" >}}
 {{< /cards >}}
