@@ -1,0 +1,78 @@
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-config
+  namespace: crossplane-system
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-credentials
+      key: credentials
+      namespace: crossplane-system
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-credentials
+  namespace: crossplane-system
+type: Opaque
+stringData:
+  # Replace the placeholder values below. Never commit real secrets.
+  credentials: |
+    {
+      "client_id": "xxxxxx",
+      "client_secret": "xxxxxx",
+      "url": "https://keycloak.example.com",
+      "base_path": "",
+      "realm": "master"
+    }
+---
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: this
+spec:
+  forProvider:
+    attributes:
+      custom: value
+    displayName: My Realm
+    enabled: true
+    realm: my-realm
+    smtpServer:
+      - from: admin@example.com
+        host: smtp.example.com
+        port: "587"
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: child-group
+spec:
+  forProvider:
+    attributes:
+      department: engineering
+    name: Child Group
+    parentId: some-static-parent
+    realmIdRef:
+      name: this
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: app
+spec:
+  forProvider:
+    clientId: my-app
+    enabled: true
+    name: My App
+    realmIdRef:
+      name: this
+    validRedirectUris:
+      - https://app.example.com/*
+  providerConfigRef:
+    name: keycloak-provider-config

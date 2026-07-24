@@ -1,0 +1,11 @@
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: with-var
+spec:
+  forProvider:
+    name: '"Group ${var.suffix}"'
+    parentId: local.parent
+    realmId: var.realm_id
+  providerConfigRef:
+    name: keycloak-provider-config
