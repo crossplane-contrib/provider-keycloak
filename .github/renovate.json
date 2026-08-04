@@ -25,6 +25,26 @@
   ],
   "packageRules": [
     {
+      "groupName": "go versions",
+      "matchManagers": [
+        "gomod",
+        "github-actions",
+        "custom.regex"
+      ],
+      "matchDepNames": [
+        "go",
+        "golang",
+        "golang/go"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
       "groupName": "k8s.io dependencies",
       "matchManagers": [
         "gomod"
@@ -158,6 +178,42 @@
     }
   ],
   "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^Makefile$"
+      ],
+      "matchStrings": [
+        "GO_REQUIRED_VERSION \\?= (?<currentValue>.*)"
+      ],
+      "datasourceTemplate": "golang-version",
+      "depNameTemplate": "go",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^\\.github/workflows/.*\\.yml$"
+      ],
+      "matchStrings": [
+        "GO_VERSION:\\s*'(?<currentValue>[^']+)'"
+      ],
+      "datasourceTemplate": "golang-version",
+      "depNameTemplate": "go",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^\\.github/workflows/(deploy-docs|preview-docs)\\.yml$"
+      ],
+      "matchStrings": [
+        "go-version:\\s*'(?<currentValue>[^']+)'"
+      ],
+      "datasourceTemplate": "golang-version",
+      "depNameTemplate": "go",
+      "versioningTemplate": "semver"
+    },
     {
       "customType": "regex",
       "fileMatch": [
