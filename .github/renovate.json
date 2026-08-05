@@ -170,6 +170,18 @@
       "automerge": true
     },
     {
+      "groupName": "hugo version",
+      "matchDepNames": [
+        "gohugoio/hugo"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ],
+      "automerge": true
+    },
+    {
       "description": "Terraform 1.6+ is not allowed due to BSL licensing",
       "matchDepNames": [
         "hashicorp/terraform"
@@ -212,6 +224,18 @@
       ],
       "datasourceTemplate": "golang-version",
       "depNameTemplate": "go",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^\\.github/workflows/(deploy-docs|preview-docs)\\.yml$"
+      ],
+      "matchStrings": [
+        "hugo-version:\\s*'(?<currentValue>[^']+)'"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "gohugoio/hugo",
       "versioningTemplate": "semver"
     },
     {
