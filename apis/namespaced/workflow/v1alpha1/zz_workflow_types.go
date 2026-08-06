@@ -14,16 +14,67 @@ import (
 	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
 )
 
+type ScheduleInitParameters struct {
+
+	// Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+	// Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d) or milliseconds.
+	After *string `json:"after,omitempty" tf:"after,omitempty"`
+
+	// Maximum number of realm resources processed during each scheduled run.
+	// Maximum number of resources processed per scheduled batch.
+	BatchSize *float64 `json:"batchSize,omitempty" tf:"batch_size,omitempty"`
+}
+
+type ScheduleObservation struct {
+
+	// Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+	// Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d) or milliseconds.
+	After *string `json:"after,omitempty" tf:"after,omitempty"`
+
+	// Maximum number of realm resources processed during each scheduled run.
+	// Maximum number of resources processed per scheduled batch.
+	BatchSize *float64 `json:"batchSize,omitempty" tf:"batch_size,omitempty"`
+}
+
+type ScheduleParameters struct {
+
+	// Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+	// Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d) or milliseconds.
+	// +kubebuilder:validation:Optional
+	After *string `json:"after,omitempty" tf:"after,omitempty"`
+
+	// Maximum number of realm resources processed during each scheduled run.
+	// Maximum number of resources processed per scheduled batch.
+	// +kubebuilder:validation:Optional
+	BatchSize *float64 `json:"batchSize,omitempty" tf:"batch_size,omitempty"`
+}
+
+type StateInitParameters struct {
+}
+
+type StateObservation struct {
+
+	// A list of error messages recorded for the workflow.
+	Errors []*string `json:"errors,omitempty" tf:"errors,omitempty"`
+}
+
+type StateParameters struct {
+}
+
 type StepInitParameters struct {
 
-	// Delay in milliseconds before executing this step.
-	// Delay in milliseconds before executing this step.
+	// Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+	// Delay before executing this step, as a duration string (e.g. 7d) or milliseconds (e.g. 2592000000).
 	After *string `json:"after,omitempty" tf:"after,omitempty"`
 
 	// A map of key-value pairs configuring the step (e.g. emailTemplate for notify-user).
 	// Key-value configuration for the step.
 	// +mapType=granular
 	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
+
+	// Execution priority used to order steps that would otherwise run at the same time.
+	// Execution priority of the step, used to order steps that would otherwise run at the same time.
+	Priority *string `json:"priority,omitempty" tf:"priority,omitempty"`
 
 	// The step type. Built-in values: disable-user, delete-user, notify-user, set-user-required-action, set-user-attribute.
 	// The step type to execute (e.g. disable-user, delete-user, notify-user).
@@ -32,14 +83,26 @@ type StepInitParameters struct {
 
 type StepObservation struct {
 
-	// Delay in milliseconds before executing this step.
-	// Delay in milliseconds before executing this step.
+	// Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+	// Delay before executing this step, as a duration string (e.g. 7d) or milliseconds (e.g. 2592000000).
 	After *string `json:"after,omitempty" tf:"after,omitempty"`
 
 	// A map of key-value pairs configuring the step (e.g. emailTemplate for notify-user).
 	// Key-value configuration for the step.
 	// +mapType=granular
 	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
+
+	// Execution priority used to order steps that would otherwise run at the same time.
+	// Execution priority of the step, used to order steps that would otherwise run at the same time.
+	Priority *string `json:"priority,omitempty" tf:"priority,omitempty"`
+
+	// Epoch timestamp in milliseconds at which the step is scheduled to execute.
+	// Epoch timestamp in milliseconds at which the step is scheduled to execute.
+	ScheduledAt *float64 `json:"scheduledAt,omitempty" tf:"scheduled_at,omitempty"`
+
+	// The execution status of the step.
+	// Execution status of the step, as reported by Keycloak.
+	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 
 	// The step type. Built-in values: disable-user, delete-user, notify-user, set-user-required-action, set-user-attribute.
 	// The step type to execute (e.g. disable-user, delete-user, notify-user).
@@ -48,8 +111,8 @@ type StepObservation struct {
 
 type StepParameters struct {
 
-	// Delay in milliseconds before executing this step.
-	// Delay in milliseconds before executing this step.
+	// Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+	// Delay before executing this step, as a duration string (e.g. 7d) or milliseconds (e.g. 2592000000).
 	// +kubebuilder:validation:Optional
 	After *string `json:"after,omitempty" tf:"after,omitempty"`
 
@@ -58,6 +121,11 @@ type StepParameters struct {
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
+
+	// Execution priority used to order steps that would otherwise run at the same time.
+	// Execution priority of the step, used to order steps that would otherwise run at the same time.
+	// +kubebuilder:validation:Optional
+	Priority *string `json:"priority,omitempty" tf:"priority,omitempty"`
 
 	// The step type. Built-in values: disable-user, delete-user, notify-user, set-user-required-action, set-user-attribute.
 	// The step type to execute (e.g. disable-user, delete-user, notify-user).
@@ -67,7 +135,7 @@ type StepParameters struct {
 
 type WorkflowInitParameters struct {
 
-	// Event that cancels an in-progress workflow execution.
+	// Whether to cancel an already in-progress execution when the workflow is re-triggered for the same resource. Set to "true" to enable.
 	// Event that cancels an in-progress workflow execution.
 	CancelInProgress *string `json:"cancelInProgress,omitempty" tf:"cancel_in_progress,omitempty"`
 
@@ -100,9 +168,13 @@ type WorkflowInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
-	// Event that restarts an in-progress workflow execution.
+	// Whether to restart an already in-progress execution (resetting it to the first step) when the workflow is re-triggered for the same resource. Set to "true" to enable.
 	// Event that restarts an in-progress workflow execution.
 	RestartInProgress *string `json:"restartInProgress,omitempty" tf:"restart_in_progress,omitempty"`
+
+	// A schedule block that makes the workflow run periodically over matching realm resources instead of (or in addition to) reacting to a single event.
+	// Scheduling configuration for the workflow.
+	Schedule []ScheduleInitParameters `json:"schedule,omitempty" tf:"schedule,omitempty"`
 
 	// One or more step blocks defining the actions to execute, in order.
 	// Ordered list of steps to execute.
@@ -111,7 +183,7 @@ type WorkflowInitParameters struct {
 
 type WorkflowObservation struct {
 
-	// Event that cancels an in-progress workflow execution.
+	// Whether to cancel an already in-progress execution when the workflow is re-triggered for the same resource. Set to "true" to enable.
 	// Event that cancels an in-progress workflow execution.
 	CancelInProgress *string `json:"cancelInProgress,omitempty" tf:"cancel_in_progress,omitempty"`
 
@@ -137,9 +209,17 @@ type WorkflowObservation struct {
 	// The realm this workflow belongs to.
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
-	// Event that restarts an in-progress workflow execution.
+	// Whether to restart an already in-progress execution (resetting it to the first step) when the workflow is re-triggered for the same resource. Set to "true" to enable.
 	// Event that restarts an in-progress workflow execution.
 	RestartInProgress *string `json:"restartInProgress,omitempty" tf:"restart_in_progress,omitempty"`
+
+	// A schedule block that makes the workflow run periodically over matching realm resources instead of (or in addition to) reacting to a single event.
+	// Scheduling configuration for the workflow.
+	Schedule []ScheduleObservation `json:"schedule,omitempty" tf:"schedule,omitempty"`
+
+	// The runtime state of the workflow as reported by Keycloak. Contains:
+	// Runtime state of the workflow, as reported by Keycloak.
+	State []StateObservation `json:"state,omitempty" tf:"state,omitempty"`
 
 	// One or more step blocks defining the actions to execute, in order.
 	// Ordered list of steps to execute.
@@ -148,7 +228,7 @@ type WorkflowObservation struct {
 
 type WorkflowParameters struct {
 
-	// Event that cancels an in-progress workflow execution.
+	// Whether to cancel an already in-progress execution when the workflow is re-triggered for the same resource. Set to "true" to enable.
 	// Event that cancels an in-progress workflow execution.
 	// +kubebuilder:validation:Optional
 	CancelInProgress *string `json:"cancelInProgress,omitempty" tf:"cancel_in_progress,omitempty"`
@@ -187,10 +267,15 @@ type WorkflowParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
-	// Event that restarts an in-progress workflow execution.
+	// Whether to restart an already in-progress execution (resetting it to the first step) when the workflow is re-triggered for the same resource. Set to "true" to enable.
 	// Event that restarts an in-progress workflow execution.
 	// +kubebuilder:validation:Optional
 	RestartInProgress *string `json:"restartInProgress,omitempty" tf:"restart_in_progress,omitempty"`
+
+	// A schedule block that makes the workflow run periodically over matching realm resources instead of (or in addition to) reacting to a single event.
+	// Scheduling configuration for the workflow.
+	// +kubebuilder:validation:Optional
+	Schedule []ScheduleParameters `json:"schedule,omitempty" tf:"schedule,omitempty"`
 
 	// One or more step blocks defining the actions to execute, in order.
 	// Ordered list of steps to execute.

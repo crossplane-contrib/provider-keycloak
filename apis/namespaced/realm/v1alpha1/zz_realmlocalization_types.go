@@ -20,8 +20,8 @@ type RealmLocalizationInitParameters struct {
 	// The locale for the localization texts.
 	Locale *string `json:"locale,omitempty" tf:"locale,omitempty"`
 
-	// The ID of the realm the user profile applies to.
 	// The ID of the realm the localization texts apply to.
+	// The realm in which the texts exists.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -46,8 +46,8 @@ type RealmLocalizationObservation struct {
 	// The locale for the localization texts.
 	Locale *string `json:"locale,omitempty" tf:"locale,omitempty"`
 
-	// The ID of the realm the user profile applies to.
 	// The ID of the realm the localization texts apply to.
+	// The realm in which the texts exists.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// A map of translation keys to values.
@@ -63,8 +63,8 @@ type RealmLocalizationParameters struct {
 	// +kubebuilder:validation:Optional
 	Locale *string `json:"locale,omitempty" tf:"locale,omitempty"`
 
-	// The ID of the realm the user profile applies to.
 	// The ID of the realm the localization texts apply to.
+	// The realm in which the texts exists.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
