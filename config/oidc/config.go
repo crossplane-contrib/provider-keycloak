@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/crossplane/upjet/v2/pkg/config"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
@@ -31,6 +32,11 @@ func Configure(p *config.Provider) {
 		}
 		if s, ok := r.TerraformResource.Schema["client_secret"]; ok {
 			s.Sensitive = true
+		}
+		// schema.json types this as a number, but the runtime provider stores it as
+		// a string; force string so late-init can unmarshal state (readNumberAsString).
+		if s, ok := r.TerraformResource.Schema["client_secret_wo_version"]; ok {
+			s.Type = schema.TypeString
 		}
 	})
 

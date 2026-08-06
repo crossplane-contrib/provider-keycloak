@@ -6,6 +6,7 @@ import (
 
 	"github.com/crossplane/upjet/v2/pkg/config"
 	n "github.com/crossplane/upjet/v2/pkg/types/name"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
@@ -111,6 +112,12 @@ func Configure(p *config.Provider) {
 				"valid_redirect_uris",
 				"web_origins",
 			},
+		}
+
+		// schema.json types this as a number, but the runtime provider stores it as
+		// a string; force string so late-init can unmarshal state (readNumberAsString).
+		if s, ok := r.TerraformResource.Schema["client_secret_wo_version"]; ok {
+			s.Type = schema.TypeString
 		}
 
 		// Publish the client's credentials as connection details.

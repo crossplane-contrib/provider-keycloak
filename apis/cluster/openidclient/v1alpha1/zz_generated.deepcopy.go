@@ -2415,7 +2415,7 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 	}
 	if in.ClientSecretWoVersion != nil {
 		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
-		*out = new(float64)
+		*out = new(string)
 		**out = **in
 	}
 	if in.ClientSessionIdleTimeout != nil {
@@ -2776,7 +2776,7 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 	}
 	if in.ClientSecretWoVersion != nil {
 		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
-		*out = new(float64)
+		*out = new(string)
 		**out = **in
 	}
 	if in.ClientSessionIdleTimeout != nil {
@@ -3367,7 +3367,7 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 	}
 	if in.ClientSecretWoVersion != nil {
 		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
-		*out = new(float64)
+		*out = new(string)
 		**out = **in
 	}
 	if in.ClientSessionIdleTimeout != nil {
