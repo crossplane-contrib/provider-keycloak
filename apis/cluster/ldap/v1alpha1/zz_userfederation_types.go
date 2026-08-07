@@ -248,6 +248,10 @@ type UserFederationInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+	RelativeCreateDn *string `json:"relativeCreateDn,omitempty" tf:"relative_create_dn,omitempty"`
+
 	// Can be one of ONE_LEVEL or SUBTREE:
 	// ONE_LEVEL: only search for users in the DN specified by user_dn. SUBTREE: search entire LDAP subtree.
 	SearchScope *string `json:"searchScope,omitempty" tf:"search_scope,omitempty"`
@@ -387,6 +391,10 @@ type UserFederationObservation struct {
 	// The realm that this provider will provide user federation for.
 	// The realm this provider will provide user federation for.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+	RelativeCreateDn *string `json:"relativeCreateDn,omitempty" tf:"relative_create_dn,omitempty"`
 
 	// Can be one of ONE_LEVEL or SUBTREE:
 	// ONE_LEVEL: only search for users in the DN specified by user_dn. SUBTREE: search entire LDAP subtree.
@@ -561,6 +569,11 @@ type UserFederationParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+	// +kubebuilder:validation:Optional
+	RelativeCreateDn *string `json:"relativeCreateDn,omitempty" tf:"relative_create_dn,omitempty"`
 
 	// Can be one of ONE_LEVEL or SUBTREE:
 	// ONE_LEVEL: only search for users in the DN specified by user_dn. SUBTREE: search entire LDAP subtree.

@@ -53,6 +53,11 @@ func (in *AudienceProtocolMapperInitParameters) DeepCopyInto(out *AudienceProtoc
 		*out = new(bool)
 		**out = **in
 	}
+	if in.AddToTokenIntrospection != nil {
+		in, out := &in.AddToTokenIntrospection, &out.AddToTokenIntrospection
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ClientID != nil {
 		in, out := &in.ClientID, &out.ClientID
 		*out = new(string)
@@ -170,6 +175,11 @@ func (in *AudienceProtocolMapperObservation) DeepCopyInto(out *AudienceProtocolM
 		*out = new(bool)
 		**out = **in
 	}
+	if in.AddToTokenIntrospection != nil {
+		in, out := &in.AddToTokenIntrospection, &out.AddToTokenIntrospection
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ClientID != nil {
 		in, out := &in.ClientID, &out.ClientID
 		*out = new(string)
@@ -227,6 +237,11 @@ func (in *AudienceProtocolMapperParameters) DeepCopyInto(out *AudienceProtocolMa
 	}
 	if in.AddToIDToken != nil {
 		in, out := &in.AddToIDToken, &out.AddToIDToken
+		*out = new(bool)
+		**out = **in
+	}
+	if in.AddToTokenIntrospection != nil {
+		in, out := &in.AddToTokenIntrospection, &out.AddToTokenIntrospection
 		*out = new(bool)
 		**out = **in
 	}
@@ -950,6 +965,11 @@ func (in *GroupMembershipProtocolMapperInitParameters) DeepCopyInto(out *GroupMe
 		*out = new(bool)
 		**out = **in
 	}
+	if in.AddToTokenIntrospection != nil {
+		in, out := &in.AddToTokenIntrospection, &out.AddToTokenIntrospection
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AddToUserinfo != nil {
 		in, out := &in.AddToUserinfo, &out.AddToUserinfo
 		*out = new(bool)
@@ -1072,6 +1092,11 @@ func (in *GroupMembershipProtocolMapperObservation) DeepCopyInto(out *GroupMembe
 		*out = new(bool)
 		**out = **in
 	}
+	if in.AddToTokenIntrospection != nil {
+		in, out := &in.AddToTokenIntrospection, &out.AddToTokenIntrospection
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AddToUserinfo != nil {
 		in, out := &in.AddToUserinfo, &out.AddToUserinfo
 		*out = new(bool)
@@ -1134,6 +1159,11 @@ func (in *GroupMembershipProtocolMapperParameters) DeepCopyInto(out *GroupMember
 	}
 	if in.AddToIDToken != nil {
 		in, out := &in.AddToIDToken, &out.AddToIDToken
+		*out = new(bool)
+		**out = **in
+	}
+	if in.AddToTokenIntrospection != nil {
+		in, out := &in.AddToTokenIntrospection, &out.AddToTokenIntrospection
 		*out = new(bool)
 		**out = **in
 	}

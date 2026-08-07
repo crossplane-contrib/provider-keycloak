@@ -83,6 +83,11 @@ spec:
                       Indicates if the audience should be included in the aud claim for the id token. Defaults to true.
                       Indicates if this claim should be added to the id token.
                     type: boolean
+                  addToTokenIntrospection:
+                    description: |-
+                      Indicates if the attribute should be added as a claim on the token introspection response. Defaults to true.
+                      Indicates if the attribute should be a claim in the token introspection response.
+                    type: boolean
                   clientId:
                     description: |-
                       The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
@@ -362,6 +367,11 @@ spec:
                     description: |-
                       Indicates if the audience should be included in the aud claim for the id token. Defaults to true.
                       Indicates if this claim should be added to the id token.
+                    type: boolean
+                  addToTokenIntrospection:
+                    description: |-
+                      Indicates if the attribute should be added as a claim on the token introspection response. Defaults to true.
+                      Indicates if the attribute should be a claim in the token introspection response.
                     type: boolean
                   clientId:
                     description: |-
@@ -726,6 +736,11 @@ spec:
                     description: |-
                       Indicates if the audience should be included in the aud claim for the id token. Defaults to true.
                       Indicates if this claim should be added to the id token.
+                    type: boolean
+                  addToTokenIntrospection:
+                    description: |-
+                      Indicates if the attribute should be added as a claim on the token introspection response. Defaults to true.
+                      Indicates if the attribute should be a claim in the token introspection response.
                     type: boolean
                   clientId:
                     description: |-

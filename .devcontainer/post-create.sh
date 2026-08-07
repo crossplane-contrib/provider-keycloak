@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Sets up what the build and e2e flows need but the devcontainer base image
 # doesn't already provide. Tool versions live in the Makefile, never here.
+
 set -euo pipefail
 
 BIN=/usr/local/bin

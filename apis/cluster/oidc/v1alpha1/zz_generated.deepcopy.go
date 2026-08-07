@@ -722,7 +722,7 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 	}
 	if in.ClientSecretWoVersion != nil {
 		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
-		*out = new(float64)
+		*out = new(string)
 		**out = **in
 	}
 	if in.DefaultScopes != nil {
@@ -980,7 +980,7 @@ func (in *IdentityProviderObservation) DeepCopyInto(out *IdentityProviderObserva
 	}
 	if in.ClientSecretWoVersion != nil {
 		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
-		*out = new(float64)
+		*out = new(string)
 		**out = **in
 	}
 	if in.DefaultScopes != nil {
@@ -1197,7 +1197,7 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 	}
 	if in.ClientSecretWoVersion != nil {
 		in, out := &in.ClientSecretWoVersion, &out.ClientSecretWoVersion
-		*out = new(float64)
+		*out = new(string)
 		**out = **in
 	}
 	if in.DefaultScopes != nil {

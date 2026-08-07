@@ -21,6 +21,9 @@ type GroupMembershipProtocolMapperInitParameters struct {
 	// Indicates if the property should be added as a claim to the id token. Defaults to true.
 	AddToIDToken *bool `json:"addToIdToken,omitempty" tf:"add_to_id_token,omitempty"`
 
+	// Indicates if the attribute should be added as a claim to the token introspection response. Defaults to false.
+	AddToTokenIntrospection *bool `json:"addToTokenIntrospection,omitempty" tf:"add_to_token_introspection,omitempty"`
+
 	// Indicates if the property should be added as a claim to the UserInfo response body. Defaults to true.
 	AddToUserinfo *bool `json:"addToUserinfo,omitempty" tf:"add_to_userinfo,omitempty"`
 
@@ -83,6 +86,9 @@ type GroupMembershipProtocolMapperObservation struct {
 	// Indicates if the property should be added as a claim to the id token. Defaults to true.
 	AddToIDToken *bool `json:"addToIdToken,omitempty" tf:"add_to_id_token,omitempty"`
 
+	// Indicates if the attribute should be added as a claim to the token introspection response. Defaults to false.
+	AddToTokenIntrospection *bool `json:"addToTokenIntrospection,omitempty" tf:"add_to_token_introspection,omitempty"`
+
 	// Indicates if the property should be added as a claim to the UserInfo response body. Defaults to true.
 	AddToUserinfo *bool `json:"addToUserinfo,omitempty" tf:"add_to_userinfo,omitempty"`
 
@@ -120,6 +126,10 @@ type GroupMembershipProtocolMapperParameters struct {
 	// Indicates if the property should be added as a claim to the id token. Defaults to true.
 	// +kubebuilder:validation:Optional
 	AddToIDToken *bool `json:"addToIdToken,omitempty" tf:"add_to_id_token,omitempty"`
+
+	// Indicates if the attribute should be added as a claim to the token introspection response. Defaults to false.
+	// +kubebuilder:validation:Optional
+	AddToTokenIntrospection *bool `json:"addToTokenIntrospection,omitempty" tf:"add_to_token_introspection,omitempty"`
 
 	// Indicates if the property should be added as a claim to the UserInfo response body. Defaults to true.
 	// +kubebuilder:validation:Optional

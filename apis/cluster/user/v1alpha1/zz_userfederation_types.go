@@ -22,7 +22,7 @@ type UserFederationInitParameters struct {
 	// How frequently Keycloak should sync changed users, in seconds. Omit this property to disable periodic changed users sync.
 	ChangedSyncPeriod *float64 `json:"changedSyncPeriod,omitempty" tf:"changed_sync_period,omitempty"`
 
-	// The provider configuration handed over to your custom user federation provider. In order to add multivalued settings, use ## to separate the values.
+	// The provider configuration handed over to your custom user federation provider. To give a setting more than one value, join the values with ##; each value is stored separately in Keycloak.
 	// +mapType=granular
 	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
 
@@ -73,7 +73,7 @@ type UserFederationObservation struct {
 	// How frequently Keycloak should sync changed users, in seconds. Omit this property to disable periodic changed users sync.
 	ChangedSyncPeriod *float64 `json:"changedSyncPeriod,omitempty" tf:"changed_sync_period,omitempty"`
 
-	// The provider configuration handed over to your custom user federation provider. In order to add multivalued settings, use ## to separate the values.
+	// The provider configuration handed over to your custom user federation provider. To give a setting more than one value, join the values with ##; each value is stored separately in Keycloak.
 	// +mapType=granular
 	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
 
@@ -119,7 +119,7 @@ type UserFederationParameters struct {
 	// +kubebuilder:validation:Optional
 	ChangedSyncPeriod *float64 `json:"changedSyncPeriod,omitempty" tf:"changed_sync_period,omitempty"`
 
-	// The provider configuration handed over to your custom user federation provider. In order to add multivalued settings, use ## to separate the values.
+	// The provider configuration handed over to your custom user federation provider. To give a setting more than one value, join the values with ##; each value is stored separately in Keycloak.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`

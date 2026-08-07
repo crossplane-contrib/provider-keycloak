@@ -71,8 +71,9 @@ spec:
                     additionalProperties:
                       type: string
                     description: 'The provider configuration handed over to your custom
-                      user federation provider. In order to add multivalued settings,
-                      use ## to separate the values.'
+                      user federation provider. To give a setting more than one value,
+                      join the values with ##; each value is stored separately in
+                      Keycloak.'
                     type: object
                     x-kubernetes-map-type: granular
                   enabled:
@@ -217,8 +218,9 @@ spec:
                     additionalProperties:
                       type: string
                     description: 'The provider configuration handed over to your custom
-                      user federation provider. In order to add multivalued settings,
-                      use ## to separate the values.'
+                      user federation provider. To give a setting more than one value,
+                      join the values with ##; each value is stored separately in
+                      Keycloak.'
                     type: object
                     x-kubernetes-map-type: granular
                   enabled:
@@ -422,8 +424,9 @@ spec:
                     additionalProperties:
                       type: string
                     description: 'The provider configuration handed over to your custom
-                      user federation provider. In order to add multivalued settings,
-                      use ## to separate the values.'
+                      user federation provider. To give a setting more than one value,
+                      join the values with ##; each value is stored separately in
+                      Keycloak.'
                     type: object
                     x-kubernetes-map-type: granular
                   enabled:

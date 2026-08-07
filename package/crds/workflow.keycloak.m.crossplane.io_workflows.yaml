@@ -60,7 +60,7 @@ spec:
                 properties:
                   cancelInProgress:
                     description: |-
-                      Event that cancels an in-progress workflow execution.
+                      Whether to cancel an already in-progress execution when the workflow is re-triggered for the same resource. Set to "true" to enable.
                       Event that cancels an in-progress workflow execution.
                     type: string
                   conditions:
@@ -170,9 +170,27 @@ spec:
                     type: object
                   restartInProgress:
                     description: |-
-                      Event that restarts an in-progress workflow execution.
+                      Whether to restart an already in-progress execution (resetting it to the first step) when the workflow is re-triggered for the same resource. Set to "true" to enable.
                       Event that restarts an in-progress workflow execution.
                     type: string
+                  schedule:
+                    description: |-
+                      A schedule block that makes the workflow run periodically over matching realm resources instead of (or in addition to) reacting to a single event.
+                      Scheduling configuration for the workflow.
+                    items:
+                      properties:
+                        after:
+                          description: |-
+                            Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+                            Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d) or milliseconds.
+                          type: string
+                        batchSize:
+                          description: |-
+                            Maximum number of realm resources processed during each scheduled run.
+                            Maximum number of resources processed per scheduled batch.
+                          type: number
+                      type: object
+                    type: array
                   step:
                     description: |-
                       One or more step blocks defining the actions to execute, in order.
@@ -181,8 +199,8 @@ spec:
                       properties:
                         after:
                           description: |-
-                            Delay in milliseconds before executing this step.
-                            Delay in milliseconds before executing this step.
+                            Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+                            Delay before executing this step, as a duration string (e.g. 7d) or milliseconds (e.g. 2592000000).
                           type: string
                         config:
                           additionalProperties:
@@ -192,6 +210,11 @@ spec:
                             Key-value configuration for the step.
                           type: object
                           x-kubernetes-map-type: granular
+                        priority:
+                          description: |-
+                            Execution priority used to order steps that would otherwise run at the same time.
+                            Execution priority of the step, used to order steps that would otherwise run at the same time.
+                          type: string
                         uses:
                           description: |-
                             The step type. Built-in values: disable-user, delete-user, notify-user, set-user-required-action, set-user-attribute.
@@ -215,7 +238,7 @@ spec:
                 properties:
                   cancelInProgress:
                     description: |-
-                      Event that cancels an in-progress workflow execution.
+                      Whether to cancel an already in-progress execution when the workflow is re-triggered for the same resource. Set to "true" to enable.
                       Event that cancels an in-progress workflow execution.
                     type: string
                   conditions:
@@ -325,9 +348,27 @@ spec:
                     type: object
                   restartInProgress:
                     description: |-
-                      Event that restarts an in-progress workflow execution.
+                      Whether to restart an already in-progress execution (resetting it to the first step) when the workflow is re-triggered for the same resource. Set to "true" to enable.
                       Event that restarts an in-progress workflow execution.
                     type: string
+                  schedule:
+                    description: |-
+                      A schedule block that makes the workflow run periodically over matching realm resources instead of (or in addition to) reacting to a single event.
+                      Scheduling configuration for the workflow.
+                    items:
+                      properties:
+                        after:
+                          description: |-
+                            Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+                            Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d) or milliseconds.
+                          type: string
+                        batchSize:
+                          description: |-
+                            Maximum number of realm resources processed during each scheduled run.
+                            Maximum number of resources processed per scheduled batch.
+                          type: number
+                      type: object
+                    type: array
                   step:
                     description: |-
                       One or more step blocks defining the actions to execute, in order.
@@ -336,8 +377,8 @@ spec:
                       properties:
                         after:
                           description: |-
-                            Delay in milliseconds before executing this step.
-                            Delay in milliseconds before executing this step.
+                            Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+                            Delay before executing this step, as a duration string (e.g. 7d) or milliseconds (e.g. 2592000000).
                           type: string
                         config:
                           additionalProperties:
@@ -347,6 +388,11 @@ spec:
                             Key-value configuration for the step.
                           type: object
                           x-kubernetes-map-type: granular
+                        priority:
+                          description: |-
+                            Execution priority used to order steps that would otherwise run at the same time.
+                            Execution priority of the step, used to order steps that would otherwise run at the same time.
+                          type: string
                         uses:
                           description: |-
                             The step type. Built-in values: disable-user, delete-user, notify-user, set-user-required-action, set-user-attribute.
@@ -433,7 +479,7 @@ spec:
                 properties:
                   cancelInProgress:
                     description: |-
-                      Event that cancels an in-progress workflow execution.
+                      Whether to cancel an already in-progress execution when the workflow is re-triggered for the same resource. Set to "true" to enable.
                       Event that cancels an in-progress workflow execution.
                     type: string
                   conditions:
@@ -465,9 +511,40 @@ spec:
                     type: string
                   restartInProgress:
                     description: |-
-                      Event that restarts an in-progress workflow execution.
+                      Whether to restart an already in-progress execution (resetting it to the first step) when the workflow is re-triggered for the same resource. Set to "true" to enable.
                       Event that restarts an in-progress workflow execution.
                     type: string
+                  schedule:
+                    description: |-
+                      A schedule block that makes the workflow run periodically over matching realm resources instead of (or in addition to) reacting to a single event.
+                      Scheduling configuration for the workflow.
+                    items:
+                      properties:
+                        after:
+                          description: |-
+                            Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+                            Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d) or milliseconds.
+                          type: string
+                        batchSize:
+                          description: |-
+                            Maximum number of realm resources processed during each scheduled run.
+                            Maximum number of resources processed per scheduled batch.
+                          type: number
+                      type: object
+                    type: array
+                  state:
+                    description: |-
+                      The runtime state of the workflow as reported by Keycloak. Contains:
+                      Runtime state of the workflow, as reported by Keycloak.
+                    items:
+                      properties:
+                        errors:
+                          description: A list of error messages recorded for the workflow.
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    type: array
                   step:
                     description: |-
                       One or more step blocks defining the actions to execute, in order.
@@ -476,8 +553,8 @@ spec:
                       properties:
                         after:
                           description: |-
-                            Delay in milliseconds before executing this step.
-                            Delay in milliseconds before executing this step.
+                            Interval between successive scheduled runs, as a duration string (e.g. 30s, 1d).
+                            Delay before executing this step, as a duration string (e.g. 7d) or milliseconds (e.g. 2592000000).
                           type: string
                         config:
                           additionalProperties:
@@ -487,6 +564,21 @@ spec:
                             Key-value configuration for the step.
                           type: object
                           x-kubernetes-map-type: granular
+                        priority:
+                          description: |-
+                            Execution priority used to order steps that would otherwise run at the same time.
+                            Execution priority of the step, used to order steps that would otherwise run at the same time.
+                          type: string
+                        scheduledAt:
+                          description: |-
+                            Epoch timestamp in milliseconds at which the step is scheduled to execute.
+                            Epoch timestamp in milliseconds at which the step is scheduled to execute.
+                          type: number
+                        status:
+                          description: |-
+                            The execution status of the step.
+                            Execution status of the step, as reported by Keycloak.
+                          type: string
                         uses:
                           description: |-
                             The step type. Built-in values: disable-user, delete-user, notify-user, set-user-required-action, set-user-attribute.

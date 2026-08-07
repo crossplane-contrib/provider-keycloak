@@ -553,6 +553,11 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        discoverableCredential:
+                          description: |-
+                            The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                            Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                          type: string
                         extraOrigins:
                           description: A set of extra origins for non-web applications.
                           items:
@@ -573,7 +578,7 @@ spec:
                           type: string
                         requireResidentKey:
                           description: |-
-                            Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+                            Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
                             Either Yes or No
                           type: string
                         signatureAlgorithms:
@@ -622,6 +627,11 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        discoverableCredential:
+                          description: |-
+                            The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                            Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                          type: string
                         extraOrigins:
                           description: A set of extra origins for non-web applications.
                           items:
@@ -637,7 +647,7 @@ spec:
                           type: string
                         requireResidentKey:
                           description: |-
-                            Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+                            Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
                             Either Yes or No
                           type: string
                         signatureAlgorithms:
@@ -1168,6 +1178,11 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        discoverableCredential:
+                          description: |-
+                            The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                            Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                          type: string
                         extraOrigins:
                           description: A set of extra origins for non-web applications.
                           items:
@@ -1188,7 +1203,7 @@ spec:
                           type: string
                         requireResidentKey:
                           description: |-
-                            Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+                            Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
                             Either Yes or No
                           type: string
                         signatureAlgorithms:
@@ -1237,6 +1252,11 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        discoverableCredential:
+                          description: |-
+                            The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                            Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                          type: string
                         extraOrigins:
                           description: A set of extra origins for non-web applications.
                           items:
@@ -1252,7 +1272,7 @@ spec:
                           type: string
                         requireResidentKey:
                           description: |-
-                            Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+                            Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
                             Either Yes or No
                           type: string
                         signatureAlgorithms:
@@ -1812,6 +1832,11 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        discoverableCredential:
+                          description: |-
+                            The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                            Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                          type: string
                         extraOrigins:
                           description: A set of extra origins for non-web applications.
                           items:
@@ -1832,7 +1857,7 @@ spec:
                           type: string
                         requireResidentKey:
                           description: |-
-                            Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+                            Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
                             Either Yes or No
                           type: string
                         signatureAlgorithms:
@@ -1881,6 +1906,11 @@ spec:
                             key credential in seconds. When set to 0, this timeout
                             option is not adapted. Defaults to 0.
                           type: number
+                        discoverableCredential:
+                          description: |-
+                            The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                            Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+                          type: string
                         extraOrigins:
                           description: A set of extra origins for non-web applications.
                           items:
@@ -1896,7 +1926,7 @@ spec:
                           type: string
                         requireResidentKey:
                           description: |-
-                            Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+                            Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
                             Either Yes or No
                           type: string
                         signatureAlgorithms:

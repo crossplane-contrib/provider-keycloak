@@ -32,6 +32,9 @@ type ClientScopeInitParameters struct {
 	// Specify order of the client scope in GUI (such as in Consent page) as integer.
 	GuiOrder *float64 `json:"guiOrder,omitempty" tf:"gui_order,omitempty"`
 
+	// When true, this client scope will be listed in the scopes_supported field of the realm's OpenID Provider Metadata (the .well-known/openid-configuration discovery document). When false, it will be omitted. Defaults to true.
+	IncludeInOpenIDProviderMetadata *bool `json:"includeInOpenidProviderMetadata,omitempty" tf:"include_in_openid_provider_metadata,omitempty"`
+
 	// When true, the name of this client scope will be added to the access token property 'scope' as well as to the Token Introspection Endpoint response. When false, this scope will be omitted from the token and from the Token Introspection Endpoint response. Defaults to true.
 	IncludeInTokenScope *bool `json:"includeInTokenScope,omitempty" tf:"include_in_token_scope,omitempty"`
 
@@ -71,6 +74,9 @@ type ClientScopeObservation struct {
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// When true, this client scope will be listed in the scopes_supported field of the realm's OpenID Provider Metadata (the .well-known/openid-configuration discovery document). When false, it will be omitted. Defaults to true.
+	IncludeInOpenIDProviderMetadata *bool `json:"includeInOpenidProviderMetadata,omitempty" tf:"include_in_openid_provider_metadata,omitempty"`
+
 	// When true, the name of this client scope will be added to the access token property 'scope' as well as to the Token Introspection Endpoint response. When false, this scope will be omitted from the token and from the Token Introspection Endpoint response. Defaults to true.
 	IncludeInTokenScope *bool `json:"includeInTokenScope,omitempty" tf:"include_in_token_scope,omitempty"`
 
@@ -102,6 +108,10 @@ type ClientScopeParameters struct {
 	// Specify order of the client scope in GUI (such as in Consent page) as integer.
 	// +kubebuilder:validation:Optional
 	GuiOrder *float64 `json:"guiOrder,omitempty" tf:"gui_order,omitempty"`
+
+	// When true, this client scope will be listed in the scopes_supported field of the realm's OpenID Provider Metadata (the .well-known/openid-configuration discovery document). When false, it will be omitted. Defaults to true.
+	// +kubebuilder:validation:Optional
+	IncludeInOpenIDProviderMetadata *bool `json:"includeInOpenidProviderMetadata,omitempty" tf:"include_in_openid_provider_metadata,omitempty"`
 
 	// When true, the name of this client scope will be added to the access token property 'scope' as well as to the Token Introspection Endpoint response. When false, this scope will be omitted from the token and from the Token Introspection Endpoint response. Defaults to true.
 	// +kubebuilder:validation:Optional
