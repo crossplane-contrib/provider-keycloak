@@ -16,7 +16,7 @@ import (
 type ClientPermissionsInitParameters struct {
 
 	// The id of the client that provides the role.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -90,7 +90,7 @@ type ClientPermissionsObservation struct {
 type ClientPermissionsParameters struct {
 
 	// The id of the client that provides the role.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`

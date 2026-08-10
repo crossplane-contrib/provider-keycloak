@@ -842,7 +842,7 @@ func (mg *RoleMapper) ResolveReferences(ctx context.Context, c client.Reader) er
 	var rsp reference.NamespacedResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -902,7 +902,7 @@ func (mg *RoleMapper) ResolveReferences(ctx context.Context, c client.Reader) er
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}

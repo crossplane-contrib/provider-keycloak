@@ -40,7 +40,7 @@ type ClientServiceAccountRealmRoleInitParameters struct {
 	ServiceAccountUserClientIDSelector *v1.NamespacedSelector `json:"serviceAccountUserClientIdSelector,omitempty" tf:"-"`
 
 	// The id of the service account that is assigned the role (the service account of the client that "consumes" the role).
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.ServiceAccountRoleIDExtractor()
 	// +crossplane:generate:reference:refFieldName=ServiceAccountUserClientIDRef
 	// +crossplane:generate:reference:selectorFieldName=ServiceAccountUserClientIDSelector
@@ -88,7 +88,7 @@ type ClientServiceAccountRealmRoleParameters struct {
 	ServiceAccountUserClientIDSelector *v1.NamespacedSelector `json:"serviceAccountUserClientIdSelector,omitempty" tf:"-"`
 
 	// The id of the service account that is assigned the role (the service account of the client that "consumes" the role).
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.ServiceAccountRoleIDExtractor()
 	// +crossplane:generate:reference:refFieldName=ServiceAccountUserClientIDRef
 	// +crossplane:generate:reference:selectorFieldName=ServiceAccountUserClientIDSelector

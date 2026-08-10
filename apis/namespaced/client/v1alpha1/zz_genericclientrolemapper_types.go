@@ -18,7 +18,7 @@ type GenericClientRoleMapperInitParameters struct {
 
 	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The destination client of the role. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -130,7 +130,7 @@ type GenericClientRoleMapperParameters struct {
 
 	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The destination client of the role. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`

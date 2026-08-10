@@ -9,6 +9,7 @@ import (
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
+	"github.com/crossplane-contrib/provider-keycloak/config/conversion"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	"github.com/crossplane-contrib/provider-keycloak/config/multitypes"
 )
@@ -82,6 +83,12 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_openid_client", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		r.ShortGroup = Group
+
+		// terraform-provider-keycloak v5.9.0 changed the type of
+		// client_secret_wo_version from number to string. Serve the old
+		// (number) schema as v1alpha1 and the new (string) schema as v1alpha2,
+		// and let the conversion webhook translate between them.
+		conversion.BumpVersionForIntToStringChange(r, "v1alpha2", "clientSecretWoVersion")
 
 		r.References["authentication_flow_binding_overrides.browser_id"] = config.Reference{
 			TerraformName: "keycloak_authentication_flow",

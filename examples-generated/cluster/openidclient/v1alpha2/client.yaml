@@ -1,12 +1,11 @@
-apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/client
+    meta.upbound.io/example-id: openidclient/v1alpha2/client
   labels:
     testing.upbound.io/example-name: openid_client
   name: openid-client
-  namespace: upbound-system
 spec:
   forProvider:
     accessType: CONFIDENTIAL
@@ -26,15 +25,14 @@ spec:
 
 ---
 
-apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
   annotations:
-    meta.upbound.io/example-id: openidclient/v1alpha1/client
+    meta.upbound.io/example-id: openidclient/v1alpha2/client
   labels:
     testing.upbound.io/example-name: realm
   name: realm
-  namespace: upbound-system
 spec:
   forProvider:
     enabled: true

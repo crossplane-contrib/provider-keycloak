@@ -193,7 +193,7 @@ type ClientInitParameters struct {
 
 	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
 	// Version of the Client secret write-only argument
-	ClientSecretWoVersion *string `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
+	ClientSecretWoVersion *float64 `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
 
 	// Time a client offline session is allowed to be idle before it expires. Offline tokens are invalidated when a client offline session is expired. If not set it uses the Offline Session Idle value.
 	ClientSessionIdleTimeout *string `json:"clientSessionIdleTimeout,omitempty" tf:"client_session_idle_timeout,omitempty"`
@@ -369,7 +369,7 @@ type ClientObservation struct {
 
 	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
 	// Version of the Client secret write-only argument
-	ClientSecretWoVersion *string `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
+	ClientSecretWoVersion *float64 `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
 
 	// Time a client offline session is allowed to be idle before it expires. Offline tokens are invalidated when a client offline session is expired. If not set it uses the Offline Session Idle value.
 	ClientSessionIdleTimeout *string `json:"clientSessionIdleTimeout,omitempty" tf:"client_session_idle_timeout,omitempty"`
@@ -570,7 +570,7 @@ type ClientParameters struct {
 	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
 	// Version of the Client secret write-only argument
 	// +kubebuilder:validation:Optional
-	ClientSecretWoVersion *string `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
+	ClientSecretWoVersion *float64 `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
 
 	// Time a client offline session is allowed to be idle before it expires. Offline tokens are invalidated when a client offline session is expired. If not set it uses the Offline Session Idle value.
 	// +kubebuilder:validation:Optional
@@ -752,7 +752,6 @@ type ClientStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-// +kubebuilder:storageversion
 
 // Client is the Schema for the Clients API.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"

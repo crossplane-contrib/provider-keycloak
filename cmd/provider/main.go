@@ -237,6 +237,16 @@ func main() {
 		kingpin.FatalIfError(controllerNamespaced.Setup(mgr, optsNamespaced), "Cannot setup Keycloak controllers")
 	}
 
+	// The CRD conversion webhooks are served by every replica, not only by the
+	// leader, so they are registered independently of the controllers. They are
+	// only registered when Crossplane supplied the TLS server certificates.
+	if *certsDir != "" {
+		kingpin.FatalIfError(controllerCluster.SetupWebhookWithManager(mgr), "Cannot setup Keycloak cluster-scoped conversion webhooks")
+		kingpin.FatalIfError(controllerNamespaced.SetupWebhookWithManager(mgr), "Cannot setup Keycloak namespaced conversion webhooks")
+	} else {
+		log.Info("No TLS certificates directory configured, CRD conversion webhooks are disabled")
+	}
+
 	kingpin.FatalIfError(conversion.RegisterConversions(optsCluster.Provider, optsNamespaced.Provider, mgr.GetScheme()), "Cannot initialize the webhook conversion registry")
 	kingpin.FatalIfError(mgr.Add(sessionCleanupRunnable{}), "Cannot register session cleanup runnable")
 	kingpin.FatalIfError(mgr.Start(ctrl.SetupSignalHandler()), "Cannot start controller manager")

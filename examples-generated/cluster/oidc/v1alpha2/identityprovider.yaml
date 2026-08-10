@@ -1,8 +1,8 @@
-apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+apiVersion: oidc.keycloak.crossplane.io/v1alpha2
 kind: IdentityProvider
 metadata:
   annotations:
-    meta.upbound.io/example-id: oidc/v1alpha1/identityprovider
+    meta.upbound.io/example-id: oidc/v1alpha2/identityprovider
   labels:
     testing.upbound.io/example-name: realm_identity_provider
   name: realm-identity-provider
@@ -31,7 +31,7 @@ apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
   annotations:
-    meta.upbound.io/example-id: oidc/v1alpha1/identityprovider
+    meta.upbound.io/example-id: oidc/v1alpha2/identityprovider
   labels:
     testing.upbound.io/example-name: realm
   name: realm

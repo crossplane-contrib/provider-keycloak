@@ -18,7 +18,7 @@ type ProviderTokenExchangeScopePermissionInitParameters struct {
 
 	// A list of IDs of the clients for which a policy will be created and set on scope based token exchange permission.
 	// Ids of the clients for which a policy will be created and set on scope based token exchange permission
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
 	Clients []*string `json:"clients,omitempty" tf:"clients,omitempty"`
@@ -36,7 +36,7 @@ type ProviderTokenExchangeScopePermissionInitParameters struct {
 	PolicyType *string `json:"policyType,omitempty" tf:"policy_type,omitempty"`
 
 	// Alias of the identity provider.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/oidc/v1alpha1.IdentityProvider
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/oidc/v1alpha2.IdentityProvider
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
 	ProviderAlias *string `json:"providerAlias,omitempty" tf:"provider_alias,omitempty"`
 
@@ -101,7 +101,7 @@ type ProviderTokenExchangeScopePermissionParameters struct {
 
 	// A list of IDs of the clients for which a policy will be created and set on scope based token exchange permission.
 	// Ids of the clients for which a policy will be created and set on scope based token exchange permission
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set
@@ -121,7 +121,7 @@ type ProviderTokenExchangeScopePermissionParameters struct {
 	PolicyType *string `json:"policyType,omitempty" tf:"policy_type,omitempty"`
 
 	// Alias of the identity provider.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/oidc/v1alpha1.IdentityProvider
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/oidc/v1alpha2.IdentityProvider
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
 	// +kubebuilder:validation:Optional
 	ProviderAlias *string `json:"providerAlias,omitempty" tf:"provider_alias,omitempty"`
