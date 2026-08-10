@@ -1,6 +1,6 @@
 ---
 # OIDC Identity Provider
-apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+apiVersion: oidc.keycloak.m.crossplane.io/v1alpha2
 kind: IdentityProvider
 metadata:
   name: token-exchange-test-idp
@@ -25,7 +25,7 @@ spec:
     kind: ProviderConfig
 ---
 # OpenID Client
-apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: token-exchange-test-client

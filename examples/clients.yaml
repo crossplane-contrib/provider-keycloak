@@ -1,6 +1,6 @@
 ---
 # Example 1: Public Client for a Web Application
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: web-app-public-client
@@ -16,7 +16,7 @@ spec:
 
 ---
 # Example 2: Confidential Client for a Backend Service
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: backend-service-confidential-client
@@ -34,7 +34,7 @@ spec:
 
 ---
 # Example 3: Bearer-Only Client for Resource Servers
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: resource-server-bearer-only-client
@@ -47,7 +47,7 @@ spec:
 
 ---
 # Example 4: Client for Mobile Application
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: mobile-app-public-client
@@ -64,7 +64,7 @@ spec:
 
 ---
 # Example 5: Client for ArgoCD Application
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: argocd
@@ -89,7 +89,7 @@ spec:
 
 ---
 # Example 6: Client for Kubernetes Application
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: kubernetes
