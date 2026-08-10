@@ -18,7 +18,7 @@ type AudienceResolveProtocolMapperInitParameters struct {
 
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -86,7 +86,7 @@ type AudienceResolveProtocolMapperParameters struct {
 
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`

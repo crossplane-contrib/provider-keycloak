@@ -25,7 +25,7 @@ func (mg *AudienceProtocolMapper) ResolveReferences( // ResolveReferences of thi
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -85,7 +85,7 @@ func (mg *AudienceProtocolMapper) ResolveReferences( // ResolveReferences of thi
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -157,7 +157,7 @@ func (mg *AudienceResolveProtocolMapper) ResolveReferences(ctx context.Context, 
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -217,7 +217,7 @@ func (mg *AudienceResolveProtocolMapper) ResolveReferences(ctx context.Context, 
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -289,7 +289,7 @@ func (mg *FullNameProtocolMapper) ResolveReferences(ctx context.Context, c clien
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -349,7 +349,7 @@ func (mg *FullNameProtocolMapper) ResolveReferences(ctx context.Context, c clien
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -421,7 +421,7 @@ func (mg *GroupMembershipProtocolMapper) ResolveReferences(ctx context.Context, 
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -481,7 +481,7 @@ func (mg *GroupMembershipProtocolMapper) ResolveReferences(ctx context.Context, 
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -553,7 +553,7 @@ func (mg *HardcodedClaimProtocolMapper) ResolveReferences(ctx context.Context, c
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -613,7 +613,7 @@ func (mg *HardcodedClaimProtocolMapper) ResolveReferences(ctx context.Context, c
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -685,7 +685,7 @@ func (mg *HardcodedRoleProtocolMapper) ResolveReferences(ctx context.Context, c 
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -765,7 +765,7 @@ func (mg *HardcodedRoleProtocolMapper) ResolveReferences(ctx context.Context, c 
 	mg.Spec.ForProvider.RoleID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RoleIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -857,7 +857,7 @@ func (mg *SubProtocolMapper) ResolveReferences(ctx context.Context, c client.Rea
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -917,7 +917,7 @@ func (mg *SubProtocolMapper) ResolveReferences(ctx context.Context, c client.Rea
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -989,7 +989,7 @@ func (mg *UserAttributeProtocolMapper) ResolveReferences(ctx context.Context, c 
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1049,7 +1049,7 @@ func (mg *UserAttributeProtocolMapper) ResolveReferences(ctx context.Context, c 
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1121,7 +1121,7 @@ func (mg *UserClientRoleProtocolMapper) ResolveReferences(ctx context.Context, c
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1141,7 +1141,7 @@ func (mg *UserClientRoleProtocolMapper) ResolveReferences(ctx context.Context, c
 	mg.Spec.ForProvider.ClientID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.ClientIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1201,7 +1201,7 @@ func (mg *UserClientRoleProtocolMapper) ResolveReferences(ctx context.Context, c
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1221,7 +1221,7 @@ func (mg *UserClientRoleProtocolMapper) ResolveReferences(ctx context.Context, c
 	mg.Spec.InitProvider.ClientID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.ClientIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1293,7 +1293,7 @@ func (mg *UserPropertyProtocolMapper) ResolveReferences(ctx context.Context, c c
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1353,7 +1353,7 @@ func (mg *UserPropertyProtocolMapper) ResolveReferences(ctx context.Context, c c
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1425,7 +1425,7 @@ func (mg *UserRealmRoleProtocolMapper) ResolveReferences(ctx context.Context, c 
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1485,7 +1485,7 @@ func (mg *UserRealmRoleProtocolMapper) ResolveReferences(ctx context.Context, c 
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1557,7 +1557,7 @@ func (mg *UserSessionNoteProtocolMapper) ResolveReferences(ctx context.Context, 
 	var rsp reference.ResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1617,7 +1617,7 @@ func (mg *UserSessionNoteProtocolMapper) ResolveReferences(ctx context.Context, 
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}

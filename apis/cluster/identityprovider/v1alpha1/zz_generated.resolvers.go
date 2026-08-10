@@ -538,7 +538,7 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	var mrsp reference.MultiResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -558,7 +558,7 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	mg.Spec.ForProvider.Clients = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.ForProvider.ClientsRefs = mrsp.ResolvedReferences
 	{
-		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -598,7 +598,7 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha1", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -618,7 +618,7 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	mg.Spec.InitProvider.Clients = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.InitProvider.ClientsRefs = mrsp.ResolvedReferences
 	{
-		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}

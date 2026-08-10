@@ -17,7 +17,7 @@ type GenericClientProtocolMapperInitParameters struct {
 
 	// The client this protocol mapper is attached to.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -140,7 +140,7 @@ type GenericClientProtocolMapperParameters struct {
 
 	// The client this protocol mapper is attached to.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
