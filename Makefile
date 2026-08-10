@@ -301,6 +301,17 @@ local-deploy-provider-prebuilt: local.xpkg.deploy.provider.$(PROJECT_NAME)
 
 e2e: local-deploy uptest
 
+# Runs the CRD conversion webhook tests, which cannot be expressed as uptest
+# example cases because they apply the very same object through two different
+# API versions. Requires a cluster with the provider deployed, i.e. the same
+# prerequisites as the `uptest` target.
+uptest-conversion: $(CHAINSAW)
+	@$(INFO) running CRD conversion webhook tests
+	@$(CHAINSAW) test --test-dir cluster/test/conversion || $(FAIL)
+	@$(OK) running CRD conversion webhook tests
+
+e2e-conversion: local-deploy uptest-conversion
+
 crddiff: $(UPTEST)
 	@$(INFO) Checking breaking CRD schema changes
 	@for crd in $${MODIFIED_CRD_LIST}; do \

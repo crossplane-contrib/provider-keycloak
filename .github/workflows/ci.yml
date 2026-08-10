@@ -471,6 +471,16 @@ jobs:
       - name: Set kind cluster as context
         run: kind export kubeconfig --name fenrir-1
 
+      - name: Running CRD Conversion Webhook Tests
+        id: conversionTests
+        continue-on-error: true
+        shell: bash
+        run:
+          #!/bin/bash
+          set -o pipefail;
+          make uptest-conversion | tee logs/uptest-conversion.log;
+          exit $?;
+
       - name: Running E2E Tests
         id: e2eTests
         continue-on-error: true
@@ -484,17 +494,21 @@ jobs:
           exit $?;
 
       - name: Collect logs
-        if: steps.e2eTests.outcome == 'failure'
+        if: steps.e2eTests.outcome == 'failure' || steps.conversionTests.outcome == 'failure'
         shell: bash
         run: ./dev/collect-logs.sh
 
       - name: Upload logs
-        if: steps.e2eTests.outcome == 'failure'
+        if: steps.e2eTests.outcome == 'failure' || steps.conversionTests.outcome == 'failure'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: e2e-logs-${{ matrix.keycloak-version }}
           path: |
             logs/
+
+      - name: Fail on conversion webhook test error
+        if: steps.conversionTests.outcome == 'failure'
+        run: exit 1
 
       - name: Fail on error
         if: steps.e2eTests.outcome == 'failure'
