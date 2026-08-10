@@ -26,7 +26,7 @@ Use identity providers when users should sign in to Keycloak with an external id
 Use this resource for a generic OpenID Connect identity provider when you need explicit authorization and token endpoints.
 
 ```yaml
-apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+apiVersion: oidc.keycloak.crossplane.io/v1alpha2
 kind: IdentityProvider
 metadata:
   name: oidc-identity-provider
@@ -59,7 +59,7 @@ spec:
 Use organization binding when the external IdP should route users into a specific Keycloak organization.
 
 ```yaml
-apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+apiVersion: oidc.keycloak.crossplane.io/v1alpha2
 kind: IdentityProvider
 metadata:
   name: org-provider

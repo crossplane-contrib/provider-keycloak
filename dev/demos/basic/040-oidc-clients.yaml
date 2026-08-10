@@ -1,5 +1,5 @@
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: test
@@ -19,7 +19,7 @@ spec:
   providerConfigRef:
     name: "keycloak-provider-config"
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: account
@@ -36,7 +36,7 @@ spec:
   providerConfigRef:
     name: "keycloak-provider-config"
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: service-acc-1
