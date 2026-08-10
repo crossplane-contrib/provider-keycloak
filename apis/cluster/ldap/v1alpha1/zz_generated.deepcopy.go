@@ -3524,6 +3524,11 @@ func (in *UserFederationInitParameters) DeepCopyInto(out *UserFederationInitPara
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RelativeCreateDn != nil {
+		in, out := &in.RelativeCreateDn, &out.RelativeCreateDn
+		*out = new(string)
+		**out = **in
+	}
 	if in.SearchScope != nil {
 		in, out := &in.SearchScope, &out.SearchScope
 		*out = new(string)
@@ -3756,6 +3761,11 @@ func (in *UserFederationObservation) DeepCopyInto(out *UserFederationObservation
 		*out = new(string)
 		**out = **in
 	}
+	if in.RelativeCreateDn != nil {
+		in, out := &in.RelativeCreateDn, &out.RelativeCreateDn
+		*out = new(string)
+		**out = **in
+	}
 	if in.SearchScope != nil {
 		in, out := &in.SearchScope, &out.SearchScope
 		*out = new(string)
@@ -3965,6 +3975,11 @@ func (in *UserFederationParameters) DeepCopyInto(out *UserFederationParameters) 
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RelativeCreateDn != nil {
+		in, out := &in.RelativeCreateDn, &out.RelativeCreateDn
+		*out = new(string)
+		**out = **in
 	}
 	if in.SearchScope != nil {
 		in, out := &in.SearchScope, &out.SearchScope

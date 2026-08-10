@@ -24,6 +24,10 @@ type AudienceProtocolMapperInitParameters struct {
 	// Indicates if this claim should be added to the id token.
 	AddToIDToken *bool `json:"addToIdToken,omitempty" tf:"add_to_id_token,omitempty"`
 
+	// Indicates if the attribute should be added as a claim on the token introspection response. Defaults to true.
+	// Indicates if the attribute should be a claim in the token introspection response.
+	AddToTokenIntrospection *bool `json:"addToTokenIntrospection,omitempty" tf:"add_to_token_introspection,omitempty"`
+
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.Client
@@ -87,6 +91,10 @@ type AudienceProtocolMapperObservation struct {
 	// Indicates if this claim should be added to the id token.
 	AddToIDToken *bool `json:"addToIdToken,omitempty" tf:"add_to_id_token,omitempty"`
 
+	// Indicates if the attribute should be added as a claim on the token introspection response. Defaults to true.
+	// Indicates if the attribute should be a claim in the token introspection response.
+	AddToTokenIntrospection *bool `json:"addToTokenIntrospection,omitempty" tf:"add_to_token_introspection,omitempty"`
+
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
@@ -125,6 +133,11 @@ type AudienceProtocolMapperParameters struct {
 	// Indicates if this claim should be added to the id token.
 	// +kubebuilder:validation:Optional
 	AddToIDToken *bool `json:"addToIdToken,omitempty" tf:"add_to_id_token,omitempty"`
+
+	// Indicates if the attribute should be added as a claim on the token introspection response. Defaults to true.
+	// Indicates if the attribute should be a claim in the token introspection response.
+	// +kubebuilder:validation:Optional
+	AddToTokenIntrospection *bool `json:"addToTokenIntrospection,omitempty" tf:"add_to_token_introspection,omitempty"`
 
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.

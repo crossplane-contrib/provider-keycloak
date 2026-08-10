@@ -53,7 +53,7 @@ type IdentityProviderInitParameters struct {
 
 	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
 	// Version of the Client secret write-only argument
-	ClientSecretWoVersion *float64 `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
+	ClientSecretWoVersion *string `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
 
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
@@ -217,7 +217,7 @@ type IdentityProviderObservation struct {
 
 	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
 	// Version of the Client secret write-only argument
-	ClientSecretWoVersion *float64 `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
+	ClientSecretWoVersion *string `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
 
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
@@ -381,7 +381,7 @@ type IdentityProviderParameters struct {
 	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
 	// Version of the Client secret write-only argument
 	// +kubebuilder:validation:Optional
-	ClientSecretWoVersion *float64 `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
+	ClientSecretWoVersion *string `json:"clientSecretWoVersion,omitempty" tf:"client_secret_wo_version,omitempty"`
 
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid.
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to 'openid'.
