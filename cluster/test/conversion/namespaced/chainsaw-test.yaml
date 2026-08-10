@@ -33,6 +33,27 @@ spec:
                   - name: v1alpha2
                     served: true
                     storage: true
+        - assert:
+            resource:
+              apiVersion: apiextensions.k8s.io/v1
+              kind: CustomResourceDefinition
+              metadata:
+                name: identityproviders.oidc.keycloak.m.crossplane.io
+              spec:
+                conversion:
+                  strategy: Webhook
+                  webhook:
+                    clientConfig:
+                      (length(caBundle) > `0`): true
+                      service:
+                        path: /convert
+                versions:
+                  - name: v1alpha1
+                    served: true
+                    storage: false
+                  - name: v1alpha2
+                    served: true
+                    storage: true
 
     - name: create-the-prerequisites
       try:
@@ -44,6 +65,7 @@ spec:
                 name: conversion-test
                 namespace: ($namespace)
               stringData:
+                client-id: conversion-test-client-id
                 client-secret: conversion-test-secret
         - apply:
             resource:
@@ -138,8 +160,71 @@ spec:
                   clientSecretWoVersion: 1
                   (type(clientSecretWoVersion) == 'number'): true
 
+    - name: create-the-identity-provider-with-the-previous-api-version
+      try:
+        # The very same in-place type change also hit oidc/IdentityProvider,
+        # so the second converted kind is exercised end-to-end as well.
+        - apply:
+            resource:
+              apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+              kind: IdentityProvider
+              metadata:
+                name: conversion-test-ns
+                namespace: ($namespace)
+              spec:
+                forProvider:
+                  alias: conversion-test-ns
+                  authorizationUrl: https://authorizationurl.com
+                  tokenUrl: https://tokenurl.com
+                  clientIdSecretRef:
+                    name: conversion-test
+                    key: client-id
+                  clientSecretWoSecretRef:
+                    name: conversion-test
+                    key: client-secret
+                  clientSecretWoVersion: 1
+                  realmRef:
+                    name: conversion-test-ns
+                providerConfigRef:
+                  name: keycloak-provider-config
+                  kind: ProviderConfig
+        - assert:
+            resource:
+              apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+              kind: IdentityProvider
+              metadata:
+                name: conversion-test-ns
+                namespace: ($namespace)
+              status:
+                conditions:
+                  - type: Ready
+                    status: "True"
+                  - type: Synced
+                    status: "True"
+
+    - name: upgrade-read-the-identity-provider-through-the-new-api-version
+      try:
+        - assert:
+            resource:
+              apiVersion: oidc.keycloak.m.crossplane.io/v1alpha2
+              kind: IdentityProvider
+              metadata:
+                name: conversion-test-ns
+                namespace: ($namespace)
+              spec:
+                forProvider:
+                  alias: conversion-test-ns
+                  clientSecretWoVersion: "1"
+                  (type(clientSecretWoVersion) == 'string'): true
+
     - name: cleanup
       try:
+        - delete:
+            ref:
+              apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
+              kind: IdentityProvider
+              name: conversion-test-ns
+              namespace: ($namespace)
         - delete:
             ref:
               apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
