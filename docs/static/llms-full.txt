@@ -507,7 +507,7 @@ kubectl wait realm my-app-realm --for=condition=Ready --timeout=60s
 ## Step 2: Create a Client
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: my-web-app
@@ -1629,7 +1629,7 @@ Use a `Client` when an application or service needs Keycloak to authenticate use
 ### Confidential client with authorization
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: test
@@ -1653,7 +1653,7 @@ spec:
 ### Managing a built-in client without deleting it
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: account
@@ -1673,7 +1673,7 @@ spec:
 ### Managing another built-in client (account-console)
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: account-console
@@ -1694,7 +1694,7 @@ spec:
 ### Service account client
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: service-acc-1
@@ -1715,7 +1715,7 @@ spec:
 ### Kubernetes federated JWT client
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: k8s-federated-client
@@ -2011,7 +2011,7 @@ Use identity providers when users should sign in to Keycloak with an external id
 Use this resource for a generic OpenID Connect identity provider when you need explicit authorization and token endpoints.
 
 ```yaml
-apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+apiVersion: oidc.keycloak.crossplane.io/v1alpha2
 kind: IdentityProvider
 metadata:
   name: oidc-identity-provider
@@ -2044,7 +2044,7 @@ spec:
 Use organization binding when the external IdP should route users into a specific Keycloak organization.
 
 ```yaml
-apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+apiVersion: oidc.keycloak.crossplane.io/v1alpha2
 kind: IdentityProvider
 metadata:
   name: org-provider

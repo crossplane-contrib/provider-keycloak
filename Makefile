@@ -312,9 +312,16 @@ uptest-conversion: $(CHAINSAW)
 
 e2e-conversion: local-deploy uptest-conversion
 
+# Breaking CRD schema changes are only acceptable in a major release, where
+# they are accompanied by a new API version and a conversion webhook. Set
+# CRDDIFF_ALLOW_BREAKING=true on such a branch to report the changes without
+# failing, e.g. `make crddiff CRDDIFF_ALLOW_BREAKING=true`.
+CRDDIFF_ALLOW_BREAKING ?= false
+
 crddiff: $(UPTEST)
 	@$(INFO) Checking breaking CRD schema changes
-	@for crd in $${MODIFIED_CRD_LIST}; do \
+	@breaking=false ; \
+	for crd in $${MODIFIED_CRD_LIST}; do \
 		if ! git cat-file -e "$${GITHUB_BASE_REF}:$${crd}" 2>/dev/null; then \
 			echo "CRD $${crd} does not exist in the $${GITHUB_BASE_REF} branch. Skipping..." ; \
 			continue ; \
@@ -322,11 +329,20 @@ crddiff: $(UPTEST)
 		echo "Checking $${crd} for breaking API changes..." ; \
 		changes_detected=$$($(UPTEST) crddiff revision <(git cat-file -p "$${GITHUB_BASE_REF}:$${crd}") "$${crd}" 2>&1) ; \
 		if [[ $$? != 0 ]] ; then \
+			breaking=true ; \
 			printf "\033[31m"; echo "Breaking change detected!"; printf "\033[0m" ; \
 			echo "$${changes_detected}" ; \
 			echo ; \
 		fi ; \
-	done
+	done ; \
+	if [[ "$${breaking}" == "true" ]] ; then \
+		if [[ "$(CRDDIFF_ALLOW_BREAKING)" == "true" ]] ; then \
+			echo "CRDDIFF_ALLOW_BREAKING is set: breaking changes are allowed for this major release." ; \
+		else \
+			echo "Set CRDDIFF_ALLOW_BREAKING=true if these changes belong to a major release." ; \
+			exit 1 ; \
+		fi ; \
+	fi
 	@$(OK) Checking breaking CRD schema changes
 
 schema-version-diff:
