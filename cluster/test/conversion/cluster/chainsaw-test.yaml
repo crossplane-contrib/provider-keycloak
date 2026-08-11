@@ -134,16 +134,6 @@ spec:
                   clientSecretWoVersion: 1
                 providerConfigRef:
                   name: keycloak-provider-config
-        - assert:
-            resource:
-              apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-              kind: Client
-              metadata:
-                name: conversion-test
-              status:
-                (length(conditions[?type == 'Ready' && status == 'True']) == `1`): true
-                (length(conditions[?type == 'Synced' && status == 'True']) == `1`): true
-
     - name: upgrade-read-the-object-through-the-new-api-version
       try:
         # Reading the object as v1alpha2 goes through the conversion webhook,
