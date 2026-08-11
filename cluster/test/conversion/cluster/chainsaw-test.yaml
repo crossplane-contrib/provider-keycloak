@@ -97,11 +97,8 @@ spec:
               metadata:
                 name: conversion-test
               status:
-                conditions:
-                  - type: Ready
-                    status: "True"
-                  - type: Synced
-                    status: "True"
+                (length(conditions[?type == 'Ready' && status == 'True']) == `1`): true
+                (length(conditions[?type == 'Synced' && status == 'True']) == `1`): true
 
     - name: create-the-client-with-the-previous-api-version
       try:
@@ -134,11 +131,8 @@ spec:
               metadata:
                 name: conversion-test
               status:
-                conditions:
-                  - type: Ready
-                    status: "True"
-                  - type: Synced
-                    status: "True"
+                (length(conditions[?type == 'Ready' && status == 'True']) == `1`): true
+                (length(conditions[?type == 'Synced' && status == 'True']) == `1`): true
 
     - name: upgrade-read-the-object-through-the-new-api-version
       try:
@@ -211,11 +205,8 @@ spec:
               metadata:
                 name: conversion-test
               status:
-                conditions:
-                  - type: Ready
-                    status: "True"
-                  - type: Synced
-                    status: "True"
+                (length(conditions[?type == 'Ready' && status == 'True']) == `1`): true
+                (length(conditions[?type == 'Synced' && status == 'True']) == `1`): true
 
     - name: create-the-identity-provider-with-the-previous-api-version
       try:
@@ -253,11 +244,8 @@ spec:
               metadata:
                 name: conversion-test
               status:
-                conditions:
-                  - type: Ready
-                    status: "True"
-                  - type: Synced
-                    status: "True"
+                (length(conditions[?type == 'Ready' && status == 'True']) == `1`): true
+                (length(conditions[?type == 'Synced' && status == 'True']) == `1`): true
 
     - name: upgrade-read-the-identity-provider-through-the-new-api-version
       try:

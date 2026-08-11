@@ -80,6 +80,7 @@ spec:
                 providerConfigRef:
                   name: keycloak-provider-config
                   kind: ProviderConfig
+                  namespace: dev-ns
         - assert:
             resource:
               apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
@@ -88,11 +89,8 @@ spec:
                 name: conversion-test-ns
                 namespace: ($namespace)
               status:
-                conditions:
-                  - type: Ready
-                    status: "True"
-                  - type: Synced
-                    status: "True"
+                (length(conditions[?type == 'Ready' && status == 'True']) == `1`): true
+                (length(conditions[?type == 'Synced' && status == 'True']) == `1`): true
 
     - name: create-the-client-with-the-previous-api-version
       try:
@@ -116,6 +114,7 @@ spec:
                 providerConfigRef:
                   name: keycloak-provider-config
                   kind: ProviderConfig
+                  namespace: dev-ns
         - assert:
             resource:
               apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
@@ -124,11 +123,8 @@ spec:
                 name: conversion-test-ns
                 namespace: ($namespace)
               status:
-                conditions:
-                  - type: Ready
-                    status: "True"
-                  - type: Synced
-                    status: "True"
+                (length(conditions[?type == 'Ready' && status == 'True']) == `1`): true
+                (length(conditions[?type == 'Synced' && status == 'True']) == `1`): true
 
     - name: upgrade-read-the-object-through-the-new-api-version
       try:
@@ -188,6 +184,7 @@ spec:
                 providerConfigRef:
                   name: keycloak-provider-config
                   kind: ProviderConfig
+                  namespace: dev-ns
         - assert:
             resource:
               apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
@@ -196,11 +193,8 @@ spec:
                 name: conversion-test-ns
                 namespace: ($namespace)
               status:
-                conditions:
-                  - type: Ready
-                    status: "True"
-                  - type: Synced
-                    status: "True"
+                (length(conditions[?type == 'Ready' && status == 'True']) == `1`): true
+                (length(conditions[?type == 'Synced' && status == 'True']) == `1`): true
 
     - name: upgrade-read-the-identity-provider-through-the-new-api-version
       try:
