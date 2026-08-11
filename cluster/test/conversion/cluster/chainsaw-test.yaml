@@ -65,6 +65,16 @@ spec:
                   - name: v1alpha2
                     served: true
                     storage: true
+        # Also wait for the Realm CRD to be established so that the
+        # create-the-prerequisites step can apply a Realm immediately.
+        - assert:
+            resource:
+              apiVersion: apiextensions.k8s.io/v1
+              kind: CustomResourceDefinition
+              metadata:
+                name: realms.realm.keycloak.crossplane.io
+              status:
+                (conditions[?type=='Established'].status | [0]): 'True'
 
     - name: create-the-prerequisites
       try:
