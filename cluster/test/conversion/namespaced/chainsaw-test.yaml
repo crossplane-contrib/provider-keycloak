@@ -79,8 +79,7 @@ spec:
                   realm: conversion-test-ns
                 providerConfigRef:
                   name: keycloak-provider-config
-                  kind: ProviderConfig
-                  namespace: dev-ns
+                  kind: ClusterProviderConfig
         - assert:
             resource:
               apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
@@ -113,8 +112,7 @@ spec:
                   clientSecretWoVersion: 1
                 providerConfigRef:
                   name: keycloak-provider-config
-                  kind: ProviderConfig
-                  namespace: dev-ns
+                  kind: ClusterProviderConfig
         - assert:
             resource:
               apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
@@ -183,8 +181,7 @@ spec:
                     name: conversion-test-ns
                 providerConfigRef:
                   name: keycloak-provider-config
-                  kind: ProviderConfig
-                  namespace: dev-ns
+                  kind: ClusterProviderConfig
         - assert:
             resource:
               apiVersion: oidc.keycloak.m.crossplane.io/v1alpha1
