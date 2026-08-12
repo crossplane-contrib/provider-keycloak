@@ -264,7 +264,7 @@ service:
 EOF
 
 echo "* Installing Keycloak via Helm"
-helm install keycloak codecentric/keycloakx --version 7.0.1 \
+retry 5 15 helm install keycloak codecentric/keycloakx --version 7.0.1 \
   --namespace keycloak --create-namespace \
   -f /tmp/keycloak-values.yaml \
   --wait --timeout 300s
