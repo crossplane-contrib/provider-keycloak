@@ -10,7 +10,7 @@
     "helpers:pinGitHubActionDigests",
     ":automergeRequireAllStatusChecks"
   ],
-  "baseBranches": [
+  "baseBranchPatterns": [
     "main"
   ],
   "postUpdateOptions": [
@@ -192,8 +192,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "GO_REQUIRED_VERSION \\?= (?<currentValue>.*)"
@@ -204,8 +204,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^\\.github/workflows/.*\\.yml$"
+      "managerFilePatterns": [
+        "/^\\.github/workflows/.*\\.yml$/"
       ],
       "matchStrings": [
         "GO_VERSION:\\s*'(?<currentValue>[^']+)'"
@@ -216,8 +216,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^\\.github/workflows/(deploy-docs|preview-docs)\\.yml$"
+      "managerFilePatterns": [
+        "/^\\.github/workflows/(deploy-docs|preview-docs)\\.yml$/"
       ],
       "matchStrings": [
         "go-version:\\s*'(?<currentValue>[^']+)'"
@@ -228,8 +228,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^\\.github/workflows/(deploy-docs|preview-docs)\\.yml$"
+      "managerFilePatterns": [
+        "/^\\.github/workflows/(deploy-docs|preview-docs)\\.yml$/"
       ],
       "matchStrings": [
         "hugo-version:\\s*'(?<currentValue>[^']+)'"
@@ -240,8 +240,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "export TERRAFORM_PROVIDER_VERSION .*= (?<currentValue>.*)"
@@ -252,8 +252,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "export TERRAFORM_VERSION \\?= (?<currentValue>.*)"
@@ -264,8 +264,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "export GOLANGCILINT_VERSION \\?= (?<currentValue>.*)"
@@ -276,8 +276,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "KUBECTL_VERSION \\?= (?<currentValue>.*)"
@@ -288,8 +288,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "KIND_VERSION = (?<currentValue>.*)"
@@ -300,8 +300,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "UP_VERSION = (?<currentValue>.*)"
@@ -312,8 +312,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "UPTEST_VERSION = (?<currentValue>.*)"
@@ -324,8 +324,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "CHAINSAW_VERSION = (?<currentValue>.*)"
@@ -336,8 +336,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "CROSSPLANE_VERSION = (?<currentValue>.*)"
@@ -348,8 +348,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "CROSSPLANE_CLI_VERSION = (?<currentValue>.*)"
