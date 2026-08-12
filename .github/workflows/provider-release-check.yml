@@ -1,0 +1,122 @@
+name: Provider Release Check
+
+# Checks whether a new release of the upstream Keycloak Terraform provider
+# (github.com/keycloak/terraform-provider-keycloak) is available and, if so:
+#   - files a tracking issue with a checklist of everything a version bump
+#     requires (unless already tracked by an open issue)
+#   - opens a draft PR that performs the mechanical part of the bump
+#     (Makefile, go.mod, `make generate`) and calls out any potential
+#     breaking changes found in the regenerated schema.json
+#
+# Note: Renovate already auto-merges minor/patch/digest bumps of this
+# dependency on a weekly schedule (see .github/renovate.json); this workflow
+# exists to (a) surface bumps -- including major ones that Renovate does not
+# auto-merge -- with a full TODO checklist and a ready-to-review PR, and
+# (b) proactively flag potential breaking schema changes.
+#
+# - pull_request: dry-run only (no issues/PRs are created), and only runs
+#   when the automation itself changes, so it doesn't run on every PR.
+# - schedule / workflow_dispatch: creates the issue and PR for real.
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/check_provider_release.py'
+      - 'scripts/version_diff.py'
+      - '.github/workflows/provider-release-check.yml'
+  schedule:
+    - cron: '0 6 * * 1' # Every Monday at 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (report only, do not create an issue/PR)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+env:
+  GO_VERSION: '1.25.12'
+
+jobs:
+  check-release:
+    runs-on: ubuntu-24.04
+    outputs:
+      new_version_available: ${{ steps.bump.outputs.new_version_available }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          submodules: true
+
+      - name: Determine dry-run mode
+        id: mode
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "dry_run=true" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "dry_run=${{ inputs.dry_run }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "dry_run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: File tracking issue for new release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARGS=(--repo "${{ github.repository }}" --mode issue --label dependencies)
+          if [[ "${{ steps.mode.outputs.dry_run }}" == "true" ]]; then
+            ARGS+=(--dry-run)
+          fi
+          ./scripts/check_provider_release.py "${ARGS[@]}"
+
+      - name: Setup Go
+        if: steps.mode.outputs.dry_run != 'true'
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Vendor Dependencies
+        if: steps.mode.outputs.dry_run != 'true'
+        run: make vendor vendor.check
+
+      - name: Bump provider version and regenerate schema/CRDs
+        if: steps.mode.outputs.dry_run != 'true'
+        id: bump
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          ./scripts/check_provider_release.py --repo "${{ github.repository }}" --mode bump --pr-body-file /tmp/pr-body.md
+          rc=$?
+          set -e
+          if [[ $rc -eq 1 ]]; then
+            echo "new_version_available=true" >> "$GITHUB_OUTPUT"
+          elif [[ $rc -eq 0 ]]; then
+            echo "new_version_available=false" >> "$GITHUB_OUTPUT"
+          else
+            exit $rc
+          fi
+
+      - name: Open pull request
+        if: steps.mode.outputs.dry_run != 'true' && steps.bump.outputs.new_version_available == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(sed -nr 's/^export[[:space:]]*TERRAFORM_PROVIDER_VERSION[[:space:]]*\?=[[:space:]]*(.+)/\1/p' Makefile)
+          BRANCH="bump-terraform-provider-keycloak-v${VERSION}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "${BRANCH}"
+          git add -A
+          git commit -m "chore: bump terraform-provider-keycloak to v${VERSION}"
+          git push origin "${BRANCH}" --force
+          gh pr create --repo "${{ github.repository }}" \
+            --title "chore: bump terraform-provider-keycloak to v${VERSION}" \
+            --body-file /tmp/pr-body.md \
+            --draft \
+            --label dependencies || echo "PR may already exist for this branch"
