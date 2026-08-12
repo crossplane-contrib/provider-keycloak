@@ -80,7 +80,8 @@ name selection, references, import-by-properties, testing).
 `.github/workflows/schema-diff-issues.yml` runs
 `scripts/schema_diff_issues.py` to diff `config/schema.json` against
 `config/generated.lst` and file one GitHub issue per missing resource that
-isn't already tracked. It dry-runs on pull requests and creates real issues
+isn't already tracked. It dry-runs only on pull requests that change the
+automation itself (script or workflow file), and creates real issues
 on schedule, on `Makefile` changes on `main`, and on manual dispatch.
 
 ## Cross-Resource References

@@ -136,8 +136,9 @@ issue per missing resource (see "Automated Schema Diff Issues" below).
 `config/generated.lst` and files one GitHub issue per resource that is
 missing and not already tracked by an existing open issue.
 
-- On `pull_request`, it always runs in `--dry-run` mode (prints what it
-  would do; never creates issues) so the automation itself can be reviewed.
+- On `pull_request`, it only runs (in `--dry-run` mode; never creates issues)
+  when the automation itself changes (`scripts/schema_diff_issues.py` or the
+  workflow file) — not on every PR.
 - On `schedule` (weekly) and `push` to `main` that touches the `Makefile`
   (i.e. a Terraform provider version bump), and on manual
   `workflow_dispatch`, it creates real issues.
