@@ -85,11 +85,21 @@ linters:
       - linters:
           - dupl
           - errcheck
+          - goconst
           - gocyclo
           - gosec
           - scopelint
           - unparam
         path: _test(ing)?\.go
+      - linters:
+          - goconst
+        path: ^config/.*\.go$
+      - linters:
+          - goconst
+        path: ^internal/clients/keycloak\.go$
+      - linters:
+          - goconst
+        path: ^internal/keycloaksession/session\.go$
       - linters:
           - gocritic
         path: _test\.go
