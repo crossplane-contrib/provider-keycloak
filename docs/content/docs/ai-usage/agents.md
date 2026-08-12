@@ -118,8 +118,9 @@ which diffs `config/schema.json` against `config/generated.lst` and files one
 GitHub issue per missing resource that isn't already tracked by an existing
 open issue (matched by exact resource name in the issue title/body).
 
-- On `pull_request`, it always runs in dry-run mode (reports only, creates
-  nothing) so changes to the automation itself can be reviewed.
+- On `pull_request`, it only runs in dry-run mode (reports only, creates
+  nothing) when the automation itself changes (the script or the workflow
+  file) — not on every PR.
 - On a weekly `schedule`, on `push` to `main` that touches the `Makefile`
   (a Terraform provider version bump), and on manual `workflow_dispatch`, it
   creates real issues.

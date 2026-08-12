@@ -5,17 +5,14 @@ name: Schema Diff Issues
 # resources, and files one GitHub issue per resource that isn't already
 # tracked by an existing open issue.
 #
-# - pull_request: dry-run only (no issues are created), so the automation
-#   itself can be reviewed/validated as part of a PR.
+# - pull_request: dry-run only (no issues are created), and only runs when
+#   the automation itself changes, so it doesn't run on every unrelated PR.
 # - schedule / workflow_dispatch / push (when TERRAFORM_PROVIDER_VERSION
 #   changes on main): creates issues for real.
 
 on:
   pull_request:
     paths:
-      - 'config/schema.json'
-      - 'config/generated.lst'
-      - 'Makefile'
       - 'scripts/schema_diff_issues.py'
       - '.github/workflows/schema-diff-issues.yml'
   push:
