@@ -56,9 +56,30 @@ jobs:
           if echo "$COMMIT_MESSAGE" | grep -iq "\[skip e2e\]"; then
             echo "skip=true" >> $GITHUB_OUTPUT
             echo "Found [skip e2e] in commit message, will skip e2e tests"
-          else
+            exit 0
+          fi
+          echo "No [skip e2e] found in commit message"
+
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
             echo "skip=false" >> $GITHUB_OUTPUT
-            echo "No [skip e2e] found in commit message"
+            echo "Not a pull_request event, will not skip e2e tests based on changed paths"
+            exit 0
+          fi
+
+          CHANGED_FILES=$(git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}")
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          # Only run e2e tests when changes could affect the operator/e2e
+          # environment: Go code, generated APIs/CRDs, upjet config, e2e
+          # test manifests/dev demos, build tooling, or the CI workflow
+          # itself. Docs, scripts, and other metadata-only changes skip e2e.
+          if echo "$CHANGED_FILES" | grep -Eq '^(apis/|cmd/|internal/|config/|package/crds/|cluster/|dev/|build/|Makefile$|go\.mod$|go\.sum$|Dockerfile|\.github/workflows/ci\.yml)'; then
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "Found changes relevant to e2e tests"
+          else
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "No changes relevant to e2e tests found, will skip e2e tests"
           fi
 
 
