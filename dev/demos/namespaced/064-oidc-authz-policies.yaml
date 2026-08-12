@@ -24,10 +24,6 @@ spec:
 ---
 # OpenID client time policy (namespaced)
 # Restricts authorization to business hours (09:00–17:00).
-# ClientTimePolicy does not depend on other policies or scope UUIDs and can be
-# applied standalone, unlike ClientAggregatePolicy (needs sub-policy UUIDs) or
-# ClientAuthorizationClientScopePolicy (needs scope UUIDs) which require
-# Keycloak-assigned UUIDs with no Crossplane cross-resource reference support.
 apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientTimePolicy
 metadata:
@@ -48,6 +44,62 @@ spec:
       name: test
       policy:
         resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+
+---
+# OpenID client aggregate policy (namespaced)
+# Combines the time policy above into an aggregate policy.
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientAggregatePolicy
+metadata:
+  name: authz-aggregate-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    name: aggregate-policy
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: test
+      policy:
+        resolve: Always
+    timePoliciesRefs:
+      - name: authz-time-policy
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+
+---
+# OpenID client authorization scope policy (namespaced)
+# Requires the manage:users scope for access.
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientAuthorizationClientScopePolicy
+metadata:
+  name: authz-scope-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    name: scope-policy
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: test
+      policy:
+        resolve: Always
+    scope:
+      - idRef:
+          name: authz-manage-users-scope
+        required: false
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig

@@ -19,7 +19,9 @@ spec:
       matchLabels:
         testing.upbound.io/example-name: test
     scope:
-    - id: ${keycloak_openid_client_scope.test1.id}
+    - idSelector:
+        matchLabels:
+          testing.upbound.io/example-name: test1
       required: false
 
 ---

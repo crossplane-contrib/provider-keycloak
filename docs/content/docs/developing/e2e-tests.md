@@ -73,7 +73,7 @@ human-readable names. Common mismatches:
 |---------------|---------------------|
 | `clientRef` | `resourceServerIdRef` (for `resource_server_id`) |
 | `realmRef` | `realmIdRef` |
-| `clientScopesRef` | no ref generated; use `scope[].id` (UUID) |
+| `clientScopesRef` | `scope[].idRef` (resolved from `ClientAuthorizationScope` name) |
 | `expiresInMinutes` | does not exist; use `hour`/`hourEnd`, `notBefore`/`notOnOrAfter` |
 
 Check the generated `zz_*_types.go` for the exact JSON field names, or look
@@ -92,13 +92,6 @@ Common mistakes:
 
 - Referencing a resource by name that is not created by any earlier demo file
   or by `000-init.yaml`.
-- Using a Kubernetes resource name where a **Keycloak UUID** is required.
-  Some fields (e.g. `policies []*string` in `ClientAggregatePolicy`,
-  `scope[].id` in `ClientAuthorizationClientScopePolicy`) take raw Keycloak
-  UUIDs. These fields have **no generated `*Ref` counterpart** and cannot be
-  resolved from a Crossplane resource name. Hardcoded UUIDs are not portable,
-  so resources relying solely on such fields should be omitted from e2e demos
-  unless a real UUID can be supplied.
 - Using `realmRef.name: dev` in a namespaced demo (should be `dev-ns` if that
   is the name of the namespaced realm resource).
 
@@ -114,19 +107,7 @@ Authorization resources (`ClientAuthorizationScope`, `ClientAggregatePolicy`,
 If you reference a different client without authorization enabled Keycloak
 will return a 404/400 error and the resource will stay unsynced.
 
-### 5. Unresolvable `policies` in `ClientAggregatePolicy`
-
-`ClientAggregatePolicy.spec.forProvider.policies` is a `[]string` of
-Keycloak-internal policy UUIDs. There is no `policiesRef` cross-resource
-reference generated. This means you cannot express the dependency purely in
-YAML without knowing the UUID upfront. Workarounds:
-
-- Omit `ClientAggregatePolicy` from the e2e demo and cover it in a manual or
-  integration test where UUIDs can be injected.
-- Use `initProvider.policies` and patch the resource after sub-policies are
-  Ready (requires a custom chainsaw step).
-
-### 6. Status Conditions Not Yet Available
+### 5. Status Conditions Not Yet Available
 
 Immediately asserting `Ready=True` after `kubectl apply` can fail because
 Crossplane may not have written the initial status conditions yet. Chainsaw
@@ -135,7 +116,7 @@ JMESPath assertions on `status.conditions` will error if the field is `nil`.
 Mitigation: add a short `wait` step before asserting conditions, or check
 only that the object exists.
 
-### 7. Race: CRD Not Established Before Test Applies Resources
+### 6. Race: CRD Not Established Before Test Applies Resources
 
 If a new resource type is registered just before uptest runs, the Kubernetes
 API discovery cache may not yet include it. `setup.sh` already waits for all
@@ -231,11 +212,5 @@ decode errors, then fix the field names or references as described above.
 
 ## Known Limitations
 
-- `ClientAggregatePolicy.policies` and `ClientAuthorizationClientScopePolicy.scope[].id`
-  require raw Keycloak UUIDs. No `*Ref` cross-resource reference is generated
-  for these fields, so they cannot be wired purely through Crossplane YAML
-  without knowing the UUID in advance. Omit these resources from the e2e demo
-  or supply UUIDs via a chainsaw patch step.
-- The `policies` field in `ClientAggregatePolicy` is marked as a **required
-  parameter** by kubebuilder validation, so the resource cannot be created
-  without at least one policy ID.
+- E2E tests only cover resources listed in `cluster/test/cases.txt`.
+- Chainsaw JMESPath assertions on `status.conditions` can fail if conditions are `nil` immediately after apply; add a wait step or assert only object existence first.

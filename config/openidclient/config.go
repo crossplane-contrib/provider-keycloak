@@ -390,6 +390,49 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_openid_client",
 			Extractor:     common.PathUUIDExtractor,
 		}
+		addSyntheticListReferences(r, "policies",
+			syntheticListReference{
+				name: "client_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_client_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "group_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_group_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "regex_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_regex_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "role_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_role_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "time_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_time_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
+				name: "user_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_user_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			})
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_js_policy", func(r *config.Resource) {
@@ -412,6 +455,10 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 		r.References["resource_server_id"] = config.Reference{
 			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+		r.References["scope.id"] = config.Reference{
+			TerraformName: "keycloak_openid_client_authorization_scope",
 			Extractor:     common.PathUUIDExtractor,
 		}
 	})

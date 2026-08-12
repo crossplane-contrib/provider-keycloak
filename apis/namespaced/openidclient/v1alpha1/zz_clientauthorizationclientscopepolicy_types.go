@@ -137,7 +137,17 @@ type ClientAuthorizationClientScopePolicyParameters struct {
 type ScopeInitParameters struct {
 
 	// Id of client scope.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientAuthorizationScope
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// Reference to a ClientAuthorizationScope in openidclient to populate id.
+	// +kubebuilder:validation:Optional
+	IDRef *v1.NamespacedReference `json:"idRef,omitempty" tf:"-"`
+
+	// Selector for a ClientAuthorizationScope in openidclient to populate id.
+	// +kubebuilder:validation:Optional
+	IDSelector *v1.NamespacedSelector `json:"idSelector,omitempty" tf:"-"`
 
 	// When true, then this client scope will be set as required. Defaults to false.
 	Required *bool `json:"required,omitempty" tf:"required,omitempty"`
@@ -155,8 +165,18 @@ type ScopeObservation struct {
 type ScopeParameters struct {
 
 	// Id of client scope.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientAuthorizationScope
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
-	ID *string `json:"id" tf:"id,omitempty"`
+	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// Reference to a ClientAuthorizationScope in openidclient to populate id.
+	// +kubebuilder:validation:Optional
+	IDRef *v1.NamespacedReference `json:"idRef,omitempty" tf:"-"`
+
+	// Selector for a ClientAuthorizationScope in openidclient to populate id.
+	// +kubebuilder:validation:Optional
+	IDSelector *v1.NamespacedSelector `json:"idSelector,omitempty" tf:"-"`
 
 	// When true, then this client scope will be set as required. Defaults to false.
 	// +kubebuilder:validation:Optional
