@@ -8,7 +8,8 @@
     "config:recommended",
     ":semanticCommits",
     "helpers:pinGitHubActionDigests",
-    ":automergeRequireAllStatusChecks"
+    ":automergeRequireAllStatusChecks",
+    "schedule:weekly"
   ],
   "baseBranchPatterns": [
     "main"
@@ -19,127 +20,8 @@
   "dependencyDashboard": true,
   "recreateWhen": "always",
   "platformAutomerge": true,
-  "ignoreDeps": [
-    "github.com/keycloak/terraform-provider-keycloak",
-    "keycloak/terraform-provider-keycloak"
-  ],
+  "minimumReleaseAge": "3 days",
   "packageRules": [
-    {
-      "groupName": "go versions",
-      "matchManagers": [
-        "gomod",
-        "github-actions",
-        "custom.regex"
-      ],
-      "matchDepNames": [
-        "go",
-        "golang",
-        "golang/go"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true
-    },
-    {
-      "groupName": "k8s.io dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^k8s\\.io//"
-      ]
-    },
-    {
-      "groupName": "sigs.k8s.io dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^sigs\\.k8s\\.io//"
-      ]
-    },
-    {
-      "groupName": "github.com/keycloak/terraform-provider-keycloak dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^github\\.com/keycloak/terraform-provider-keycloak/"
-      ]
-    },
-    {
-      "groupName": "github.com/hashicorp dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^github\\.com/hashicorp//"
-      ]
-    },
-    {
-      "groupName": "github.com/crossplane dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^github\\.com/crossplane//"
-      ]
-    },
-    {
-      "groupName": "github.com/alecthomas dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^github\\.com/alecthomas//"
-      ]
-    },
     {
       "groupName": "github-actions",
       "matchManagers": [
@@ -160,6 +42,16 @@
       ],
       "matchFileNames": [
         "Makefile"
+      ],
+      "matchDepNames": [
+        "golangci/golangci-lint",
+        "kubernetes/kubernetes",
+        "kubernetes-sigs/kind",
+        "upbound/up",
+        "crossplane-contrib/uptest",
+        "kyverno/chainsaw",
+        "crossplane/crossplane",
+        "hashicorp/terraform"
       ],
       "matchUpdateTypes": [
         "major",
@@ -187,6 +79,45 @@
         "hashicorp/terraform"
       ],
       "allowedVersions": "<1.6.0"
+    },
+    {
+      "groupName": "go versions",
+      "matchManagers": [
+        "gomod",
+        "github-actions",
+        "custom.regex"
+      ],
+      "matchDepNames": [
+        "go",
+        "golang",
+        "golang/go"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "groupName": "terraform-provider-keycloak",
+      "description": "Keycloak Terraform provider used by the code generator (go.mod pseudo-version) and its pinned version in the Makefile, grouped and reviewed together weekly since upgrading requires deliberate schema migration.",
+      "matchManagers": [
+        "gomod",
+        "custom.regex"
+      ],
+      "matchDepNames": [
+        "github.com/keycloak/terraform-provider-keycloak",
+        "keycloak/terraform-provider-keycloak"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": false
     }
   ],
   "customManagers": [
