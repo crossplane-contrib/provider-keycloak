@@ -126,7 +126,7 @@ func isStaleRefCondition(c xpv1.Condition) bool {
 // if at least one value was cleared.
 func clearResolvedRefs(mg Managed) bool {
 	v := reflect.ValueOf(mg)
-	for v.Kind() == reflect.Ptr {
+	for v.Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
 	if v.Kind() != reflect.Struct {
@@ -200,7 +200,7 @@ func valueFieldName(name string) (string, bool) {
 
 func isNilOrEmpty(v reflect.Value) bool {
 	switch v.Kind() { //nolint:exhaustive // only the kinds upjet uses for ref-paired fields matter
-	case reflect.Ptr, reflect.Interface:
+	case reflect.Pointer, reflect.Interface:
 		return v.IsNil()
 	case reflect.Slice, reflect.Map:
 		return v.IsNil() || v.Len() == 0
