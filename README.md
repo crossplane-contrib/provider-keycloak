@@ -364,6 +364,7 @@ and `--start-cloud-provider-kind` (how to install cloud-provider-kind [see here]
 Run tests
 
 ```console
+make e2e-cases-check
 make uptest
 ```
 

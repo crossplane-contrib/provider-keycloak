@@ -47,6 +47,8 @@ import (
 	userattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/userattributemapper"
 	userfederation "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/userfederation"
 	usermodelhardcodedattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/ldap/usermodelhardcodedattributemapper"
+	facebookidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/facebookidentityprovider"
+	githubidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/githubidentityprovider"
 	googleidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/googleidentityprovider"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/identityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/client"
@@ -144,6 +146,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		userattributemapper.Setup,
 		userfederation.Setup,
 		usermodelhardcodedattributemapper.Setup,
+		facebookidentityprovider.Setup,
+		githubidentityprovider.Setup,
 		googleidentityprovider.Setup,
 		identityprovider.Setup,
 		client.Setup,
@@ -247,6 +251,8 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		userattributemapper.SetupGated,
 		userfederation.SetupGated,
 		usermodelhardcodedattributemapper.SetupGated,
+		facebookidentityprovider.SetupGated,
+		githubidentityprovider.SetupGated,
 		googleidentityprovider.SetupGated,
 		identityprovider.SetupGated,
 		client.SetupGated,
@@ -349,6 +355,8 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		userattributemapper.SetupWebhookWithManager,
 		userfederation.SetupWebhookWithManager,
 		usermodelhardcodedattributemapper.SetupWebhookWithManager,
+		facebookidentityprovider.SetupWebhookWithManager,
+		githubidentityprovider.SetupWebhookWithManager,
 		googleidentityprovider.SetupWebhookWithManager,
 		identityprovider.SetupWebhookWithManager,
 		client.SetupWebhookWithManager,
