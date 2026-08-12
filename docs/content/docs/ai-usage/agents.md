@@ -160,9 +160,11 @@ consuming individual pages.
 
 - **Never edit `examples-generated/` by hand.** These are auto-generated.
 - **Never edit generated files in `apis/` or `package/crds/` by hand.**
-- **Do not update `github.com/keycloak/terraform-provider-keycloak` via Renovate.**
-  It is explicitly excluded from automated updates because upgrading it requires
-  deliberate schema migration.
+- **`github.com/keycloak/terraform-provider-keycloak` updates are grouped;
+  major bumps require manual review.** The go.mod pseudo-version and its
+  pinned Makefile version are grouped into a single weekly Renovate PR.
+  Minor/patch/digest updates auto-merge once tests pass; major version bumps
+  are not auto-merged since upgrading requires deliberate schema migration.
 - **E2E tests only cover resources in `cluster/test/cases.txt`.** New resources
   are not automatically e2e tested.
 - **Upjet does not support `+nullable` markers.** Do not add nullable annotations
