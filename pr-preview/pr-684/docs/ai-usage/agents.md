@@ -118,7 +118,7 @@ open issue (matched by exact resource name in the issue title/body).
   nothing) so changes to the automation itself can be reviewed.
 - On a weekly `schedule`, on `push` to `main` that touches the `Makefile`
   (a Terraform provider version bump), and on manual `workflow_dispatch`, it
-  creates real issues (capped per run).
+  creates real issues.
 
 ## Cross-Resource References
 
