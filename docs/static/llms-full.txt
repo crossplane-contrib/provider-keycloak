@@ -89,16 +89,41 @@ explicitly listed in `cluster/test/cases.txt` receive e2e coverage.
 
 ## Adding a New Resource
 
-1. Add an entry to `config/external_name.go` (the external name is the Keycloak-assigned ID).
+Use `make schema-diff OLD_PROVIDER_VERSION=<prev>` (or compare
+`config/generated.lst` against `config/schema.json`) to find Terraform
+resources that aren't yet exposed as managed resources. The
+`schema-diff-issues` GitHub Actions workflow automates this and files one
+issue per missing resource that isn't already tracked.
+
+1. Add an entry to `config/external_name.go`. Choose `config.IdentifierFromProvider`
+   when the Terraform provider already returns a stable ID (including composite
+   `{realm}/...` IDs), or a `<group>.<Resource>IdentifierFromIdentifyingProperties`
+   helper (see `config/openidclient/` or `config/group/`) when the ID must be
+   derived from identifying attributes such as name + realm.
 2. Create or update `config/<group>/config.go` to configure references and any
    custom behaviors.
 3. Run `make generate` to regenerate CRDs and Go types.
 4. Add a hand-authored example to `examples/<group>/<resource>.yaml`.
 5. Optionally add a docs page to `docs/content/docs/using/resources/<resource>.md`.
+6. Optionally add the resource to `cluster/test/cases.txt` plus a chainsaw/uptest
+   manifest under `cluster/test/` or `dev/demos/` for e2e coverage.
 
 To allow a resource to be imported/observed by its properties (avoiding 409 on create),
 wire its `external_name.go` entry to a `lookup.BuildIdentifyingPropertiesLookup` config
 in the `config/<group>` package (see `config/openidclient/config.go` for an example).
+
+## Automated Schema Diff Issues
+
+`.github/workflows/schema-diff-issues.yml` runs `scripts/schema_diff_issues.py`,
+which diffs `config/schema.json` against `config/generated.lst` and files one
+GitHub issue per missing resource that isn't already tracked by an existing
+open issue (matched by exact resource name in the issue title/body).
+
+- On `pull_request`, it always runs in dry-run mode (reports only, creates
+  nothing) so changes to the automation itself can be reviewed.
+- On a weekly `schedule`, on `push` to `main` that touches the `Makefile`
+  (a Terraform provider version bump), and on manual `workflow_dispatch`, it
+  creates real issues (capped per run).
 
 ## Cross-Resource References
 

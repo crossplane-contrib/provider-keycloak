@@ -74,14 +74,76 @@ The generation pipeline:
 
 ## Adding a New Resource
 
-1. Add an entry to `config/external_name.go`.
-2. Create or update `config/<group>/config.go` to configure references.
-3. Run `make generate`.
-4. Add a hand-authored example to `examples/<group>/<resource>.yaml`.
+Use `make schema-diff OLD_PROVIDER_VERSION=<prev>` (or check
+`config/generated.lst` against `config/schema.json`) to find Terraform
+resources that aren't yet exposed as managed resources. The
+`schema-diff-issues` GitHub Actions workflow automates this and files one
+issue per missing resource (see "Automated Schema Diff Issues" below).
 
-To allow import/observe by identifying properties (avoiding 409 on create), wire
-to `lookup.BuildIdentifyingPropertiesLookup` in the group config (see
-`config/openidclient/config.go` for an example).
+1. **External name.** Add an entry for the resource to
+   `config/external_name.go`. Pick the mapping based on how Keycloak/the
+   Terraform provider identifies the resource:
+   - `config.IdentifierFromProvider` — the ID is a plain string returned by
+     the provider (e.g. a UUID) with no need to derive it from other fields.
+     Use this for resources with a simple, provider-assigned ID, including
+     composite `{realm}/...` style IDs already produced by the TF provider.
+   - `<group>.<Resource>IdentifierFromIdentifyingProperties` — the resource
+     has no single stable ID until created, so the external name must be
+     derived from a set of identifying attributes (e.g. name + realm). Add a
+     small helper in `config/<group>/` following the pattern of
+     `config/openidclient/*IdentifierFromIdentifyingProperties` or
+     `config/group/group.go`.
+   - Inspect the resource's docs page in the
+     [terraform-provider-keycloak repo](https://github.com/keycloak/terraform-provider-keycloak)
+     and, if unsure, check how a similar existing resource in the same group
+     is mapped.
+2. **References.** Identify which schema attributes point at other Keycloak
+   resources (commonly `realm_id`, `client_id`, `parent_id`, etc.) and wire
+   them in `config/<group>/config.go`:
+   ```go
+   r.References["realm_id"] = config.Reference{
+       TerraformName: "keycloak_realm",
+   }
+   ```
+   For references that require extracting an ID from a composite external
+   name (e.g. `{realm}/{id}`), use `resolve.ExtractResourceID` or a custom
+   extractor — see existing entries in `config/<group>/config.go` for
+   patterns.
+3. **Import / identify by properties.** If the resource can already exist in
+   Keycloak before Crossplane creates it (so a naive `Create` would 409),
+   wire it to `lookup.BuildIdentifyingPropertiesLookup` in the group config
+   (see `config/openidclient/config.go` for a full example) so it can be
+   found and imported instead.
+4. **Generate.** Run `make generate`. Confirm new/updated files appear under
+   `apis/<group>/<version>/` and `package/crds/`, and that the CRD's
+   `spec.forProvider` fields match the Terraform resource's schema.
+5. **Examples.** Add a hand-authored example manifest to
+   `examples/<group>/<resource>.yaml` with realistic field values (do not
+   edit `examples-generated/` by hand).
+6. **Docs.** Optionally add/update
+   `docs/content/docs/using/resources/<resource>.md` and run `make docs-gen`
+   to refresh `llms.txt`/`llms-full.txt`.
+7. **Tests.** If the resource is meant to be covered by end-to-end tests,
+   add it to `cluster/test/cases.txt` and provide (or extend) a
+   chainsaw/uptest manifest under `cluster/test/` or `dev/demos/`. Run
+   `make test` for unit tests; e2e coverage is otherwise limited to
+   resources already listed in `cluster/test/cases.txt`.
+
+## Automated Schema Diff Issues
+
+`.github/workflows/schema-diff-issues.yml` runs
+`scripts/schema_diff_issues.py`, which diffs `config/schema.json` against
+`config/generated.lst` and files one GitHub issue per resource that is
+missing and not already tracked by an existing open issue.
+
+- On `pull_request`, it always runs in `--dry-run` mode (prints what it
+  would do; never creates issues) so the automation itself can be reviewed.
+- On `schedule` (weekly) and `push` to `main` that touches the `Makefile`
+  (i.e. a Terraform provider version bump), and on manual
+  `workflow_dispatch`, it creates real issues (capped per run via
+  `--max-issues`).
+- Dedup is based on whether the exact resource name (as a whole token, not a
+  substring) already appears in an open issue's title or body.
 
 ## Cross-Resource References
 
