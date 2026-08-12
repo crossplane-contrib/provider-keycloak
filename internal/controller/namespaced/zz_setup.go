@@ -82,7 +82,12 @@ import (
 	clientpolicyprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofile"
 	clientpolicyprofilepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofilepolicy"
 	defaultclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/defaultclientscopes"
+	keystoreaesgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/keystoreaesgenerated"
+	keystoreecdsagenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/keystoreecdsagenerated"
+	keystorehmacgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/keystorehmacgenerated"
+	keystorejavakeystore "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/keystorejavakeystore"
 	keystorersa "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/keystorersa"
+	keystorersagenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/keystorersagenerated"
 	optionalclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/optionalclientscopes"
 	realm "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/realm"
 	realmevents "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/realmevents"
@@ -181,7 +186,12 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientpolicyprofile.Setup,
 		clientpolicyprofilepolicy.Setup,
 		defaultclientscopes.Setup,
+		keystoreaesgenerated.Setup,
+		keystoreecdsagenerated.Setup,
+		keystorehmacgenerated.Setup,
+		keystorejavakeystore.Setup,
 		keystorersa.Setup,
+		keystorersagenerated.Setup,
 		optionalclientscopes.Setup,
 		realm.Setup,
 		realmevents.Setup,
@@ -286,7 +296,12 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientpolicyprofile.SetupGated,
 		clientpolicyprofilepolicy.SetupGated,
 		defaultclientscopes.SetupGated,
+		keystoreaesgenerated.SetupGated,
+		keystoreecdsagenerated.SetupGated,
+		keystorehmacgenerated.SetupGated,
+		keystorejavakeystore.SetupGated,
 		keystorersa.SetupGated,
+		keystorersagenerated.SetupGated,
 		optionalclientscopes.SetupGated,
 		realm.SetupGated,
 		realmevents.SetupGated,
@@ -390,7 +405,12 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientpolicyprofile.SetupWebhookWithManager,
 		clientpolicyprofilepolicy.SetupWebhookWithManager,
 		defaultclientscopes.SetupWebhookWithManager,
+		keystoreaesgenerated.SetupWebhookWithManager,
+		keystoreecdsagenerated.SetupWebhookWithManager,
+		keystorehmacgenerated.SetupWebhookWithManager,
+		keystorejavakeystore.SetupWebhookWithManager,
 		keystorersa.SetupWebhookWithManager,
+		keystorersagenerated.SetupWebhookWithManager,
 		optionalclientscopes.SetupWebhookWithManager,
 		realm.SetupWebhookWithManager,
 		realmevents.SetupWebhookWithManager,
