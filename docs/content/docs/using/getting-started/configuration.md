@@ -4,8 +4,6 @@ title: Configuration
 description: Configure provider-keycloak credentials to connect to Keycloak
 ---
 
-# Configuration
-
 Every Keycloak instance you manage requires a `ProviderConfig` resource that specifies how to connect to the Keycloak API.
 
 ## Create a Credentials Secret

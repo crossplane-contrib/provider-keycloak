@@ -7,16 +7,22 @@ import (
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
+	"github.com/crossplane-contrib/provider-keycloak/config/conversion"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 )
-
-const shortGroupOIDC = "oidc"
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_oidc_identity_provider", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
-		r.ShortGroup = shortGroupOIDC
+		r.ShortGroup = "oidc"
+
+		// terraform-provider-keycloak v5.9.0 changed the type of
+		// client_secret_wo_version from number to string. Serve the old
+		// (number) schema as v1alpha1 and the new (string) schema as v1alpha2,
+		// and let the conversion webhook translate between them.
+		conversion.BumpVersionForIntToStringChange(r, "v1alpha2", "clientSecretWoVersion")
+
 		r.References["realm"] = config.Reference{
 			TerraformName: "keycloak_realm",
 		}
@@ -38,7 +44,7 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_oidc_google_identity_provider", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
-		r.ShortGroup = shortGroupOIDC
+		r.ShortGroup = "oidc"
 		r.References["realm"] = config.Reference{
 			TerraformName: "keycloak_realm",
 		}
@@ -92,10 +98,6 @@ func Configure(p *config.Provider) {
 		if s, ok := r.TerraformResource.Schema["client_secret"]; ok {
 			s.Sensitive = true
 		}
-	})
-
-	p.AddResourceConfigurator("keycloak_user_template_importer_identity_provider_mapper", func(r *config.Resource) {
-		r.ShortGroup = shortGroupOIDC
 	})
 }
 

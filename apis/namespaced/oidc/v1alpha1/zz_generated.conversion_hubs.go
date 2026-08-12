@@ -14,6 +14,3 @@ func (tr *GithubIdentityProvider) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *GoogleIdentityProvider) Hub() {}
-
-// Hub marks this type as a conversion hub.
-func (tr *IdentityProvider) Hub() {}

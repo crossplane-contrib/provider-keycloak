@@ -70,7 +70,7 @@ Move every reference selector / ref out of `spec.forProvider` into
 `managementPolicies` to everything *except* `LateInitialize`:
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: my-client

@@ -4,8 +4,6 @@ title: Identity Providers
 description: Federate Keycloak login with external identity providers
 ---
 
-# Identity Providers
-
 Use identity providers when users should sign in to Keycloak with an external identity system instead of local usernames and passwords. This is the right fit for social login, corporate SAML or OIDC federation, Kubernetes or OpenShift workload identity, SPIFFE-based trust, and controlled token exchange between clients and external providers.
 
 ## API Reference
@@ -28,7 +26,7 @@ Use identity providers when users should sign in to Keycloak with an external id
 Use this resource for a generic OpenID Connect identity provider when you need explicit authorization and token endpoints.
 
 ```yaml
-apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+apiVersion: oidc.keycloak.crossplane.io/v1alpha2
 kind: IdentityProvider
 metadata:
   name: oidc-identity-provider
@@ -61,7 +59,7 @@ spec:
 Use organization binding when the external IdP should route users into a specific Keycloak organization.
 
 ```yaml
-apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+apiVersion: oidc.keycloak.crossplane.io/v1alpha2
 kind: IdentityProvider
 metadata:
   name: org-provider

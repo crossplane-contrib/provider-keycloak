@@ -4,8 +4,6 @@ title: Groups
 description: Manage Keycloak groups, memberships, role mappings, and permissions
 ---
 
-# Groups
-
 Use groups when multiple users should share the same roles or when you need a hierarchical structure such as teams, departments, or environments. Groups let you model organization structure once and then manage access in bulk.
 
 ## API Reference

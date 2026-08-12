@@ -1,4 +1,4 @@
-apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+apiVersion: oidc.keycloak.crossplane.io/v1alpha2
 kind: IdentityProvider
 metadata:
   name: org-provider

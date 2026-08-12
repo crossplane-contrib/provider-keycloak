@@ -80,6 +80,12 @@ spec:
                     description: Specify order of the client scope in GUI (such as
                       in Consent page) as integer.
                     type: number
+                  includeInOpenidProviderMetadata:
+                    description: When true, this client scope will be listed in the
+                      scopes_supported field of the realm's OpenID Provider Metadata
+                      (the .well-known/openid-configuration discovery document). When
+                      false, it will be omitted. Defaults to true.
+                    type: boolean
                   includeInTokenScope:
                     description: When true, the name of this client scope will be
                       added to the access token property 'scope' as well as to the
@@ -209,6 +215,12 @@ spec:
                     description: Specify order of the client scope in GUI (such as
                       in Consent page) as integer.
                     type: number
+                  includeInOpenidProviderMetadata:
+                    description: When true, this client scope will be listed in the
+                      scopes_supported field of the realm's OpenID Provider Metadata
+                      (the .well-known/openid-configuration discovery document). When
+                      false, it will be omitted. Defaults to true.
+                    type: boolean
                   includeInTokenScope:
                     description: When true, the name of this client scope will be
                       added to the access token property 'scope' as well as to the
@@ -395,6 +407,12 @@ spec:
                     type: number
                   id:
                     type: string
+                  includeInOpenidProviderMetadata:
+                    description: When true, this client scope will be listed in the
+                      scopes_supported field of the realm's OpenID Provider Metadata
+                      (the .well-known/openid-configuration discovery document). When
+                      false, it will be omitted. Defaults to true.
+                    type: boolean
                   includeInTokenScope:
                     description: When true, the name of this client scope will be
                       added to the access token property 'scope' as well as to the

@@ -1198,6 +1198,10 @@ type WebAuthnPasswordlessPolicyInitParameters struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
+	// The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	// Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	DiscoverableCredential *string `json:"discoverableCredential,omitempty" tf:"discoverable_credential,omitempty"`
+
 	// A set of extra origins for non-web applications.
 	// +listType=set
 	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
@@ -1212,7 +1216,7 @@ type WebAuthnPasswordlessPolicyInitParameters struct {
 	// The WebAuthn relying party ID.
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
@@ -1246,6 +1250,10 @@ type WebAuthnPasswordlessPolicyObservation struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
+	// The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	// Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	DiscoverableCredential *string `json:"discoverableCredential,omitempty" tf:"discoverable_credential,omitempty"`
+
 	// A set of extra origins for non-web applications.
 	// +listType=set
 	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
@@ -1260,7 +1268,7 @@ type WebAuthnPasswordlessPolicyObservation struct {
 	// The WebAuthn relying party ID.
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
@@ -1299,6 +1307,11 @@ type WebAuthnPasswordlessPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
+	// The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	// Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	// +kubebuilder:validation:Optional
+	DiscoverableCredential *string `json:"discoverableCredential,omitempty" tf:"discoverable_credential,omitempty"`
+
 	// A set of extra origins for non-web applications.
 	// +kubebuilder:validation:Optional
 	// +listType=set
@@ -1317,7 +1330,7 @@ type WebAuthnPasswordlessPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
 	// Either Yes or No
 	// +kubebuilder:validation:Optional
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
@@ -1354,6 +1367,10 @@ type WebAuthnPolicyInitParameters struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
+	// The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	// Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	DiscoverableCredential *string `json:"discoverableCredential,omitempty" tf:"discoverable_credential,omitempty"`
+
 	// A set of extra origins for non-web applications.
 	// +listType=set
 	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
@@ -1364,7 +1381,7 @@ type WebAuthnPolicyInitParameters struct {
 	// The WebAuthn relying party ID.
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
@@ -1398,6 +1415,10 @@ type WebAuthnPolicyObservation struct {
 	// The timeout value for creating a user's public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
+	// The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	// Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	DiscoverableCredential *string `json:"discoverableCredential,omitempty" tf:"discoverable_credential,omitempty"`
+
 	// A set of extra origins for non-web applications.
 	// +listType=set
 	ExtraOrigins []*string `json:"extraOrigins,omitempty" tf:"extra_origins,omitempty"`
@@ -1408,7 +1429,7 @@ type WebAuthnPolicyObservation struct {
 	// The WebAuthn relying party ID.
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
@@ -1447,6 +1468,11 @@ type WebAuthnPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	CreateTimeout *float64 `json:"createTimeout,omitempty" tf:"create_timeout,omitempty"`
 
+	// The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	// Either required, preferred or discouraged. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.
+	// +kubebuilder:validation:Optional
+	DiscoverableCredential *string `json:"discoverableCredential,omitempty" tf:"discoverable_credential,omitempty"`
+
 	// A set of extra origins for non-web applications.
 	// +kubebuilder:validation:Optional
 	// +listType=set
@@ -1460,7 +1486,7 @@ type WebAuthnPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RelyingPartyID *string `json:"relyingPartyId,omitempty" tf:"relying_party_id,omitempty"`
 
-	// Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified.
+	// Deprecated Specifies whether a public key should be created to represent the resident key. Valid options are not specified, Yes, or No. Defaults to not specified. Deprecated by Keycloak in favor of discoverable_credential — this attribute is only used when discoverable_credential is left as not specified.
 	// Either Yes or No
 	// +kubebuilder:validation:Optional
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`

@@ -4,8 +4,6 @@ title: Troubleshooting
 description: Common issues and how to resolve them
 ---
 
-# Troubleshooting
-
 ## Common Issues
 
 ### Resource Stuck in "Creating" State
@@ -49,6 +47,16 @@ Look at the `Events` section and `status.conditions` for error messages.
 - Timestamp or ordering differences
 
 **Solution**: Ensure your spec exactly matches the desired state. Use `kubectl describe` to compare `spec.forProvider` with `status.atProvider`.
+
+### Unexpected `make generate` Diffs
+
+**Symptoms**: `make generate` produces unexpectedly large or stale diffs.
+
+**Common cause**: Stale local generator cache/artifacts.
+
+**Solution**:
+1. Remove `.work/` and `config/schema.json`.
+2. Run `make generate` again.
 
 ### Provider Pod CrashLoopBackOff
 

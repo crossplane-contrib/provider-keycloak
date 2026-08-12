@@ -1,6 +1,6 @@
 module github.com/crossplane-contrib/provider-keycloak
 
-go 1.25.8
+go 1.25.12
 
 require (
 	dario.cat/mergo v1.0.2
@@ -8,7 +8,7 @@ require (
 	github.com/crossplane/crossplane-runtime/v2 v2.2.0
 	github.com/crossplane/crossplane-tools v0.0.0-20251017183449-dd4517244339
 	github.com/crossplane/upjet/v2 v2.3.0
-	github.com/hashicorp/terraform-json v0.27.2
+	github.com/hashicorp/terraform-json v0.28.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.1
 	github.com/keycloak/terraform-provider-keycloak v0.0.0-20260706114118-a2fa31aea0b2
 	github.com/pkg/errors v0.9.1
@@ -18,6 +18,7 @@ require (
 	k8s.io/client-go v0.35.4
 	sigs.k8s.io/controller-runtime v0.23.3
 	sigs.k8s.io/controller-tools v0.20.0
+	sigs.k8s.io/yaml v1.6.0
 )
 
 require (
@@ -163,5 +164,4 @@ require (
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect
 	sigs.k8s.io/randfill v1.0.0 // indirect
 	sigs.k8s.io/structured-merge-diff/v6 v6.3.2-0.20260122202528-d9cc6641c482 // indirect
-	sigs.k8s.io/yaml v1.6.0 // indirect
 )

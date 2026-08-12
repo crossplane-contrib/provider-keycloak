@@ -14,8 +14,24 @@ ${KUBECTL} apply -f ${SCRIPT_DIR}/../../dev/demos/namespaced/000-init.yaml
 # uptest runs (observed with OidcOpenShiftV4IdentityProvider and
 # ClientRegexPolicy in Keycloak 26.4.x).
 echo "Waiting for all ManagedResourceDefinitions to be established..."
-${KUBECTL} wait managedresourcedefinitions.apiextensions.crossplane.io \
-  --all --for=condition=Established --timeout=10m
+if ${KUBECTL} api-resources --api-group=apiextensions.crossplane.io --no-headers | grep -q '^managedresourcedefinitions'; then
+  if ${KUBECTL} get managedresourcedefinitions.apiextensions.crossplane.io --no-headers 2>/dev/null | grep -q .; then
+    ${KUBECTL} wait managedresourcedefinitions.apiextensions.crossplane.io \
+      --all --for=condition=Established --timeout=10m
+  else
+    echo "No ManagedResourceDefinitions found; waiting for Keycloak CRDs instead..."
+    mapfile -t keycloak_crds < <(${KUBECTL} get crd -o name | grep -E 'keycloak\.(crossplane\.io|m\.crossplane\.io)$' || true)
+    if [ "${#keycloak_crds[@]}" -gt 0 ]; then
+      ${KUBECTL} wait --for=condition=Established --timeout=10m "${keycloak_crds[@]}"
+    fi
+  fi
+else
+  echo "ManagedResourceDefinition API is not available; waiting for Keycloak CRDs instead..."
+  mapfile -t keycloak_crds < <(${KUBECTL} get crd -o name | grep -E 'keycloak\.(crossplane\.io|m\.crossplane\.io)$' || true)
+  if [ "${#keycloak_crds[@]}" -gt 0 ]; then
+    ${KUBECTL} wait --for=condition=Established --timeout=10m "${keycloak_crds[@]}"
+  fi
+fi
 
 # Apply org init manifest if KEYCLOAK_VERSION >= 26.6
 if [ -n "${KEYCLOAK_VERSION:-}" ]; then
@@ -31,18 +47,28 @@ fi
 # * 02-import.yaml
 # * 03-delete.yaml
 
+# Chainsaw sometimes runs setup.sh with a working directory different from the
+# generated case directory, so resolve files from either location.
+CASE_DIR="${PWD}"
+if [[ ! -f "${CASE_DIR}/00-apply.yaml" && -f "/tmp/uptest-e2e/case/00-apply.yaml" ]]; then
+  CASE_DIR="/tmp/uptest-e2e/case"
+fi
+
+rewrite_file() {
+  local src="$1"
+  local tmp
+  tmp="${src}.new"
+  sed "s/exec: 20m0s/exec: 60m0s/g" "${src}" | \
+    sed "s/apply: 20m0s/apply: 60m0s/g" | \
+    sed "s/assert: 20m0s/assert: 60m0s/g" > "${tmp}"
+  mv "${tmp}" "${src}"
+}
+
 # Increase timeouts
-sed "s/exec: 20m0s/exec: 60m0s/g" 00-apply.yaml | sed "s/apply: 20m0s/apply: 60m0s/g" | sed "s/assert: 20m0s/assert: 60m0s/g"  > 00-apply-new.yaml
-rm 00-apply.yaml
-mv 00-apply-new.yaml  00-apply.yaml
-
-sed "s/exec: 20m0s/exec: 60m0s/g" 02-import.yaml | sed "s/apply: 20m0s/apply: 60m0s/g" | sed "s/assert: 20m0s/assert: 60m0s/g" > 02-import-new.yaml
-rm 02-import.yaml
-mv 02-import-new.yaml  02-import.yaml
-
-sed "s/exec: 20m0s/exec: 60m0s/g" 03-delete.yaml > 03-delete-new.yaml
-rm 03-delete.yaml
-mv 03-delete-new.yaml  03-delete.yaml
+rewrite_file "${CASE_DIR}/00-apply.yaml"
+rewrite_file "${CASE_DIR}/02-import.yaml"
+sed "s/exec: 20m0s/exec: 60m0s/g" "${CASE_DIR}/03-delete.yaml" > "${CASE_DIR}/03-delete.yaml.new"
+mv "${CASE_DIR}/03-delete.yaml.new" "${CASE_DIR}/03-delete.yaml"
 
 
 # We want to add more import tests that:
@@ -66,7 +92,6 @@ mv 03-delete-new.yaml  03-delete.yaml
 #rm 02-import-NoExtName.yaml
 
 cp ${SCRIPT_DIR}/hack/deleteOrdered.sh /tmp/deleteOrdered.sh
-sed 's/retry_kubectl "/eval "\/tmp\/deleteOrdered.sh /g' 03-delete.yaml > 03-delete-new.yaml
-rm 03-delete.yaml
-mv 03-delete-new.yaml  03-delete.yaml
+sed 's/retry_kubectl "/eval "\/tmp\/deleteOrdered.sh /g' "${CASE_DIR}/03-delete.yaml" > "${CASE_DIR}/03-delete.yaml.new"
+mv "${CASE_DIR}/03-delete.yaml.new" "${CASE_DIR}/03-delete.yaml"
 
