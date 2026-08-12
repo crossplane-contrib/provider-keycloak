@@ -4,8 +4,6 @@ title: Authentication Flows
 description: Customize Keycloak login, MFA, and flow bindings declaratively
 ---
 
-# Authentication Flows
-
 Use authentication flow resources when the default Keycloak login process is not enough. They let you define custom browser, registration, direct-grant, or client-authentication flows; nest subflows; add execution steps such as MFA, OTP, WebAuthn, or identity-provider redirects; and bind the finished flow to the realm behavior that should use it.
 
 ## API Reference

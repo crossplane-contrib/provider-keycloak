@@ -2,8 +2,6 @@
 title: Local Docs Development
 ---
 
-# Local Docs Development
-
 Run the documentation site locally:
 
 ```bash

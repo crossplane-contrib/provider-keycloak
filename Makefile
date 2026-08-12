@@ -14,7 +14,7 @@ TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAF
 export TERRAFORM_PROVIDER_SOURCE ?= keycloak/keycloak
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/keycloak/terraform-provider-keycloak
 # renovate: datasource=github-releases depName=keycloak/terraform-provider-keycloak
-export TERRAFORM_PROVIDER_VERSION ?= 5.8.0
+export TERRAFORM_PROVIDER_VERSION ?= 5.9.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-keycloak
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= ${TERRAFORM_PROVIDER_REPO}/releases/download/v$(TERRAFORM_PROVIDER_VERSION)
 export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-keycloak_v$(TERRAFORM_PROVIDER_VERSION)
@@ -49,7 +49,7 @@ NPROCS ?= 1
 # to half the number of CPU cores.
 GO_TEST_PARALLEL := $(shell echo $$(( $(NPROCS) / 2 )))
 
-GO_REQUIRED_VERSION ?= 1.25
+GO_REQUIRED_VERSION ?= 1.25.12
 GO_STATIC_PACKAGES = $(GO_PROJECT)/cmd/provider $(GO_PROJECT)/cmd/generator
 GO_LDFLAGS += -X $(GO_PROJECT)/internal/version.Version=$(VERSION)
 GO_SUBDIRS += cmd internal apis generate
@@ -191,7 +191,7 @@ run: go.build
 
 # ====================================================================================
 # End to End Testing
-CHAINSAW_VERSION = 0.2.12
+CHAINSAW_VERSION = 0.2.15
 CROSSPLANE_VERSION = 2.0.2
 CROSSPLANE_CLI_VERSION = v2.0.2
 CROSSPLANE_NAMESPACE = crossplane-system
@@ -281,6 +281,9 @@ uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW) $(CROSSPLANE_CLI)
 	@KUBECTL=$(KUBECTL) CHAINSAW=$(CHAINSAW) CROSSPLANE_CLI=$(CROSSPLANE_CLI) CROSSPLANE_NAMESPACE=$(CROSSPLANE_NAMESPACE) $(UPTEST) e2e "$(UPTEST_EXAMPLE_LIST)" $(RENDER_ONLY_FLAG) --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=cluster/test/setup.sh --default-conditions="Test" --default-timeout=2400s || $(FAIL)
 	@$(OK) running automated tests
 
+e2e-cases-check:
+	@./cluster/test/check_cases_coverage.sh
+
 local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(INFO) running locally built provider
 	@$(KUBECTL) wait crd providers.pkg.crossplane.io --for=create --timeout 5m
@@ -301,9 +304,16 @@ local-deploy-provider-prebuilt: local.xpkg.deploy.provider.$(PROJECT_NAME)
 
 e2e: local-deploy uptest
 
+# Breaking CRD schema changes are only acceptable in a major release, where
+# they are accompanied by a new API version and a conversion webhook. Set
+# CRDDIFF_ALLOW_BREAKING=true on such a branch to report the changes without
+# failing, e.g. `make crddiff CRDDIFF_ALLOW_BREAKING=true`.
+CRDDIFF_ALLOW_BREAKING ?= false
+
 crddiff: $(UPTEST)
 	@$(INFO) Checking breaking CRD schema changes
-	@for crd in $${MODIFIED_CRD_LIST}; do \
+	@breaking=false ; \
+	for crd in $${MODIFIED_CRD_LIST}; do \
 		if ! git cat-file -e "$${GITHUB_BASE_REF}:$${crd}" 2>/dev/null; then \
 			echo "CRD $${crd} does not exist in the $${GITHUB_BASE_REF} branch. Skipping..." ; \
 			continue ; \
@@ -311,11 +321,20 @@ crddiff: $(UPTEST)
 		echo "Checking $${crd} for breaking API changes..." ; \
 		changes_detected=$$($(UPTEST) crddiff revision <(git cat-file -p "$${GITHUB_BASE_REF}:$${crd}") "$${crd}" 2>&1) ; \
 		if [[ $$? != 0 ]] ; then \
+			breaking=true ; \
 			printf "\033[31m"; echo "Breaking change detected!"; printf "\033[0m" ; \
 			echo "$${changes_detected}" ; \
 			echo ; \
 		fi ; \
-	done
+	done ; \
+	if [[ "$${breaking}" == "true" ]] ; then \
+		if [[ "$(CRDDIFF_ALLOW_BREAKING)" == "true" ]] ; then \
+			echo "CRDDIFF_ALLOW_BREAKING is set: breaking changes are allowed for this major release." ; \
+		else \
+			echo "Set CRDDIFF_ALLOW_BREAKING=true if these changes belong to a major release." ; \
+			exit 1 ; \
+		fi ; \
+	fi
 	@$(OK) Checking breaking CRD schema changes
 
 schema-version-diff:

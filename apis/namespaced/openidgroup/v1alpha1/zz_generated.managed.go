@@ -7,6 +7,126 @@ package v1alpha1
 
 import xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
 
+// GetCondition of this AudienceProtocolMapper.
+func (mg *AudienceProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this AudienceProtocolMapper.
+func (mg *AudienceProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this AudienceProtocolMapper.
+func (mg *AudienceProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this AudienceProtocolMapper.
+func (mg *AudienceProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this AudienceProtocolMapper.
+func (mg *AudienceProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this AudienceProtocolMapper.
+func (mg *AudienceProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this AudienceProtocolMapper.
+func (mg *AudienceProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this AudienceProtocolMapper.
+func (mg *AudienceProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this AudienceResolveProtocolMapper.
+func (mg *AudienceResolveProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this AudienceResolveProtocolMapper.
+func (mg *AudienceResolveProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this AudienceResolveProtocolMapper.
+func (mg *AudienceResolveProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this AudienceResolveProtocolMapper.
+func (mg *AudienceResolveProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this AudienceResolveProtocolMapper.
+func (mg *AudienceResolveProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this AudienceResolveProtocolMapper.
+func (mg *AudienceResolveProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this AudienceResolveProtocolMapper.
+func (mg *AudienceResolveProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this AudienceResolveProtocolMapper.
+func (mg *AudienceResolveProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this FullNameProtocolMapper.
+func (mg *FullNameProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this FullNameProtocolMapper.
+func (mg *FullNameProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this FullNameProtocolMapper.
+func (mg *FullNameProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this FullNameProtocolMapper.
+func (mg *FullNameProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this FullNameProtocolMapper.
+func (mg *FullNameProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this FullNameProtocolMapper.
+func (mg *FullNameProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this FullNameProtocolMapper.
+func (mg *FullNameProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this FullNameProtocolMapper.
+func (mg *FullNameProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this GroupMembershipProtocolMapper.
 func (mg *GroupMembershipProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)
@@ -44,5 +164,325 @@ func (mg *GroupMembershipProtocolMapper) SetProviderConfigReference(r *xpv1.Prov
 
 // SetWriteConnectionSecretToReference of this GroupMembershipProtocolMapper.
 func (mg *GroupMembershipProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this HardcodedClaimProtocolMapper.
+func (mg *HardcodedClaimProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this HardcodedClaimProtocolMapper.
+func (mg *HardcodedClaimProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this HardcodedClaimProtocolMapper.
+func (mg *HardcodedClaimProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this HardcodedClaimProtocolMapper.
+func (mg *HardcodedClaimProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this HardcodedClaimProtocolMapper.
+func (mg *HardcodedClaimProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this HardcodedClaimProtocolMapper.
+func (mg *HardcodedClaimProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this HardcodedClaimProtocolMapper.
+func (mg *HardcodedClaimProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this HardcodedClaimProtocolMapper.
+func (mg *HardcodedClaimProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this HardcodedRoleProtocolMapper.
+func (mg *HardcodedRoleProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this HardcodedRoleProtocolMapper.
+func (mg *HardcodedRoleProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this HardcodedRoleProtocolMapper.
+func (mg *HardcodedRoleProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this HardcodedRoleProtocolMapper.
+func (mg *HardcodedRoleProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this HardcodedRoleProtocolMapper.
+func (mg *HardcodedRoleProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this HardcodedRoleProtocolMapper.
+func (mg *HardcodedRoleProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this HardcodedRoleProtocolMapper.
+func (mg *HardcodedRoleProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this HardcodedRoleProtocolMapper.
+func (mg *HardcodedRoleProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this SubProtocolMapper.
+func (mg *SubProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this SubProtocolMapper.
+func (mg *SubProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this SubProtocolMapper.
+func (mg *SubProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this SubProtocolMapper.
+func (mg *SubProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this SubProtocolMapper.
+func (mg *SubProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this SubProtocolMapper.
+func (mg *SubProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this SubProtocolMapper.
+func (mg *SubProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this SubProtocolMapper.
+func (mg *SubProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this UserAttributeProtocolMapper.
+func (mg *UserAttributeProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this UserClientRoleProtocolMapper.
+func (mg *UserClientRoleProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this UserClientRoleProtocolMapper.
+func (mg *UserClientRoleProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this UserClientRoleProtocolMapper.
+func (mg *UserClientRoleProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this UserClientRoleProtocolMapper.
+func (mg *UserClientRoleProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this UserClientRoleProtocolMapper.
+func (mg *UserClientRoleProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this UserClientRoleProtocolMapper.
+func (mg *UserClientRoleProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this UserClientRoleProtocolMapper.
+func (mg *UserClientRoleProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this UserClientRoleProtocolMapper.
+func (mg *UserClientRoleProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this UserPropertyProtocolMapper.
+func (mg *UserPropertyProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this UserRealmRoleProtocolMapper.
+func (mg *UserRealmRoleProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this UserRealmRoleProtocolMapper.
+func (mg *UserRealmRoleProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this UserRealmRoleProtocolMapper.
+func (mg *UserRealmRoleProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this UserRealmRoleProtocolMapper.
+func (mg *UserRealmRoleProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this UserRealmRoleProtocolMapper.
+func (mg *UserRealmRoleProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this UserRealmRoleProtocolMapper.
+func (mg *UserRealmRoleProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this UserRealmRoleProtocolMapper.
+func (mg *UserRealmRoleProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this UserRealmRoleProtocolMapper.
+func (mg *UserRealmRoleProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this UserSessionNoteProtocolMapper.
+func (mg *UserSessionNoteProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this UserSessionNoteProtocolMapper.
+func (mg *UserSessionNoteProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this UserSessionNoteProtocolMapper.
+func (mg *UserSessionNoteProtocolMapper) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this UserSessionNoteProtocolMapper.
+func (mg *UserSessionNoteProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this UserSessionNoteProtocolMapper.
+func (mg *UserSessionNoteProtocolMapper) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this UserSessionNoteProtocolMapper.
+func (mg *UserSessionNoteProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this UserSessionNoteProtocolMapper.
+func (mg *UserSessionNoteProtocolMapper) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this UserSessionNoteProtocolMapper.
+func (mg *UserSessionNoteProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }

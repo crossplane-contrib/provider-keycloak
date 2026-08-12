@@ -1,0 +1,225 @@
+---
+# OpenID group protocol mappers comprehensive demo
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: AudienceProtocolMapper
+metadata:
+  name: audience-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    includedCustomAudience: foo
+    name: audience-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: AudienceResolveProtocolMapper
+metadata:
+  name: audience-resolve-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    name: audience-resolve-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: FullNameProtocolMapper
+metadata:
+  name: full-name-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    name: full-name-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: HardcodedClaimProtocolMapper
+metadata:
+  name: hardcoded-claim-mapper
+spec:
+  forProvider:
+    claimName: hardcoded-claim
+    claimValue: "true"
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    name: hardcoded-claim-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: HardcodedRoleProtocolMapper
+metadata:
+  name: hardcoded-role-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    name: hardcoded-role-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleIdRef:
+      name: test
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: SubProtocolMapper
+metadata:
+  name: sub-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    name: sub-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: UserAttributeProtocolMapper
+metadata:
+  name: user-attribute-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    claimName: email
+    name: user-attribute-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    userAttribute: email
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: UserClientRoleProtocolMapper
+metadata:
+  name: user-client-role-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    claimName: client-roles
+    name: user-client-role-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: UserPropertyProtocolMapper
+metadata:
+  name: user-property-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    claimName: username
+    name: user-property-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    userProperty: username
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: UserRealmRoleProtocolMapper
+metadata:
+  name: user-realm-role-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    claimName: realm-roles
+    name: user-realm-role-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+---
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: UserSessionNoteProtocolMapper
+metadata:
+  name: user-session-note-mapper
+spec:
+  forProvider:
+    clientIdRef:
+      name: test
+      policy:
+        resolve: Always
+    claimName: session-note
+    claimValueType: String
+    name: user-session-note-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    sessionNote: auth_time
+  providerConfigRef:
+    name: "keycloak-provider-config"

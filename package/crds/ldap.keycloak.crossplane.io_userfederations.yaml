@@ -325,6 +325,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  relativeCreateDn:
+                    description: |-
+                      Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+                      Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+                    type: string
                   searchScope:
                     description: |-
                       Can be one of ONE_LEVEL or SUBTREE:
@@ -652,6 +657,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  relativeCreateDn:
+                    description: |-
+                      Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+                      Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+                    type: string
                   searchScope:
                     description: |-
                       Can be one of ONE_LEVEL or SUBTREE:
@@ -994,6 +1004,11 @@ spec:
                     description: |-
                       The realm that this provider will provide user federation for.
                       The realm this provider will provide user federation for.
+                    type: string
+                  relativeCreateDn:
+                    description: |-
+                      Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
+                      Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
                     type: string
                   searchScope:
                     description: |-

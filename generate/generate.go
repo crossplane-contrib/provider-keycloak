@@ -12,7 +12,12 @@ Copyright 2021 Upbound Inc.
 //go:generate rm -rf ../package/crds
 
 // Remove generated files
-//go:generate bash -c "find ../apis -iname 'zz_*' ! -iname 'zz_generated.managed*.go' -delete"
+// NOTE: We must not delete the generated API types of the previously released
+// API versions (config.Resource.PreviousVersions). Those versions are frozen:
+// upjet only (re)generates the types of the current config.Resource.Version and
+// loads the types of the previous versions from disk. Deleting them would drop
+// the spoke versions and therefore break the conversion webhook.
+//go:generate bash -c "find ../apis \\( -iname 'zz_generated.conversion_hubs.go' -o -iname 'zz_generated.conversion_spokes.go' -o -iname 'zz_generated.resolvers.go' \\) -delete"
 //go:generate bash -c "find ../apis -type d -empty -delete"
 //go:generate bash -c "find ../internal/controller -iname 'zz_*' -delete"
 //go:generate bash -c "find ../internal/controller -type d -empty -delete"
@@ -29,6 +34,8 @@ Copyright 2021 Upbound Inc.
 // Generate deepcopy methodsets and CRD manifests
 //go:generate go run -tags generate sigs.k8s.io/controller-tools/cmd/controller-gen object:headerFile=../hack/boilerplate.go.txt paths=../apis/... crd:allowDangerousTypes=true,crdVersions=v1 output:artifacts:config=../package/crds
 
+// Enable the conversion webhook for the CRDs that serve more than one version
+//go:generate go run ../cmd/crdconversion/main.go ../package/crds
 
 // Generate crossplane-runtime methodsets (resource.Claim, etc)
 //go:generate go run -tags generate github.com/crossplane/crossplane-tools/cmd/angryjet generate-methodsets --header-file=../hack/boilerplate.go.txt ../apis/...
@@ -37,7 +44,6 @@ Copyright 2021 Upbound Inc.
 // API-group imports and to prevent import cycles
 //go:generate go run github.com/crossplane/upjet/v2/cmd/resolver -g keycloak.crossplane.io -a github.com/crossplane-contrib/provider-keycloak/internal/apis -s -p ../apis/cluster/...
 //go:generate go run github.com/crossplane/upjet/v2/cmd/resolver -g keycloak.m.crossplane.io -a github.com/crossplane-contrib/provider-keycloak/internal/apis -s -p ../apis/namespaced/...
-
 
 package generate
 

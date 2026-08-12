@@ -12,6 +12,7 @@ spec:
     description: When requested, this scope will map a user's group memberships to
       a claim
     guiOrder: 1
+    includeInOpenidProviderMetadata: true
     includeInTokenScope: true
     name: groups
     realmIdSelector:

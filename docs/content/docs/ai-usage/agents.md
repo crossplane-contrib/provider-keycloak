@@ -88,16 +88,42 @@ explicitly listed in `cluster/test/cases.txt` receive e2e coverage.
 
 ## Adding a New Resource
 
-1. Add an entry to `config/external_name.go` (the external name is the Keycloak-assigned ID).
+Use `make schema-diff OLD_PROVIDER_VERSION=<prev>` (or compare
+`config/generated.lst` against `config/schema.json`) to find Terraform
+resources that aren't yet exposed as managed resources. The
+`schema-diff-issues` GitHub Actions workflow automates this and files one
+issue per missing resource that isn't already tracked.
+
+1. Add an entry to `config/external_name.go`. Choose `config.IdentifierFromProvider`
+   when the Terraform provider already returns a stable ID (including composite
+   `{realm}/...` IDs), or a `<group>.<Resource>IdentifierFromIdentifyingProperties`
+   helper (see `config/openidclient/` or `config/group/`) when the ID must be
+   derived from identifying attributes such as name + realm.
 2. Create or update `config/<group>/config.go` to configure references and any
    custom behaviors.
 3. Run `make generate` to regenerate CRDs and Go types.
 4. Add a hand-authored example to `examples/<group>/<resource>.yaml`.
 5. Optionally add a docs page to `docs/content/docs/using/resources/<resource>.md`.
+6. Optionally add the resource to `cluster/test/cases.txt` plus a chainsaw/uptest
+   manifest under `cluster/test/` or `dev/demos/` for e2e coverage.
 
 To allow a resource to be imported/observed by its properties (avoiding 409 on create),
 wire its `external_name.go` entry to a `lookup.BuildIdentifyingPropertiesLookup` config
 in the `config/<group>` package (see `config/openidclient/config.go` for an example).
+
+## Automated Schema Diff Issues
+
+`.github/workflows/schema-diff-issues.yml` runs `scripts/schema_diff_issues.py`,
+which diffs `config/schema.json` against `config/generated.lst` and files one
+GitHub issue per missing resource that isn't already tracked by an existing
+open issue (matched by exact resource name in the issue title/body).
+
+- On `pull_request`, it only runs in dry-run mode (reports only, creates
+  nothing) when the automation itself changes (the script or the workflow
+  file) — not on every PR.
+- On a weekly `schedule`, on `push` to `main` that touches the `Makefile`
+  (a Terraform provider version bump), and on manual `workflow_dispatch`, it
+  creates real issues.
 
 ## Cross-Resource References
 
@@ -142,9 +168,9 @@ consuming individual pages.
 - **Upjet does not support `+nullable` markers.** Do not add nullable annotations
   to generated types; the `kubebuilder` Options struct only supports Required,
   Minimum, Maximum, Default.
-- **Membership conflicts:** Never let both a `Memberships` resource (authoritative)
-  and a `Groups` resource with `exhaustive=true` manage the same group's membership
-  — they will fight each other and cause reconciliation loops.
+- **Membership ownership:** Avoid managing the same group's membership with both
+  a `Memberships` resource and a `Groups` resource with `exhaustive=true` at the
+  same time; this can cause reconciliation loops.
 - **E2E Crossplane startup:** When waiting for Crossplane to be ready in CI/dev
   scripts, wait on the deployment availability rather than pods by selector — pods
   may not exist yet when the wait command runs.
@@ -160,5 +186,6 @@ consuming individual pages.
 | `409 Conflict` on resource create | External name collision; resource already exists in Keycloak | Use `lookup.BuildIdentifyingPropertiesLookup` to enable import |
 | `llms-full.txt is stale` in CI | Docs changed but `make docs-gen` not run | Run `make docs-gen` and commit |
 | `no matches for kind` in e2e | CRD not yet established when chainsaw runs | `cluster/test/setup.sh` waits for MRDs; check timing |
+| `make generate` produces unexpectedly large/stale diffs | Stale local generator cache/artifacts | Remove `.work/` and `config/schema.json`, then re-run `make generate` |
 | E2E provider version mismatch | Git tags not fetched before build | Add `git fetch --tags` before `make build` |
 | Reconciliation loop on group membership | Both `Memberships` and `Groups` (exhaustive) target same group | Use only one authoritative source per group |

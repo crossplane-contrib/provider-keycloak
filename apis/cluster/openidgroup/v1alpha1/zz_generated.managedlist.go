@@ -7,8 +7,107 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 
+// GetItems of this AudienceProtocolMapperList.
+func (l *AudienceProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this AudienceResolveProtocolMapperList.
+func (l *AudienceResolveProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this FullNameProtocolMapperList.
+func (l *FullNameProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this GroupMembershipProtocolMapperList.
 func (l *GroupMembershipProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this HardcodedClaimProtocolMapperList.
+func (l *HardcodedClaimProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this HardcodedRoleProtocolMapperList.
+func (l *HardcodedRoleProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this SubProtocolMapperList.
+func (l *SubProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this UserAttributeProtocolMapperList.
+func (l *UserAttributeProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this UserClientRoleProtocolMapperList.
+func (l *UserClientRoleProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this UserPropertyProtocolMapperList.
+func (l *UserPropertyProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this UserRealmRoleProtocolMapperList.
+func (l *UserRealmRoleProtocolMapperList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this UserSessionNoteProtocolMapperList.
+func (l *UserSessionNoteProtocolMapperList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

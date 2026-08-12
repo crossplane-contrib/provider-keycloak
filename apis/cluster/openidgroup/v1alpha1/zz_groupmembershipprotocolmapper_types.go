@@ -21,6 +21,9 @@ type GroupMembershipProtocolMapperInitParameters struct {
 	// Indicates if the property should be added as a claim to the id token. Defaults to true.
 	AddToIDToken *bool `json:"addToIdToken,omitempty" tf:"add_to_id_token,omitempty"`
 
+	// Indicates if the attribute should be added as a claim to the token introspection response. Defaults to false.
+	AddToTokenIntrospection *bool `json:"addToTokenIntrospection,omitempty" tf:"add_to_token_introspection,omitempty"`
+
 	// Indicates if the property should be added as a claim to the UserInfo response body. Defaults to true.
 	AddToUserinfo *bool `json:"addToUserinfo,omitempty" tf:"add_to_userinfo,omitempty"`
 
@@ -29,7 +32,7 @@ type GroupMembershipProtocolMapperInitParameters struct {
 
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -83,6 +86,9 @@ type GroupMembershipProtocolMapperObservation struct {
 	// Indicates if the property should be added as a claim to the id token. Defaults to true.
 	AddToIDToken *bool `json:"addToIdToken,omitempty" tf:"add_to_id_token,omitempty"`
 
+	// Indicates if the attribute should be added as a claim to the token introspection response. Defaults to false.
+	AddToTokenIntrospection *bool `json:"addToTokenIntrospection,omitempty" tf:"add_to_token_introspection,omitempty"`
+
 	// Indicates if the property should be added as a claim to the UserInfo response body. Defaults to true.
 	AddToUserinfo *bool `json:"addToUserinfo,omitempty" tf:"add_to_userinfo,omitempty"`
 
@@ -121,6 +127,10 @@ type GroupMembershipProtocolMapperParameters struct {
 	// +kubebuilder:validation:Optional
 	AddToIDToken *bool `json:"addToIdToken,omitempty" tf:"add_to_id_token,omitempty"`
 
+	// Indicates if the attribute should be added as a claim to the token introspection response. Defaults to false.
+	// +kubebuilder:validation:Optional
+	AddToTokenIntrospection *bool `json:"addToTokenIntrospection,omitempty" tf:"add_to_token_introspection,omitempty"`
+
 	// Indicates if the property should be added as a claim to the UserInfo response body. Defaults to true.
 	// +kubebuilder:validation:Optional
 	AddToUserinfo *bool `json:"addToUserinfo,omitempty" tf:"add_to_userinfo,omitempty"`
@@ -131,7 +141,7 @@ type GroupMembershipProtocolMapperParameters struct {
 
 	// The client this protocol mapper should be attached to. Conflicts with client_scope_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`

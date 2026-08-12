@@ -7,6 +7,106 @@ package v1alpha1
 
 import xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
 
+// GetCondition of this FacebookIdentityProvider.
+func (mg *FacebookIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this FacebookIdentityProvider.
+func (mg *FacebookIdentityProvider) GetDeletionPolicy() xpv1.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this FacebookIdentityProvider.
+func (mg *FacebookIdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this FacebookIdentityProvider.
+func (mg *FacebookIdentityProvider) GetProviderConfigReference() *xpv1.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this FacebookIdentityProvider.
+func (mg *FacebookIdentityProvider) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this FacebookIdentityProvider.
+func (mg *FacebookIdentityProvider) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this FacebookIdentityProvider.
+func (mg *FacebookIdentityProvider) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this FacebookIdentityProvider.
+func (mg *FacebookIdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this FacebookIdentityProvider.
+func (mg *FacebookIdentityProvider) SetProviderConfigReference(r *xpv1.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this FacebookIdentityProvider.
+func (mg *FacebookIdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this GithubIdentityProvider.
+func (mg *GithubIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this GithubIdentityProvider.
+func (mg *GithubIdentityProvider) GetDeletionPolicy() xpv1.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this GithubIdentityProvider.
+func (mg *GithubIdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this GithubIdentityProvider.
+func (mg *GithubIdentityProvider) GetProviderConfigReference() *xpv1.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this GithubIdentityProvider.
+func (mg *GithubIdentityProvider) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this GithubIdentityProvider.
+func (mg *GithubIdentityProvider) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this GithubIdentityProvider.
+func (mg *GithubIdentityProvider) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this GithubIdentityProvider.
+func (mg *GithubIdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this GithubIdentityProvider.
+func (mg *GithubIdentityProvider) SetProviderConfigReference(r *xpv1.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this GithubIdentityProvider.
+func (mg *GithubIdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this GoogleIdentityProvider.
 func (mg *GoogleIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)

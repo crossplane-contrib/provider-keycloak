@@ -5521,6 +5521,11 @@ func (in *WebAuthnPasswordlessPolicyInitParameters) DeepCopyInto(out *WebAuthnPa
 		*out = new(float64)
 		**out = **in
 	}
+	if in.DiscoverableCredential != nil {
+		in, out := &in.DiscoverableCredential, &out.DiscoverableCredential
+		*out = new(string)
+		**out = **in
+	}
 	if in.ExtraOrigins != nil {
 		in, out := &in.ExtraOrigins, &out.ExtraOrigins
 		*out = make([]*string, len(*in))
@@ -5612,6 +5617,11 @@ func (in *WebAuthnPasswordlessPolicyObservation) DeepCopyInto(out *WebAuthnPassw
 	if in.CreateTimeout != nil {
 		in, out := &in.CreateTimeout, &out.CreateTimeout
 		*out = new(float64)
+		**out = **in
+	}
+	if in.DiscoverableCredential != nil {
+		in, out := &in.DiscoverableCredential, &out.DiscoverableCredential
+		*out = new(string)
 		**out = **in
 	}
 	if in.ExtraOrigins != nil {
@@ -5707,6 +5717,11 @@ func (in *WebAuthnPasswordlessPolicyParameters) DeepCopyInto(out *WebAuthnPasswo
 		*out = new(float64)
 		**out = **in
 	}
+	if in.DiscoverableCredential != nil {
+		in, out := &in.DiscoverableCredential, &out.DiscoverableCredential
+		*out = new(string)
+		**out = **in
+	}
 	if in.ExtraOrigins != nil {
 		in, out := &in.ExtraOrigins, &out.ExtraOrigins
 		*out = make([]*string, len(*in))
@@ -5800,6 +5815,11 @@ func (in *WebAuthnPolicyInitParameters) DeepCopyInto(out *WebAuthnPolicyInitPara
 		*out = new(float64)
 		**out = **in
 	}
+	if in.DiscoverableCredential != nil {
+		in, out := &in.DiscoverableCredential, &out.DiscoverableCredential
+		*out = new(string)
+		**out = **in
+	}
 	if in.ExtraOrigins != nil {
 		in, out := &in.ExtraOrigins, &out.ExtraOrigins
 		*out = make([]*string, len(*in))
@@ -5888,6 +5908,11 @@ func (in *WebAuthnPolicyObservation) DeepCopyInto(out *WebAuthnPolicyObservation
 		*out = new(float64)
 		**out = **in
 	}
+	if in.DiscoverableCredential != nil {
+		in, out := &in.DiscoverableCredential, &out.DiscoverableCredential
+		*out = new(string)
+		**out = **in
+	}
 	if in.ExtraOrigins != nil {
 		in, out := &in.ExtraOrigins, &out.ExtraOrigins
 		*out = make([]*string, len(*in))
@@ -5974,6 +5999,11 @@ func (in *WebAuthnPolicyParameters) DeepCopyInto(out *WebAuthnPolicyParameters) 
 	if in.CreateTimeout != nil {
 		in, out := &in.CreateTimeout, &out.CreateTimeout
 		*out = new(float64)
+		**out = **in
+	}
+	if in.DiscoverableCredential != nil {
+		in, out := &in.DiscoverableCredential, &out.DiscoverableCredential
+		*out = new(string)
 		**out = **in
 	}
 	if in.ExtraOrigins != nil {

@@ -43,5 +43,6 @@
 
 ## Optional
 
+- [Dev Container](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/dev-container/)
 - [Documentation Model](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/documentation-model/)
 - [Local Docs Development](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs/)
