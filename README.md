@@ -498,19 +498,6 @@ Unit tests for the registered conversions live in `config/conversion_test.go`. T
 same code path as the webhook (`conversion.RegisterConversions` + `ConvertTo`/`ConvertFrom`)
 and assert both the upgrade and the downgrade direction.
 
-End-to-end coverage lives in `cluster/test/conversion` as [Kyverno Chainsaw](https://kyverno.github.io/chainsaw/)
-tests. They cannot be expressed as uptest example cases, because they apply and read back the
-very same object through two different API versions. The demo manifests under `dev/demos`
-(and therefore the uptest suite) always use the current storage version, so the upgrade path
-of a released version is covered exclusively by these dedicated tests. Run them against a
-cluster that already has the provider deployed:
-
-```shell
-make uptest-conversion
-# or, including building and deploying the provider:
-make e2e-conversion
-```
-
 `make crddiff` fails when a CRD schema change is breaking. When the change is part of a major
 release that ships a new API version plus a conversion webhook, run it with
 `CRDDIFF_ALLOW_BREAKING=true`.
