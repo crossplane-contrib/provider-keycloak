@@ -41,10 +41,10 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_openid_client_role_policy":                         openidclient.AuthzRolePoliciesIdentifierFromIdentifyingProperties,         // {UUid}
 	"keycloak_openid_client_user_policy":                         openidclient.AuthzUserPoliciesIdentifierFromIdentifyingProperties,         // {UUid}
 	"keycloak_openid_client_regex_policy":                        openidclient.AuthzRegexPoliciesIdentifierFromIdentifyingProperties,        // {UUid}
-	"keycloak_openid_client_aggregate_policy":                    openidclient.AuthzAggregatePoliciesIdentifierFromIdentifyingProperties,   // {UUid}
-	"keycloak_openid_client_time_policy":                         openidclient.AuthzTimePoliciesIdentifierFromIdentifyingProperties,        // {UUid}
-	"keycloak_openid_client_authorization_client_scope_policy":   openidclient.AuthzClientScopePoliciesIdentifierFromIdentifyingProperties, // {UUid}
-	"keycloak_openid_client_authorization_scope":                 openidclient.AuthzScopeIdentifierFromIdentifyingProperties,               // {UUid}
+	"keycloak_openid_client_aggregate_policy":                    openidclient.AuthzAggregatePoliciesIdentifierFromIdentifyingProperties,    // {UUid}
+	"keycloak_openid_client_time_policy":                         openidclient.AuthzTimePoliciesIdentifierFromIdentifyingProperties,         // {UUid}
+	"keycloak_openid_client_authorization_client_scope_policy":   openidclient.AuthzClientScopePoliciesIdentifierFromIdentifyingProperties,  // {UUid}
+	"keycloak_openid_client_authorization_scope":                 openidclient.AuthzScopeIdentifierFromIdentifyingProperties,                // {UUid}
 	"keycloak_openid_client_default_scopes":                      config.IdentifierFromProvider,                                             // {realm}/{Client.UUid}
 	"keycloak_openid_client_optional_scopes":                     config.IdentifierFromProvider,                                             // {realm}/{Client.UUid}
 	"keycloak_openid_client_scope":                               openidclient.ClientScopeIdentifierFromIdentifyingProperties,               // {UUid}
