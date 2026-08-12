@@ -192,6 +192,7 @@ run: go.build
 # ====================================================================================
 # End to End Testing
 CHAINSAW_VERSION = 0.2.15
+CHAINSAW := $(TOOLS_HOST_DIR)/chainsaw-$(CHAINSAW_VERSION)
 CROSSPLANE_VERSION = 2.0.2
 CROSSPLANE_CLI_VERSION = v2.0.2
 CROSSPLANE_NAMESPACE = crossplane-system
@@ -217,6 +218,16 @@ $(CROSSPLANE_CHART):
 	@cp -R $(TOOLS_HOST_DIR)/tmp-crossplane-chart/*/cluster/charts/crossplane/. $(CROSSPLANE_CHART_DIR)/
 	@rm -rf $(TOOLS_HOST_DIR)/tmp-crossplane-chart
 	@$(OK) downloading Crossplane chart $(CROSSPLANE_VERSION)
+
+$(CHAINSAW):
+	@$(INFO) installing chainsaw $(CHAINSAW_VERSION)
+	@rm -f $(CHAINSAW).tar.gz
+	@curl --retry 5 --retry-delay 2 --retry-all-errors -fsSLo $(CHAINSAW).tar.gz --create-dirs https://github.com/kyverno/chainsaw/releases/download/v$(CHAINSAW_VERSION)/chainsaw_$(SAFEHOST_PLATFORM).tar.gz || $(FAIL)
+	@tar -xvf $(CHAINSAW).tar.gz chainsaw
+	@mv chainsaw $(CHAINSAW)
+	@chmod +x $(CHAINSAW)
+	@rm $(CHAINSAW).tar.gz
+	@$(OK) installing chainsaw $(CHAINSAW_VERSION)
 
 controlplane.up: $(HELM) $(KUBECTL) $(KIND) $(CROSSPLANE_CHART)
 	@$(INFO) setting up controlplane
