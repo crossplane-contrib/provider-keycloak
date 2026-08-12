@@ -177,8 +177,9 @@ make docs-freshness-check             # CI: verify llms.txt is current
 - Do **not** edit generated files in `apis/` or `package/crds/` by hand.
 - `github.com/keycloak/terraform-provider-keycloak` (the go.mod pseudo-version
   and its pinned version in the Makefile) is grouped into a single weekly
-  Renovate PR, but is **not** auto-merged — upgrading it requires deliberate
-  schema migration and must be reviewed manually.
+  Renovate PR. Minor/patch/digest updates auto-merge once tests pass; major
+  version bumps are **not** auto-merged since they require deliberate schema
+  migration and must be reviewed manually.
 - E2E tests only cover resources listed in `cluster/test/cases.txt`.
 - **Upjet does not support `+nullable` markers.** The kubebuilder Options struct
   only supports Required, Minimum, Maximum, Default.

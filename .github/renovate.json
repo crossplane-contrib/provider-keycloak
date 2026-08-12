@@ -112,10 +112,25 @@
         "keycloak/terraform-provider-keycloak"
       ],
       "matchUpdateTypes": [
-        "major",
         "minor",
         "patch",
         "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "groupName": "terraform-provider-keycloak",
+      "description": "Major version bumps of the Keycloak Terraform provider require deliberate schema migration and are not auto-merged.",
+      "matchManagers": [
+        "gomod",
+        "custom.regex"
+      ],
+      "matchDepNames": [
+        "github.com/keycloak/terraform-provider-keycloak",
+        "keycloak/terraform-provider-keycloak"
+      ],
+      "matchUpdateTypes": [
+        "major"
       ],
       "automerge": false
     }
