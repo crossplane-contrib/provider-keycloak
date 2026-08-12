@@ -4,8 +4,6 @@ title: Clients
 description: Manage OpenID Connect clients for applications and services
 ---
 
-# Clients
-
 Use a `Client` when an application or service needs Keycloak to authenticate users with OpenID Connect. This is the resource for web apps, SPAs, backend services, service accounts, and federated workloads.
 
 ## API Reference
@@ -19,7 +17,7 @@ Use a `Client` when an application or service needs Keycloak to authenticate use
 ### Confidential client with authorization
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: test
@@ -43,7 +41,7 @@ spec:
 ### Managing a built-in client without deleting it
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: account
@@ -63,7 +61,7 @@ spec:
 ### Managing another built-in client (account-console)
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: account-console
@@ -84,7 +82,7 @@ spec:
 ### Service account client
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: service-acc-1
@@ -105,7 +103,7 @@ spec:
 ### Kubernetes federated JWT client
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: k8s-federated-client

@@ -5533,6 +5533,11 @@ func (in *ClientScopeInitParameters) DeepCopyInto(out *ClientScopeInitParameters
 		*out = new(float64)
 		**out = **in
 	}
+	if in.IncludeInOpenIDProviderMetadata != nil {
+		in, out := &in.IncludeInOpenIDProviderMetadata, &out.IncludeInOpenIDProviderMetadata
+		*out = new(bool)
+		**out = **in
+	}
 	if in.IncludeInTokenScope != nil {
 		in, out := &in.IncludeInTokenScope, &out.IncludeInTokenScope
 		*out = new(bool)
@@ -5641,6 +5646,11 @@ func (in *ClientScopeObservation) DeepCopyInto(out *ClientScopeObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.IncludeInOpenIDProviderMetadata != nil {
+		in, out := &in.IncludeInOpenIDProviderMetadata, &out.IncludeInOpenIDProviderMetadata
+		*out = new(bool)
+		**out = **in
+	}
 	if in.IncludeInTokenScope != nil {
 		in, out := &in.IncludeInTokenScope, &out.IncludeInTokenScope
 		*out = new(bool)
@@ -5700,6 +5710,11 @@ func (in *ClientScopeParameters) DeepCopyInto(out *ClientScopeParameters) {
 	if in.GuiOrder != nil {
 		in, out := &in.GuiOrder, &out.GuiOrder
 		*out = new(float64)
+		**out = **in
+	}
+	if in.IncludeInOpenIDProviderMetadata != nil {
+		in, out := &in.IncludeInOpenIDProviderMetadata, &out.IncludeInOpenIDProviderMetadata
+		*out = new(bool)
 		**out = **in
 	}
 	if in.IncludeInTokenScope != nil {

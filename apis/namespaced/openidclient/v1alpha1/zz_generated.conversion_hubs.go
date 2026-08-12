@@ -7,6 +7,7 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 // Hub marks this type as a conversion hub.
+<<<<<<< HEAD
 func (tr *Client) Hub() {}
 
 // Hub marks this type as a conversion hub.
@@ -16,6 +17,8 @@ func (tr *ClientAggregatePolicy) Hub() {}
 func (tr *ClientAuthorizationClientScopePolicy) Hub() {}
 
 // Hub marks this type as a conversion hub.
+=======
+>>>>>>> origin/main
 func (tr *ClientAuthorizationPermission) Hub() {}
 
 // Hub marks this type as a conversion hub.

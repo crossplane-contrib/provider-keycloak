@@ -18,10 +18,17 @@
 ./dev/demos/namespaced/071-authentication-subflow.yaml
 ./dev/demos/namespaced/070-authentication-flows.yaml
 ./dev/demos/namespaced/063-saml-client-policies.yaml
+<<<<<<< HEAD
 ./dev/demos/namespaced/064-oidc-authz-policies.yaml
+=======
+./dev/demos/namespaced/065-saml-generic-mappers.yaml
+>>>>>>> origin/main
 ./dev/demos/namespaced/062-saml-client-default-scopes.yaml
 ./dev/demos/namespaced/061-saml-client-scopes.yaml
 ./dev/demos/namespaced/060-saml-client.yaml
+./dev/demos/namespaced/057-github-identity-provider.yaml
+./dev/demos/namespaced/056-facebook-identity-provider.yaml
+./dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml
 ./dev/demos/namespaced/055-identity-provider-token-exchange.yaml
 ./dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml
 ./dev/demos/namespaced/053-google-identity-provider.yaml
@@ -30,6 +37,8 @@
 ./dev/demos/namespaced/050-oidc-identity-provider.yaml
 ./dev/demos/namespaced/049-oidc-client-authorization.yaml
 ./dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml
+./dev/demos/namespaced/047-oidc-client-role-mapper.yaml
+./dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml
 ./dev/demos/namespaced/047-oidc-client-role-mapper.yaml
 ./dev/demos/namespaced/046-oidc-client-policies.yaml
 ./dev/demos/namespaced/045-oidc-service-account-roles.yaml
@@ -54,6 +63,7 @@
 ./dev/demos/namespaced/006-realm-events.yaml
 ./dev/demos/namespaced/005-realm-user-profile.yaml
 ./dev/demos/namespaced/005-realm-localization.yaml
+./dev/demos/namespaced/005-realm-keystores-comprehensive.yaml
 ./dev/demos/namespaced/004-realm-keystore-rsa.yaml
 ./dev/demos/namespaced/003-realm-required-action.yaml
 ./dev/demos/namespaced/002-realm-clientscopes.yaml
@@ -76,10 +86,17 @@
 ./dev/demos/basic/071-authentication-subflow.yaml
 ./dev/demos/basic/070-authentication-flows.yaml
 ./dev/demos/basic/063-saml-client-policies.yaml
+<<<<<<< HEAD
 ./dev/demos/basic/064-oidc-authz-policies.yaml
+=======
+./dev/demos/basic/065-saml-generic-mappers.yaml
+>>>>>>> origin/main
 ./dev/demos/basic/062-saml-client-default-scopes.yaml
 ./dev/demos/basic/061-saml-client-scopes.yaml
 ./dev/demos/basic/060-saml-client.yaml
+./dev/demos/basic/057-github-identity-provider.yaml
+./dev/demos/basic/056-facebook-identity-provider.yaml
+./dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml
 ./dev/demos/basic/055-identity-provider-token-exchange.yaml
 ./dev/demos/basic/054-identity-provider-token-exchange-idp.yaml
 ./dev/demos/basic/053-google-identity-provider.yaml
@@ -88,6 +105,8 @@
 ./dev/demos/basic/050-oidc-identity-provider.yaml
 ./dev/demos/basic/049-oidc-client-authorization.yaml
 ./dev/demos/basic/048-oidc-client-protocol-mapper.yaml
+./dev/demos/basic/047-oidc-client-role-mapper.yaml
+./dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml
 ./dev/demos/basic/047-oidc-client-role-mapper.yaml
 ./dev/demos/basic/046-oidc-client-policies.yaml
 ./dev/demos/basic/045-oidc-service-account-roles.yaml
@@ -112,6 +131,7 @@
 ./dev/demos/basic/006-realm-events.yaml
 ./dev/demos/basic/005-realm-user-profile.yaml
 ./dev/demos/basic/005-realm-localization.yaml
+./dev/demos/basic/005-realm-keystores-comprehensive.yaml
 ./dev/demos/basic/004-realm-keystore-rsa.yaml
 ./dev/demos/basic/003-realm-required-action.yaml
 ./dev/demos/basic/002-realm-clientscopes.yaml

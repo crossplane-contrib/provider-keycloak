@@ -60,11 +60,29 @@ make e2e        # end-to-end tests (requires live cluster + Keycloak)
 
 ## Adding a New Resource
 
-1. Add entry to `config/external_name.go`.
-2. Create/update `config/<group>/config.go` with references and optional lookup config.
+1. Add entry to `config/external_name.go` (`config.IdentifierFromProvider`
+   for a plain provider-assigned ID, or a
+   `<group>.<Resource>IdentifierFromIdentifyingProperties` helper when the ID
+   must be derived from other fields).
+2. Create/update `config/<group>/config.go` with references and optional
+   lookup config.
 3. Run `make generate`.
 4. Add example to `examples/<group>/<resource>.yaml`.
 5. Optionally add docs page to `docs/content/docs/using/resources/<resource>.md`.
+6. Optionally add the resource to `cluster/test/cases.txt` plus an e2e
+   manifest under `cluster/test/` or `dev/demos/`.
+
+See "Adding a New Resource" in `AGENTS.md` for the full playbook (external
+name selection, references, import-by-properties, testing).
+
+## Automated Schema Diff Issues
+
+`.github/workflows/schema-diff-issues.yml` runs
+`scripts/schema_diff_issues.py` to diff `config/schema.json` against
+`config/generated.lst` and file one GitHub issue per missing resource that
+isn't already tracked. It dry-runs only on pull requests that change the
+automation itself (script or workflow file), and creates real issues
+on schedule, on `Makefile` changes on `main`, and on manual dispatch.
 
 ## Cross-Resource References
 

@@ -14,6 +14,8 @@ import (
 	executionconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/authenticationflow/executionconfig"
 	flow "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/authenticationflow/flow"
 	subflow "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/authenticationflow/subflow"
+	genericclientprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/genericclientprotocolmapper"
+	genericclientrolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/genericclientrolemapper"
 	protocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/protocolmapper"
 	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/rolemapper"
 	defaultgroups "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/defaults/defaultgroups"
@@ -22,11 +24,17 @@ import (
 	memberships "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/group/memberships"
 	permissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/group/permissions"
 	rolesgroup "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/group/roles"
+	attributeidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/attributeidentityprovidermapper"
+	groupidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/groupidentityprovidermapper"
 	identityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/identityprovidermapper"
+	importeridentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/importeridentityprovidermapper"
 	kubernetesidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/kubernetesidentityprovider"
 	oidcopenshiftv4identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/oidcopenshiftv4identityprovider"
 	providertokenexchangescopepermission "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/providertokenexchangescopepermission"
+	roleidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/roleidentityprovidermapper"
 	spiffeidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/spiffeidentityprovider"
+	templateimporteridentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/templateimporteridentityprovidermapper"
+	toroleidentityprovidermapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/identityprovider/toroleidentityprovidermapper"
 	custommapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/custommapper"
 	fullnamemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/fullnamemapper"
 	groupmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/groupmapper"
@@ -38,6 +46,9 @@ import (
 	rolemapperldap "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/rolemapper"
 	userattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/userattributemapper"
 	userfederation "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/userfederation"
+	usermodelhardcodedattributemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/ldap/usermodelhardcodedattributemapper"
+	facebookidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/facebookidentityprovider"
+	githubidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/githubidentityprovider"
 	googleidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/googleidentityprovider"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/identityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/client"
@@ -58,13 +69,29 @@ import (
 	clientserviceaccountrole "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientserviceaccountrole"
 	clienttimepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clienttimepolicy"
 	clientuserpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientuserpolicy"
+	audienceprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/audienceprotocolmapper"
+	audienceresolveprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/audienceresolveprotocolmapper"
+	fullnameprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/fullnameprotocolmapper"
 	groupmembershipprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/groupmembershipprotocolmapper"
+	hardcodedclaimprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/hardcodedclaimprotocolmapper"
+	hardcodedroleprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/hardcodedroleprotocolmapper"
+	subprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/subprotocolmapper"
+	userattributeprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/userattributeprotocolmapper"
+	userclientroleprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/userclientroleprotocolmapper"
+	userpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/userpropertyprotocolmapper"
+	userrealmroleprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/userrealmroleprotocolmapper"
+	usersessionnoteprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/usersessionnoteprotocolmapper"
 	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/organization/organization"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/providerconfig"
 	clientpolicyprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/clientpolicyprofile"
 	clientpolicyprofilepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/clientpolicyprofilepolicy"
 	defaultclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/defaultclientscopes"
+	keystoreaesgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystoreaesgenerated"
+	keystoreecdsagenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystoreecdsagenerated"
+	keystorehmacgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystorehmacgenerated"
+	keystorejavakeystore "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystorejavakeystore"
 	keystorersa "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystorersa"
+	keystorersagenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystorersagenerated"
 	optionalclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/optionalclientscopes"
 	realm "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/realm"
 	realmevents "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/realmevents"
@@ -76,6 +103,8 @@ import (
 	clientsamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/samlclient/client"
 	clientdefaultscopessamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/samlclient/clientdefaultscopes"
 	clientscopesamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/samlclient/clientscope"
+	samluserattributeprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/samlclient/samluserattributeprotocolmapper"
+	samluserpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/samlclient/samluserpropertyprotocolmapper"
 	groups "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/user/groups"
 	permissionsuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/user/permissions"
 	rolesuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/user/roles"
@@ -93,6 +122,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		executionconfig.Setup,
 		flow.Setup,
 		subflow.Setup,
+		genericclientprotocolmapper.Setup,
+		genericclientrolemapper.Setup,
 		protocolmapper.Setup,
 		rolemapper.Setup,
 		defaultgroups.Setup,
@@ -101,11 +132,17 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		memberships.Setup,
 		permissions.Setup,
 		rolesgroup.Setup,
+		attributeidentityprovidermapper.Setup,
+		groupidentityprovidermapper.Setup,
 		identityprovidermapper.Setup,
+		importeridentityprovidermapper.Setup,
 		kubernetesidentityprovider.Setup,
 		oidcopenshiftv4identityprovider.Setup,
 		providertokenexchangescopepermission.Setup,
+		roleidentityprovidermapper.Setup,
 		spiffeidentityprovider.Setup,
+		templateimporteridentityprovidermapper.Setup,
+		toroleidentityprovidermapper.Setup,
 		custommapper.Setup,
 		fullnamemapper.Setup,
 		groupmapper.Setup,
@@ -117,6 +154,9 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		rolemapperldap.Setup,
 		userattributemapper.Setup,
 		userfederation.Setup,
+		usermodelhardcodedattributemapper.Setup,
+		facebookidentityprovider.Setup,
+		githubidentityprovider.Setup,
 		googleidentityprovider.Setup,
 		identityprovider.Setup,
 		client.Setup,
@@ -137,13 +177,29 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientserviceaccountrole.Setup,
 		clienttimepolicy.Setup,
 		clientuserpolicy.Setup,
+		audienceprotocolmapper.Setup,
+		audienceresolveprotocolmapper.Setup,
+		fullnameprotocolmapper.Setup,
 		groupmembershipprotocolmapper.Setup,
+		hardcodedclaimprotocolmapper.Setup,
+		hardcodedroleprotocolmapper.Setup,
+		subprotocolmapper.Setup,
+		userattributeprotocolmapper.Setup,
+		userclientroleprotocolmapper.Setup,
+		userpropertyprotocolmapper.Setup,
+		userrealmroleprotocolmapper.Setup,
+		usersessionnoteprotocolmapper.Setup,
 		organization.Setup,
 		providerconfig.Setup,
 		clientpolicyprofile.Setup,
 		clientpolicyprofilepolicy.Setup,
 		defaultclientscopes.Setup,
+		keystoreaesgenerated.Setup,
+		keystoreecdsagenerated.Setup,
+		keystorehmacgenerated.Setup,
+		keystorejavakeystore.Setup,
 		keystorersa.Setup,
+		keystorersagenerated.Setup,
 		optionalclientscopes.Setup,
 		realm.Setup,
 		realmevents.Setup,
@@ -155,6 +211,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientsamlclient.Setup,
 		clientdefaultscopessamlclient.Setup,
 		clientscopesamlclient.Setup,
+		samluserattributeprotocolmapper.Setup,
+		samluserpropertyprotocolmapper.Setup,
 		groups.Setup,
 		permissionsuser.Setup,
 		rolesuser.Setup,
@@ -178,6 +236,8 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		executionconfig.SetupGated,
 		flow.SetupGated,
 		subflow.SetupGated,
+		genericclientprotocolmapper.SetupGated,
+		genericclientrolemapper.SetupGated,
 		protocolmapper.SetupGated,
 		rolemapper.SetupGated,
 		defaultgroups.SetupGated,
@@ -186,11 +246,17 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		memberships.SetupGated,
 		permissions.SetupGated,
 		rolesgroup.SetupGated,
+		attributeidentityprovidermapper.SetupGated,
+		groupidentityprovidermapper.SetupGated,
 		identityprovidermapper.SetupGated,
+		importeridentityprovidermapper.SetupGated,
 		kubernetesidentityprovider.SetupGated,
 		oidcopenshiftv4identityprovider.SetupGated,
 		providertokenexchangescopepermission.SetupGated,
+		roleidentityprovidermapper.SetupGated,
 		spiffeidentityprovider.SetupGated,
+		templateimporteridentityprovidermapper.SetupGated,
+		toroleidentityprovidermapper.SetupGated,
 		custommapper.SetupGated,
 		fullnamemapper.SetupGated,
 		groupmapper.SetupGated,
@@ -202,6 +268,9 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		rolemapperldap.SetupGated,
 		userattributemapper.SetupGated,
 		userfederation.SetupGated,
+		usermodelhardcodedattributemapper.SetupGated,
+		facebookidentityprovider.SetupGated,
+		githubidentityprovider.SetupGated,
 		googleidentityprovider.SetupGated,
 		identityprovider.SetupGated,
 		client.SetupGated,
@@ -222,13 +291,29 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientserviceaccountrole.SetupGated,
 		clienttimepolicy.SetupGated,
 		clientuserpolicy.SetupGated,
+		audienceprotocolmapper.SetupGated,
+		audienceresolveprotocolmapper.SetupGated,
+		fullnameprotocolmapper.SetupGated,
 		groupmembershipprotocolmapper.SetupGated,
+		hardcodedclaimprotocolmapper.SetupGated,
+		hardcodedroleprotocolmapper.SetupGated,
+		subprotocolmapper.SetupGated,
+		userattributeprotocolmapper.SetupGated,
+		userclientroleprotocolmapper.SetupGated,
+		userpropertyprotocolmapper.SetupGated,
+		userrealmroleprotocolmapper.SetupGated,
+		usersessionnoteprotocolmapper.SetupGated,
 		organization.SetupGated,
 		providerconfig.SetupGated,
 		clientpolicyprofile.SetupGated,
 		clientpolicyprofilepolicy.SetupGated,
 		defaultclientscopes.SetupGated,
+		keystoreaesgenerated.SetupGated,
+		keystoreecdsagenerated.SetupGated,
+		keystorehmacgenerated.SetupGated,
+		keystorejavakeystore.SetupGated,
 		keystorersa.SetupGated,
+		keystorersagenerated.SetupGated,
 		optionalclientscopes.SetupGated,
 		realm.SetupGated,
 		realmevents.SetupGated,
@@ -240,6 +325,8 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientsamlclient.SetupGated,
 		clientdefaultscopessamlclient.SetupGated,
 		clientscopesamlclient.SetupGated,
+		samluserattributeprotocolmapper.SetupGated,
+		samluserpropertyprotocolmapper.SetupGated,
 		groups.SetupGated,
 		permissionsuser.SetupGated,
 		rolesuser.SetupGated,
@@ -262,6 +349,8 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		executionconfig.SetupWebhookWithManager,
 		flow.SetupWebhookWithManager,
 		subflow.SetupWebhookWithManager,
+		genericclientprotocolmapper.SetupWebhookWithManager,
+		genericclientrolemapper.SetupWebhookWithManager,
 		protocolmapper.SetupWebhookWithManager,
 		rolemapper.SetupWebhookWithManager,
 		defaultgroups.SetupWebhookWithManager,
@@ -270,11 +359,17 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		memberships.SetupWebhookWithManager,
 		permissions.SetupWebhookWithManager,
 		rolesgroup.SetupWebhookWithManager,
+		attributeidentityprovidermapper.SetupWebhookWithManager,
+		groupidentityprovidermapper.SetupWebhookWithManager,
 		identityprovidermapper.SetupWebhookWithManager,
+		importeridentityprovidermapper.SetupWebhookWithManager,
 		kubernetesidentityprovider.SetupWebhookWithManager,
 		oidcopenshiftv4identityprovider.SetupWebhookWithManager,
 		providertokenexchangescopepermission.SetupWebhookWithManager,
+		roleidentityprovidermapper.SetupWebhookWithManager,
 		spiffeidentityprovider.SetupWebhookWithManager,
+		templateimporteridentityprovidermapper.SetupWebhookWithManager,
+		toroleidentityprovidermapper.SetupWebhookWithManager,
 		custommapper.SetupWebhookWithManager,
 		fullnamemapper.SetupWebhookWithManager,
 		groupmapper.SetupWebhookWithManager,
@@ -286,6 +381,9 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		rolemapperldap.SetupWebhookWithManager,
 		userattributemapper.SetupWebhookWithManager,
 		userfederation.SetupWebhookWithManager,
+		usermodelhardcodedattributemapper.SetupWebhookWithManager,
+		facebookidentityprovider.SetupWebhookWithManager,
+		githubidentityprovider.SetupWebhookWithManager,
 		googleidentityprovider.SetupWebhookWithManager,
 		identityprovider.SetupWebhookWithManager,
 		client.SetupWebhookWithManager,
@@ -306,13 +404,29 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientserviceaccountrole.SetupWebhookWithManager,
 		clienttimepolicy.SetupWebhookWithManager,
 		clientuserpolicy.SetupWebhookWithManager,
+		audienceprotocolmapper.SetupWebhookWithManager,
+		audienceresolveprotocolmapper.SetupWebhookWithManager,
+		fullnameprotocolmapper.SetupWebhookWithManager,
 		groupmembershipprotocolmapper.SetupWebhookWithManager,
+		hardcodedclaimprotocolmapper.SetupWebhookWithManager,
+		hardcodedroleprotocolmapper.SetupWebhookWithManager,
+		subprotocolmapper.SetupWebhookWithManager,
+		userattributeprotocolmapper.SetupWebhookWithManager,
+		userclientroleprotocolmapper.SetupWebhookWithManager,
+		userpropertyprotocolmapper.SetupWebhookWithManager,
+		userrealmroleprotocolmapper.SetupWebhookWithManager,
+		usersessionnoteprotocolmapper.SetupWebhookWithManager,
 		organization.SetupWebhookWithManager,
 		providerconfig.SetupWebhookWithManager,
 		clientpolicyprofile.SetupWebhookWithManager,
 		clientpolicyprofilepolicy.SetupWebhookWithManager,
 		defaultclientscopes.SetupWebhookWithManager,
+		keystoreaesgenerated.SetupWebhookWithManager,
+		keystoreecdsagenerated.SetupWebhookWithManager,
+		keystorehmacgenerated.SetupWebhookWithManager,
+		keystorejavakeystore.SetupWebhookWithManager,
 		keystorersa.SetupWebhookWithManager,
+		keystorersagenerated.SetupWebhookWithManager,
 		optionalclientscopes.SetupWebhookWithManager,
 		realm.SetupWebhookWithManager,
 		realmevents.SetupWebhookWithManager,
@@ -324,6 +438,8 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientsamlclient.SetupWebhookWithManager,
 		clientdefaultscopessamlclient.SetupWebhookWithManager,
 		clientscopesamlclient.SetupWebhookWithManager,
+		samluserattributeprotocolmapper.SetupWebhookWithManager,
+		samluserpropertyprotocolmapper.SetupWebhookWithManager,
 		groups.SetupWebhookWithManager,
 		permissionsuser.SetupWebhookWithManager,
 		rolesuser.SetupWebhookWithManager,

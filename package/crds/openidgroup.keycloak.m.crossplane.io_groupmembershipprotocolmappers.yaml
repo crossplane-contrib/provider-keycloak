@@ -68,6 +68,10 @@ spec:
                     description: Indicates if the property should be added as a claim
                       to the id token. Defaults to true.
                     type: boolean
+                  addToTokenIntrospection:
+                    description: Indicates if the attribute should be added as a claim
+                      to the token introspection response. Defaults to false.
+                    type: boolean
                   addToUserinfo:
                     description: Indicates if the property should be added as a claim
                       to the UserInfo response body. Defaults to true.
@@ -364,6 +368,10 @@ spec:
                   addToIdToken:
                     description: Indicates if the property should be added as a claim
                       to the id token. Defaults to true.
+                    type: boolean
+                  addToTokenIntrospection:
+                    description: Indicates if the attribute should be added as a claim
+                      to the token introspection response. Defaults to false.
                     type: boolean
                   addToUserinfo:
                     description: Indicates if the property should be added as a claim
@@ -721,6 +729,10 @@ spec:
                   addToIdToken:
                     description: Indicates if the property should be added as a claim
                       to the id token. Defaults to true.
+                    type: boolean
+                  addToTokenIntrospection:
+                    description: Indicates if the attribute should be added as a claim
+                      to the token introspection response. Defaults to false.
                     type: boolean
                   addToUserinfo:
                     description: Indicates if the property should be added as a claim

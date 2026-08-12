@@ -45,7 +45,7 @@ kubectl wait realm my-app-realm --for=condition=Ready --timeout=60s
 ## Step 2: Create a Client
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: my-web-app

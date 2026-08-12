@@ -1,0 +1,16 @@
+# Example 1: To map a user model attribute to all LDAP users
+# This example marks all LDAP users as email-verified in the Keycloak user model.
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserModelHardcodedAttributeMapper
+metadata:
+  name: email-verified
+spec:
+  forProvider:
+    name: "email-verified"
+    attributeName: "email_verified"
+    attributeValue: "true"
+    ldapUserFederationIdRef:
+      name: my-realm
+    realmId: my-realm
+  providerConfigRef:
+    name: keycloak-provider-config

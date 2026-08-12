@@ -4,8 +4,6 @@ title: User Federation
 description: Connect Keycloak to LDAP, Active Directory, and custom user stores
 ---
 
-# User Federation
-
 Use user federation when Keycloak should authenticate users against an external directory or user store instead of managing every account in its own database. LDAP and Active Directory federation let users sign in with their existing directory credentials, while mapper resources control how LDAP attributes, groups, and roles are projected into Keycloak. Use the custom user federation CRD when you have a Keycloak user storage SPI provider that is not LDAP-based.
 
 ## API Reference

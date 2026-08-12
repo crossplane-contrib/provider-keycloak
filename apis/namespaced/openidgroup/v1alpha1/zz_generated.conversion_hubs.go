@@ -7,4 +7,37 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 // Hub marks this type as a conversion hub.
+func (tr *AudienceProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *AudienceResolveProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *FullNameProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *GroupMembershipProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *HardcodedClaimProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *HardcodedRoleProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *SubProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *UserAttributeProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *UserClientRoleProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *UserPropertyProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *UserRealmRoleProtocolMapper) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *UserSessionNoteProtocolMapper) Hub() {}

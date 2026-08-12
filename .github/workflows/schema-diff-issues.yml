@@ -1,0 +1,63 @@
+name: Schema Diff Issues
+
+# Compares config/schema.json against config/generated.lst to find Terraform
+# provider resources that are not yet exposed as Crossplane managed
+# resources, and files one GitHub issue per resource that isn't already
+# tracked by an existing open issue.
+#
+# - pull_request: dry-run only (no issues are created), and only runs when
+#   the automation itself changes, so it doesn't run on every unrelated PR.
+# - schedule / workflow_dispatch / push (when TERRAFORM_PROVIDER_VERSION
+#   changes on main): creates issues for real.
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/schema_diff_issues.py'
+      - '.github/workflows/schema-diff-issues.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'Makefile'
+  schedule:
+    - cron: '0 6 * * 1' # Every Monday at 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (report only, do not create issues)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  schema-diff-issues:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Determine dry-run mode
+        id: mode
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "dry_run=true" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "dry_run=${{ inputs.dry_run }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "dry_run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run schema diff issue automation
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARGS=(--repo "${{ github.repository }}")
+          if [[ "${{ steps.mode.outputs.dry_run }}" == "true" ]]; then
+            ARGS+=(--dry-run)
+          fi
+          ./scripts/schema_diff_issues.py "${ARGS[@]}"

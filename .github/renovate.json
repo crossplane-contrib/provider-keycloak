@@ -8,9 +8,10 @@
     "config:recommended",
     ":semanticCommits",
     "helpers:pinGitHubActionDigests",
-    ":automergeRequireAllStatusChecks"
+    ":automergeRequireAllStatusChecks",
+    "schedule:weekly"
   ],
-  "baseBranches": [
+  "baseBranchPatterns": [
     "main"
   ],
   "postUpdateOptions": [
@@ -19,107 +20,8 @@
   "dependencyDashboard": true,
   "recreateWhen": "always",
   "platformAutomerge": true,
-  "ignoreDeps": [
-    "github.com/keycloak/terraform-provider-keycloak",
-    "keycloak/terraform-provider-keycloak"
-  ],
+  "minimumReleaseAge": "3 days",
   "packageRules": [
-    {
-      "groupName": "k8s.io dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^k8s\\.io//"
-      ]
-    },
-    {
-      "groupName": "sigs.k8s.io dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^sigs\\.k8s\\.io//"
-      ]
-    },
-    {
-      "groupName": "github.com/keycloak/terraform-provider-keycloak dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^github\\.com/keycloak/terraform-provider-keycloak/"
-      ]
-    },
-    {
-      "groupName": "github.com/hashicorp dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^github\\.com/hashicorp//"
-      ]
-    },
-    {
-      "groupName": "github.com/crossplane dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^github\\.com/crossplane//"
-      ]
-    },
-    {
-      "groupName": "github.com/alecthomas dependencies",
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/^github\\.com/alecthomas//"
-      ]
-    },
     {
       "groupName": "github-actions",
       "matchManagers": [
@@ -134,18 +36,158 @@
       "automerge": true
     },
     {
+      "groupName": "makefile dependencies",
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchFileNames": [
+        "Makefile"
+      ],
+      "matchDepNames": [
+        "golangci/golangci-lint",
+        "kubernetes/kubernetes",
+        "kubernetes-sigs/kind",
+        "upbound/up",
+        "crossplane-contrib/uptest",
+        "kyverno/chainsaw",
+        "crossplane/crossplane",
+        "hashicorp/terraform"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "groupName": "hugo version",
+      "matchDepNames": [
+        "gohugoio/hugo"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ],
+      "automerge": true
+    },
+    {
       "description": "Terraform 1.6+ is not allowed due to BSL licensing",
       "matchDepNames": [
         "hashicorp/terraform"
       ],
       "allowedVersions": "<1.6.0"
+    },
+    {
+      "groupName": "go versions",
+      "matchManagers": [
+        "gomod",
+        "github-actions",
+        "custom.regex"
+      ],
+      "matchDepNames": [
+        "go",
+        "golang",
+        "golang/go"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "groupName": "terraform-provider-keycloak",
+      "description": "Keycloak Terraform provider used by the code generator (go.mod pseudo-version) and its pinned version in the Makefile, grouped and reviewed together weekly since upgrading requires deliberate schema migration.",
+      "matchManagers": [
+        "gomod",
+        "custom.regex"
+      ],
+      "matchDepNames": [
+        "github.com/keycloak/terraform-provider-keycloak",
+        "keycloak/terraform-provider-keycloak"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "groupName": "terraform-provider-keycloak",
+      "description": "Major version bumps of the Keycloak Terraform provider require deliberate schema migration and are not auto-merged.",
+      "matchManagers": [
+        "gomod",
+        "custom.regex"
+      ],
+      "matchDepNames": [
+        "github.com/keycloak/terraform-provider-keycloak",
+        "keycloak/terraform-provider-keycloak"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "automerge": false
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
+      ],
+      "matchStrings": [
+        "GO_REQUIRED_VERSION \\?= (?<currentValue>.*)"
+      ],
+      "datasourceTemplate": "golang-version",
+      "depNameTemplate": "go",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/.*\\.yml$/"
+      ],
+      "matchStrings": [
+        "GO_VERSION:\\s*'(?<currentValue>[^']+)'"
+      ],
+      "datasourceTemplate": "golang-version",
+      "depNameTemplate": "go",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/(deploy-docs|preview-docs)\\.yml$/"
+      ],
+      "matchStrings": [
+        "go-version:\\s*'(?<currentValue>[^']+)'"
+      ],
+      "datasourceTemplate": "golang-version",
+      "depNameTemplate": "go",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/(deploy-docs|preview-docs)\\.yml$/"
+      ],
+      "matchStrings": [
+        "hugo-version:\\s*'(?<currentValue>[^']+)'"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "gohugoio/hugo",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "export TERRAFORM_PROVIDER_VERSION .*= (?<currentValue>.*)"
@@ -156,8 +198,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "export TERRAFORM_VERSION \\?= (?<currentValue>.*)"
@@ -168,8 +210,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "export GOLANGCILINT_VERSION \\?= (?<currentValue>.*)"
@@ -180,8 +222,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "KUBECTL_VERSION \\?= (?<currentValue>.*)"
@@ -192,8 +234,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "KIND_VERSION = (?<currentValue>.*)"
@@ -204,8 +246,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "UP_VERSION = (?<currentValue>.*)"
@@ -216,8 +258,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "UPTEST_VERSION = (?<currentValue>.*)"
@@ -228,8 +270,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "CHAINSAW_VERSION = (?<currentValue>.*)"
@@ -240,8 +282,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "CROSSPLANE_VERSION = (?<currentValue>.*)"
@@ -252,8 +294,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^Makefile$"
+      "managerFilePatterns": [
+        "/^Makefile$/"
       ],
       "matchStrings": [
         "CROSSPLANE_CLI_VERSION = (?<currentValue>.*)"
