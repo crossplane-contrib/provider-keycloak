@@ -77,6 +77,30 @@ Look at the `Events` section and `status.conditions` for error messages.
 - Add the CA certificate to the credentials using `root_ca_certificate`
 - Or mount the CA certificate into the provider pod via `DeploymentRuntimeConfig`
 
+### Growing Number of Keycloak Sessions
+
+**Symptoms**: The number of active sessions for the technical/admin user
+configured in your `ProviderConfig` keeps growing over time in the Keycloak
+admin console, even though the provider is running continuously (not
+restarting).
+
+**Cause**: The provider caches and reuses the Keycloak client/login per
+`ProviderConfig`, so it does not log in on every reconcile. However, if you
+are using the resource-owner **password grant** (`username`/`password`
+credentials), the underlying `terraform-provider-keycloak` client
+re-authenticates with the `password` grant whenever the short-lived access
+token expires, instead of using the OAuth2 refresh-token grant. Each of
+these re-authentications creates a new session on the Keycloak server. See
+[ProviderConfig Reference — Authentication Sessions](/docs/using/reference/provider-config/#authentication-sessions)
+for details.
+
+**Solution**:
+- Switch the `ProviderConfig` credentials to the **Client Credentials
+  Grant** (`client_id`/`client_secret` for a service account), which does
+  not hit this re-authentication path.
+- Track/upvote the upstream fix in
+  [`keycloak/terraform-provider-keycloak`](https://github.com/keycloak/terraform-provider-keycloak).
+
 ## Useful Commands
 
 ```bash
