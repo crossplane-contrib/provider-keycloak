@@ -140,8 +140,7 @@ missing and not already tracked by an existing open issue.
   would do; never creates issues) so the automation itself can be reviewed.
 - On `schedule` (weekly) and `push` to `main` that touches the `Makefile`
   (i.e. a Terraform provider version bump), and on manual
-  `workflow_dispatch`, it creates real issues (capped per run via
-  `--max-issues`).
+  `workflow_dispatch`, it creates real issues.
 - Dedup is based on whether the exact resource name (as a whole token, not a
   substring) already appears in an open issue's title or body.
 

@@ -10,7 +10,7 @@ you (or, in --dry-run mode, just reports what it *would* do).
 
 Usage:
   schema_diff_issues.py --repo <owner/repo> [--generated-lst PATH] [--schema PATH]
-                         [--dry-run] [--max-issues N] [--label LABEL]
+                         [--dry-run] [--label LABEL]
 
 Requires the `gh` CLI to be installed and authenticated (GH_TOKEN/GITHUB_TOKEN)
 unless --dry-run is used together with --skip-issue-lookup, in which case no
@@ -130,7 +130,6 @@ def main():
     parser.add_argument("--generated-lst", default="config/generated.lst")
     parser.add_argument("--schema", default="config/schema.json")
     parser.add_argument("--dry-run", action="store_true", help="Only print what would happen; do not create issues")
-    parser.add_argument("--max-issues", type=int, default=5, help="Maximum number of issues to create in one run")
     parser.add_argument("--label", default="enhancement", help="Label to apply to created issues")
     args = parser.parse_args()
 
@@ -167,10 +166,6 @@ def main():
         existing = find_existing_issue(resource, issues)
         if existing:
             print(f"[skip] {resource}: already tracked by #{existing['number']} ({existing['url']})")
-            continue
-
-        if created >= args.max_issues:
-            print(f"[skip] {resource}: max-issues limit ({args.max_issues}) reached for this run")
             continue
 
         title = f"feat: expose {resource} managed resource"
