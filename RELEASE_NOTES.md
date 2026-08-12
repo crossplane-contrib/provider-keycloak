@@ -71,9 +71,6 @@ sure it does not strip `spec.conversion` from the provider's CRDs — the
 - Generated API types of previous versions are no longer deleted by
   `make generate`; only `zz_generated.conversion_{hubs,spokes}.go` and
   `zz_generated.resolvers.go` are regenerated from scratch.
-- New `make uptest-conversion` / `make e2e-conversion` targets run the
-  Chainsaw upgrade tests in `cluster/test/conversion`, which create an object
-  through `v1alpha1` in a real cluster and read it back through `v1alpha2`.
 - `make crddiff` now fails on breaking CRD schema changes; set
   `CRDDIFF_ALLOW_BREAKING=true` on a major release branch such as this one.
 
