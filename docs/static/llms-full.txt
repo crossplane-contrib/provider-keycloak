@@ -658,6 +658,31 @@ decode errors, then fix the field names or references as described above.
 - E2E tests only cover resources listed in `cluster/test/cases.txt`.
 - Chainsaw JMESPath assertions on `status.conditions` can fail if conditions are `nil` immediately after apply; add a wait step or assert only object existence first.
 
+## Test Selection and the Resource Index
+
+CI does not always run every demo. `scripts/e2e_dag.py select` classifies the
+changed files of a pull request into a tier:
+
+| Tier | Trigger | Scope |
+|------|---------|-------|
+| `full` | `go.mod`, `go.sum`, `Makefile`, `internal/`, `cmd/`, `build/`, `ci.yml`, or any non-PR event | all demos × all Keycloak versions |
+| `targeted` | `apis/`, `config/`, `package/crds/`, `dev/demos/`, `cluster/test/` | DAG subgraph for the touched API groups × latest Keycloak only |
+| `skip` | docs / markdown / images only | no e2e |
+
+The graph is derived from the demo YAML itself: `apiVersion:` lines give the
+API group, and `*Ref:` → `name:` lookups give cross-demo edges. No manual
+mapping file is maintained.
+
+`make generate` refreshes `cluster/test/e2e-index.json`, which answers
+"which e2e test uses resource X?":
+
+```bash
+jq '.resources["ClientTimePolicy (openidclient)"]' cluster/test/e2e-index.json
+```
+
+The same file holds the demo DAG under `.demos`. It is committed, so
+`make check-diff` fails if it is stale.
+
 ## Local Docs Development
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs/
 

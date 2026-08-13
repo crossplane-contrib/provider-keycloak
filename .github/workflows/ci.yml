@@ -529,18 +529,16 @@ jobs:
           KEYCLOAK_VERSION: ${{ matrix.keycloak-version }}
           E2E_DEMO_LIST: ${{ needs.detect-noop.outputs.e2e-demo-list }}
           E2E_TIER: ${{ needs.detect-noop.outputs.e2e-tier }}
-        run:
-          #!/bin/bash
-          set -o pipefail;
-          echo "E2E tier: ${E2E_TIER}";
+        run: |
+          set -o pipefail
+          echo "E2E tier: ${E2E_TIER}"
           if [ -n "${E2E_DEMO_LIST}" ]; then
-            echo "Targeted mode: running $(echo "${E2E_DEMO_LIST}" | tr ',' '\n' | wc -l) demos";
-            make uptest KEYCLOAK_VERSION=${{ matrix.keycloak-version }} UPTEST_EXAMPLE_LIST="${E2E_DEMO_LIST}" | tee logs/uptest.log;
+            echo "Targeted mode: running $(echo "${E2E_DEMO_LIST}" | tr ',' '\n' | wc -l) demos"
+            make uptest KEYCLOAK_VERSION="${KEYCLOAK_VERSION}" UPTEST_EXAMPLE_LIST="${E2E_DEMO_LIST}" | tee logs/uptest.log
           else
-            echo "Full mode: running all demos";
-            make uptest KEYCLOAK_VERSION=${{ matrix.keycloak-version }} | tee logs/uptest.log;
-          fi;
-          exit $?;
+            echo "Full mode: running all demos"
+            make uptest KEYCLOAK_VERSION="${KEYCLOAK_VERSION}" | tee logs/uptest.log
+          fi
 
       - name: Collect logs
         if: steps.e2eTests.outcome == 'failure'

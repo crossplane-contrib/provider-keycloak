@@ -295,18 +295,14 @@ uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW) $(CROSSPLANE_CLI)
 e2e-cases-check:
 	@./cluster/test/check_cases_coverage.sh
 
-# Query the e2e DAG: which tests use resource kind X?
-# Usage: make e2e-query KIND=ClientTimePolicy [GROUP=openidclient]
-e2e-query:
-	@python3 scripts/e2e_dag.py query $(KIND) $(if $(GROUP),--group $(GROUP))
-
-# Print the full inverted index (resource → demo files) as JSON
+# Regenerate the e2e resource index + demo DAG (cluster/test/e2e-index.json).
+# Answers "which e2e test uses resource X?" — run as part of `make generate`.
 e2e-index:
 	@python3 scripts/e2e_dag.py index
 
-# Print the full dependency graph as JSON
-e2e-dag:
-	@python3 scripts/e2e_dag.py dag
+generate.done: e2e-index
+
+.PHONY: e2e-index
 
 local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(INFO) running locally built provider
