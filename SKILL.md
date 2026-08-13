@@ -65,7 +65,8 @@ make e2e        # end-to-end tests (requires live cluster + Keycloak)
    `<group>.<Resource>IdentifierFromIdentifyingProperties` helper when the ID
    must be derived from other fields).
 2. Create/update `config/<group>/config.go` with references and optional
-   lookup config.
+   lookup config. If an attribute can reference more than one resource type,
+   use `config/multitypes` (see "Multi-Type References" below).
 3. Run `make generate`.
 4. Add example to `examples/<group>/<resource>.yaml`.
 5. Optionally add docs page to `docs/content/docs/using/resources/<resource>.md`.
@@ -92,6 +93,42 @@ r.References["realm_id"] = config.Reference{
     TerraformName: "keycloak_realm",
 }
 ```
+
+## Multi-Type References
+
+`r.References` only supports one `TerraformName`. When a Terraform attribute
+may hold the ID of several different resource types, use `config/multitypes`
+to generate one strongly-typed field per type; the values are consolidated
+back into the original Terraform field at runtime. Never expose such an
+attribute as a raw ID field.
+
+```go
+// Scalar field: role client_id may be an OpenID or a SAML client
+multitypes.ApplyToWithOptions(r, "client_id",
+    &multitypes.Options{KeepOriginalField: true},
+    multitypes.Instance{Name: "client_id", Reference: config.Reference{
+        TerraformName: "keycloak_openid_client", Extractor: common.PathUUIDExtractor}},
+    multitypes.Instance{Name: "saml_client_id", Reference: config.Reference{
+        TerraformName: "keycloak_saml_client", Extractor: common.PathUUIDExtractor}},
+)
+
+// List/set field: aggregate policy `policies` holds IDs of any policy type
+multitypes.ApplyToAsList(r, "policies",
+    multitypes.Instance{Name: "time_policies", Reference: config.Reference{
+        TerraformName: "keycloak_openid_client_time_policy", Extractor: common.PathUUIDExtractor}},
+    multitypes.Instance{Name: "role_policies", Reference: config.Reference{
+        TerraformName: "keycloak_openid_client_role_policy", Extractor: common.PathUUIDExtractor}},
+)
+```
+
+- `Options.KeepOriginalField: true` is required exactly when one `Instance`
+  reuses the original field name (backward compatibility); otherwise the
+  original field becomes computed-only and its required-parameter CEL rule is
+  no longer emitted.
+- Every referenced `TerraformName` must exist in `config/generated.lst`, or
+  `make generate` panics.
+- Examples: `config/role/config.go`, `config/mapper/config.go`,
+  `config/authentication/config.go`, `config/openidclient/config.go`.
 
 ## Import / Identify by Properties
 
