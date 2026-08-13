@@ -104,11 +104,11 @@ NAME_VALUE_RE = re.compile(r"^\s+name:\s+[\"']?([^\"'\s]+)[\"']?\s*$")
 # Metadata name definition
 METADATA_NAME_RE = re.compile(r"^\s{2}name:\s+[\"']?([^\"'\s]+)[\"']?\s*$")
 
-# apiVersion line
-APIVERSION_RE = re.compile(r"^\s*apiVersion:\s+([^\s]+)")
+# Top-level apiVersion line
+APIVERSION_RE = re.compile(r"^apiVersion:\s+([^\s]+)")
 
-# kind line
-KIND_RE = re.compile(r"^\s*kind:\s+([A-Za-z][A-Za-z0-9]+)\s*$")
+# Top-level kind line
+KIND_RE = re.compile(r"^kind:\s+([A-Za-z][A-Za-z0-9]+)\s*$")
 
 # Source path → group extraction
 CONFIG_GROUP_RE = re.compile(r"^config/([a-z][a-z0-9]+)/")
@@ -117,6 +117,21 @@ CRD_GROUP_RE = re.compile(r"^package/crds/([a-z][a-z0-9]+)\.")
 EXAMPLES_GROUP_RE = re.compile(
     r"^examples(?:-generated)?/(?:cluster/|namespaced/)?([a-z][a-z0-9]+)/"
 )
+RESOURCE_APIS_RE = re.compile(
+    r"^apis/(?:cluster|namespaced)/([a-z][a-z0-9]+)/v[^/]+/"
+    r"zz_[a-z0-9]+_(?:types|terraformed)\.go$"
+)
+RESOURCE_CONTROLLER_RE = re.compile(
+    r"^internal/controller/(?:cluster|namespaced)/([a-z][a-z0-9]+)/[a-z0-9]+/zz_controller\.go$"
+)
+RESOURCE_CRD_RE = re.compile(
+    r"^package/crds/([a-z][a-z0-9]+)\.keycloak(?:\.m)?\.crossplane\.io_[a-z0-9]+\.yaml$"
+)
+TOP_LEVEL_RESOURCE_KIND_RE = re.compile(r"^kind:\s+([A-Z][A-Za-z0-9]+)\s*$", re.MULTILINE)
+NESTED_RESOURCE_KIND_RE = re.compile(r"^\s+kind:\s+([A-Z][A-Za-z0-9]+)\s*$", re.MULTILINE)
+CRD_SPEC_KIND_RE = re.compile(r"^\s{4}kind:\s+([A-Z][A-Za-z0-9]+)\s*$", re.MULTILINE)
+GO_SCHEMA_KIND_RE = re.compile(r"^//\s+([A-Z][A-Za-z0-9]+)\s+is the Schema\b", re.MULTILINE)
+GO_CONTROLLER_KIND_RE = re.compile(r"\*svcapitypes\.([A-Z][A-Za-z0-9]+)")
 
 
 # ---------------------------------------------------------------------------
@@ -305,7 +320,7 @@ class DemoGraph:
                 if ref_name in INFRA_NAMES:
                     continue
                 for dep_demo in self.name_to_demos.get(ref_name, []):
-                    if dep_demo != demo:
+                    if dep_demo != demo and dep_demo.parent == demo.parent:
                         self.demo_deps[demo].add(dep_demo)
                         self.demo_rdeps[dep_demo].add(demo)
 
@@ -313,6 +328,13 @@ class DemoGraph:
         result: set[Path] = set()
         for g in groups:
             result.update(self.group_to_demos.get(g, []))
+        return result
+
+    def demos_for_resources(self, resources: set[tuple[str, str]]) -> set[Path]:
+        result: set[Path] = set()
+        for resource in resources:
+            result.update(self.resource_defined_by.get(resource, []))
+            result.update(self.resource_used_by.get(resource, []))
         return result
 
     def expand_subgraph(self, seed: set[Path]) -> tuple[list[Path], dict[Path, str]]:
@@ -333,13 +355,11 @@ class DemoGraph:
                     reasons[dep] = f"prerequisite of {rel(d)}"
                     queue.append(dep)
 
-        # Walk reverse deps from the full included set
-        for d in list(included):
-            for rdep in self.demo_rdeps.get(d, set()):
-                if rdep not in included:
-                    included.add(rdep)
-                    reasons[rdep] = f"depends on {rel(d)}"
-                    queue.append(rdep)
+        # Walk reverse deps starting from the original seed only. This keeps
+        # resource-focused selections tight: prerequisites pulled in by the
+        # forward walk do not fan out into every sibling demo that happens to
+        # share the same dependency.
+        queue = deque(seed)
         while queue:
             d = queue.popleft()
             for rdep in self.demo_rdeps.get(d, set()):
@@ -466,6 +486,77 @@ def extract_groups_from_paths(
     return groups, why
 
 
+def parse_resource_kinds_from_file(path: Path) -> set[str]:
+    try:
+        text = path.read_text(errors="replace")
+    except Exception:
+        return set()
+
+    if path.suffix == ".go":
+        kinds = set(GO_SCHEMA_KIND_RE.findall(text))
+        if kinds:
+            return kinds
+        return set(GO_CONTROLLER_KIND_RE.findall(text))
+
+    if path.suffix == ".yaml":
+        if RESOURCE_CRD_RE.match(str(path.relative_to(REPO_ROOT))):
+            return {
+                kind for kind in CRD_SPEC_KIND_RE.findall(text)
+                if kind != "CustomResourceDefinition"
+            }
+        top_level = set(TOP_LEVEL_RESOURCE_KIND_RE.findall(text))
+        if top_level:
+            return top_level
+        return {
+            kind for kind in NESTED_RESOURCE_KIND_RE.findall(text)
+            if kind != "CustomResourceDefinition"
+        }
+
+    return set()
+
+
+def extract_resources_from_paths(
+    changed_files: list[str], demo_dir: Path
+) -> tuple[set[tuple[str, str]], dict[tuple[str, str], set[str]]]:
+    resources: set[tuple[str, str]] = set()
+    why: dict[tuple[str, str], set[str]] = defaultdict(set)
+
+    for f in changed_files:
+        f = f.strip()
+        if not f:
+            continue
+
+        path = REPO_ROOT / f
+        group = None
+        for pattern in (
+            RESOURCE_APIS_RE,
+            RESOURCE_CRD_RE,
+            RESOURCE_CONTROLLER_RE,
+        ):
+            match = pattern.match(f)
+            if match:
+                group = match.group(1)
+                break
+
+        if f.startswith("dev/demos/") and path.exists() and path.suffix == ".yaml":
+            info = parse_demo_file(path)
+            for kind, group_name in info["kinds"]:
+                resource = (kind, group_name)
+                resources.add(resource)
+                why[resource].add(f)
+            continue
+
+        if not group or not path.exists():
+            continue
+
+        for kind in parse_resource_kinds_from_file(path):
+            resource = (kind, group)
+            resources.add(resource)
+            why[resource].add(f)
+
+    return resources, why
+
+
 # ---------------------------------------------------------------------------
 # CLI commands
 # ---------------------------------------------------------------------------
@@ -521,12 +612,20 @@ def cmd_select(args) -> None:
     # targeted
     graph = DemoGraph(demo_dir)
     touched_groups, group_why = extract_groups_from_paths(changed, demo_dir)
-    seed = graph.demos_for_groups(touched_groups)
-
+    touched_resources, resource_why = extract_resources_from_paths(changed, demo_dir)
+    seed = graph.demos_for_resources(touched_resources)
     seed_why: dict[Path, str] = {}
-    for g in sorted(touched_groups):
-        for d in graph.group_to_demos.get(g, []):
-            seed_why.setdefault(d, f"uses API group '{g}'")
+    for kind, group in sorted(touched_resources):
+        for d in graph.resource_defined_by.get((kind, group), []):
+            seed_why.setdefault(d, f"defines {kind} ({group})")
+        for d in graph.resource_used_by.get((kind, group), []):
+            seed_why.setdefault(d, f"uses {kind} ({group})")
+
+    if not seed and not touched_resources:
+        seed = graph.demos_for_groups(touched_groups)
+        for g in sorted(touched_groups):
+            for d in graph.group_to_demos.get(g, []):
+                seed_why.setdefault(d, f"uses API group '{g}'")
 
     # Include directly changed demo files
     for f in changed:
@@ -537,6 +636,16 @@ def cmd_select(args) -> None:
                 seed_why[p] = "changed directly"
 
     proof.append("")
+    proof.append("Touched resources:")
+    if touched_resources:
+        for kind, group in sorted(touched_resources):
+            proof.append(
+                f"  {kind} ({group}) (from {', '.join(sorted(resource_why[(kind, group)]))})"
+            )
+    else:
+        proof.append("  (none)")
+
+    proof.append("")
     proof.append("Touched API groups:")
     if touched_groups:
         for g in sorted(touched_groups):
@@ -545,15 +654,25 @@ def cmd_select(args) -> None:
         proof.append("  (none)")
 
     if not seed:
-        # Changed config/ paths don't map to any known demo group → run full
+        # If we could not map the change set to covered resources, either skip
+        # uncovered resource-only changes or fall back to groups for broad paths.
         proof.append("")
-        proof.append(
-            "No demo covers the touched groups — falling back to ALL demos "
-            "against ALL Keycloak versions."
-        )
-        print("full")
-        print("E2E_TIER=full (fallback: no demos match changed groups)", file=sys.stderr)
-        print("KEYCLOAK_VERSIONS=all", file=sys.stderr)
+        if touched_resources:
+            proof.append(
+                "No demo directly covers the touched resources — running NO demos "
+                "instead of broadening to the whole API group."
+            )
+            print("skip")
+            print("E2E_TIER=skip (no demos cover touched resources)", file=sys.stderr)
+            print("KEYCLOAK_VERSIONS=none", file=sys.stderr)
+        else:
+            proof.append(
+                "No demo covers the touched groups — falling back to ALL demos "
+                "against ALL Keycloak versions."
+            )
+            print("full")
+            print("E2E_TIER=full (fallback: no demos match changed groups)", file=sys.stderr)
+            print("KEYCLOAK_VERSIONS=all", file=sys.stderr)
         _proof(proof, args.proof_file)
         return
 

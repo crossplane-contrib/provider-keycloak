@@ -3,1036 +3,1014 @@
   "resources": {
     "AttributeIdentityProviderMapper (identityprovider)": {
       "defined_in": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ]
     },
     "AudienceProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "AudienceResolveProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "Bindings (authenticationflow)": {
       "defined_in": [
-        "dev/demos/basic/074-authentication-execution-binding.yaml"
+        "dev/demos/basic/074-authentication-execution-binding.yaml",
+        "dev/demos/namespaced/074-authentication-execution-binding.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/074-authentication-execution-binding.yaml"
+        "dev/demos/basic/074-authentication-execution-binding.yaml",
+        "dev/demos/namespaced/074-authentication-execution-binding.yaml"
       ]
     },
     "Client (openidclient)": {
       "defined_in": [
         "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/basic/043-oidc-client-no-redirect-uris.yaml",
-        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml"
+        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/namespaced/040-oidc-clients.yaml",
+        "dev/demos/namespaced/043-oidc-client-no-redirect-uris.yaml",
+        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml"
       ],
       "used_by": [
         "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/basic/043-oidc-client-no-redirect-uris.yaml",
-        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml"
+        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/namespaced/040-oidc-clients.yaml",
+        "dev/demos/namespaced/043-oidc-client-no-redirect-uris.yaml",
+        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml"
       ]
     },
     "Client (samlclient)": {
       "defined_in": [
-        "dev/demos/basic/060-saml-client.yaml"
+        "dev/demos/basic/060-saml-client.yaml",
+        "dev/demos/namespaced/060-saml-client.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/060-saml-client.yaml"
+        "dev/demos/basic/060-saml-client.yaml",
+        "dev/demos/namespaced/060-saml-client.yaml"
       ]
     },
     "ClientAggregatePolicy (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/064-oidc-authz-policies.yaml"
+        "dev/demos/basic/064-oidc-authz-policies.yaml",
+        "dev/demos/namespaced/064-oidc-authz-policies.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/064-oidc-authz-policies.yaml"
+        "dev/demos/basic/064-oidc-authz-policies.yaml",
+        "dev/demos/namespaced/064-oidc-authz-policies.yaml"
       ]
     },
     "ClientAuthorizationClientScopePolicy (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/064-oidc-authz-policies.yaml"
+        "dev/demos/basic/064-oidc-authz-policies.yaml",
+        "dev/demos/namespaced/064-oidc-authz-policies.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/064-oidc-authz-policies.yaml"
+        "dev/demos/basic/064-oidc-authz-policies.yaml",
+        "dev/demos/namespaced/064-oidc-authz-policies.yaml"
       ]
     },
     "ClientAuthorizationPermission (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/049-oidc-client-authorization.yaml"
+        "dev/demos/basic/049-oidc-client-authorization.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/049-oidc-client-authorization.yaml"
+        "dev/demos/basic/049-oidc-client-authorization.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization.yaml"
       ]
     },
     "ClientAuthorizationResource (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/049-oidc-client-authorization.yaml"
+        "dev/demos/basic/049-oidc-client-authorization.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/049-oidc-client-authorization.yaml"
+        "dev/demos/basic/049-oidc-client-authorization.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization.yaml"
       ]
     },
     "ClientAuthorizationScope (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/064-oidc-authz-policies.yaml"
+        "dev/demos/basic/064-oidc-authz-policies.yaml",
+        "dev/demos/namespaced/064-oidc-authz-policies.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/064-oidc-authz-policies.yaml"
+        "dev/demos/basic/064-oidc-authz-policies.yaml",
+        "dev/demos/namespaced/064-oidc-authz-policies.yaml"
       ]
     },
     "ClientClientPolicy (openidclient)": {
       "defined_in": [
         "dev/demos/basic/046-oidc-client-policies.yaml",
-        "dev/demos/basic/063-saml-client-policies.yaml"
+        "dev/demos/basic/063-saml-client-policies.yaml",
+        "dev/demos/namespaced/046-oidc-client-policies.yaml",
+        "dev/demos/namespaced/063-saml-client-policies.yaml"
       ],
       "used_by": [
         "dev/demos/basic/046-oidc-client-policies.yaml",
-        "dev/demos/basic/063-saml-client-policies.yaml"
+        "dev/demos/basic/063-saml-client-policies.yaml",
+        "dev/demos/namespaced/046-oidc-client-policies.yaml",
+        "dev/demos/namespaced/063-saml-client-policies.yaml"
       ]
     },
     "ClientDefaultScopes (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml"
+        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
+        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml"
+        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
+        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
       ]
     },
     "ClientDefaultScopes (samlclient)": {
       "defined_in": [
-        "dev/demos/basic/062-saml-client-default-scopes.yaml"
+        "dev/demos/basic/062-saml-client-default-scopes.yaml",
+        "dev/demos/namespaced/062-saml-client-default-scopes.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/062-saml-client-default-scopes.yaml"
+        "dev/demos/basic/062-saml-client-default-scopes.yaml",
+        "dev/demos/namespaced/062-saml-client-default-scopes.yaml"
       ]
     },
     "ClientGroupPolicy (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/046-oidc-client-policies.yaml"
+        "dev/demos/basic/046-oidc-client-policies.yaml",
+        "dev/demos/namespaced/046-oidc-client-policies.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/046-oidc-client-policies.yaml"
+        "dev/demos/basic/046-oidc-client-policies.yaml",
+        "dev/demos/namespaced/046-oidc-client-policies.yaml"
       ]
     },
     "ClientOptionalScopes (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml"
+        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
+        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml"
+        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
+        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
       ]
     },
     "ClientPermissions (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/042-oidc-client-permissions.yaml"
+        "dev/demos/basic/042-oidc-client-permissions.yaml",
+        "dev/demos/namespaced/042-oidc-client-permissions.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/042-oidc-client-permissions.yaml"
+        "dev/demos/basic/042-oidc-client-permissions.yaml",
+        "dev/demos/namespaced/042-oidc-client-permissions.yaml"
       ]
     },
     "ClientPolicyProfile (realm)": {
       "defined_in": [
-        "dev/demos/basic/008-realm-client-policy-profile.yaml"
+        "dev/demos/basic/008-realm-client-policy-profile.yaml",
+        "dev/demos/namespaced/008-realm-client-policy-profile.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/008-realm-client-policy-profile.yaml"
+        "dev/demos/basic/008-realm-client-policy-profile.yaml",
+        "dev/demos/namespaced/008-realm-client-policy-profile.yaml"
       ]
     },
     "ClientPolicyProfilePolicy (realm)": {
       "defined_in": [
-        "dev/demos/basic/009-realm-client-policy-profile-policy.yaml"
+        "dev/demos/basic/009-realm-client-policy-profile-policy.yaml",
+        "dev/demos/namespaced/009-realm-client-policy-profile-policy.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/009-realm-client-policy-profile-policy.yaml"
+        "dev/demos/basic/009-realm-client-policy-profile-policy.yaml",
+        "dev/demos/namespaced/009-realm-client-policy-profile-policy.yaml"
       ]
     },
     "ClientRegexPolicy (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/085-new-resources.yaml"
+        "dev/demos/basic/085-new-resources.yaml",
+        "dev/demos/namespaced/085-new-resources.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/085-new-resources.yaml"
+        "dev/demos/basic/085-new-resources.yaml",
+        "dev/demos/namespaced/085-new-resources.yaml"
       ]
     },
     "ClientRolePolicy (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/046-oidc-client-policies.yaml"
+        "dev/demos/basic/046-oidc-client-policies.yaml",
+        "dev/demos/namespaced/046-oidc-client-policies.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/046-oidc-client-policies.yaml"
+        "dev/demos/basic/046-oidc-client-policies.yaml",
+        "dev/demos/namespaced/046-oidc-client-policies.yaml"
       ]
     },
     "ClientScope (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml"
+        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
+        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml"
+        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
+        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
       ]
     },
     "ClientScope (samlclient)": {
       "defined_in": [
-        "dev/demos/basic/061-saml-client-scopes.yaml"
+        "dev/demos/basic/061-saml-client-scopes.yaml",
+        "dev/demos/namespaced/061-saml-client-scopes.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/061-saml-client-scopes.yaml"
+        "dev/demos/basic/061-saml-client-scopes.yaml",
+        "dev/demos/namespaced/061-saml-client-scopes.yaml"
       ]
     },
     "ClientServiceAccountRealmRole (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/045-oidc-service-account-roles.yaml"
+        "dev/demos/basic/045-oidc-service-account-roles.yaml",
+        "dev/demos/namespaced/045-oidc-service-account-roles.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/045-oidc-service-account-roles.yaml"
+        "dev/demos/basic/045-oidc-service-account-roles.yaml",
+        "dev/demos/namespaced/045-oidc-service-account-roles.yaml"
       ]
     },
     "ClientServiceAccountRole (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/045-oidc-service-account-roles.yaml"
+        "dev/demos/basic/045-oidc-service-account-roles.yaml",
+        "dev/demos/namespaced/045-oidc-service-account-roles.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/045-oidc-service-account-roles.yaml"
+        "dev/demos/basic/045-oidc-service-account-roles.yaml",
+        "dev/demos/namespaced/045-oidc-service-account-roles.yaml"
       ]
     },
     "ClientTimePolicy (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/064-oidc-authz-policies.yaml"
+        "dev/demos/basic/064-oidc-authz-policies.yaml",
+        "dev/demos/namespaced/064-oidc-authz-policies.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/064-oidc-authz-policies.yaml"
+        "dev/demos/basic/064-oidc-authz-policies.yaml",
+        "dev/demos/namespaced/064-oidc-authz-policies.yaml"
       ]
     },
     "ClientUserPolicy (openidclient)": {
       "defined_in": [
-        "dev/demos/basic/046-oidc-client-policies.yaml"
+        "dev/demos/basic/046-oidc-client-policies.yaml",
+        "dev/demos/namespaced/046-oidc-client-policies.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/046-oidc-client-policies.yaml"
+        "dev/demos/basic/046-oidc-client-policies.yaml",
+        "dev/demos/namespaced/046-oidc-client-policies.yaml"
       ]
     },
     "CustomMapper (ldap)": {
       "defined_in": [
-        "dev/demos/basic/097-ldap-custom-mapper.yaml"
+        "dev/demos/basic/097-ldap-custom-mapper.yaml",
+        "dev/demos/namespaced/097-ldap-custom-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/097-ldap-custom-mapper.yaml"
+        "dev/demos/basic/097-ldap-custom-mapper.yaml",
+        "dev/demos/namespaced/097-ldap-custom-mapper.yaml"
       ]
     },
     "DefaultClientScopes (realm)": {
       "defined_in": [
-        "dev/demos/basic/002-realm-clientscopes.yaml"
+        "dev/demos/basic/002-realm-clientscopes.yaml",
+        "dev/demos/namespaced/002-realm-clientscopes.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/002-realm-clientscopes.yaml"
+        "dev/demos/basic/002-realm-clientscopes.yaml",
+        "dev/demos/namespaced/002-realm-clientscopes.yaml"
       ]
     },
     "DefaultGroups (defaults)": {
       "defined_in": [
-        "dev/demos/basic/080-defaults-groups.yaml"
+        "dev/demos/basic/080-defaults-groups.yaml",
+        "dev/demos/namespaced/080-defaults-groups.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/080-defaults-groups.yaml"
+        "dev/demos/basic/080-defaults-groups.yaml",
+        "dev/demos/namespaced/080-defaults-groups.yaml"
       ]
     },
     "Execution (authenticationflow)": {
       "defined_in": [
         "dev/demos/basic/072-authentication-execution-subflow-ref.yaml",
-        "dev/demos/basic/072-authentication-execution.yaml"
+        "dev/demos/basic/072-authentication-execution.yaml",
+        "dev/demos/namespaced/072-authentication-execution-subflow-ref.yaml",
+        "dev/demos/namespaced/072-authentication-execution.yaml"
       ],
       "used_by": [
         "dev/demos/basic/072-authentication-execution-subflow-ref.yaml",
-        "dev/demos/basic/072-authentication-execution.yaml"
+        "dev/demos/basic/072-authentication-execution.yaml",
+        "dev/demos/namespaced/072-authentication-execution-subflow-ref.yaml",
+        "dev/demos/namespaced/072-authentication-execution.yaml"
       ]
     },
     "ExecutionConfig (authenticationflow)": {
       "defined_in": [
-        "dev/demos/basic/073-authentication-execution-config.yaml"
+        "dev/demos/basic/073-authentication-execution-config.yaml",
+        "dev/demos/namespaced/073-authentication-execution-config.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/073-authentication-execution-config.yaml"
+        "dev/demos/basic/073-authentication-execution-config.yaml",
+        "dev/demos/namespaced/073-authentication-execution-config.yaml"
       ]
     },
     "FacebookIdentityProvider (oidc)": {
       "defined_in": [
-        "dev/demos/basic/056-facebook-identity-provider.yaml"
+        "dev/demos/basic/056-facebook-identity-provider.yaml",
+        "dev/demos/namespaced/056-facebook-identity-provider.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/056-facebook-identity-provider.yaml"
+        "dev/demos/basic/056-facebook-identity-provider.yaml",
+        "dev/demos/namespaced/056-facebook-identity-provider.yaml"
       ]
     },
     "Flow (authenticationflow)": {
       "defined_in": [
-        "dev/demos/basic/070-authentication-flows.yaml"
+        "dev/demos/basic/070-authentication-flows.yaml",
+        "dev/demos/namespaced/070-authentication-flows.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/070-authentication-flows.yaml"
+        "dev/demos/basic/070-authentication-flows.yaml",
+        "dev/demos/namespaced/070-authentication-flows.yaml"
       ]
     },
     "FullNameMapper (ldap)": {
       "defined_in": [
-        "dev/demos/basic/096-ldap-full-name-mapper.yaml"
+        "dev/demos/basic/096-ldap-full-name-mapper.yaml",
+        "dev/demos/namespaced/096-ldap-full-name-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/096-ldap-full-name-mapper.yaml"
+        "dev/demos/basic/096-ldap-full-name-mapper.yaml",
+        "dev/demos/namespaced/096-ldap-full-name-mapper.yaml"
       ]
     },
     "FullNameProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "GenericClientProtocolMapper (client)": {
       "defined_in": [
-        "dev/demos/basic/065-saml-generic-mappers.yaml"
+        "dev/demos/basic/065-saml-generic-mappers.yaml",
+        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/065-saml-generic-mappers.yaml"
+        "dev/demos/basic/065-saml-generic-mappers.yaml",
+        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
       ]
     },
     "GenericClientRoleMapper (client)": {
       "defined_in": [
-        "dev/demos/basic/065-saml-generic-mappers.yaml"
+        "dev/demos/basic/065-saml-generic-mappers.yaml",
+        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/065-saml-generic-mappers.yaml"
+        "dev/demos/basic/065-saml-generic-mappers.yaml",
+        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
       ]
     },
     "GithubIdentityProvider (oidc)": {
       "defined_in": [
-        "dev/demos/basic/057-github-identity-provider.yaml"
+        "dev/demos/basic/057-github-identity-provider.yaml",
+        "dev/demos/namespaced/057-github-identity-provider.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/057-github-identity-provider.yaml"
+        "dev/demos/basic/057-github-identity-provider.yaml",
+        "dev/demos/namespaced/057-github-identity-provider.yaml"
       ]
     },
     "GoogleIdentityProvider (oidc)": {
       "defined_in": [
-        "dev/demos/basic/053-google-identity-provider.yaml"
+        "dev/demos/basic/053-google-identity-provider.yaml",
+        "dev/demos/namespaced/053-google-identity-provider.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/053-google-identity-provider.yaml"
+        "dev/demos/basic/053-google-identity-provider.yaml",
+        "dev/demos/namespaced/053-google-identity-provider.yaml"
       ]
     },
     "Group (group)": {
       "defined_in": [
         "dev/demos/basic/015-groups.yaml",
         "dev/demos/basic/016-groups-same-name-children.yaml",
-        "dev/demos/basic/087-nonmaster-provider.yaml"
+        "dev/demos/basic/087-nonmaster-provider.yaml",
+        "dev/demos/namespaced/015-groups.yaml",
+        "dev/demos/namespaced/016-groups-same-name-children.yaml",
+        "dev/demos/namespaced/087-nonmaster-provider.yaml"
       ],
       "used_by": [
         "dev/demos/basic/015-groups.yaml",
         "dev/demos/basic/016-groups-same-name-children.yaml",
-        "dev/demos/basic/087-nonmaster-provider.yaml"
+        "dev/demos/basic/087-nonmaster-provider.yaml",
+        "dev/demos/namespaced/015-groups.yaml",
+        "dev/demos/namespaced/016-groups-same-name-children.yaml",
+        "dev/demos/namespaced/087-nonmaster-provider.yaml"
       ]
     },
     "GroupIdentityProviderMapper (identityprovider)": {
       "defined_in": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ]
     },
     "GroupMapper (ldap)": {
       "defined_in": [
-        "dev/demos/basic/093-ldap-group-mapper.yaml"
+        "dev/demos/basic/093-ldap-group-mapper.yaml",
+        "dev/demos/namespaced/093-ldap-group-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/093-ldap-group-mapper.yaml"
+        "dev/demos/basic/093-ldap-group-mapper.yaml",
+        "dev/demos/namespaced/093-ldap-group-mapper.yaml"
       ]
     },
     "GroupMembershipProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/044-oidc-group-membership-protocol-mapper.yaml"
+        "dev/demos/basic/044-oidc-group-membership-protocol-mapper.yaml",
+        "dev/demos/namespaced/044-oidc-group-membership-protocol-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/044-oidc-group-membership-protocol-mapper.yaml"
+        "dev/demos/basic/044-oidc-group-membership-protocol-mapper.yaml",
+        "dev/demos/namespaced/044-oidc-group-membership-protocol-mapper.yaml"
       ]
     },
     "Groups (user)": {
       "defined_in": [
-        "dev/demos/basic/022-users-groups.yaml"
+        "dev/demos/basic/022-users-groups.yaml",
+        "dev/demos/namespaced/022-users-groups.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/022-users-groups.yaml"
+        "dev/demos/basic/022-users-groups.yaml",
+        "dev/demos/namespaced/022-users-groups.yaml"
       ]
     },
     "HardcodedAttributeMapper (ldap)": {
       "defined_in": [
-        "dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml"
+        "dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml",
+        "dev/demos/namespaced/095-ldap-hardcoded-attribute-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml"
+        "dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml",
+        "dev/demos/namespaced/095-ldap-hardcoded-attribute-mapper.yaml"
       ]
     },
     "HardcodedClaimProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "HardcodedGroupMapper (ldap)": {
       "defined_in": [
-        "dev/demos/basic/093-ldap-group-mapper.yaml"
+        "dev/demos/basic/093-ldap-group-mapper.yaml",
+        "dev/demos/namespaced/093-ldap-group-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/093-ldap-group-mapper.yaml"
+        "dev/demos/basic/093-ldap-group-mapper.yaml",
+        "dev/demos/namespaced/093-ldap-group-mapper.yaml"
       ]
     },
     "HardcodedRoleMapper (ldap)": {
       "defined_in": [
-        "dev/demos/basic/092-ldap-role-mapper.yaml"
+        "dev/demos/basic/092-ldap-role-mapper.yaml",
+        "dev/demos/namespaced/092-ldap-role-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/092-ldap-role-mapper.yaml"
+        "dev/demos/basic/092-ldap-role-mapper.yaml",
+        "dev/demos/namespaced/092-ldap-role-mapper.yaml"
       ]
     },
     "HardcodedRoleProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "IdentityProvider (oidc)": {
       "defined_in": [
         "dev/demos/basic/050-oidc-identity-provider.yaml",
-        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml"
+        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/namespaced/050-oidc-identity-provider.yaml",
+        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml"
       ],
       "used_by": [
         "dev/demos/basic/050-oidc-identity-provider.yaml",
-        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml"
+        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/namespaced/050-oidc-identity-provider.yaml",
+        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml"
       ]
     },
     "IdentityProvider (saml)": {
       "defined_in": [
-        "dev/demos/basic/051-saml-identity-provider.yaml"
+        "dev/demos/basic/051-saml-identity-provider.yaml",
+        "dev/demos/namespaced/051-saml-identity-provider.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/051-saml-identity-provider.yaml"
+        "dev/demos/basic/051-saml-identity-provider.yaml",
+        "dev/demos/namespaced/051-saml-identity-provider.yaml"
       ]
     },
     "IdentityProviderMapper (identityprovider)": {
       "defined_in": [
         "dev/demos/basic/052-identity-provider-mapper.yaml",
-        "dev/demos/basic/053-google-identity-provider.yaml"
+        "dev/demos/basic/053-google-identity-provider.yaml",
+        "dev/demos/namespaced/052-identity-provider-mapper.yaml",
+        "dev/demos/namespaced/053-google-identity-provider.yaml"
       ],
       "used_by": [
         "dev/demos/basic/052-identity-provider-mapper.yaml",
-        "dev/demos/basic/053-google-identity-provider.yaml"
+        "dev/demos/basic/053-google-identity-provider.yaml",
+        "dev/demos/namespaced/052-identity-provider-mapper.yaml",
+        "dev/demos/namespaced/053-google-identity-provider.yaml"
       ]
     },
     "ImporterIdentityProviderMapper (identityprovider)": {
       "defined_in": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ]
     },
     "KeystoreAesGenerated (realm)": {
       "defined_in": [
-        "dev/demos/basic/005-realm-keystores-comprehensive.yaml"
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/005-realm-keystores-comprehensive.yaml"
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
       ]
     },
     "KeystoreEcdsaGenerated (realm)": {
       "defined_in": [
-        "dev/demos/basic/005-realm-keystores-comprehensive.yaml"
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/005-realm-keystores-comprehensive.yaml"
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
       ]
     },
     "KeystoreHMACGenerated (realm)": {
       "defined_in": [
-        "dev/demos/basic/005-realm-keystores-comprehensive.yaml"
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/005-realm-keystores-comprehensive.yaml"
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
       ]
     },
     "KeystoreRsa (realm)": {
       "defined_in": [
-        "dev/demos/basic/004-realm-keystore-rsa.yaml"
+        "dev/demos/basic/004-realm-keystore-rsa.yaml",
+        "dev/demos/namespaced/004-realm-keystore-rsa.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/004-realm-keystore-rsa.yaml"
+        "dev/demos/basic/004-realm-keystore-rsa.yaml",
+        "dev/demos/namespaced/004-realm-keystore-rsa.yaml"
       ]
     },
     "KeystoreRsaGenerated (realm)": {
       "defined_in": [
-        "dev/demos/basic/005-realm-keystores-comprehensive.yaml"
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/005-realm-keystores-comprehensive.yaml"
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
       ]
     },
     "Memberships (group)": {
       "defined_in": [
-        "dev/demos/basic/031-group-memberships.yaml"
+        "dev/demos/basic/031-group-memberships.yaml",
+        "dev/demos/namespaced/031-group-memberships.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/031-group-memberships.yaml"
+        "dev/demos/basic/031-group-memberships.yaml",
+        "dev/demos/namespaced/031-group-memberships.yaml"
       ]
     },
     "MsadLdsUserAccountControlMapper (ldap)": {
       "defined_in": [
-        "dev/demos/basic/094-ldap-msad-mapper.yaml"
+        "dev/demos/basic/094-ldap-msad-mapper.yaml",
+        "dev/demos/namespaced/094-ldap-msad-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/094-ldap-msad-mapper.yaml"
+        "dev/demos/basic/094-ldap-msad-mapper.yaml",
+        "dev/demos/namespaced/094-ldap-msad-mapper.yaml"
       ]
     },
     "MsadUserAccountControlMapper (ldap)": {
       "defined_in": [
-        "dev/demos/basic/094-ldap-msad-mapper.yaml"
+        "dev/demos/basic/094-ldap-msad-mapper.yaml",
+        "dev/demos/namespaced/094-ldap-msad-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/094-ldap-msad-mapper.yaml"
+        "dev/demos/basic/094-ldap-msad-mapper.yaml",
+        "dev/demos/namespaced/094-ldap-msad-mapper.yaml"
       ]
     },
     "OidcOpenShiftV4IdentityProvider (identityprovider)": {
       "defined_in": [
-        "dev/demos/basic/085-new-resources.yaml"
+        "dev/demos/basic/085-new-resources.yaml",
+        "dev/demos/namespaced/085-new-resources.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/085-new-resources.yaml"
+        "dev/demos/basic/085-new-resources.yaml",
+        "dev/demos/namespaced/085-new-resources.yaml"
       ]
     },
     "OptionalClientScopes (realm)": {
       "defined_in": [
-        "dev/demos/basic/002-realm-clientscopes.yaml"
+        "dev/demos/basic/002-realm-clientscopes.yaml",
+        "dev/demos/namespaced/002-realm-clientscopes.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/002-realm-clientscopes.yaml"
+        "dev/demos/basic/002-realm-clientscopes.yaml",
+        "dev/demos/namespaced/002-realm-clientscopes.yaml"
       ]
     },
     "Permissions (group)": {
       "defined_in": [
-        "dev/demos/basic/033-group-permissions.yaml"
+        "dev/demos/basic/033-group-permissions.yaml",
+        "dev/demos/namespaced/033-group-permissions.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/033-group-permissions.yaml"
+        "dev/demos/basic/033-group-permissions.yaml",
+        "dev/demos/namespaced/033-group-permissions.yaml"
       ]
     },
     "Permissions (user)": {
       "defined_in": [
-        "dev/demos/basic/023-user-permissions.yaml"
+        "dev/demos/basic/023-user-permissions.yaml",
+        "dev/demos/namespaced/023-user-permissions.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/023-user-permissions.yaml"
+        "dev/demos/basic/023-user-permissions.yaml",
+        "dev/demos/namespaced/023-user-permissions.yaml"
       ]
     },
     "ProtocolMapper (client)": {
       "defined_in": [
         "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
         "dev/demos/basic/060-saml-client.yaml",
-        "dev/demos/basic/061-saml-client-scopes.yaml"
+        "dev/demos/basic/061-saml-client-scopes.yaml",
+        "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/namespaced/060-saml-client.yaml",
+        "dev/demos/namespaced/061-saml-client-scopes.yaml"
       ],
       "used_by": [
         "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
         "dev/demos/basic/060-saml-client.yaml",
-        "dev/demos/basic/061-saml-client-scopes.yaml"
-      ]
-    },
-    "ProviderConfig (authenticationflow)": {
-      "defined_in": [
-        "dev/demos/namespaced/070-authentication-flows.yaml",
-        "dev/demos/namespaced/071-authentication-subflow.yaml",
-        "dev/demos/namespaced/072-authentication-execution-subflow-ref.yaml",
-        "dev/demos/namespaced/072-authentication-execution.yaml",
-        "dev/demos/namespaced/073-authentication-execution-config.yaml",
-        "dev/demos/namespaced/074-authentication-execution-binding.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/070-authentication-flows.yaml",
-        "dev/demos/namespaced/071-authentication-subflow.yaml",
-        "dev/demos/namespaced/072-authentication-execution-subflow-ref.yaml",
-        "dev/demos/namespaced/072-authentication-execution.yaml",
-        "dev/demos/namespaced/073-authentication-execution-config.yaml",
-        "dev/demos/namespaced/074-authentication-execution-binding.yaml"
-      ]
-    },
-    "ProviderConfig (client)": {
-      "defined_in": [
-        "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
+        "dev/demos/basic/061-saml-client-scopes.yaml",
         "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
         "dev/demos/namespaced/060-saml-client.yaml",
-        "dev/demos/namespaced/061-saml-client-scopes.yaml",
-        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
-        "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
-        "dev/demos/namespaced/060-saml-client.yaml",
-        "dev/demos/namespaced/061-saml-client-scopes.yaml",
-        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
-      ]
-    },
-    "ProviderConfig (defaults)": {
-      "defined_in": [
-        "dev/demos/namespaced/080-defaults-groups.yaml",
-        "dev/demos/namespaced/081-defaults-roles.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/080-defaults-groups.yaml",
-        "dev/demos/namespaced/081-defaults-roles.yaml"
-      ]
-    },
-    "ProviderConfig (group)": {
-      "defined_in": [
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/016-groups-same-name-children.yaml",
-        "dev/demos/namespaced/031-group-memberships.yaml",
-        "dev/demos/namespaced/032-groups-roles.yaml",
-        "dev/demos/namespaced/033-group-permissions.yaml",
-        "dev/demos/namespaced/087-nonmaster-provider.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/016-groups-same-name-children.yaml",
-        "dev/demos/namespaced/031-group-memberships.yaml",
-        "dev/demos/namespaced/032-groups-roles.yaml",
-        "dev/demos/namespaced/033-group-permissions.yaml",
-        "dev/demos/namespaced/087-nonmaster-provider.yaml"
-      ]
-    },
-    "ProviderConfig (identityprovider)": {
-      "defined_in": [
-        "dev/demos/namespaced/052-identity-provider-mapper.yaml",
-        "dev/demos/namespaced/053-google-identity-provider.yaml",
-        "dev/demos/namespaced/055-identity-provider-token-exchange.yaml",
-        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml",
-        "dev/demos/namespaced/085-new-resources.yaml",
-        "dev/demos/namespaced/086-kc-26.5-resources.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/052-identity-provider-mapper.yaml",
-        "dev/demos/namespaced/053-google-identity-provider.yaml",
-        "dev/demos/namespaced/055-identity-provider-token-exchange.yaml",
-        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml",
-        "dev/demos/namespaced/085-new-resources.yaml",
-        "dev/demos/namespaced/086-kc-26.5-resources.yaml"
-      ]
-    },
-    "ProviderConfig (ldap)": {
-      "defined_in": [
-        "dev/demos/namespaced/090-ldap-user-federation.yaml",
-        "dev/demos/namespaced/091-ldap-user-attribute-mapper.yaml",
-        "dev/demos/namespaced/092-ldap-role-mapper.yaml",
-        "dev/demos/namespaced/093-ldap-group-mapper.yaml",
-        "dev/demos/namespaced/094-ldap-msad-mapper.yaml",
-        "dev/demos/namespaced/095-ldap-hardcoded-attribute-mapper.yaml",
-        "dev/demos/namespaced/096-ldap-full-name-mapper.yaml",
-        "dev/demos/namespaced/097-ldap-custom-mapper.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/090-ldap-user-federation.yaml",
-        "dev/demos/namespaced/091-ldap-user-attribute-mapper.yaml",
-        "dev/demos/namespaced/092-ldap-role-mapper.yaml",
-        "dev/demos/namespaced/093-ldap-group-mapper.yaml",
-        "dev/demos/namespaced/094-ldap-msad-mapper.yaml",
-        "dev/demos/namespaced/095-ldap-hardcoded-attribute-mapper.yaml",
-        "dev/demos/namespaced/096-ldap-full-name-mapper.yaml",
-        "dev/demos/namespaced/097-ldap-custom-mapper.yaml"
-      ]
-    },
-    "ProviderConfig (oidc)": {
-      "defined_in": [
-        "dev/demos/namespaced/050-oidc-identity-provider.yaml",
-        "dev/demos/namespaced/053-google-identity-provider.yaml",
-        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml",
-        "dev/demos/namespaced/056-facebook-identity-provider.yaml",
-        "dev/demos/namespaced/057-github-identity-provider.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/050-oidc-identity-provider.yaml",
-        "dev/demos/namespaced/053-google-identity-provider.yaml",
-        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml",
-        "dev/demos/namespaced/056-facebook-identity-provider.yaml",
-        "dev/demos/namespaced/057-github-identity-provider.yaml"
-      ]
-    },
-    "ProviderConfig (openidclient)": {
-      "defined_in": [
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml",
-        "dev/demos/namespaced/042-oidc-client-permissions.yaml",
-        "dev/demos/namespaced/043-oidc-client-no-redirect-uris.yaml",
-        "dev/demos/namespaced/045-oidc-service-account-roles.yaml",
-        "dev/demos/namespaced/046-oidc-client-policies.yaml",
-        "dev/demos/namespaced/049-oidc-client-authorization.yaml",
-        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml",
-        "dev/demos/namespaced/063-saml-client-policies.yaml",
-        "dev/demos/namespaced/064-oidc-authz-policies.yaml",
-        "dev/demos/namespaced/085-new-resources.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml",
-        "dev/demos/namespaced/042-oidc-client-permissions.yaml",
-        "dev/demos/namespaced/043-oidc-client-no-redirect-uris.yaml",
-        "dev/demos/namespaced/045-oidc-service-account-roles.yaml",
-        "dev/demos/namespaced/046-oidc-client-policies.yaml",
-        "dev/demos/namespaced/049-oidc-client-authorization.yaml",
-        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml",
-        "dev/demos/namespaced/063-saml-client-policies.yaml",
-        "dev/demos/namespaced/064-oidc-authz-policies.yaml",
-        "dev/demos/namespaced/085-new-resources.yaml"
-      ]
-    },
-    "ProviderConfig (openidgroup)": {
-      "defined_in": [
-        "dev/demos/namespaced/044-oidc-group-membership-protocol-mapper.yaml",
-        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/044-oidc-group-membership-protocol-mapper.yaml",
-        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
-      ]
-    },
-    "ProviderConfig (realm)": {
-      "defined_in": [
-        "dev/demos/namespaced/001-realm-durations.yaml",
-        "dev/demos/namespaced/002-realm-clientscopes.yaml",
-        "dev/demos/namespaced/003-realm-required-action.yaml",
-        "dev/demos/namespaced/004-realm-keystore-rsa.yaml",
-        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml",
-        "dev/demos/namespaced/005-realm-localization.yaml",
-        "dev/demos/namespaced/005-realm-user-profile.yaml",
-        "dev/demos/namespaced/006-realm-events.yaml",
-        "dev/demos/namespaced/007-existing-realm.yaml",
-        "dev/demos/namespaced/008-realm-client-policy-profile.yaml",
-        "dev/demos/namespaced/009-realm-client-policy-profile-policy.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/001-realm-durations.yaml",
-        "dev/demos/namespaced/002-realm-clientscopes.yaml",
-        "dev/demos/namespaced/003-realm-required-action.yaml",
-        "dev/demos/namespaced/004-realm-keystore-rsa.yaml",
-        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml",
-        "dev/demos/namespaced/005-realm-localization.yaml",
-        "dev/demos/namespaced/005-realm-user-profile.yaml",
-        "dev/demos/namespaced/006-realm-events.yaml",
-        "dev/demos/namespaced/007-existing-realm.yaml",
-        "dev/demos/namespaced/008-realm-client-policy-profile.yaml",
-        "dev/demos/namespaced/009-realm-client-policy-profile-policy.yaml"
-      ]
-    },
-    "ProviderConfig (role)": {
-      "defined_in": [
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/045-oidc-service-account-roles.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/045-oidc-service-account-roles.yaml"
-      ]
-    },
-    "ProviderConfig (saml)": {
-      "defined_in": [
-        "dev/demos/namespaced/051-saml-identity-provider.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/051-saml-identity-provider.yaml"
-      ]
-    },
-    "ProviderConfig (samlclient)": {
-      "defined_in": [
-        "dev/demos/namespaced/060-saml-client.yaml",
-        "dev/demos/namespaced/061-saml-client-scopes.yaml",
-        "dev/demos/namespaced/062-saml-client-default-scopes.yaml",
-        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/060-saml-client.yaml",
-        "dev/demos/namespaced/061-saml-client-scopes.yaml",
-        "dev/demos/namespaced/062-saml-client-default-scopes.yaml",
-        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
-      ]
-    },
-    "ProviderConfig (user)": {
-      "defined_in": [
-        "dev/demos/namespaced/020-user.yaml",
-        "dev/demos/namespaced/021-user-roles.yaml",
-        "dev/demos/namespaced/022-users-groups.yaml",
-        "dev/demos/namespaced/023-user-permissions.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/020-user.yaml",
-        "dev/demos/namespaced/021-user-roles.yaml",
-        "dev/demos/namespaced/022-users-groups.yaml",
-        "dev/demos/namespaced/023-user-permissions.yaml"
-      ]
-    },
-    "ProviderConfig (workflow)": {
-      "defined_in": [
-        "dev/demos/namespaced/086-kc-26.5-resources.yaml"
-      ],
-      "used_by": [
-        "dev/demos/namespaced/086-kc-26.5-resources.yaml"
+        "dev/demos/namespaced/061-saml-client-scopes.yaml"
       ]
     },
     "ProviderTokenExchangeScopePermission (identityprovider)": {
       "defined_in": [
-        "dev/demos/basic/055-identity-provider-token-exchange.yaml"
+        "dev/demos/basic/055-identity-provider-token-exchange.yaml",
+        "dev/demos/namespaced/055-identity-provider-token-exchange.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/055-identity-provider-token-exchange.yaml"
+        "dev/demos/basic/055-identity-provider-token-exchange.yaml",
+        "dev/demos/namespaced/055-identity-provider-token-exchange.yaml"
       ]
     },
     "Realm (realm)": {
       "defined_in": [
         "dev/demos/basic/001-realm-durations.yaml",
-        "dev/demos/basic/007-existing-realm.yaml"
+        "dev/demos/basic/007-existing-realm.yaml",
+        "dev/demos/namespaced/001-realm-durations.yaml",
+        "dev/demos/namespaced/007-existing-realm.yaml"
       ],
       "used_by": [
         "dev/demos/basic/001-realm-durations.yaml",
-        "dev/demos/basic/007-existing-realm.yaml"
+        "dev/demos/basic/007-existing-realm.yaml",
+        "dev/demos/namespaced/001-realm-durations.yaml",
+        "dev/demos/namespaced/007-existing-realm.yaml"
       ]
     },
     "RealmEvents (realm)": {
       "defined_in": [
-        "dev/demos/basic/006-realm-events.yaml"
+        "dev/demos/basic/006-realm-events.yaml",
+        "dev/demos/namespaced/006-realm-events.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/006-realm-events.yaml"
+        "dev/demos/basic/006-realm-events.yaml",
+        "dev/demos/namespaced/006-realm-events.yaml"
       ]
     },
     "RealmLocalization (realm)": {
       "defined_in": [
-        "dev/demos/basic/005-realm-localization.yaml"
+        "dev/demos/basic/005-realm-localization.yaml",
+        "dev/demos/namespaced/005-realm-localization.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/005-realm-localization.yaml"
+        "dev/demos/basic/005-realm-localization.yaml",
+        "dev/demos/namespaced/005-realm-localization.yaml"
       ]
     },
     "RequiredAction (realm)": {
       "defined_in": [
-        "dev/demos/basic/003-realm-required-action.yaml"
+        "dev/demos/basic/003-realm-required-action.yaml",
+        "dev/demos/namespaced/003-realm-required-action.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/003-realm-required-action.yaml"
+        "dev/demos/basic/003-realm-required-action.yaml",
+        "dev/demos/namespaced/003-realm-required-action.yaml"
       ]
     },
     "Role (role)": {
       "defined_in": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/045-oidc-service-account-roles.yaml"
+        "dev/demos/basic/045-oidc-service-account-roles.yaml",
+        "dev/demos/namespaced/010-roles.yaml",
+        "dev/demos/namespaced/040-oidc-clients.yaml",
+        "dev/demos/namespaced/045-oidc-service-account-roles.yaml"
       ],
       "used_by": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/045-oidc-service-account-roles.yaml"
+        "dev/demos/basic/045-oidc-service-account-roles.yaml",
+        "dev/demos/namespaced/010-roles.yaml",
+        "dev/demos/namespaced/040-oidc-clients.yaml",
+        "dev/demos/namespaced/045-oidc-service-account-roles.yaml"
       ]
     },
     "RoleIdentityProviderMapper (identityprovider)": {
       "defined_in": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ]
     },
     "RoleMapper (client)": {
       "defined_in": [
-        "dev/demos/basic/047-oidc-client-role-mapper.yaml"
+        "dev/demos/basic/047-oidc-client-role-mapper.yaml",
+        "dev/demos/namespaced/047-oidc-client-role-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/047-oidc-client-role-mapper.yaml"
+        "dev/demos/basic/047-oidc-client-role-mapper.yaml",
+        "dev/demos/namespaced/047-oidc-client-role-mapper.yaml"
       ]
     },
     "RoleMapper (ldap)": {
       "defined_in": [
-        "dev/demos/basic/092-ldap-role-mapper.yaml"
+        "dev/demos/basic/092-ldap-role-mapper.yaml",
+        "dev/demos/namespaced/092-ldap-role-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/092-ldap-role-mapper.yaml"
+        "dev/demos/basic/092-ldap-role-mapper.yaml",
+        "dev/demos/namespaced/092-ldap-role-mapper.yaml"
       ]
     },
     "Roles (defaults)": {
       "defined_in": [
-        "dev/demos/basic/081-defaults-roles.yaml"
+        "dev/demos/basic/081-defaults-roles.yaml",
+        "dev/demos/namespaced/081-defaults-roles.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/081-defaults-roles.yaml"
+        "dev/demos/basic/081-defaults-roles.yaml",
+        "dev/demos/namespaced/081-defaults-roles.yaml"
       ]
     },
     "Roles (group)": {
       "defined_in": [
-        "dev/demos/basic/032-groups-roles.yaml"
+        "dev/demos/basic/032-groups-roles.yaml",
+        "dev/demos/namespaced/032-groups-roles.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/032-groups-roles.yaml"
+        "dev/demos/basic/032-groups-roles.yaml",
+        "dev/demos/namespaced/032-groups-roles.yaml"
       ]
     },
     "Roles (user)": {
       "defined_in": [
-        "dev/demos/basic/021-user-roles.yaml"
+        "dev/demos/basic/021-user-roles.yaml",
+        "dev/demos/namespaced/021-user-roles.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/021-user-roles.yaml"
+        "dev/demos/basic/021-user-roles.yaml",
+        "dev/demos/namespaced/021-user-roles.yaml"
       ]
     },
     "SamlUserAttributeProtocolMapper (samlclient)": {
       "defined_in": [
-        "dev/demos/basic/065-saml-generic-mappers.yaml"
+        "dev/demos/basic/065-saml-generic-mappers.yaml",
+        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/065-saml-generic-mappers.yaml"
+        "dev/demos/basic/065-saml-generic-mappers.yaml",
+        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
       ]
     },
     "SamlUserPropertyProtocolMapper (samlclient)": {
       "defined_in": [
-        "dev/demos/basic/065-saml-generic-mappers.yaml"
+        "dev/demos/basic/065-saml-generic-mappers.yaml",
+        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/065-saml-generic-mappers.yaml"
+        "dev/demos/basic/065-saml-generic-mappers.yaml",
+        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
       ]
     },
     "SpiffeIdentityProvider (identityprovider)": {
       "defined_in": [
-        "dev/demos/basic/086-kc-26.5-resources.yaml"
+        "dev/demos/basic/086-kc-26.5-resources.yaml",
+        "dev/demos/namespaced/086-kc-26.5-resources.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/086-kc-26.5-resources.yaml"
+        "dev/demos/basic/086-kc-26.5-resources.yaml",
+        "dev/demos/namespaced/086-kc-26.5-resources.yaml"
       ]
     },
     "SubProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "Subflow (authenticationflow)": {
       "defined_in": [
-        "dev/demos/basic/071-authentication-subflow.yaml"
+        "dev/demos/basic/071-authentication-subflow.yaml",
+        "dev/demos/namespaced/071-authentication-subflow.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/071-authentication-subflow.yaml"
+        "dev/demos/basic/071-authentication-subflow.yaml",
+        "dev/demos/namespaced/071-authentication-subflow.yaml"
       ]
     },
     "TemplateImporterIdentityProviderMapper (identityprovider)": {
       "defined_in": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ]
     },
     "ToRoleIdentityProviderMapper (identityprovider)": {
       "defined_in": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
       ]
     },
     "User (user)": {
       "defined_in": [
-        "dev/demos/basic/020-user.yaml"
+        "dev/demos/basic/020-user.yaml",
+        "dev/demos/namespaced/020-user.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/020-user.yaml"
+        "dev/demos/basic/020-user.yaml",
+        "dev/demos/namespaced/020-user.yaml"
       ]
     },
     "UserAttributeMapper (ldap)": {
       "defined_in": [
-        "dev/demos/basic/091-ldap-user-attribute-mapper.yaml"
+        "dev/demos/basic/091-ldap-user-attribute-mapper.yaml",
+        "dev/demos/namespaced/091-ldap-user-attribute-mapper.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/091-ldap-user-attribute-mapper.yaml"
+        "dev/demos/basic/091-ldap-user-attribute-mapper.yaml",
+        "dev/demos/namespaced/091-ldap-user-attribute-mapper.yaml"
       ]
     },
     "UserAttributeProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "UserClientRoleProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "UserFederation (ldap)": {
       "defined_in": [
-        "dev/demos/basic/090-ldap-user-federation.yaml"
+        "dev/demos/basic/090-ldap-user-federation.yaml",
+        "dev/demos/namespaced/090-ldap-user-federation.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/090-ldap-user-federation.yaml"
+        "dev/demos/basic/090-ldap-user-federation.yaml",
+        "dev/demos/namespaced/090-ldap-user-federation.yaml"
       ]
     },
     "UserProfile (realm)": {
       "defined_in": [
-        "dev/demos/basic/005-realm-user-profile.yaml"
+        "dev/demos/basic/005-realm-user-profile.yaml",
+        "dev/demos/namespaced/005-realm-user-profile.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/005-realm-user-profile.yaml"
+        "dev/demos/basic/005-realm-user-profile.yaml",
+        "dev/demos/namespaced/005-realm-user-profile.yaml"
       ]
     },
     "UserPropertyProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "UserRealmRoleProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "UserSessionNoteProtocolMapper (openidgroup)": {
       "defined_in": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml"
+        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
+        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml"
       ]
     },
     "Workflow (workflow)": {
       "defined_in": [
-        "dev/demos/basic/086-kc-26.5-resources.yaml"
+        "dev/demos/basic/086-kc-26.5-resources.yaml",
+        "dev/demos/namespaced/086-kc-26.5-resources.yaml"
       ],
       "used_by": [
-        "dev/demos/basic/086-kc-26.5-resources.yaml"
+        "dev/demos/basic/086-kc-26.5-resources.yaml",
+        "dev/demos/namespaced/086-kc-26.5-resources.yaml"
       ]
     }
   },
@@ -1127,10 +1105,7 @@
       ],
       "deps": [
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": [
         "dev/demos/basic/031-group-memberships.yaml",
@@ -1151,27 +1126,7 @@
         "dev/demos/basic/065-saml-generic-mappers.yaml",
         "dev/demos/basic/085-new-resources.yaml",
         "dev/demos/basic/092-ldap-role-mapper.yaml",
-        "dev/demos/basic/093-ldap-group-mapper.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/031-group-memberships.yaml",
-        "dev/demos/namespaced/032-groups-roles.yaml",
-        "dev/demos/namespaced/033-group-permissions.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml",
-        "dev/demos/namespaced/042-oidc-client-permissions.yaml",
-        "dev/demos/namespaced/044-oidc-group-membership-protocol-mapper.yaml",
-        "dev/demos/namespaced/045-oidc-service-account-roles.yaml",
-        "dev/demos/namespaced/046-oidc-client-policies.yaml",
-        "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
-        "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
-        "dev/demos/namespaced/049-oidc-client-authorization.yaml",
-        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml",
-        "dev/demos/namespaced/063-saml-client-policies.yaml",
-        "dev/demos/namespaced/064-oidc-authz-policies.yaml",
-        "dev/demos/namespaced/065-saml-generic-mappers.yaml",
-        "dev/demos/namespaced/085-new-resources.yaml",
-        "dev/demos/namespaced/092-ldap-role-mapper.yaml",
-        "dev/demos/namespaced/093-ldap-group-mapper.yaml"
+        "dev/demos/basic/093-ldap-group-mapper.yaml"
       ]
     },
     "dev/demos/basic/015-groups.yaml": {
@@ -1198,26 +1153,7 @@
         "dev/demos/basic/064-oidc-authz-policies.yaml",
         "dev/demos/basic/085-new-resources.yaml",
         "dev/demos/basic/092-ldap-role-mapper.yaml",
-        "dev/demos/basic/093-ldap-group-mapper.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/031-group-memberships.yaml",
-        "dev/demos/namespaced/032-groups-roles.yaml",
-        "dev/demos/namespaced/033-group-permissions.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml",
-        "dev/demos/namespaced/042-oidc-client-permissions.yaml",
-        "dev/demos/namespaced/044-oidc-group-membership-protocol-mapper.yaml",
-        "dev/demos/namespaced/045-oidc-service-account-roles.yaml",
-        "dev/demos/namespaced/046-oidc-client-policies.yaml",
-        "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
-        "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
-        "dev/demos/namespaced/049-oidc-client-authorization.yaml",
-        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml",
-        "dev/demos/namespaced/063-saml-client-policies.yaml",
-        "dev/demos/namespaced/064-oidc-authz-policies.yaml",
-        "dev/demos/namespaced/085-new-resources.yaml",
-        "dev/demos/namespaced/092-ldap-role-mapper.yaml",
-        "dev/demos/namespaced/093-ldap-group-mapper.yaml"
+        "dev/demos/basic/093-ldap-group-mapper.yaml"
       ]
     },
     "dev/demos/basic/016-groups-same-name-children.yaml": {
@@ -1234,9 +1170,7 @@
       "deps": [],
       "rdeps": [
         "dev/demos/basic/021-user-roles.yaml",
-        "dev/demos/basic/022-users-groups.yaml",
-        "dev/demos/namespaced/021-user-roles.yaml",
-        "dev/demos/namespaced/022-users-groups.yaml"
+        "dev/demos/basic/022-users-groups.yaml"
       ]
     },
     "dev/demos/basic/021-user-roles.yaml": {
@@ -1244,8 +1178,7 @@
         "user"
       ],
       "deps": [
-        "dev/demos/basic/020-user.yaml",
-        "dev/demos/namespaced/020-user.yaml"
+        "dev/demos/basic/020-user.yaml"
       ],
       "rdeps": []
     },
@@ -1254,8 +1187,7 @@
         "user"
       ],
       "deps": [
-        "dev/demos/basic/020-user.yaml",
-        "dev/demos/namespaced/020-user.yaml"
+        "dev/demos/basic/020-user.yaml"
       ],
       "rdeps": []
     },
@@ -1273,10 +1205,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1287,10 +1216,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1301,10 +1227,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1315,10 +1238,7 @@
       ],
       "deps": [
         "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/015-groups.yaml"
       ],
       "rdeps": [
         "dev/demos/basic/010-roles.yaml",
@@ -1338,26 +1258,7 @@
         "dev/demos/basic/064-oidc-authz-policies.yaml",
         "dev/demos/basic/085-new-resources.yaml",
         "dev/demos/basic/092-ldap-role-mapper.yaml",
-        "dev/demos/basic/093-ldap-group-mapper.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/031-group-memberships.yaml",
-        "dev/demos/namespaced/032-groups-roles.yaml",
-        "dev/demos/namespaced/033-group-permissions.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml",
-        "dev/demos/namespaced/042-oidc-client-permissions.yaml",
-        "dev/demos/namespaced/044-oidc-group-membership-protocol-mapper.yaml",
-        "dev/demos/namespaced/045-oidc-service-account-roles.yaml",
-        "dev/demos/namespaced/046-oidc-client-policies.yaml",
-        "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
-        "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
-        "dev/demos/namespaced/049-oidc-client-authorization.yaml",
-        "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml",
-        "dev/demos/namespaced/063-saml-client-policies.yaml",
-        "dev/demos/namespaced/064-oidc-authz-policies.yaml",
-        "dev/demos/namespaced/085-new-resources.yaml",
-        "dev/demos/namespaced/092-ldap-role-mapper.yaml",
-        "dev/demos/namespaced/093-ldap-group-mapper.yaml"
+        "dev/demos/basic/093-ldap-group-mapper.yaml"
       ]
     },
     "dev/demos/basic/041-oidc-client-clientscopes.yaml": {
@@ -1367,18 +1268,12 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": [
         "dev/demos/basic/044-oidc-group-membership-protocol-mapper.yaml",
         "dev/demos/basic/047-oidc-client-role-mapper.yaml",
-        "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
-        "dev/demos/namespaced/044-oidc-group-membership-protocol-mapper.yaml",
-        "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
-        "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml"
+        "dev/demos/basic/048-oidc-client-protocol-mapper.yaml"
       ]
     },
     "dev/demos/basic/042-oidc-client-permissions.yaml": {
@@ -1388,10 +1283,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1410,11 +1302,7 @@
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
         "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
+        "dev/demos/basic/041-oidc-client-clientscopes.yaml"
       ],
       "rdeps": []
     },
@@ -1426,10 +1314,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1440,10 +1325,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1455,11 +1337,7 @@
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
         "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
+        "dev/demos/basic/041-oidc-client-clientscopes.yaml"
       ],
       "rdeps": []
     },
@@ -1471,11 +1349,7 @@
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
         "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
+        "dev/demos/basic/041-oidc-client-clientscopes.yaml"
       ],
       "rdeps": []
     },
@@ -1486,10 +1360,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1529,8 +1400,7 @@
       ],
       "deps": [],
       "rdeps": [
-        "dev/demos/basic/055-identity-provider-token-exchange.yaml",
-        "dev/demos/namespaced/055-identity-provider-token-exchange.yaml"
+        "dev/demos/basic/055-identity-provider-token-exchange.yaml"
       ]
     },
     "dev/demos/basic/055-identity-provider-token-exchange.yaml": {
@@ -1538,8 +1408,7 @@
         "identityprovider"
       ],
       "deps": [
-        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
-        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml"
+        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml"
       ],
       "rdeps": []
     },
@@ -1571,10 +1440,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1583,15 +1449,10 @@
         "client",
         "samlclient"
       ],
-      "deps": [
-        "dev/demos/namespaced/060-saml-client.yaml"
-      ],
+      "deps": [],
       "rdeps": [
         "dev/demos/basic/062-saml-client-default-scopes.yaml",
-        "dev/demos/basic/065-saml-generic-mappers.yaml",
-        "dev/demos/namespaced/060-saml-client.yaml",
-        "dev/demos/namespaced/062-saml-client-default-scopes.yaml",
-        "dev/demos/namespaced/065-saml-generic-mappers.yaml"
+        "dev/demos/basic/065-saml-generic-mappers.yaml"
       ]
     },
     "dev/demos/basic/061-saml-client-scopes.yaml": {
@@ -1599,20 +1460,15 @@
         "client",
         "samlclient"
       ],
-      "deps": [
-        "dev/demos/namespaced/061-saml-client-scopes.yaml"
-      ],
-      "rdeps": [
-        "dev/demos/namespaced/061-saml-client-scopes.yaml"
-      ]
+      "deps": [],
+      "rdeps": []
     },
     "dev/demos/basic/062-saml-client-default-scopes.yaml": {
       "groups": [
         "samlclient"
       ],
       "deps": [
-        "dev/demos/basic/060-saml-client.yaml",
-        "dev/demos/namespaced/060-saml-client.yaml"
+        "dev/demos/basic/060-saml-client.yaml"
       ],
       "rdeps": []
     },
@@ -1623,10 +1479,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1637,10 +1490,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1651,9 +1501,7 @@
       ],
       "deps": [
         "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/060-saml-client.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/060-saml-client.yaml"
+        "dev/demos/basic/060-saml-client.yaml"
       ],
       "rdeps": []
     },
@@ -1665,10 +1513,7 @@
       "rdeps": [
         "dev/demos/basic/071-authentication-subflow.yaml",
         "dev/demos/basic/072-authentication-execution.yaml",
-        "dev/demos/basic/074-authentication-execution-binding.yaml",
-        "dev/demos/namespaced/071-authentication-subflow.yaml",
-        "dev/demos/namespaced/072-authentication-execution.yaml",
-        "dev/demos/namespaced/074-authentication-execution-binding.yaml"
+        "dev/demos/basic/074-authentication-execution-binding.yaml"
       ]
     },
     "dev/demos/basic/071-authentication-subflow.yaml": {
@@ -1676,12 +1521,10 @@
         "authenticationflow"
       ],
       "deps": [
-        "dev/demos/basic/070-authentication-flows.yaml",
-        "dev/demos/namespaced/070-authentication-flows.yaml"
+        "dev/demos/basic/070-authentication-flows.yaml"
       ],
       "rdeps": [
-        "dev/demos/basic/072-authentication-execution-subflow-ref.yaml",
-        "dev/demos/namespaced/072-authentication-execution-subflow-ref.yaml"
+        "dev/demos/basic/072-authentication-execution-subflow-ref.yaml"
       ]
     },
     "dev/demos/basic/072-authentication-execution-subflow-ref.yaml": {
@@ -1689,8 +1532,7 @@
         "authenticationflow"
       ],
       "deps": [
-        "dev/demos/basic/071-authentication-subflow.yaml",
-        "dev/demos/namespaced/071-authentication-subflow.yaml"
+        "dev/demos/basic/071-authentication-subflow.yaml"
       ],
       "rdeps": []
     },
@@ -1699,12 +1541,10 @@
         "authenticationflow"
       ],
       "deps": [
-        "dev/demos/basic/070-authentication-flows.yaml",
-        "dev/demos/namespaced/070-authentication-flows.yaml"
+        "dev/demos/basic/070-authentication-flows.yaml"
       ],
       "rdeps": [
-        "dev/demos/basic/073-authentication-execution-config.yaml",
-        "dev/demos/namespaced/073-authentication-execution-config.yaml"
+        "dev/demos/basic/073-authentication-execution-config.yaml"
       ]
     },
     "dev/demos/basic/073-authentication-execution-config.yaml": {
@@ -1712,8 +1552,7 @@
         "authenticationflow"
       ],
       "deps": [
-        "dev/demos/basic/072-authentication-execution.yaml",
-        "dev/demos/namespaced/072-authentication-execution.yaml"
+        "dev/demos/basic/072-authentication-execution.yaml"
       ],
       "rdeps": []
     },
@@ -1722,8 +1561,7 @@
         "authenticationflow"
       ],
       "deps": [
-        "dev/demos/basic/070-authentication-flows.yaml",
-        "dev/demos/namespaced/070-authentication-flows.yaml"
+        "dev/demos/basic/070-authentication-flows.yaml"
       ],
       "rdeps": []
     },
@@ -1749,10 +1587,7 @@
       "deps": [
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml"
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1783,14 +1618,7 @@
         "dev/demos/basic/094-ldap-msad-mapper.yaml",
         "dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml",
         "dev/demos/basic/096-ldap-full-name-mapper.yaml",
-        "dev/demos/basic/097-ldap-custom-mapper.yaml",
-        "dev/demos/namespaced/091-ldap-user-attribute-mapper.yaml",
-        "dev/demos/namespaced/092-ldap-role-mapper.yaml",
-        "dev/demos/namespaced/093-ldap-group-mapper.yaml",
-        "dev/demos/namespaced/094-ldap-msad-mapper.yaml",
-        "dev/demos/namespaced/095-ldap-hardcoded-attribute-mapper.yaml",
-        "dev/demos/namespaced/096-ldap-full-name-mapper.yaml",
-        "dev/demos/namespaced/097-ldap-custom-mapper.yaml"
+        "dev/demos/basic/097-ldap-custom-mapper.yaml"
       ]
     },
     "dev/demos/basic/091-ldap-user-attribute-mapper.yaml": {
@@ -1798,8 +1626,7 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/090-ldap-user-federation.yaml",
-        "dev/demos/namespaced/090-ldap-user-federation.yaml"
+        "dev/demos/basic/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
     },
@@ -1811,11 +1638,7 @@
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
         "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/090-ldap-user-federation.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/090-ldap-user-federation.yaml"
+        "dev/demos/basic/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
     },
@@ -1827,11 +1650,7 @@
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
         "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/090-ldap-user-federation.yaml",
-        "dev/demos/namespaced/010-roles.yaml",
-        "dev/demos/namespaced/015-groups.yaml",
-        "dev/demos/namespaced/040-oidc-clients.yaml",
-        "dev/demos/namespaced/090-ldap-user-federation.yaml"
+        "dev/demos/basic/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
     },
@@ -1840,8 +1659,7 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/090-ldap-user-federation.yaml",
-        "dev/demos/namespaced/090-ldap-user-federation.yaml"
+        "dev/demos/basic/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
     },
@@ -1850,8 +1668,7 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/090-ldap-user-federation.yaml",
-        "dev/demos/namespaced/090-ldap-user-federation.yaml"
+        "dev/demos/basic/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
     },
@@ -1860,8 +1677,7 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/090-ldap-user-federation.yaml",
-        "dev/demos/namespaced/090-ldap-user-federation.yaml"
+        "dev/demos/basic/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
     },
@@ -1870,8 +1686,7 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/090-ldap-user-federation.yaml",
-        "dev/demos/namespaced/090-ldap-user-federation.yaml"
+        "dev/demos/basic/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
     },
@@ -1964,33 +1779,10 @@
         "role"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
       ],
       "rdeps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/031-group-memberships.yaml",
-        "dev/demos/basic/032-groups-roles.yaml",
-        "dev/demos/basic/033-group-permissions.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
-        "dev/demos/basic/042-oidc-client-permissions.yaml",
-        "dev/demos/basic/044-oidc-group-membership-protocol-mapper.yaml",
-        "dev/demos/basic/045-oidc-service-account-roles.yaml",
-        "dev/demos/basic/046-oidc-client-policies.yaml",
-        "dev/demos/basic/047-oidc-client-role-mapper.yaml",
-        "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
-        "dev/demos/basic/049-oidc-client-authorization.yaml",
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
-        "dev/demos/basic/063-saml-client-policies.yaml",
-        "dev/demos/basic/064-oidc-authz-policies.yaml",
-        "dev/demos/basic/065-saml-generic-mappers.yaml",
-        "dev/demos/basic/085-new-resources.yaml",
-        "dev/demos/basic/092-ldap-role-mapper.yaml",
-        "dev/demos/basic/093-ldap-group-mapper.yaml",
         "dev/demos/namespaced/031-group-memberships.yaml",
         "dev/demos/namespaced/032-groups-roles.yaml",
         "dev/demos/namespaced/033-group-permissions.yaml",
@@ -2018,25 +1810,6 @@
       ],
       "deps": [],
       "rdeps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/031-group-memberships.yaml",
-        "dev/demos/basic/032-groups-roles.yaml",
-        "dev/demos/basic/033-group-permissions.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
-        "dev/demos/basic/042-oidc-client-permissions.yaml",
-        "dev/demos/basic/044-oidc-group-membership-protocol-mapper.yaml",
-        "dev/demos/basic/045-oidc-service-account-roles.yaml",
-        "dev/demos/basic/046-oidc-client-policies.yaml",
-        "dev/demos/basic/047-oidc-client-role-mapper.yaml",
-        "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
-        "dev/demos/basic/049-oidc-client-authorization.yaml",
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
-        "dev/demos/basic/063-saml-client-policies.yaml",
-        "dev/demos/basic/064-oidc-authz-policies.yaml",
-        "dev/demos/basic/085-new-resources.yaml",
-        "dev/demos/basic/092-ldap-role-mapper.yaml",
-        "dev/demos/basic/093-ldap-group-mapper.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/031-group-memberships.yaml",
         "dev/demos/namespaced/032-groups-roles.yaml",
@@ -2071,8 +1844,6 @@
       ],
       "deps": [],
       "rdeps": [
-        "dev/demos/basic/021-user-roles.yaml",
-        "dev/demos/basic/022-users-groups.yaml",
         "dev/demos/namespaced/021-user-roles.yaml",
         "dev/demos/namespaced/022-users-groups.yaml"
       ]
@@ -2082,7 +1853,6 @@
         "user"
       ],
       "deps": [
-        "dev/demos/basic/020-user.yaml",
         "dev/demos/namespaced/020-user.yaml"
       ],
       "rdeps": []
@@ -2092,7 +1862,6 @@
         "user"
       ],
       "deps": [
-        "dev/demos/basic/020-user.yaml",
         "dev/demos/namespaced/020-user.yaml"
       ],
       "rdeps": []
@@ -2109,9 +1878,6 @@
         "group"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2123,9 +1889,6 @@
         "group"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2137,9 +1900,6 @@
         "group"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2152,32 +1912,10 @@
         "role"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml"
       ],
       "rdeps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/031-group-memberships.yaml",
-        "dev/demos/basic/032-groups-roles.yaml",
-        "dev/demos/basic/033-group-permissions.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
-        "dev/demos/basic/042-oidc-client-permissions.yaml",
-        "dev/demos/basic/044-oidc-group-membership-protocol-mapper.yaml",
-        "dev/demos/basic/045-oidc-service-account-roles.yaml",
-        "dev/demos/basic/046-oidc-client-policies.yaml",
-        "dev/demos/basic/047-oidc-client-role-mapper.yaml",
-        "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
-        "dev/demos/basic/049-oidc-client-authorization.yaml",
-        "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
-        "dev/demos/basic/063-saml-client-policies.yaml",
-        "dev/demos/basic/064-oidc-authz-policies.yaml",
-        "dev/demos/basic/085-new-resources.yaml",
-        "dev/demos/basic/092-ldap-role-mapper.yaml",
-        "dev/demos/basic/093-ldap-group-mapper.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/031-group-memberships.yaml",
         "dev/demos/namespaced/032-groups-roles.yaml",
@@ -2203,17 +1941,11 @@
         "openidclient"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
       ],
       "rdeps": [
-        "dev/demos/basic/044-oidc-group-membership-protocol-mapper.yaml",
-        "dev/demos/basic/047-oidc-client-role-mapper.yaml",
-        "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
         "dev/demos/namespaced/044-oidc-group-membership-protocol-mapper.yaml",
         "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
         "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml"
@@ -2224,9 +1956,6 @@
         "openidclient"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2245,10 +1974,6 @@
         "openidgroup"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
@@ -2262,9 +1987,6 @@
         "role"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2276,9 +1998,6 @@
         "openidclient"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2290,10 +2009,6 @@
         "client"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
@@ -2306,10 +2021,6 @@
         "client"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/041-oidc-client-clientscopes.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
@@ -2322,9 +2033,6 @@
         "openidclient"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2367,7 +2075,6 @@
       ],
       "deps": [],
       "rdeps": [
-        "dev/demos/basic/055-identity-provider-token-exchange.yaml",
         "dev/demos/namespaced/055-identity-provider-token-exchange.yaml"
       ]
     },
@@ -2376,7 +2083,6 @@
         "identityprovider"
       ],
       "deps": [
-        "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
         "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml"
       ],
       "rdeps": []
@@ -2407,9 +2113,6 @@
         "openidgroup"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2421,13 +2124,8 @@
         "client",
         "samlclient"
       ],
-      "deps": [
-        "dev/demos/basic/060-saml-client.yaml"
-      ],
+      "deps": [],
       "rdeps": [
-        "dev/demos/basic/060-saml-client.yaml",
-        "dev/demos/basic/062-saml-client-default-scopes.yaml",
-        "dev/demos/basic/065-saml-generic-mappers.yaml",
         "dev/demos/namespaced/062-saml-client-default-scopes.yaml",
         "dev/demos/namespaced/065-saml-generic-mappers.yaml"
       ]
@@ -2437,19 +2135,14 @@
         "client",
         "samlclient"
       ],
-      "deps": [
-        "dev/demos/basic/061-saml-client-scopes.yaml"
-      ],
-      "rdeps": [
-        "dev/demos/basic/061-saml-client-scopes.yaml"
-      ]
+      "deps": [],
+      "rdeps": []
     },
     "dev/demos/namespaced/062-saml-client-default-scopes.yaml": {
       "groups": [
         "samlclient"
       ],
       "deps": [
-        "dev/demos/basic/060-saml-client.yaml",
         "dev/demos/namespaced/060-saml-client.yaml"
       ],
       "rdeps": []
@@ -2459,9 +2152,6 @@
         "openidclient"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2473,9 +2163,6 @@
         "openidclient"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2488,8 +2175,6 @@
         "samlclient"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/060-saml-client.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/060-saml-client.yaml"
       ],
@@ -2501,9 +2186,6 @@
       ],
       "deps": [],
       "rdeps": [
-        "dev/demos/basic/071-authentication-subflow.yaml",
-        "dev/demos/basic/072-authentication-execution.yaml",
-        "dev/demos/basic/074-authentication-execution-binding.yaml",
         "dev/demos/namespaced/071-authentication-subflow.yaml",
         "dev/demos/namespaced/072-authentication-execution.yaml",
         "dev/demos/namespaced/074-authentication-execution-binding.yaml"
@@ -2514,11 +2196,9 @@
         "authenticationflow"
       ],
       "deps": [
-        "dev/demos/basic/070-authentication-flows.yaml",
         "dev/demos/namespaced/070-authentication-flows.yaml"
       ],
       "rdeps": [
-        "dev/demos/basic/072-authentication-execution-subflow-ref.yaml",
         "dev/demos/namespaced/072-authentication-execution-subflow-ref.yaml"
       ]
     },
@@ -2527,7 +2207,6 @@
         "authenticationflow"
       ],
       "deps": [
-        "dev/demos/basic/071-authentication-subflow.yaml",
         "dev/demos/namespaced/071-authentication-subflow.yaml"
       ],
       "rdeps": []
@@ -2537,11 +2216,9 @@
         "authenticationflow"
       ],
       "deps": [
-        "dev/demos/basic/070-authentication-flows.yaml",
         "dev/demos/namespaced/070-authentication-flows.yaml"
       ],
       "rdeps": [
-        "dev/demos/basic/073-authentication-execution-config.yaml",
         "dev/demos/namespaced/073-authentication-execution-config.yaml"
       ]
     },
@@ -2550,7 +2227,6 @@
         "authenticationflow"
       ],
       "deps": [
-        "dev/demos/basic/072-authentication-execution.yaml",
         "dev/demos/namespaced/072-authentication-execution.yaml"
       ],
       "rdeps": []
@@ -2560,7 +2236,6 @@
         "authenticationflow"
       ],
       "deps": [
-        "dev/demos/basic/070-authentication-flows.yaml",
         "dev/demos/namespaced/070-authentication-flows.yaml"
       ],
       "rdeps": []
@@ -2585,9 +2260,6 @@
         "openidclient"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
@@ -2615,13 +2287,6 @@
       ],
       "deps": [],
       "rdeps": [
-        "dev/demos/basic/091-ldap-user-attribute-mapper.yaml",
-        "dev/demos/basic/092-ldap-role-mapper.yaml",
-        "dev/demos/basic/093-ldap-group-mapper.yaml",
-        "dev/demos/basic/094-ldap-msad-mapper.yaml",
-        "dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml",
-        "dev/demos/basic/096-ldap-full-name-mapper.yaml",
-        "dev/demos/basic/097-ldap-custom-mapper.yaml",
         "dev/demos/namespaced/091-ldap-user-attribute-mapper.yaml",
         "dev/demos/namespaced/092-ldap-role-mapper.yaml",
         "dev/demos/namespaced/093-ldap-group-mapper.yaml",
@@ -2636,7 +2301,6 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/090-ldap-user-federation.yaml",
         "dev/demos/namespaced/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
@@ -2646,10 +2310,6 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/090-ldap-user-federation.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
@@ -2662,10 +2322,6 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/010-roles.yaml",
-        "dev/demos/basic/015-groups.yaml",
-        "dev/demos/basic/040-oidc-clients.yaml",
-        "dev/demos/basic/090-ldap-user-federation.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
@@ -2678,7 +2334,6 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/090-ldap-user-federation.yaml",
         "dev/demos/namespaced/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
@@ -2688,7 +2343,6 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/090-ldap-user-federation.yaml",
         "dev/demos/namespaced/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
@@ -2698,7 +2352,6 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/090-ldap-user-federation.yaml",
         "dev/demos/namespaced/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
@@ -2708,7 +2361,6 @@
         "ldap"
       ],
       "deps": [
-        "dev/demos/basic/090-ldap-user-federation.yaml",
         "dev/demos/namespaced/090-ldap-user-federation.yaml"
       ],
       "rdeps": []
