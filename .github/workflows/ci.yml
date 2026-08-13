@@ -35,9 +35,9 @@ jobs:
     outputs:
       noop: ${{ steps.noop.outputs.should_skip }}
       skip-e2e: ${{ steps.e2e-scope.outputs.skip }}
-      # DAG-derived e2e scope outputs (consumed by e2e-tests / build-provider)
+      # DAG-derived e2e tier + Keycloak matrix (the demo subset itself is
+      # recomputed in the e2e-tests job so it is visible per run)
       e2e-tier: ${{ steps.e2e-scope.outputs.tier }}
-      e2e-demo-list: ${{ steps.e2e-scope.outputs.demo_list }}
       e2e-keycloak-versions: ${{ steps.e2e-scope.outputs.keycloak_versions }}
     steps:
       - name: Detect No-op Changes
@@ -64,7 +64,6 @@ jobs:
           if echo "$COMMIT_MESSAGE" | grep -iq "\[skip e2e\]"; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             echo "tier=skip" >> "$GITHUB_OUTPUT"
-            echo "demo_list=" >> "$GITHUB_OUTPUT"
             echo "keycloak_versions=[]" >> "$GITHUB_OUTPUT"
             echo "[skip e2e] found in commit message — skipping all e2e tests"
             exit 0
@@ -74,7 +73,6 @@ jobs:
           if [ "${{ github.event_name }}" != "pull_request" ]; then
             echo "skip=false" >> "$GITHUB_OUTPUT"
             echo "tier=full" >> "$GITHUB_OUTPUT"
-            echo "demo_list=" >> "$GITHUB_OUTPUT"
             echo "keycloak_versions=${ALL_VERSIONS}" >> "$GITHUB_OUTPUT"
             echo "Non-PR event — running full e2e suite against all Keycloak versions"
             exit 0
@@ -97,20 +95,17 @@ jobs:
           if [ "$TIER" = "skip" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             echo "tier=skip" >> "$GITHUB_OUTPUT"
-            echo "demo_list=" >> "$GITHUB_OUTPUT"
             echo "keycloak_versions=[]" >> "$GITHUB_OUTPUT"
             echo "No e2e-relevant changes — skipping e2e tests"
           elif [ "$TIER" = "full" ]; then
             echo "skip=false" >> "$GITHUB_OUTPUT"
             echo "tier=full" >> "$GITHUB_OUTPUT"
-            echo "demo_list=" >> "$GITHUB_OUTPUT"
             echo "keycloak_versions=${ALL_VERSIONS}" >> "$GITHUB_OUTPUT"
             echo "Full tier — running all demos against all Keycloak versions"
           else
             # targeted: TIER contains a comma-separated list of demo paths
             echo "skip=false" >> "$GITHUB_OUTPUT"
             echo "tier=targeted" >> "$GITHUB_OUTPUT"
-            echo "demo_list=${TIER}" >> "$GITHUB_OUTPUT"
             echo "keycloak_versions=${LATEST_VERSION}" >> "$GITHUB_OUTPUT"
             DEMO_COUNT=$(echo "$TIER" | tr ',' '\n' | wc -l)
             echo "Targeted tier — running ${DEMO_COUNT} demos against latest Keycloak only"
@@ -426,6 +421,37 @@ jobs:
       - name: Fetch History
         run: git fetch --prune --unshallow
 
+      - name: Calculate E2E test selection
+        id: select
+        shell: bash
+        env:
+          E2E_TIER: ${{ needs.detect-noop.outputs.e2e-tier }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -o pipefail
+          if [ "${E2E_TIER}" != "targeted" ]; then
+            echo "demos=" >> "$GITHUB_OUTPUT"
+            echo "### E2E selection: ${E2E_TIER} — running all demos" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          DEMOS=$(git diff --name-only "${BASE_SHA}" "${HEAD_SHA}" | \
+            python3 scripts/e2e_dag.py select --changed-files -)
+          if [ "${DEMOS}" = "full" ] || [ "${DEMOS}" = "skip" ] || [ -z "${DEMOS}" ]; then
+            echo "demos=" >> "$GITHUB_OUTPUT"
+            echo "### E2E selection: fallback — running all demos" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "demos=${DEMOS}" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### E2E selection: targeted — $(echo "${DEMOS}" | tr ',' '\n' | wc -l) demos"
+            echo ""
+            echo "${DEMOS}" | tr ',' '\n' | sed 's/^/- /'
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "${DEMOS}" | tr ',' '\n'
+
       - name: Setup Go
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
         with:
@@ -527,7 +553,7 @@ jobs:
         shell: bash
         env:
           KEYCLOAK_VERSION: ${{ matrix.keycloak-version }}
-          E2E_DEMO_LIST: ${{ needs.detect-noop.outputs.e2e-demo-list }}
+          E2E_DEMO_LIST: ${{ steps.select.outputs.demos }}
           E2E_TIER: ${{ needs.detect-noop.outputs.e2e-tier }}
         run: |
           set -o pipefail

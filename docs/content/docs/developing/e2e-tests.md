@@ -232,6 +232,11 @@ changed files of a pull request into a tier:
 | `targeted` | `apis/`, `config/`, `package/crds/`, `dev/demos/`, `cluster/test/` | DAG subgraph for the touched API groups × latest Keycloak only |
 | `skip` | docs / markdown / images only | no e2e |
 
+The `detect-noop` job determines the tier (and therefore the Keycloak version
+matrix). The `e2e-tests` job then has a **Calculate E2E test selection** step
+that resolves the concrete demo list for the run and writes it to the job
+summary, so every run shows exactly which demos it executed.
+
 The graph is derived from the demo YAML itself: `apiVersion:` lines give the
 API group, and `*Ref:` → `name:` lookups give cross-demo edges. No manual
 mapping file is maintained.
