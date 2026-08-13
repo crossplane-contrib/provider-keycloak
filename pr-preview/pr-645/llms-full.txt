@@ -565,6 +565,39 @@ Symptoms: `no matches for kind` even though the kind name is correct.
 Mitigation: the `setup.sh` wait loop handles the common case; if a specific
 CRD keeps racing, add it to the wait list explicitly.
 
+### 7. Optional Field That Keycloak Nevertheless Requires
+
+Some Terraform fields are optional in the schema (and therefore optional in the
+CRD) but are always sent to Keycloak, which then fails to parse the empty
+value. `ClientTimePolicy` is the canonical case: omitting `notBefore` /
+`notOnOrAfter` yields
+
+```text
+400 Bad Request: {"error":"Unable not parse a date using format []"}
+```
+
+Mitigation: set both fields (format `yyyy-MM-dd HH:mm:ss`), as the upstream
+Terraform provider's own acceptance test does.
+
+### 8. Lookup Helper Not Recognising "Not Found"
+
+Resources wired to `lookup.BuildIdentifyingPropertiesLookup` call an upstream
+`Get...ByName` client function. Several of those return a plain
+`fmt.Errorf("no ... with name %s found", ...)` rather than a typed not-found
+error. If the helper in `config/<group>/config.go` does not treat that message
+as "not found", the very first reconcile fails with
+
+```text
+connect failed: cannot initialize the Terraform plugin SDK async external client:
+failed to get the extended parameters for resource "/<name>": cannot get ID: ...
+```
+
+and the resource is never created, blocking everything that references it.
+
+Mitigation: check the upstream function's not-found error string and return
+`("", nil)` for it — see `getAuthzScopeIDByIdentifyingProperties` in
+`config/openidclient/config.go`.
+
 ## Methodology: Writing a Demo File
 
 Follow these steps when writing a new demo file.
@@ -657,6 +690,63 @@ decode errors, then fix the field names or references as described above.
 
 - E2E tests only cover resources listed in `cluster/test/cases.txt`.
 - Chainsaw JMESPath assertions on `status.conditions` can fail if conditions are `nil` immediately after apply; add a wait step or assert only object existence first.
+
+## Test Selection and the Resource Index
+
+CI does not always run every demo. `scripts/e2e_dag.py select` classifies every
+changed file of a pull request with exactly one named rule, and the highest
+resulting tier wins:
+
+| Tier | Rules (matched in this order) | Scope |
+|------|-------------------------------|-------|
+| `skip` | `documentation` (`docs/`), `markdown/images` (`*.md`, `*.png`, `*.jpg`, `*.svg`), `unrelated workflow` (any `.github/` file other than `ci.yml`), `helper script` (`scripts/`) | no e2e |
+| `targeted` | `generated controller` (`internal/controller/**/zz_*.go`), `API types` (`apis/`), `resource config` (`config/`), `CRD schema` (`package/crds/`), `generated example` / `example manifest`, `demo manifest` (`dev/demos/`), `e2e harness` (`cluster/test/`), plus any unclassified path as a safe fallback | DAG subgraph for the touched API groups × latest Keycloak only |
+| `full` | `go module` (`go.mod`, `go.sum`), `build system` (`Makefile`, `build/`), `provider runtime code` (`internal/`, `cmd/` — excluding generated controllers), `CI workflow` (`.github/workflows/ci.yml`), `e2e environment` (`dev/` outside `dev/demos/`), or any non-PR event | all demos × all Keycloak versions |
+
+Generated per-resource controller code (`internal/controller/<scope>/<group>/<resource>/zz_controller.go`
+and `zz_setup.go`) is deliberately **not** full-tier: it belongs to a single API
+group and is treated like `apis/<group>/`. Only hand-written provider runtime
+code forces a full run.
+
+The `detect-noop` job determines the tier (and therefore the Keycloak version
+matrix). The `e2e-tests` job then has a **Calculate E2E test selection** step
+that resolves the concrete demo list for the run.
+
+Both steps compute the changed files against `main` (`git merge-base
+origin/main HEAD`), never against the pull request's recorded base SHA, so the
+selection stays correct even when the branch is behind or the base ref moves.
+
+### Proof
+
+Every selection is accompanied by a proof written to the job summary
+(`--proof-file`), so a full run is never unexplained. It lists:
+
+1. each changed file → the rule it matched → the tier that rule implies, with
+   the files that determined the final tier marked `*`;
+2. the touched API groups and which changed paths implied them;
+3. every selected demo with the reason it is in the set — `uses API group 'x'`,
+   `changed directly`, `prerequisite of <demo>` or `depends on <demo>`.
+
+Reproduce it locally:
+
+```bash
+git diff --name-only $(git merge-base origin/main HEAD) HEAD | \
+  python3 scripts/e2e_dag.py select --changed-files -
+```
+
+The graph is derived from the demo YAML itself: `apiVersion:` lines give the
+API group, and `*Ref:` → `name:` lookups give cross-demo edges. No manual
+mapping file is maintained.
+
+`make generate` refreshes `cluster/test/e2e-index.json`, which answers
+"which e2e test uses resource X?":
+
+```bash
+jq '.resources["ClientTimePolicy (openidclient)"]' cluster/test/e2e-index.json
+```
+
+The same file holds the demo DAG under `.demos`. It is committed, so
+`make check-diff` fails if it is stale.
 
 ## Local Docs Development
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs/
