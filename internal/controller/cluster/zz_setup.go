@@ -56,6 +56,7 @@ import (
 	clientaggregatepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientaggregatepolicy"
 	clientauthorizationclientscopepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientauthorizationclientscopepolicy"
 	clientauthorizationpermission "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientauthorizationpermission"
+	clientauthorizationpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientauthorizationpolicy"
 	clientauthorizationresource "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientauthorizationresource"
 	clientauthorizationscope "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientauthorizationscope"
 	clientclientpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientclientpolicy"
@@ -167,6 +168,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientaggregatepolicy.Setup,
 		clientauthorizationclientscopepolicy.Setup,
 		clientauthorizationpermission.Setup,
+		clientauthorizationpolicy.Setup,
 		clientauthorizationresource.Setup,
 		clientauthorizationscope.Setup,
 		clientclientpolicy.Setup,
@@ -284,6 +286,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientaggregatepolicy.SetupGated,
 		clientauthorizationclientscopepolicy.SetupGated,
 		clientauthorizationpermission.SetupGated,
+		clientauthorizationpolicy.SetupGated,
 		clientauthorizationresource.SetupGated,
 		clientauthorizationscope.SetupGated,
 		clientclientpolicy.SetupGated,
@@ -400,6 +403,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientaggregatepolicy.SetupWebhookWithManager,
 		clientauthorizationclientscopepolicy.SetupWebhookWithManager,
 		clientauthorizationpermission.SetupWebhookWithManager,
+		clientauthorizationpolicy.SetupWebhookWithManager,
 		clientauthorizationresource.SetupWebhookWithManager,
 		clientauthorizationscope.SetupWebhookWithManager,
 		clientclientpolicy.SetupWebhookWithManager,
