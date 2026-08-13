@@ -109,6 +109,11 @@ issue per missing resource (see "Automated Schema Diff Issues" below).
    name (e.g. `{realm}/{id}`), use `resolve.ExtractResourceID` or a custom
    extractor — see existing entries in `config/<group>/config.go` for
    patterns.
+
+   If a single Terraform attribute can point at **more than one** resource
+   type (e.g. an ID that may belong to an OpenID or a SAML client), do not
+   leave it as a raw ID field — use `config/multitypes` (see
+   "Multi-Type References" below).
 3. **Import / identify by properties.** If the resource can already exist in
    Keycloak before Crossplane creates it (so a naive `Create` would 409),
    wire it to `lookup.BuildIdentifyingPropertiesLookup` in the group config
@@ -154,6 +159,82 @@ r.References["realm_id"] = config.Reference{
     TerraformName: "keycloak_realm",
 }
 ```
+
+## Multi-Type References
+
+`r.References` only accepts a single `TerraformName`, so it cannot express a
+Terraform attribute whose value may be the ID of several different resource
+types. For those, use the `config/multitypes` package instead of hand-rolled
+synthetic fields or raw ID inputs. It creates one synthetic, strongly-typed
+field per referenceable type, and consolidates the resolved values back into
+the original Terraform field before the request is sent to Terraform.
+
+Scalar field (`multitypes.ApplyTo` / `ApplyToWithOptions`) — e.g. a role's
+`client_id`, which may reference an OpenID or a SAML client:
+
+```go
+multitypes.ApplyToWithOptions(r, "client_id",
+    &multitypes.Options{KeepOriginalField: true}, // keep client_id settable
+    multitypes.Instance{
+        Name: "client_id",
+        Reference: config.Reference{
+            TerraformName: "keycloak_openid_client",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+    multitypes.Instance{
+        Name: "saml_client_id",
+        Reference: config.Reference{
+            TerraformName: "keycloak_saml_client",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+)
+```
+
+List/set field (`multitypes.ApplyToAsList` / `ApplyToAsListWithOptions`) — e.g.
+`keycloak_openid_client_aggregate_policy.policies`, which holds IDs of any
+policy type:
+
+```go
+multitypes.ApplyToAsList(r, "policies",
+    multitypes.Instance{
+        Name: "time_policies",
+        Reference: config.Reference{
+            TerraformName: "keycloak_openid_client_time_policy",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+    multitypes.Instance{
+        Name: "role_policies",
+        Reference: config.Reference{
+            TerraformName: "keycloak_openid_client_role_policy",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+    // ... one Instance per referenceable policy type
+)
+```
+
+Rules and gotchas:
+
+- `Options.KeepOriginalField: true` is required (and only allowed) when one
+  `Instance` reuses the original field name; use it to keep the existing field
+  settable for backward compatibility. The helper panics on a mismatch.
+- If no `Instance` reuses the original name, the original field becomes
+  computed-only (`status.atProvider`). A useful side effect is that a
+  *required* Terraform field no longer emits a required-parameter CEL rule,
+  so no CRD post-processing is needed.
+- For scalar fields, only one synthetic field may be set at a time; the
+  consolidation injector returns an error otherwise. For list fields, all
+  synthetic lists are unioned.
+- Every `TerraformName` you reference must be present in
+  `config/generated.lst`; otherwise `make generate` panics with
+  `cannot find configuration for Terraform resource`.
+- Examples in the codebase: `config/role/config.go` and `config/mapper/config.go`
+  (`client_id`/`saml_client_id`), `config/authentication/config.go`
+  (`parent_flow_alias`/`parent_subflow_alias`), `config/openidclient/config.go`
+  (`clients`/`saml_clients` and aggregate-policy `policies`).
 
 ## Testing
 

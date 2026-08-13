@@ -390,6 +390,68 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_openid_client",
 			Extractor:     common.PathUUIDExtractor,
 		}
+
+		// policies is a single Terraform field holding the IDs of arbitrary
+		// authorization policies. Expose one strongly-typed list field per
+		// referenceable policy type; the values are consolidated back into
+		// policies before they are sent to Terraform.
+		multitypes.ApplyToAsList(r, "policies",
+			multitypes.Instance{
+				Name: "aggregate_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_aggregate_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "client_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_client_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "client_scope_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_authorization_client_scope_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "group_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_group_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "regex_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_regex_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "role_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_role_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "time_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_time_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "user_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_user_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			})
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_js_policy", func(r *config.Resource) {
@@ -412,6 +474,10 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = Group
 		r.References["resource_server_id"] = config.Reference{
 			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
+		}
+		r.References["scope.id"] = config.Reference{
+			TerraformName: "keycloak_openid_client_scope",
 			Extractor:     common.PathUUIDExtractor,
 		}
 	})
@@ -610,6 +676,104 @@ func getAuthzRegexPoliciesIDByExternalName(ctx context.Context, id string, param
 
 func getAuthzRegexPoliciesIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
 	return getAuthzPolicyIDByIdentifyingProperties(ctx, parameters, kcClient)
+}
+
+var authzAggregatePoliciesIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "resource_server_id", "name"},
+	GetIDByExternalName:          getAuthzAggregatePoliciesIDByExternalName,
+	GetIDByIdentifyingProperties: getAuthzAggregatePoliciesIDByIdentifyingProperties,
+}
+
+// AuthzAggregatePoliciesIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var AuthzAggregatePoliciesIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(authzAggregatePoliciesIdentifyingPropertiesLookup)
+
+func getAuthzAggregatePoliciesIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetOpenidClientAuthorizationAggregatePolicy(ctx, parameters["realm_id"].(string), parameters["resource_server_id"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getAuthzAggregatePoliciesIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	return getAuthzPolicyIDByIdentifyingProperties(ctx, parameters, kcClient)
+}
+
+var authzTimePoliciesIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "resource_server_id", "name"},
+	GetIDByExternalName:          getAuthzTimePoliciesIDByExternalName,
+	GetIDByIdentifyingProperties: getAuthzTimePoliciesIDByIdentifyingProperties,
+}
+
+// AuthzTimePoliciesIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var AuthzTimePoliciesIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(authzTimePoliciesIdentifyingPropertiesLookup)
+
+func getAuthzTimePoliciesIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetOpenidClientAuthorizationTimePolicy(ctx, parameters["realm_id"].(string), parameters["resource_server_id"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getAuthzTimePoliciesIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	return getAuthzPolicyIDByIdentifyingProperties(ctx, parameters, kcClient)
+}
+
+var authzClientScopePoliciesIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "resource_server_id", "name"},
+	GetIDByExternalName:          getAuthzClientScopePoliciesIDByExternalName,
+	GetIDByIdentifyingProperties: getAuthzClientScopePoliciesIDByIdentifyingProperties,
+}
+
+// AuthzClientScopePoliciesIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var AuthzClientScopePoliciesIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(authzClientScopePoliciesIdentifyingPropertiesLookup)
+
+func getAuthzClientScopePoliciesIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetOpenidClientAuthorizationClientScopePolicy(ctx, parameters["realm_id"].(string), parameters["resource_server_id"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getAuthzClientScopePoliciesIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	return getAuthzPolicyIDByIdentifyingProperties(ctx, parameters, kcClient)
+}
+
+var authzScopeIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "resource_server_id", "name"},
+	GetIDByExternalName:          getAuthzScopeIDByExternalName,
+	GetIDByIdentifyingProperties: getAuthzScopeIDByIdentifyingProperties,
+}
+
+// AuthzScopeIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var AuthzScopeIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(authzScopeIdentifyingPropertiesLookup)
+
+func getAuthzScopeIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetOpenidClientAuthorizationScope(ctx, parameters["realm_id"].(string), parameters["resource_server_id"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getAuthzScopeIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetOpenidClientAuthorizationScopeByName(ctx, parameters["realm_id"].(string), parameters["resource_server_id"].(string), parameters["name"].(string))
+	if err != nil {
+		// The upstream client returns "no authorization scope with name %s found"
+		// instead of a not-found error when the scope does not exist yet.
+		if strings.Contains(err.Error(), "no authorization scope with name") ||
+			strings.Contains(err.Error(), "unable to find") ||
+			strings.Contains(err.Error(), "does not exist") {
+			return "", nil
+		}
+		return "", err
+	}
+	if found == nil {
+		return "", nil
+	}
+	return found.Id, nil
 }
 
 var authzResourceIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{

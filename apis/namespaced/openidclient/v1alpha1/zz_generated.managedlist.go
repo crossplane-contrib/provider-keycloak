@@ -7,6 +7,24 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 
+// GetItems of this ClientAggregatePolicyList.
+func (l *ClientAggregatePolicyList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientAuthorizationClientScopePolicyList.
+func (l *ClientAuthorizationClientScopePolicyList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this ClientAuthorizationPermissionList.
 func (l *ClientAuthorizationPermissionList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -18,6 +36,15 @@ func (l *ClientAuthorizationPermissionList) GetItems() []resource.Managed {
 
 // GetItems of this ClientAuthorizationResourceList.
 func (l *ClientAuthorizationResourceList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientAuthorizationScopeList.
+func (l *ClientAuthorizationScopeList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]
@@ -117,6 +144,15 @@ func (l *ClientServiceAccountRealmRoleList) GetItems() []resource.Managed {
 
 // GetItems of this ClientServiceAccountRoleList.
 func (l *ClientServiceAccountRoleList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ClientTimePolicyList.
+func (l *ClientTimePolicyList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

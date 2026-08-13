@@ -65,6 +65,26 @@ spec:
 
 ---
 
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationScope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationpermission
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    name: scope_name
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+
+---
+
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:
