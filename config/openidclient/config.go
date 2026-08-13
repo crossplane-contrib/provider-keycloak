@@ -49,6 +49,12 @@ func addSyntheticListReferences(r *config.Resource, field string, refs ...synthe
 		r.TerraformResource.Schema[ref.name] = &cp
 		r.References[ref.name] = ref.reference
 	}
+	// Mark the base field as optional: it can be populated at reconcile time
+	// via the synthetic reference fields, so the CRD must not enforce it as a
+	// required parameter at admission time.
+	s := r.TerraformResource.Schema[field]
+	s.Required = false
+	s.Optional = true
 
 	ci := r.TerraformConfigurationInjector
 	r.TerraformConfigurationInjector = func(jsonMap, tfMap map[string]any) error {
