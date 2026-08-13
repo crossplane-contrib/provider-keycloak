@@ -36,6 +36,9 @@ spec:
     logic: POSITIVE
     hour: "09"
     hourEnd: "17"
+    # Keycloak always parses notBefore/notOnOrAfter, so both must be set.
+    notBefore: "2024-01-01 00:00:00"
+    notOnOrAfter: "2500-01-01 00:00:00"
     realmIdRef:
       name: "dev-ns"
       policy:

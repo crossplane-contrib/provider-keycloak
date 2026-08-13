@@ -761,7 +761,11 @@ func getAuthzScopeIDByExternalName(ctx context.Context, id string, parameters ma
 func getAuthzScopeIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
 	found, err := kcClient.GetOpenidClientAuthorizationScopeByName(ctx, parameters["realm_id"].(string), parameters["resource_server_id"].(string), parameters["name"].(string))
 	if err != nil {
-		if strings.Contains(err.Error(), "unable to find") || strings.Contains(err.Error(), "does not exist") {
+		// The upstream client returns "no authorization scope with name %s found"
+		// instead of a not-found error when the scope does not exist yet.
+		if strings.Contains(err.Error(), "no authorization scope with name") ||
+			strings.Contains(err.Error(), "unable to find") ||
+			strings.Contains(err.Error(), "does not exist") {
 			return "", nil
 		}
 		return "", err

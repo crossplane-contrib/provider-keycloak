@@ -128,6 +128,39 @@ Symptoms: `no matches for kind` even though the kind name is correct.
 Mitigation: the `setup.sh` wait loop handles the common case; if a specific
 CRD keeps racing, add it to the wait list explicitly.
 
+### 7. Optional Field That Keycloak Nevertheless Requires
+
+Some Terraform fields are optional in the schema (and therefore optional in the
+CRD) but are always sent to Keycloak, which then fails to parse the empty
+value. `ClientTimePolicy` is the canonical case: omitting `notBefore` /
+`notOnOrAfter` yields
+
+```text
+400 Bad Request: {"error":"Unable not parse a date using format []"}
+```
+
+Mitigation: set both fields (format `yyyy-MM-dd HH:mm:ss`), as the upstream
+Terraform provider's own acceptance test does.
+
+### 8. Lookup Helper Not Recognising "Not Found"
+
+Resources wired to `lookup.BuildIdentifyingPropertiesLookup` call an upstream
+`Get...ByName` client function. Several of those return a plain
+`fmt.Errorf("no ... with name %s found", ...)` rather than a typed not-found
+error. If the helper in `config/<group>/config.go` does not treat that message
+as "not found", the very first reconcile fails with
+
+```text
+connect failed: cannot initialize the Terraform plugin SDK async external client:
+failed to get the extended parameters for resource "/<name>": cannot get ID: ...
+```
+
+and the resource is never created, blocking everything that references it.
+
+Mitigation: check the upstream function's not-found error string and return
+`("", nil)` for it — see `getAuthzScopeIDByIdentifyingProperties` in
+`config/openidclient/config.go`.
+
 ## Methodology: Writing a Demo File
 
 Follow these steps when writing a new demo file.
