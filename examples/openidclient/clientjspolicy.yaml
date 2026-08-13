@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: example-clientjspolicy
+---
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: example-realm
+  namespace: example-clientjspolicy
+spec:
+  forProvider:
+    realm: example-clientjspolicy
+    enabled: true
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: example-client
+  namespace: example-clientjspolicy
+spec:
+  forProvider:
+    clientId: example-client
+    enabled: true
+    accessType: CONFIDENTIAL
+    serviceAccountsEnabled: true
+    realmIdRef:
+      name: example-realm
+    authorization:
+      - policyEnforcementMode: PERMISSIVE
+  providerConfigRef:
+    name: keycloak-provider-config
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientJsPolicy
+metadata:
+  name: example-js-policy
+  namespace: example-clientjspolicy
+spec:
+  forProvider:
+    name: example-js-policy
+    code: script-example-js-policy.js
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    realmIdRef:
+      name: example-realm
+    resourceServerIdRef:
+      name: example-client
+  providerConfigRef:
+    name: keycloak-provider-config

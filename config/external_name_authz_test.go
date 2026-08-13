@@ -21,6 +21,7 @@ func TestAuthzExternalNameImportLookup(t *testing.T) {
 	cases := map[string]reflect.Value{
 		"keycloak_openid_client_authorization_resource":   reflect.ValueOf(openidclient.AuthzResourceIdentifierFromIdentifyingProperties.GetIDFn),
 		"keycloak_openid_client_authorization_permission": reflect.ValueOf(openidclient.AuthzPermissionIdentifierFromIdentifyingProperties.GetIDFn),
+		"keycloak_openid_client_js_policy":                reflect.ValueOf(openidclient.AuthzJSPoliciesIdentifierFromIdentifyingProperties.GetIDFn),
 	}
 
 	for tfName, want := range cases {
