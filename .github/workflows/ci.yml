@@ -34,7 +34,11 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       noop: ${{ steps.noop.outputs.should_skip }}
-      skip-e2e: ${{ steps.skip-e2e.outputs.skip }}
+      skip-e2e: ${{ steps.e2e-scope.outputs.skip }}
+      # DAG-derived e2e scope outputs (consumed by e2e-tests / build-provider)
+      e2e-tier: ${{ steps.e2e-scope.outputs.tier }}
+      e2e-demo-list: ${{ steps.e2e-scope.outputs.demo_list }}
+      e2e-keycloak-versions: ${{ steps.e2e-scope.outputs.keycloak_versions }}
     steps:
       - name: Detect No-op Changes
         id: noop
@@ -49,37 +53,67 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check for skip e2e in commit message
-        id: skip-e2e
+      - name: Compute E2E scope via DAG
+        id: e2e-scope
         run: |
+          # Full Keycloak version matrix (all supported releases)
+          ALL_VERSIONS='["26.7.0","26.6.2","26.5.1","26.4.4","26.3.5","26.2.5","26.1.5","26.0.8"]'
+          LATEST_VERSION='["26.7.0"]'
+
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
           if echo "$COMMIT_MESSAGE" | grep -iq "\[skip e2e\]"; then
-            echo "skip=true" >> $GITHUB_OUTPUT
-            echo "Found [skip e2e] in commit message, will skip e2e tests"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "tier=skip" >> "$GITHUB_OUTPUT"
+            echo "demo_list=" >> "$GITHUB_OUTPUT"
+            echo "keycloak_versions=[]" >> "$GITHUB_OUTPUT"
+            echo "[skip e2e] found in commit message — skipping all e2e tests"
             exit 0
           fi
-          echo "No [skip e2e] found in commit message"
 
+          # On non-PR events (push to main, workflow_dispatch) always run full
           if [ "${{ github.event_name }}" != "pull_request" ]; then
-            echo "skip=false" >> $GITHUB_OUTPUT
-            echo "Not a pull_request event, will not skip e2e tests based on changed paths"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "tier=full" >> "$GITHUB_OUTPUT"
+            echo "demo_list=" >> "$GITHUB_OUTPUT"
+            echo "keycloak_versions=${ALL_VERSIONS}" >> "$GITHUB_OUTPUT"
+            echo "Non-PR event — running full e2e suite against all Keycloak versions"
             exit 0
           fi
 
-          CHANGED_FILES=$(git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}")
+          # Compute changed files for the PR
+          CHANGED_FILES=$(git diff --name-only \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}")
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          # Only run e2e tests when changes could affect the operator/e2e
-          # environment: Go code, generated APIs/CRDs, upjet config, e2e
-          # test manifests/dev demos, build tooling, or the CI workflow
-          # itself. Docs, scripts, and other metadata-only changes skip e2e.
-          if echo "$CHANGED_FILES" | grep -Eq '^(apis/|cmd/|internal/|config/|package/crds/|cluster/|dev/|build/|Makefile$|go\.mod$|go\.sum$|Dockerfile|\.github/workflows/ci\.yml)'; then
-            echo "skip=false" >> $GITHUB_OUTPUT
-            echo "Found changes relevant to e2e tests"
+          # Use the DAG script to determine tier + demo subset
+          TIER=$(echo "$CHANGED_FILES" | \
+            python3 scripts/e2e_dag.py select --changed-files - 2>/tmp/e2e_dag_stderr.txt)
+          DAG_STDERR=$(cat /tmp/e2e_dag_stderr.txt)
+          echo "DAG stderr: $DAG_STDERR"
+          echo "DAG stdout (tier/list): $TIER"
+
+          if [ "$TIER" = "skip" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "tier=skip" >> "$GITHUB_OUTPUT"
+            echo "demo_list=" >> "$GITHUB_OUTPUT"
+            echo "keycloak_versions=[]" >> "$GITHUB_OUTPUT"
+            echo "No e2e-relevant changes — skipping e2e tests"
+          elif [ "$TIER" = "full" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "tier=full" >> "$GITHUB_OUTPUT"
+            echo "demo_list=" >> "$GITHUB_OUTPUT"
+            echo "keycloak_versions=${ALL_VERSIONS}" >> "$GITHUB_OUTPUT"
+            echo "Full tier — running all demos against all Keycloak versions"
           else
-            echo "skip=true" >> $GITHUB_OUTPUT
-            echo "No changes relevant to e2e tests found, will skip e2e tests"
+            # targeted: TIER contains a comma-separated list of demo paths
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "tier=targeted" >> "$GITHUB_OUTPUT"
+            echo "demo_list=${TIER}" >> "$GITHUB_OUTPUT"
+            echo "keycloak_versions=${LATEST_VERSION}" >> "$GITHUB_OUTPUT"
+            DEMO_COUNT=$(echo "$TIER" | tr ',' '\n' | wc -l)
+            echo "Targeted tier — running ${DEMO_COUNT} demos against latest Keycloak only"
           fi
 
 
@@ -382,15 +416,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keycloak-version:
-          - '26.7.0'
-          - '26.6.2'
-          - '26.5.1'
-          - '26.4.4'
-          - '26.3.5'
-          - '26.2.5'
-          - '26.1.5'
-          - '26.0.8'
+        keycloak-version: ${{ fromJSON(needs.detect-noop.outputs.e2e-keycloak-versions) }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -501,10 +527,19 @@ jobs:
         shell: bash
         env:
           KEYCLOAK_VERSION: ${{ matrix.keycloak-version }}
+          E2E_DEMO_LIST: ${{ needs.detect-noop.outputs.e2e-demo-list }}
+          E2E_TIER: ${{ needs.detect-noop.outputs.e2e-tier }}
         run:
           #!/bin/bash
           set -o pipefail;
-          make uptest KEYCLOAK_VERSION=${{ matrix.keycloak-version }} | tee logs/uptest.log;
+          echo "E2E tier: ${E2E_TIER}";
+          if [ -n "${E2E_DEMO_LIST}" ]; then
+            echo "Targeted mode: running $(echo "${E2E_DEMO_LIST}" | tr ',' '\n' | wc -l) demos";
+            make uptest KEYCLOAK_VERSION=${{ matrix.keycloak-version }} UPTEST_EXAMPLE_LIST="${E2E_DEMO_LIST}" | tee logs/uptest.log;
+          else
+            echo "Full mode: running all demos";
+            make uptest KEYCLOAK_VERSION=${{ matrix.keycloak-version }} | tee logs/uptest.log;
+          fi;
           exit $?;
 
       - name: Collect logs
