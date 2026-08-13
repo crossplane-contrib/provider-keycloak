@@ -49,12 +49,6 @@ func addSyntheticListReferences(r *config.Resource, field string, refs ...synthe
 		r.TerraformResource.Schema[ref.name] = &cp
 		r.References[ref.name] = ref.reference
 	}
-	// Mark the base field as optional: it can be populated at reconcile time
-	// via the synthetic reference fields, so the CRD must not enforce it as a
-	// required parameter at admission time.
-	s := r.TerraformResource.Schema[field]
-	s.Required = false
-	s.Optional = true
 
 	ci := r.TerraformConfigurationInjector
 	r.TerraformConfigurationInjector = func(jsonMap, tfMap map[string]any) error {
@@ -396,49 +390,6 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_openid_client",
 			Extractor:     common.PathUUIDExtractor,
 		}
-		addSyntheticListReferences(r, "policies",
-			syntheticListReference{
-				name: "client_policies",
-				reference: config.Reference{
-					TerraformName: "keycloak_openid_client_client_policy",
-					Extractor:     common.PathUUIDExtractor,
-				},
-			},
-			syntheticListReference{
-				name: "group_policies",
-				reference: config.Reference{
-					TerraformName: "keycloak_openid_client_group_policy",
-					Extractor:     common.PathUUIDExtractor,
-				},
-			},
-			syntheticListReference{
-				name: "regex_policies",
-				reference: config.Reference{
-					TerraformName: "keycloak_openid_client_regex_policy",
-					Extractor:     common.PathUUIDExtractor,
-				},
-			},
-			syntheticListReference{
-				name: "role_policies",
-				reference: config.Reference{
-					TerraformName: "keycloak_openid_client_role_policy",
-					Extractor:     common.PathUUIDExtractor,
-				},
-			},
-			syntheticListReference{
-				name: "time_policies",
-				reference: config.Reference{
-					TerraformName: "keycloak_openid_client_time_policy",
-					Extractor:     common.PathUUIDExtractor,
-				},
-			},
-			syntheticListReference{
-				name: "user_policies",
-				reference: config.Reference{
-					TerraformName: "keycloak_openid_client_user_policy",
-					Extractor:     common.PathUUIDExtractor,
-				},
-			})
 	})
 
 	p.AddResourceConfigurator("keycloak_openid_client_js_policy", func(r *config.Resource) {
