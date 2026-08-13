@@ -237,6 +237,10 @@ matrix). The `e2e-tests` job then has a **Calculate E2E test selection** step
 that resolves the concrete demo list for the run and writes it to the job
 summary, so every run shows exactly which demos it executed.
 
+Both steps compute the changed files against `main` (`git merge-base
+origin/main HEAD`), never against the pull request's recorded base SHA, so the
+selection stays correct even when the branch is behind or the base ref moves.
+
 The graph is derived from the demo YAML itself: `apiVersion:` lines give the
 API group, and `*Ref:` → `name:` lookups give cross-demo edges. No manual
 mapping file is maintained.

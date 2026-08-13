@@ -78,10 +78,11 @@ jobs:
             exit 0
           fi
 
-          # Compute changed files for the PR
-          CHANGED_FILES=$(git diff --name-only \
-            "${{ github.event.pull_request.base.sha }}" \
-            "${{ github.event.pull_request.head.sha }}")
+          # Compute changed files for the PR, always relative to main
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          MERGE_BASE=$(git merge-base origin/main HEAD)
+          echo "Comparing against main (merge base ${MERGE_BASE})"
+          CHANGED_FILES=$(git diff --name-only "${MERGE_BASE}" HEAD)
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
@@ -426,8 +427,6 @@ jobs:
         shell: bash
         env:
           E2E_TIER: ${{ needs.detect-noop.outputs.e2e-tier }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -o pipefail
           if [ "${E2E_TIER}" != "targeted" ]; then
@@ -436,7 +435,11 @@ jobs:
             exit 0
           fi
 
-          DEMOS=$(git diff --name-only "${BASE_SHA}" "${HEAD_SHA}" | \
+          # Always compare against main
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          MERGE_BASE=$(git merge-base origin/main HEAD)
+          echo "Comparing against main (merge base ${MERGE_BASE})"
+          DEMOS=$(git diff --name-only "${MERGE_BASE}" HEAD | \
             python3 scripts/e2e_dag.py select --changed-files -)
           if [ "${DEMOS}" = "full" ] || [ "${DEMOS}" = "skip" ] || [ -z "${DEMOS}" ]; then
             echo "demos=" >> "$GITHUB_OUTPUT"
