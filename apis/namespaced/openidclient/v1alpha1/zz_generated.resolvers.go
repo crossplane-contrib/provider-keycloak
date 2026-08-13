@@ -247,6 +247,26 @@ func (mg *ClientAggregatePolicy) ResolveReferences(ctx context.Context, c client
 	mg.Spec.ForProvider.GroupPolicies = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.ForProvider.GroupPoliciesRefs = mrsp.ResolvedReferences
 	{
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "ClientJsPolicy", "ClientJsPolicyList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiNamespacedResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.JsPolicies),
+			Extract:       common.UUIDExtractor(),
+			Namespace:     mg.GetNamespace(),
+			References:    mg.Spec.ForProvider.JsPoliciesRefs,
+			Selector:      mg.Spec.ForProvider.JsPoliciesSelector,
+			To:            reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.JsPolicies")
+	}
+	mg.Spec.ForProvider.JsPolicies = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.ForProvider.JsPoliciesRefs = mrsp.ResolvedReferences
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -446,6 +466,26 @@ func (mg *ClientAggregatePolicy) ResolveReferences(ctx context.Context, c client
 	}
 	mg.Spec.InitProvider.GroupPolicies = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.InitProvider.GroupPoliciesRefs = mrsp.ResolvedReferences
+	{
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "ClientJsPolicy", "ClientJsPolicyList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiNamespacedResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.JsPolicies),
+			Extract:       common.UUIDExtractor(),
+			Namespace:     mg.GetNamespace(),
+			References:    mg.Spec.InitProvider.JsPoliciesRefs,
+			Selector:      mg.Spec.InitProvider.JsPoliciesSelector,
+			To:            reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.JsPolicies")
+	}
+	mg.Spec.InitProvider.JsPolicies = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.InitProvider.JsPoliciesRefs = mrsp.ResolvedReferences
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
@@ -757,6 +797,26 @@ func (mg *ClientAuthorizationPermission) ResolveReferences(ctx context.Context, 
 	mg.Spec.ForProvider.GroupPolicies = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.ForProvider.GroupPoliciesRefs = mrsp.ResolvedReferences
 	{
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "ClientJsPolicy", "ClientJsPolicyList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiNamespacedResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.JsPolicies),
+			Extract:       common.UUIDExtractor(),
+			Namespace:     mg.GetNamespace(),
+			References:    mg.Spec.ForProvider.JsPoliciesRefs,
+			Selector:      mg.Spec.ForProvider.JsPoliciesSelector,
+			To:            reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.JsPolicies")
+	}
+	mg.Spec.ForProvider.JsPolicies = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.ForProvider.JsPoliciesRefs = mrsp.ResolvedReferences
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -916,6 +976,26 @@ func (mg *ClientAuthorizationPermission) ResolveReferences(ctx context.Context, 
 	}
 	mg.Spec.InitProvider.GroupPolicies = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.InitProvider.GroupPoliciesRefs = mrsp.ResolvedReferences
+	{
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "ClientJsPolicy", "ClientJsPolicyList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiNamespacedResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.JsPolicies),
+			Extract:       common.UUIDExtractor(),
+			Namespace:     mg.GetNamespace(),
+			References:    mg.Spec.InitProvider.JsPoliciesRefs,
+			Selector:      mg.Spec.InitProvider.JsPoliciesSelector,
+			To:            reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.JsPolicies")
+	}
+	mg.Spec.InitProvider.JsPolicies = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.InitProvider.JsPoliciesRefs = mrsp.ResolvedReferences
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {

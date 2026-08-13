@@ -354,6 +354,13 @@ func Configure(p *config.Provider) {
 				},
 			},
 			syntheticListReference{
+				name: "js_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_js_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
 				name: "regex_policies",
 				reference: config.Reference{
 					TerraformName: "keycloak_openid_client_regex_policy",
@@ -421,6 +428,13 @@ func Configure(p *config.Provider) {
 				Name: "group_policies",
 				Reference: config.Reference{
 					TerraformName: "keycloak_openid_client_group_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "js_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_js_policy",
 					Extractor:     common.PathUUIDExtractor,
 				},
 			},

@@ -392,6 +392,29 @@ func (in *ClientAggregatePolicyInitParameters) DeepCopyInto(out *ClientAggregate
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.JsPolicies != nil {
+		in, out := &in.JsPolicies, &out.JsPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.JsPoliciesRefs != nil {
+		in, out := &in.JsPoliciesRefs, &out.JsPoliciesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.JsPoliciesSelector != nil {
+		in, out := &in.JsPoliciesSelector, &out.JsPoliciesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Logic != nil {
 		in, out := &in.Logic, &out.Logic
 		*out = new(string)
@@ -630,6 +653,17 @@ func (in *ClientAggregatePolicyObservation) DeepCopyInto(out *ClientAggregatePol
 		*out = new(string)
 		**out = **in
 	}
+	if in.JsPolicies != nil {
+		in, out := &in.JsPolicies, &out.JsPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
 	if in.Logic != nil {
 		in, out := &in.Logic, &out.Logic
 		*out = new(string)
@@ -819,6 +853,29 @@ func (in *ClientAggregatePolicyParameters) DeepCopyInto(out *ClientAggregatePoli
 	}
 	if in.GroupPoliciesSelector != nil {
 		in, out := &in.GroupPoliciesSelector, &out.GroupPoliciesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.JsPolicies != nil {
+		in, out := &in.JsPolicies, &out.JsPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.JsPoliciesRefs != nil {
+		in, out := &in.JsPoliciesRefs, &out.JsPoliciesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.JsPoliciesSelector != nil {
+		in, out := &in.JsPoliciesSelector, &out.JsPoliciesSelector
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}
@@ -1382,6 +1439,29 @@ func (in *ClientAuthorizationPermissionInitParameters) DeepCopyInto(out *ClientA
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.JsPolicies != nil {
+		in, out := &in.JsPolicies, &out.JsPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.JsPoliciesRefs != nil {
+		in, out := &in.JsPoliciesRefs, &out.JsPoliciesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.JsPoliciesSelector != nil {
+		in, out := &in.JsPoliciesSelector, &out.JsPoliciesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
@@ -1625,6 +1705,17 @@ func (in *ClientAuthorizationPermissionObservation) DeepCopyInto(out *ClientAuth
 		*out = new(string)
 		**out = **in
 	}
+	if in.JsPolicies != nil {
+		in, out := &in.JsPolicies, &out.JsPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
@@ -1784,6 +1875,29 @@ func (in *ClientAuthorizationPermissionParameters) DeepCopyInto(out *ClientAutho
 	}
 	if in.GroupPoliciesSelector != nil {
 		in, out := &in.GroupPoliciesSelector, &out.GroupPoliciesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.JsPolicies != nil {
+		in, out := &in.JsPolicies, &out.JsPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.JsPoliciesRefs != nil {
+		in, out := &in.JsPoliciesRefs, &out.JsPoliciesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.JsPoliciesSelector != nil {
+		in, out := &in.JsPoliciesSelector, &out.JsPoliciesSelector
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}
