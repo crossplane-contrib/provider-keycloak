@@ -11,9 +11,6 @@ spec:
     decisionStrategy: AFFIRMATIVE
     logic: POSITIVE
     name: aggregate_policy
-    policies:
-    - ${keycloak_openid_client_role_policy.role_policy.id}
-    - ${keycloak_openid_client_user_policy.user_policy.id}
     realmIdSelector:
       matchLabels:
         testing.upbound.io/example-name: realm

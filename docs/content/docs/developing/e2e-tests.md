@@ -164,9 +164,15 @@ For each `*Ref` field, confirm the referenced resource:
 3. Uses the correct API group (`*.keycloak.crossplane.io` for cluster,
    `*.keycloak.m.crossplane.io` for namespaced).
 
-For fields that require a raw Keycloak UUID (no `*Ref` support), either
-omit the resource from the demo or provide a known-good value from a
-previously created resource via a chainsaw patch step.
+Demos must be self-contained: every referenced object is created by the demo
+itself (or a lower-numbered one), never by hardcoding a Keycloak UUID. If a
+field only accepts raw IDs, configure a cross-resource reference for it in
+`config/<group>/config.go`. When a single Terraform field accepts IDs of
+several different resource types (e.g. `keycloak_openid_client_aggregate_policy`'s
+`policies`), use the `config/multitypes` helpers to expose one strongly-typed
+list field per referenceable type — see `keycloak_openid_client_client_policy`
+(`clients`/`saml_clients`) and `keycloak_openid_client_aggregate_policy`
+(`timePolicies`, `rolePolicies`, …) for examples.
 
 ### Step 4 – Name resources to avoid collisions
 

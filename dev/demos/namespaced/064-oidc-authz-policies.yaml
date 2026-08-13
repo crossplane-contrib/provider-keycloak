@@ -76,3 +76,36 @@ spec:
   providerConfigRef:
     name: "keycloak-provider-config"
     kind: ProviderConfig
+
+---
+# OpenID client aggregate policy (namespaced)
+# Aggregates the time policy and the client scope policy above.
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientAggregatePolicy
+metadata:
+  name: authz-aggregate-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    name: aggregate-policy
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: test
+      policy:
+        resolve: Always
+    timePoliciesRefs:
+      - name: authz-time-policy
+        policy:
+          resolve: Always
+    clientScopePoliciesRefs:
+      - name: authz-scope-policy
+        policy:
+          resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

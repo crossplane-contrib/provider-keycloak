@@ -70,3 +70,36 @@ spec:
         required: false
   providerConfigRef:
     name: "keycloak-provider-config"
+
+---
+# OpenID client aggregate policy
+# Aggregates the time policy and the client scope policy above. The policy IDs
+# are resolved from the referenced managed resources, one typed list per policy
+# type, and consolidated into the Terraform 'policies' field.
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAggregatePolicy
+metadata:
+  name: authz-aggregate-policy
+spec:
+  forProvider:
+    name: aggregate-policy
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: test
+      policy:
+        resolve: Always
+    timePoliciesRefs:
+      - name: authz-time-policy
+        policy:
+          resolve: Always
+    clientScopePoliciesRefs:
+      - name: authz-scope-policy
+        policy:
+          resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
