@@ -8,9 +8,13 @@ Usage
 -----
   # Compute demo subset from changed files (used by CI)
   #   stdout: "full" | "skip" | comma-separated list of demo paths
-  #   stderr: E2E_TIER=... and KEYCLOAK_VERSIONS=... lines for CI
+  #   stderr: E2E_TIER=... / KEYCLOAK_VERSIONS=... plus a human-readable proof
+  #           explaining exactly why the tier and each demo were selected
   python3 scripts/e2e_dag.py select --changed-files <file> [--demo-dir dev/demos]
   echo "config/openidclient/config.go" | python3 scripts/e2e_dag.py select --changed-files -
+
+  # Write the proof as markdown (for $GITHUB_STEP_SUMMARY) instead of plain text
+  python3 scripts/e2e_dag.py select --changed-files - --proof-file proof.md
 
   # Write cluster/test/e2e-index.json (run automatically by `make generate`).
   # The index answers "which e2e test uses resource X?" and holds the demo DAG.
@@ -18,11 +22,16 @@ Usage
 
 Tier logic (highest wins)
 --------------------------
-  full     : go.mod | go.sum | Makefile | internal/ | cmd/ | build/ |
-             .github/workflows/ci.yml | non-PR event
+  full     : go.mod | go.sum | Makefile | internal/ (except generated
+             controllers) | cmd/ | build/ | .github/workflows/ci.yml |
+             non-PR event
   targeted : apis/<group>/ | config/<group>/ | package/crds/ |
-             dev/demos/ | cluster/test/
+             dev/demos/ | cluster/test/ | generated internal/controller code
   skip     : docs/ | scripts/ | *.md | *.png | *.jpg only
+
+Every decision is accompanied by a proof: which changed file matched which
+rule, which API groups that implies, which demos seeded the subgraph and which
+dependency edge pulled in each additional demo.
 """
 
 import argparse
@@ -38,21 +47,48 @@ REPO_ROOT = Path(__file__).parent.parent
 INDEX_FILE = "cluster/test/e2e-index.json"
 
 # ---------------------------------------------------------------------------
-# Path-classification patterns
+# Path-classification rules
+#
+# Each rule is (tier, name, regex). The first matching rule wins per file, and
+# the highest tier across all files wins overall. Rule names are reported in
+# the selection proof so every decision is traceable back to a single pattern.
 # ---------------------------------------------------------------------------
 
-FULL_PATTERNS = re.compile(
-    r"^(go\.mod$|go\.sum$|Makefile$|internal/|cmd/|build/|"
-    r"\.github/workflows/ci\.yml$)"
+# Generated per-resource controller code: belongs to an API group, so a change
+# there is targeted (not a provider-wide change), same as apis/<group>/.
+GENERATED_CONTROLLER_RE = re.compile(
+    r"^internal/controller/(?:cluster|namespaced)/"
+    r"(?:([a-z][a-z0-9]+)/[a-z0-9]+/)?zz_[a-z_]+\.go$"
 )
 
-TARGETED_PATTERNS = re.compile(
-    r"^(apis/|config/|package/crds/|dev/demos/|cluster/test/)"
-)
+CLASSIFICATION_RULES: list[tuple[str, str, re.Pattern]] = [
+    # skip — cannot affect provider behaviour at runtime
+    ("skip", "documentation", re.compile(r"^docs/")),
+    ("skip", "markdown/images", re.compile(r".*\.(md|png|jpg|svg)$")),
+    # targeted — generated controller code for a single API group
+    ("targeted", "generated controller", GENERATED_CONTROLLER_RE),
+    # full — provider-wide code, build system or CI definition
+    ("full", "go module", re.compile(r"^go\.(mod|sum)$")),
+    ("full", "build system", re.compile(r"^(Makefile$|build/)")),
+    ("full", "provider runtime code", re.compile(r"^(internal/|cmd/)")),
+    ("full", "CI workflow", re.compile(r"^\.github/workflows/ci\.yml$")),
+    ("full", "e2e environment", re.compile(r"^dev/(?!demos/)")),
+    # skip — other workflows do not influence the e2e run
+    ("skip", "unrelated workflow", re.compile(r"^\.github/")),
+    # targeted — API surface / demos
+    ("targeted", "API types", re.compile(r"^apis/")),
+    ("targeted", "resource config", re.compile(r"^config/")),
+    ("targeted", "CRD schema", re.compile(r"^package/crds/")),
+    ("targeted", "generated example", re.compile(r"^examples-generated/")),
+    ("targeted", "example manifest", re.compile(r"^examples/")),
+    ("targeted", "demo manifest", re.compile(r"^dev/demos/")),
+    ("targeted", "e2e harness", re.compile(r"^cluster/test/")),
+    # skip — helper scripts (the selection script itself is covered here; a
+    # change to it only affects which tests are chosen, not their outcome)
+    ("skip", "helper script", re.compile(r"^scripts/")),
+]
 
-SKIP_PATTERNS = re.compile(
-    r".*\.(md|png|jpg|svg)$|^(docs/|scripts/|AGENTS\.md|SKILL\.md|README\.md)"
-)
+TIER_ORDER = {"skip": 0, "targeted": 1, "full": 2}
 
 # Extract API group from apiVersion, e.g.
 #   "openidclient.keycloak.crossplane.io/v1alpha1"   (cluster-scoped)
@@ -78,6 +114,9 @@ KIND_RE = re.compile(r"^\s*kind:\s+([A-Za-z][A-Za-z0-9]+)\s*$")
 CONFIG_GROUP_RE = re.compile(r"^config/([a-z][a-z0-9]+)/")
 APIS_GROUP_RE = re.compile(r"^apis/(?:cluster/|namespaced/)?([a-z][a-z0-9]+)/")
 CRD_GROUP_RE = re.compile(r"^package/crds/([a-z][a-z0-9]+)\.")
+EXAMPLES_GROUP_RE = re.compile(
+    r"^examples(?:-generated)?/(?:cluster/|namespaced/)?([a-z][a-z0-9]+)/"
+)
 
 
 # ---------------------------------------------------------------------------
@@ -276,9 +315,13 @@ class DemoGraph:
             result.update(self.group_to_demos.get(g, []))
         return result
 
-    def expand_subgraph(self, seed: set[Path]) -> list[Path]:
-        """Expand seed via forward + reverse dep traversal, return topo-sorted list."""
+    def expand_subgraph(self, seed: set[Path]) -> tuple[list[Path], dict[Path, str]]:
+        """Expand seed via forward + reverse dep traversal, return topo-sorted list.
+
+        Also returns a mapping demo → reason describing which edge pulled it in.
+        """
         included = set(seed)
+        reasons: dict[Path, str] = {}
         queue: deque[Path] = deque(seed)
 
         # Walk forward deps
@@ -287,6 +330,7 @@ class DemoGraph:
             for dep in self.demo_deps.get(d, set()):
                 if dep not in included:
                     included.add(dep)
+                    reasons[dep] = f"prerequisite of {rel(d)}"
                     queue.append(dep)
 
         # Walk reverse deps from the full included set
@@ -294,15 +338,17 @@ class DemoGraph:
             for rdep in self.demo_rdeps.get(d, set()):
                 if rdep not in included:
                     included.add(rdep)
+                    reasons[rdep] = f"depends on {rel(d)}"
                     queue.append(rdep)
         while queue:
             d = queue.popleft()
             for rdep in self.demo_rdeps.get(d, set()):
                 if rdep not in included:
                     included.add(rdep)
+                    reasons[rdep] = f"depends on {rel(d)}"
                     queue.append(rdep)
 
-        return self._topo_sort(included)
+        return self._topo_sort(included), reasons
 
     def _topo_sort(self, nodes: set[Path]) -> list[Path]:
         in_deg = {n: 0 for n in nodes}
@@ -358,42 +404,80 @@ class DemoGraph:
 # Tier detection
 # ---------------------------------------------------------------------------
 
-def detect_tier(changed_files: list[str]) -> str:
+def rel(path: Path) -> str:
+    """Repo-relative string for a demo path."""
+    try:
+        return str(path.relative_to(REPO_ROOT))
+    except ValueError:
+        return str(path)
+
+
+def classify_file(path: str) -> tuple[str, str]:
+    """Return (tier, rule name) for a single changed path."""
+    for tier, name, pattern in CLASSIFICATION_RULES:
+        if pattern.match(path):
+            return tier, name
+    # Unknown path → safe fallback
+    return "targeted", "unclassified path (safe fallback)"
+
+
+def detect_tier(changed_files: list[str]) -> tuple[str, list[tuple[str, str, str]]]:
+    """Return (tier, [(file, tier, rule), ...]) for the changed file set."""
     tier = "skip"
+    matches: list[tuple[str, str, str]] = []
     for f in changed_files:
         f = f.strip()
         if not f:
             continue
-        if FULL_PATTERNS.search(f):
-            return "full"
-        if TARGETED_PATTERNS.search(f):
-            tier = "targeted"
-        elif not SKIP_PATTERNS.match(f) and tier == "skip":
-            tier = "targeted"  # unknown path → safe fallback
-    return tier
+        file_tier, rule = classify_file(f)
+        matches.append((f, file_tier, rule))
+        if TIER_ORDER[file_tier] > TIER_ORDER[tier]:
+            tier = file_tier
+    return tier, matches
 
 
-def extract_groups_from_paths(changed_files: list[str], demo_dir: Path) -> set[str]:
+def extract_groups_from_paths(
+    changed_files: list[str], demo_dir: Path
+) -> tuple[set[str], dict[str, set[str]]]:
+    """Return (groups, group → changed paths that implied it)."""
     groups: set[str] = set()
+    why: dict[str, set[str]] = defaultdict(set)
     for f in changed_files:
         f = f.strip()
-        for pat in (CONFIG_GROUP_RE, APIS_GROUP_RE, CRD_GROUP_RE):
+        matched = False
+        for pat in (CONFIG_GROUP_RE, APIS_GROUP_RE, CRD_GROUP_RE,
+                    EXAMPLES_GROUP_RE, GENERATED_CONTROLLER_RE):
             m = pat.match(f)
-            if m:
+            if m and m.group(1):
                 groups.add(m.group(1))
+                why[m.group(1)].add(f)
+                matched = True
                 break
+        if matched:
+            continue
         # If a demo YAML changed directly, infer its group(s) by parsing it
         if f.startswith("dev/demos/"):
             p = REPO_ROOT / f
             if p.exists() and p.suffix == ".yaml":
                 info = parse_demo_file(p)
-                groups.update(info["groups"])
-    return groups
+                for g in info["groups"]:
+                    groups.add(g)
+                    why[g].add(f)
+    return groups, why
 
 
 # ---------------------------------------------------------------------------
 # CLI commands
 # ---------------------------------------------------------------------------
+
+def _proof(lines: list[str], proof_file: str | None) -> None:
+    """Emit the selection proof to stderr and, optionally, a markdown file."""
+    text = "\n".join(lines)
+    print(text, file=sys.stderr)
+    if proof_file:
+        md = ["### E2E test selection proof", "", "```text", text, "```", ""]
+        Path(proof_file).write_text("\n".join(md))
+
 
 def cmd_select(args) -> None:
     demo_dir = REPO_ROOT / args.demo_dir
@@ -404,24 +488,45 @@ def cmd_select(args) -> None:
             changed = fh.read().splitlines()
     changed = [f.strip() for f in changed if f.strip()]
 
-    tier = detect_tier(changed)
+    tier, matches = detect_tier(changed)
+
+    proof: list[str] = [f"Tier: {tier}", "", "Why (changed file -> rule -> tier):"]
+    # Show the decisive matches first, then the rest.
+    for f, file_tier, rule in sorted(
+        matches, key=lambda m: (-TIER_ORDER[m[1]], m[0])
+    ):
+        marker = "*" if file_tier == tier else " "
+        proof.append(f"  {marker} {f} -> {rule} -> {file_tier}")
+    proof.append("")
+    proof.append("(* = files that determined the resulting tier)")
 
     if tier == "full":
+        proof.append("")
+        proof.append("Running ALL demos against ALL Keycloak versions.")
         print("full")
         print("E2E_TIER=full", file=sys.stderr)
         print("KEYCLOAK_VERSIONS=all", file=sys.stderr)
+        _proof(proof, args.proof_file)
         return
 
     if tier == "skip":
+        proof.append("")
+        proof.append("No e2e-relevant changes — running NO demos.")
         print("skip")
         print("E2E_TIER=skip", file=sys.stderr)
         print("KEYCLOAK_VERSIONS=none", file=sys.stderr)
+        _proof(proof, args.proof_file)
         return
 
     # targeted
     graph = DemoGraph(demo_dir)
-    touched_groups = extract_groups_from_paths(changed, demo_dir)
+    touched_groups, group_why = extract_groups_from_paths(changed, demo_dir)
     seed = graph.demos_for_groups(touched_groups)
+
+    seed_why: dict[Path, str] = {}
+    for g in sorted(touched_groups):
+        for d in graph.group_to_demos.get(g, []):
+            seed_why.setdefault(d, f"uses API group '{g}'")
 
     # Include directly changed demo files
     for f in changed:
@@ -429,19 +534,44 @@ def cmd_select(args) -> None:
         if p.suffix == ".yaml" and p.exists():
             if p.parent.parent == demo_dir and p.name != "000-init.yaml":
                 seed.add(p)
+                seed_why[p] = "changed directly"
+
+    proof.append("")
+    proof.append("Touched API groups:")
+    if touched_groups:
+        for g in sorted(touched_groups):
+            proof.append(f"  {g} (from {', '.join(sorted(group_why[g]))})")
+    else:
+        proof.append("  (none)")
 
     if not seed:
         # Changed config/ paths don't map to any known demo group → run full
+        proof.append("")
+        proof.append(
+            "No demo covers the touched groups — falling back to ALL demos "
+            "against ALL Keycloak versions."
+        )
         print("full")
         print("E2E_TIER=full (fallback: no demos match changed groups)", file=sys.stderr)
         print("KEYCLOAK_VERSIONS=all", file=sys.stderr)
+        _proof(proof, args.proof_file)
         return
 
-    ordered = graph.expand_subgraph(seed)
+    ordered, dep_why = graph.expand_subgraph(seed)
     paths = [f"./{p.relative_to(REPO_ROOT)}" for p in ordered]
+
+    proof.append("")
+    proof.append(f"Selected demos ({len(paths)}, in execution order):")
+    for p in ordered:
+        reason = seed_why.get(p) or dep_why.get(p, "pulled in by the DAG")
+        proof.append(f"  {rel(p)} -- {reason}")
+    proof.append("")
+    proof.append("Keycloak versions: latest only")
+
     print(",".join(paths))
     print(f"E2E_TIER=targeted ({len(paths)} demos)", file=sys.stderr)
     print("KEYCLOAK_VERSIONS=latest", file=sys.stderr)
+    _proof(proof, args.proof_file)
 
 
 def build_index(demo_dir: Path) -> dict:
@@ -492,6 +622,9 @@ def main() -> None:
     sel = sub.add_parser("select", help="Compute minimal demo subset from changed files")
     sel.add_argument("--changed-files", required=True,
                      metavar="FILE", help="Newline-separated changed paths or '-' for stdin")
+    sel.add_argument("--proof-file", metavar="FILE", default=None,
+                     help="Also write the selection proof as markdown to FILE "
+                          "(e.g. $GITHUB_STEP_SUMMARY)")
     sel.set_defaults(func=cmd_select)
 
     idx = sub.add_parser(
