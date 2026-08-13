@@ -477,7 +477,7 @@ func Configure(p *config.Provider) {
 			Extractor:     common.PathUUIDExtractor,
 		}
 		r.References["scope.id"] = config.Reference{
-			TerraformName: "keycloak_openid_client_authorization_scope",
+			TerraformName: "keycloak_openid_client_scope",
 			Extractor:     common.PathUUIDExtractor,
 		}
 	})

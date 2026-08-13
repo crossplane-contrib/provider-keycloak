@@ -137,15 +137,15 @@ type ClientAuthorizationClientScopePolicyParameters struct {
 type ScopeInitParameters struct {
 
 	// Id of client scope.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientAuthorizationScope
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientScope
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// Reference to a ClientAuthorizationScope in openidclient to populate id.
+	// Reference to a ClientScope in openidclient to populate id.
 	// +kubebuilder:validation:Optional
 	IDRef *v1.NamespacedReference `json:"idRef,omitempty" tf:"-"`
 
-	// Selector for a ClientAuthorizationScope in openidclient to populate id.
+	// Selector for a ClientScope in openidclient to populate id.
 	// +kubebuilder:validation:Optional
 	IDSelector *v1.NamespacedSelector `json:"idSelector,omitempty" tf:"-"`
 
@@ -165,16 +165,16 @@ type ScopeObservation struct {
 type ScopeParameters struct {
 
 	// Id of client scope.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientAuthorizationScope
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientScope
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// Reference to a ClientAuthorizationScope in openidclient to populate id.
+	// Reference to a ClientScope in openidclient to populate id.
 	// +kubebuilder:validation:Optional
 	IDRef *v1.NamespacedReference `json:"idRef,omitempty" tf:"-"`
 
-	// Selector for a ClientAuthorizationScope in openidclient to populate id.
+	// Selector for a ClientScope in openidclient to populate id.
 	// +kubebuilder:validation:Optional
 	IDSelector *v1.NamespacedSelector `json:"idSelector,omitempty" tf:"-"`
 

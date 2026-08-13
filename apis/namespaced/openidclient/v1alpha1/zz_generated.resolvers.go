@@ -621,7 +621,7 @@ func (mg *ClientAuthorizationClientScopePolicy) ResolveReferences(ctx context.Co
 
 	for i3 := 0; i3 < len(mg.Spec.ForProvider.Scope); i3++ {
 		{
-			m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "ClientAuthorizationScope", "ClientAuthorizationScopeList")
+			m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "ClientScope", "ClientScopeList")
 			if err != nil {
 				return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 			}
@@ -683,7 +683,7 @@ func (mg *ClientAuthorizationClientScopePolicy) ResolveReferences(ctx context.Co
 
 	for i3 := 0; i3 < len(mg.Spec.InitProvider.Scope); i3++ {
 		{
-			m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "ClientAuthorizationScope", "ClientAuthorizationScopeList")
+			m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha1", "ClientScope", "ClientScopeList")
 			if err != nil {
 				return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 			}

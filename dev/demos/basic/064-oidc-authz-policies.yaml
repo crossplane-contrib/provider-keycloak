@@ -49,7 +49,7 @@ spec:
 
 ---
 # OpenID client authorization scope policy
-# Requires the manage:users scope for access.
+# Requires the my-groups client scope to be present in the request.
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientAuthorizationClientScopePolicy
 metadata:
@@ -69,7 +69,7 @@ spec:
         resolve: Always
     scope:
       - idRef:
-          name: authz-manage-users-scope
+          name: openid-client-scope
         required: false
   providerConfigRef:
     name: "keycloak-provider-config"

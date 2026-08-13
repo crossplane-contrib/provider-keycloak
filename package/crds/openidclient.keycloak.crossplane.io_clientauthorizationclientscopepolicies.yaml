@@ -253,8 +253,8 @@ spec:
                           description: Id of client scope.
                           type: string
                         idRef:
-                          description: Reference to a ClientAuthorizationScope in
-                            openidclient to populate id.
+                          description: Reference to a ClientScope in openidclient
+                            to populate id.
                           properties:
                             name:
                               description: Name of the referenced object.
@@ -288,8 +288,8 @@ spec:
                           - name
                           type: object
                         idSelector:
-                          description: Selector for a ClientAuthorizationScope in
-                            openidclient to populate id.
+                          description: Selector for a ClientScope in openidclient
+                            to populate id.
                           properties:
                             matchControllerRef:
                               description: |-
@@ -527,8 +527,8 @@ spec:
                           description: Id of client scope.
                           type: string
                         idRef:
-                          description: Reference to a ClientAuthorizationScope in
-                            openidclient to populate id.
+                          description: Reference to a ClientScope in openidclient
+                            to populate id.
                           properties:
                             name:
                               description: Name of the referenced object.
@@ -562,8 +562,8 @@ spec:
                           - name
                           type: object
                         idSelector:
-                          description: Selector for a ClientAuthorizationScope in
-                            openidclient to populate id.
+                          description: Selector for a ClientScope in openidclient
+                            to populate id.
                           properties:
                             matchControllerRef:
                               description: |-
