@@ -9,6 +9,7 @@ case_files=(
   "cluster/test/cases-kc-26.4.txt"
   "cluster/test/cases-kc-26.5.txt"
   "cluster/test/cases-orgs.txt"
+  "cluster/test/cases-fgapv2.txt"
 )
 
 for file in "${case_files[@]}"; do
@@ -29,7 +30,7 @@ stale_cases="$(mktemp)"
 
 trap 'rm -f "$all_demos" "$all_cases" "$missing_cases" "$stale_cases"' EXIT
 
-find dev/demos/basic dev/demos/namespaced dev/demos/orgs \
+find dev/demos/basic dev/demos/namespaced dev/demos/orgs dev/demos/fgapv2 \
   -type f -name '*.yaml' ! -name '000-init.yaml' \
   | sed 's#^\./##' | sort -u > "$all_demos"
 

@@ -97,5 +97,6 @@ keycloak_user
 keycloak_user_groups
 keycloak_user_roles
 keycloak_user_template_importer_identity_provider_mapper
+keycloak_users_admin_permissions
 keycloak_users_permissions
 keycloak_workflow
