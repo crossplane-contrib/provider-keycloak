@@ -1,0 +1,45 @@
+---
+# Group used as the target of the group admin permission below.
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: fgapv2-managed-group
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: fgapv2-managed-group
+    realmIdRef:
+      name: "fgapv2"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+# Fine-grained admin permission (FGAPv2) controlling who can manage the
+# members of a specific group. Keycloak's admin-permissions client allows only
+# one scope-based permission per set of resources, so all desired scopes are
+# combined into a single AdminPermissions resource.
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: manage-groups
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: manage-groups
+    description: Controls who can view and manage the managed group
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "fgapv2"
+      policy:
+        resolve: Always
+    groupIdsRefs:
+      - name: "fgapv2-managed-group"
+    scopes:
+      - view
+      - manage
+      - view-members
+      - manage-members
+      - manage-membership
+  providerConfigRef:
+    name: "keycloak-provider-config"
