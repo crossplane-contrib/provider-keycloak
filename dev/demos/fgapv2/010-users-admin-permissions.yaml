@@ -1,16 +1,17 @@
 ---
-# Fine-grained admin permission (FGAPv2) granting read access to all users of
-# the realm. Each AdminPermissions resource is exactly one permission, user
-# permissions are always realm wide.
+# Fine-grained admin permission (FGAPv2) controlling who can manage users in
+# the realm. Keycloak's admin-permissions client allows only one scope-based
+# permission per resource type ("Users"), so all desired scopes are combined
+# into a single AdminPermissions resource.
 apiVersion: user.keycloak.crossplane.io/v1alpha1
 kind: AdminPermissions
 metadata:
-  name: auditors-view-users
+  name: manage-users
 spec:
   deletionPolicy: Delete
   forProvider:
-    name: auditors-can-view-users
-    description: Auditors can view all users
+    name: manage-users
+    description: Controls who can view and manage all users in the realm
     decisionStrategy: UNANIMOUS
     realmIdRef:
       name: "fgapv2"
@@ -18,27 +19,6 @@ spec:
         resolve: Always
     scopes:
       - view
-  providerConfigRef:
-    name: "keycloak-provider-config"
----
-# A second permission covering the remaining write/admin scopes.
-# Note: scopes must be unique across permissions on the same resource server
-# (FGAPv2 enforces one permission per scope). "view" is already used above.
-apiVersion: user.keycloak.crossplane.io/v1alpha1
-kind: AdminPermissions
-metadata:
-  name: admins-manage-users
-spec:
-  deletionPolicy: Delete
-  forProvider:
-    name: admins-can-manage-users
-    description: Admins can manage all users
-    decisionStrategy: AFFIRMATIVE
-    realmIdRef:
-      name: "fgapv2"
-      policy:
-        resolve: Always
-    scopes:
       - manage
       - map-roles
       - manage-group-membership
