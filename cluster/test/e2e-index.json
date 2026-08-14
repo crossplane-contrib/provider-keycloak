@@ -1517,7 +1517,10 @@
       "deps": [
         "dev/demos/basic/001-realm.yaml"
       ],
-      "rdeps": []
+      "rdeps": [
+        "dev/demos/basic/052-identity-provider-mapper.yaml",
+        "dev/demos/basic/058-identity-provider-mappers-comprehensive.yaml"
+      ]
     },
     "dev/demos/basic/051-saml-identity-provider.yaml": {
       "groups": [
@@ -1533,7 +1536,8 @@
         "identityprovider"
       ],
       "deps": [
-        "dev/demos/basic/001-realm.yaml"
+        "dev/demos/basic/001-realm.yaml",
+        "dev/demos/basic/050-oidc-identity-provider.yaml"
       ],
       "rdeps": []
     },
@@ -1592,7 +1596,8 @@
         "identityprovider"
       ],
       "deps": [
-        "dev/demos/basic/001-realm.yaml"
+        "dev/demos/basic/001-realm.yaml",
+        "dev/demos/basic/050-oidc-identity-provider.yaml"
       ],
       "rdeps": []
     },
@@ -2391,7 +2396,10 @@
       "deps": [
         "dev/demos/namespaced/001-realm.yaml"
       ],
-      "rdeps": []
+      "rdeps": [
+        "dev/demos/namespaced/052-identity-provider-mapper.yaml",
+        "dev/demos/namespaced/058-identity-provider-mappers-comprehensive.yaml"
+      ]
     },
     "dev/demos/namespaced/051-saml-identity-provider.yaml": {
       "groups": [
@@ -2407,7 +2415,8 @@
         "identityprovider"
       ],
       "deps": [
-        "dev/demos/namespaced/001-realm.yaml"
+        "dev/demos/namespaced/001-realm.yaml",
+        "dev/demos/namespaced/050-oidc-identity-provider.yaml"
       ],
       "rdeps": []
     },
@@ -2466,7 +2475,8 @@
         "identityprovider"
       ],
       "deps": [
-        "dev/demos/namespaced/001-realm.yaml"
+        "dev/demos/namespaced/001-realm.yaml",
+        "dev/demos/namespaced/050-oidc-identity-provider.yaml"
       ],
       "rdeps": []
     },

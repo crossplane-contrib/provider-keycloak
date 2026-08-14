@@ -43,15 +43,14 @@ var additionalIdentityProviderTypes = []struct {
 // keycloak_oidc_identity_provider for backward compatibility, all other types get their
 // own synthetic field.
 func identityProviderAliasInstances(field string) []multitypes.Instance {
-	instances := []multitypes.Instance{
-		{
-			Name: field,
-			Reference: config.Reference{
-				TerraformName: "keycloak_oidc_identity_provider",
-				Extractor:     common.PathIdentityProviderAliasExtractor,
-			},
+	instances := make([]multitypes.Instance, 0, 1+len(additionalIdentityProviderTypes))
+	instances = append(instances, multitypes.Instance{
+		Name: field,
+		Reference: config.Reference{
+			TerraformName: "keycloak_oidc_identity_provider",
+			Extractor:     common.PathIdentityProviderAliasExtractor,
 		},
-	}
+	})
 	for _, t := range additionalIdentityProviderTypes {
 		instances = append(instances, multitypes.Instance{
 			Name: t.prefix + "_" + field,
