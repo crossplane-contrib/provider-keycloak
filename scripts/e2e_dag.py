@@ -24,6 +24,9 @@ Usage
   # The index answers "which e2e test uses resource X?" and holds the demo DAG.
   python3 scripts/e2e_dag.py index [--check]
 
+  # Fail when a managed resource has no e2e demo (run by `make e2e-cases-check`)
+  python3 scripts/e2e_dag.py coverage
+
 Tier logic (highest wins)
 --------------------------
   full     : go.mod | go.sum | Makefile | internal/ (except generated
@@ -32,6 +35,11 @@ Tier logic (highest wins)
   targeted : apis/<group>/ | config/<group>/ | package/crds/ |
              dev/demos/ | cluster/test/ | generated internal/controller code
   skip     : docs/ | scripts/ | *.md | *.png | *.jpg only
+
+A `targeted` change never selects zero demos: if no demo covers the touched
+resources, the selection broadens to the demos of their API group, and if even
+that is empty it falls back to `full`. Only a `skip`-tier change set (which
+cannot affect provider behaviour) runs no demos at all.
 
 Every decision is accompanied by a proof: which changed file matched which
 rule, which API groups that implies, which demos seeded the subgraph and which
@@ -42,8 +50,8 @@ Suites
 The demo directory has one subdirectory per e2e suite, each with its own
 cluster and Keycloak configuration:
 
-  basic/, namespaced/  regular suite   (cluster/test/cases.txt)
-  fgapv2/              FGAPv2 suite    (cluster/test/cases-fgapv2.txt)
+  basic/, namespaced/, orgs/  regular suite  (cluster/test/cases*.txt)
+  fgapv2/                     FGAPv2 suite   (cluster/test/cases-fgapv2.txt)
 
 Selection is computed per suite: ``select`` only ever returns demos of the
 regular suite, ``select-fgapv2`` only decides whether the FGAPv2 suite runs.
@@ -62,6 +70,9 @@ REPO_ROOT = Path(__file__).parent.parent
 
 # Generated inverted index + demo DAG, refreshed by `make generate`.
 INDEX_FILE = "cluster/test/e2e-index.json"
+
+# Managed resources that intentionally have no e2e demo, with the reason why.
+UNCOVERED_FILE = "cluster/test/uncovered-resources.txt"
 
 # ---------------------------------------------------------------------------
 # Path-classification rules
@@ -290,8 +301,12 @@ def parse_demo_file(path: Path) -> dict:
 # The demo directory holds one subdirectory per e2e suite. Each suite runs in
 # its own cluster with its own Keycloak configuration, so selection is computed
 # per suite and the suites never pull demos from each other.
-REGULAR_VARIANTS = ("basic", "namespaced")
-"""Demo subdirectories of the regular e2e suite (cluster/test/cases.txt)."""
+#
+# basic/, namespaced/ and orgs/ share one cluster: the orgs demos only need the
+# additional `organization` feature (Keycloak >= 26.6) and are version-gated by
+# the Makefile, while targeted runs always use the latest Keycloak.
+REGULAR_VARIANTS = ("basic", "namespaced", "orgs")
+"""Demo subdirectories of the regular e2e suite (cluster/test/cases*.txt)."""
 
 FGAPV2_VARIANTS = ("fgapv2",)
 """Demo subdirectories of the FGAPv2 e2e suite (cluster/test/cases-fgapv2.txt)."""
@@ -765,26 +780,27 @@ def cmd_select(args) -> None:
     else:
         proof.append("  (none)")
 
+    if not seed and touched_resources:
+        # A touched resource that no demo covers must never silently result in
+        # an empty run: broaden to the demos of its API group.
+        seed = graph.demos_for_groups(touched_groups)
+        for g in sorted(touched_groups):
+            for d in graph.group_to_demos.get(g, []):
+                seed_why.setdefault(
+                    d, f"uses API group '{g}' (no demo covers the touched resources)"
+                )
+
     if not seed:
-        # If we could not map the change set to covered resources, either skip
-        # uncovered resource-only changes or fall back to groups for broad paths.
+        # Nothing in the change set could be mapped to a demo. Never run an
+        # empty e2e suite for a code change — fall back to the full suite.
         proof.append("")
-        if touched_resources:
-            proof.append(
-                "No demo directly covers the touched resources — running NO demos "
-                "instead of broadening to the whole API group."
-            )
-            print("skip")
-            print("E2E_TIER=skip (no demos cover touched resources)", file=sys.stderr)
-            print("KEYCLOAK_VERSIONS=none", file=sys.stderr)
-        else:
-            proof.append(
-                "No demo covers the touched groups — falling back to ALL demos "
-                "against ALL Keycloak versions."
-            )
-            print("full")
-            print("E2E_TIER=full (fallback: no demos match changed groups)", file=sys.stderr)
-            print("KEYCLOAK_VERSIONS=all", file=sys.stderr)
+        proof.append(
+            "No demo covers the touched resources or groups — falling back to "
+            "ALL demos against ALL Keycloak versions."
+        )
+        print("full")
+        print("E2E_TIER=full (fallback: no demos match the change set)", file=sys.stderr)
+        print("KEYCLOAK_VERSIONS=all", file=sys.stderr)
         _proof(proof, args.proof_file)
         return
 
@@ -892,6 +908,96 @@ def cmd_select_fgapv2(args) -> None:
     _proof(proof, args.proof_file)
 
 
+def managed_resources() -> dict[tuple[str, str], str]:
+    """Return {(kind, group): crd path} for every managed resource CRD.
+
+    Only the cluster-scoped flavour is enumerated; the namespaced flavour
+    (``*.keycloak.m.crossplane.io``) always mirrors it.
+    """
+    result: dict[tuple[str, str], str] = {}
+    crd_dir = REPO_ROOT / "package" / "crds"
+    for path in sorted(crd_dir.glob("*.keycloak.crossplane.io_*.yaml")):
+        group = path.name.split(".", 1)[0]
+        for kind in CRD_SPEC_KIND_RE.findall(path.read_text(errors="replace")):
+            if kind == "CustomResourceDefinition":
+                continue
+            result[(kind, group)] = rel(path)
+            break
+    return result
+
+
+def demo_covered_resources(demo_dir: Path) -> set[tuple[str, str]]:
+    """Every (kind, group) used by a demo of any suite."""
+    covered: set[tuple[str, str]] = set()
+    for variants in (REGULAR_VARIANTS, FGAPV2_VARIANTS):
+        for demo in discover_demos(demo_dir, variants):
+            covered.update(parse_demo_file(demo)["kinds"])
+    return covered
+
+
+def read_uncovered_exceptions() -> dict[tuple[str, str], str]:
+    """Parse UNCOVERED_FILE into {(kind, group): reason}.
+
+    Format (one per line, ``#`` starts a comment):
+
+        Kind (group): reason why Keycloak cannot accept this resource in e2e
+    """
+    path = REPO_ROOT / UNCOVERED_FILE
+    result: dict[tuple[str, str], str] = {}
+    if not path.exists():
+        return result
+    for lineno, raw in enumerate(path.read_text().splitlines(), start=1):
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        m = re.match(r"^([A-Z][A-Za-z0-9]*)\s+\(([a-z][a-z0-9]*)\):\s*(\S.*)$", line)
+        if not m:
+            raise SystemExit(
+                f"{UNCOVERED_FILE}:{lineno}: expected 'Kind (group): reason', got {raw!r}"
+            )
+        result[(m.group(1), m.group(2))] = m.group(3).strip()
+    return result
+
+
+def cmd_coverage(args) -> None:
+    """Fail when a managed resource has no e2e demo and no declared exception."""
+    demo_dir = REPO_ROOT / args.demo_dir
+    resources = managed_resources()
+    covered = demo_covered_resources(demo_dir)
+    exceptions = read_uncovered_exceptions()
+
+    missing = sorted(r for r in resources if r not in covered and r not in exceptions)
+    stale = sorted(r for r in exceptions if r in covered or r not in resources)
+
+    if missing:
+        print("e2e resource coverage check failed", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("managed resources without an e2e demo:", file=sys.stderr)
+        for kind, group in missing:
+            print(f"  {kind} ({group}) — {resources[(kind, group)]}", file=sys.stderr)
+        print("", file=sys.stderr)
+        print(
+            "Add a demo under dev/demos/<suite>/ and list it in the matching "
+            f"cluster/test/cases*.txt. Only if Keycloak cannot accept the resource "
+            f"in a test environment, declare it in {UNCOVERED_FILE} with a reason.",
+            file=sys.stderr,
+        )
+    if stale:
+        print("", file=sys.stderr)
+        print(f"stale entries in {UNCOVERED_FILE} (now covered or removed):", file=sys.stderr)
+        for kind, group in stale:
+            print(f"  {kind} ({group})", file=sys.stderr)
+
+    if missing or stale:
+        sys.exit(1)
+
+    print(
+        f"e2e resource coverage check passed "
+        f"({len(resources) - len(exceptions)}/{len(resources)} resources covered, "
+        f"{len(exceptions)} declared untestable)"
+    )
+
+
 def build_index(demo_dir: Path) -> dict:
     graph = DemoGraph(demo_dir)
     return {
@@ -962,6 +1068,12 @@ def main() -> None:
     idx.add_argument("--check", action="store_true",
                      help="Verify the committed index is up to date instead of writing it")
     idx.set_defaults(func=cmd_index)
+
+    cov = sub.add_parser(
+        "coverage",
+        help="Fail when a managed resource has no e2e demo and no declared exception",
+    )
+    cov.set_defaults(func=cmd_coverage)
 
     args = parser.parse_args()
     args.func(args)

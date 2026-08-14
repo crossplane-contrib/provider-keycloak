@@ -482,8 +482,13 @@ suite runs in its own cluster with its own Keycloak configuration:
 
 | Suite | Demos | Case list | Keycloak features | CI job |
 |-------|-------|-----------|-------------------|--------|
-| regular | `dev/demos/basic/`, `dev/demos/namespaced/` | `cluster/test/cases.txt` | `admin-fine-grained-authz:v1` | `e2e-tests` |
+| regular | `dev/demos/basic/`, `dev/demos/namespaced/`, `dev/demos/orgs/` | `cluster/test/cases.txt`, `cases-kc-26.4.txt`, `cases-kc-26.5.txt`, `cases-orgs.txt` | `admin-fine-grained-authz:v1` (+ `organization` from 26.6) | `e2e-tests` |
 | FGAPv2 | `dev/demos/fgapv2/` | `cluster/test/cases-fgapv2.txt` | `admin-fine-grained-authz:v2` | `e2e-tests-fgapv2` |
+
+`dev/demos/orgs/` and the version-specific case lists belong to the regular
+suite: they run in the same cluster and are gated by Keycloak version in the
+`Makefile` (organizations need 26.6+). Targeted runs always use the latest
+Keycloak, so those demos can be selected freely.
 
 The split is a hard Keycloak constraint, not a convenience: the
 `admin-fine-grained-authz` feature can be enabled as **either** v1 **or** v2,
@@ -730,7 +735,10 @@ decode errors, then fix the field names or references as described above.
 ## Known Limitations
 
 - E2E tests only cover resources listed in `cluster/test/cases.txt` (regular
-  suite) or `cluster/test/cases-fgapv2.txt` (FGAPv2 suite).
+  suite) or `cluster/test/cases-fgapv2.txt` (FGAPv2 suite). Every managed
+  resource must be covered by a demo — see "Resource coverage gate" below —
+  unless it is declared in `cluster/test/uncovered-resources.txt` because
+  Keycloak rejects it in a test environment.
 - Chainsaw JMESPath assertions on `status.conditions` can fail if conditions are `nil` immediately after apply; add a wait step or assert only object existence first.
 
 ## Test Selection and the Resource Index
@@ -777,6 +785,35 @@ A change that only touches resources covered by one suite therefore runs
 exactly that suite — for example a new FGAPv2-only resource runs the FGAPv2
 suite while the regular suite is skipped, and neither result is derived from
 the other.
+
+### Never zero demos
+
+A `targeted` change set never results in an empty run. If no demo covers the
+touched resources, the selection broadens to all demos of their API group; if
+even that is empty it falls back to `full`. Only a `skip`-tier change set
+(documentation, images, helper scripts) runs no demos at all.
+
+### Resource coverage gate
+
+`make e2e-cases-check` runs two gates:
+
+1. `cluster/test/check_cases_coverage.sh` — every demo file is listed in a case
+   file, and every case entry has a demo file.
+2. `python3 scripts/e2e_dag.py coverage` — every managed resource CRD in
+   `package/crds/` is used by at least one demo.
+
+Adding a managed resource without an e2e demo therefore fails CI. The only
+accepted exception is a resource Keycloak itself rejects in a test environment
+(missing server-side artifact, removed feature, custom SPI deployment); such a
+resource must be declared with its reason in
+`cluster/test/uncovered-resources.txt`:
+
+```text
+Kind (group): reason
+```
+
+The gate also fails on stale entries, so an exception disappears automatically
+once the resource becomes testable.
 
 ### Group-scoped configuration
 

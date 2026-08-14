@@ -266,6 +266,18 @@ enforces this structurally: one demo graph per suite (`REGULAR_VARIANTS` /
 `select-fgapv2`), each gating its own CI job. Do not special-case individual
 files; add a variant tuple and a graph if a new suite is needed.
 
+`dev/demos/orgs/` belongs to the regular suite: it runs in the same cluster,
+gated by Keycloak version (organizations need 26.6+).
+
+**Every new managed resource must have an e2e demo.** `make e2e-cases-check`
+fails when a CRD in `package/crds/` is used by no demo. The only accepted
+exception is a resource Keycloak rejects in a test environment (missing
+server-side artifact, removed feature, custom SPI deployment); declare it with
+its reason in `cluster/test/uncovered-resources.txt`. "No demo written yet" is
+not a reason, and stale entries fail the gate too.
+
+A `targeted` selection never runs zero demos: if no demo covers the touched
+resources it broadens to their API group, and otherwise falls back to `full`.
 When you add a resource that is only covered by one suite, make sure that
 suite actually runs: `git diff --name-only <base> HEAD | python3
 scripts/e2e_dag.py select-fgapv2 --changed-files -` must print `run` (and the
