@@ -87,6 +87,7 @@ import (
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/providerconfig"
 	clientpolicyprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/clientpolicyprofile"
 	clientpolicyprofilepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/clientpolicyprofilepolicy"
+	clientregistrationpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/clientregistrationpolicy"
 	defaultclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/defaultclientscopes"
 	keystoreaesgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystoreaesgenerated"
 	keystoreecdsagenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystoreecdsagenerated"
@@ -197,6 +198,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		providerconfig.Setup,
 		clientpolicyprofile.Setup,
 		clientpolicyprofilepolicy.Setup,
+		clientregistrationpolicy.Setup,
 		defaultclientscopes.Setup,
 		keystoreaesgenerated.Setup,
 		keystoreecdsagenerated.Setup,
@@ -313,6 +315,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		providerconfig.SetupGated,
 		clientpolicyprofile.SetupGated,
 		clientpolicyprofilepolicy.SetupGated,
+		clientregistrationpolicy.SetupGated,
 		defaultclientscopes.SetupGated,
 		keystoreaesgenerated.SetupGated,
 		keystoreecdsagenerated.SetupGated,
@@ -428,6 +431,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		providerconfig.SetupWebhookWithManager,
 		clientpolicyprofile.SetupWebhookWithManager,
 		clientpolicyprofilepolicy.SetupWebhookWithManager,
+		clientregistrationpolicy.SetupWebhookWithManager,
 		defaultclientscopes.SetupWebhookWithManager,
 		keystoreaesgenerated.SetupWebhookWithManager,
 		keystoreecdsagenerated.SetupWebhookWithManager,

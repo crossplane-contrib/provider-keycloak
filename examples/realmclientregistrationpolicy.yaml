@@ -1,0 +1,22 @@
+# Example: Realm Client Registration Policy
+# This example demonstrates how to configure a client registration policy for a
+# realm. Client registration policies control which clients are allowed to
+# register themselves anonymously or with authentication (e.g. restricting
+# registration to a set of trusted hosts).
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: ClientRegistrationPolicy
+metadata:
+  name: trusted-hosts
+spec:
+  forProvider:
+    realmIdRef:
+      name: basic-realm  # Reference to the Realm resource
+    name: "Trusted Hosts"
+    providerId: "trusted-hosts"  # e.g. 'trusted-hosts', 'consent-required'
+    subType: "anonymous"  # Whether this policy applies to anonymous or authenticated client registration
+    config:
+      host-sending-registration-request-must-match: "true"
+      client-uris-must-match: "true"
+      trusted-hosts: "example.com"
+  providerConfigRef:
+    name: "keycloak-provider-config"  # Reference to the ProviderConfig resource

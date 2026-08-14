@@ -55,6 +55,7 @@
 ./dev/demos/namespaced/016-groups-same-name-children.yaml
 ./dev/demos/namespaced/015-groups.yaml
 ./dev/demos/namespaced/010-roles.yaml
+./dev/demos/namespaced/009-realm-client-registration-policy.yaml
 ./dev/demos/namespaced/009-realm-client-policy-profile-policy.yaml
 ./dev/demos/namespaced/008-realm-client-policy-profile.yaml
 ./dev/demos/namespaced/007-existing-realm.yaml
@@ -121,6 +122,7 @@
 ./dev/demos/basic/016-groups-same-name-children.yaml
 ./dev/demos/basic/015-groups.yaml
 ./dev/demos/basic/010-roles.yaml
+./dev/demos/basic/009-realm-client-registration-policy.yaml
 ./dev/demos/basic/009-realm-client-policy-profile-policy.yaml
 ./dev/demos/basic/008-realm-client-policy-profile.yaml
 ./dev/demos/basic/007-existing-realm.yaml
