@@ -81,6 +81,23 @@
       "allowedVersions": "<1.6.0"
     },
     {
+      "description": "Prevent the github-actions manager from misidentifying hugo-version as a Go version in docs workflows. The github-actions manager incorrectly treats peaceiris/actions-hugo's hugo-version input as a Go version dep. Disable exact-version Go updates from github-actions in those files; actions/setup-go uses range notation (1.x) which is excluded by this pattern.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchFileNames": [
+        ".github/workflows/deploy-docs.yml",
+        ".github/workflows/preview-docs.yml"
+      ],
+      "matchDepNames": [
+        "go",
+        "golang",
+        "golang/go"
+      ],
+      "matchCurrentVersion": "/^\\d+\\.\\d+\\.\\d+$/",
+      "enabled": false
+    },
+    {
       "groupName": "go versions",
       "matchManagers": [
         "gomod",
