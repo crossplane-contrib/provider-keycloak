@@ -467,21 +467,60 @@ E2e tests are driven by [uptest](https://github.com/crossplane/uptest) and
 | Path | Purpose |
 |------|---------|
 | `cluster/test/cases.txt` | Ordered list of demo files to test (deletion order is reversed) |
+| `cluster/test/cases-fgapv2.txt` | Ordered list of demo files of the FGAPv2 suite |
 | `cluster/test/setup.sh` | Per-case setup: CRD readiness wait, timeout rewriting, ordered deletion |
 | `dev/demos/basic/` | Cluster-scoped demo manifests |
 | `dev/demos/namespaced/` | Namespace-scoped demo manifests |
+| `dev/demos/fgapv2/` | Demos requiring fine-grained admin permissions v2 |
 | `dev/demos/basic/000-init.yaml` | Prerequisite resources for cluster demos (realm, secrets, etc.) |
 | `dev/demos/namespaced/000-init.yaml` | Prerequisite resources for namespaced demos |
+
+## Test Suites
+
+The demo directory has exactly **one subdirectory per e2e suite**, and each
+suite runs in its own cluster with its own Keycloak configuration:
+
+| Suite | Demos | Case list | Keycloak features | CI job |
+|-------|-------|-----------|-------------------|--------|
+| regular | `dev/demos/basic/`, `dev/demos/namespaced/`, `dev/demos/orgs/` | `cluster/test/cases.txt`, `cases-kc-26.4.txt`, `cases-kc-26.5.txt`, `cases-orgs.txt` | `admin-fine-grained-authz:v1` (+ `organization` from 26.6) | `e2e-tests` |
+| FGAPv2 | `dev/demos/fgapv2/` | `cluster/test/cases-fgapv2.txt` | `admin-fine-grained-authz:v2` | `e2e-tests-fgapv2` |
+
+`dev/demos/orgs/` and the version-specific case lists belong to the regular
+suite: they run in the same cluster and are gated by Keycloak version in the
+`Makefile` (organizations need 26.6+). Targeted runs always use the latest
+Keycloak, so those demos can be selected freely.
+
+The split is a hard Keycloak constraint, not a convenience: the
+`admin-fine-grained-authz` feature can be enabled as **either** v1 **or** v2,
+never both. Demos of one suite therefore must never end up in the other
+suite's run — a v2 demo would fail on a v1 cluster and vice versa.
+
+This is enforced structurally rather than by special-casing individual files:
+`scripts/e2e_dag.py` builds one demo graph per suite (`REGULAR_VARIANTS` /
+`FGAPV2_VARIANTS`) and exposes one selection command per suite (`select` and
+`select-fgapv2`). Adding a suite means adding a variant tuple and a graph, not
+adding exceptions.
+
+Run the FGAPv2 suite locally:
+
+```bash
+./dev/setup_dev_environment.sh --fgap-version v2
+make uptest FGAP_VERSION=v2
+```
 
 ## Adding a New Test
 
 1. Create `dev/demos/basic/<NNN>-<name>.yaml` and/or
-   `dev/demos/namespaced/<NNN>-<name>.yaml`.
-2. Add both paths to `cluster/test/cases.txt` in the correct position
+   `dev/demos/namespaced/<NNN>-<name>.yaml` — or, for resources requiring
+   fine-grained admin permissions v2, `dev/demos/fgapv2/<NNN>-<name>.yaml`.
+2. Add both paths to `cluster/test/cases.txt` (or `cases-fgapv2.txt`) in the
+   correct position
    (higher numbers run first in the list; deletion is in reverse order, so
    resources that depend on earlier resources must have a higher number).
 3. Make sure all prerequisites exist in earlier numbered demo files or in
    `000-init.yaml`.
+4. Reference prerequisites via `*Ref` blocks, never by literal name — the
+   selection DAG derives its edges from those refs.
 
 ## Why Tests Get Stuck
 
@@ -695,7 +734,11 @@ decode errors, then fix the field names or references as described above.
 
 ## Known Limitations
 
-- E2E tests only cover resources listed in `cluster/test/cases.txt`.
+- E2E tests only cover resources listed in `cluster/test/cases.txt` (regular
+  suite) or `cluster/test/cases-fgapv2.txt` (FGAPv2 suite). Every managed
+  resource must be covered by a demo — see "Resource coverage gate" below —
+  unless it is declared in `cluster/test/uncovered-resources.txt` because
+  Keycloak rejects it in a test environment.
 - Chainsaw JMESPath assertions on `status.conditions` can fail if conditions are `nil` immediately after apply; add a wait step or assert only object existence first.
 
 ## Test Selection and the Resource Index
@@ -723,6 +766,63 @@ Both steps compute the changed files against `main` (`git merge-base
 origin/main HEAD`), never against the pull request's recorded base SHA, so the
 selection stays correct even when the branch is behind or the base ref moves.
 
+### Per-suite selection
+
+Each suite is selected independently, so one suite can never silently disable
+the other:
+
+| Command | Output | Gates |
+|---------|--------|-------|
+| `select` | `full`, `skip`, or a comma-separated demo list (`basic/` + `namespaced/` only) | `e2e-tests` (runs unless the tier is `skip`) |
+| `select-fgapv2` | `run` or `skip` | `e2e-tests-fgapv2` |
+
+`select-fgapv2` answers a boolean because the FGAPv2 suite is small and always
+runs its full case list. It returns `run` when the change is `full`-tier, when
+an FGAPv2 demo or `cases-fgapv2.txt` changed, or when a touched resource or
+API group is used by an FGAPv2 demo.
+
+A change that only touches resources covered by one suite therefore runs
+exactly that suite — for example a new FGAPv2-only resource runs the FGAPv2
+suite while the regular suite is skipped, and neither result is derived from
+the other.
+
+### Never zero demos
+
+A `targeted` change set never results in an empty run. If no demo covers the
+touched resources, the selection broadens to all demos of their API group; if
+even that is empty it falls back to `full`. Only a `skip`-tier change set
+(documentation, images, helper scripts) runs no demos at all.
+
+### Resource coverage gate
+
+`make e2e-cases-check` runs two gates:
+
+1. `cluster/test/check_cases_coverage.sh` — every demo file is listed in a case
+   file, and every case entry has a demo file.
+2. `python3 scripts/e2e_dag.py coverage` — every managed resource CRD in
+   `package/crds/` is used by at least one demo.
+
+Adding a managed resource without an e2e demo therefore fails CI. The only
+accepted exception is a resource Keycloak itself rejects in a test environment
+(missing server-side artifact, removed feature, custom SPI deployment); such a
+resource must be declared with its reason in
+`cluster/test/uncovered-resources.txt`:
+
+```text
+Kind (group): reason
+```
+
+The gate also fails on stale entries, so an exception disappears automatically
+once the resource becomes testable.
+
+### Group-scoped configuration
+
+`config/<group>/` holds the Upjet configuration of a whole API group (external
+names, references, lookups). A change there cannot be attributed to a single
+resource, so **all** demos of that group are selected, on top of the demos of
+the concretely touched resources. Generated per-resource files
+(`apis/`, `package/crds/`, `internal/controller/`) stay resource-scoped.
+
 ### Proof
 
 Every selection is accompanied by a proof written to the job summary
@@ -741,6 +841,9 @@ Reproduce it locally:
 ```bash
 git diff --name-only $(git merge-base origin/main HEAD) HEAD | \
   python3 scripts/e2e_dag.py select --changed-files -
+
+git diff --name-only $(git merge-base origin/main HEAD) HEAD | \
+  python3 scripts/e2e_dag.py select-fgapv2 --changed-files -
 ```
 
 The graph is derived from the demo YAML itself: top-level `apiVersion:` and
