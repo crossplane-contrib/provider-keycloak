@@ -1,0 +1,69 @@
+---
+# Fine-grained admin permissions (FGAPv2) for users.
+#
+# Requires Keycloak 26.2+ started with the `admin-fine-grained-authz:v2`
+# feature and a realm with `adminPermissionsEnabled: true`. Keycloak then
+# creates an `admin-permissions` client that acts as the resource server for
+# all admin permissions of that realm.
+#
+# Each AdminPermissions resource is exactly one permission. User permissions
+# are always realm wide, they apply to all users of the realm.
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: example-adminpermissions-realm
+spec:
+  forProvider:
+    realm: example-adminpermissions
+    enabled: true
+    adminPermissionsEnabled: true
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+# Example 1: A permission granting read access to all users of the realm.
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: example-auditors-view-users
+spec:
+  forProvider:
+    name: auditors-can-view-users
+    description: Auditors can view all users
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: example-adminpermissions-realm
+    scopes:
+      - view
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+# Example 2: A permission covering every available user scope, evaluated
+# against the policies attached to it.
+#
+# Policies have to live on the realm's `admin-permissions` client. Their IDs
+# can either be set directly via `policies`, or resolved from managed policy
+# resources via the typed reference fields (`groupPolicies`, `rolePolicies`,
+# `userPolicies`, ...).
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: example-admins-manage-users
+spec:
+  forProvider:
+    name: admins-can-manage-users
+    description: Admins can view and manage all users
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: example-adminpermissions-realm
+    scopes:
+      - view
+      - manage
+      - map-roles
+      - manage-group-membership
+      - impersonate
+    policies:
+      - 4b0b7b4c-4a3f-4d2e-9f24-8b7b1a5d2c11
+  providerConfigRef:
+    name: keycloak-provider-config

@@ -109,6 +109,7 @@ import (
 	clientscopesamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/clientscope"
 	samluserattributeprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/samluserattributeprotocolmapper"
 	samluserpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/samluserpropertyprotocolmapper"
+	adminpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/adminpermissions"
 	groups "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/groups"
 	permissionsuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/permissions"
 	rolesuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/roles"
@@ -221,6 +222,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientscopesamlclient.Setup,
 		samluserattributeprotocolmapper.Setup,
 		samluserpropertyprotocolmapper.Setup,
+		adminpermissions.Setup,
 		groups.Setup,
 		permissionsuser.Setup,
 		rolesuser.Setup,
@@ -339,6 +341,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientscopesamlclient.SetupGated,
 		samluserattributeprotocolmapper.SetupGated,
 		samluserpropertyprotocolmapper.SetupGated,
+		adminpermissions.SetupGated,
 		groups.SetupGated,
 		permissionsuser.SetupGated,
 		rolesuser.SetupGated,
@@ -456,6 +459,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientscopesamlclient.SetupWebhookWithManager,
 		samluserattributeprotocolmapper.SetupWebhookWithManager,
 		samluserpropertyprotocolmapper.SetupWebhookWithManager,
+		adminpermissions.SetupWebhookWithManager,
 		groups.SetupWebhookWithManager,
 		permissionsuser.SetupWebhookWithManager,
 		rolesuser.SetupWebhookWithManager,

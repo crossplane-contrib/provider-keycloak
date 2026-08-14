@@ -272,6 +272,15 @@ UPTEST_EXAMPLE_LIST := $(UPTEST_EXAMPLE_LIST),$(shell grep -v '^\#' cluster/test
 endif
 endif
 
+# Fine-grained admin permissions (FGAPv2) test cases run against a Keycloak
+# started with the admin-fine-grained-authz:v2 feature. That feature replaces
+# the v1 feature all other test cases rely on, so the FGAPv2 cases are the only
+# ones executed in such a cluster.
+FGAP_VERSION ?= v1
+ifeq ($(FGAP_VERSION),v2)
+UPTEST_EXAMPLE_LIST := $(shell grep -v '^\#' cluster/test/cases-fgapv2.txt | paste -sd ',' -)
+endif
+
 # This target requires the following environment variables to be set:
 # - UPTEST_EXAMPLE_LIST, a comma-separated list of examples to test
 #   To ensure the proper functioning of the end-to-end test resource pre-deletion hook, it is crucial to arrange your resources appropriately.

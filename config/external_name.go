@@ -74,6 +74,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_user_groups":                                       config.IdentifierFromProvider,                                             // {realm}/{User.UUid}
 	"keycloak_user_roles":                                        config.IdentifierFromProvider,                                             // {realm}/{User.UUid}
 	"keycloak_users_permissions":                                 config.IdentifierFromProvider,                                             // {realm}
+	"keycloak_users_admin_permissions":                           config.IdentifierFromProvider,                                             // {realm}/{Permission.UUid}
 	"keycloak_user":                                              user.UserIdentifierFromIdentifyingProperties,                              // {UUid}
 	"keycloak_custom_user_federation":                            config.IdentifierFromProvider,                                             // ???
 	"keycloak_oidc_identity_provider":                            oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
