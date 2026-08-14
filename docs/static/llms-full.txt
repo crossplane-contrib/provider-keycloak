@@ -739,7 +739,10 @@ git diff --name-only $(git merge-base origin/main HEAD) HEAD | \
 The graph is derived from the demo YAML itself: top-level `apiVersion:` and
 `kind:` lines identify resources, and `*Ref:` → `name:` lookups give
 cross-demo edges within the same demo variant (`basic/` or `namespaced/`). No
-manual mapping file is maintained.
+manual mapping file is maintained. Only genuine infrastructure names
+(`keycloak-provider-config`, `crossplane-system`) are ignored when building
+those edges — realm names such as `dev`/`dev-ns` are real dependencies, so a
+targeted run always pulls in the realm demo that defines them.
 
 `make generate` refreshes `cluster/test/e2e-index.json`, which answers
 "which e2e test uses resource X?":

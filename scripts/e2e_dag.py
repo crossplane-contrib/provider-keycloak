@@ -95,20 +95,29 @@ TIER_ORDER = {"skip": 0, "targeted": 1, "full": 2}
 #   "realm.keycloak.m.crossplane.io/v1alpha1"         (namespaced)
 API_GROUP_RE = re.compile(r"^([a-z][a-z0-9]+)\.keycloak(?:\.m)?\.crossplane\.io/")
 
-# Ref-style key (e.g. clientIdRef:, realmIdRef:, idRef:)
-REF_LINE_RE = re.compile(r"^\s+\w+Ref:\s*$")
+# Ref-style key (e.g. clientIdRef:, realmIdRef:, idRef:) — also matches list
+# entries ("- idRef:") and plural list keys ("timePoliciesRefs:").
+REF_KEY_RE = re.compile(r"^\s*(?:-\s+)?\w+Refs?:\s*(?:#.*)?$")
 
-# name: value under a Ref block
-NAME_VALUE_RE = re.compile(r"^\s+name:\s+[\"']?([^\"'\s]+)[\"']?\s*$")
+# name: value inside a Ref block, either plain ("name: x") or as a list item
+# ("- name: x"). A trailing "# ..." comment is tolerated.
+REF_NAME_RE = re.compile(r"^(?:-\s+)?name:\s+[\"']?([^\"'\s#]+)[\"']?\s*(?:#.*)?$")
 
-# Metadata name definition
-METADATA_NAME_RE = re.compile(r"^\s{2}name:\s+[\"']?([^\"'\s]+)[\"']?\s*$")
+# Metadata name definition (a trailing "# ..." comment is tolerated)
+METADATA_NAME_RE = re.compile(r"^\s{2}name:\s+[\"']?([^\"'\s#]+)[\"']?\s*(?:#.*)?$")
 
 # Top-level apiVersion line
 APIVERSION_RE = re.compile(r"^apiVersion:\s+([^\s]+)")
 
-# Top-level kind line
-KIND_RE = re.compile(r"^kind:\s+([A-Za-z][A-Za-z0-9]+)\s*$")
+# Top-level kind line (a trailing "# ..." comment is tolerated)
+KIND_RE = re.compile(r"^kind:\s+([A-Za-z][A-Za-z0-9]+)\s*(?:#.*)?$")
+
+# Literal realm reference, e.g. "    realmId: dev" or "    realm: \"dev-ns\"".
+# Many demos address the realm by value instead of via realmIdRef; the demo
+# creating that realm is still a prerequisite.
+REALM_VALUE_RE = re.compile(
+    r"^\s+(?:realmId|realm):\s+[\"']?([^\"'\s#]+)[\"']?\s*(?:#.*)?$"
+)
 
 # Source path → group extraction
 CONFIG_GROUP_RE = re.compile(r"^config/([a-z][a-z0-9]+)/")
@@ -146,7 +155,8 @@ def parse_demo_file(path: Path) -> dict:
         "groups":   set of API group names used
         "kinds":    dict of (kind, group) → count
         "defines":  dict of resource name → (kind, group)
-        "ref_names": set of names appearing under *Ref keys (cross-resource refs)
+        "ref_names": set of names appearing under *Ref keys, plus literal realm
+                     values (cross-resource refs)
       }
     """
     groups: set[str] = set()
@@ -163,28 +173,47 @@ def parse_demo_file(path: Path) -> dict:
     current_group = ""
     current_name = ""
     in_metadata = False
-    in_ref = False
+    # Indentation of the enclosing *Ref/*Refs key, or None when outside one.
+    ref_indent: int | None = None
 
     for line in lines:
+        stripped = line.strip()
+
         # Document separator resets state
-        if line.strip() == "---":
+        if stripped == "---":
             if current_kind and current_group and current_name:
                 defines[current_name] = (current_kind, current_group)
             current_kind = ""
             current_group = ""
             current_name = ""
             in_metadata = False
-            in_ref = False
+            ref_indent = None
             continue
 
+        if not stripped or stripped.startswith("#"):
+            continue
+
+        indent = len(line) - len(line.lstrip())
+
+        # Inside a *Ref/*Refs block: collect every "name:" (also list items,
+        # e.g. "- name: x" for *Refs lists and "- idRef:" + "name: x").
+        if ref_indent is not None:
+            if indent > ref_indent:
+                m = REF_NAME_RE.match(stripped)
+                if m:
+                    ref_names.add(m.group(1))
+                if not REF_KEY_RE.match(line):
+                    continue
+            else:
+                ref_indent = None
+
         # Track metadata block (indentation = 0 for "metadata:", depth 1 for "  name:")
-        if line.strip() == "metadata:":
+        if stripped == "metadata:":
             in_metadata = True
-            in_ref = False
             continue
 
         # Leaving metadata block on any non-indented key
-        if in_metadata and line and not line[0].isspace():
+        if in_metadata and indent == 0:
             in_metadata = False
 
         # apiVersion
@@ -195,14 +224,12 @@ def parse_demo_file(path: Path) -> dict:
             if mg:
                 current_group = mg.group(1)
                 groups.add(current_group)
-            in_ref = False
             continue
 
         # kind
         m = KIND_RE.match(line)
         if m:
             current_kind = m.group(1)
-            in_ref = False
             continue
 
         # metadata name (exactly 2-space indent + "name:")
@@ -211,22 +238,17 @@ def parse_demo_file(path: Path) -> dict:
             current_name = m2.group(1)
             continue
 
-        # *Ref: key (entering a ref block)
-        if REF_LINE_RE.match(line):
-            in_ref = True
+        # *Ref:/*Refs: key (entering a ref block)
+        if REF_KEY_RE.match(line):
+            ref_indent = indent
             continue
 
-        # name: under a Ref block (deeper indent = 6+ spaces typically)
-        if in_ref and re.match(r"^\s{6,}name:\s+", line):
-            m2 = re.match(r"^\s+name:\s+[\"']?([^\"'\s#]+)[\"']?", line)
-            if m2:
-                ref_names.add(m2.group(1))
-            in_ref = False
+        # Literal realm value (realmId: dev) — the demo defining that realm is
+        # a prerequisite just like an explicit realmIdRef would be.
+        m = REALM_VALUE_RE.match(line)
+        if m:
+            ref_names.add(m.group(1))
             continue
-
-        # Any other non-empty line clears ref state if indentation drops
-        if in_ref and line.strip() and not re.match(r"^\s{6,}", line):
-            in_ref = False
 
     # Flush last document
     if current_kind and current_group and current_name:
@@ -313,7 +335,11 @@ class DemoGraph:
                     self.resource_used_by[(kind, group)].append(demo)
 
         # Phase 2: build cross-demo edges from *Ref lookups
-        INFRA_NAMES = {"keycloak-provider-config", "dev", "crossplane-system"}
+        # Cross-demo edges are derived from *Ref names. Only genuinely
+        # infrastructure-level names are ignored here; realm names such as
+        # "dev"/"dev-ns" are real demo dependencies (the realm demo must run
+        # first) and must not be filtered out.
+        INFRA_NAMES = {"keycloak-provider-config", "crossplane-system"}
         for demo in self.demos:
             info = self._parsed[demo]
             for ref_name in info["ref_names"]:
