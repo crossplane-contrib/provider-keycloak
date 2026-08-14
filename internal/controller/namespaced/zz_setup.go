@@ -102,6 +102,7 @@ import (
 	realmlocalization "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/realmlocalization"
 	requiredaction "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/requiredaction"
 	userprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/userprofile"
+	adminpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/role/adminpermissions"
 	role "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/role/role"
 	identityprovidersaml "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/saml/identityprovider"
 	clientsamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/client"
@@ -109,7 +110,7 @@ import (
 	clientscopesamlclient "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/clientscope"
 	samluserattributeprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/samluserattributeprotocolmapper"
 	samluserpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/samlclient/samluserpropertyprotocolmapper"
-	adminpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/adminpermissions"
+	adminpermissionsuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/adminpermissions"
 	groups "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/groups"
 	permissionsuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/permissions"
 	rolesuser "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/user/roles"
@@ -215,6 +216,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		realmlocalization.Setup,
 		requiredaction.Setup,
 		userprofile.Setup,
+		adminpermissions.Setup,
 		role.Setup,
 		identityprovidersaml.Setup,
 		clientsamlclient.Setup,
@@ -222,7 +224,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientscopesamlclient.Setup,
 		samluserattributeprotocolmapper.Setup,
 		samluserpropertyprotocolmapper.Setup,
-		adminpermissions.Setup,
+		adminpermissionsuser.Setup,
 		groups.Setup,
 		permissionsuser.Setup,
 		rolesuser.Setup,
@@ -334,6 +336,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		realmlocalization.SetupGated,
 		requiredaction.SetupGated,
 		userprofile.SetupGated,
+		adminpermissions.SetupGated,
 		role.SetupGated,
 		identityprovidersaml.SetupGated,
 		clientsamlclient.SetupGated,
@@ -341,7 +344,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientscopesamlclient.SetupGated,
 		samluserattributeprotocolmapper.SetupGated,
 		samluserpropertyprotocolmapper.SetupGated,
-		adminpermissions.SetupGated,
+		adminpermissionsuser.SetupGated,
 		groups.SetupGated,
 		permissionsuser.SetupGated,
 		rolesuser.SetupGated,
@@ -452,6 +455,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		realmlocalization.SetupWebhookWithManager,
 		requiredaction.SetupWebhookWithManager,
 		userprofile.SetupWebhookWithManager,
+		adminpermissions.SetupWebhookWithManager,
 		role.SetupWebhookWithManager,
 		identityprovidersaml.SetupWebhookWithManager,
 		clientsamlclient.SetupWebhookWithManager,
@@ -459,7 +463,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientscopesamlclient.SetupWebhookWithManager,
 		samluserattributeprotocolmapper.SetupWebhookWithManager,
 		samluserpropertyprotocolmapper.SetupWebhookWithManager,
-		adminpermissions.SetupWebhookWithManager,
+		adminpermissionsuser.SetupWebhookWithManager,
 		groups.SetupWebhookWithManager,
 		permissionsuser.SetupWebhookWithManager,
 		rolesuser.SetupWebhookWithManager,
