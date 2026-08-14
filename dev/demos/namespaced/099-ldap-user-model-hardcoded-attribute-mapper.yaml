@@ -4,7 +4,6 @@ metadata:
   name: hardcode-email-verified
   namespace: dev-ns
 spec:
-  deletionPolicy: Delete
   forProvider:
     attributeName: email_verified
     attributeValue: "true"
