@@ -633,6 +633,16 @@
         "dev/demos/namespaced/031-group-memberships.yaml"
       ]
     },
+    "MicrosoftIdentityProvider (oidc)": {
+      "defined_in": [
+        "dev/demos/basic/098-microsoft-identity-provider.yaml",
+        "dev/demos/namespaced/098-microsoft-identity-provider.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/098-microsoft-identity-provider.yaml",
+        "dev/demos/namespaced/098-microsoft-identity-provider.yaml"
+      ]
+    },
     "MsadLdsUserAccountControlMapper (ldap)": {
       "defined_in": [
         "dev/demos/basic/094-ldap-msad-mapper.yaml",
@@ -1094,7 +1104,8 @@
         "dev/demos/basic/094-ldap-msad-mapper.yaml",
         "dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml",
         "dev/demos/basic/096-ldap-full-name-mapper.yaml",
-        "dev/demos/basic/097-ldap-custom-mapper.yaml"
+        "dev/demos/basic/097-ldap-custom-mapper.yaml",
+        "dev/demos/basic/098-microsoft-identity-provider.yaml"
       ]
     },
     "dev/demos/basic/002-realm-clientscopes.yaml": {
@@ -1883,6 +1894,15 @@
       ],
       "rdeps": []
     },
+    "dev/demos/basic/098-microsoft-identity-provider.yaml": {
+      "groups": [
+        "oidc"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
     "dev/demos/namespaced/001-realm-durations.yaml": {
       "groups": [
         "realm"
@@ -1958,7 +1978,8 @@
         "dev/demos/namespaced/094-ldap-msad-mapper.yaml",
         "dev/demos/namespaced/095-ldap-hardcoded-attribute-mapper.yaml",
         "dev/demos/namespaced/096-ldap-full-name-mapper.yaml",
-        "dev/demos/namespaced/097-ldap-custom-mapper.yaml"
+        "dev/demos/namespaced/097-ldap-custom-mapper.yaml",
+        "dev/demos/namespaced/098-microsoft-identity-provider.yaml"
       ]
     },
     "dev/demos/namespaced/002-realm-clientscopes.yaml": {
@@ -2744,6 +2765,15 @@
       "deps": [
         "dev/demos/namespaced/001-realm.yaml",
         "dev/demos/namespaced/090-ldap-user-federation.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/098-microsoft-identity-provider.yaml": {
+      "groups": [
+        "oidc"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml"
       ],
       "rdeps": []
     }
