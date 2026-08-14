@@ -270,10 +270,14 @@ def parse_demo_file(path: Path) -> dict:
 # Demo discovery
 # ---------------------------------------------------------------------------
 
+DEMO_VARIANTS = ("basic", "namespaced")
+"""Subdirectories of the demo directory that are included in the regular (non-fgapv2) e2e suite."""
+
+
 def discover_demos(demo_dir: Path) -> list[Path]:
     """Sorted list of all non-init demo YAML files across basic/ and namespaced/."""
     result: list[Path] = []
-    for variant in ("basic", "namespaced"):
+    for variant in DEMO_VARIANTS:
         sub = demo_dir / variant
         if sub.is_dir():
             for f in sorted(sub.glob("*.yaml")):
@@ -673,11 +677,16 @@ def cmd_select(args) -> None:
             for d in graph.group_to_demos.get(g, []):
                 seed_why.setdefault(d, f"uses API group '{g}'")
 
-    # Include directly changed demo files
+    # Include directly changed demo files (basic/ and namespaced/ only; fgapv2/
+    # and other subdirectories are excluded because they run in a separate cluster).
     for f in changed:
         p = REPO_ROOT / f.strip()
         if p.suffix == ".yaml" and p.exists():
-            if p.parent.parent == demo_dir and p.name != "000-init.yaml":
+            if (
+                p.parent.parent == demo_dir
+                and p.parent.name in DEMO_VARIANTS
+                and p.name != "000-init.yaml"
+            ):
                 seed.add(p)
                 seed_why[p] = "changed directly"
 
