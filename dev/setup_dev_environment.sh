@@ -387,7 +387,19 @@ else
   pushd "${SCRIPT_DIR}/.." > /dev/null
   if [ "${PROVIDER_PREBUILT:-}" = "true" ]; then
     echo "DEBUG: Using pre-built provider image (PROVIDER_PREBUILT=true)"
-    make local-deploy-provider-prebuilt BUILD_REGISTRY=ci-build
+    # Extract VERSION from the pre-built xpkg filename so that the xpkg cache
+    # entry (named after the filename) and the Provider spec (which embeds
+    # VERSION) stay in sync.  Without this, the two git-describe invocations
+    # (one in the build job, one here) may produce different abbreviation
+    # lengths and cause "failed to get pre-cached package with pull policy Never".
+    XPKG_FILE=$(ls _output/xpkg/linux_amd64/*.xpkg 2>/dev/null | head -1)
+    if [ -n "$XPKG_FILE" ]; then
+      XPKG_VERSION=$(basename "$XPKG_FILE" | sed 's/^provider-keycloak-//; s/\.xpkg$//')
+      echo "DEBUG: Using version from pre-built xpkg filename: $XPKG_VERSION"
+      make local-deploy-provider-prebuilt BUILD_REGISTRY=ci-build VERSION="$XPKG_VERSION"
+    else
+      make local-deploy-provider-prebuilt BUILD_REGISTRY=ci-build
+    fi
     exit_code=$?
   else
     make local-deploy-provider
