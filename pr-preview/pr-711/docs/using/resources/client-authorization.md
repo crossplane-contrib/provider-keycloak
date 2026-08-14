@@ -8,6 +8,7 @@ Use these resources when a client needs Keycloak Authorization Services for fine
 |------|-----------|-------------------|---|
 | ClientAuthorizationResource | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_authorization_resource`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_authorization_resource) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAuthorizationResource/v1alpha1) |
 | ClientAuthorizationPermission | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_authorization_permission`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_authorization_permission) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAuthorizationPermission/v1alpha1) |
+| ClientAuthorizationPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_client_authorization_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_client_authorization_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAuthorizationPolicy/v1alpha1) |
 | ClientClientPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_client_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_client_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientClientPolicy/v1alpha1) |
 | ClientGroupPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_group_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_group_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientGroupPolicy/v1alpha1) |
 | ClientRolePolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_role_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_role_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientRolePolicy/v1alpha1) |
@@ -78,6 +79,7 @@ the generated reference fields instead, for example:
 
 - `resourcesRefs` / `resourcesSelector`
 - `clientPoliciesRefs`
+- `genericPoliciesRefs`
 - `groupPoliciesRefs`
 - `regexPoliciesRefs`
 - `rolePoliciesRefs`
@@ -265,6 +267,39 @@ spec:
     targetClaim: sample-claim
   providerConfigRef:
     name: "keycloak-provider-config"
+```
+
+### `ClientAuthorizationPolicy`
+
+Addresses any policy provider by its type id. Use it for custom policy providers
+implemented as a Java SPI, and for JavaScript policies deployed in a JAR, whose
+type is the `script-<fileName>` id Keycloak assigns. Stock policy types have
+dedicated resources and those should be preferred. This resource carries no
+provider-specific configuration, so it suits providers that require none.
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationPolicy
+metadata:
+  name: my-generic-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-generic-policy
+    description: Generic authorization policy addressed by provider type
+    type: time
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
 ```
 
 ### `ClientPermissions`
