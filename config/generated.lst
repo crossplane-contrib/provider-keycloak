@@ -86,6 +86,7 @@ keycloak_realm_optional_client_scopes
 keycloak_realm_user_profile
 keycloak_required_action
 keycloak_role
+keycloak_role_admin_permissions
 keycloak_saml_client
 keycloak_saml_client_default_scopes
 keycloak_saml_client_scope
