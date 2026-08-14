@@ -124,7 +124,7 @@ type Instance struct {
 // isUntyped reports whether the Instance has no cross-resource reference
 // configured, i.e. it only participates in consolidation.
 func (i Instance) isUntyped() bool {
-	return i.Reference.TerraformName == "" && i.Reference.Type == ""
+	return i.Reference.TerraformName == ""
 }
 
 // Options configures optional behavior for multi-type field generation.
