@@ -307,6 +307,13 @@ manual mapping file is maintained. Only genuine infrastructure names
 those edges — realm names such as `dev`/`dev-ns` are real dependencies, so a
 targeted run always pulls in the realm demo that defines them.
 
+The selected demo list is emitted in the same order as `cluster/test/cases.txt`
+— dependents first, prerequisites last — because uptest deletes the examples in
+the order they are listed. Deleting a prerequisite (for example the realm)
+before its dependents leaves them unable to resolve their references and blocks
+teardown, whereas applying in that order is safe since Crossplane retries
+reference resolution until the prerequisite exists.
+
 `make generate` refreshes `cluster/test/e2e-index.json`, which answers
 "which e2e test uses resource X?":
 

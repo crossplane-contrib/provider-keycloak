@@ -200,6 +200,11 @@ Rules and gotchas:
 - `Options.KeepOriginalField: true` is required (and only allowed) when one
   `Instance` reuses the original field name; use it to keep the existing field
   settable for backward compatibility. The helper panics on a mismatch.
+- An `Instance` that reuses the original field name may omit its `Reference`
+  entirely. Such an "untyped" instance gets no Ref/Selector fields; the
+  original field simply stays settable for raw IDs of types that have no
+  managed resource yet, and its value still takes part in consolidation.
+  Omitting the `Reference` on a *synthetic* instance panics.
 - If no `Instance` reuses the original name, the original field becomes
   computed-only (`status.atProvider`). As a side effect, a *required* Terraform
   field no longer emits a required-parameter CEL rule, so no CRD
@@ -745,6 +750,13 @@ manual mapping file is maintained. Only genuine infrastructure names
 (`keycloak-provider-config`, `crossplane-system`) are ignored when building
 those edges — realm names such as `dev`/`dev-ns` are real dependencies, so a
 targeted run always pulls in the realm demo that defines them.
+
+The selected demo list is emitted in the same order as `cluster/test/cases.txt`
+— dependents first, prerequisites last — because uptest deletes the examples in
+the order they are listed. Deleting a prerequisite (for example the realm)
+before its dependents leaves them unable to resolve their references and blocks
+teardown, whereas applying in that order is safe since Crossplane retries
+reference resolution until the prerequisite exists.
 
 `make generate` refreshes `cluster/test/e2e-index.json`, which answers
 "which e2e test uses resource X?":

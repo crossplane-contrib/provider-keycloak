@@ -364,7 +364,14 @@ class DemoGraph:
         return result
 
     def expand_subgraph(self, seed: set[Path]) -> tuple[list[Path], dict[Path, str]]:
-        """Expand seed via forward + reverse dep traversal, return topo-sorted list.
+        """Expand seed via forward + reverse dep traversal, return an ordered list.
+
+        The returned order matches the convention of ``cluster/test/cases.txt``:
+        dependents first, prerequisites last, because uptest deletes the
+        examples in the order they are listed. Applying in that order is safe —
+        Crossplane retries reference resolution until the prerequisite exists —
+        whereas deleting a prerequisite (e.g. the realm) before its dependents
+        leaves them unable to resolve their references and blocks teardown.
 
         Also returns a mapping demo → reason describing which edge pulled it in.
         """
@@ -394,7 +401,20 @@ class DemoGraph:
                     reasons[rdep] = f"depends on {rel(d)}"
                     queue.append(rdep)
 
-        return self._topo_sort(included), reasons
+        # Pull in prerequisites of anything added during the reverse-dep walk.
+        # A demo selected via rdeps may itself have prerequisites (forward deps)
+        # that were never visited because the first forward walk only started
+        # from the seed.
+        queue = deque(included)
+        while queue:
+            d = queue.popleft()
+            for dep in self.demo_deps.get(d, set()):
+                if dep not in included:
+                    included.add(dep)
+                    reasons[dep] = f"prerequisite of {rel(d)}"
+                    queue.append(dep)
+
+        return list(reversed(self._topo_sort(included))), reasons
 
     def _topo_sort(self, nodes: set[Path]) -> list[Path]:
         in_deg = {n: 0 for n in nodes}
@@ -706,7 +726,7 @@ def cmd_select(args) -> None:
     paths = [f"./{p.relative_to(REPO_ROOT)}" for p in ordered]
 
     proof.append("")
-    proof.append(f"Selected demos ({len(paths)}, in execution order):")
+    proof.append(f"Selected demos ({len(paths)}, in apply/delete order):")
     for p in ordered:
         reason = seed_why.get(p) or dep_why.get(p, "pulled in by the DAG")
         proof.append(f"  {rel(p)} -- {reason}")

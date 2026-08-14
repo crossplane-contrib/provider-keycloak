@@ -111,7 +111,20 @@ type Instance struct {
 	//
 	// The most important field is TerraformName, which identifies the target
 	// Terraform resource type (e.g., "keycloak_authentication_flow", "keycloak_authentication_subflow").
+	//
+	// It may be left empty only for an Instance that reuses the original field
+	// name (together with Options.KeepOriginalField). Such an "untyped"
+	// Instance gets no Ref/Selector fields; the original field simply stays
+	// settable so users can pass raw IDs for resource types that are not (yet)
+	// covered by a managed resource, and its value still participates in
+	// consolidation.
 	Reference config.Reference
+}
+
+// isUntyped reports whether the Instance has no cross-resource reference
+// configured, i.e. it only participates in consolidation.
+func (i Instance) isUntyped() bool {
+	return i.Reference.TerraformName == ""
 }
 
 // Options configures optional behavior for multi-type field generation.
@@ -195,23 +208,32 @@ func apply(r *config.Resource, name string, opts *Options, types ...Instance) {
 
 	// Configure each typed variant
 	for _, t := range types {
-		if t.Name == name {
-			// This instance reuses the original field name (with explicit permission via Options)
-			// Set the reference on the original field
-			// The field remains Optional in spec.forProvider for backward compatibility
-			r.References[t.Name] = t.Reference
-		} else {
+		if t.Name != name {
 			// Create a synthetic field for other types
 			// This copies the schema from the original field, inheriting
 			// all its properties (type, description, validation, etc.)
 			cp := *r.TerraformResource.Schema[name]
 			r.TerraformResource.Schema[t.Name] = &cp
-
-			// Configure cross-resource reference for the synthetic field
-			// This enables generation of Ref/Selector fields in the CRD
-			// See: github.com/crossplane/upjet/v2/pkg/config.Reference
-			r.References[t.Name] = t.Reference
 		}
+
+		if t.isUntyped() {
+			// An untyped Instance only participates in consolidation; it does
+			// not get a cross-resource reference. This is only meaningful for
+			// the original field, which stays settable so users can pass raw
+			// IDs of resource types that have no managed resource (yet).
+			if t.Name != name {
+				panic("multitypes: Instance '" + t.Name + "' has no Reference.TerraformName. " +
+					"Only an Instance reusing the original field name '" + name + "' may omit its Reference.")
+			}
+			continue
+		}
+
+		// Configure cross-resource reference for the field.
+		// For synthetic fields this enables generation of Ref/Selector fields
+		// in the CRD; for the original field (kept via Options.KeepOriginalField)
+		// it keeps the pre-existing reference for backward compatibility.
+		// See: github.com/crossplane/upjet/v2/pkg/config.Reference
+		r.References[t.Name] = t.Reference
 	}
 
 	if hasOriginalName && opts != nil && opts.KeepOriginalField {
