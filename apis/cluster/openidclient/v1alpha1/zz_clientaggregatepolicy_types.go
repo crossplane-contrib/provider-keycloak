@@ -77,6 +77,20 @@ type ClientAggregatePolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	GroupPoliciesSelector *v1.Selector `json:"groupPoliciesSelector,omitempty" tf:"-"`
 
+	// A list of policy IDs to aggregate.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientJsPolicy
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +listType=set
+	JsPolicies []*string `json:"jsPolicies,omitempty" tf:"js_policies,omitempty"`
+
+	// References to ClientJsPolicy in openidclient to populate jsPolicies.
+	// +kubebuilder:validation:Optional
+	JsPoliciesRefs []v1.Reference `json:"jsPoliciesRefs,omitempty" tf:"-"`
+
+	// Selector for a list of ClientJsPolicy in openidclient to populate jsPolicies.
+	// +kubebuilder:validation:Optional
+	JsPoliciesSelector *v1.Selector `json:"jsPoliciesSelector,omitempty" tf:"-"`
+
 	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
@@ -192,6 +206,10 @@ type ClientAggregatePolicyObservation struct {
 	// Policy ID representing the aggregate policy.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// A list of policy IDs to aggregate.
+	// +listType=set
+	JsPolicies []*string `json:"jsPolicies,omitempty" tf:"js_policies,omitempty"`
+
 	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
 
@@ -294,6 +312,21 @@ type ClientAggregatePolicyParameters struct {
 	// Selector for a list of ClientGroupPolicy in openidclient to populate groupPolicies.
 	// +kubebuilder:validation:Optional
 	GroupPoliciesSelector *v1.Selector `json:"groupPoliciesSelector,omitempty" tf:"-"`
+
+	// A list of policy IDs to aggregate.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientJsPolicy
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +kubebuilder:validation:Optional
+	// +listType=set
+	JsPolicies []*string `json:"jsPolicies,omitempty" tf:"js_policies,omitempty"`
+
+	// References to ClientJsPolicy in openidclient to populate jsPolicies.
+	// +kubebuilder:validation:Optional
+	JsPoliciesRefs []v1.Reference `json:"jsPoliciesRefs,omitempty" tf:"-"`
+
+	// Selector for a list of ClientJsPolicy in openidclient to populate jsPolicies.
+	// +kubebuilder:validation:Optional
+	JsPoliciesSelector *v1.Selector `json:"jsPoliciesSelector,omitempty" tf:"-"`
 
 	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	// +kubebuilder:validation:Optional

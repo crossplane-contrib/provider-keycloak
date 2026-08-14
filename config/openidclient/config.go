@@ -354,6 +354,13 @@ func Configure(p *config.Provider) {
 				},
 			},
 			syntheticListReference{
+				name: "js_policies",
+				reference: config.Reference{
+					TerraformName: "keycloak_openid_client_js_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			syntheticListReference{
 				name: "regex_policies",
 				reference: config.Reference{
 					TerraformName: "keycloak_openid_client_regex_policy",
@@ -421,6 +428,13 @@ func Configure(p *config.Provider) {
 				Name: "group_policies",
 				Reference: config.Reference{
 					TerraformName: "keycloak_openid_client_group_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "js_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_js_policy",
 					Extractor:     common.PathUUIDExtractor,
 				},
 			},
@@ -654,6 +668,27 @@ func getAuthzUserPoliciesIDByExternalName(ctx context.Context, id string, parame
 }
 
 func getAuthzUserPoliciesIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	return getAuthzPolicyIDByIdentifyingProperties(ctx, parameters, kcClient)
+}
+
+var authzJSPoliciesIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "resource_server_id", "name"},
+	GetIDByExternalName:          getAuthzJSPoliciesIDByExternalName,
+	GetIDByIdentifyingProperties: getAuthzJSPoliciesIDByIdentifyingProperties,
+}
+
+// AuthzJSPoliciesIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var AuthzJSPoliciesIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(authzJSPoliciesIdentifyingPropertiesLookup)
+
+func getAuthzJSPoliciesIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetOpenidClientAuthorizationJSPolicy(ctx, parameters["realm_id"].(string), parameters["resource_server_id"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getAuthzJSPoliciesIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
 	return getAuthzPolicyIDByIdentifyingProperties(ctx, parameters, kcClient)
 }
 

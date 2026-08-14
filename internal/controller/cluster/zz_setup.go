@@ -60,6 +60,7 @@ import (
 	clientclientpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientclientpolicy"
 	clientdefaultscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientdefaultscopes"
 	clientgrouppolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientgrouppolicy"
+	clientjspolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientjspolicy"
 	clientoptionalscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientoptionalscopes"
 	clientpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientpermissions"
 	clientregexpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientregexpolicy"
@@ -168,6 +169,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientclientpolicy.Setup,
 		clientdefaultscopes.Setup,
 		clientgrouppolicy.Setup,
+		clientjspolicy.Setup,
 		clientoptionalscopes.Setup,
 		clientpermissions.Setup,
 		clientregexpolicy.Setup,
@@ -282,6 +284,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientclientpolicy.SetupGated,
 		clientdefaultscopes.SetupGated,
 		clientgrouppolicy.SetupGated,
+		clientjspolicy.SetupGated,
 		clientoptionalscopes.SetupGated,
 		clientpermissions.SetupGated,
 		clientregexpolicy.SetupGated,
@@ -395,6 +398,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientclientpolicy.SetupWebhookWithManager,
 		clientdefaultscopes.SetupWebhookWithManager,
 		clientgrouppolicy.SetupWebhookWithManager,
+		clientjspolicy.SetupWebhookWithManager,
 		clientoptionalscopes.SetupWebhookWithManager,
 		clientpermissions.SetupWebhookWithManager,
 		clientregexpolicy.SetupWebhookWithManager,

@@ -95,20 +95,29 @@ TIER_ORDER = {"skip": 0, "targeted": 1, "full": 2}
 #   "realm.keycloak.m.crossplane.io/v1alpha1"         (namespaced)
 API_GROUP_RE = re.compile(r"^([a-z][a-z0-9]+)\.keycloak(?:\.m)?\.crossplane\.io/")
 
-# Ref-style key (e.g. clientIdRef:, realmIdRef:, idRef:)
-REF_LINE_RE = re.compile(r"^\s+\w+Ref:\s*$")
+# Ref-style key (e.g. clientIdRef:, realmIdRef:, idRef:) — also matches list
+# entries ("- idRef:") and plural list keys ("timePoliciesRefs:").
+REF_KEY_RE = re.compile(r"^\s*(?:-\s+)?\w+Refs?:\s*(?:#.*)?$")
 
-# name: value under a Ref block
-NAME_VALUE_RE = re.compile(r"^\s+name:\s+[\"']?([^\"'\s]+)[\"']?\s*$")
+# name: value inside a Ref block, either plain ("name: x") or as a list item
+# ("- name: x"). A trailing "# ..." comment is tolerated.
+REF_NAME_RE = re.compile(r"^(?:-\s+)?name:\s+[\"']?([^\"'\s#]+)[\"']?\s*(?:#.*)?$")
 
-# Metadata name definition
-METADATA_NAME_RE = re.compile(r"^\s{2}name:\s+[\"']?([^\"'\s]+)[\"']?\s*$")
+# Metadata name definition (a trailing "# ..." comment is tolerated)
+METADATA_NAME_RE = re.compile(r"^\s{2}name:\s+[\"']?([^\"'\s#]+)[\"']?\s*(?:#.*)?$")
 
-# apiVersion line
-APIVERSION_RE = re.compile(r"^\s*apiVersion:\s+([^\s]+)")
+# Top-level apiVersion line
+APIVERSION_RE = re.compile(r"^apiVersion:\s+([^\s]+)")
 
-# kind line
-KIND_RE = re.compile(r"^\s*kind:\s+([A-Za-z][A-Za-z0-9]+)\s*$")
+# Top-level kind line (a trailing "# ..." comment is tolerated)
+KIND_RE = re.compile(r"^kind:\s+([A-Za-z][A-Za-z0-9]+)\s*(?:#.*)?$")
+
+# Literal realm reference, e.g. "    realmId: dev" or "    realm: \"dev-ns\"".
+# Many demos address the realm by value instead of via realmIdRef; the demo
+# creating that realm is still a prerequisite.
+REALM_VALUE_RE = re.compile(
+    r"^\s+(?:realmId|realm):\s+[\"']?([^\"'\s#]+)[\"']?\s*(?:#.*)?$"
+)
 
 # Source path → group extraction
 CONFIG_GROUP_RE = re.compile(r"^config/([a-z][a-z0-9]+)/")
@@ -117,6 +126,21 @@ CRD_GROUP_RE = re.compile(r"^package/crds/([a-z][a-z0-9]+)\.")
 EXAMPLES_GROUP_RE = re.compile(
     r"^examples(?:-generated)?/(?:cluster/|namespaced/)?([a-z][a-z0-9]+)/"
 )
+RESOURCE_APIS_RE = re.compile(
+    r"^apis/(?:cluster|namespaced)/([a-z][a-z0-9]+)/v[^/]+/"
+    r"zz_[a-z0-9]+_(?:types|terraformed)\.go$"
+)
+RESOURCE_CONTROLLER_RE = re.compile(
+    r"^internal/controller/(?:cluster|namespaced)/([a-z][a-z0-9]+)/[a-z0-9]+/zz_controller\.go$"
+)
+RESOURCE_CRD_RE = re.compile(
+    r"^package/crds/([a-z][a-z0-9]+)\.keycloak(?:\.m)?\.crossplane\.io_[a-z0-9]+\.yaml$"
+)
+TOP_LEVEL_RESOURCE_KIND_RE = re.compile(r"^kind:\s+([A-Z][A-Za-z0-9]+)\s*$", re.MULTILINE)
+NESTED_RESOURCE_KIND_RE = re.compile(r"^\s+kind:\s+([A-Z][A-Za-z0-9]+)\s*$", re.MULTILINE)
+CRD_SPEC_KIND_RE = re.compile(r"^\s{4}kind:\s+([A-Z][A-Za-z0-9]+)\s*$", re.MULTILINE)
+GO_SCHEMA_KIND_RE = re.compile(r"^//\s+([A-Z][A-Za-z0-9]+)\s+is the Schema\b", re.MULTILINE)
+GO_CONTROLLER_KIND_RE = re.compile(r"\*svcapitypes\.([A-Z][A-Za-z0-9]+)")
 
 
 # ---------------------------------------------------------------------------
@@ -131,7 +155,8 @@ def parse_demo_file(path: Path) -> dict:
         "groups":   set of API group names used
         "kinds":    dict of (kind, group) → count
         "defines":  dict of resource name → (kind, group)
-        "ref_names": set of names appearing under *Ref keys (cross-resource refs)
+        "ref_names": set of names appearing under *Ref keys, plus literal realm
+                     values (cross-resource refs)
       }
     """
     groups: set[str] = set()
@@ -148,28 +173,47 @@ def parse_demo_file(path: Path) -> dict:
     current_group = ""
     current_name = ""
     in_metadata = False
-    in_ref = False
+    # Indentation of the enclosing *Ref/*Refs key, or None when outside one.
+    ref_indent: int | None = None
 
     for line in lines:
+        stripped = line.strip()
+
         # Document separator resets state
-        if line.strip() == "---":
+        if stripped == "---":
             if current_kind and current_group and current_name:
                 defines[current_name] = (current_kind, current_group)
             current_kind = ""
             current_group = ""
             current_name = ""
             in_metadata = False
-            in_ref = False
+            ref_indent = None
             continue
 
+        if not stripped or stripped.startswith("#"):
+            continue
+
+        indent = len(line) - len(line.lstrip())
+
+        # Inside a *Ref/*Refs block: collect every "name:" (also list items,
+        # e.g. "- name: x" for *Refs lists and "- idRef:" + "name: x").
+        if ref_indent is not None:
+            if indent > ref_indent:
+                m = REF_NAME_RE.match(stripped)
+                if m:
+                    ref_names.add(m.group(1))
+                if not REF_KEY_RE.match(line):
+                    continue
+            else:
+                ref_indent = None
+
         # Track metadata block (indentation = 0 for "metadata:", depth 1 for "  name:")
-        if line.strip() == "metadata:":
+        if stripped == "metadata:":
             in_metadata = True
-            in_ref = False
             continue
 
         # Leaving metadata block on any non-indented key
-        if in_metadata and line and not line[0].isspace():
+        if in_metadata and indent == 0:
             in_metadata = False
 
         # apiVersion
@@ -180,14 +224,12 @@ def parse_demo_file(path: Path) -> dict:
             if mg:
                 current_group = mg.group(1)
                 groups.add(current_group)
-            in_ref = False
             continue
 
         # kind
         m = KIND_RE.match(line)
         if m:
             current_kind = m.group(1)
-            in_ref = False
             continue
 
         # metadata name (exactly 2-space indent + "name:")
@@ -196,22 +238,17 @@ def parse_demo_file(path: Path) -> dict:
             current_name = m2.group(1)
             continue
 
-        # *Ref: key (entering a ref block)
-        if REF_LINE_RE.match(line):
-            in_ref = True
+        # *Ref:/*Refs: key (entering a ref block)
+        if REF_KEY_RE.match(line):
+            ref_indent = indent
             continue
 
-        # name: under a Ref block (deeper indent = 6+ spaces typically)
-        if in_ref and re.match(r"^\s{6,}name:\s+", line):
-            m2 = re.match(r"^\s+name:\s+[\"']?([^\"'\s#]+)[\"']?", line)
-            if m2:
-                ref_names.add(m2.group(1))
-            in_ref = False
+        # Literal realm value (realmId: dev) — the demo defining that realm is
+        # a prerequisite just like an explicit realmIdRef would be.
+        m = REALM_VALUE_RE.match(line)
+        if m:
+            ref_names.add(m.group(1))
             continue
-
-        # Any other non-empty line clears ref state if indentation drops
-        if in_ref and line.strip() and not re.match(r"^\s{6,}", line):
-            in_ref = False
 
     # Flush last document
     if current_kind and current_group and current_name:
@@ -298,14 +335,18 @@ class DemoGraph:
                     self.resource_used_by[(kind, group)].append(demo)
 
         # Phase 2: build cross-demo edges from *Ref lookups
-        INFRA_NAMES = {"keycloak-provider-config", "dev", "crossplane-system"}
+        # Cross-demo edges are derived from *Ref names. Only genuinely
+        # infrastructure-level names are ignored here; realm names such as
+        # "dev"/"dev-ns" are real demo dependencies (the realm demo must run
+        # first) and must not be filtered out.
+        INFRA_NAMES = {"keycloak-provider-config", "crossplane-system"}
         for demo in self.demos:
             info = self._parsed[demo]
             for ref_name in info["ref_names"]:
                 if ref_name in INFRA_NAMES:
                     continue
                 for dep_demo in self.name_to_demos.get(ref_name, []):
-                    if dep_demo != demo:
+                    if dep_demo != demo and dep_demo.parent == demo.parent:
                         self.demo_deps[demo].add(dep_demo)
                         self.demo_rdeps[dep_demo].add(demo)
 
@@ -313,6 +354,13 @@ class DemoGraph:
         result: set[Path] = set()
         for g in groups:
             result.update(self.group_to_demos.get(g, []))
+        return result
+
+    def demos_for_resources(self, resources: set[tuple[str, str]]) -> set[Path]:
+        result: set[Path] = set()
+        for resource in resources:
+            result.update(self.resource_defined_by.get(resource, []))
+            result.update(self.resource_used_by.get(resource, []))
         return result
 
     def expand_subgraph(self, seed: set[Path]) -> tuple[list[Path], dict[Path, str]]:
@@ -333,13 +381,11 @@ class DemoGraph:
                     reasons[dep] = f"prerequisite of {rel(d)}"
                     queue.append(dep)
 
-        # Walk reverse deps from the full included set
-        for d in list(included):
-            for rdep in self.demo_rdeps.get(d, set()):
-                if rdep not in included:
-                    included.add(rdep)
-                    reasons[rdep] = f"depends on {rel(d)}"
-                    queue.append(rdep)
+        # Walk reverse deps starting from the original seed only. This keeps
+        # resource-focused selections tight: prerequisites pulled in by the
+        # forward walk do not fan out into every sibling demo that happens to
+        # share the same dependency.
+        queue = deque(seed)
         while queue:
             d = queue.popleft()
             for rdep in self.demo_rdeps.get(d, set()):
@@ -466,6 +512,77 @@ def extract_groups_from_paths(
     return groups, why
 
 
+def parse_resource_kinds_from_file(path: Path) -> set[str]:
+    try:
+        text = path.read_text(errors="replace")
+    except Exception:
+        return set()
+
+    if path.suffix == ".go":
+        kinds = set(GO_SCHEMA_KIND_RE.findall(text))
+        if kinds:
+            return kinds
+        return set(GO_CONTROLLER_KIND_RE.findall(text))
+
+    if path.suffix == ".yaml":
+        if RESOURCE_CRD_RE.match(str(path.relative_to(REPO_ROOT))):
+            return {
+                kind for kind in CRD_SPEC_KIND_RE.findall(text)
+                if kind != "CustomResourceDefinition"
+            }
+        top_level = set(TOP_LEVEL_RESOURCE_KIND_RE.findall(text))
+        if top_level:
+            return top_level
+        return {
+            kind for kind in NESTED_RESOURCE_KIND_RE.findall(text)
+            if kind != "CustomResourceDefinition"
+        }
+
+    return set()
+
+
+def extract_resources_from_paths(
+    changed_files: list[str], demo_dir: Path
+) -> tuple[set[tuple[str, str]], dict[tuple[str, str], set[str]]]:
+    resources: set[tuple[str, str]] = set()
+    why: dict[tuple[str, str], set[str]] = defaultdict(set)
+
+    for f in changed_files:
+        f = f.strip()
+        if not f:
+            continue
+
+        path = REPO_ROOT / f
+        group = None
+        for pattern in (
+            RESOURCE_APIS_RE,
+            RESOURCE_CRD_RE,
+            RESOURCE_CONTROLLER_RE,
+        ):
+            match = pattern.match(f)
+            if match:
+                group = match.group(1)
+                break
+
+        if f.startswith("dev/demos/") and path.exists() and path.suffix == ".yaml":
+            info = parse_demo_file(path)
+            for kind, group_name in info["kinds"]:
+                resource = (kind, group_name)
+                resources.add(resource)
+                why[resource].add(f)
+            continue
+
+        if not group or not path.exists():
+            continue
+
+        for kind in parse_resource_kinds_from_file(path):
+            resource = (kind, group)
+            resources.add(resource)
+            why[resource].add(f)
+
+    return resources, why
+
+
 # ---------------------------------------------------------------------------
 # CLI commands
 # ---------------------------------------------------------------------------
@@ -521,12 +638,20 @@ def cmd_select(args) -> None:
     # targeted
     graph = DemoGraph(demo_dir)
     touched_groups, group_why = extract_groups_from_paths(changed, demo_dir)
-    seed = graph.demos_for_groups(touched_groups)
-
+    touched_resources, resource_why = extract_resources_from_paths(changed, demo_dir)
+    seed = graph.demos_for_resources(touched_resources)
     seed_why: dict[Path, str] = {}
-    for g in sorted(touched_groups):
-        for d in graph.group_to_demos.get(g, []):
-            seed_why.setdefault(d, f"uses API group '{g}'")
+    for kind, group in sorted(touched_resources):
+        for d in graph.resource_defined_by.get((kind, group), []):
+            seed_why.setdefault(d, f"defines {kind} ({group})")
+        for d in graph.resource_used_by.get((kind, group), []):
+            seed_why.setdefault(d, f"uses {kind} ({group})")
+
+    if not seed and not touched_resources:
+        seed = graph.demos_for_groups(touched_groups)
+        for g in sorted(touched_groups):
+            for d in graph.group_to_demos.get(g, []):
+                seed_why.setdefault(d, f"uses API group '{g}'")
 
     # Include directly changed demo files
     for f in changed:
@@ -537,6 +662,16 @@ def cmd_select(args) -> None:
                 seed_why[p] = "changed directly"
 
     proof.append("")
+    proof.append("Touched resources:")
+    if touched_resources:
+        for kind, group in sorted(touched_resources):
+            proof.append(
+                f"  {kind} ({group}) (from {', '.join(sorted(resource_why[(kind, group)]))})"
+            )
+    else:
+        proof.append("  (none)")
+
+    proof.append("")
     proof.append("Touched API groups:")
     if touched_groups:
         for g in sorted(touched_groups):
@@ -545,15 +680,25 @@ def cmd_select(args) -> None:
         proof.append("  (none)")
 
     if not seed:
-        # Changed config/ paths don't map to any known demo group → run full
+        # If we could not map the change set to covered resources, either skip
+        # uncovered resource-only changes or fall back to groups for broad paths.
         proof.append("")
-        proof.append(
-            "No demo covers the touched groups — falling back to ALL demos "
-            "against ALL Keycloak versions."
-        )
-        print("full")
-        print("E2E_TIER=full (fallback: no demos match changed groups)", file=sys.stderr)
-        print("KEYCLOAK_VERSIONS=all", file=sys.stderr)
+        if touched_resources:
+            proof.append(
+                "No demo directly covers the touched resources — running NO demos "
+                "instead of broadening to the whole API group."
+            )
+            print("skip")
+            print("E2E_TIER=skip (no demos cover touched resources)", file=sys.stderr)
+            print("KEYCLOAK_VERSIONS=none", file=sys.stderr)
+        else:
+            proof.append(
+                "No demo covers the touched groups — falling back to ALL demos "
+                "against ALL Keycloak versions."
+            )
+            print("full")
+            print("E2E_TIER=full (fallback: no demos match changed groups)", file=sys.stderr)
+            print("KEYCLOAK_VERSIONS=all", file=sys.stderr)
         _proof(proof, args.proof_file)
         return
 
