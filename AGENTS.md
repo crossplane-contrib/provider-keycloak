@@ -221,6 +221,11 @@ Rules and gotchas:
 - `Options.KeepOriginalField: true` is required (and only allowed) when one
   `Instance` reuses the original field name; use it to keep the existing field
   settable for backward compatibility. The helper panics on a mismatch.
+- An `Instance` that reuses the original field name may omit its `Reference`
+  entirely. Such an "untyped" instance gets no Ref/Selector fields; the
+  original field simply stays settable for raw IDs of types that have no
+  managed resource yet, and its value still takes part in consolidation.
+  Omitting the `Reference` on a *synthetic* instance panics.
 - If no `Instance` reuses the original name, the original field becomes
   computed-only (`status.atProvider`). A useful side effect is that a
   *required* Terraform field no longer emits a required-parameter CEL rule,

@@ -125,6 +125,8 @@ multitypes.ApplyToAsList(r, "policies",
   reuses the original field name (backward compatibility); otherwise the
   original field becomes computed-only and its required-parameter CEL rule is
   no longer emitted.
+- An `Instance` reusing the original field name may omit its `Reference` to
+  keep that field settable for raw, untyped IDs (no Ref/Selector generated).
 - Every referenced `TerraformName` must exist in `config/generated.lst`, or
   `make generate` panics.
 - Examples: `config/role/config.go`, `config/mapper/config.go`,
