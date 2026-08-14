@@ -394,6 +394,19 @@ class DemoGraph:
                     reasons[rdep] = f"depends on {rel(d)}"
                     queue.append(rdep)
 
+        # Pull in prerequisites of anything added during the reverse-dep walk.
+        # A demo selected via rdeps may itself have prerequisites (forward deps)
+        # that were never visited because the first forward walk only started
+        # from the seed.
+        queue = deque(included)
+        while queue:
+            d = queue.popleft()
+            for dep in self.demo_deps.get(d, set()):
+                if dep not in included:
+                    included.add(dep)
+                    reasons[dep] = f"prerequisite of {rel(d)}"
+                    queue.append(dep)
+
         return self._topo_sort(included), reasons
 
     def _topo_sort(self, nodes: set[Path]) -> list[Path]:
