@@ -249,6 +249,28 @@ Rules and gotchas:
 - E2E tests: `make e2e` (requires a running Keycloak and Crossplane cluster)
 - E2E coverage is limited to resources listed in `cluster/test/cases.txt`
 
+### E2E suites
+
+There is exactly one demo subdirectory per e2e suite, and each suite runs in
+its own cluster with its own Keycloak configuration:
+
+| Suite | Demos | Case list | Keycloak features | CI job |
+|-------|-------|-----------|-------------------|--------|
+| regular | `dev/demos/basic/`, `dev/demos/namespaced/` | `cluster/test/cases.txt` | `admin-fine-grained-authz:v1` | `e2e-tests` |
+| FGAPv2 | `dev/demos/fgapv2/` | `cluster/test/cases-fgapv2.txt` | `admin-fine-grained-authz:v2` | `e2e-tests-fgapv2` |
+
+`admin-fine-grained-authz` can be enabled as v1 **or** v2, never both, so a
+demo of one suite must never be selected for the other. `scripts/e2e_dag.py`
+enforces this structurally: one demo graph per suite (`REGULAR_VARIANTS` /
+`FGAPV2_VARIANTS`) and one selection command per suite (`select` /
+`select-fgapv2`), each gating its own CI job. Do not special-case individual
+files; add a variant tuple and a graph if a new suite is needed.
+
+When you add a resource that is only covered by one suite, make sure that
+suite actually runs: `git diff --name-only <base> HEAD | python3
+scripts/e2e_dag.py select-fgapv2 --changed-files -` must print `run` (and the
+regular `select` must list the demos you expect).
+
 ## Documentation
 
 Docs use [Hugo](https://gohugo.io/) with the
@@ -269,7 +291,11 @@ make docs-freshness-check             # CI: verify llms.txt is current
   Renovate PR. Minor/patch/digest updates auto-merge once tests pass; major
   version bumps are **not** auto-merged since they require deliberate schema
   migration and must be reviewed manually.
-- E2E tests only cover resources listed in `cluster/test/cases.txt`.
+- E2E tests only cover resources listed in `cluster/test/cases.txt`
+  (regular suite) or `cluster/test/cases-fgapv2.txt` (FGAPv2 suite).
+- **No hacks or workarounds.** Prefer an explicit, documented pattern over
+  a special case; if a constraint forces a deviation, document the
+  constraint instead of working around it.
 - **Upjet does not support `+nullable` markers.** The kubebuilder Options struct
   only supports Required, Minimum, Maximum, Default.
 - **Membership ownership:** Avoid managing the same group's membership with both
@@ -289,6 +315,7 @@ make docs-freshness-check             # CI: verify llms.txt is current
 | `make generate` produces unexpectedly large/stale diffs | Stale local generator cache/artifacts | Remove `.work/` and `config/schema.json`, then re-run `make generate` |
 | E2E provider version mismatch | Git tags not fetched before build | Add `git fetch --tags` before `make build` |
 | Reconciliation loop on membership | Both `Memberships` + `Groups` (exhaustive) target same group | Use only one authoritative source |
+| E2E job skipped although the resource changed | No demo of that suite covers the resource | Add a demo + case-list entry, then verify with `scripts/e2e_dag.py select` / `select-fgapv2` |
 
 ## LLM Files
 

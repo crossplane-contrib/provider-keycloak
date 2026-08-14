@@ -34,11 +34,14 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       noop: ${{ steps.noop.outputs.should_skip }}
+      # true only when BOTH e2e suites are skipped (gates the provider build)
       skip-e2e: ${{ steps.e2e-scope.outputs.skip }}
       # DAG-derived e2e tier + Keycloak matrix (the demo subset itself is
       # recomputed in the e2e-tests job so it is visible per run)
       e2e-tier: ${{ steps.e2e-scope.outputs.tier }}
       e2e-keycloak-versions: ${{ steps.e2e-scope.outputs.keycloak_versions }}
+      # FGAPv2 suite runs in its own cluster and is selected independently
+      e2e-fgapv2: ${{ steps.e2e-scope.outputs.fgapv2 }}
     steps:
       - name: Detect No-op Changes
         id: noop
@@ -65,6 +68,7 @@ jobs:
             echo "skip=true" >> "$GITHUB_OUTPUT"
             echo "tier=skip" >> "$GITHUB_OUTPUT"
             echo "keycloak_versions=[]" >> "$GITHUB_OUTPUT"
+            echo "fgapv2=false" >> "$GITHUB_OUTPUT"
             echo "[skip e2e] found in commit message — skipping all e2e tests"
             exit 0
           fi
@@ -74,6 +78,7 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
             echo "tier=full" >> "$GITHUB_OUTPUT"
             echo "keycloak_versions=${ALL_VERSIONS}" >> "$GITHUB_OUTPUT"
+            echo "fgapv2=true" >> "$GITHUB_OUTPUT"
             echo "Non-PR event — running full e2e suite against all Keycloak versions"
             exit 0
           fi
@@ -96,11 +101,32 @@ jobs:
           cat /tmp/e2e_proof.md >> "$GITHUB_STEP_SUMMARY"
           echo "DAG stdout (tier/list): $TIER"
 
+          # The FGAPv2 suite runs in its own cluster (admin-fine-grained-authz:v2
+          # excludes the v1 feature the regular suite needs), so it is selected
+          # independently of the regular suite.
+          FGAPV2=$(echo "$CHANGED_FILES" | \
+            python3 scripts/e2e_dag.py select-fgapv2 --changed-files - \
+              --proof-file /tmp/e2e_proof_fgapv2.md 2>/tmp/e2e_dag_fgapv2_stderr.txt)
+          cat /tmp/e2e_dag_fgapv2_stderr.txt
+          cat /tmp/e2e_proof_fgapv2.md >> "$GITHUB_STEP_SUMMARY"
+          echo "DAG stdout (fgapv2): $FGAPV2"
+
+          if [ "$FGAPV2" = "run" ]; then
+            echo "fgapv2=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "fgapv2=false" >> "$GITHUB_OUTPUT"
+          fi
+
           if [ "$TIER" = "skip" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
+            # Only skip the provider build when neither suite has anything to run
+            if [ "$FGAPV2" = "run" ]; then
+              echo "skip=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            fi
             echo "tier=skip" >> "$GITHUB_OUTPUT"
             echo "keycloak_versions=[]" >> "$GITHUB_OUTPUT"
-            echo "No e2e-relevant changes — skipping e2e tests"
+            echo "No e2e-relevant changes for the regular suite — skipping it"
           elif [ "$TIER" = "full" ]; then
             echo "skip=false" >> "$GITHUB_OUTPUT"
             echo "tier=full" >> "$GITHUB_OUTPUT"
@@ -408,7 +434,7 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-24.04
     needs: [detect-noop, build-provider]
-    if: needs.detect-noop.outputs.noop != 'true' && needs.detect-noop.outputs.skip-e2e != 'true'
+    if: needs.detect-noop.outputs.noop != 'true' && needs.detect-noop.outputs.e2e-tier != 'skip'
     concurrency:
       group: ${{ github.head_ref || github.run_id }}-${{ matrix.keycloak-version }}
       cancel-in-progress: true
@@ -596,7 +622,7 @@ jobs:
   e2e-tests-fgapv2:
     runs-on: ubuntu-24.04
     needs: [detect-noop, build-provider]
-    if: needs.detect-noop.outputs.noop != 'true' && needs.detect-noop.outputs.skip-e2e != 'true'
+    if: needs.detect-noop.outputs.noop != 'true' && needs.detect-noop.outputs.e2e-fgapv2 == 'true'
     concurrency:
       group: ${{ github.head_ref || github.run_id }}-fgapv2
       cancel-in-progress: true

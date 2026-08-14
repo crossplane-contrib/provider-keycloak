@@ -13,6 +13,10 @@ Usage
   python3 scripts/e2e_dag.py select --changed-files <file> [--demo-dir dev/demos]
   echo "config/openidclient/config.go" | python3 scripts/e2e_dag.py select --changed-files -
 
+  # Decide whether the FGAPv2 suite (dev/demos/fgapv2, own cluster) must run
+  #   stdout: "run" | "skip"
+  python3 scripts/e2e_dag.py select-fgapv2 --changed-files <file>
+
   # Write the proof as markdown (for $GITHUB_STEP_SUMMARY) instead of plain text
   python3 scripts/e2e_dag.py select --changed-files - --proof-file proof.md
 
@@ -32,6 +36,19 @@ Tier logic (highest wins)
 Every decision is accompanied by a proof: which changed file matched which
 rule, which API groups that implies, which demos seeded the subgraph and which
 dependency edge pulled in each additional demo.
+
+Suites
+------
+The demo directory has one subdirectory per e2e suite, each with its own
+cluster and Keycloak configuration:
+
+  basic/, namespaced/  regular suite   (cluster/test/cases.txt)
+  fgapv2/              FGAPv2 suite    (cluster/test/cases-fgapv2.txt)
+
+Selection is computed per suite: ``select`` only ever returns demos of the
+regular suite, ``select-fgapv2`` only decides whether the FGAPv2 suite runs.
+The suites never pull demos from each other, because the Keycloak feature
+``admin-fine-grained-authz`` can only be enabled as v1 or v2, not both.
 """
 
 import argparse
@@ -270,14 +287,20 @@ def parse_demo_file(path: Path) -> dict:
 # Demo discovery
 # ---------------------------------------------------------------------------
 
-DEMO_VARIANTS = ("basic", "namespaced")
-"""Subdirectories of the demo directory that are included in the regular (non-fgapv2) e2e suite."""
+# The demo directory holds one subdirectory per e2e suite. Each suite runs in
+# its own cluster with its own Keycloak configuration, so selection is computed
+# per suite and the suites never pull demos from each other.
+REGULAR_VARIANTS = ("basic", "namespaced")
+"""Demo subdirectories of the regular e2e suite (cluster/test/cases.txt)."""
+
+FGAPV2_VARIANTS = ("fgapv2",)
+"""Demo subdirectories of the FGAPv2 e2e suite (cluster/test/cases-fgapv2.txt)."""
 
 
-def discover_demos(demo_dir: Path) -> list[Path]:
-    """Sorted list of all non-init demo YAML files across basic/ and namespaced/."""
+def discover_demos(demo_dir: Path, variants: tuple[str, ...] = REGULAR_VARIANTS) -> list[Path]:
+    """Sorted list of all non-init demo YAML files across the given variants."""
     result: list[Path] = []
-    for variant in DEMO_VARIANTS:
+    for variant in variants:
         sub = demo_dir / variant
         if sub.is_dir():
             for f in sorted(sub.glob("*.yaml")):
@@ -293,9 +316,10 @@ def discover_demos(demo_dir: Path) -> list[Path]:
 class DemoGraph:
     """Full demo dependency graph + inverted index, derived purely from YAML."""
 
-    def __init__(self, demo_dir: Path):
+    def __init__(self, demo_dir: Path, variants: tuple[str, ...] = REGULAR_VARIANTS):
         self.demo_dir = demo_dir
-        self.demos = discover_demos(demo_dir)
+        self.variants = variants
+        self.demos = discover_demos(demo_dir, variants)
         self._parsed: dict[Path, dict] = {}
 
         # group name → demos using that group
@@ -536,6 +560,26 @@ def extract_groups_from_paths(
     return groups, why
 
 
+def group_scoped_config_changes(
+    changed_files: list[str],
+) -> tuple[set[str], dict[str, set[str]]]:
+    """Return (groups, group → changed paths) for hand-written group config.
+
+    ``config/<group>/`` holds the Upjet configuration of a whole API group
+    (external names, references, lookups). A change there is not attributable
+    to a single resource, so every demo of that group is exercised.
+    """
+    groups: set[str] = set()
+    why: dict[str, set[str]] = defaultdict(set)
+    for f in changed_files:
+        f = f.strip()
+        m = CONFIG_GROUP_RE.match(f)
+        if m:
+            groups.add(m.group(1))
+            why[m.group(1)].add(f)
+    return groups, why
+
+
 def parse_resource_kinds_from_file(path: Path) -> set[str]:
     try:
         text = path.read_text(errors="replace")
@@ -671,20 +715,33 @@ def cmd_select(args) -> None:
         for d in graph.resource_used_by.get((kind, group), []):
             seed_why.setdefault(d, f"uses {kind} ({group})")
 
+    # Hand-written resource configuration (config/<group>/) is group-scoped:
+    # a single edit there can change external names, references or lookups of
+    # every resource of that group, so the whole group is exercised — not only
+    # the resources whose generated files happen to be in the change set.
+    config_groups, config_why = group_scoped_config_changes(changed)
+    for g in sorted(config_groups):
+        for d in graph.group_to_demos.get(g, []):
+            seed.add(d)
+            seed_why.setdefault(
+                d, f"uses API group '{g}' ({', '.join(sorted(config_why[g]))} is group-scoped)"
+            )
+
     if not seed and not touched_resources:
         seed = graph.demos_for_groups(touched_groups)
         for g in sorted(touched_groups):
             for d in graph.group_to_demos.get(g, []):
                 seed_why.setdefault(d, f"uses API group '{g}'")
 
-    # Include directly changed demo files (basic/ and namespaced/ only; fgapv2/
-    # and other subdirectories are excluded because they run in a separate cluster).
+    # Include directly changed demo files of this suite. Demos of the other
+    # suite are ignored here: they run in a separate cluster and are selected
+    # by their own command (`select-fgapv2`).
     for f in changed:
         p = REPO_ROOT / f.strip()
         if p.suffix == ".yaml" and p.exists():
             if (
                 p.parent.parent == demo_dir
-                and p.parent.name in DEMO_VARIANTS
+                and p.parent.name in REGULAR_VARIANTS
                 and p.name != "000-init.yaml"
             ):
                 seed.add(p)
@@ -748,6 +805,93 @@ def cmd_select(args) -> None:
     _proof(proof, args.proof_file)
 
 
+def cmd_select_fgapv2(args) -> None:
+    """Decide whether the FGAPv2 e2e suite has to run for the changed file set.
+
+    The FGAPv2 suite needs Keycloak's ``admin-fine-grained-authz:v2`` feature,
+    which is mutually exclusive with the v1 feature the regular suite relies
+    on, so it runs in its own cluster over the complete
+    ``cluster/test/cases-fgapv2.txt`` list. There is no subsetting: the answer
+    is simply ``run`` or ``skip``.
+    """
+    demo_dir = REPO_ROOT / args.demo_dir
+    if args.changed_files == "-":
+        changed = sys.stdin.read().splitlines()
+    else:
+        with open(args.changed_files) as fh:
+            changed = fh.read().splitlines()
+    changed = [f.strip() for f in changed if f.strip()]
+
+    tier, _ = detect_tier(changed)
+    proof: list[str] = [f"FGAPv2 suite tier: {tier}", ""]
+
+    if tier == "skip":
+        proof.append("No e2e-relevant changes — NOT running the FGAPv2 suite.")
+        print("skip")
+        _proof(proof, args.proof_file)
+        return
+
+    if tier == "full":
+        proof.append("Provider-wide change — running the FGAPv2 suite.")
+        print("run")
+        _proof(proof, args.proof_file)
+        return
+
+    # targeted: run the suite only if the change can affect one of its demos.
+    graph = DemoGraph(demo_dir, FGAPV2_VARIANTS)
+    touched_groups, group_why = extract_groups_from_paths(changed, demo_dir)
+    touched_resources, resource_why = extract_resources_from_paths(changed, demo_dir)
+
+    reasons: list[str] = []
+    for resource in sorted(touched_resources):
+        if graph.demos_for_resources({resource}):
+            kind, group = resource
+            reasons.append(
+                f"  {kind} ({group}) is used by the FGAPv2 suite "
+                f"(from {', '.join(sorted(resource_why[resource]))})"
+            )
+
+    if not touched_resources:
+        for g in sorted(touched_groups):
+            if graph.group_to_demos.get(g):
+                reasons.append(
+                    f"  API group '{g}' is used by the FGAPv2 suite "
+                    f"(from {', '.join(sorted(group_why[g]))})"
+                )
+
+    # Hand-written group configuration affects every resource of the group.
+    config_groups, config_why = group_scoped_config_changes(changed)
+    for g in sorted(config_groups):
+        if graph.group_to_demos.get(g):
+            reasons.append(
+                f"  API group '{g}' is used by the FGAPv2 suite "
+                f"({', '.join(sorted(config_why[g]))} is group-scoped)"
+            )
+
+    for f in changed:
+        p = REPO_ROOT / f
+        if (
+            p.suffix == ".yaml"
+            and p.parent.parent == demo_dir
+            and p.parent.name in FGAPV2_VARIANTS
+        ):
+            reasons.append(f"  {f} is an FGAPv2 demo and changed directly")
+        elif f == "cluster/test/cases-fgapv2.txt":
+            reasons.append(f"  {f} defines the FGAPv2 case list and changed")
+
+    if reasons:
+        proof.append("Running the FGAPv2 suite because:")
+        proof.extend(reasons)
+        print("run")
+    else:
+        proof.append(
+            "No FGAPv2 demo covers the changed resources, API groups or files — "
+            "NOT running the FGAPv2 suite."
+        )
+        print("skip")
+    _proof(proof, args.proof_file)
+
+
 def build_index(demo_dir: Path) -> dict:
     graph = DemoGraph(demo_dir)
     return {
@@ -800,6 +944,17 @@ def main() -> None:
                      help="Also write the selection proof as markdown to FILE "
                           "(e.g. $GITHUB_STEP_SUMMARY)")
     sel.set_defaults(func=cmd_select)
+
+    fgap = sub.add_parser(
+        "select-fgapv2",
+        help="Decide whether the FGAPv2 e2e suite must run ('run' or 'skip')",
+    )
+    fgap.add_argument("--changed-files", required=True,
+                      metavar="FILE", help="Newline-separated changed paths or '-' for stdin")
+    fgap.add_argument("--proof-file", metavar="FILE", default=None,
+                      help="Also write the selection proof as markdown to FILE "
+                           "(e.g. $GITHUB_STEP_SUMMARY)")
+    fgap.set_defaults(func=cmd_select_fgapv2)
 
     idx = sub.add_parser(
         "index", help=f"Write {INDEX_FILE} (resource index + demo DAG)"
