@@ -79,6 +79,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_oidc_facebook_identity_provider":                   oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_oidc_github_identity_provider":                     oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_oidc_google_identity_provider":                     oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
+	"keycloak_oidc_microsoft_identity_provider":                  oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_kubernetes_identity_provider":                      oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_oidc_openshift_v4_identity_provider":               oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_spiffe_identity_provider":                          oidc.IdentifierFromIdentifyingProperties,                                  // {alias}

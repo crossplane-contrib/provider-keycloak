@@ -234,7 +234,9 @@ Rules and gotchas:
 - Examples in the codebase: `config/role/config.go` and `config/mapper/config.go`
   (`client_id`/`saml_client_id`), `config/authentication/config.go`
   (`parent_flow_alias`/`parent_subflow_alias`), `config/openidclient/config.go`
-  (`clients`/`saml_clients` and aggregate-policy `policies`).
+  (`clients`/`saml_clients` and aggregate-policy `policies`),
+  `config/identityprovider/config.go` (`provider_alias`/`identity_provider_alias`
+  wired to every identity provider type).
 
 ## Testing
 

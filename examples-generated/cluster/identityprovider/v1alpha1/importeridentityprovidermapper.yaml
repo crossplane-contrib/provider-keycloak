@@ -11,7 +11,9 @@ spec:
     claimName: my-email-claim
     extraConfig:
       syncMode: INHERIT
-    identityProviderAlias: my-idp
+    identityProviderAliasSelector:
+      matchLabels:
+        testing.upbound.io/example-name: oidc
     name: email-attribute-importer
     realmSelector:
       matchLabels:

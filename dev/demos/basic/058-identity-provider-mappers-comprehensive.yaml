@@ -9,7 +9,10 @@ spec:
     claimName: email
     extraConfig:
       syncMode: INHERIT
-    identityProviderAlias: my-idp
+    identityProviderAliasRef:
+      name: oidc-identity-provider
+      policy:
+        resolve: Always
     name: import-email-from-idp
     realmRef:
       name: "dev"
@@ -31,7 +34,10 @@ spec:
     claimValue: admin
     extraConfig:
       syncMode: INHERIT
-    identityProviderAlias: my-idp
+    identityProviderAliasRef:
+      name: oidc-identity-provider
+      policy:
+        resolve: Always
     name: map-attribute-admin-to-role
     realmRef:
       name: "dev"
@@ -53,7 +59,10 @@ spec:
     attributeValue: engineering
     extraConfig:
       syncMode: INHERIT
-    identityProviderAlias: my-idp
+    identityProviderAliasRef:
+      name: oidc-identity-provider
+      policy:
+        resolve: Always
     name: hardcode-department
     realmRef:
       name: "dev"
@@ -74,7 +83,10 @@ spec:
     extraConfig:
       syncMode: INHERIT
     group: test
-    identityProviderAlias: my-idp
+    identityProviderAliasRef:
+      name: oidc-identity-provider
+      policy:
+        resolve: Always
     name: assign-to-test-group
     realmRef:
       name: "dev"
@@ -93,7 +105,10 @@ spec:
   forProvider:
     extraConfig:
       syncMode: INHERIT
-    identityProviderAlias: my-idp
+    identityProviderAliasRef:
+      name: oidc-identity-provider
+      policy:
+        resolve: Always
     name: hardcode-user-role
     realmRef:
       name: "dev"
@@ -113,7 +128,10 @@ spec:
   forProvider:
     extraConfig:
       syncMode: INHERIT
-    identityProviderAlias: my-idp
+    identityProviderAliasRef:
+      name: oidc-identity-provider
+      policy:
+        resolve: Always
     name: import-user-template
     realmRef:
       name: "dev"

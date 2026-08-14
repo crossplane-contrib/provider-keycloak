@@ -29,11 +29,105 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.FacebookIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	FacebookIdentityProviderAlias *string `json:"facebookIdentityProviderAlias,omitempty" tf:"facebook_identity_provider_alias,omitempty"`
+
+	// Reference to a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	FacebookIdentityProviderAliasRef *v1.Reference `json:"facebookIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	FacebookIdentityProviderAliasSelector *v1.Selector `json:"facebookIdentityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.GithubIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	GithubIdentityProviderAlias *string `json:"githubIdentityProviderAlias,omitempty" tf:"github_identity_provider_alias,omitempty"`
+
+	// Reference to a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	GithubIdentityProviderAliasRef *v1.Reference `json:"githubIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	GithubIdentityProviderAliasSelector *v1.Selector `json:"githubIdentityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.GoogleIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	GoogleIdentityProviderAlias *string `json:"googleIdentityProviderAlias,omitempty" tf:"google_identity_provider_alias,omitempty"`
+
+	// Reference to a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	GoogleIdentityProviderAliasRef *v1.Reference `json:"googleIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	GoogleIdentityProviderAliasSelector *v1.Selector `json:"googleIdentityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha2.IdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
 	IdentityProviderAlias *string `json:"identityProviderAlias,omitempty" tf:"identity_provider_alias,omitempty"`
+
+	// Reference to a IdentityProvider in oidc to populate identityProviderAlias.
+	// +kubebuilder:validation:Optional
+	IdentityProviderAliasRef *v1.Reference `json:"identityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a IdentityProvider in oidc to populate identityProviderAlias.
+	// +kubebuilder:validation:Optional
+	IdentityProviderAliasSelector *v1.Selector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.KubernetesIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	KubernetesIdentityProviderAlias *string `json:"kubernetesIdentityProviderAlias,omitempty" tf:"kubernetes_identity_provider_alias,omitempty"`
+
+	// Reference to a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	KubernetesIdentityProviderAliasRef *v1.Reference `json:"kubernetesIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	KubernetesIdentityProviderAliasSelector *v1.Selector `json:"kubernetesIdentityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.MicrosoftIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	MicrosoftIdentityProviderAlias *string `json:"microsoftIdentityProviderAlias,omitempty" tf:"microsoft_identity_provider_alias,omitempty"`
+
+	// Reference to a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	MicrosoftIdentityProviderAliasRef *v1.Reference `json:"microsoftIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	MicrosoftIdentityProviderAliasSelector *v1.Selector `json:"microsoftIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// Display name of this mapper when displayed in the console.
 	// IDP Mapper Name
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.OidcOpenShiftV4IdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	OpenshiftV4IdentityProviderAlias *string `json:"openshiftV4IdentityProviderAlias,omitempty" tf:"openshift_v4_identity_provider_alias,omitempty"`
+
+	// Reference to a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	OpenshiftV4IdentityProviderAliasRef *v1.Reference `json:"openshiftV4IdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	OpenshiftV4IdentityProviderAliasSelector *v1.Selector `json:"openshiftV4IdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The realm ID that this mapper will exist in.
 	// Realm Name
@@ -47,6 +141,34 @@ type AttributeIdentityProviderMapperInitParameters struct {
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
 	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/saml/v1alpha1.IdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	SAMLIdentityProviderAlias *string `json:"samlIdentityProviderAlias,omitempty" tf:"saml_identity_provider_alias,omitempty"`
+
+	// Reference to a IdentityProvider in saml to populate samlIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	SAMLIdentityProviderAliasRef *v1.Reference `json:"samlIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a IdentityProvider in saml to populate samlIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	SAMLIdentityProviderAliasSelector *v1.Selector `json:"samlIdentityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.SpiffeIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	SpiffeIdentityProviderAlias *string `json:"spiffeIdentityProviderAlias,omitempty" tf:"spiffe_identity_provider_alias,omitempty"`
+
+	// Reference to a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	SpiffeIdentityProviderAliasRef *v1.Reference `json:"spiffeIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	SpiffeIdentityProviderAliasSelector *v1.Selector `json:"spiffeIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// Is Attribute related to a User Session.
 	// Is Attribute Related To a User Session
@@ -67,19 +189,51 @@ type AttributeIdentityProviderMapperObservation struct {
 	// +mapType=granular
 	ExtraConfig map[string]*string `json:"extraConfig,omitempty" tf:"extra_config,omitempty"`
 
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	FacebookIdentityProviderAlias *string `json:"facebookIdentityProviderAlias,omitempty" tf:"facebook_identity_provider_alias,omitempty"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	GithubIdentityProviderAlias *string `json:"githubIdentityProviderAlias,omitempty" tf:"github_identity_provider_alias,omitempty"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	GoogleIdentityProviderAlias *string `json:"googleIdentityProviderAlias,omitempty" tf:"google_identity_provider_alias,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
 	IdentityProviderAlias *string `json:"identityProviderAlias,omitempty" tf:"identity_provider_alias,omitempty"`
 
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	KubernetesIdentityProviderAlias *string `json:"kubernetesIdentityProviderAlias,omitempty" tf:"kubernetes_identity_provider_alias,omitempty"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	MicrosoftIdentityProviderAlias *string `json:"microsoftIdentityProviderAlias,omitempty" tf:"microsoft_identity_provider_alias,omitempty"`
+
 	// Display name of this mapper when displayed in the console.
 	// IDP Mapper Name
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	OpenshiftV4IdentityProviderAlias *string `json:"openshiftV4IdentityProviderAlias,omitempty" tf:"openshift_v4_identity_provider_alias,omitempty"`
+
 	// The realm ID that this mapper will exist in.
 	// Realm Name
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	SAMLIdentityProviderAlias *string `json:"samlIdentityProviderAlias,omitempty" tf:"saml_identity_provider_alias,omitempty"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	SpiffeIdentityProviderAlias *string `json:"spiffeIdentityProviderAlias,omitempty" tf:"spiffe_identity_provider_alias,omitempty"`
 
 	// Is Attribute related to a User Session.
 	// Is Attribute Related To a User Session
@@ -105,13 +259,113 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.FacebookIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	FacebookIdentityProviderAlias *string `json:"facebookIdentityProviderAlias,omitempty" tf:"facebook_identity_provider_alias,omitempty"`
+
+	// Reference to a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	FacebookIdentityProviderAliasRef *v1.Reference `json:"facebookIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	FacebookIdentityProviderAliasSelector *v1.Selector `json:"facebookIdentityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.GithubIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	GithubIdentityProviderAlias *string `json:"githubIdentityProviderAlias,omitempty" tf:"github_identity_provider_alias,omitempty"`
+
+	// Reference to a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	GithubIdentityProviderAliasRef *v1.Reference `json:"githubIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	GithubIdentityProviderAliasSelector *v1.Selector `json:"githubIdentityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.GoogleIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	GoogleIdentityProviderAlias *string `json:"googleIdentityProviderAlias,omitempty" tf:"google_identity_provider_alias,omitempty"`
+
+	// Reference to a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	GoogleIdentityProviderAliasRef *v1.Reference `json:"googleIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	GoogleIdentityProviderAliasSelector *v1.Selector `json:"googleIdentityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha2.IdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
 	// +kubebuilder:validation:Optional
 	IdentityProviderAlias *string `json:"identityProviderAlias,omitempty" tf:"identity_provider_alias,omitempty"`
+
+	// Reference to a IdentityProvider in oidc to populate identityProviderAlias.
+	// +kubebuilder:validation:Optional
+	IdentityProviderAliasRef *v1.Reference `json:"identityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a IdentityProvider in oidc to populate identityProviderAlias.
+	// +kubebuilder:validation:Optional
+	IdentityProviderAliasSelector *v1.Selector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.KubernetesIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	KubernetesIdentityProviderAlias *string `json:"kubernetesIdentityProviderAlias,omitempty" tf:"kubernetes_identity_provider_alias,omitempty"`
+
+	// Reference to a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	KubernetesIdentityProviderAliasRef *v1.Reference `json:"kubernetesIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	KubernetesIdentityProviderAliasSelector *v1.Selector `json:"kubernetesIdentityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.MicrosoftIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	MicrosoftIdentityProviderAlias *string `json:"microsoftIdentityProviderAlias,omitempty" tf:"microsoft_identity_provider_alias,omitempty"`
+
+	// Reference to a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	MicrosoftIdentityProviderAliasRef *v1.Reference `json:"microsoftIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	MicrosoftIdentityProviderAliasSelector *v1.Selector `json:"microsoftIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// Display name of this mapper when displayed in the console.
 	// IDP Mapper Name
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.OidcOpenShiftV4IdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	OpenshiftV4IdentityProviderAlias *string `json:"openshiftV4IdentityProviderAlias,omitempty" tf:"openshift_v4_identity_provider_alias,omitempty"`
+
+	// Reference to a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	OpenshiftV4IdentityProviderAliasRef *v1.Reference `json:"openshiftV4IdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	OpenshiftV4IdentityProviderAliasSelector *v1.Selector `json:"openshiftV4IdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The realm ID that this mapper will exist in.
 	// Realm Name
@@ -126,6 +380,36 @@ type AttributeIdentityProviderMapperParameters struct {
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
 	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/saml/v1alpha1.IdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	SAMLIdentityProviderAlias *string `json:"samlIdentityProviderAlias,omitempty" tf:"saml_identity_provider_alias,omitempty"`
+
+	// Reference to a IdentityProvider in saml to populate samlIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	SAMLIdentityProviderAliasRef *v1.Reference `json:"samlIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a IdentityProvider in saml to populate samlIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	SAMLIdentityProviderAliasSelector *v1.Selector `json:"samlIdentityProviderAliasSelector,omitempty" tf:"-"`
+
+	// The IDP alias of the attribute to set.
+	// IDP Alias
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.SpiffeIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	SpiffeIdentityProviderAlias *string `json:"spiffeIdentityProviderAlias,omitempty" tf:"spiffe_identity_provider_alias,omitempty"`
+
+	// Reference to a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	SpiffeIdentityProviderAliasRef *v1.Reference `json:"spiffeIdentityProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
+	// +kubebuilder:validation:Optional
+	SpiffeIdentityProviderAliasSelector *v1.Selector `json:"spiffeIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// Is Attribute related to a User Session.
 	// Is Attribute Related To a User Session
@@ -169,7 +453,6 @@ type AttributeIdentityProviderMapperStatus struct {
 type AttributeIdentityProviderMapper struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.identityProviderAlias) || (has(self.initProvider) && has(self.initProvider.identityProviderAlias))",message="spec.forProvider.identityProviderAlias is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.userSession) || (has(self.initProvider) && has(self.initProvider.userSession))",message="spec.forProvider.userSession is a required parameter"
 	Spec   AttributeIdentityProviderMapperSpec   `json:"spec"`

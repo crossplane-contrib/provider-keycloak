@@ -1,0 +1,40 @@
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: MicrosoftIdentityProvider
+metadata:
+  annotations:
+    meta.upbound.io/example-id: oidc/v1alpha1/microsoftidentityprovider
+  labels:
+    testing.upbound.io/example-name: microsoft
+  name: microsoft
+spec:
+  forProvider:
+    clientIdSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    clientSecretSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    displayName: myMicrosoft-idp
+    extraConfig:
+      myCustomConfigKey: value
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    syncMode: IMPORT
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: oidc/v1alpha1/microsoftidentityprovider
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
