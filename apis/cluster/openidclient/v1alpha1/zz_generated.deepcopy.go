@@ -369,6 +369,29 @@ func (in *ClientAggregatePolicyInitParameters) DeepCopyInto(out *ClientAggregate
 		*out = new(string)
 		**out = **in
 	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.GenericPoliciesRefs != nil {
+		in, out := &in.GenericPoliciesRefs, &out.GenericPoliciesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.GenericPoliciesSelector != nil {
+		in, out := &in.GenericPoliciesSelector, &out.GenericPoliciesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
 		*out = make([]*string, len(*in))
@@ -637,6 +660,17 @@ func (in *ClientAggregatePolicyObservation) DeepCopyInto(out *ClientAggregatePol
 		*out = new(string)
 		**out = **in
 	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
 		*out = make([]*string, len(*in))
@@ -832,6 +866,29 @@ func (in *ClientAggregatePolicyParameters) DeepCopyInto(out *ClientAggregatePoli
 		in, out := &in.Description, &out.Description
 		*out = new(string)
 		**out = **in
+	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.GenericPoliciesRefs != nil {
+		in, out := &in.GenericPoliciesRefs, &out.GenericPoliciesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.GenericPoliciesSelector != nil {
+		in, out := &in.GenericPoliciesSelector, &out.GenericPoliciesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
@@ -1416,6 +1473,29 @@ func (in *ClientAuthorizationPermissionInitParameters) DeepCopyInto(out *ClientA
 		*out = new(string)
 		**out = **in
 	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.GenericPoliciesRefs != nil {
+		in, out := &in.GenericPoliciesRefs, &out.GenericPoliciesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.GenericPoliciesSelector != nil {
+		in, out := &in.GenericPoliciesSelector, &out.GenericPoliciesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
 		*out = make([]*string, len(*in))
@@ -1689,6 +1769,17 @@ func (in *ClientAuthorizationPermissionObservation) DeepCopyInto(out *ClientAuth
 		*out = new(string)
 		**out = **in
 	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
 		*out = make([]*string, len(*in))
@@ -1854,6 +1945,29 @@ func (in *ClientAuthorizationPermissionParameters) DeepCopyInto(out *ClientAutho
 		in, out := &in.Description, &out.Description
 		*out = new(string)
 		**out = **in
+	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.GenericPoliciesRefs != nil {
+		in, out := &in.GenericPoliciesRefs, &out.GenericPoliciesRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.GenericPoliciesSelector != nil {
+		in, out := &in.GenericPoliciesSelector, &out.GenericPoliciesSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies

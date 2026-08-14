@@ -25,6 +25,10 @@ func TestClientAggregatePolicyReferences(t *testing.T) {
 			terraformName: "keycloak_openid_client_authorization_client_scope_policy",
 			extractor:     common.PathUUIDExtractor,
 		},
+		"generic_policies": {
+			terraformName: "keycloak_generic_client_authorization_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
 		"group_policies": {
 			terraformName: "keycloak_openid_client_group_policy",
 			extractor:     common.PathUUIDExtractor,

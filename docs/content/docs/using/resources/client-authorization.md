@@ -83,6 +83,7 @@ the generated reference fields instead, for example:
 
 - `resourcesRefs` / `resourcesSelector`
 - `clientPoliciesRefs`
+- `genericPoliciesRefs`
 - `groupPoliciesRefs`
 - `regexPoliciesRefs`
 - `rolePoliciesRefs`

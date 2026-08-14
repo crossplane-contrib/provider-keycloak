@@ -316,6 +316,13 @@ func Configure(p *config.Provider) {
 				},
 			},
 			multitypes.Instance{
+				Name: "generic_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_generic_client_authorization_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
 				Name: "group_policies",
 				Reference: config.Reference{
 					TerraformName: "keycloak_openid_client_group_policy",
@@ -390,6 +397,13 @@ func Configure(p *config.Provider) {
 				Name: "client_scope_policies",
 				Reference: config.Reference{
 					TerraformName: "keycloak_openid_client_authorization_client_scope_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "generic_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_generic_client_authorization_policy",
 					Extractor:     common.PathUUIDExtractor,
 				},
 			},
