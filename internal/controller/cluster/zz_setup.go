@@ -51,6 +51,7 @@ import (
 	githubidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/githubidentityprovider"
 	googleidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/googleidentityprovider"
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/identityprovider"
+	microsoftidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/oidc/microsoftidentityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/client"
 	clientaggregatepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientaggregatepolicy"
 	clientauthorizationclientscopepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidclient/clientauthorizationclientscopepolicy"
@@ -160,6 +161,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		githubidentityprovider.Setup,
 		googleidentityprovider.Setup,
 		identityprovider.Setup,
+		microsoftidentityprovider.Setup,
 		client.Setup,
 		clientaggregatepolicy.Setup,
 		clientauthorizationclientscopepolicy.Setup,
@@ -275,6 +277,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		githubidentityprovider.SetupGated,
 		googleidentityprovider.SetupGated,
 		identityprovider.SetupGated,
+		microsoftidentityprovider.SetupGated,
 		client.SetupGated,
 		clientaggregatepolicy.SetupGated,
 		clientauthorizationclientscopepolicy.SetupGated,
@@ -389,6 +392,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		githubidentityprovider.SetupWebhookWithManager,
 		googleidentityprovider.SetupWebhookWithManager,
 		identityprovider.SetupWebhookWithManager,
+		microsoftidentityprovider.SetupWebhookWithManager,
 		client.SetupWebhookWithManager,
 		clientaggregatepolicy.SetupWebhookWithManager,
 		clientauthorizationclientscopepolicy.SetupWebhookWithManager,

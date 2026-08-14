@@ -166,3 +166,43 @@ func (mg *IdentityProvider) SetProviderConfigReference(r *xpv1.ProviderConfigRef
 func (mg *IdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
+
+// GetCondition of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) GetProviderConfigReference() *xpv1.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) GetWriteConnectionSecretToReference() *xpv1.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) SetProviderConfigReference(r *xpv1.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}

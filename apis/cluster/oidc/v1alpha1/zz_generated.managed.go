@@ -206,3 +206,53 @@ func (mg *IdentityProvider) SetProviderConfigReference(r *xpv1.Reference) {
 func (mg *IdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
+
+// GetCondition of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) GetDeletionPolicy() xpv1.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) GetProviderConfigReference() *xpv1.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) SetProviderConfigReference(r *xpv1.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this MicrosoftIdentityProvider.
+func (mg *MicrosoftIdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
