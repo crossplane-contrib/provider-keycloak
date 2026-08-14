@@ -96,7 +96,9 @@ issue per missing resource that isn't already tracked.
    helper (see `config/openidclient/` or `config/group/`) when the ID must be
    derived from identifying attributes such as name + realm.
 2. Create or update `config/<group>/config.go` to configure references and any
-   custom behaviors.
+   custom behaviors. If an attribute can reference more than one resource type,
+   use `config/multitypes` (see [Multi-Type References](#multi-type-references))
+   rather than leaving it as a raw ID field.
 3. Run `make generate` to regenerate CRDs and Go types.
 4. Add a hand-authored example to `examples/<group>/<resource>.yaml`.
 5. Optionally add a docs page to `docs/content/docs/using/resources/<resource>.md`.
@@ -114,8 +116,9 @@ which diffs `config/schema.json` against `config/generated.lst` and files one
 GitHub issue per missing resource that isn't already tracked by an existing
 open issue (matched by exact resource name in the issue title/body).
 
-- On `pull_request`, it always runs in dry-run mode (reports only, creates
-  nothing) so changes to the automation itself can be reviewed.
+- On `pull_request`, it only runs in dry-run mode (reports only, creates
+  nothing) when the automation itself changes (the script or the workflow
+  file) — not on every PR.
 - On a weekly `schedule`, on `push` to `main` that touches the `Makefile`
   (a Terraform provider version bump), and on manual `workflow_dispatch`, it
   creates real issues.
@@ -131,6 +134,88 @@ r.References["realm_id"] = config.Reference{
     TerraformName: "keycloak_realm",
 }
 ```
+
+## Multi-Type References
+
+`r.References` accepts a single `TerraformName`, so it cannot describe a
+Terraform attribute whose value may be the ID of several different resource
+types. For those attributes, use the `config/multitypes` package instead of
+exposing a raw ID field or hand-rolling synthetic fields. It creates one
+synthetic, strongly-typed field per referenceable type and consolidates the
+resolved values back into the original Terraform field before the request is
+sent to Terraform.
+
+Scalar field — a role's `client_id` may point at an OpenID or a SAML client:
+
+```go
+multitypes.ApplyToWithOptions(r, "client_id",
+    &multitypes.Options{KeepOriginalField: true}, // keep client_id settable
+    multitypes.Instance{
+        Name: "client_id",
+        Reference: config.Reference{
+            TerraformName: "keycloak_openid_client",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+    multitypes.Instance{
+        Name: "saml_client_id",
+        Reference: config.Reference{
+            TerraformName: "keycloak_saml_client",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+)
+```
+
+List/set field — `keycloak_openid_client_aggregate_policy.policies` holds IDs
+of any authorization policy type:
+
+```go
+multitypes.ApplyToAsList(r, "policies",
+    multitypes.Instance{
+        Name: "time_policies",
+        Reference: config.Reference{
+            TerraformName: "keycloak_openid_client_time_policy",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+    multitypes.Instance{
+        Name: "role_policies",
+        Reference: config.Reference{
+            TerraformName: "keycloak_openid_client_role_policy",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+    // ... one Instance per referenceable policy type
+)
+```
+
+Rules and gotchas:
+
+- `Options.KeepOriginalField: true` is required (and only allowed) when one
+  `Instance` reuses the original field name; use it to keep the existing field
+  settable for backward compatibility. The helper panics on a mismatch.
+- An `Instance` that reuses the original field name may omit its `Reference`
+  entirely. Such an "untyped" instance gets no Ref/Selector fields; the
+  original field simply stays settable for raw IDs of types that have no
+  managed resource yet, and its value still takes part in consolidation.
+  Omitting the `Reference` on a *synthetic* instance panics.
+- If no `Instance` reuses the original name, the original field becomes
+  computed-only (`status.atProvider`). As a side effect, a *required* Terraform
+  field no longer emits a required-parameter CEL rule, so no CRD
+  post-processing is needed.
+- For scalar fields only one synthetic field may be set at a time; the
+  consolidation injector errors otherwise. For list fields all synthetic lists
+  are unioned.
+- Every referenced `TerraformName` must be present in `config/generated.lst`,
+  otherwise `make generate` panics with
+  `cannot find configuration for Terraform resource`.
+- Examples: `config/role/config.go` and `config/mapper/config.go`
+  (`client_id`/`saml_client_id`), `config/authentication/config.go`
+  (`parent_flow_alias`/`parent_subflow_alias`), `config/openidclient/config.go`
+  (`clients`/`saml_clients` and aggregate-policy `policies`),
+  `config/identityprovider/config.go` (`provider_alias`/`identity_provider_alias`
+  wired to every identity provider type).
 
 ## Documentation Site
 
@@ -155,9 +240,11 @@ consuming individual pages.
 
 - **Never edit `examples-generated/` by hand.** These are auto-generated.
 - **Never edit generated files in `apis/` or `package/crds/` by hand.**
-- **Do not update `github.com/keycloak/terraform-provider-keycloak` via Renovate.**
-  It is explicitly excluded from automated updates because upgrading it requires
-  deliberate schema migration.
+- **`github.com/keycloak/terraform-provider-keycloak` updates are grouped;
+  major bumps require manual review.** The go.mod pseudo-version and its
+  pinned Makefile version are grouped into a single weekly Renovate PR.
+  Minor/patch/digest updates auto-merge once tests pass; major version bumps
+  are not auto-merged since upgrading requires deliberate schema migration.
 - **E2E tests only cover resources in `cluster/test/cases.txt`.** New resources
   are not automatically e2e tested.
 - **Upjet does not support `+nullable` markers.** Do not add nullable annotations

@@ -45,4 +45,5 @@
 
 - [Dev Container](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/dev-container/)
 - [Documentation Model](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/documentation-model/)
+- [End-to-End Tests](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/e2e-tests/): How to write and debug end-to-end tests for provider-keycloak
 - [Local Docs Development](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs/)
