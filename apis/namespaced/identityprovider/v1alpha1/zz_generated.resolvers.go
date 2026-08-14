@@ -25,6 +25,146 @@ func (mg *AttributeIdentityProviderMapper) ResolveReferences( // ResolveReferenc
 	var rsp reference.NamespacedResolutionResponse
 	var err error
 	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -45,6 +185,186 @@ func (mg *AttributeIdentityProviderMapper) ResolveReferences( // ResolveReferenc
 	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -64,6 +384,46 @@ func (mg *AttributeIdentityProviderMapper) ResolveReferences( // ResolveReferenc
 	}
 	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
 
 	return nil
 }
@@ -77,6 +437,146 @@ func (mg *GroupIdentityProviderMapper) ResolveReferences(ctx context.Context, c 
 	var rsp reference.NamespacedResolutionResponse
 	var err error
 	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -97,6 +597,186 @@ func (mg *GroupIdentityProviderMapper) ResolveReferences(ctx context.Context, c 
 	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -116,6 +796,46 @@ func (mg *GroupIdentityProviderMapper) ResolveReferences(ctx context.Context, c 
 	}
 	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
 
 	return nil
 }
@@ -129,6 +849,146 @@ func (mg *IdentityProviderMapper) ResolveReferences(ctx context.Context, c clien
 	var rsp reference.NamespacedResolutionResponse
 	var err error
 	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -149,6 +1009,186 @@ func (mg *IdentityProviderMapper) ResolveReferences(ctx context.Context, c clien
 	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -168,6 +1208,46 @@ func (mg *IdentityProviderMapper) ResolveReferences(ctx context.Context, c clien
 	}
 	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
 
 	return nil
 }
@@ -181,6 +1261,146 @@ func (mg *ImporterIdentityProviderMapper) ResolveReferences(ctx context.Context,
 	var rsp reference.NamespacedResolutionResponse
 	var err error
 	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -201,6 +1421,186 @@ func (mg *ImporterIdentityProviderMapper) ResolveReferences(ctx context.Context,
 	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -220,6 +1620,46 @@ func (mg *ImporterIdentityProviderMapper) ResolveReferences(ctx context.Context,
 	}
 	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
 
 	return nil
 }
@@ -558,6 +1998,126 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	mg.Spec.ForProvider.Clients = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.ForProvider.ClientsRefs = mrsp.ResolvedReferences
 	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.FacebookProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.FacebookProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.FacebookProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.FacebookProviderAlias")
+	}
+	mg.Spec.ForProvider.FacebookProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.FacebookProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GithubProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GithubProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GithubProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GithubProviderAlias")
+	}
+	mg.Spec.ForProvider.GithubProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GithubProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GoogleProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GoogleProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GoogleProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GoogleProviderAlias")
+	}
+	mg.Spec.ForProvider.GoogleProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GoogleProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.KubernetesProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.KubernetesProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.KubernetesProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.KubernetesProviderAlias")
+	}
+	mg.Spec.ForProvider.KubernetesProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.KubernetesProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.MicrosoftProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.MicrosoftProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.MicrosoftProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.MicrosoftProviderAlias")
+	}
+	mg.Spec.ForProvider.MicrosoftProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.MicrosoftProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OpenshiftV4ProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.OpenshiftV4ProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.OpenshiftV4ProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OpenshiftV4ProviderAlias")
+	}
+	mg.Spec.ForProvider.OpenshiftV4ProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OpenshiftV4ProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -598,6 +2158,46 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SAMLProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SAMLProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLProviderAlias")
+	}
+	mg.Spec.ForProvider.SAMLProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SAMLProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SpiffeProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SpiffeProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SpiffeProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SpiffeProviderAlias")
+	}
+	mg.Spec.ForProvider.SpiffeProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SpiffeProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha2", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -617,6 +2217,126 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	}
 	mg.Spec.InitProvider.Clients = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.InitProvider.ClientsRefs = mrsp.ResolvedReferences
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.FacebookProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.FacebookProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.FacebookProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.FacebookProviderAlias")
+	}
+	mg.Spec.InitProvider.FacebookProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.FacebookProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GithubProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GithubProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GithubProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GithubProviderAlias")
+	}
+	mg.Spec.InitProvider.GithubProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GithubProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GoogleProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GoogleProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GoogleProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GoogleProviderAlias")
+	}
+	mg.Spec.InitProvider.GoogleProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GoogleProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.KubernetesProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.KubernetesProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.KubernetesProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.KubernetesProviderAlias")
+	}
+	mg.Spec.InitProvider.KubernetesProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.KubernetesProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.MicrosoftProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.MicrosoftProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.MicrosoftProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.MicrosoftProviderAlias")
+	}
+	mg.Spec.InitProvider.MicrosoftProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.MicrosoftProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OpenshiftV4ProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.OpenshiftV4ProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.OpenshiftV4ProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OpenshiftV4ProviderAlias")
+	}
+	mg.Spec.InitProvider.OpenshiftV4ProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OpenshiftV4ProviderAliasRef = rsp.ResolvedReference
 	{
 		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
 		if err != nil {
@@ -657,6 +2377,46 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	}
 	mg.Spec.InitProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmIDRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SAMLProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SAMLProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLProviderAlias")
+	}
+	mg.Spec.InitProvider.SAMLProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SAMLProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SpiffeProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SpiffeProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SpiffeProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SpiffeProviderAlias")
+	}
+	mg.Spec.InitProvider.SpiffeProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SpiffeProviderAliasRef = rsp.ResolvedReference
 
 	return nil
 }
@@ -669,6 +2429,146 @@ func (mg *RoleIdentityProviderMapper) ResolveReferences(ctx context.Context, c c
 
 	var rsp reference.NamespacedResolutionResponse
 	var err error
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
@@ -690,6 +2590,186 @@ func (mg *RoleIdentityProviderMapper) ResolveReferences(ctx context.Context, c c
 	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -709,6 +2789,46 @@ func (mg *RoleIdentityProviderMapper) ResolveReferences(ctx context.Context, c c
 	}
 	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
 
 	return nil
 }
@@ -894,6 +3014,146 @@ func (mg *TemplateImporterIdentityProviderMapper) ResolveReferences(ctx context.
 	var rsp reference.NamespacedResolutionResponse
 	var err error
 	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -914,6 +3174,186 @@ func (mg *TemplateImporterIdentityProviderMapper) ResolveReferences(ctx context.
 	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -933,6 +3373,46 @@ func (mg *TemplateImporterIdentityProviderMapper) ResolveReferences(ctx context.
 	}
 	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
 
 	return nil
 }
@@ -946,6 +3426,146 @@ func (mg *ToRoleIdentityProviderMapper) ResolveReferences(ctx context.Context, c
 	var rsp reference.NamespacedResolutionResponse
 	var err error
 	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -966,6 +3586,186 @@ func (mg *ToRoleIdentityProviderMapper) ResolveReferences(ctx context.Context, c
 	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
 	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.ForProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.ForProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "FacebookIdentityProvider", "FacebookIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.FacebookIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.FacebookIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.FacebookIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.FacebookIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.FacebookIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.FacebookIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GithubIdentityProvider", "GithubIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GithubIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GithubIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GithubIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GithubIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GithubIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GithubIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "GoogleIdentityProvider", "GoogleIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GoogleIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.GoogleIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.GoogleIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.GoogleIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.GoogleIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.GoogleIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha2", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "KubernetesIdentityProvider", "KubernetesIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.KubernetesIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.KubernetesIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.KubernetesIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.KubernetesIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.KubernetesIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("oidc.keycloak.m.crossplane.io", "v1alpha1", "MicrosoftIdentityProvider", "MicrosoftIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.MicrosoftIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.MicrosoftIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.MicrosoftIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.MicrosoftIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "OidcOpenShiftV4IdentityProvider", "OidcOpenShiftV4IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
+	{
 		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
@@ -985,6 +3785,46 @@ func (mg *ToRoleIdentityProviderMapper) ResolveReferences(ctx context.Context, c
 	}
 	mg.Spec.InitProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.RealmRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("saml.keycloak.m.crossplane.io", "v1alpha1", "IdentityProvider", "IdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SAMLIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SAMLIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SAMLIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SAMLIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SAMLIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SAMLIdentityProviderAliasRef = rsp.ResolvedReference
+	{
+		m, l, err = apisresolver.GetManagedResource("identityprovider.keycloak.m.crossplane.io", "v1alpha1", "SpiffeIdentityProvider", "SpiffeIdentityProviderList")
+		if err != nil {
+			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
+		}
+
+		rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SpiffeIdentityProviderAlias),
+			Extract:      common.IdentityProviderAliasExtractor(),
+			Namespace:    mg.GetNamespace(),
+			Reference:    mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef,
+			Selector:     mg.Spec.InitProvider.SpiffeIdentityProviderAliasSelector,
+			To:           reference.To{List: l, Managed: m},
+		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SpiffeIdentityProviderAlias")
+	}
+	mg.Spec.InitProvider.SpiffeIdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SpiffeIdentityProviderAliasRef = rsp.ResolvedReference
 
 	return nil
 }

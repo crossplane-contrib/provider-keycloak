@@ -11,7 +11,9 @@ spec:
   forProvider:
     extraConfig:
       syncMode: INHERIT
-    identityProviderAlias: my-idp
+    identityProviderAliasSelector:
+      matchLabels:
+        testing.upbound.io/example-name: oidc
     name: username-template-importer
     realmSelector:
       matchLabels:
