@@ -301,8 +301,12 @@ uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW) $(CROSSPLANE_CLI)
 	@KUBECTL=$(KUBECTL) CHAINSAW=$(CHAINSAW) CROSSPLANE_CLI=$(CROSSPLANE_CLI) CROSSPLANE_NAMESPACE=$(CROSSPLANE_NAMESPACE) $(UPTEST) e2e "$(UPTEST_EXAMPLE_LIST)" $(RENDER_ONLY_FLAG) --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=cluster/test/setup.sh --default-conditions="Test" --default-timeout=2400s || $(FAIL)
 	@$(OK) running automated tests
 
+# Two gates: every demo file is listed in a case file, and every managed
+# resource has an e2e demo (or a documented exception in
+# cluster/test/uncovered-resources.txt).
 e2e-cases-check:
 	@./cluster/test/check_cases_coverage.sh
+	@python3 scripts/e2e_dag.py coverage
 
 # Regenerate the e2e resource index + demo DAG (cluster/test/e2e-index.json).
 # Answers "which e2e test uses resource X?" — run as part of `make generate`.

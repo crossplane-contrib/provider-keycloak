@@ -1,0 +1,21 @@
+apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
+kind: UserModelHardcodedAttributeMapper
+metadata:
+  name: hardcode-email-verified
+  namespace: dev-ns
+spec:
+  forProvider:
+    attributeName: email_verified
+    attributeValue: "true"
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: hardcode-email-verified
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

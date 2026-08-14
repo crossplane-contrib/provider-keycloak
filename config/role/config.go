@@ -50,6 +50,86 @@ func Configure(p *config.Provider) {
 				},
 			})
 	})
+
+	p.AddResourceConfigurator("keycloak_role_admin_permissions", func(r *config.Resource) {
+		r.ShortGroup = "role"
+
+		// policies is a single Terraform field holding the IDs of arbitrary
+		// authorization policies living on the realm's admin-permissions
+		// client. Expose one strongly-typed list field per referenceable
+		// policy type; the values are consolidated back into policies before
+		// they are sent to Terraform. The original policies field stays
+		// settable for raw IDs of policy types that have no managed resource
+		// yet.
+		multitypes.ApplyToAsListWithOptions(r, "policies",
+			&multitypes.Options{KeepOriginalField: true},
+			multitypes.Instance{
+				Name: "policies",
+			},
+			multitypes.Instance{
+				Name: "aggregate_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_aggregate_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "client_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_client_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "client_scope_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_authorization_client_scope_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "group_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_group_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "js_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_js_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "regex_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_regex_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "role_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_role_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "time_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_time_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "user_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client_user_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			})
+	})
 }
 
 var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
