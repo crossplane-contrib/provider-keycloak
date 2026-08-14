@@ -1,0 +1,21 @@
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: ClientRegistrationPolicy
+metadata:
+  name: client-registration-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    config:
+      host-sending-registration-request-must-match: "true"
+      client-uris-must-match: "true"
+      trusted-hosts: "example.com"
+    name: my-trusted-hosts-policy
+    providerId: trusted-hosts
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    subType: anonymous
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

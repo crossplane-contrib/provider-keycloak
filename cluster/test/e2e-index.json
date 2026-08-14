@@ -213,6 +213,16 @@
         "dev/demos/namespaced/085-new-resources.yaml"
       ]
     },
+    "ClientRegistrationPolicy (realm)": {
+      "defined_in": [
+        "dev/demos/basic/009-realm-client-registration-policy.yaml",
+        "dev/demos/namespaced/009-realm-client-registration-policy.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/009-realm-client-registration-policy.yaml",
+        "dev/demos/namespaced/009-realm-client-registration-policy.yaml"
+      ]
+    },
     "ClientRolePolicy (openidclient)": {
       "defined_in": [
         "dev/demos/basic/046-oidc-client-policies.yaml",
@@ -1051,6 +1061,7 @@
         "dev/demos/basic/006-realm-events.yaml",
         "dev/demos/basic/008-realm-client-policy-profile.yaml",
         "dev/demos/basic/009-realm-client-policy-profile-policy.yaml",
+        "dev/demos/basic/009-realm-client-registration-policy.yaml",
         "dev/demos/basic/010-roles.yaml",
         "dev/demos/basic/015-groups.yaml",
         "dev/demos/basic/016-groups-same-name-children.yaml",
@@ -1196,6 +1207,15 @@
       "deps": [
         "dev/demos/basic/001-realm.yaml",
         "dev/demos/basic/008-realm-client-policy-profile.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/basic/009-realm-client-registration-policy.yaml": {
+      "groups": [
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml"
       ],
       "rdeps": []
     },
@@ -1930,6 +1950,7 @@
         "dev/demos/namespaced/006-realm-events.yaml",
         "dev/demos/namespaced/008-realm-client-policy-profile.yaml",
         "dev/demos/namespaced/009-realm-client-policy-profile-policy.yaml",
+        "dev/demos/namespaced/009-realm-client-registration-policy.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/016-groups-same-name-children.yaml",
@@ -2075,6 +2096,15 @@
       "deps": [
         "dev/demos/namespaced/001-realm.yaml",
         "dev/demos/namespaced/008-realm-client-policy-profile.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/009-realm-client-registration-policy.yaml": {
+      "groups": [
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml"
       ],
       "rdeps": []
     },
