@@ -65,6 +65,20 @@ type ClientAggregatePolicyInitParameters struct {
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	// A list of policy IDs to aggregate.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientAuthorizationPolicy
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +listType=set
+	GenericPolicies []*string `json:"genericPolicies,omitempty" tf:"generic_policies,omitempty"`
+
+	// References to ClientAuthorizationPolicy in openidclient to populate genericPolicies.
+	// +kubebuilder:validation:Optional
+	GenericPoliciesRefs []v1.NamespacedReference `json:"genericPoliciesRefs,omitempty" tf:"-"`
+
+	// Selector for a list of ClientAuthorizationPolicy in openidclient to populate genericPolicies.
+	// +kubebuilder:validation:Optional
+	GenericPoliciesSelector *v1.NamespacedSelector `json:"genericPoliciesSelector,omitempty" tf:"-"`
+
+	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientGroupPolicy
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
@@ -202,6 +216,10 @@ type ClientAggregatePolicyObservation struct {
 
 	// A list of policy IDs to aggregate.
 	// +listType=set
+	GenericPolicies []*string `json:"genericPolicies,omitempty" tf:"generic_policies,omitempty"`
+
+	// A list of policy IDs to aggregate.
+	// +listType=set
 	GroupPolicies []*string `json:"groupPolicies,omitempty" tf:"group_policies,omitempty"`
 
 	// Policy ID representing the aggregate policy.
@@ -298,6 +316,21 @@ type ClientAggregatePolicyParameters struct {
 	// A description for the authorization policy.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
+	// A list of policy IDs to aggregate.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientAuthorizationPolicy
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +kubebuilder:validation:Optional
+	// +listType=set
+	GenericPolicies []*string `json:"genericPolicies,omitempty" tf:"generic_policies,omitempty"`
+
+	// References to ClientAuthorizationPolicy in openidclient to populate genericPolicies.
+	// +kubebuilder:validation:Optional
+	GenericPoliciesRefs []v1.NamespacedReference `json:"genericPoliciesRefs,omitempty" tf:"-"`
+
+	// Selector for a list of ClientAuthorizationPolicy in openidclient to populate genericPolicies.
+	// +kubebuilder:validation:Optional
+	GenericPoliciesSelector *v1.NamespacedSelector `json:"genericPoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientGroupPolicy

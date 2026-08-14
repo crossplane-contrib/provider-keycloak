@@ -22,6 +22,10 @@ func TestClientAuthorizationPermissionReferences(t *testing.T) {
 			terraformName: "keycloak_openid_client_client_policy",
 			extractor:     common.PathUUIDExtractor,
 		},
+		"generic_policies": {
+			terraformName: "keycloak_generic_client_authorization_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
 		"group_policies": {
 			terraformName: "keycloak_openid_client_group_policy",
 			extractor:     common.PathUUIDExtractor,

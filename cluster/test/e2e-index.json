@@ -99,6 +99,16 @@
         "dev/demos/namespaced/049-oidc-client-authorization.yaml"
       ]
     },
+    "ClientAuthorizationPolicy (openidclient)": {
+      "defined_in": [
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml"
+      ]
+    },
     "ClientAuthorizationResource (openidclient)": {
       "defined_in": [
         "dev/demos/basic/049-oidc-client-authorization.yaml",
@@ -1081,6 +1091,7 @@
         "dev/demos/basic/046-oidc-client-policies.yaml",
         "dev/demos/basic/047-oidc-client-role-mapper.yaml",
         "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/basic/049-oidc-client-authorization.yaml",
         "dev/demos/basic/050-oidc-identity-provider.yaml",
         "dev/demos/basic/051-saml-identity-provider.yaml",
@@ -1242,6 +1253,7 @@
         "dev/demos/basic/046-oidc-client-policies.yaml",
         "dev/demos/basic/047-oidc-client-role-mapper.yaml",
         "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/basic/049-oidc-client-authorization.yaml",
         "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/basic/063-saml-client-policies.yaml",
@@ -1276,6 +1288,7 @@
         "dev/demos/basic/046-oidc-client-policies.yaml",
         "dev/demos/basic/047-oidc-client-role-mapper.yaml",
         "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/basic/049-oidc-client-authorization.yaml",
         "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/basic/063-saml-client-policies.yaml",
@@ -1404,6 +1417,7 @@
         "dev/demos/basic/046-oidc-client-policies.yaml",
         "dev/demos/basic/047-oidc-client-role-mapper.yaml",
         "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/basic/049-oidc-client-authorization.yaml",
         "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/basic/063-saml-client-policies.yaml",
@@ -1515,6 +1529,18 @@
         "dev/demos/basic/015-groups.yaml",
         "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/basic/041-oidc-client-clientscopes.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml": {
+      "groups": [
+        "openidclient"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml",
+        "dev/demos/basic/010-roles.yaml",
+        "dev/demos/basic/015-groups.yaml",
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1970,6 +1996,7 @@
         "dev/demos/namespaced/046-oidc-client-policies.yaml",
         "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
         "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/namespaced/049-oidc-client-authorization.yaml",
         "dev/demos/namespaced/050-oidc-identity-provider.yaml",
         "dev/demos/namespaced/051-saml-identity-provider.yaml",
@@ -2131,6 +2158,7 @@
         "dev/demos/namespaced/046-oidc-client-policies.yaml",
         "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
         "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/namespaced/049-oidc-client-authorization.yaml",
         "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/namespaced/063-saml-client-policies.yaml",
@@ -2165,6 +2193,7 @@
         "dev/demos/namespaced/046-oidc-client-policies.yaml",
         "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
         "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/namespaced/049-oidc-client-authorization.yaml",
         "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/namespaced/063-saml-client-policies.yaml",
@@ -2293,6 +2322,7 @@
         "dev/demos/namespaced/046-oidc-client-policies.yaml",
         "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
         "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/namespaced/049-oidc-client-authorization.yaml",
         "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/namespaced/063-saml-client-policies.yaml",
@@ -2404,6 +2434,18 @@
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
         "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml": {
+      "groups": [
+        "openidclient"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml",
+        "dev/demos/namespaced/010-roles.yaml",
+        "dev/demos/namespaced/015-groups.yaml",
+        "dev/demos/namespaced/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },

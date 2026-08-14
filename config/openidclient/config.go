@@ -316,6 +316,13 @@ func Configure(p *config.Provider) {
 				},
 			},
 			multitypes.Instance{
+				Name: "generic_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_generic_client_authorization_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
 				Name: "group_policies",
 				Reference: config.Reference{
 					TerraformName: "keycloak_openid_client_group_policy",
@@ -390,6 +397,13 @@ func Configure(p *config.Provider) {
 				Name: "client_scope_policies",
 				Reference: config.Reference{
 					TerraformName: "keycloak_openid_client_authorization_client_scope_policy",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "generic_policies",
+				Reference: config.Reference{
+					TerraformName: "keycloak_generic_client_authorization_policy",
 					Extractor:     common.PathUUIDExtractor,
 				},
 			},
@@ -480,6 +494,14 @@ func Configure(p *config.Provider) {
 		if s, ok := r.TerraformResource.Schema["logic"]; ok {
 			s.Optional = false
 			s.Computed = false
+		}
+	})
+
+	p.AddResourceConfigurator("keycloak_generic_client_authorization_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.References["resource_server_id"] = config.Reference{
+			TerraformName: "keycloak_openid_client",
+			Extractor:     common.PathUUIDExtractor,
 		}
 	})
 }
@@ -699,6 +721,23 @@ func getAuthzAggregatePoliciesIDByExternalName(ctx context.Context, id string, p
 	return found.Id, nil
 }
 
+var authzGenericPoliciesIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "resource_server_id", "name"},
+	GetIDByExternalName:          getAuthzGenericPoliciesIDByExternalName,
+	GetIDByIdentifyingProperties: getAuthzGenericPoliciesIDByIdentifyingProperties,
+}
+
+// AuthzGenericPoliciesIdentifierFromIdentifyingProperties is used to find the existing resource by it´s identifying properties
+var AuthzGenericPoliciesIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(authzGenericPoliciesIdentifyingPropertiesLookup)
+
+func getAuthzGenericPoliciesIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetGenericClientAuthorizationPolicy(ctx, parameters["realm_id"].(string), parameters["resource_server_id"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
 func getAuthzAggregatePoliciesIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
 	return getAuthzPolicyIDByIdentifyingProperties(ctx, parameters, kcClient)
 }
@@ -778,6 +817,10 @@ func getAuthzScopeIDByIdentifyingProperties(ctx context.Context, parameters map[
 		return "", nil
 	}
 	return found.Id, nil
+}
+
+func getAuthzGenericPoliciesIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	return getAuthzPolicyIDByIdentifyingProperties(ctx, parameters, kcClient)
 }
 
 var authzResourceIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
