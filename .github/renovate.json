@@ -81,6 +81,22 @@
       "allowedVersions": "<1.6.0"
     },
     {
+      "description": "Prevent the github-actions manager from misidentifying hugo-version as a Go version in docs workflows.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchFileNames": [
+        ".github/workflows/deploy-docs.yml",
+        ".github/workflows/preview-docs.yml"
+      ],
+      "matchDepNames": [
+        "go",
+        "golang",
+        "golang/go"
+      ],
+      "enabled": false
+    },
+    {
       "groupName": "go versions",
       "matchManagers": [
         "gomod",
