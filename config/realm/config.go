@@ -123,6 +123,10 @@ func Configure(p *config.Provider) {
 			Extractor:     common.PathNameExtractor,
 		}
 	})
+
+	p.AddResourceConfigurator("keycloak_realm_client_registration_policy", func(r *config.Resource) {
+		r.ShortGroup = Group
+	})
 }
 
 var realmIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
@@ -191,4 +195,44 @@ func getEventsRealmIDByIdentifyingProperties(ctx context.Context, parameters map
 		return "", err
 	}
 	return found.Realm, nil
+}
+
+var clientRegistrationPolicyIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
+	RequiredParameters:           []string{"realm_id", "name", "provider_id", "sub_type"},
+	GetIDByExternalName:          getClientRegistrationPolicyIDByExternalName,
+	GetIDByIdentifyingProperties: getClientRegistrationPolicyIDByIdentifyingProperties,
+}
+
+// ClientRegistrationPolicyIdentifierFromIdentifyingProperties is used to find the existing
+// resource by it´s identifying properties. Keycloak auto-creates a set of default client
+// registration policies ("Trusted Hosts", "Consent Required", etc.) for every realm, so a
+// naive Create would otherwise run into a 409 Conflict for those.
+var ClientRegistrationPolicyIdentifierFromIdentifyingProperties = lookup.BuildIdentifyingPropertiesLookup(clientRegistrationPolicyIdentifyingPropertiesLookup)
+
+func getClientRegistrationPolicyIDByExternalName(ctx context.Context, id string, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	found, err := kcClient.GetRealmClientRegistrationPolicy(ctx, parameters["realm_id"].(string), id)
+	if err != nil {
+		return "", err
+	}
+	return found.Id, nil
+}
+
+func getClientRegistrationPolicyIDByIdentifyingProperties(ctx context.Context, parameters map[string]any, kcClient *keycloak.KeycloakClient) (string, error) {
+	realmId := parameters["realm_id"].(string)
+	name := parameters["name"].(string)
+	providerId := parameters["provider_id"].(string)
+	subType := parameters["sub_type"].(string)
+
+	policies, err := kcClient.GetRealmClientRegistrationPolicies(ctx, realmId)
+	if err != nil {
+		return "", err
+	}
+
+	for _, policy := range policies {
+		if policy.Name == name && policy.ProviderId == providerId && policy.SubType == subType {
+			return policy.Id, nil
+		}
+	}
+
+	return "", nil
 }

@@ -110,6 +110,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_realm_events":                                      realm.EventsRealmIdentifierFromIdentifyingProperties,                      // {realm}
 	"keycloak_realm_client_policy_profile":                       config.IdentifierFromProvider,                                             // {realm}/realm-client-policy-profiles/{name}
 	"keycloak_realm_client_policy_profile_policy":                config.IdentifierFromProvider,                                             // {realm}/realm-client-policy-profile-policies/{name}
+	"keycloak_realm_client_registration_policy":                  realm.ClientRegistrationPolicyIdentifierFromIdentifyingProperties,         // {UUid}
 	"keycloak_authentication_flow":                               authentication.FlowIdentifierFromIdentifyingProperties,                    // {UUid}
 	"keycloak_authentication_subflow":                            authentication.SubFlowIdentifierFromIdentifyingProperties,                 // {UUid}
 	"keycloak_authentication_execution":                          authentication.ExecutionIdentifierFromIdentifyingProperties,               // {UUid}
