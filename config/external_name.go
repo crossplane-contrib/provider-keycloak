@@ -32,6 +32,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_generic_client_role_mapper":                        config.IdentifierFromProvider,                                             // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
 	"keycloak_generic_protocol_mapper":                           mapper.ProtocolMapperIdentifierFromIdentifyingProperties,                  // {UUid}
 	"keycloak_generic_role_mapper":                               config.IdentifierFromProvider,                                             // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
+	"keycloak_group_admin_permissions":                           config.IdentifierFromProvider,                                             // {realm}/{Permission.UUid}
 	"keycloak_group_memberships":                                 config.IdentifierFromProvider,                                             // {realm}/group-memberships/{Group.UUid}
 	"keycloak_group_permissions":                                 config.IdentifierFromProvider,                                             // {realm}/{Group.UUid}
 	"keycloak_group_roles":                                       config.IdentifierFromProvider,                                             // {realm}/{Group.UUid}
