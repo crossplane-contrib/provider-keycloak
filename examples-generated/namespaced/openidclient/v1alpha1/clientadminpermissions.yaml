@@ -1,0 +1,106 @@
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientAdminPermissions
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientadminpermissions
+  labels:
+    testing.upbound.io/example-name: admins_manage_my_client
+  name: admins-manage-my-client
+  namespace: upbound-system
+spec:
+  forProvider:
+    clientIdsRefs:
+    - name: my_client
+    decisionStrategy: UNANIMOUS
+    description: Admins can view and manage my-client
+    name: admins-manage-my-client
+    policies:
+    - ${keycloak_openid_client_group_policy.admins_policy.id}
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    scopes:
+    - view
+    - manage
+
+---
+
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientadminpermissions
+  labels:
+    testing.upbound.io/example-name: admins
+  name: admins
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: admins
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientadminpermissions
+  labels:
+    testing.upbound.io/example-name: my_client
+  name: my-client
+  namespace: upbound-system
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientId: my-client
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientGroupPolicy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientadminpermissions
+  labels:
+    testing.upbound.io/example-name: admins_policy
+  name: admins-policy
+  namespace: upbound-system
+spec:
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    groups:
+    - extendChildren: false
+      idSelector:
+        matchLabels:
+          testing.upbound.io/example-name: admins
+      path: ${keycloak_group.admins.path}
+    logic: POSITIVE
+    name: admins-policy
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: keycloak_openid_client
+
+---
+
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientadminpermissions
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+  namespace: upbound-system
+spec:
+  forProvider:
+    adminPermissionsEnabled: true
+    realm: my-realm

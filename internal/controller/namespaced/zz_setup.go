@@ -54,6 +54,7 @@ import (
 	identityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/identityprovider"
 	microsoftidentityprovider "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/oidc/microsoftidentityprovider"
 	client "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/client"
+	clientadminpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientadminpermissions"
 	clientaggregatepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientaggregatepolicy"
 	clientauthorizationclientscopepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientauthorizationclientscopepolicy"
 	clientauthorizationpermission "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidclient/clientauthorizationpermission"
@@ -169,6 +170,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		identityprovider.Setup,
 		microsoftidentityprovider.Setup,
 		client.Setup,
+		clientadminpermissions.Setup,
 		clientaggregatepolicy.Setup,
 		clientauthorizationclientscopepolicy.Setup,
 		clientauthorizationpermission.Setup,
@@ -290,6 +292,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		identityprovider.SetupGated,
 		microsoftidentityprovider.SetupGated,
 		client.SetupGated,
+		clientadminpermissions.SetupGated,
 		clientaggregatepolicy.SetupGated,
 		clientauthorizationclientscopepolicy.SetupGated,
 		clientauthorizationpermission.SetupGated,
@@ -410,6 +413,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		identityprovider.SetupWebhookWithManager,
 		microsoftidentityprovider.SetupWebhookWithManager,
 		client.SetupWebhookWithManager,
+		clientadminpermissions.SetupWebhookWithManager,
 		clientaggregatepolicy.SetupWebhookWithManager,
 		clientauthorizationclientscopepolicy.SetupWebhookWithManager,
 		clientauthorizationpermission.SetupWebhookWithManager,

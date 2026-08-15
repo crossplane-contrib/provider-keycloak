@@ -3,6 +3,7 @@
 # feature, which cannot be combined with the v1 feature the other test cases
 # rely on. They therefore run in a dedicated cluster (make uptest FGAP_VERSION=v2).
 # Ordered by deletion order: dependents first, base resources last
+dev/demos/fgapv2/040-openid-client-admin-permissions.yaml
 dev/demos/fgapv2/030-group-admin-permissions.yaml
 dev/demos/fgapv2/020-role-admin-permissions.yaml
 dev/demos/fgapv2/010-users-admin-permissions.yaml

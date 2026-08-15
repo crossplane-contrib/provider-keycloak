@@ -1,0 +1,83 @@
+---
+# Fine-grained admin permissions (FGAPv2) for clients.
+#
+# Requires Keycloak 26.2+ started with the `admin-fine-grained-authz:v2`
+# feature and a realm with `adminPermissionsEnabled: true`. Keycloak then
+# creates an `admin-permissions` client that acts as the resource server for
+# all admin permissions of that realm.
+#
+# Each AdminPermissions resource is exactly one permission. It either applies
+# to all clients of the realm, or only to the clients listed in `clientIdsRefs`
+# / `samlClientIdsRefs`.
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: example-clientadminpermissions-realm
+spec:
+  forProvider:
+    realm: example-clientadminpermissions
+    enabled: true
+    adminPermissionsEnabled: true
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: example-clientadminpermissions-client
+spec:
+  forProvider:
+    clientId: example-managed-client
+    accessType: CONFIDENTIAL
+    realmIdRef:
+      name: example-clientadminpermissions-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+# Example 1: A permission covering every client of the realm.
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAdminPermissions
+metadata:
+  name: example-admins-view-clients
+spec:
+  forProvider:
+    name: admins-can-view-clients
+    description: Admins can view every client of the realm
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: example-clientadminpermissions-realm
+    scopes:
+      - view
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+# Example 2: A permission restricted to a single client and evaluated against
+# the policies attached to it.
+#
+# Policies have to live on the realm's `admin-permissions` client. Their IDs
+# can either be set directly via `policies`, or resolved from managed policy
+# resources via the typed reference fields (`groupPolicies`, `rolePolicies`,
+# `userPolicies`, ...).
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAdminPermissions
+metadata:
+  name: example-support-manage-managed-client
+spec:
+  forProvider:
+    name: support-can-manage-managed-client
+    description: Support can view and manage the managed client
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: example-clientadminpermissions-realm
+    clientIdsRefs:
+      - name: example-clientadminpermissions-client
+    scopes:
+      - view
+      - manage
+    policies:
+      - 4b0b7b4c-4a3f-4d2e-9f24-8b7b1a5d2c11
+  providerConfigRef:
+    name: keycloak-provider-config
