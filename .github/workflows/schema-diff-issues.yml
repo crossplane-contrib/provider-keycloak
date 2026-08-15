@@ -34,12 +34,25 @@ permissions:
   contents: read
   issues: write
 
+env:
+  GO_VERSION: '1.26.5'
+
 jobs:
   schema-diff-issues:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      # Regenerate the list from config.ExternalNameConfigs so a stale committed
+      # file can never make an already implemented resource look missing.
+      - name: Refresh config/generated.lst
+        run: make generated-lst
 
       - name: Determine dry-run mode
         id: mode

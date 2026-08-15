@@ -255,6 +255,9 @@ jobs:
       - name: Validate E2E Case Coverage
         run: make e2e-cases-check
 
+      - name: Check config/generated.lst Freshness
+        run: make generated-lst-check
+
       - name: Check Diff
         run: make check-diff
 

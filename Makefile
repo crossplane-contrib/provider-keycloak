@@ -313,9 +313,20 @@ e2e-cases-check:
 e2e-index:
 	@python3 scripts/e2e_dag.py index
 
-generate.done: e2e-index
+# Regenerate config/generated.lst, the list of Terraform resources exposed as
+# managed resources. Derived from config.ExternalNameConfigs so it can never
+# drift from the actual configuration — run as part of `make generate`.
+generated-lst:
+	@go run ./cmd/generatedlist config/generated.lst
 
-.PHONY: e2e-index
+# Verify that config/generated.lst matches config.ExternalNameConfigs. Exits
+# non-zero when the file is stale. Run generated-lst to fix.
+generated-lst-check:
+	@go run ./cmd/generatedlist --check config/generated.lst
+
+generate.done: e2e-index generated-lst
+
+.PHONY: e2e-index generated-lst generated-lst-check
 
 local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(INFO) running locally built provider

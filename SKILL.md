@@ -85,6 +85,10 @@ isn't already tracked. It dry-runs only on pull requests that change the
 automation itself (script or workflow file), and creates real issues
 on schedule, on `Makefile` changes on `main`, and on manual dispatch.
 
+`config/generated.lst` is generated from `config.ExternalNameConfigs` by
+`make generated-lst` (part of `make generate`); never edit it by hand.
+`make generated-lst-check` gates its freshness in CI.
+
 ## Cross-Resource References
 
 ```go
@@ -127,7 +131,7 @@ multitypes.ApplyToAsList(r, "policies",
   no longer emitted.
 - An `Instance` reusing the original field name may omit its `Reference` to
   keep that field settable for raw, untyped IDs (no Ref/Selector generated).
-- Every referenced `TerraformName` must exist in `config/generated.lst`, or
+- Every referenced `TerraformName` must exist in `config/external_name.go`, or
   `make generate` panics.
 - Examples: `config/role/config.go`, `config/mapper/config.go`,
   `config/authentication/config.go`, `config/openidclient/config.go`.
