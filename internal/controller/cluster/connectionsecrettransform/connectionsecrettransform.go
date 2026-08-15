@@ -66,9 +66,17 @@ import (
 
 const (
 	// AnnotationKeyRename configures the renaming for a single managed
-	// resource, as a comma-separated list of "<oldKey>=<newKey>" pairs, e.g.
+	// resource, as a comma- and/or newline-separated list of
+	// "<oldKey>=<newKey>" pairs, e.g.
 	//
 	//	keycloak.crossplane.io/connection-secret-key-rename: clientID=client-id,clientSecret=client-secret
+	//
+	// Kubernetes annotations may be multi-line (a YAML block scalar), which
+	// reads better for longer lists:
+	//
+	//	keycloak.crossplane.io/connection-secret-key-rename: |
+	//	  clientID=client-id
+	//	  clientSecret=client-secret
 	//
 	// Entries here are merged on top of the ProviderConfig-wide
 	// spec.connectionSecretKeys.rename map, so a resource can extend or
@@ -532,15 +540,17 @@ func transform(data map[string][]byte, rename map[string]string) (map[string][]b
 	return out, conflicts
 }
 
-// parseRenameAnnotation parses a comma-separated list of "<oldKey>=<newKey>"
-// pairs. Malformed entries are ignored rather than failing the whole
-// reconcile, which would otherwise leave a resource stuck on a typo.
+// parseRenameAnnotation parses a list of "<oldKey>=<newKey>" pairs separated
+// by commas and/or newlines (Kubernetes annotations may be multi-line YAML
+// block scalars, which is easier to read for longer lists). Malformed
+// entries are ignored rather than failing the whole reconcile, which would
+// otherwise leave a resource stuck on a typo.
 func parseRenameAnnotation(v string) map[string]string {
 	if v == "" {
 		return nil
 	}
 	rename := map[string]string{}
-	for _, pair := range strings.Split(v, ",") {
+	for _, pair := range strings.FieldsFunc(v, func(r rune) bool { return r == ',' || r == '\n' }) {
 		oldKey, newKey, found := strings.Cut(strings.TrimSpace(pair), "=")
 		oldKey, newKey = strings.TrimSpace(oldKey), strings.TrimSpace(newKey)
 		if !found || oldKey == "" || newKey == "" {

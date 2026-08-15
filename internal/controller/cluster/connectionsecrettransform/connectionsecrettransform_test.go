@@ -435,6 +435,18 @@ func TestParseRenameAnnotation(t *testing.T) {
 			annotation: "clientID=client-id,,noseparator,=novalue,nokey=",
 			want:       map[string]string{"clientID": "client-id"},
 		},
+		"Multiline": {
+			annotation: "clientID=client-id\nclientSecret=client-secret\n",
+			want:       map[string]string{"clientID": "client-id", "clientSecret": "client-secret"},
+		},
+		"MultilineAndComma": {
+			annotation: "clientID=client-id, serviceAccountUserId=service-account-user-id\nclientSecret=client-secret",
+			want: map[string]string{
+				"clientID":             "client-id",
+				"serviceAccountUserId": "service-account-user-id",
+				"clientSecret":         "client-secret",
+			},
+		},
 	}
 
 	for name, tc := range cases {
