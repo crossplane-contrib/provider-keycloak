@@ -593,3 +593,70 @@ is in
 Use the transform to adjust the keys of connection secrets you already have,
 and a `Composition` when the Keycloak client is part of a larger API you
 offer to your users anyway.
+
+## Alternative: External Secrets Operator
+
+[External Secrets Operator (ESO)](https://external-secrets.io) can read keys
+from the Crossplane connection secret and republish them under different names
+into a new `Secret`, entirely outside the provider. No provider feature is
+needed; ESO must be installed separately.
+
+The building blocks are:
+
+1. A **`ClusterSecretStore`** (or `SecretStore`) using the [Kubernetes
+   provider](https://external-secrets.io/latest/provider/kubernetes/), pointed
+   at the namespace where Crossplane writes connection secrets
+   (`crossplane-system` by default).
+2. An **`ExternalSecret`** that selects individual keys from the connection
+   secret, remaps them in the `target.template`, and adds any literal values
+   you need — such as the realm's OIDC issuer URL.
+
+```yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: example-eso-oidc
+  namespace: crossplane-system
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    name: keycloak-connection-secrets
+    kind: ClusterSecretStore
+  target:
+    name: example-eso-oidc
+    creationPolicy: Owner
+    template:
+      type: Opaque
+      data:
+        client-id: "{{ .clientID }}"
+        client-secret: "{{ .clientSecret }}"
+        # The issuer URL must be supplied here; ESO has no access to the
+        # ProviderConfig credentials, so it cannot derive it automatically.
+        issuer-url: "https://keycloak.example.com/realms/example-realm"
+  data:
+    - secretKey: clientID
+      remoteRef:
+        key: example-eso-client   # name of the Crossplane connection secret
+        property: clientID
+    - secretKey: clientSecret
+      remoteRef:
+        key: example-eso-client
+        property: clientSecret
+```
+
+The full example — `ClusterSecretStore`, `Client` and `ExternalSecret` — is in
+[`examples/eso/connection-secret-transform.yaml`](https://github.com/crossplane-contrib/provider-keycloak/blob/main/examples/eso/connection-secret-transform.yaml).
+
+| | Connection secret transform | Crossplane v2 Composition | External Secrets Operator |
+|---|---|---|---|
+| Applies to | Any existing connection secret | Only resources the `Composition` itself composes | Any existing `Secret` (Kubernetes or external vault) |
+| Extra secret | None in `InPlace` mode | Always — `Composition` cannot add keys to provider-written secrets | Always — ESO always writes a separate `Secret` |
+| Original key names | Kept (`InPlace`) or dropped (`SeparateSecret`) | Only the keys the template writes exist | Only the keys `ExternalSecret` selects/templates exist |
+| Keycloak-derived values | Resolved automatically (`keycloak:issuerUrl`, …) | Must be supplied on the composite resource | Must be supplied as literals in the `ExternalSecret` |
+| Arbitrary shaping | Renaming and adding scalar fields only | Anything the function can template | Full Go template over any number of source secrets, vault secrets, etc. |
+| Extra prerequisites | None | `Composition`, XRD, composition functions | ESO installation |
+
+Use ESO when you already have ESO in your cluster and want to bridge from
+Crossplane connection secrets to application secrets in a uniform way —
+especially when your transforms are complex, span multiple source secrets, or
+need to pull from an external vault alongside the connection secret.
