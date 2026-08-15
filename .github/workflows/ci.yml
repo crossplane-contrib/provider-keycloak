@@ -633,6 +633,8 @@ jobs:
     concurrency:
       group: ${{ github.head_ref || github.run_id }}-controller-e2e
       cancel-in-progress: true
+    permissions:
+      contents: read
     env:
       CONTROLLER_E2E_KEYCLOAK_VERSION: "26.7.0"
     steps:
