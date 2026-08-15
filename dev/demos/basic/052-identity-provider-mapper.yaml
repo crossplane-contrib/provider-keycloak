@@ -9,7 +9,10 @@ spec:
       Claim: my-email-claim
       UserAttribute: email
       syncMode: INHERIT
-    identityProviderAlias: my-idp
+    identityProviderAliasRef:
+      name: oidc-identity-provider
+      policy:
+        resolve: Always
     identityProviderMapper: '%s-user-attribute-idp-mapper'
     name: email-attribute-importer
     realmRef:

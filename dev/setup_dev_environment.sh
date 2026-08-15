@@ -6,6 +6,7 @@ SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 # Default variable values
 CLUSTER_NAME="fenrir-1"
 KEYCLOAK_VERSION="26.6.2"
+FGAP_VERSION="v1"
 skipmetallb=false
 runcloudproviderkind=false
 uselocalprovider=false
@@ -23,6 +24,7 @@ usage() {
  echo " -d, --deploy-local-provider      Deploy local provider"
  echo " --direct-helm                    Deploy Keycloak directly via Helm instead of ArgoCD (faster for CI)"
  echo " -k, --keycloak-version           Keycloak Version"
+ echo " --fgap-version                   Version of the admin-fine-grained-authz feature (v1 or v2, default: v1)"
 }
 
 has_argument() {
@@ -84,6 +86,17 @@ handle_options() {
 
         shift
         ;;
+      --fgap-version*)
+        if ! has_argument $@; then
+          echo "FGAP version not specified." >&2
+          usage
+          exit 1
+        fi
+
+        FGAP_VERSION=$(extract_argument $@)
+
+        shift
+        ;;
       -k | --keycloak-version*)
         if ! has_argument $@; then
           echo "Keycloakversion not specified." >&2
@@ -111,7 +124,13 @@ handle_options "$@"
 echo "Cluster name: $CLUSTER_NAME"
 echo "Keycloak version: $KEYCLOAK_VERSION"
 
-KEYCLOAK_FEATURES="admin-fine-grained-authz:v1"
+if [ "$FGAP_VERSION" != "v1" ] && [ "$FGAP_VERSION" != "v2" ]; then
+  echo "Invalid fgap version: $FGAP_VERSION (expected v1 or v2)" >&2
+  exit 1
+fi
+echo "Fine-grained admin permissions: $FGAP_VERSION"
+
+KEYCLOAK_FEATURES="admin-fine-grained-authz:${FGAP_VERSION}"
 if [ "$(printf '%s\n%s' "26.4" "$KEYCLOAK_VERSION" | sort -V | head -n1)" = "26.4" ]; then
   KEYCLOAK_FEATURES="${KEYCLOAK_FEATURES},workflows,spiffe"
 fi
@@ -264,7 +283,7 @@ service:
 EOF
 
 echo "* Installing Keycloak via Helm"
-helm install keycloak codecentric/keycloakx --version 7.0.1 \
+retry 5 15 helm install keycloak codecentric/keycloakx --version 7.0.1 \
   --namespace keycloak --create-namespace \
   -f /tmp/keycloak-values.yaml \
   --wait --timeout 300s
@@ -368,7 +387,19 @@ else
   pushd "${SCRIPT_DIR}/.." > /dev/null
   if [ "${PROVIDER_PREBUILT:-}" = "true" ]; then
     echo "DEBUG: Using pre-built provider image (PROVIDER_PREBUILT=true)"
-    make local-deploy-provider-prebuilt BUILD_REGISTRY=ci-build
+    # Extract VERSION from the pre-built xpkg filename so that the xpkg cache
+    # entry (named after the filename) and the Provider spec (which embeds
+    # VERSION) stay in sync.  Without this, the two git-describe invocations
+    # (one in the build job, one here) may produce different abbreviation
+    # lengths and cause "failed to get pre-cached package with pull policy Never".
+    XPKG_FILE=$(ls _output/xpkg/linux_amd64/*.xpkg 2>/dev/null | head -1)
+    if [ -n "$XPKG_FILE" ]; then
+      XPKG_VERSION=$(basename "$XPKG_FILE" | sed 's/^provider-keycloak-//; s/\.xpkg$//')
+      echo "DEBUG: Using version from pre-built xpkg filename: $XPKG_VERSION"
+      make local-deploy-provider-prebuilt BUILD_REGISTRY=ci-build VERSION="$XPKG_VERSION"
+    else
+      make local-deploy-provider-prebuilt BUILD_REGISTRY=ci-build
+    fi
     exit_code=$?
   else
     make local-deploy-provider

@@ -1,0 +1,24 @@
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: MicrosoftIdentityProvider
+metadata:
+  name: microsoft
+spec:
+  forProvider:
+    alias: microsoft
+    clientIdSecretRef:
+      key: client-id
+      name: client-secret
+      namespace: dev
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+      namespace: dev
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    syncMode: IMPORT
+    tenantId: common
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"

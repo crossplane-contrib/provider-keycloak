@@ -1,0 +1,20 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: ClientRegistrationPolicy
+metadata:
+  name: client-registration-policy
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    config:
+      host-sending-registration-request-must-match: "true"
+      client-uris-must-match: "true"
+      trusted-hosts: "example.com"
+    name: my-trusted-hosts-policy
+    providerId: trusted-hosts
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    subType: anonymous
+  providerConfigRef:
+    name: "keycloak-provider-config"

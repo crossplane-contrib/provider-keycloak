@@ -1,0 +1,16 @@
+---
+# Realm used by the fine-grained admin permission (FGAPv2) demos.
+# adminPermissionsEnabled makes Keycloak create the 'admin-permissions' client
+# that acts as the resource server for all admin permissions of this realm.
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: fgapv2
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: "fgapv2"
+    enabled: true
+    adminPermissionsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"

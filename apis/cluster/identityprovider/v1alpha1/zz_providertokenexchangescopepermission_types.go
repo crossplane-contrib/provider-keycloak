@@ -30,6 +30,84 @@ type ProviderTokenExchangeScopePermissionInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ClientsSelector *v1.Selector `json:"clientsSelector,omitempty" tf:"-"`
 
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.FacebookIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	FacebookProviderAlias *string `json:"facebookProviderAlias,omitempty" tf:"facebook_provider_alias,omitempty"`
+
+	// Reference to a FacebookIdentityProvider in oidc to populate facebookProviderAlias.
+	// +kubebuilder:validation:Optional
+	FacebookProviderAliasRef *v1.Reference `json:"facebookProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a FacebookIdentityProvider in oidc to populate facebookProviderAlias.
+	// +kubebuilder:validation:Optional
+	FacebookProviderAliasSelector *v1.Selector `json:"facebookProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.GithubIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	GithubProviderAlias *string `json:"githubProviderAlias,omitempty" tf:"github_provider_alias,omitempty"`
+
+	// Reference to a GithubIdentityProvider in oidc to populate githubProviderAlias.
+	// +kubebuilder:validation:Optional
+	GithubProviderAliasRef *v1.Reference `json:"githubProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a GithubIdentityProvider in oidc to populate githubProviderAlias.
+	// +kubebuilder:validation:Optional
+	GithubProviderAliasSelector *v1.Selector `json:"githubProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.GoogleIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	GoogleProviderAlias *string `json:"googleProviderAlias,omitempty" tf:"google_provider_alias,omitempty"`
+
+	// Reference to a GoogleIdentityProvider in oidc to populate googleProviderAlias.
+	// +kubebuilder:validation:Optional
+	GoogleProviderAliasRef *v1.Reference `json:"googleProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a GoogleIdentityProvider in oidc to populate googleProviderAlias.
+	// +kubebuilder:validation:Optional
+	GoogleProviderAliasSelector *v1.Selector `json:"googleProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.KubernetesIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	KubernetesProviderAlias *string `json:"kubernetesProviderAlias,omitempty" tf:"kubernetes_provider_alias,omitempty"`
+
+	// Reference to a KubernetesIdentityProvider in identityprovider to populate kubernetesProviderAlias.
+	// +kubebuilder:validation:Optional
+	KubernetesProviderAliasRef *v1.Reference `json:"kubernetesProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a KubernetesIdentityProvider in identityprovider to populate kubernetesProviderAlias.
+	// +kubebuilder:validation:Optional
+	KubernetesProviderAliasSelector *v1.Selector `json:"kubernetesProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.MicrosoftIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	MicrosoftProviderAlias *string `json:"microsoftProviderAlias,omitempty" tf:"microsoft_provider_alias,omitempty"`
+
+	// Reference to a MicrosoftIdentityProvider in oidc to populate microsoftProviderAlias.
+	// +kubebuilder:validation:Optional
+	MicrosoftProviderAliasRef *v1.Reference `json:"microsoftProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a MicrosoftIdentityProvider in oidc to populate microsoftProviderAlias.
+	// +kubebuilder:validation:Optional
+	MicrosoftProviderAliasSelector *v1.Selector `json:"microsoftProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.OidcOpenShiftV4IdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	OpenshiftV4ProviderAlias *string `json:"openshiftV4ProviderAlias,omitempty" tf:"openshift_v4_provider_alias,omitempty"`
+
+	// Reference to a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4ProviderAlias.
+	// +kubebuilder:validation:Optional
+	OpenshiftV4ProviderAliasRef *v1.Reference `json:"openshiftV4ProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4ProviderAlias.
+	// +kubebuilder:validation:Optional
+	OpenshiftV4ProviderAliasSelector *v1.Selector `json:"openshiftV4ProviderAliasSelector,omitempty" tf:"-"`
+
 	// Defaults to "client" This is also the only value policy type supported by this provider.
 	// Type of policy that is created. At the moment only 'client' type is supported
 	PolicyType *string `json:"policyType,omitempty" tf:"policy_type,omitempty"`
@@ -58,6 +136,32 @@ type ProviderTokenExchangeScopePermissionInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/saml/v1alpha1.IdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	SAMLProviderAlias *string `json:"samlProviderAlias,omitempty" tf:"saml_provider_alias,omitempty"`
+
+	// Reference to a IdentityProvider in saml to populate samlProviderAlias.
+	// +kubebuilder:validation:Optional
+	SAMLProviderAliasRef *v1.Reference `json:"samlProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a IdentityProvider in saml to populate samlProviderAlias.
+	// +kubebuilder:validation:Optional
+	SAMLProviderAliasSelector *v1.Selector `json:"samlProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.SpiffeIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	SpiffeProviderAlias *string `json:"spiffeProviderAlias,omitempty" tf:"spiffe_provider_alias,omitempty"`
+
+	// Reference to a SpiffeIdentityProvider in identityprovider to populate spiffeProviderAlias.
+	// +kubebuilder:validation:Optional
+	SpiffeProviderAliasRef *v1.Reference `json:"spiffeProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a SpiffeIdentityProvider in identityprovider to populate spiffeProviderAlias.
+	// +kubebuilder:validation:Optional
+	SpiffeProviderAliasSelector *v1.Selector `json:"spiffeProviderAliasSelector,omitempty" tf:"-"`
 }
 
 type ProviderTokenExchangeScopePermissionObservation struct {
@@ -79,7 +183,25 @@ type ProviderTokenExchangeScopePermissionObservation struct {
 	// +listType=set
 	Clients []*string `json:"clients,omitempty" tf:"clients,omitempty"`
 
+	// Alias of the identity provider.
+	FacebookProviderAlias *string `json:"facebookProviderAlias,omitempty" tf:"facebook_provider_alias,omitempty"`
+
+	// Alias of the identity provider.
+	GithubProviderAlias *string `json:"githubProviderAlias,omitempty" tf:"github_provider_alias,omitempty"`
+
+	// Alias of the identity provider.
+	GoogleProviderAlias *string `json:"googleProviderAlias,omitempty" tf:"google_provider_alias,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// Alias of the identity provider.
+	KubernetesProviderAlias *string `json:"kubernetesProviderAlias,omitempty" tf:"kubernetes_provider_alias,omitempty"`
+
+	// Alias of the identity provider.
+	MicrosoftProviderAlias *string `json:"microsoftProviderAlias,omitempty" tf:"microsoft_provider_alias,omitempty"`
+
+	// Alias of the identity provider.
+	OpenshiftV4ProviderAlias *string `json:"openshiftV4ProviderAlias,omitempty" tf:"openshift_v4_provider_alias,omitempty"`
 
 	// (Computed) Policy ID that will be set on the scope based token exchange permission automatically created by enabling permissions on the reference identity provider.
 	// Policy id that will be set on the scope based token exchange permission automatically created by enabling permissions on the reference identity provider
@@ -94,6 +216,12 @@ type ProviderTokenExchangeScopePermissionObservation struct {
 
 	// The realm that the identity provider exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Alias of the identity provider.
+	SAMLProviderAlias *string `json:"samlProviderAlias,omitempty" tf:"saml_provider_alias,omitempty"`
+
+	// Alias of the identity provider.
+	SpiffeProviderAlias *string `json:"spiffeProviderAlias,omitempty" tf:"spiffe_provider_alias,omitempty"`
 }
 
 type ProviderTokenExchangeScopePermissionParameters struct {
@@ -113,6 +241,90 @@ type ProviderTokenExchangeScopePermissionParameters struct {
 	// Selector for a list of Client in openidclient to populate clients.
 	// +kubebuilder:validation:Optional
 	ClientsSelector *v1.Selector `json:"clientsSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.FacebookIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	FacebookProviderAlias *string `json:"facebookProviderAlias,omitempty" tf:"facebook_provider_alias,omitempty"`
+
+	// Reference to a FacebookIdentityProvider in oidc to populate facebookProviderAlias.
+	// +kubebuilder:validation:Optional
+	FacebookProviderAliasRef *v1.Reference `json:"facebookProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a FacebookIdentityProvider in oidc to populate facebookProviderAlias.
+	// +kubebuilder:validation:Optional
+	FacebookProviderAliasSelector *v1.Selector `json:"facebookProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.GithubIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	GithubProviderAlias *string `json:"githubProviderAlias,omitempty" tf:"github_provider_alias,omitempty"`
+
+	// Reference to a GithubIdentityProvider in oidc to populate githubProviderAlias.
+	// +kubebuilder:validation:Optional
+	GithubProviderAliasRef *v1.Reference `json:"githubProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a GithubIdentityProvider in oidc to populate githubProviderAlias.
+	// +kubebuilder:validation:Optional
+	GithubProviderAliasSelector *v1.Selector `json:"githubProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.GoogleIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	GoogleProviderAlias *string `json:"googleProviderAlias,omitempty" tf:"google_provider_alias,omitempty"`
+
+	// Reference to a GoogleIdentityProvider in oidc to populate googleProviderAlias.
+	// +kubebuilder:validation:Optional
+	GoogleProviderAliasRef *v1.Reference `json:"googleProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a GoogleIdentityProvider in oidc to populate googleProviderAlias.
+	// +kubebuilder:validation:Optional
+	GoogleProviderAliasSelector *v1.Selector `json:"googleProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.KubernetesIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	KubernetesProviderAlias *string `json:"kubernetesProviderAlias,omitempty" tf:"kubernetes_provider_alias,omitempty"`
+
+	// Reference to a KubernetesIdentityProvider in identityprovider to populate kubernetesProviderAlias.
+	// +kubebuilder:validation:Optional
+	KubernetesProviderAliasRef *v1.Reference `json:"kubernetesProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a KubernetesIdentityProvider in identityprovider to populate kubernetesProviderAlias.
+	// +kubebuilder:validation:Optional
+	KubernetesProviderAliasSelector *v1.Selector `json:"kubernetesProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1.MicrosoftIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	MicrosoftProviderAlias *string `json:"microsoftProviderAlias,omitempty" tf:"microsoft_provider_alias,omitempty"`
+
+	// Reference to a MicrosoftIdentityProvider in oidc to populate microsoftProviderAlias.
+	// +kubebuilder:validation:Optional
+	MicrosoftProviderAliasRef *v1.Reference `json:"microsoftProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a MicrosoftIdentityProvider in oidc to populate microsoftProviderAlias.
+	// +kubebuilder:validation:Optional
+	MicrosoftProviderAliasSelector *v1.Selector `json:"microsoftProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.OidcOpenShiftV4IdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	OpenshiftV4ProviderAlias *string `json:"openshiftV4ProviderAlias,omitempty" tf:"openshift_v4_provider_alias,omitempty"`
+
+	// Reference to a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4ProviderAlias.
+	// +kubebuilder:validation:Optional
+	OpenshiftV4ProviderAliasRef *v1.Reference `json:"openshiftV4ProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4ProviderAlias.
+	// +kubebuilder:validation:Optional
+	OpenshiftV4ProviderAliasSelector *v1.Selector `json:"openshiftV4ProviderAliasSelector,omitempty" tf:"-"`
 
 	// Defaults to "client" This is also the only value policy type supported by this provider.
 	// Type of policy that is created. At the moment only 'client' type is supported
@@ -145,6 +357,34 @@ type ProviderTokenExchangeScopePermissionParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/saml/v1alpha1.IdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	SAMLProviderAlias *string `json:"samlProviderAlias,omitempty" tf:"saml_provider_alias,omitempty"`
+
+	// Reference to a IdentityProvider in saml to populate samlProviderAlias.
+	// +kubebuilder:validation:Optional
+	SAMLProviderAliasRef *v1.Reference `json:"samlProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a IdentityProvider in saml to populate samlProviderAlias.
+	// +kubebuilder:validation:Optional
+	SAMLProviderAliasSelector *v1.Selector `json:"samlProviderAliasSelector,omitempty" tf:"-"`
+
+	// Alias of the identity provider.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1.SpiffeIdentityProvider
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.IdentityProviderAliasExtractor()
+	// +kubebuilder:validation:Optional
+	SpiffeProviderAlias *string `json:"spiffeProviderAlias,omitempty" tf:"spiffe_provider_alias,omitempty"`
+
+	// Reference to a SpiffeIdentityProvider in identityprovider to populate spiffeProviderAlias.
+	// +kubebuilder:validation:Optional
+	SpiffeProviderAliasRef *v1.Reference `json:"spiffeProviderAliasRef,omitempty" tf:"-"`
+
+	// Selector for a SpiffeIdentityProvider in identityprovider to populate spiffeProviderAlias.
+	// +kubebuilder:validation:Optional
+	SpiffeProviderAliasSelector *v1.Selector `json:"spiffeProviderAliasSelector,omitempty" tf:"-"`
 }
 
 // ProviderTokenExchangeScopePermissionSpec defines the desired state of ProviderTokenExchangeScopePermission

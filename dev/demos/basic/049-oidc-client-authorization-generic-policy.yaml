@@ -1,0 +1,26 @@
+# Covers the generic policy resource, which manages any policy type by its
+# provider id. Uses "time" because Keycloak creates it without the
+# provider-specific config this resource cannot supply; the point is to
+# exercise the generic path, not the time policy itself.
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationPolicy
+metadata:
+  name: my-authz-generic-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-authz-generic-policy
+    description: Generic authorization policy addressed by provider type
+    type: time
+    logic: POSITIVE
+    decisionStrategy: UNANIMOUS
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always

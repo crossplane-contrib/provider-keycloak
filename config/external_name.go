@@ -27,20 +27,27 @@ import (
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
+	"keycloak_generic_client_authorization_policy":               openidclient.AuthzGenericPoliciesIdentifierFromIdentifyingProperties,      // {UUid}
 	"keycloak_generic_client_protocol_mapper":                    mapper.GenericClientProtocolMapperIdentifierFromIdentifyingProperties,     // {UUid}
 	"keycloak_generic_client_role_mapper":                        config.IdentifierFromProvider,                                             // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
 	"keycloak_generic_protocol_mapper":                           mapper.ProtocolMapperIdentifierFromIdentifyingProperties,                  // {UUid}
 	"keycloak_generic_role_mapper":                               config.IdentifierFromProvider,                                             // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
+	"keycloak_group_admin_permissions":                           config.IdentifierFromProvider,                                             // {realm}/{Permission.UUid}
 	"keycloak_group_memberships":                                 config.IdentifierFromProvider,                                             // {realm}/group-memberships/{Group.UUid}
 	"keycloak_group_permissions":                                 config.IdentifierFromProvider,                                             // {realm}/{Group.UUid}
 	"keycloak_group_roles":                                       config.IdentifierFromProvider,                                             // {realm}/{Group.UUid}
 	"keycloak_group":                                             group.GroupIdentifierFromIdentifyingProperties,                            // {UUid}
 	"keycloak_openid_client_client_policy":                       openidclient.AuthzClientPoliciesIdentifierFromIdentifyingProperties,       // {UUid}
 	"keycloak_openid_client_group_policy":                        openidclient.AuthzGroupPoliciesIdentifierFromIdentifyingProperties,        // {UUid}
+	"keycloak_openid_client_js_policy":                           openidclient.AuthzJSPoliciesIdentifierFromIdentifyingProperties,           // {UUid}
 	"keycloak_openid_client_permissions":                         config.IdentifierFromProvider,                                             // {realm}/{Client.UUid}
 	"keycloak_openid_client_role_policy":                         openidclient.AuthzRolePoliciesIdentifierFromIdentifyingProperties,         // {UUid}
 	"keycloak_openid_client_user_policy":                         openidclient.AuthzUserPoliciesIdentifierFromIdentifyingProperties,         // {UUid}
 	"keycloak_openid_client_regex_policy":                        openidclient.AuthzRegexPoliciesIdentifierFromIdentifyingProperties,        // {UUid}
+	"keycloak_openid_client_aggregate_policy":                    openidclient.AuthzAggregatePoliciesIdentifierFromIdentifyingProperties,    // {UUid}
+	"keycloak_openid_client_time_policy":                         openidclient.AuthzTimePoliciesIdentifierFromIdentifyingProperties,         // {UUid}
+	"keycloak_openid_client_authorization_client_scope_policy":   openidclient.AuthzClientScopePoliciesIdentifierFromIdentifyingProperties,  // {UUid}
+	"keycloak_openid_client_authorization_scope":                 openidclient.AuthzScopeIdentifierFromIdentifyingProperties,                // {UUid}
 	"keycloak_openid_client_default_scopes":                      config.IdentifierFromProvider,                                             // {realm}/{Client.UUid}
 	"keycloak_openid_client_optional_scopes":                     config.IdentifierFromProvider,                                             // {realm}/{Client.UUid}
 	"keycloak_openid_client_scope":                               openidclient.ClientScopeIdentifierFromIdentifyingProperties,               // {UUid}
@@ -65,15 +72,18 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_realm":                                             realm.RealmIdentifierFromIdentifyingProperties,                            // {realm}
 	"keycloak_required_action":                                   config.IdentifierFromProvider,                                             // {realm}/{alias}
 	"keycloak_role":                                              role.IdentifierFromIdentifyingProperties,                                  // {UUid}
+	"keycloak_role_admin_permissions":                            config.IdentifierFromProvider,                                             // {realm}/{Permission.UUid}
 	"keycloak_user_groups":                                       config.IdentifierFromProvider,                                             // {realm}/{User.UUid}
 	"keycloak_user_roles":                                        config.IdentifierFromProvider,                                             // {realm}/{User.UUid}
 	"keycloak_users_permissions":                                 config.IdentifierFromProvider,                                             // {realm}
+	"keycloak_users_admin_permissions":                           config.IdentifierFromProvider,                                             // {realm}/{Permission.UUid}
 	"keycloak_user":                                              user.UserIdentifierFromIdentifyingProperties,                              // {UUid}
 	"keycloak_custom_user_federation":                            config.IdentifierFromProvider,                                             // ???
 	"keycloak_oidc_identity_provider":                            oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_oidc_facebook_identity_provider":                   oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_oidc_github_identity_provider":                     oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_oidc_google_identity_provider":                     oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
+	"keycloak_oidc_microsoft_identity_provider":                  oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_kubernetes_identity_provider":                      oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_oidc_openshift_v4_identity_provider":               oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
 	"keycloak_spiffe_identity_provider":                          oidc.IdentifierFromIdentifyingProperties,                                  // {alias}
@@ -104,6 +114,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_realm_events":                                      realm.EventsRealmIdentifierFromIdentifyingProperties,                      // {realm}
 	"keycloak_realm_client_policy_profile":                       config.IdentifierFromProvider,                                             // {realm}/realm-client-policy-profiles/{name}
 	"keycloak_realm_client_policy_profile_policy":                config.IdentifierFromProvider,                                             // {realm}/realm-client-policy-profile-policies/{name}
+	"keycloak_realm_client_registration_policy":                  realm.ClientRegistrationPolicyIdentifierFromIdentifyingProperties,         // {UUid}
 	"keycloak_authentication_flow":                               authentication.FlowIdentifierFromIdentifyingProperties,                    // {UUid}
 	"keycloak_authentication_subflow":                            authentication.SubFlowIdentifierFromIdentifyingProperties,                 // {UUid}
 	"keycloak_authentication_execution":                          authentication.ExecutionIdentifierFromIdentifyingProperties,               // {UUid}

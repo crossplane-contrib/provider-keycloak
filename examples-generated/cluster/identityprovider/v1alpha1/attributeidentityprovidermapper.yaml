@@ -12,7 +12,9 @@ spec:
     attributeValue: value
     extraConfig:
       syncMode: INHERIT
-    identityProviderAlias: my-idp
+    identityProviderAliasSelector:
+      matchLabels:
+        testing.upbound.io/example-name: oidc
     name: hardcodedUserSessionAttribute
     realmSelector:
       matchLabels:

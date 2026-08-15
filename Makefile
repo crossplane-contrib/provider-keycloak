@@ -143,7 +143,7 @@ download-tf-provider-platform:
 	@PLATFORM=$*
 	@$(INFO) downloading provider for platform $(PLATFORM)
 	@mkdir -p $(TERRAFORM_WORKDIR)/$(TERRAFORM_FILE_MIRROR_REPO)/$(TERRAFORM_PROVIDER_SOURCE)/$(TERRAFORM_PROVIDER_VERSION)/${PLATFORM}
-	@curl -fsSL ${TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX}/${TERRAFORM_PROVIDER_DOWNLOAD_NAME}_${TERRAFORM_PROVIDER_VERSION}_${PLATFORM}.zip -o $(TERRAFORM_WORKDIR)/$(TERRAFORM_FILE_MIRROR_REPO)/$(TERRAFORM_PROVIDER_SOURCE)/$(TERRAFORM_PROVIDER_VERSION)/${PLATFORM}/terraform.zip
+	@curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors ${TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX}/${TERRAFORM_PROVIDER_DOWNLOAD_NAME}_${TERRAFORM_PROVIDER_VERSION}_${PLATFORM}.zip -o $(TERRAFORM_WORKDIR)/$(TERRAFORM_FILE_MIRROR_REPO)/$(TERRAFORM_PROVIDER_SOURCE)/$(TERRAFORM_PROVIDER_VERSION)/${PLATFORM}/terraform.zip
 	@unzip -o -qq $(TERRAFORM_WORKDIR)/$(TERRAFORM_FILE_MIRROR_REPO)/$(TERRAFORM_PROVIDER_SOURCE)/$(TERRAFORM_PROVIDER_VERSION)/${PLATFORM}/terraform.zip -d $(TERRAFORM_WORKDIR)/$(TERRAFORM_FILE_MIRROR_REPO)/$(TERRAFORM_PROVIDER_SOURCE)/$(TERRAFORM_PROVIDER_VERSION)/${PLATFORM}/
 	@rm $(TERRAFORM_WORKDIR)/$(TERRAFORM_FILE_MIRROR_REPO)/$(TERRAFORM_PROVIDER_SOURCE)/$(TERRAFORM_PROVIDER_VERSION)/${PLATFORM}/terraform.zip
 
@@ -192,6 +192,7 @@ run: go.build
 # ====================================================================================
 # End to End Testing
 CHAINSAW_VERSION = 0.2.15
+CHAINSAW := $(TOOLS_HOST_DIR)/chainsaw-$(CHAINSAW_VERSION)
 CROSSPLANE_VERSION = 2.0.2
 CROSSPLANE_CLI_VERSION = v2.0.2
 CROSSPLANE_NAMESPACE = crossplane-system
@@ -217,6 +218,16 @@ $(CROSSPLANE_CHART):
 	@cp -R $(TOOLS_HOST_DIR)/tmp-crossplane-chart/*/cluster/charts/crossplane/. $(CROSSPLANE_CHART_DIR)/
 	@rm -rf $(TOOLS_HOST_DIR)/tmp-crossplane-chart
 	@$(OK) downloading Crossplane chart $(CROSSPLANE_VERSION)
+
+$(CHAINSAW):
+	@$(INFO) installing chainsaw $(CHAINSAW_VERSION)
+	@rm -f $(CHAINSAW).tar.gz
+	@curl --retry 5 --retry-delay 2 --retry-all-errors -fsSLo $(CHAINSAW).tar.gz --create-dirs https://github.com/kyverno/chainsaw/releases/download/v$(CHAINSAW_VERSION)/chainsaw_$(SAFEHOST_PLATFORM).tar.gz || $(FAIL)
+	@tar -xvf $(CHAINSAW).tar.gz chainsaw
+	@mv chainsaw $(CHAINSAW)
+	@chmod +x $(CHAINSAW)
+	@rm $(CHAINSAW).tar.gz
+	@$(OK) installing chainsaw $(CHAINSAW_VERSION)
 
 controlplane.up: $(HELM) $(KUBECTL) $(KIND) $(CROSSPLANE_CHART)
 	@$(INFO) setting up controlplane
@@ -261,6 +272,15 @@ UPTEST_EXAMPLE_LIST := $(UPTEST_EXAMPLE_LIST),$(shell grep -v '^\#' cluster/test
 endif
 endif
 
+# Fine-grained admin permissions (FGAPv2) test cases run against a Keycloak
+# started with the admin-fine-grained-authz:v2 feature. That feature replaces
+# the v1 feature all other test cases rely on, so the FGAPv2 cases are the only
+# ones executed in such a cluster.
+FGAP_VERSION ?= v1
+ifeq ($(FGAP_VERSION),v2)
+UPTEST_EXAMPLE_LIST := $(shell grep -v '^\#' cluster/test/cases-fgapv2.txt | paste -sd ',' -)
+endif
+
 # This target requires the following environment variables to be set:
 # - UPTEST_EXAMPLE_LIST, a comma-separated list of examples to test
 #   To ensure the proper functioning of the end-to-end test resource pre-deletion hook, it is crucial to arrange your resources appropriately.
@@ -281,8 +301,32 @@ uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW) $(CROSSPLANE_CLI)
 	@KUBECTL=$(KUBECTL) CHAINSAW=$(CHAINSAW) CROSSPLANE_CLI=$(CROSSPLANE_CLI) CROSSPLANE_NAMESPACE=$(CROSSPLANE_NAMESPACE) $(UPTEST) e2e "$(UPTEST_EXAMPLE_LIST)" $(RENDER_ONLY_FLAG) --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=cluster/test/setup.sh --default-conditions="Test" --default-timeout=2400s || $(FAIL)
 	@$(OK) running automated tests
 
+# Two gates: every demo file is listed in a case file, and every managed
+# resource has an e2e demo (or a documented exception in
+# cluster/test/uncovered-resources.txt).
 e2e-cases-check:
 	@./cluster/test/check_cases_coverage.sh
+	@python3 scripts/e2e_dag.py coverage
+
+# Regenerate the e2e resource index + demo DAG (cluster/test/e2e-index.json).
+# Answers "which e2e test uses resource X?" — run as part of `make generate`.
+e2e-index:
+	@python3 scripts/e2e_dag.py index
+
+# Regenerate config/generated.lst, the list of Terraform resources exposed as
+# managed resources. Derived from config.ExternalNameConfigs so it can never
+# drift from the actual configuration — run as part of `make generate`.
+generated-lst:
+	@go run ./cmd/generatedlist config/generated.lst
+
+# Verify that config/generated.lst matches config.ExternalNameConfigs. Exits
+# non-zero when the file is stale. Run generated-lst to fix.
+generated-lst-check:
+	@go run ./cmd/generatedlist --check config/generated.lst
+
+generate.done: e2e-index generated-lst
+
+.PHONY: e2e-index generated-lst generated-lst-check
 
 local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(INFO) running locally built provider

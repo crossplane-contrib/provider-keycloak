@@ -99,6 +99,25 @@ func Configure(p *config.Provider) {
 			s.Sensitive = true
 		}
 	})
+
+	p.AddResourceConfigurator("keycloak_oidc_microsoft_identity_provider", func(r *config.Resource) {
+		// We need to override the default group that upjet generated for
+		r.ShortGroup = "oidc"
+		r.References["realm"] = config.Reference{
+			TerraformName: "keycloak_realm",
+		}
+		r.References["first_broker_login_flow_alias"] = config.Reference{
+			TerraformName: "keycloak_authentication_flow",
+			Extractor:     common.PathAuthenticationFlowAliasExtractor,
+		}
+
+		if s, ok := r.TerraformResource.Schema["client_id"]; ok {
+			s.Sensitive = true
+		}
+		if s, ok := r.TerraformResource.Schema["client_secret"]; ok {
+			s.Sensitive = true
+		}
+	})
 }
 
 var identifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{

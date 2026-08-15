@@ -1,0 +1,114 @@
+---
+# OpenID client authorization scope (namespaced)
+# Registers a named authorization scope on the 'test' client's resource server.
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientAuthorizationScope
+metadata:
+  name: authz-manage-users-scope
+  namespace: dev-ns
+spec:
+  forProvider:
+    name: manage:users
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: test
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+
+---
+# OpenID client time policy (namespaced)
+# Restricts authorization to business hours (09:00–17:00).
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientTimePolicy
+metadata:
+  name: authz-time-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    name: business-hours-policy
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    hour: "09"
+    hourEnd: "17"
+    # Keycloak always parses notBefore/notOnOrAfter, so both must be set.
+    notBefore: "2024-01-01 00:00:00"
+    notOnOrAfter: "2500-01-01 00:00:00"
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: test
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+
+---
+# OpenID client authorization scope policy (namespaced)
+# Requires the my-groups client scope to be present in the request.
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientAuthorizationClientScopePolicy
+metadata:
+  name: authz-scope-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    name: scope-policy
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: test
+      policy:
+        resolve: Always
+    scope:
+      - idRef:
+          name: openid-client-scope
+        required: false
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+
+---
+# OpenID client aggregate policy (namespaced)
+# Aggregates the time policy and the client scope policy above.
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: ClientAggregatePolicy
+metadata:
+  name: authz-aggregate-policy
+  namespace: dev-ns
+spec:
+  forProvider:
+    name: aggregate-policy
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    realmIdRef:
+      name: "dev-ns"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: test
+      policy:
+        resolve: Always
+    timePoliciesRefs:
+      - name: authz-time-policy
+        policy:
+          resolve: Always
+    clientScopePoliciesRefs:
+      - name: authz-scope-policy
+        policy:
+          resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig

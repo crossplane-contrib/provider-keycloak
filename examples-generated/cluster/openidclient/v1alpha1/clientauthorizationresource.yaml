@@ -50,6 +50,46 @@ spec:
 
 ---
 
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationScope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationresource
+  labels:
+    testing.upbound.io/example-name: read_scope
+  name: read-scope
+spec:
+  forProvider:
+    name: read
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationScope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: openidclient/v1alpha1/clientauthorizationresource
+  labels:
+    testing.upbound.io/example-name: write_scope
+  name: write-scope
+spec:
+  forProvider:
+    name: write
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+
+---
+
 apiVersion: realm.keycloak.crossplane.io/v1alpha1
 kind: Realm
 metadata:

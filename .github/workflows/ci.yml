@@ -34,7 +34,14 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       noop: ${{ steps.noop.outputs.should_skip }}
-      skip-e2e: ${{ steps.skip-e2e.outputs.skip }}
+      # true only when BOTH e2e suites are skipped (gates the provider build)
+      skip-e2e: ${{ steps.e2e-scope.outputs.skip }}
+      # DAG-derived e2e tier + Keycloak matrix (the demo subset itself is
+      # recomputed in the e2e-tests job so it is visible per run)
+      e2e-tier: ${{ steps.e2e-scope.outputs.tier }}
+      e2e-keycloak-versions: ${{ steps.e2e-scope.outputs.keycloak_versions }}
+      # FGAPv2 suite runs in its own cluster and is selected independently
+      e2e-fgapv2: ${{ steps.e2e-scope.outputs.fgapv2 }}
     steps:
       - name: Detect No-op Changes
         id: noop
@@ -49,37 +56,89 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check for skip e2e in commit message
-        id: skip-e2e
+      - name: Compute E2E scope via DAG
+        id: e2e-scope
         run: |
+          # Full Keycloak version matrix (all supported releases)
+          ALL_VERSIONS='["26.7.0","26.6.2","26.5.1","26.4.4","26.3.5","26.2.5","26.1.5","26.0.8"]'
+          LATEST_VERSION='["26.7.0"]'
+
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
           if echo "$COMMIT_MESSAGE" | grep -iq "\[skip e2e\]"; then
-            echo "skip=true" >> $GITHUB_OUTPUT
-            echo "Found [skip e2e] in commit message, will skip e2e tests"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "tier=skip" >> "$GITHUB_OUTPUT"
+            echo "keycloak_versions=[]" >> "$GITHUB_OUTPUT"
+            echo "fgapv2=false" >> "$GITHUB_OUTPUT"
+            echo "[skip e2e] found in commit message — skipping all e2e tests"
             exit 0
           fi
-          echo "No [skip e2e] found in commit message"
 
+          # On non-PR events (push to main, workflow_dispatch) always run full
           if [ "${{ github.event_name }}" != "pull_request" ]; then
-            echo "skip=false" >> $GITHUB_OUTPUT
-            echo "Not a pull_request event, will not skip e2e tests based on changed paths"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "tier=full" >> "$GITHUB_OUTPUT"
+            echo "keycloak_versions=${ALL_VERSIONS}" >> "$GITHUB_OUTPUT"
+            echo "fgapv2=true" >> "$GITHUB_OUTPUT"
+            echo "Non-PR event — running full e2e suite against all Keycloak versions"
             exit 0
           fi
 
-          CHANGED_FILES=$(git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}")
+          # Compute changed files for the PR, always relative to main
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          MERGE_BASE=$(git merge-base origin/main HEAD)
+          echo "Comparing against main (merge base ${MERGE_BASE})"
+          CHANGED_FILES=$(git diff --name-only "${MERGE_BASE}" HEAD)
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          # Only run e2e tests when changes could affect the operator/e2e
-          # environment: Go code, generated APIs/CRDs, upjet config, e2e
-          # test manifests/dev demos, build tooling, or the CI workflow
-          # itself. Docs, scripts, and other metadata-only changes skip e2e.
-          if echo "$CHANGED_FILES" | grep -Eq '^(apis/|cmd/|internal/|config/|package/crds/|cluster/|dev/|build/|Makefile$|go\.mod$|go\.sum$|Dockerfile|\.github/workflows/ci\.yml)'; then
-            echo "skip=false" >> $GITHUB_OUTPUT
-            echo "Found changes relevant to e2e tests"
+          # Use the DAG script to determine tier + demo subset. The proof
+          # (which changed file matched which rule, and why each demo was
+          # selected) is written to the job summary.
+          TIER=$(echo "$CHANGED_FILES" | \
+            python3 scripts/e2e_dag.py select --changed-files - \
+              --proof-file /tmp/e2e_proof.md 2>/tmp/e2e_dag_stderr.txt)
+          cat /tmp/e2e_dag_stderr.txt
+          cat /tmp/e2e_proof.md >> "$GITHUB_STEP_SUMMARY"
+          echo "DAG stdout (tier/list): $TIER"
+
+          # The FGAPv2 suite runs in its own cluster (admin-fine-grained-authz:v2
+          # excludes the v1 feature the regular suite needs), so it is selected
+          # independently of the regular suite.
+          FGAPV2=$(echo "$CHANGED_FILES" | \
+            python3 scripts/e2e_dag.py select-fgapv2 --changed-files - \
+              --proof-file /tmp/e2e_proof_fgapv2.md 2>/tmp/e2e_dag_fgapv2_stderr.txt)
+          cat /tmp/e2e_dag_fgapv2_stderr.txt
+          cat /tmp/e2e_proof_fgapv2.md >> "$GITHUB_STEP_SUMMARY"
+          echo "DAG stdout (fgapv2): $FGAPV2"
+
+          if [ "$FGAPV2" = "run" ]; then
+            echo "fgapv2=true" >> "$GITHUB_OUTPUT"
           else
-            echo "skip=true" >> $GITHUB_OUTPUT
-            echo "No changes relevant to e2e tests found, will skip e2e tests"
+            echo "fgapv2=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if [ "$TIER" = "skip" ]; then
+            # Only skip the provider build when neither suite has anything to run
+            if [ "$FGAPV2" = "run" ]; then
+              echo "skip=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            fi
+            echo "tier=skip" >> "$GITHUB_OUTPUT"
+            echo "keycloak_versions=[]" >> "$GITHUB_OUTPUT"
+            echo "No e2e-relevant changes for the regular suite — skipping it"
+          elif [ "$TIER" = "full" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "tier=full" >> "$GITHUB_OUTPUT"
+            echo "keycloak_versions=${ALL_VERSIONS}" >> "$GITHUB_OUTPUT"
+            echo "Full tier — running all demos against all Keycloak versions"
+          else
+            # targeted: TIER contains a comma-separated list of demo paths
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "tier=targeted" >> "$GITHUB_OUTPUT"
+            echo "keycloak_versions=${LATEST_VERSION}" >> "$GITHUB_OUTPUT"
+            DEMO_COUNT=$(echo "$TIER" | tr ',' '\n' | wc -l)
+            echo "Targeted tier — running ${DEMO_COUNT} demos against latest Keycloak only"
           fi
 
 
@@ -195,6 +254,9 @@ jobs:
 
       - name: Validate E2E Case Coverage
         run: make e2e-cases-check
+
+      - name: Check config/generated.lst Freshness
+        run: make generated-lst-check
 
       - name: Check Diff
         run: make check-diff
@@ -375,22 +437,14 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-24.04
     needs: [detect-noop, build-provider]
-    if: needs.detect-noop.outputs.noop != 'true' && needs.detect-noop.outputs.skip-e2e != 'true'
+    if: needs.detect-noop.outputs.noop != 'true' && needs.detect-noop.outputs.e2e-tier != 'skip'
     concurrency:
       group: ${{ github.head_ref || github.run_id }}-${{ matrix.keycloak-version }}
       cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
-        keycloak-version:
-          - '26.7.0'
-          - '26.6.2'
-          - '26.5.1'
-          - '26.4.4'
-          - '26.3.5'
-          - '26.2.5'
-          - '26.1.5'
-          - '26.0.8'
+        keycloak-version: ${{ fromJSON(needs.detect-noop.outputs.e2e-keycloak-versions) }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -399,6 +453,39 @@ jobs:
 
       - name: Fetch History
         run: git fetch --prune --unshallow
+
+      - name: Calculate E2E test selection
+        id: select
+        shell: bash
+        env:
+          E2E_TIER: ${{ needs.detect-noop.outputs.e2e-tier }}
+        run: |
+          set -o pipefail
+          if [ "${E2E_TIER}" != "targeted" ]; then
+            echo "demos=" >> "$GITHUB_OUTPUT"
+            echo "### E2E selection: ${E2E_TIER} — running all demos" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          # Always compare against main
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          MERGE_BASE=$(git merge-base origin/main HEAD)
+          echo "Comparing against main (merge base ${MERGE_BASE})"
+          DEMOS=$(git diff --name-only "${MERGE_BASE}" HEAD | \
+            python3 scripts/e2e_dag.py select --changed-files - \
+              --proof-file /tmp/e2e_proof.md)
+
+          # Always publish the proof: which file matched which rule, and why
+          # each demo ended up in the selection.
+          cat /tmp/e2e_proof.md >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "${DEMOS}" = "full" ] || [ "${DEMOS}" = "skip" ] || [ -z "${DEMOS}" ]; then
+            echo "demos=" >> "$GITHUB_OUTPUT"
+            echo "### E2E selection: fallback — running all demos" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "demos=${DEMOS}" >> "$GITHUB_OUTPUT"
+          echo "${DEMOS}" | tr ',' '\n'
 
       - name: Setup Go
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
@@ -501,11 +588,18 @@ jobs:
         shell: bash
         env:
           KEYCLOAK_VERSION: ${{ matrix.keycloak-version }}
-        run:
-          #!/bin/bash
-          set -o pipefail;
-          make uptest KEYCLOAK_VERSION=${{ matrix.keycloak-version }} | tee logs/uptest.log;
-          exit $?;
+          E2E_DEMO_LIST: ${{ steps.select.outputs.demos }}
+          E2E_TIER: ${{ needs.detect-noop.outputs.e2e-tier }}
+        run: |
+          set -o pipefail
+          echo "E2E tier: ${E2E_TIER}"
+          if [ -n "${E2E_DEMO_LIST}" ]; then
+            echo "Targeted mode: running $(echo "${E2E_DEMO_LIST}" | tr ',' '\n' | wc -l) demos"
+            make uptest KEYCLOAK_VERSION="${KEYCLOAK_VERSION}" UPTEST_EXAMPLE_LIST="${E2E_DEMO_LIST}" | tee logs/uptest.log
+          else
+            echo "Full mode: running all demos"
+            make uptest KEYCLOAK_VERSION="${KEYCLOAK_VERSION}" | tee logs/uptest.log
+          fi
 
       - name: Collect logs
         if: steps.e2eTests.outcome == 'failure'
@@ -524,12 +618,145 @@ jobs:
         if: steps.e2eTests.outcome == 'failure'
         run: exit 1
 
+  # Fine-grained admin permissions v2 (FGAPv2) resources need Keycloak to run
+  # with the admin-fine-grained-authz:v2 feature. That feature replaces the v1
+  # feature the regular e2e suite depends on, so these demos get their own
+  # cluster and only run the cases listed in cluster/test/cases-fgapv2.txt.
+  e2e-tests-fgapv2:
+    runs-on: ubuntu-24.04
+    needs: [detect-noop, build-provider]
+    if: needs.detect-noop.outputs.noop != 'true' && needs.detect-noop.outputs.e2e-fgapv2 == 'true'
+    concurrency:
+      group: ${{ github.head_ref || github.run_id }}-fgapv2
+      cancel-in-progress: true
+    permissions:
+      contents: read
+    env:
+      FGAP_KEYCLOAK_VERSION: "26.7.0"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          submodules: true
+
+      - name: Fetch History
+        run: git fetch --prune --unshallow
+
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Find the Go Build Cache
+        id: go
+        run: echo "cache=$(make go.cachedir)" >> $GITHUB_OUTPUT
+
+      - name: Cache the Go Build Cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ steps.go.outputs.cache }}
+          key: ${{ runner.os }}-build-unit-tests-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-build-unit-tests-
+
+      - name: Cache Go Dependencies
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: .work/pkg
+          key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-pkg-
+
+      - name: Cache Build Tools
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: .cache/tools
+          key: ${{ runner.os }}-${{ runner.arch }}-tools-${{ hashFiles('Makefile', 'build/makelib/**/*.mk') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-tools-
+
+      - name: Vendor Dependencies
+        run: make vendor vendor.check
+
+      - name: Download Provider Image
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: provider-image
+          path: /tmp
+
+      - name: Download Provider Package
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: provider-xpkg
+          path: _output/xpkg/linux_amd64/
+
+      - name: Load Provider Image
+        run: docker load -i /tmp/provider-image.tar
+
+      - name: Pre-pull container images
+        run: docker pull quay.io/keycloak/keycloak:${{ env.FGAP_KEYCLOAK_VERSION }}
+
+      - name: Starting testsetup for E2E Tests
+        id: setup
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          mkdir -p logs
+          ./dev/setup_dev_environment.sh --cluster-name fenrir-1 --deploy-local-provider --direct-helm --keycloak-version ${{ env.FGAP_KEYCLOAK_VERSION }} --fgap-version v2 | tee logs/setup-environment.log
+        env:
+          PROVIDER_PREBUILT: "true"
+
+      - name: Collect setup logs
+        if: steps.setup.outcome == 'failure'
+        shell: bash
+        run: |
+          kind export kubeconfig --name fenrir-1 || true
+          ./dev/collect-logs.sh || true
+
+      - name: Upload setup logs
+        if: steps.setup.outcome == 'failure'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: e2e-setup-logs-fgapv2
+          path: |
+            logs/
+
+      - name: Fail on setup error
+        if: steps.setup.outcome == 'failure'
+        run: exit 1
+
+      - name: Set kind cluster as context
+        run: kind export kubeconfig --name fenrir-1
+
+      - name: Running E2E Tests
+        id: e2eTests
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          make uptest KEYCLOAK_VERSION="${{ env.FGAP_KEYCLOAK_VERSION }}" FGAP_VERSION=v2 | tee logs/uptest.log
+
+      - name: Collect logs
+        if: steps.e2eTests.outcome == 'failure'
+        shell: bash
+        run: ./dev/collect-logs.sh
+
+      - name: Upload logs
+        if: steps.e2eTests.outcome == 'failure'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: e2e-logs-fgapv2
+          path: |
+            logs/
+
+      - name: Fail on error
+        if: steps.e2eTests.outcome == 'failure'
+        run: exit 1
+
   publish-artifacts:
     runs-on: ubuntu-24.04
-    needs:  [detect-noop, lint, check-diff, unit-tests, local-deploy, e2e-tests]
+    needs:  [detect-noop, lint, check-diff, unit-tests, local-deploy, e2e-tests, e2e-tests-fgapv2]
     if: |
       needs.detect-noop.outputs.noop != 'true' && needs.lint.result == 'success' && needs.check-diff.result == 'success'  && needs.unit-tests.result == 'success' && needs.local-deploy.result == 'success' &&
-      (always() && (needs.e2e-tests.result == 'success' || needs.e2e-tests.result == 'skipped' || needs.detect-noop.outputs.skip-e2e == 'true'))
+      (always() && (needs.e2e-tests.result == 'success' || needs.e2e-tests.result == 'skipped' || needs.detect-noop.outputs.skip-e2e == 'true')) &&
+      (always() && (needs.e2e-tests-fgapv2.result == 'success' || needs.e2e-tests-fgapv2.result == 'skipped' || needs.detect-noop.outputs.skip-e2e == 'true'))
     outputs:
       version: ${{ steps.version.outputs.VERSION }}
     permissions:
