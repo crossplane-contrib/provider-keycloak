@@ -1,0 +1,4713 @@
+# provider-keycloak — full content for AI assistants
+# Generated from docs/content. See https://llmstxt.org/
+
+## Agents
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/agents/
+
+
+# Agent Instructions for provider-keycloak
+
+This page collects context and instructions for AI coding agents (GitHub Copilot,
+Cursor, Claude, etc.) working on the provider-keycloak repository.
+
+## What This Repository Is
+
+`provider-keycloak` is a [Crossplane](https://crossplane.io/) provider that lets
+you manage [Keycloak](https://www.keycloak.org/) resources as Kubernetes custom
+resources. It is generated with [Upjet](https://github.com/crossplane/upjet) on
+top of the [Keycloak Terraform Provider](https://github.com/keycloak/terraform-provider-keycloak).
+
+**One-line flow:**
+```
+Keycloak Terraform Provider  →  Upjet (code generator)  →  Crossplane provider  →  Kubernetes CRDs
+```
+
+Users declare Keycloak resources as YAML (`spec.forProvider` maps to Terraform arguments), and the provider reconciles them continuously against a live Keycloak instance.
+
+## Repository Layout
+
+```
+apis/               Crossplane API types (generated + hand-authored)
+cmd/                provider and generator entry points
+config/             Upjet resource configuration (external names, references, cross-resource refs)
+docs/               Hugo (hextra) documentation site
+examples/           Hand-authored example manifests for each managed resource
+examples-generated/ Auto-generated example manifests (do not edit by hand)
+package/crds/       Generated CRD YAML files (source of truth for field schemas)
+internal/           Internal controller and reconciler logic
+generate/           Generation scripts
+cluster/            Uptest end-to-end test manifests and setup
+dev/                Local development environment scripts
+scripts/            Utility scripts
+```
+
+## Core Concepts
+
+- **ProviderConfig** – holds connection details for a Keycloak instance (URL,
+  client ID, credentials secret reference).
+- **Managed Resources** – Kubernetes CRDs that map 1:1 to Keycloak objects.
+  `spec.forProvider` maps to Terraform resource arguments.
+- **Reconciliation** – the provider controller continuously ensures Keycloak
+  matches the desired state expressed in `spec.forProvider`.
+- **External Name** – the Keycloak-side identifier wired in `config/external_name.go`.
+  This is the ID or name that Keycloak assigns to the resource.
+- **References** – cross-resource references (e.g., `realmIdRef`) are configured
+  in `config/<group>/config.go`. They wire one managed resource's external name
+  into another resource's field.
+
+## Key Files for Common Tasks
+
+| Task | File(s) |
+|------|---------|
+| Add a new resource | `config/external_name.go`, `config/<group>/config.go` |
+| Change reference resolution | `config/<group>/config.go` |
+| Update docs for a resource | `docs/content/docs/using/resources/<resource>.md` |
+| Add/update an example manifest | `examples/<group>/<resource>.yaml` |
+| Modify CRD generation | `generate/*.go`, run `make generate` |
+| Run unit tests | `make test` |
+| Run e2e tests | `make e2e`, see `cluster/test/cases.txt` for covered resources |
+| Regenerate llms.txt/llms-full.txt | `make generate` (or `make docs-gen`) |
+| Verify docs freshness | `make docs-freshness-check` |
+
+## Code Generation
+
+Always run `make generate` after changing `config/` to regenerate CRDs and Go types. **Never** edit files in `apis/` or `package/crds/` by hand — they are generated outputs.
+
+`make generate` is the single entry point for **all** generation — code, DAG and docs. There is no need to run the individual targets by hand.
+
+The generation pipeline:
+1. `generate/main.go` calls Upjet with the Terraform provider schema.
+2. Upjet writes Go type definitions into `apis/<group>/<version>/`.
+3. `make generate` runs `go generate ./...` which invokes controller-gen to write CRDs into `package/crds/`.
+4. `make generate` then runs `e2e-index` (DAG: `cluster/test/e2e-index.json`), `generated-lst` (`config/generated.lst`) and `docs-gen` (`docs/static/llms.txt`, `docs/static/llms-full.txt`).
+
+## Testing
+
+- Unit tests: `make test`
+- E2E tests: `make e2e` (requires a running Keycloak and Crossplane cluster)
+- E2E coverage is limited to resources listed in `cluster/test/cases.txt`
+
+The E2E suite uses [uptest](https://github.com/crossplane/uptest). Only resources
+explicitly listed in `cluster/test/cases.txt` receive e2e coverage.
+
+## Adding a New Resource
+
+Use `make schema-diff OLD_PROVIDER_VERSION=<prev>` (or compare
+`config/generated.lst` against `config/schema.json`) to find Terraform
+resources that aren't yet exposed as managed resources. The
+`schema-diff-issues` GitHub Actions workflow automates this and files one
+issue per missing resource that isn't already tracked.
+
+1. Add an entry to `config/external_name.go`. Choose `config.IdentifierFromProvider`
+   when the Terraform provider already returns a stable ID (including composite
+   `{realm}/...` IDs), or a `<group>.<Resource>IdentifierFromIdentifyingProperties`
+   helper (see `config/openidclient/` or `config/group/`) when the ID must be
+   derived from identifying attributes such as name + realm.
+2. Create or update `config/<group>/config.go` to configure references and any
+   custom behaviors. If an attribute can reference more than one resource type,
+   use `config/multitypes` (see [Multi-Type References](#multi-type-references))
+   rather than leaving it as a raw ID field.
+3. Run `make generate` to regenerate CRDs and Go types.
+4. Add a hand-authored example to `examples/<group>/<resource>.yaml`.
+5. Optionally add a docs page to `docs/content/docs/using/resources/<resource>.md`.
+6. Optionally add the resource to `cluster/test/cases.txt` plus a chainsaw/uptest
+   manifest under `cluster/test/` or `dev/demos/` for e2e coverage.
+
+To allow a resource to be imported/observed by its properties (avoiding 409 on create),
+wire its `external_name.go` entry to a `lookup.BuildIdentifyingPropertiesLookup` config
+in the `config/<group>` package (see `config/openidclient/config.go` for an example).
+
+## Automated Schema Diff Issues
+
+`.github/workflows/schema-diff-issues.yml` runs `scripts/schema_diff_issues.py`,
+which diffs `config/schema.json` against `config/generated.lst` and files one
+GitHub issue per missing resource that isn't already tracked by an existing
+open issue (matched by exact resource name in the issue title/body).
+
+`config/generated.lst` is itself generated from `config.ExternalNameConfigs`
+(`make generated-lst`, run as part of `make generate`), and the workflow
+refreshes it before diffing, so an already implemented resource is never
+reported as missing. `make generated-lst-check` fails CI when the committed
+file is stale.
+
+- On `pull_request`, it only runs in dry-run mode (reports only, creates
+  nothing) when the automation itself changes (the script or the workflow
+  file) — not on every PR.
+- On a weekly `schedule`, on `push` to `main` that touches the `Makefile`
+  (a Terraform provider version bump), and on manual `workflow_dispatch`, it
+  creates real issues.
+
+## Cross-Resource References
+
+References are wired in `config/<group>/config.go` using `r.References` on the
+Upjet resource configuration. The reference resolver fills in the referenced
+resource's external name at reconciliation time. Example pattern:
+
+```go
+r.References["realm_id"] = config.Reference{
+    TerraformName: "keycloak_realm",
+}
+```
+
+## Multi-Type References
+
+`r.References` accepts a single `TerraformName`, so it cannot describe a
+Terraform attribute whose value may be the ID of several different resource
+types. For those attributes, use the `config/multitypes` package instead of
+exposing a raw ID field or hand-rolling synthetic fields. It creates one
+synthetic, strongly-typed field per referenceable type and consolidates the
+resolved values back into the original Terraform field before the request is
+sent to Terraform.
+
+Scalar field — a role's `client_id` may point at an OpenID or a SAML client:
+
+```go
+multitypes.ApplyToWithOptions(r, "client_id",
+    &multitypes.Options{KeepOriginalField: true}, // keep client_id settable
+    multitypes.Instance{
+        Name: "client_id",
+        Reference: config.Reference{
+            TerraformName: "keycloak_openid_client",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+    multitypes.Instance{
+        Name: "saml_client_id",
+        Reference: config.Reference{
+            TerraformName: "keycloak_saml_client",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+)
+```
+
+List/set field — `keycloak_openid_client_aggregate_policy.policies` holds IDs
+of any authorization policy type:
+
+```go
+multitypes.ApplyToAsList(r, "policies",
+    multitypes.Instance{
+        Name: "time_policies",
+        Reference: config.Reference{
+            TerraformName: "keycloak_openid_client_time_policy",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+    multitypes.Instance{
+        Name: "role_policies",
+        Reference: config.Reference{
+            TerraformName: "keycloak_openid_client_role_policy",
+            Extractor:     common.PathUUIDExtractor,
+        },
+    },
+    // ... one Instance per referenceable policy type
+)
+```
+
+Rules and gotchas:
+
+- `Options.KeepOriginalField: true` is required (and only allowed) when one
+  `Instance` reuses the original field name; use it to keep the existing field
+  settable for backward compatibility. The helper panics on a mismatch.
+- An `Instance` that reuses the original field name may omit its `Reference`
+  entirely. Such an "untyped" instance gets no Ref/Selector fields; the
+  original field simply stays settable for raw IDs of types that have no
+  managed resource yet, and its value still takes part in consolidation.
+  Omitting the `Reference` on a *synthetic* instance panics.
+- If no `Instance` reuses the original name, the original field becomes
+  computed-only (`status.atProvider`). As a side effect, a *required* Terraform
+  field no longer emits a required-parameter CEL rule, so no CRD
+  post-processing is needed.
+- For scalar fields only one synthetic field may be set at a time; the
+  consolidation injector errors otherwise. For list fields all synthetic lists
+  are unioned.
+- Every referenced `TerraformName` must have an entry in
+  `config/external_name.go`, otherwise `make generate` panics with
+  `cannot find configuration for Terraform resource`.
+- Examples: `config/role/config.go` and `config/mapper/config.go`
+  (`client_id`/`saml_client_id`), `config/authentication/config.go`
+  (`parent_flow_alias`/`parent_subflow_alias`), `config/openidclient/config.go`
+  (`clients`/`saml_clients` and aggregate-policy `policies`),
+  `config/identityprovider/config.go` (`provider_alias`/`identity_provider_alias`
+  wired to every identity provider type).
+
+## Documentation Site
+
+The docs use [Hugo](https://gohugo.io/) with the [Hextra](https://imfing.github.io/hextra/) theme.
+
+```bash
+cd docs && hugo server --buildDrafts   # local preview
+make generate                          # regenerates code, DAG and llms.txt
+make docs-gen                          # regenerate llms.txt and llms-full.txt only
+make docs-freshness-check             # CI: verify llms.txt is current
+```
+
+Every page is available as clean Markdown at the same URL with `.md` appended
+(e.g., `/docs/using/resources/realms/index.md`). This is useful for AI agents
+consuming individual pages.
+
+## LLM Files
+
+- [`/llms.txt`](/llms.txt) — brief categorized index for AI assistants
+- [`/llms-full.txt`](/llms-full.txt) — all doc pages concatenated for full-context ingestion
+
+## Known Constraints and Pitfalls
+
+- **Never edit `examples-generated/` by hand.** These are auto-generated.
+- **Never edit generated files in `apis/` or `package/crds/` by hand.**
+- **Never edit `config/generated.lst` by hand.** It is generated from
+  `config.ExternalNameConfigs` by `make generated-lst` (part of
+  `make generate`).
+- **`github.com/keycloak/terraform-provider-keycloak` updates are grouped;
+  major bumps require manual review.** The go.mod pseudo-version and its
+  pinned Makefile version are grouped into a single weekly Renovate PR.
+  Minor/patch/digest updates auto-merge once tests pass; major version bumps
+  are not auto-merged since upgrading requires deliberate schema migration.
+- **E2E tests only cover resources in `cluster/test/cases.txt`.** New resources
+  are not automatically e2e tested.
+- **Upjet does not support `+nullable` markers.** Do not add nullable annotations
+  to generated types; the `kubebuilder` Options struct only supports Required,
+  Minimum, Maximum, Default.
+- **Membership ownership:** Avoid managing the same group's membership with both
+  a `Memberships` resource and a `Groups` resource with `exhaustive=true` at the
+  same time; this can cause reconciliation loops.
+- **E2E Crossplane startup:** When waiting for Crossplane to be ready in CI/dev
+  scripts, wait on the deployment availability rather than pods by selector — pods
+  may not exist yet when the wait command runs.
+- **E2E CI versioning:** Jobs that build or deploy local xpkgs must fetch git tags
+  (`git fetch --tags`) so that `build/makelib/common.mk` derives the correct
+  VERSION that matches the pre-cached xpkg.
+
+## Troubleshooting Common Issues
+
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| CRD fields not updating after config change | `make generate` not run | Run `make generate` |
+| `409 Conflict` on resource create | External name collision; resource already exists in Keycloak | Use `lookup.BuildIdentifyingPropertiesLookup` to enable import |
+| `llms-full.txt is stale` in CI | Docs changed but `make generate` not run | Run `make generate` and commit |
+| `no matches for kind` in e2e | CRD not yet established when chainsaw runs | `cluster/test/setup.sh` waits for MRDs; check timing |
+| `make generate` produces unexpectedly large/stale diffs | Stale local generator cache/artifacts | Remove `.work/` and `config/schema.json`, then re-run `make generate` |
+| E2E provider version mismatch | Git tags not fetched before build | Add `git fetch --tags` before `make build` |
+| Reconciliation loop on group membership | Both `Memberships` and `Groups` (exhaustive) target same group | Use only one authoritative source per group |
+
+## LLM Files
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/llms/
+
+
+The docs site ships AI-oriented reference files:
+
+- [`/llms.txt`](/llms.txt)
+- [`/llms-full.txt`](/llms-full.txt)
+
+## Dev Container
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/dev-container/
+
+
+# Dev Container
+
+The repository ships a [Dev Container](https://containers.dev/) under
+`.devcontainer/` that provides a ready-to-use environment to **build the
+provider** and **run the end-to-end (uptest) suite** — Go, Docker-in-Docker and
+kind included. Use it to avoid installing the toolchain on your host.
+
+## What's inside
+
+| Tool | Version | Source |
+|------|---------|--------|
+| Go | 1.25 | devcontainer feature |
+| Docker (DinD) | latest | devcontainer feature |
+| kind, kubectl, helm | pinned in the Makefile | `make` (via `post-create.sh`) |
+| make, curl, unzip, jq, envsubst, git, bash-completion | — | provided by the base image |
+| goimports | latest | `post-create.sh` |
+
+`kind`, `kubectl` and `helm` are **not** version-pinned in the container.
+`post-create.sh` downloads them through the repository's existing Makefile
+targets (`build/makelib/k8s_tools.mk`) into `.cache/tools/` and symlinks them
+onto `PATH`, so the Makefile stays the single source of truth for their
+versions. `yq`, `chainsaw`, `uptest`, `crossplane` and `terraform` are consumed
+only by the Makefile and are fetched by it on demand, so they are not placed on
+`PATH` here.
+
+## Getting started
+
+Open the folder in VS Code and **"Reopen in Container"**, or use the
+[`devcontainer` CLI](https://github.com/devcontainers/cli):
+
+```bash
+devcontainer up --workspace-folder .
+devcontainer exec --workspace-folder . make generate
+```
+
+The first build runs `post-create.sh`, which initializes the `build/` git
+submodule, fetches the k8s CLIs via the Makefile, installs `goimports`, and wires
+up shell completion. Everything else comes from the base image and the
+Go / Docker-in-Docker features.
+
+> Recommended host resources: **4 CPUs / 8 GB RAM / 32 GB disk**. The e2e stack
+> (2-node kind cluster + Keycloak + Crossplane + provider) is memory hungry;
+> less than this risks OOM-killed pods.
+
+## Build and code generation
+
+```bash
+make generate   # regenerate CRDs, API types, controllers, examples,
+                # the e2e DAG index and llms.txt/llms-full.txt
+make build      # build provider binary and xpkg package
+make test       # unit tests
+```
+
+`make generate` uses the committed `config/schema.json` (Keycloak Terraform
+provider **v5.8.0**); it does not upgrade the provider dependency.
+
+## End-to-end tests
+
+`make e2e` (= `local-deploy` + `uptest`) builds and deploys the provider into a
+fresh kind cluster but **does not install Keycloak**. For a complete, runnable
+environment use the dev setup script, then run uptest:
+
+```bash
+# 1. kind cluster + Keycloak (via Helm) + Crossplane + locally-built provider
+./dev/setup_dev_environment.sh --direct-helm --deploy-local-provider -k 26.6.2
+
+# 2. point kubectl at the kind cluster (fenrir-1)
+kind export kubeconfig --name fenrir-1
+
+# 3. run the uptest suite
+make uptest KEYCLOAK_VERSION=26.6.2
+
+# 4. clean up
+kind delete cluster --name fenrir-1
+```
+
+The `--direct-helm` flag installs Keycloak straight from the Helm chart (faster,
+no ArgoCD). Drop `--deploy-local-provider` to test the published provider image
+instead of your local build.
+
+Render the test cases without a cluster:
+
+```bash
+make uptest RENDER_ONLY=true KEYCLOAK_VERSION=26.6.2
+```
+
+## Shell completion
+
+`post-create.sh` enables command completion for **kubectl**, **kind** and
+**docker** in both `bash` and `zsh`, and adds a `k` alias for `kubectl`. The
+configuration is appended to `~/.bashrc` / `~/.zshrc` behind a marker, so
+container rebuilds don't duplicate it. It takes effect in any new shell — in your
+current one, run `source ~/.bashrc` (or `source ~/.zshrc`).
+
+## Networking note
+
+The setup script exposes Keycloak through a `LoadBalancer` service. By default it
+uses **MetalLB** to assign an IP from the kind Docker network; Docker-in-Docker
+runs the Docker daemon inside the container, so that IP is reachable and the
+script can `curl` Keycloak directly.
+
+Alternatively, run it with `--skip-metal-lb --start-cloud-provider-kind` to use
+[`cloud-provider-kind`](https://github.com/kubernetes-sigs/cloud-provider-kind) —
+the LoadBalancer implementation for kind clusters — instead of MetalLB. That
+binary is not part of the container image; install it separately (for example
+`go install sigs.k8s.io/cloud-provider-kind@latest`) if you take this path.
+
+## Documentation Model
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/documentation-model/
+
+
+Provider Keycloak has a large API surface. Keep the documentation useful by
+separating authored guidance from generated reference material.
+
+## Authored content
+
+Write and review these pages by hand:
+
+- Getting started pages that teach the first successful installation and realm.
+- Scenario guides that combine several resources into a working integration.
+- Troubleshooting pages that explain symptoms, causes, and fixes.
+- AI usage pages that describe how to consume the docs.
+
+Authored pages should answer "when and why should I use this?" and include
+tested examples or links to manifests in `examples/`.
+
+## Generated or schema-derived content
+
+The following content should come from generated artifacts or be checked against
+them:
+
+- Complete `spec.forProvider` field lists.
+- Reference and selector fields.
+- Status fields and connection secret keys.
+- API group, version, kind, plural name, and scope.
+- Repeated Crossplane fields such as `providerConfigRef`, `deletionPolicy`, and
+  `managementPolicies`.
+
+The source of truth for this data is `package/crds/*.yaml`. When the APIs change,
+regenerate the provider artifacts and update only the curated explanations that
+need human context.
+
+## Resource page checklist
+
+Each resource page should include:
+
+- A short explanation of what the resource manages.
+- A small API reference block.
+- One or more realistic examples.
+- Links to related guides or examples.
+- A pointer back to `package/crds/` for exhaustive schema details.
+
+Avoid hand-maintaining complete field tables in Markdown unless they are
+generated from the CRD OpenAPI schema.
+
+## End-to-End Tests
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/e2e-tests/
+
+
+# End-to-End Tests
+
+This page explains the e2e test infrastructure, common causes of **stuck
+(hung) tests**, and the methodology for writing new tests.
+
+## Overview
+
+E2e tests are driven by [uptest](https://github.com/crossplane/uptest) and
+[chainsaw](https://kyverno.github.io/chainsaw/). The test runner:
+
+1. Reads the ordered list of demo manifests from `cluster/test/cases.txt`.
+2. Calls `cluster/test/setup.sh` to prepare each test case.
+3. Applies all resources in the manifest, waits for them to become Ready/Synced, imports them, then deletes them.
+
+### File layout
+
+| Path | Purpose |
+|------|---------|
+| `cluster/test/cases.txt` | Ordered list of demo files to test (deletion order is reversed) |
+| `cluster/test/cases-fgapv2.txt` | Ordered list of demo files of the FGAPv2 suite |
+| `cluster/test/setup.sh` | Per-case setup: CRD readiness wait, timeout rewriting, ordered deletion |
+| `dev/demos/basic/` | Cluster-scoped demo manifests |
+| `dev/demos/namespaced/` | Namespace-scoped demo manifests |
+| `dev/demos/fgapv2/` | Demos requiring fine-grained admin permissions v2 |
+| `dev/demos/basic/000-init.yaml` | Prerequisite resources for cluster demos (realm, secrets, etc.) |
+| `dev/demos/namespaced/000-init.yaml` | Prerequisite resources for namespaced demos |
+
+## Test Suites
+
+The demo directory has exactly **one subdirectory per e2e suite**, and each
+suite runs in its own cluster with its own Keycloak configuration:
+
+| Suite | Demos | Case list | Keycloak features | CI job |
+|-------|-------|-----------|-------------------|--------|
+| regular | `dev/demos/basic/`, `dev/demos/namespaced/`, `dev/demos/orgs/` | `cluster/test/cases.txt`, `cases-kc-26.4.txt`, `cases-kc-26.5.txt`, `cases-orgs.txt` | `admin-fine-grained-authz:v1` (+ `organization` from 26.6) | `e2e-tests` |
+| FGAPv2 | `dev/demos/fgapv2/` | `cluster/test/cases-fgapv2.txt` | `admin-fine-grained-authz:v2` | `e2e-tests-fgapv2` |
+
+`dev/demos/orgs/` and the version-specific case lists belong to the regular
+suite: they run in the same cluster and are gated by Keycloak version in the
+`Makefile` (organizations need 26.6+). Targeted runs always use the latest
+Keycloak, so those demos can be selected freely.
+
+The split is a hard Keycloak constraint, not a convenience: the
+`admin-fine-grained-authz` feature can be enabled as **either** v1 **or** v2,
+never both. Demos of one suite therefore must never end up in the other
+suite's run — a v2 demo would fail on a v1 cluster and vice versa.
+
+This is enforced structurally rather than by special-casing individual files:
+`scripts/e2e_dag.py` builds one demo graph per suite (`REGULAR_VARIANTS` /
+`FGAPV2_VARIANTS`) and exposes one selection command per suite (`select` and
+`select-fgapv2`). Adding a suite means adding a variant tuple and a graph, not
+adding exceptions.
+
+Run the FGAPv2 suite locally:
+
+```bash
+./dev/setup_dev_environment.sh --fgap-version v2
+make uptest FGAP_VERSION=v2
+```
+
+## Adding a New Test
+
+1. Create `dev/demos/basic/<NNN>-<name>.yaml` and/or
+   `dev/demos/namespaced/<NNN>-<name>.yaml` — or, for resources requiring
+   fine-grained admin permissions v2, `dev/demos/fgapv2/<NNN>-<name>.yaml`.
+2. Add both paths to `cluster/test/cases.txt` (or `cases-fgapv2.txt`) in the
+   correct position
+   (higher numbers run first in the list; deletion is in reverse order, so
+   resources that depend on earlier resources must have a higher number).
+3. Make sure all prerequisites exist in earlier numbered demo files or in
+   `000-init.yaml`.
+4. Reference prerequisites via `*Ref` blocks, never by literal name — the
+   selection DAG derives its edges from those refs.
+
+## Why Tests Get Stuck
+
+The following are the most frequent causes of stuck (never-Ready) resources
+in e2e tests.
+
+### 1. Wrong API Kind or Version
+
+The generated kind names do **not** always match the Terraform resource name.
+Use the constant defined in the generated `*_types.go` file.
+
+```
+# Wrong – kind does not exist
+kind: OpenidClientTimePolicyPermission
+
+# Correct – use the Go type constant value
+kind: ClientTimePolicy
+```
+
+The generated API group for cluster-scoped resources is
+`<group>.keycloak.crossplane.io`; for namespaced resources it is
+`<group>.keycloak.m.crossplane.io`.
+
+Symptoms: `no matches for kind` error in chainsaw/uptest logs, or the
+resource is immediately rejected by the API server with an unknown-kind error.
+
+### 2. Wrong Field Names
+
+`spec.forProvider` fields come directly from the Terraform schema, not from
+human-readable names. Common mismatches:
+
+| Intended field | Actual field in CRD |
+|---------------|---------------------|
+| `clientRef` | `resourceServerIdRef` (for `resource_server_id`) |
+| `realmRef` | `realmIdRef` |
+| `clientScopesRef` | `scope[].idRef` (resolved from `ClientAuthorizationScope` name) |
+| `expiresInMinutes` | does not exist; use `hour`/`hourEnd`, `notBefore`/`notOnOrAfter` |
+
+Check the generated `zz_*_types.go` for the exact JSON field names, or look
+at the matching file in `examples-generated/`.
+
+Symptoms: strict-decoding errors (`unknown field`), or the resource is
+applied but never syncs because required fields are missing.
+
+### 3. Missing or Unresolvable Cross-Resource References
+
+A resource stuck in `WaitingForReferencedResourceReady` means one of its
+`*Ref` fields cannot be resolved because the referenced resource does not
+exist or is not Ready.
+
+Common mistakes:
+
+- Referencing a resource by name that is not created by any earlier demo file
+  or by `000-init.yaml`.
+- Using `realmRef.name: dev` in a namespaced demo (should be `dev-ns` if that
+  is the name of the namespaced realm resource).
+
+Symptoms: resource remains `Synced=False` with message
+`WaitingForReferencedResourceReady` or `cannot resolve references`.
+
+### 4. Required Authorization Not Enabled on the Client
+
+Authorization resources (`ClientAuthorizationScope`, `ClientAggregatePolicy`,
+`ClientTimePolicy`, etc.) require the target Keycloak client to have
+`authorization` enabled. In the demo files the `test` client (defined in
+`040-oidc-clients.yaml`) has `authorization.policyEnforcementMode: PERMISSIVE`.
+If you reference a different client without authorization enabled Keycloak
+will return a 404/400 error and the resource will stay unsynced.
+
+### 5. Status Conditions Not Yet Available
+
+Immediately asserting `Ready=True` after `kubectl apply` can fail because
+Crossplane may not have written the initial status conditions yet. Chainsaw
+JMESPath assertions on `status.conditions` will error if the field is `nil`.
+
+Mitigation: add a short `wait` step before asserting conditions, or check
+only that the object exists.
+
+### 6. Race: CRD Not Established Before Test Applies Resources
+
+If a new resource type is registered just before uptest runs, the Kubernetes
+API discovery cache may not yet include it. `setup.sh` already waits for all
+`ManagedResourceDefinitions` to be `Established`, but newly added CRDs that
+arrive very late can still hit this window.
+
+Symptoms: `no matches for kind` even though the kind name is correct.
+
+Mitigation: the `setup.sh` wait loop handles the common case; if a specific
+CRD keeps racing, add it to the wait list explicitly.
+
+### 7. Optional Field That Keycloak Nevertheless Requires
+
+Some Terraform fields are optional in the schema (and therefore optional in the
+CRD) but are always sent to Keycloak, which then fails to parse the empty
+value. `ClientTimePolicy` is the canonical case: omitting `notBefore` /
+`notOnOrAfter` yields
+
+```text
+400 Bad Request: {"error":"Unable not parse a date using format []"}
+```
+
+Mitigation: set both fields (format `yyyy-MM-dd HH:mm:ss`), as the upstream
+Terraform provider's own acceptance test does.
+
+### 8. Lookup Helper Not Recognising "Not Found"
+
+Resources wired to `lookup.BuildIdentifyingPropertiesLookup` call an upstream
+`Get...ByName` client function. Several of those return a plain
+`fmt.Errorf("no ... with name %s found", ...)` rather than a typed not-found
+error. If the helper in `config/<group>/config.go` does not treat that message
+as "not found", the very first reconcile fails with
+
+```text
+connect failed: cannot initialize the Terraform plugin SDK async external client:
+failed to get the extended parameters for resource "/<name>": cannot get ID: ...
+```
+
+and the resource is never created, blocking everything that references it.
+
+Mitigation: check the upstream function's not-found error string and return
+`("", nil)` for it — see `getAuthzScopeIDByIdentifyingProperties` in
+`config/openidclient/config.go`.
+
+## Methodology: Writing a Demo File
+
+Follow these steps when writing a new demo file.
+
+### Step 1 – Identify the correct API kind
+
+```bash
+# Find the generated types file
+ls apis/cluster/openidclient/v1alpha1/ | grep <resource>
+
+# Confirm the Kind constant
+grep 'Kind\s*=' apis/cluster/openidclient/v1alpha1/zz_<resource>_types.go
+```
+
+Use the generated `examples-generated/` file as a reference for fields and
+structure.
+
+### Step 2 – Check required fields
+
+```bash
+grep 'kubebuilder:validation:XValidation' \
+  apis/cluster/openidclient/v1alpha1/zz_<resource>_types.go
+```
+
+Every field listed in a `required parameter` message must be present in
+`spec.forProvider`.
+
+### Step 3 – Verify prerequisites
+
+For each `*Ref` field, confirm the referenced resource:
+
+1. Exists in a lower-numbered demo file **or** in `000-init.yaml`.
+2. Is in the same namespace for namespaced demos.
+3. Uses the correct API group (`*.keycloak.crossplane.io` for cluster,
+   `*.keycloak.m.crossplane.io` for namespaced).
+
+Demos must be self-contained: every referenced object is created by the demo
+itself (or a lower-numbered one), never by hardcoding a Keycloak UUID. If a
+field only accepts raw IDs, configure a cross-resource reference for it in
+`config/<group>/config.go`. When a single Terraform field accepts IDs of
+several different resource types (e.g. `keycloak_openid_client_aggregate_policy`'s
+`policies`), use the `config/multitypes` helpers to expose one strongly-typed
+list field per referenceable type — see `keycloak_openid_client_client_policy`
+(`clients`/`saml_clients`) and `keycloak_openid_client_aggregate_policy`
+(`timePolicies`, `rolePolicies`, …) for examples.
+
+### Step 4 – Name resources to avoid collisions
+
+Use unique, descriptive names that will not clash with other demo files. For
+example, prefix with the demo number: `064-authz-scope` instead of
+`manage:users`.
+
+### Step 5 – Add to `cases.txt`
+
+Append both the `basic` and `namespaced` paths to `cluster/test/cases.txt`
+in descending order (newest at the top of the namespaced block, and at the
+top of the basic block, since the file is sorted descending by number).
+
+### Step 6 – Test locally
+
+```bash
+# Apply the demo manifest and watch for readiness
+kubectl apply -f dev/demos/basic/<NNN>-<name>.yaml
+kubectl get -f dev/demos/basic/<NNN>-<name>.yaml -w
+```
+
+Check for stuck resources:
+
+```bash
+kubectl describe <kind> <name> | grep -A5 'Status\|Message\|Reason'
+```
+
+Common resolution: look for `WaitingForReferencedResourceReady` or strict
+decode errors, then fix the field names or references as described above.
+
+## Namespaced vs. Cluster-Scoped Demos
+
+| Concern | Cluster (`basic/`) | Namespaced (`namespaced/`) |
+|--------|-------------------|--------------------------|
+| API group | `*.keycloak.crossplane.io` | `*.keycloak.m.crossplane.io` |
+| Realm ref name | `dev` | `dev-ns` |
+| ProviderConfig kind | *(omit kind field)* | `kind: ProviderConfig` |
+| Resource namespace | *(none)* | `namespace: dev-ns` |
+
+> **Note:** Do **not** use `providerConfigRef.kind: ClusterProviderConfig` in
+> namespaced demos; the namespaced provider expects a `ProviderConfig`
+> (namespace-scoped).
+
+## Known Limitations
+
+- E2E tests only cover resources listed in `cluster/test/cases.txt` (regular
+  suite) or `cluster/test/cases-fgapv2.txt` (FGAPv2 suite). Every managed
+  resource must be covered by a demo — see "Resource coverage gate" below —
+  unless it is declared in `cluster/test/uncovered-resources.txt` because
+  Keycloak rejects it in a test environment.
+- Chainsaw JMESPath assertions on `status.conditions` can fail if conditions are `nil` immediately after apply; add a wait step or assert only object existence first.
+
+## Test Selection and the Resource Index
+
+CI does not always run every demo. `scripts/e2e_dag.py select` classifies every
+changed file of a pull request with exactly one named rule, and the highest
+resulting tier wins:
+
+| Tier | Rules (matched in this order) | Scope |
+|------|-------------------------------|-------|
+| `skip` | `documentation` (`docs/`), `markdown/images` (`*.md`, `*.png`, `*.jpg`, `*.svg`), `unrelated workflow` (any `.github/` file other than `ci.yml`), `helper script` (`scripts/`) | no e2e |
+| `targeted` | `generated controller` (`internal/controller/**/zz_*.go`), `API types` (`apis/`), `resource config` (`config/`), `CRD schema` (`package/crds/`), `generated example` / `example manifest`, `demo manifest` (`dev/demos/`), `e2e harness` (`cluster/test/`), plus any unclassified path as a safe fallback | resource-focused DAG slice (falling back to API groups only when the path is too broad) × latest Keycloak only |
+| `full` | `go module` (`go.mod`, `go.sum`), `build system` (`Makefile`, `build/`), `provider runtime code` (`internal/`, `cmd/` — excluding generated controllers), `CI workflow` (`.github/workflows/ci.yml`), `e2e environment` (`dev/` outside `dev/demos/`), or any non-PR event | all demos × all Keycloak versions |
+
+Generated per-resource controller code (`internal/controller/<scope>/<group>/<resource>/zz_controller.go`
+and `zz_setup.go`) is deliberately **not** full-tier: it belongs to a single API
+group and is treated like `apis/<group>/`. Only hand-written provider runtime
+code forces a full run.
+
+The `detect-noop` job determines the tier (and therefore the Keycloak version
+matrix). The `e2e-tests` job then has a **Calculate E2E test selection** step
+that resolves the concrete demo list for the run.
+
+Both steps compute the changed files against `main` (`git merge-base
+origin/main HEAD`), never against the pull request's recorded base SHA, so the
+selection stays correct even when the branch is behind or the base ref moves.
+
+### Per-suite selection
+
+Each suite is selected independently, so one suite can never silently disable
+the other:
+
+| Command | Output | Gates |
+|---------|--------|-------|
+| `select` | `full`, `skip`, or a comma-separated demo list (`basic/` + `namespaced/` only) | `e2e-tests` (runs unless the tier is `skip`) |
+| `select-fgapv2` | `run` or `skip` | `e2e-tests-fgapv2` |
+
+`select-fgapv2` answers a boolean because the FGAPv2 suite is small and always
+runs its full case list. It returns `run` when the change is `full`-tier, when
+an FGAPv2 demo or `cases-fgapv2.txt` changed, or when a touched resource or
+API group is used by an FGAPv2 demo.
+
+A change that only touches resources covered by one suite therefore runs
+exactly that suite — for example a new FGAPv2-only resource runs the FGAPv2
+suite while the regular suite is skipped, and neither result is derived from
+the other.
+
+### Never zero demos
+
+A `targeted` change set never results in an empty run. If no demo covers the
+touched resources, the selection broadens to all demos of their API group; if
+even that is empty it falls back to `full`. Only a `skip`-tier change set
+(documentation, images, helper scripts) runs no demos at all.
+
+### Resource coverage gate
+
+`make e2e-cases-check` runs two gates:
+
+1. `cluster/test/check_cases_coverage.sh` — every demo file is listed in a case
+   file, and every case entry has a demo file.
+2. `python3 scripts/e2e_dag.py coverage` — every managed resource CRD in
+   `package/crds/` is used by at least one demo.
+
+Adding a managed resource without an e2e demo therefore fails CI. The only
+accepted exception is a resource Keycloak itself rejects in a test environment
+(missing server-side artifact, removed feature, custom SPI deployment); such a
+resource must be declared with its reason in
+`cluster/test/uncovered-resources.txt`:
+
+```text
+Kind (group): reason
+```
+
+The gate also fails on stale entries, so an exception disappears automatically
+once the resource becomes testable.
+
+### Group-scoped configuration
+
+`config/<group>/` holds the Upjet configuration of a whole API group (external
+names, references, lookups). A change there cannot be attributed to a single
+resource, so **all** demos of that group are selected, on top of the demos of
+the concretely touched resources. Generated per-resource files
+(`apis/`, `package/crds/`, `internal/controller/`) stay resource-scoped.
+
+### Proof
+
+Every selection is accompanied by a proof written to the job summary
+(`--proof-file`), so a full run is never unexplained. It lists:
+
+1. each changed file → the rule it matched → the tier that rule implies, with
+   the files that determined the final tier marked `*`;
+2. the touched resources (and touched API groups as fallback context), plus
+   which changed paths implied them;
+3. every selected demo with the reason it is in the set — `defines Kind (group)`,
+   `uses Kind (group)`, `uses API group 'x'`, `changed directly`,
+   `prerequisite of <demo>` or `depends on <demo>`.
+
+Reproduce it locally:
+
+```bash
+git diff --name-only $(git merge-base origin/main HEAD) HEAD | \
+  python3 scripts/e2e_dag.py select --changed-files -
+
+git diff --name-only $(git merge-base origin/main HEAD) HEAD | \
+  python3 scripts/e2e_dag.py select-fgapv2 --changed-files -
+```
+
+The graph is derived from the demo YAML itself: top-level `apiVersion:` and
+`kind:` lines identify resources, and `*Ref:` → `name:` lookups give
+cross-demo edges within the same demo variant (`basic/` or `namespaced/`). No
+manual mapping file is maintained. Only genuine infrastructure names
+(`keycloak-provider-config`, `crossplane-system`) are ignored when building
+those edges — realm names such as `dev`/`dev-ns` are real dependencies, so a
+targeted run always pulls in the realm demo that defines them.
+
+The selected demo list is emitted in the same order as `cluster/test/cases.txt`
+— dependents first, prerequisites last — because uptest deletes the examples in
+the order they are listed. Deleting a prerequisite (for example the realm)
+before its dependents leaves them unable to resolve their references and blocks
+teardown, whereas applying in that order is safe since Crossplane retries
+reference resolution until the prerequisite exists.
+
+`make generate` refreshes `cluster/test/e2e-index.json`, which answers
+"which e2e test uses resource X?":
+
+```bash
+jq '.resources["ClientTimePolicy (openidclient)"]' cluster/test/e2e-index.json
+```
+
+The same file holds the demo DAG under `.demos`. It is committed, so
+`make check-diff` fails if it is stale.
+
+## Local Docs Development
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs/
+
+
+Run the documentation site locally:
+
+```bash
+cd docs
+hugo server --buildDrafts
+```
+
+Build the static site:
+
+```bash
+cd docs
+hugo --minify
+```
+
+The generated site is written to `docs/public/`.
+
+## Configuration
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/configuration/
+
+
+Every Keycloak instance you manage requires a `ProviderConfig` resource that specifies how to connect to the Keycloak API.
+
+## Create a Credentials Secret
+
+The provider needs credentials to authenticate with Keycloak. Create a Kubernetes Secret:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-credentials
+  namespace: crossplane-system
+type: Opaque
+stringData:
+  credentials: |
+    {
+      "client_id": "admin-cli",
+      "username": "admin",
+      "password": "admin",
+      "url": "https://keycloak.example.com",
+      "base_path": "/auth",
+      "realm": "master"
+    }
+```
+
+### Credential Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `url` | Yes | Keycloak server URL (e.g., `https://keycloak.example.com`) |
+| `client_id` | Yes | OAuth2 client ID (typically `admin-cli`) |
+| `username` | Conditional | Admin username (required if not using client credentials) |
+| `password` | Conditional | Admin password (required if not using client credentials) |
+| `client_secret` | Conditional | Client secret (for client credential grants) |
+| `realm` | No | Realm for authentication (defaults to `master`) |
+| `base_path` | No | URL path prefix (e.g., `/auth` for older Keycloak versions) |
+| `root_ca_certificate` | No | Custom CA certificate for TLS verification |
+
+### Alternative: Flat Secret Format
+
+Instead of embedded JSON, you can use plain key-value pairs:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-credentials
+  namespace: crossplane-system
+type: Opaque
+stringData:
+  client_id: "admin-cli"
+  username: "admin"
+  password: "admin"
+  url: "https://keycloak.example.com"
+  base_path: "/auth"
+  realm: "master"
+```
+
+## Create a ProviderConfig
+
+Reference the secret in a `ProviderConfig`:
+
+```yaml
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-provider-config
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-credentials
+      key: credentials
+      namespace: crossplane-system
+```
+
+## URL Validation Rules
+
+The provider validates and normalizes URL fields:
+
+- `url` must be an absolute URL with scheme and host
+- Trailing slashes are removed automatically
+- `base_path` must be empty or start with `/`
+- `base_path: "/"` is normalized to an empty string
+- Query parameters and fragments are not allowed in URLs
+
+## Multiple Keycloak Instances
+
+You can manage multiple Keycloak instances by creating separate `ProviderConfig` resources, each with their own credentials secret. Reference the appropriate config in each managed resource:
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: my-realm
+spec:
+  forProvider:
+    realm: "my-realm"
+  providerConfigRef:
+    name: keycloak-provider-config  # References a specific ProviderConfig
+```
+
+## Next Steps
+
+- [Create your first realm](./first-realm.md)
+
+## First Realm
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/first-realm/
+
+
+# Create Your First Realm
+
+This guide walks you through creating a complete Keycloak realm with a client and user.
+
+## Prerequisites
+
+- [Provider installed](./installation.md)
+- [Credentials configured](./configuration.md)
+
+## Step 1: Create a Realm
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: my-app-realm
+spec:
+  forProvider:
+    realm: "my-app"
+    enabled: true
+    displayName: "My Application"
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+Apply and verify:
+
+```bash
+kubectl apply -f realm.yaml
+kubectl get realm my-app-realm
+```
+
+Wait for the realm to become `READY`:
+
+```bash
+kubectl wait realm my-app-realm --for=condition=Ready --timeout=60s
+```
+
+## Step 2: Create a Client
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: my-web-app
+spec:
+  forProvider:
+    clientId: my-web-app
+    realmId: my-app
+    accessType: public
+    standardFlowEnabled: true
+    validRedirectUris:
+      - "http://localhost:3000/callback"
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+## Step 3: Create a User
+
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: demo-user
+spec:
+  forProvider:
+    realmId: "my-app"
+    username: "demo"
+    email: "demo@example.com"
+    firstName: "Demo"
+    lastName: "User"
+    enabled: true
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+## Step 4: Verify
+
+```bash
+# Check all resources are ready
+kubectl get realm,client,user -l crossplane.io/provider=provider-keycloak
+```
+
+All resources should show `READY: True` and `SYNCED: True`.
+
+## How Reconciliation Works
+
+The provider continuously reconciles your desired state (the YAML manifests) with the actual state in Keycloak:
+
+1. **Create**: When you apply a manifest, the provider creates the resource in Keycloak
+2. **Update**: If you modify the manifest, the provider updates Keycloak accordingly
+3. **Drift Detection**: If someone changes Keycloak directly (e.g., via the admin console), the provider detects the drift and corrects it
+4. **Delete**: When you delete the Kubernetes resource, the provider removes it from Keycloak (unless `deletionPolicy: Orphan` is set)
+
+## Next Steps
+
+- Learn about [Clients](../resources/clients.md) for more advanced configurations
+- Set up [Roles](../resources/roles.md) and [Groups](../resources/groups.md)
+
+## Installation
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/installation/
+
+
+## Prerequisites
+
+- A Kubernetes cluster with [Crossplane](https://docs.crossplane.io/latest/software/install/) installed
+- `kubectl` configured to access your cluster
+- A running Keycloak instance
+
+## Install the Provider
+
+Apply the following manifest to install provider-keycloak:
+
+```yaml
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-keycloak
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:<version>
+```
+
+Replace `<version>` with the desired release version (e.g., `v2.22.0`). See [GitHub Releases](https://github.com/crossplane-contrib/provider-keycloak/releases) for available versions.
+
+## Verify Installation
+
+```bash
+# Check that the provider pod is running
+kubectl get pods -n crossplane-system | grep keycloak
+
+# Check that CRDs are installed
+kubectl get crd | grep keycloak.crossplane.io
+```
+
+## DeploymentRuntimeConfig (Optional)
+
+To customize the provider deployment (e.g., enable external secret stores), create a `DeploymentRuntimeConfig`:
+
+```yaml
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: runtimeconfig-provider-keycloak
+spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime
+              args:
+                - --enable-external-secret-stores
+```
+
+Reference it in the Provider resource:
+
+```yaml
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-keycloak
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:<version>
+  runtimeConfigRef:
+    name: runtimeconfig-provider-keycloak
+```
+
+## Next Steps
+
+- [Configure credentials](./configuration.md) to connect to your Keycloak instance
+- [Create your first realm](./first-realm.md)
+
+## Common Patterns
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/common-patterns/
+
+
+Most provider-keycloak resources follow the same Crossplane manifest structure.
+Use these patterns across guides and examples instead of repeating long
+explanations on every resource page.
+
+## ProviderConfig reference
+
+Every managed resource should point at the Keycloak credentials it should use:
+
+```yaml
+spec:
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+See [ProviderConfig](/docs/using/reference/provider-config/) for credential
+setup.
+
+## Deletion policy
+
+Use `deletionPolicy` to control what happens to the external Keycloak object when
+the Kubernetes resource is deleted:
+
+```yaml
+spec:
+  deletionPolicy: Delete
+```
+
+- `Delete` removes the external Keycloak object.
+- `Orphan` leaves the external Keycloak object in place.
+
+Use `Orphan` for shared or manually managed Keycloak objects that should survive
+GitOps cleanup.
+
+## Import existing resources
+
+To adopt objects that already exist in Keycloak, create the managed resource
+with the same identifying fields and start with non-destructive policies:
+
+```yaml
+spec:
+  managementPolicies: [Observe, Update]
+  deletionPolicy: Orphan
+```
+
+Use `Observe` first if you want a read-only dry run before allowing updates.
+
+For many resources (for example `Realm`, `Client`, `Group`, and `User`), the
+provider can resolve the existing object from identifying fields in
+`spec.forProvider`, so you usually do not need to set an external name
+annotation manually.
+
+Some resources use provider-generated IDs for import. For those resources, set
+the external identifier explicitly:
+
+```yaml
+metadata:
+  annotations:
+    crossplane.io/external-name: "<provider-id>"
+```
+
+## References and selectors
+
+Many resources can use direct IDs, Crossplane references, or selectors. Prefer
+references when another managed resource owns the target object:
+
+```yaml
+spec:
+  forProvider:
+    realmIdRef:
+      name: example-realm
+```
+
+Use direct IDs when the target object is managed outside Crossplane:
+
+```yaml
+spec:
+  forProvider:
+    realmId: example
+```
+
+## Secret references
+
+Store credentials in Kubernetes Secrets and reference them from provider
+resources:
+
+```yaml
+spec:
+  forProvider:
+    clientSecretSecretRef:
+      namespace: crossplane-system
+      name: oidc-client
+      key: client-secret
+```
+
+See [Credentials](/docs/using/reference/credentials/) for secret formats.
+
+## Complete schemas
+
+Resource pages show common fields and examples. The generated CRDs in
+`package/crds/` contain the complete OpenAPI schema for every field, including
+references, selectors, status, and connection details.
+
+## Credentials
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/credentials/
+
+
+# Credentials Reference
+
+This page documents all supported credential fields for connecting to a Keycloak instance.
+
+## Supported Fields
+
+The credential fields map directly to the [Keycloak Terraform Provider configuration](https://registry.terraform.io/providers/mrparkers/keycloak/latest/docs#argument-reference).
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `url` | string | **Yes** | Keycloak server URL |
+| `client_id` | string | **Yes** | OAuth2 client ID for authentication |
+| `username` | string | Conditional | Admin username |
+| `password` | string | Conditional | Admin password |
+| `client_secret` | string | Conditional | Client secret (for client credentials grant) |
+| `realm` | string | No | Authentication realm (defaults to `master`) |
+| `base_path` | string | No | URL path prefix (e.g., `/auth`) |
+| `admin_url` | string | No | Separate admin API URL if different from `url` |
+| `root_ca_certificate` | string | No | PEM-encoded CA certificate for TLS |
+
+## Authentication Methods
+
+### Password Grant (Admin CLI)
+
+The most common method using username and password:
+
+```json
+{
+  "client_id": "admin-cli",
+  "username": "admin",
+  "password": "admin",
+  "url": "https://keycloak.example.com",
+  "realm": "master"
+}
+```
+
+### Client Credentials Grant
+
+For automated systems using a service account:
+
+```json
+{
+  "client_id": "my-service-account",
+  "client_secret": "client-secret-value",
+  "url": "https://keycloak.example.com",
+  "realm": "master"
+}
+```
+
+## URL Validation and Normalization
+
+The provider validates URLs before use:
+
+| Rule | Example |
+|------|---------|
+| Must be absolute with scheme | ✓ `https://keycloak.example.com` |
+| No query parameters | ✗ `https://keycloak.example.com?foo=bar` |
+| No fragments | ✗ `https://keycloak.example.com#section` |
+| Trailing slash removed | `https://kc.example.com/` → `https://kc.example.com` |
+| `base_path` must start with `/` | ✓ `/auth` |
+| `base_path: "/"` normalized to empty | `/` → `` |
+| Trailing slash on base_path removed | `/auth/` → `/auth` |
+
+## Custom TLS Certificate
+
+For self-signed or internal CA certificates:
+
+```json
+{
+  "client_id": "admin-cli",
+  "username": "admin",
+  "password": "admin",
+  "url": "https://keycloak.internal.example.com",
+  "root_ca_certificate": "-----BEGIN CERTIFICATE-----\nMIIC...\n-----END CERTIFICATE-----"
+}
+```
+
+## Base Path
+
+Older versions of Keycloak (before v17) served the application under `/auth`. Modern versions (Quarkus-based) typically serve at the root path.
+
+| Keycloak Version | Base Path |
+|-----------------|-----------|
+| < 17 (WildFly) | `/auth` |
+| ≥ 17 (Quarkus) | `` (empty) |
+
+## ProviderConfig
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/provider-config/
+
+
+# ProviderConfig Reference
+
+The `ProviderConfig` resource stores connection details for a Keycloak instance.
+
+## API Details
+
+| Field | Value |
+|-------|-------|
+| API Group | `keycloak.crossplane.io` |
+| API Version | `v1beta1` |
+| Kind | `ProviderConfig` |
+| Scope | Cluster |
+
+## Specification
+
+```yaml
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-provider-config
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-credentials    # Name of the Secret
+      key: credentials              # Key within the Secret
+      namespace: crossplane-system  # Namespace of the Secret
+```
+
+## Credential Source Options
+
+### JSON Format (Single Key)
+
+The most common approach — all settings in a single JSON object:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-credentials
+  namespace: crossplane-system
+type: Opaque
+stringData:
+  credentials: |
+    {
+      "client_id": "admin-cli",
+      "username": "admin",
+      "password": "admin",
+      "url": "https://keycloak.example.com",
+      "base_path": "/auth",
+      "realm": "master"
+    }
+```
+
+### Flat Key Format
+
+Individual keys for each setting:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-credentials
+  namespace: crossplane-system
+type: Opaque
+stringData:
+  client_id: "admin-cli"
+  username: "admin"
+  password: "admin"
+  url: "https://keycloak.example.com"
+  base_path: "/auth"
+  realm: "master"
+```
+
+### Client Credentials Grant
+
+For service-to-service authentication without a username/password:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-credentials
+  namespace: crossplane-system
+type: Opaque
+stringData:
+  credentials: |
+    {
+      "client_id": "my-service-account",
+      "client_secret": "secret-value",
+      "url": "https://keycloak.example.com",
+      "realm": "master"
+    }
+```
+
+## Multiple Instances
+
+You can manage multiple Keycloak instances by creating multiple `ProviderConfig` resources:
+
+```yaml
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-staging
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-staging-credentials
+      key: credentials
+      namespace: crossplane-system
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-production
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-production-credentials
+      key: credentials
+      namespace: crossplane-system
+```
+
+Then reference the appropriate config in each resource:
+
+```yaml
+spec:
+  providerConfigRef:
+    name: keycloak-production
+```
+
+## Troubleshooting
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/troubleshooting/
+
+
+## Common Issues
+
+### Resource Stuck in "Creating" State
+
+**Symptoms**: Resource shows `SYNCED: False` and never becomes `READY`.
+
+**Diagnosis**:
+```bash
+kubectl describe <resource-type> <resource-name>
+```
+
+Look at the `Events` section and `status.conditions` for error messages.
+
+**Common causes**:
+- Invalid `providerConfigRef` — ensure the referenced `ProviderConfig` exists
+- Incorrect credentials — verify username/password or client secret
+- Network connectivity — the provider pod cannot reach the Keycloak URL
+- Invalid field values — check the resource spec against Keycloak's requirements
+
+### Authentication Failures
+
+**Symptoms**: Events show `401 Unauthorized` or `403 Forbidden`.
+
+**Steps**:
+1. Verify the credentials secret exists and has correct data:
+   ```bash
+   kubectl get secret keycloak-credentials -n crossplane-system -o jsonpath='{.data.credentials}' | base64 -d
+   ```
+2. Test connectivity from the provider pod:
+   ```bash
+   kubectl exec -it -n crossplane-system <provider-pod> -- curl -k https://keycloak.example.com
+   ```
+3. Confirm the `client_id` has admin privileges in Keycloak
+
+### Drift Detection Loops
+
+**Symptoms**: Resource keeps updating even when no changes are made.
+
+**Common causes**:
+- Fields with server-side defaults that differ from your spec
+- Timestamp or ordering differences
+
+**Solution**: Ensure your spec exactly matches the desired state. Use `kubectl describe` to compare `spec.forProvider` with `status.atProvider`.
+
+### Unexpected `make generate` Diffs
+
+**Symptoms**: `make generate` produces unexpectedly large or stale diffs.
+
+**Common cause**: Stale local generator cache/artifacts.
+
+**Solution**:
+1. Remove `.work/` and `config/schema.json`.
+2. Run `make generate` again.
+
+### Provider Pod CrashLoopBackOff
+
+**Steps**:
+1. Check pod logs:
+   ```bash
+   kubectl logs -n crossplane-system -l pkg.crossplane.io/revision --tail=100
+   ```
+2. Common causes:
+   - Insufficient memory (increase via `DeploymentRuntimeConfig`)
+   - Missing CRDs (reinstall the provider)
+
+### TLS Certificate Errors
+
+**Symptoms**: `x509: certificate signed by unknown authority`
+
+**Solutions**:
+- Add the CA certificate to the credentials using `root_ca_certificate`
+- Or mount the CA certificate into the provider pod via `DeploymentRuntimeConfig`
+
+## Useful Commands
+
+```bash
+# List all Keycloak CRDs
+kubectl get crd | grep keycloak.crossplane.io
+
+# Check provider health
+kubectl get providers.pkg.crossplane.io
+
+# View provider logs
+kubectl logs -n crossplane-system -l pkg.crossplane.io/revision --tail=50
+
+# Describe a specific resource for debugging
+kubectl describe realm my-realm
+
+# List all managed resources
+kubectl get managed -l crossplane.io/provider=provider-keycloak
+```
+
+## Getting Help
+
+- [Open an issue](https://github.com/crossplane-contrib/provider-keycloak/issues) on GitHub
+- Join the [Crossplane Slack](https://slack.crossplane.io/) community
+- Check the [Resource Reference](/docs/using/resources/) for CRD documentation and examples
+
+## Authentication Flows
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/authentication-flows/
+
+
+Use authentication flow resources when the default Keycloak login process is not enough. They let you define custom browser, registration, direct-grant, or client-authentication flows; nest subflows; add execution steps such as MFA, OTP, WebAuthn, or identity-provider redirects; and bind the finished flow to the realm behavior that should use it.
+
+## API Reference
+
+| Kind | API Group | Terraform | CRD Explorer |
+|------|-----------|-----------|---|
+| `Flow` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_flow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_flow) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/authenticationflow.keycloak.crossplane.io/Flow/v1alpha1) |
+| `Subflow` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_subflow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_subflow) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/authenticationflow.keycloak.crossplane.io/Subflow/v1alpha1) |
+| `Execution` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_execution`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_execution) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/authenticationflow.keycloak.crossplane.io/Execution/v1alpha1) |
+| `ExecutionConfig` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_execution_config`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_execution_config) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/authenticationflow.keycloak.crossplane.io/ExecutionConfig/v1alpha1) |
+| `Bindings` | `authenticationflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_authentication_bindings`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/authentication_bindings) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/authenticationflow.keycloak.crossplane.io/Bindings/v1alpha1) |
+
+## Working YAML examples
+
+### Flow
+
+Use a `Flow` to create the top-level container for a custom authentication sequence.
+
+```yaml
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Flow
+metadata:
+  name: flow
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: my-flow-alias
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Subflow
+
+Use a `Subflow` to group steps inside a parent flow and apply its own requirement.
+
+```yaml
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Subflow
+metadata:
+  name: subflow
+  labels:
+    subflow-type: test-subflow
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: my-subflow-alias-1
+    parentFlowAliasRef:
+      name: flow
+      policy:
+        resolve: Always
+    providerId: basic-flow
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Execution using `parentFlowAliasRef`
+
+Use an `Execution` directly under a top-level flow when the step should run without an intermediate subflow.
+
+```yaml
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-one
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    authenticator: auth-cookie
+    parentFlowAliasRef:
+      name: flow
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    requirement: ALTERNATIVE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Execution using `parentSubflowAliasRef`
+
+Use `parentSubflowAliasRef` when the execution should be nested inside a specific subflow object.
+
+```yaml
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-in-subflow-ref
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    authenticator: auth-username-password-form
+    parentSubflowAliasRef:
+      name: subflow
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    requirement: REQUIRED
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Execution using `parentSubflowAliasSelector`
+
+Use the selector form when you want to target a subflow by labels instead of by a fixed name.
+
+```yaml
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Execution
+metadata:
+  name: execution-in-subflow-selector
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    authenticator: auth-otp-form
+    parentSubflowAliasSelector:
+      matchLabels:
+        subflow-type: test-subflow
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    requirement: REQUIRED
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### ExecutionConfig
+
+Use `ExecutionConfig` when an execution needs extra configuration, such as the default identity provider for an IdP redirector.
+
+```yaml
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: ExecutionConfig
+metadata:
+  name: execution-identity-redirect-config
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: my-config-alias
+    config:
+      defaultProvider: my-config-default-idp
+    executionIdRef:
+      name: execution-identity-redirect
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Bindings
+
+Use `Bindings` to assign your custom flow to browser, registration, direct grant, or other realm authentication entry points.
+
+```yaml
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Bindings
+metadata:
+  name: browser-authentication-binding
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    dockerAuthenticationFlowRef:
+      name: "flow"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Key fields
+
+### Flow and Subflow
+
+| Field | Applies to | Why it matters |
+|-------|------------|----------------|
+| `alias` | `Flow`, `Subflow` | Stable name used by executions and bindings. |
+| `realmIdRef` | `Flow`, `Subflow` | Selects the realm that owns the flow. |
+| `providerId` | `Subflow` | Chooses the Keycloak flow type, typically `basic-flow`. |
+| `parentFlowAliasRef` | `Subflow` | Attaches the subflow to its parent flow. |
+| `requirement` | `Subflow` | Controls whether the subflow is `REQUIRED`, `ALTERNATIVE`, and so on. |
+
+### Execution and ExecutionConfig
+
+| Field | Applies to | Why it matters |
+|-------|------------|----------------|
+| `authenticator` | `Execution` | Selects the actual Keycloak authenticator, such as `auth-cookie` or `auth-otp-form`. |
+| `parentFlowAliasRef` | `Execution` | Places the execution directly under a top-level flow. |
+| `parentSubflowAliasRef` / `parentSubflowAliasSelector` | `Execution` | Places the execution inside a specific subflow. |
+| `requirement` | `Execution` | Determines whether the authenticator is required, optional, or alternative. |
+| `executionIdRef` | `ExecutionConfig` | Resolves the execution that receives the configuration block. |
+| `config` | `ExecutionConfig` | Holds authenticator-specific configuration such as `defaultProvider`. |
+
+### Bindings
+
+| Field | Why it matters |
+|-------|----------------|
+| `realmIdRef` | Selects the realm whose authentication bindings are being changed. |
+| `browserAuthenticationFlowRef` | Binds a custom flow to browser logins. |
+| `registrationFlowRef` | Binds a custom flow to self-registration. |
+| `directGrantFlowRef` | Binds a flow to direct access grant authentication. |
+| `resetCredentialsFlowRef` | Binds a flow to reset-credentials behavior. |
+| `clientAuthenticationFlowRef` | Binds a flow to client authentication. |
+| `dockerAuthenticationFlowRef` | Binds a flow to Docker authentication. |
+
+## Related Resources
+
+- **[Identity Providers](./identity-providers.md)** — Combine IdP redirectors and external authentication with custom flows.
+- **[Clients](./clients.md)** — Understand which applications consume the flows you bind.
+- **[Realms](./realms.md)** — Manage the realm that owns the flows and bindings.
+
+## Client Authorization
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/client-authorization/
+
+
+Use these resources when a client needs Keycloak Authorization Services for fine-grained access control and UMA-style policy evaluation. Define resources, permissions, and policies to protect APIs and services. The client must have `authorization` enabled.
+
+## API Reference
+
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| ClientAuthorizationResource | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_authorization_resource`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_authorization_resource) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAuthorizationResource/v1alpha1) |
+| ClientAuthorizationPermission | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_authorization_permission`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_authorization_permission) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAuthorizationPermission/v1alpha1) |
+| ClientAuthorizationPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_client_authorization_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_client_authorization_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAuthorizationPolicy/v1alpha1) |
+| ClientClientPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_client_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_client_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientClientPolicy/v1alpha1) |
+| ClientGroupPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_group_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_group_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientGroupPolicy/v1alpha1) |
+| ClientRolePolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_role_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_role_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientRolePolicy/v1alpha1) |
+| ClientUserPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_user_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_user_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientUserPolicy/v1alpha1) |
+| ClientRegexPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_regex_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_regex_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientRegexPolicy/v1alpha1) |
+| ClientPermissions | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientPermissions/v1alpha1) |
+
+## Working YAML Examples
+
+### `ClientAuthorizationResource`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationResource
+metadata:
+  name: my-authz-resource
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-authz-resource
+    displayName: My Authorization Resource
+    type: "urn:test:resources:default"
+    uris:
+      - "/protected/resource"
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+### `ClientAuthorizationPermission`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationPermission
+metadata:
+  name: my-authz-permission
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-authz-permission
+    description: Permission covering all resources of a given type
+    type: resource
+    resourceType: "urn:test:resources:default"
+    decisionStrategy: UNANIMOUS
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+`spec.forProvider.policies`, `resources`, and `scopes` map directly to the
+underlying Terraform provider fields, so their raw values are UUIDs / IDs, not
+names. If you want to wire managed Keycloak objects together by reference, use
+the generated reference fields instead, for example:
+
+- `resourcesRefs` / `resourcesSelector`
+- `clientPoliciesRefs`
+- `genericPoliciesRefs`
+- `groupPoliciesRefs`
+- `regexPoliciesRefs`
+- `rolePoliciesRefs`
+- `userPoliciesRefs`
+
+Supplying names in the raw `policies`, `resources`, or `scopes` lists causes
+drift because the Terraform provider reads those attributes back as resolved
+Keycloak IDs.
+
+### `ClientClientPolicy`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientClientPolicy
+metadata:
+  name: my-client-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-client-policy
+    clientsRefs:
+      - name: "test"
+        policy:
+          resolve: Always
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+### `ClientClientPolicy` with OIDC and SAML clients
+
+`ClientClientPolicy` also supports SAML clients through `samlClientsRefs`.
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientClientPolicy
+metadata:
+  name: my-oidc-and-saml-client-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-oidc-and-saml-client-policy
+    clientsRefs:
+      - name: "test"
+        policy:
+          resolve: Always
+    samlClientsRefs:
+      - name: saml-client
+        policy:
+          resolve: Always
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+### `ClientGroupPolicy`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientGroupPolicy
+metadata:
+  name: my-group-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-group-policy
+    groups:
+      - path: /test
+        extendChildren: false
+        idRef:
+          name: "test"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+### `ClientRolePolicy`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientRolePolicy
+metadata:
+  name: my-role-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-role-policy
+    type: role
+    role:
+      - required: true
+        idRef:
+          name: "test"
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+### `ClientUserPolicy`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientUserPolicy
+metadata:
+  name: my-user-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-user-policy
+    usersRefs:
+      - name: "tim-tester"
+        policy:
+          resolve: Always
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+### `ClientRegexPolicy`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientRegexPolicy
+metadata:
+  name: regex-policy
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    name: regex-policy
+    pattern: ^sample.+$
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    targetClaim: sample-claim
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### `ClientAuthorizationPolicy`
+
+Addresses any policy provider by its type id. Use it for custom policy providers
+implemented as a Java SPI, and for JavaScript policies deployed in a JAR, whose
+type is the `script-<fileName>` id Keycloak assigns. Stock policy types have
+dedicated resources and those should be preferred. This resource carries no
+provider-specific configuration, so it suits providers that require none.
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationPolicy
+metadata:
+  name: my-generic-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-generic-policy
+    description: Generic authorization policy addressed by provider type
+    type: time
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+### `ClientPermissions`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientPermissions
+metadata:
+  name: my-permission
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+## Related Resources
+
+- [Clients](./clients.md)
+- [Groups](./groups.md)
+- [Roles](./roles.md)
+- [Users](./users.md)
+- [SAML Clients](./saml-clients.md)
+- [Realms](./realms.md)
+
+## Clients
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/clients/
+
+
+Use a `Client` when an application or service needs Keycloak to authenticate users with OpenID Connect. This is the resource for web apps, SPAs, backend services, service accounts, and federated workloads.
+
+## API Reference
+
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| Client | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/Client/v1alpha1) |
+
+## Examples
+
+### Confidential client with authorization
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: test
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    accessType: "CONFIDENTIAL"
+    clientId: "test"
+    fullScopeAllowed: false
+    serviceAccountsEnabled: true
+    authorization:
+      - policyEnforcementMode: "PERMISSIVE"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Managing a built-in client without deleting it
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: account
+spec:
+  managementPolicies: ["Create", "Update", "Observe"]
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    accessType: "CONFIDENTIAL"
+    clientId: "account"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Managing another built-in client (account-console)
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: account-console
+spec:
+  managementPolicies: [Observe, Update]
+  deletionPolicy: Orphan
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    accessType: "PUBLIC"
+    clientId: "account-console"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Service account client
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: service-acc-1
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    accessType: "CONFIDENTIAL"
+    clientId: "service-acc-1"
+    serviceAccountsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Kubernetes federated JWT client
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: k8s-federated-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientAuthenticatorType: federated-jwt
+    clientId: k8s-federated-client
+    enabled: true
+    name: k8s-federated-client
+    realmIdRef:
+      name: "orgs"
+      policy:
+        resolve: Always
+    serviceAccountsEnabled: true
+    standardFlowEnabled: false
+    extraConfig:
+      federated.idp: k8s-federated
+      federated.sub: system:serviceaccount:default:k8s-federated-test-sa
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Key Fields
+
+| Field | Description |
+|-------|-------------|
+| `accessType` | Client type. Use `CONFIDENTIAL` for server-side apps, `PUBLIC` for browser or native apps, and `BEARER-ONLY` for APIs that only validate tokens. |
+| `clientId` | Unique client identifier in the realm. |
+| `serviceAccountsEnabled` | Enables a service account so the client can use client credentials flows. |
+| `fullScopeAllowed` | Controls whether the client automatically receives all realm and client scopes. |
+| `authorization` | Enables and configures Keycloak Authorization Services for the client. |
+| `standardFlowEnabled` | Enables the authorization code flow. |
+| `implicitFlowEnabled` | Enables the implicit flow for legacy browser-based integrations. |
+| `directAccessGrantsEnabled` | Enables direct username/password token grants. |
+| `clientAuthenticatorType` | Selects how the client authenticates, such as standard secret-based auth or `federated-jwt`. |
+
+## Related Resources
+
+- [OpenID Client Scopes](./openid-client-scopes.md)
+- [Client Authorization](./client-authorization.md)
+- [Service Accounts](./service-accounts.md)
+- [SAML Clients](./saml-clients.md)
+- [Protocol Mappers](./protocol-mappers.md)
+
+## Default Configuration
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/default-config/
+
+
+Use these resources when every new user in a realm should start with the same baseline access. `DefaultGroups` adds new users to groups automatically, and `Roles` assigns the realm roles that should always be present.
+
+## API Reference
+
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| DefaultGroups | `defaults.keycloak.crossplane.io/v1alpha1` | [`keycloak_default_groups`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/default_groups) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/defaults.keycloak.crossplane.io/DefaultGroups/v1alpha1) |
+| Roles | `defaults.keycloak.crossplane.io/v1alpha1` | [`keycloak_default_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/default_roles) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/defaults.keycloak.crossplane.io/Roles/v1alpha1) |
+
+## Working YAML Examples
+
+### `DefaultGroups`
+
+```yaml
+apiVersion: defaults.keycloak.crossplane.io/v1alpha1
+kind: DefaultGroups
+metadata:
+  name: my-default-groups
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    groupIdsRefs:
+      - name: test
+        policy:
+          resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### `Roles`
+
+```yaml
+apiVersion: defaults.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: default-roles
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    defaultRolesRefs:
+      - name: test
+        policy:
+          resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Related Resources
+
+- [Groups](./groups.md)
+- [Roles](./roles.md)
+- [Users](./users.md)
+- [Realms](./realms.md)
+
+## Groups
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/groups/
+
+
+Use groups when multiple users should share the same roles or when you need a hierarchical structure such as teams, departments, or environments. Groups let you model organization structure once and then manage access in bulk.
+
+## API Reference
+
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| Group | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Group/v1alpha1) |
+| Memberships | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_memberships`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_memberships) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Memberships/v1alpha1) |
+| Roles | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_roles) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Roles/v1alpha1) |
+| Permissions | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Permissions/v1alpha1) |
+| AdminPermissions | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/AdminPermissions/v1alpha1) |
+
+## Examples
+
+### Basic group
+
+```yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: test
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: test
+    realmId: dev
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Child groups with the same name under different parents
+
+```yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: test-parent-1
+  labels:
+    role: parent
+    parent: test1
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: test-parent-1
+    realmId: dev
+  providerConfigRef:
+    name: "keycloak-provider-config"
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: test-child-1
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: test-child
+    realmId: dev
+    parentIdSelector:
+      matchLabels:
+        role: parent
+        parent: test1
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Group memberships
+
+```yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: test-members
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    groupIdRef:
+      name: test
+      policy:
+        resolve: Always
+    members:
+      - bree
+      - tim-tester
+    realmId: dev
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Group roles
+
+```yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: group-roles
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    groupIdRef:
+      name: test
+      policy:
+        resolve: Always
+    roleIdsRefs:
+      - name: "test-client"
+        policy:
+          resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Group permissions
+
+```yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  name: my-group-permission
+spec:
+  managementPolicies: ["Create", "Update", "Observe"]
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    groupIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Fine-grained admin permissions (v2)
+
+`AdminPermissions` manages a single fine-grained admin permission for the groups
+of a realm. It requires Keycloak 26.2 or newer started with the
+`admin-fine-grained-authz:v2` feature and a realm with
+`adminPermissionsEnabled: true`. Keycloak then creates an `admin-permissions`
+client for the realm that acts as the resource server for all of its admin
+permissions.
+
+`admin-fine-grained-authz:v2` replaces `admin-fine-grained-authz:v1`, so
+`AdminPermissions` and the v1 `Permissions` resource cannot be used against the
+same Keycloak instance.
+
+```yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: admins-manage-groups
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: admins-can-manage-groups
+    description: Admins can view and manage the members of the group
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    groupIdsRefs:
+      - name: "test"
+    scopes:
+      - view
+      - manage-members
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+Valid `scopes` for group permissions are `view`, `manage`, `view-members`,
+`manage-members` and `manage-membership`. Without `groupIds` the permission
+applies to every group of the realm, otherwise only to the referenced groups. A
+permission without policies is evaluated as "deny", so attach policies once they
+exist on the realm's `admin-permissions` client, either by ID via `policies` or
+through the typed reference fields (`groupPolicies`, `rolePolicies`,
+`userPolicies`, ...).
+
+## Key Fields
+
+| Resource | Field | Description |
+|----------|-------|-------------|
+| `Group` | `name` | Group name shown in Keycloak. |
+| `Group` | `realmId` | Realm where the group is created. |
+| `Group` | `parentIdRef` / `parentIdSelector` | Places the group under a parent group for nested hierarchies. |
+| `Memberships` | `groupIdRef` | Targets the group whose members you want to manage. |
+| `Memberships` | `members` | List of usernames to keep in the group. |
+| `Roles` | `groupIdRef` | Targets the group that should receive roles. |
+| `Roles` | `roleIdsRefs` | References the roles assigned to the group. |
+| `Permissions` | `realmIdRef` | Enables fine-grained admin permissions for groups in a realm. |
+| `Permissions` | `groupIdRef` | Targets the group for which permissions are managed. |
+| `AdminPermissions` | `realmIdRef` | Realm whose groups the permission applies to. |
+| `AdminPermissions` | `groupIdsRefs` | Restricts the permission to specific groups. Leave empty to target all groups of the realm. |
+| `AdminPermissions` | `scopes` | Admin operations the permission covers: `view`, `manage`, `view-members`, `manage-members`, `manage-membership`. |
+| `AdminPermissions` | `decisionStrategy` | How the attached policies are combined: `UNANIMOUS`, `AFFIRMATIVE` or `CONSENSUS`. |
+| `AdminPermissions` | `policies` | IDs of authorization policies granting the permission. Typed `*Policies` reference fields are also available. |
+
+## Related Resources
+
+- [Users](./users.md)
+- [Roles](./roles.md)
+- [Default Configuration](./default-config.md)
+
+## Identity Providers
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/identity-providers/
+
+
+Use identity providers when users should sign in to Keycloak with an external identity system instead of local usernames and passwords. This is the right fit for social login, corporate SAML or OIDC federation, Kubernetes or OpenShift workload identity, SPIFFE-based trust, and controlled token exchange between clients and external providers.
+
+## API Reference
+
+| Kind | API Group | Terraform | CRD Explorer |
+|------|-----------|-----------|---|
+| `IdentityProvider` | `oidc.keycloak.crossplane.io/v1alpha1` | [`keycloak_oidc_identity_provider`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/oidc_identity_provider) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/oidc.keycloak.crossplane.io/IdentityProvider/v1alpha1) |
+| `GoogleIdentityProvider` | `oidc.keycloak.crossplane.io/v1alpha1` | [`keycloak_oidc_google_identity_provider`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/oidc_google_identity_provider) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/oidc.keycloak.crossplane.io/GoogleIdentityProvider/v1alpha1) |
+| `IdentityProvider` | `saml.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_identity_provider`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_identity_provider) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/saml.keycloak.crossplane.io/IdentityProvider/v1alpha1) |
+| `IdentityProviderMapper` | `identityprovider.keycloak.crossplane.io/v1alpha1` | [`keycloak_custom_identity_provider_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/custom_identity_provider_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/identityprovider.keycloak.crossplane.io/IdentityProviderMapper/v1alpha1) |
+| `KubernetesIdentityProvider` | `identityprovider.keycloak.crossplane.io/v1alpha1` | [`keycloak_kubernetes_identity_provider`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/kubernetes_identity_provider) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/identityprovider.keycloak.crossplane.io/KubernetesIdentityProvider/v1alpha1) |
+| `OidcOpenShiftV4IdentityProvider` | `identityprovider.keycloak.crossplane.io/v1alpha1` | [`keycloak_oidc_openshift_v4_identity_provider`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/oidc_openshift_v4_identity_provider) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/identityprovider.keycloak.crossplane.io/OidcOpenShiftV4IdentityProvider/v1alpha1) |
+| `SpiffeIdentityProvider` | `identityprovider.keycloak.crossplane.io/v1alpha1` | [`keycloak_spiffe_identity_provider`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/spiffe_identity_provider) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/identityprovider.keycloak.crossplane.io/SpiffeIdentityProvider/v1alpha1) |
+| `ProviderTokenExchangeScopePermission` | `identityprovider.keycloak.crossplane.io/v1alpha1` | [`keycloak_identity_provider_token_exchange_scope_permission`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/identity_provider_token_exchange_scope_permission) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/identityprovider.keycloak.crossplane.io/ProviderTokenExchangeScopePermission/v1alpha1) |
+
+## Working YAML examples
+
+### OIDC Identity Provider
+
+Use this resource for a generic OpenID Connect identity provider when you need explicit authorization and token endpoints.
+
+```yaml
+apiVersion: oidc.keycloak.crossplane.io/v1alpha2
+kind: IdentityProvider
+metadata:
+  name: oidc-identity-provider
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: my-idp
+    authorizationUrl: https://authorizationurl.com
+    clientIdSecretRef:
+      key: client-id
+      name: client-secret
+      namespace: dev
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+      namespace: dev
+    extraConfig:
+      clientAuthMethod: client_secret_post
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    tokenUrl: https://tokenurl.com
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### OIDC Identity Provider with organization binding
+
+Use organization binding when the external IdP should route users into a specific Keycloak organization.
+
+```yaml
+apiVersion: oidc.keycloak.crossplane.io/v1alpha2
+kind: IdentityProvider
+metadata:
+  name: org-provider
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: my-idp
+    authorizationUrl: https://authorizationurl.com
+    clientIdSecretRef:
+      key: client-id
+      name: client-secret
+      namespace: dev
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+      namespace: dev
+    extraConfig:
+      clientAuthMethod: client_secret_post
+    realmRef:
+      name: "orgs"
+      policy:
+        resolve: Always
+    tokenUrl: https://tokenurl.com
+    orgDomain: example.com
+    orgRedirectModeEmailMatches: true
+    organizationIdRef:
+      name: example
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Google Identity Provider
+
+Use the Google-specific CRD when you want the provider defaults and options exposed by `keycloak_oidc_google_identity_provider`.
+
+```yaml
+apiVersion: oidc.keycloak.crossplane.io/v1alpha1
+kind: GoogleIdentityProvider
+metadata:
+  name: google
+spec:
+  forProvider:
+    alias: google-idp
+    clientIdSecretRef:
+      key: client-id
+      name: client-secret
+      namespace: dev
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+      namespace: dev
+    hostedDomain: example.com
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    syncMode: IMPORT
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### SAML Identity Provider
+
+Use the SAML CRD for enterprise identity providers that publish SAML metadata and SSO/SLO endpoints.
+
+```yaml
+apiVersion: saml.keycloak.crossplane.io/v1alpha1
+kind: IdentityProvider
+metadata:
+  name: saml-identity-provider
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: my-saml-idp
+    backchannelSupported: true
+    entityId: https://domain.com/entity_id
+    forceAuthn: true
+    postBindingAuthnRequest: true
+    postBindingLogout: true
+    postBindingResponse: true
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    singleLogoutServiceUrl: https://domain.com/adfs/ls/?wa=wsignout1.0
+    singleSignOnServiceUrl: https://domain.com/adfs/ls/
+    storeToken: false
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Identity Provider Mapper
+
+Use mappers to transform claims or assertions from the external identity provider into Keycloak user attributes.
+
+```yaml
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: IdentityProviderMapper
+metadata:
+  name: oidc-identity-provider-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    extraConfig:
+      Claim: my-email-claim
+      UserAttribute: email
+      syncMode: INHERIT
+    identityProviderAlias: my-idp
+    identityProviderMapper: '%s-user-attribute-idp-mapper'
+    name: email-attribute-importer
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Kubernetes Identity Provider
+
+Use this resource when Kubernetes-issued tokens should be accepted as an external identity source.
+
+```yaml
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: KubernetesIdentityProvider
+metadata:
+  name: k8s-federated-idp
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: k8s-federated
+    realmRef:
+      name: "orgs"
+      policy:
+        resolve: Always
+    organizationIdRef:
+      name: example
+      policy:
+        resolve: Always
+    issuer: https://kubernetes.default.svc
+    trustEmail: true
+    syncMode: FORCE
+    enabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### OpenShift V4 Identity Provider
+
+Use this resource to federate with OpenShift 4 clusters through the provider's purpose-built OIDC integration.
+
+```yaml
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: OidcOpenShiftV4IdentityProvider
+metadata:
+  name: openshift-v4-identity-provider
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: openshift-v4
+    baseUrl: https://openshift.example.com:8443
+    clientId: openshift-client
+    clientSecretSecretRef:
+      key: client-secret
+      name: client-secret
+      namespace: dev
+    defaultScopes: user:full
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    syncMode: IMPORT
+    trustEmail: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### SPIFFE Identity Provider
+
+Use this resource with Keycloak 26.5+ when workload identities should be validated through a SPIFFE trust domain and bundle endpoint.
+
+```yaml
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: SpiffeIdentityProvider
+metadata:
+  name: spiffe-identity-provider
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: spiffe-idp
+    bundleEndpoint: https://example.com/spiffe/bundle
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    trustDomain: spiffe://test-domain.example
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Provider Token Exchange Scope Permission
+
+Use token exchange scope permissions when selected clients are allowed to exchange tokens against an external identity provider.
+
+```yaml
+apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
+kind: ProviderTokenExchangeScopePermission
+metadata:
+  name: token-exchange-permission
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    clientsRefs:
+      - name: token-exchange-test-client
+        policy:
+          resolve: Always
+    policyType: client
+    providerAliasRef:
+      name: token-exchange-test-idp
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: dev
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Key fields
+
+### Common identity provider fields
+
+| Field | Applies to | Why it matters |
+|-------|------------|----------------|
+| `alias` | Most provider CRDs | Unique Keycloak alias used by login screens, mappers, and token exchange rules. |
+| `realmRef` / `realmIdRef` | All CRDs on this page | Selects the realm that owns the provider or permission. |
+| `providerConfigRef` | All resources | Points at the Crossplane provider configuration used to talk to Keycloak. |
+| `enabled` | Provider CRDs | Controls whether the provider is active for authentication. |
+| `syncMode` | OIDC, Google, Kubernetes, OpenShift, mappers | Decides how external identities are synchronized into Keycloak users. |
+| `trustEmail` | Google, SAML, Kubernetes, OpenShift | Marks externally supplied email addresses as trusted. |
+| `organizationIdRef` | OIDC org binding, Kubernetes | Binds the provider to a Keycloak organization. |
+
+### Protocol-specific fields
+
+| Field | Resource | Why it matters |
+|-------|----------|----------------|
+| `authorizationUrl` | OIDC `IdentityProvider` | Authorization endpoint for the external OIDC provider. |
+| `tokenUrl` | OIDC `IdentityProvider` | Token endpoint used by Keycloak to exchange authorization codes. |
+| `clientIdSecretRef` / `clientSecretSecretRef` | OIDC, Google, OpenShift | Reads client credentials from Kubernetes secrets instead of embedding them in manifests. |
+| `entityId` | SAML `IdentityProvider` | Declares the remote SAML IdP entity identifier. |
+| `singleSignOnServiceUrl` | SAML `IdentityProvider` | Remote SAML SSO entrypoint. |
+| `singleLogoutServiceUrl` | SAML `IdentityProvider` | Remote SAML logout endpoint. |
+| `identityProviderAlias` | `IdentityProviderMapper` | Attaches the mapper to a specific provider alias. |
+| `extraConfig` | OIDC providers and mappers | Holds provider- or mapper-specific settings such as client auth method or claim mapping. |
+| `issuer` | `KubernetesIdentityProvider` | Expected token issuer for Kubernetes service account tokens. |
+| `baseUrl` | `OidcOpenShiftV4IdentityProvider` | Base URL for the OpenShift cluster's OIDC endpoints. |
+| `bundleEndpoint` | `SpiffeIdentityProvider` | URL that publishes the SPIFFE bundle used for trust validation. |
+| `trustDomain` | `SpiffeIdentityProvider` | SPIFFE trust domain accepted by the identity provider. |
+| `providerAliasRef` | `ProviderTokenExchangeScopePermission` | Refers to the external provider whose tokens may be exchanged. |
+| `clientsRefs` | `ProviderTokenExchangeScopePermission` | Lists the Keycloak clients that receive token exchange permission. |
+
+## Related Resources
+
+- **[Organizations](./organizations.md)** — Bind identity providers to Keycloak organizations.
+- **[Authentication Flows](./authentication-flows.md)** — Redirect users through identity providers as part of custom login flows.
+- **[Users](./users.md)** — Understand how federated identities map to Keycloak user records.
+
+## OpenID Client Scopes
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/openid-client-scopes/
+
+
+Use these resources when you want to group protocol mappers and role scope mappings so they can be reused across multiple clients. Default scopes are always included in tokens, while optional scopes are only added when explicitly requested.
+
+## API Reference
+
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| ClientScope | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_scope`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_scope) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientScope/v1alpha1) |
+| ClientDefaultScopes | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_default_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_default_scopes) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientDefaultScopes/v1alpha1) |
+| ClientOptionalScopes | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_optional_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_optional_scopes) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientOptionalScopes/v1alpha1) |
+
+## Working YAML Examples
+
+### `ClientScope`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientScope
+metadata:
+  name: openid-client-scope
+spec:
+  deletionPolicy: Delete
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  forProvider:
+    description: When requested, this scope will map a user's group memberships to a claim
+    guiOrder: 1
+    includeInTokenScope: true
+    name: my-groups
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+```
+
+### `ClientDefaultScopes`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: client-default-scopes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    defaultScopes:
+      - profile
+      - email
+      - roles
+      - web-origins
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### `ClientOptionalScopes`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientOptionalScopes
+metadata:
+  name: client-optional-scopes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    optionalScopes:
+      - address
+      - phone
+      - offline_access
+      - microprofile-jwt
+      - my-groups
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Related Resources
+
+- [Clients](./clients.md)
+- [Protocol Mappers](./protocol-mappers.md)
+- [Roles](./roles.md)
+- [Realms](./realms.md)
+
+## Organizations
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/organizations/
+
+
+Use `Organization` when you need Keycloak multi-tenancy support in Keycloak 26.6 and later. Organizations let you group users under tenant-like entities and configure domain-based identity provider routing. The realm must have `organizationsEnabled: true`.
+
+## API Reference
+
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| Organization | `organization.keycloak.crossplane.io/v1alpha1` | [`keycloak_organization`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/organization) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/organization.keycloak.crossplane.io/Organization/v1alpha1) |
+
+## Working YAML Examples
+
+### `Organization`
+
+```yaml
+apiVersion: organization.keycloak.crossplane.io/v1alpha1
+kind: Organization
+metadata:
+  name: example
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: "orgs"
+    name: example
+    enabled: true
+    domain:
+      - name: example.com
+      - name: example.org
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Related Resources
+
+- [Realms](./realms.md)
+- [Identity Providers](./identity-providers.md)
+- [Users](./users.md)
+
+## Protocol Mappers
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/protocol-mappers/
+
+
+Use these resources when you need to control what Keycloak emits in OIDC tokens or SAML assertions. Use `ProtocolMapper` for custom claim mapping, `RoleMapper` to include roles from one client or client scope in another, and `GroupMembershipProtocolMapper` to expose group membership as a JWT claim.
+
+## API Reference
+
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| ProtocolMapper | `client.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_protocol_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_protocol_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/client.keycloak.crossplane.io/ProtocolMapper/v1alpha1) |
+| RoleMapper | `client.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_role_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_role_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/client.keycloak.crossplane.io/RoleMapper/v1alpha1) |
+| GroupMembershipProtocolMapper | `openidgroup.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_group_membership_protocol_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_group_membership_protocol_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidgroup.keycloak.crossplane.io/GroupMembershipProtocolMapper/v1alpha1) |
+
+## Working YAML Examples
+
+### OIDC user attribute `ProtocolMapper` on a client
+
+```yaml
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: openid-client-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "picture"
+    protocol: "openid-connect"
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    protocolMapper: "oidc-usermodel-attribute-mapper"
+    config:
+      userinfo.token.claim: "true"
+      user.attribute: "picture"
+      id.token.claim: "true"
+      access.token.claim: "true"
+      claim.name: "picture"
+      jsonType.label: "String"
+      introspection.token.claim: "true"
+```
+
+### OIDC client role `ProtocolMapper` on a client scope
+
+```yaml
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: openid-client-scope-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "client roles"
+    protocol: "openid-connect"
+    clientScopeIdRef:
+      name: "openid-client-scope"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    protocolMapper: "oidc-usermodel-client-role-mapper"
+    config:
+      multivalued: "true"
+      user.attribute: "foo"
+      access.token.claim: "true"
+      claim.name: "resource_access.${client_id}.roles"
+      jsonType.label: "String"
+      introspection.token.claim: "true"
+```
+
+### SAML role list `ProtocolMapper`
+
+```yaml
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: saml-client-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "user roles"
+    protocol: "saml"
+    samlClientIdRef:
+      name: "saml-client"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    protocolMapper: "saml-role-list-mapper"
+    config:
+      attribute.name: "Role"
+      attribute.nameformat: "Basic"
+      friendly.name: "test"
+      single: "true"
+```
+
+### `RoleMapper` on a client
+
+```yaml
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: openid-client-role-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleIdRef:
+      name: "test-client"
+      policy:
+        resolve: Always
+```
+
+### `RoleMapper` on a client scope
+
+```yaml
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: openid-client-scope-role-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    clientScopeIdRef:
+      name: "openid-client-scope"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleIdRef:
+      name: "test-client"
+      policy:
+        resolve: Always
+```
+
+### `GroupMembershipProtocolMapper` on a client
+
+```yaml
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: GroupMembershipProtocolMapper
+metadata:
+  name: openid-client-group-membership-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "my-mapper"
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    claimName: "test"
+```
+
+### `GroupMembershipProtocolMapper` on a client scope
+
+```yaml
+apiVersion: openidgroup.keycloak.crossplane.io/v1alpha1
+kind: GroupMembershipProtocolMapper
+metadata:
+  name: openid-client-scope-group-membership-protocol-mapper
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: "my-mapper"
+    clientScopeIdRef:
+      name: "openid-client-scope"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    claimName: "test"
+```
+
+## Related Resources
+
+- [Clients](./clients.md)
+- [OpenID Client Scopes](./openid-client-scopes.md)
+- [Groups](./groups.md)
+- [Roles](./roles.md)
+- [SAML Clients](./saml-clients.md)
+- [Realms](./realms.md)
+
+## Realm Settings
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realm-settings/
+
+
+Use these resources after a `Realm` exists and you need to shape how that realm behaves in production. They cover audit logging, user onboarding requirements, custom profile fields, signing keys, default scopes, and client policy enforcement.
+
+## API Reference
+
+- **`RealmEvents`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_events`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_events) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RealmEvents/v1alpha1)
+- **`RequiredAction`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_required_action`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/required_action) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RequiredAction/v1alpha1)
+- **`UserProfile`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_user_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_user_profile) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/UserProfile/v1alpha1)
+- **`RealmLocalization`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_localization`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_localization) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RealmLocalization/v1alpha1)
+- **`KeystoreRsa`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_keystore_rsa`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_keystore_rsa) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/KeystoreRsa/v1alpha1)
+- **`DefaultClientScopes`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_default_client_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_default_client_scopes) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/DefaultClientScopes/v1alpha1)
+- **`OptionalClientScopes`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_optional_client_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_optional_client_scopes) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/OptionalClientScopes/v1alpha1)
+- **`ClientPolicyProfile`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_client_policy_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_client_policy_profile) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/ClientPolicyProfile/v1alpha1)
+- **`ClientPolicyProfilePolicy`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_client_policy_profile_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_client_policy_profile_policy) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/ClientPolicyProfilePolicy/v1alpha1)
+
+## Working YAML Examples
+
+### RealmEvents
+
+Use `RealmEvents` to configure audit logging for user events such as `LOGIN` and `LOGOUT`, plus admin event tracking.
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: RealmEvents
+metadata:
+  name: realm-events
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    adminEventsDetailsEnabled: true
+    adminEventsEnabled: true
+    enabledEventTypes:
+      - LOGIN
+      - LOGOUT
+    eventsEnabled: true
+    eventsExpiration: 3600
+    eventsListeners:
+      - jboss-logging
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### RequiredAction
+
+Use `RequiredAction` to enable tasks users must complete, such as setting a password, verifying email, or registering WebAuthn.
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: RequiredAction
+metadata:
+  name: required-action
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: webauthn-register
+    enabled: true
+    name: Webauthn Register
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### UserProfile
+
+Use `UserProfile` to define custom user attributes with validation, permissions, and grouping.
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: UserProfile
+metadata:
+  name: userprofile
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    attribute:
+      - displayName: ""
+        group: ""
+        multiValued: false
+        name: username
+      - displayName: ""
+        group: ""
+        multiValued: false
+        name: email
+      - annotations:
+          foo: bar
+        displayName: Field 1
+        enabledWhenScope:
+          - offline_access
+        group: group1
+        multiValued: false
+        name: field1
+        permissions:
+          - edit:
+              - admin
+              - user
+            view:
+              - admin
+              - user
+        requiredForRoles:
+          - user
+        requiredForScopes:
+          - offline_access
+        validator:
+          - name: person-name-prohibited-characters
+          - config:
+              error-message: Nope
+              pattern: ^[a-z]+$
+            name: pattern
+    group:
+      - annotations:
+          foo: bar
+          foo2: '{"key":"val"}'
+        displayDescription: A first group
+        displayHeader: Group 1
+        name: group1
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    unmanagedAttributePolicy: ENABLED
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### RealmLocalization
+
+Use `RealmLocalization` to override the localized message texts a realm serves for a given locale. Each entry in `texts` maps a message key to its translation.
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: RealmLocalization
+metadata:
+  name: realm-localization-de
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    locale: "de"
+    texts:
+      Hello: "Hallo"
+      loginTitle: "Willkommen"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### KeystoreRsa
+
+Use `KeystoreRsa` to manage RSA signing keys used for token signing and verification.
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: KeystoreRsa
+metadata:
+  name: keystore-rsa
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    active: true
+    algorithm: RS256
+    certificateSecretRef:
+      key: cert
+      name: rsa-key
+      namespace: dev
+    enabled: true
+    name: my-rsa-key
+    priority: 100
+    privateKeySecretRef:
+      key: priv
+      name: rsa-key
+      namespace: dev
+    providerId: rsa
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### DefaultClientScopes
+
+Use `DefaultClientScopes` to define which client scopes are assigned automatically to new clients in the realm.
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: DefaultClientScopes
+metadata:
+  name: dev-default-scopes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "dev"
+    defaultScopes:
+      - profile
+      - email
+      - roles
+      - web-origins
+      - phone
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### OptionalClientScopes
+
+Use `OptionalClientScopes` to define which scopes clients may request optionally.
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: OptionalClientScopes
+metadata:
+  name: dev-optional-scopes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "dev"
+    optionalScopes:
+      - acr
+      - role_list
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### ClientPolicyProfile
+
+Use `ClientPolicyProfile` to define policy profiles with executors that enforce standards on clients.
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: ClientPolicyProfile
+metadata:
+  name: client-policy-profile
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    executor:
+      - configuration:
+          auto-configure: "true"
+        name: intent-client-bind-checker
+      - name: secure-session
+    name: my-profile
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### ClientPolicyProfilePolicy
+
+Use `ClientPolicyProfilePolicy` to define the conditions that trigger one or more client policy profiles.
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: ClientPolicyProfilePolicy
+metadata:
+  name: client-policy-profile-policy
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    condition:
+      - configuration:
+          protocol: openid-connect
+        name: client-type
+    description: Some desc
+    name: my-policy
+    profilesRefs:
+      - name: client-policy-profile
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Key Fields
+
+| Resource | Key fields | Description |
+| --- | --- | --- |
+| `RealmEvents` | `realmIdRef`, `eventsEnabled`, `enabledEventTypes`, `eventsListeners`, `adminEventsEnabled`, `adminEventsDetailsEnabled`, `eventsExpiration` | Controls user and admin audit event capture and retention. |
+| `RequiredAction` | `realmIdRef`, `alias`, `name`, `enabled` | Enables built-in actions users must complete during account lifecycle flows. |
+| `UserProfile` | `realmIdRef`, `attribute`, `group`, `unmanagedAttributePolicy` | Defines custom profile schema, validation, permissions, and grouping. |
+| `RealmLocalization` | `realmIdRef`, `locale`, `texts` | Overrides localized message texts for a realm and locale. |
+| `KeystoreRsa` | `realmIdRef`, `name`, `providerId`, `algorithm`, `active`, `enabled`, `priority`, `privateKeySecretRef`, `certificateSecretRef` | Manages RSA key material used by the realm. |
+| `DefaultClientScopes` | `realmId`, `defaultScopes` | Declares scopes assigned automatically to new clients. |
+| `OptionalClientScopes` | `realmId`, `optionalScopes` | Declares scopes clients can request optionally. |
+| `ClientPolicyProfile` | `realmIdRef`, `name`, `executor` | Defines reusable client policy executors. |
+| `ClientPolicyProfilePolicy` | `realmIdRef`, `name`, `description`, `condition`, `profilesRefs` | Binds policy conditions to one or more client policy profiles. |
+
+## Related Resources
+
+- [Realms](./realms.md)
+- [Default Configuration](./default-config.md)
+
+## Realms
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realms/
+
+
+Use a `Realm` when you need an isolated Keycloak boundary for a tenant, environment, or application domain. Because every other Keycloak resource belongs to a realm, this is usually the first resource you create for a new deployment.
+
+## API Reference
+
+- **`Realm`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/Realm/v1alpha1)
+
+## Working YAML Examples
+
+### Basic realm
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: dev
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: "dev"
+    attributes:
+      userProfileEnabled: "true"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Realm with timeouts and lifespans
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: dev-durations
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: "dev-durations"
+    enabled: true
+    accessTokenLifespan: "5m0s"
+    accessTokenLifespanForImplicitFlow: "1800s"
+    ssoSessionIdleTimeout: "30m0s"
+    ssoSessionMaxLifespan: "10h0m0s"
+    ssoSessionIdleTimeoutRememberMe: "0s"
+    ssoSessionMaxLifespanRememberMe: "0s"
+    offlineSessionIdleTimeout: "720h0m0s"
+    offlineSessionMaxLifespan: "1440h0m0s"
+    clientSessionIdleTimeout: "0s"
+    clientSessionMaxLifespan: "0s"
+    accessCodeLifespan: "1m0s"
+    accessCodeLifespanUserAction: "5m0s"
+    accessCodeLifespanLogin: "30m0s"
+    actionTokenGeneratedByAdminLifespan: "12h0m0s"
+    actionTokenGeneratedByUserLifespan: "5m0s"
+    oauth2DeviceCodeLifespan: "10m0s"
+    oauth2DevicePollingInterval: 5
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Managing an existing realm without deleting it
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: existing-master
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    realm: master
+    displayName: Customized Keycloak
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  managementPolicies: [Observe, Update]
+```
+
+### Realm with organizations enabled
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: orgs
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: "orgs"
+    organizationsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Key Fields
+
+| Field | Description |
+| --- | --- |
+| `realm` | Realm ID and top-level container name used by all child resources. |
+| `enabled` | Turns the realm on or off. |
+| `displayName` | Human-friendly name shown in the Keycloak UI. |
+| `passwordPolicy` | Password rules enforced for users in the realm. |
+| `attributes` | Extra realm settings such as feature flags and provider-specific options. |
+| `smtpServer` | Outbound email settings for verification, reset, and notification flows. |
+| `otpPolicy` | Realm-wide OTP settings for MFA behavior. |
+| `organizationsEnabled` | Enables organization features in supported Keycloak versions. |
+| `accessTokenLifespan` | Default lifetime for access tokens. |
+| `accessTokenLifespanForImplicitFlow` | Access token lifetime for implicit flow clients. |
+| `ssoSessionIdleTimeout` | Idle timeout before a normal SSO session expires. |
+| `ssoSessionMaxLifespan` | Maximum duration of a normal SSO session. |
+| `ssoSessionIdleTimeoutRememberMe` | Idle timeout for remember-me SSO sessions. |
+| `ssoSessionMaxLifespanRememberMe` | Maximum duration for remember-me SSO sessions. |
+| `offlineSessionIdleTimeout` | Idle timeout for offline sessions and refresh tokens. |
+| `offlineSessionMaxLifespan` | Maximum duration for offline sessions. |
+| `clientSessionIdleTimeout` | Idle timeout for client sessions. |
+| `clientSessionMaxLifespan` | Maximum duration for client sessions. |
+| `accessCodeLifespan` | Lifetime of authorization codes. |
+| `accessCodeLifespanUserAction` | Lifetime for user action tokens during browser flows. |
+| `accessCodeLifespanLogin` | Maximum time allowed to complete login. |
+| `actionTokenGeneratedByAdminLifespan` | Lifetime for admin-generated action tokens. |
+| `actionTokenGeneratedByUserLifespan` | Lifetime for user-generated action tokens. |
+| `oauth2DeviceCodeLifespan` | Lifetime for OAuth 2.0 device codes. |
+| `oauth2DevicePollingInterval` | Polling interval for device authorization clients. |
+
+## Related Resources
+
+- [Realm Settings](./realm-settings.md)
+- [Default Configuration](./default-config.md)
+
+## Roles
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/roles/
+
+
+Use roles to define permissions in Keycloak. Create realm roles for permissions shared across a realm, and client roles when access should be scoped to a specific application or service.
+
+## API Reference
+
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| Role | `role.keycloak.crossplane.io/v1alpha1` | [`keycloak_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/role) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/role.keycloak.crossplane.io/Role/v1alpha1) |
+| AdminPermissions | `role.keycloak.crossplane.io/v1alpha1` | [`keycloak_role_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/role_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/role.keycloak.crossplane.io/AdminPermissions/v1alpha1) |
+
+## Examples
+
+### Realm role
+
+```yaml
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: test
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "dev"
+    name: "test"
+    description: "abc"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Client role
+
+```yaml
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: test-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "dev"
+    name: "test-client"
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    description: "abc"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Managing a built-in realm role without deleting it
+
+```yaml
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: offline-access
+spec:
+  managementPolicies: [Observe, Update]
+  deletionPolicy: Orphan
+  forProvider:
+    realmId: "dev"
+    name: "offline_access"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Managing a built-in client role without deleting it
+
+```yaml
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: account-view-profile
+spec:
+  managementPolicies: [Observe, Update]
+  deletionPolicy: Orphan
+  forProvider:
+    realmId: "dev"
+    clientId: "account"
+    name: "view-profile"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Fine-grained admin permissions (v2)
+
+`AdminPermissions` manages a single fine-grained admin permission for the roles
+of a realm. It requires Keycloak 26.2 or newer started with the
+`admin-fine-grained-authz:v2` feature and a realm with
+`adminPermissionsEnabled: true`. Keycloak then creates an `admin-permissions`
+client for the realm that acts as the resource server for all of its admin
+permissions.
+
+`admin-fine-grained-authz:v2` replaces `admin-fine-grained-authz:v1`, so
+`AdminPermissions` and the v1 permission resources cannot be used against the
+same Keycloak instance.
+
+```yaml
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: admins-map-roles
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: admins-can-map-roles
+    description: Admins can assign any role of the realm
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    scopes:
+      - map-role
+      - map-role-client-scope
+      - map-role-composite
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+Valid `scopes` for role permissions are `map-role`, `map-role-client-scope` and
+`map-role-composite`. Without `roleIds` the permission applies to every role of
+the realm, otherwise only to the referenced roles. A permission without policies
+is evaluated as "deny", so attach policies once they exist on the realm's
+`admin-permissions` client, either by ID via `policies` or through the typed
+reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
+
+## Key Fields
+
+| Field | Description |
+|-------|-------------|
+| `name` | Role name stored in Keycloak. |
+| `realmId` | Realm where the role is created. |
+| `clientIdRef` | Set this for a client role so the role is scoped to a specific client. Omit it for a realm role. |
+| `description` | Human-readable role description. |
+| `compositeRoles` | Optional list of roles that should be included in this role as composites. |
+| `AdminPermissions`: `realmIdRef` | Realm whose roles the permission applies to. |
+| `AdminPermissions`: `roleIdsRefs` | Restricts the permission to specific roles. Leave empty to target all roles of the realm. |
+| `AdminPermissions`: `scopes` | Admin operations the permission covers: `map-role`, `map-role-client-scope`, `map-role-composite`. |
+| `AdminPermissions`: `decisionStrategy` | How the attached policies are combined: `UNANIMOUS`, `AFFIRMATIVE` or `CONSENSUS`. |
+| `AdminPermissions`: `policies` | IDs of authorization policies granting the permission. Typed `*Policies` reference fields are also available. |
+
+## Related Resources
+
+- [Groups](./groups.md)
+- [Users](./users.md)
+- [Default Configuration](./default-config.md)
+- [Service Accounts](./service-accounts.md)
+
+## SAML Clients
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/saml-clients/
+
+
+Use SAML clients when an application or service provider expects SAML 2.0 instead of OpenID Connect. This is common for legacy enterprise applications and commercial service providers such as Salesforce, Jira, or other platforms that rely on SAML metadata, signed assertions, and SSO endpoints.
+
+## API Reference
+
+| Kind | API Group | Terraform | CRD Explorer |
+|------|-----------|-----------|---|
+| `Client` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/samlclient.keycloak.crossplane.io/Client/v1alpha1) |
+| `ClientScope` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client_scope`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client_scope) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/samlclient.keycloak.crossplane.io/ClientScope/v1alpha1) |
+| `ClientDefaultScopes` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client_default_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client_default_scopes) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/samlclient.keycloak.crossplane.io/ClientDefaultScopes/v1alpha1) |
+
+## Working YAML examples
+
+### SAML Client
+
+Use a SAML client to represent the service provider that trusts Keycloak for SSO.
+
+```yaml
+apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: saml-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    clientId: saml-client-id
+    includeAuthnStatement: true
+    name: saml-client
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    signAssertions: true
+    signDocuments: false
+    signingCertificateSecretRef:
+      name: rsa-key
+      namespace: dev
+      key: cert
+    signingPrivateKeySecretRef:
+      name: saml-cliet-cert
+      namespace: dev
+      key: priv
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### SAML Client Scope
+
+Use a SAML client scope to define reusable mapper and assertion behavior that can be shared across clients.
+
+```yaml
+apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+kind: ClientScope
+metadata:
+  name: saml-client-scopes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    description: This scope will map a user's group memberships to SAML assertion
+    guiOrder: 1
+    name: groups
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### SAML Client Default Scopes
+
+Use default scopes to attach one or more SAML client scopes automatically to a client.
+
+```yaml
+apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: saml-client-default-scopes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    clientIdRef:
+      name: saml-client
+      policy:
+        resolve: Always
+    defaultScopes:
+      - groups
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Key fields
+
+### Client
+
+| Field | Why it matters |
+|-------|----------------|
+| `clientId` | SAML entity ID for the service provider. |
+| `realmIdRef` | Selects the realm that owns the client. |
+| `includeAuthnStatement` | Adds an AuthnStatement to issued assertions when required by the application. |
+| `signAssertions` | Signs SAML assertions sent to the service provider. |
+| `signDocuments` | Signs the SAML document envelope when the integration requires it. |
+| `signingCertificateSecretRef` | Supplies the public certificate used for signing. |
+| `signingPrivateKeySecretRef` | Supplies the private key used for signing. |
+
+### ClientScope
+
+| Field | Why it matters |
+|-------|----------------|
+| `name` | Scope name referenced by SAML clients. |
+| `description` | Explains the purpose of the scope in Keycloak. |
+| `guiOrder` | Controls display order in the Keycloak admin UI. |
+| `realmIdRef` | Selects the realm that owns the scope. |
+
+### ClientDefaultScopes
+
+| Field | Why it matters |
+|-------|----------------|
+| `clientIdRef` | Resolves the SAML client that should receive the scopes. |
+| `defaultScopes` | Lists the scope names that are applied automatically. |
+| `realmIdRef` | Ensures the client and scopes are resolved in the right realm. |
+
+## Related Resources
+
+- **[Clients](./clients.md)** — Compare SAML clients with OpenID Connect clients.
+- **[Protocol Mappers](./protocol-mappers.md)** — Add mappers that shape SAML assertions and attributes.
+- **[Realms](./realms.md)** — Create the realm that owns the client and scopes.
+
+## Service Accounts
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/service-accounts/
+
+
+Use these resources when a client needs to authenticate as itself for machine-to-machine access. They assign realm or client roles to a client's service account. The client must have `serviceAccountsEnabled: true`.
+
+## API Reference
+
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| ClientServiceAccountRealmRole | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_service_account_realm_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_service_account_realm_role) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientServiceAccountRealmRole/v1alpha1) |
+| ClientServiceAccountRole | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_service_account_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_service_account_role) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientServiceAccountRole/v1alpha1) |
+
+## Working YAML Examples
+
+### `ClientServiceAccountRealmRole`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientServiceAccountRealmRole
+metadata:
+  name: service-account-realm-role
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "dev"
+    role: "svc-realm-role"
+    serviceAccountUserClientIdRef:
+      name: "service-acc-1"
+      policy:
+        resolve: Always
+```
+
+### `ClientServiceAccountRole`
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientServiceAccountRole
+metadata:
+  name: service-account-role
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    clientIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleRef:
+      name: "svc-role"
+      policy:
+        resolve: Always
+    serviceAccountUserClientIdRef:
+      name: "service-acc-1"
+      policy:
+        resolve: Always
+```
+
+## Related Resources
+
+- [Clients](./clients.md)
+- [Roles](./roles.md)
+- [Realms](./realms.md)
+
+## User Federation
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/user-federation/
+
+
+Use user federation when Keycloak should authenticate users against an external directory or user store instead of managing every account in its own database. LDAP and Active Directory federation let users sign in with their existing directory credentials, while mapper resources control how LDAP attributes, groups, and roles are projected into Keycloak. Use the custom user federation CRD when you have a Keycloak user storage SPI provider that is not LDAP-based.
+
+## API Reference
+
+| Kind | API Group | Terraform | CRD Explorer |
+|------|-----------|-----------|---|
+| `UserFederation` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_user_federation) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/UserFederation/v1alpha1) |
+| `UserAttributeMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_user_attribute_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_user_attribute_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/UserAttributeMapper/v1alpha1) |
+| `FullNameMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_full_name_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_full_name_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/FullNameMapper/v1alpha1) |
+| `GroupMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_group_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_group_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/GroupMapper/v1alpha1) |
+| `RoleMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_role_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_role_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/RoleMapper/v1alpha1) |
+| `HardcodedAttributeMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_hardcoded_attribute_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_hardcoded_attribute_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/HardcodedAttributeMapper/v1alpha1) |
+| `HardcodedGroupMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_hardcoded_group_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_hardcoded_group_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/HardcodedGroupMapper/v1alpha1) |
+| `HardcodedRoleMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_hardcoded_role_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_hardcoded_role_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/HardcodedRoleMapper/v1alpha1) |
+| `MsadUserAccountControlMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_msad_user_account_control_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_msad_user_account_control_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/MsadUserAccountControlMapper/v1alpha1) |
+| `MsadLdsUserAccountControlMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_msad_lds_user_account_control_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_msad_lds_user_account_control_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/MsadLdsUserAccountControlMapper/v1alpha1) |
+| `CustomMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_custom_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_custom_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/CustomMapper/v1alpha1) |
+| `UserFederation` | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_custom_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/custom_user_federation) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/UserFederation/v1alpha1) |
+
+## Working YAML examples
+
+### LDAP UserFederation
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  name: ldap-user-federation
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    bindCredentialSecretRef:
+      key: secret
+      name: bind-credential-secret
+      namespace: dev
+    bindDn: cn=admin,dc=example,dc=org
+    connectionTimeout: 5s
+    connectionUrl: ldap://openldap
+    enabled: false
+    kerberos:
+      - kerberosRealm: FOO.LOCAL
+        keyTab: /etc/host.keytab
+        serverPrincipal: HTTP/host.foo.com@FOO.LOCAL
+    name: openldap
+    rdnLdapAttribute: cn
+    readTimeout: 10s
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    userObjectClasses:
+      - simpleSecurityObject
+      - organizationalRole
+    usernameLdapAttribute: cn
+    usersDn: dc=example,dc=org
+    uuidLdapAttribute: entryDN
+    deleteDefaultMappers: false
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### UserAttributeMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserAttributeMapper
+metadata:
+  name: ldap-user-attribute-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapAttribute: bar
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: user-attribute-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    userModelAttribute: foo
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### FullNameMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: FullNameMapper
+metadata:
+  name: ldap-full-name-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapFullNameAttribute: cn
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: full-name-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### GroupMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: GroupMapper
+metadata:
+  name: ldap-group-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    groupNameLdapAttribute: cn
+    groupObjectClasses:
+      - groupOfNames
+    ldapGroupsDn: dc=example,dc=org
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    memberofLdapAttribute: memberOf
+    membershipAttributeType: DN
+    membershipLdapAttribute: member
+    membershipUserLdapAttribute: cn
+    name: group-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### RoleMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: RoleMapper
+metadata:
+  name: ldap-role-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapRolesDn: dc=example,dc=org
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    memberofLdapAttribute: memberOf
+    membershipAttributeType: DN
+    membershipLdapAttribute: member
+    membershipUserLdapAttribute: cn
+    name: role-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleNameLdapAttribute: cn
+    roleObjectClasses:
+      - groupOfNames
+    userRolesRetrieveStrategy: GET_ROLES_FROM_USER_MEMBEROF_ATTRIBUTE
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### HardcodedRoleMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: HardcodedRoleMapper
+metadata:
+  name: assign-test-role-to-all-users
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: assign-test-role-to-all-users
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleRef:
+      name: test
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### HardcodedGroupMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: HardcodedGroupMapper
+metadata:
+  name: assign-group-to-users
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    groupRef:
+      name: test
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: assign-group-to-users
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### HardcodedAttributeMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: HardcodedAttributeMapper
+metadata:
+  name: assign-bar-to-foo
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    attributeName: foo
+    attributeValue: bar
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: assign-foo-to-bar
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### MsadUserAccountControlMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: MsadUserAccountControlMapper
+metadata:
+  name: msad-user-account-control-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: msad-user-account-control-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### MsadLdsUserAccountControlMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: MsadLdsUserAccountControlMapper
+metadata:
+  name: msad-lds-user-account-control-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: msad-lds-user-account-control-mapper
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### CustomMapper
+
+```yaml
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: CustomMapper
+metadata:
+  name: custom-mapper
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    config:
+      ldap.full.name.attribute: cn
+    ldapUserFederationIdRef:
+      name: ldap-user-federation
+      policy:
+        resolve: Always
+    name: custom-mapper
+    providerId: "full-name-ldap-mapper"
+    providerType: "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Custom UserFederation
+
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  name: custom-user-federation
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    config:
+      dummyBool: true
+      dummyString: foobar
+      multivalue: value1##value2
+    enabled: true
+    name: custom
+    providerId: custom
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Related Resources
+
+- [Realms](./realms.md)
+- [Users](./users.md)
+- [Groups](./groups.md)
+- [Roles](./roles.md)
+- [Identity Providers](./identity-providers.md)
+
+## Users
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/users/
+
+
+Use `User` to declaratively manage people who can authenticate to Keycloak. Use `Groups`, `Roles`, and `Permissions` to manage access around those users, and `UserFederation` when you need a custom external user store integration.
+
+## API Reference
+
+| Kind | API Group | Terraform Resource | CRD Explorer |
+|------|-----------|-------------------|---|
+| User | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/User/v1alpha1) |
+| Groups | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user_groups`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user_groups) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Groups/v1alpha1) |
+| Roles | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user_roles) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Roles/v1alpha1) |
+| Permissions | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_users_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/users_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Permissions/v1alpha1) |
+| AdminPermissions | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_users_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/users_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/AdminPermissions/v1alpha1) |
+| UserFederation | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_custom_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/custom_user_federation) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/UserFederation/v1alpha1) |
+
+## Examples
+
+### Basic user
+
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: bree
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "dev"
+    username: "bree"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### User roles
+
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: user-roles
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    roleIdsRefs:
+      - name: test
+        policy:
+          resolve: Always
+    userIdRef:
+      name: "tim-tester"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### User groups
+
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: Groups
+metadata:
+  name: user-groups
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    groupIdsRefs:
+      - name: test
+        policy:
+          resolve: Always
+    userIdRef:
+      name: "tim-tester"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### User permissions
+
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: Permissions
+metadata:
+  name: my-user-permission
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+### Fine-grained admin permissions (v2)
+
+`AdminPermissions` manages a single fine-grained admin permission for the users
+of a realm. It requires Keycloak 26.2 or newer started with the
+`admin-fine-grained-authz:v2` feature and a realm with
+`adminPermissionsEnabled: true`. Keycloak then creates an `admin-permissions`
+client for the realm that acts as the resource server for all of its admin
+permissions.
+
+`admin-fine-grained-authz:v2` replaces `admin-fine-grained-authz:v1`, so
+`AdminPermissions` and the v1 `Permissions` resources cannot be used against the
+same Keycloak instance.
+
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: admins-manage-users
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: admins-can-manage-users
+    description: Admins can view and manage all users
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    scopes:
+      - view
+      - manage
+      - map-roles
+      - manage-group-membership
+      - impersonate
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+Valid `scopes` for user permissions are `view`, `manage`, `map-roles`,
+`manage-group-membership` and `impersonate`. A permission without policies is
+evaluated as "deny", so attach policies once they exist on the realm's
+`admin-permissions` client, either by ID via `policies` or through the typed
+reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
+
+### Custom user federation
+
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  name: custom-user-federation
+spec:
+  forProvider:
+    config:
+      dummyBool: true
+      dummyString: foobar
+      multivalue: value1##value2
+    enabled: true
+    name: custom
+    providerId: custom
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+```
+
+## Key Fields
+
+| Resource | Field | Description |
+|----------|-------|-------------|
+| `User` | `realmId` | Realm where the user account exists. |
+| `User` | `username` | Unique username in the realm. |
+| `User` | `enabled` | Enables or disables login for the user. |
+| `Groups` | `userIdRef` | Targets the user whose group memberships are managed. |
+| `Groups` | `groupIdsRefs` | References groups to assign to the user. |
+| `Roles` | `userIdRef` | Targets the user whose direct roles are managed. |
+| `Roles` | `roleIdsRefs` | References roles to assign to the user. |
+| `Permissions` | `realmIdRef` | Enables fine-grained admin permissions for user management in a realm. |
+| `AdminPermissions` | `realmIdRef` | Realm whose users the permission applies to. |
+| `AdminPermissions` | `scopes` | Admin operations the permission covers, e.g. `view`, `manage`. |
+| `AdminPermissions` | `decisionStrategy` | How the attached policies are combined: `UNANIMOUS`, `AFFIRMATIVE` or `CONSENSUS`. |
+| `AdminPermissions` | `policies` | IDs of authorization policies granting the permission. Typed `*Policies` reference fields are also available. |
+| `UserFederation` | `providerId` | Selects the custom federation provider implementation. |
+| `UserFederation` | `config` | Provider-specific configuration passed to the federation plugin. |
+| `UserFederation` | `enabled` | Enables or disables the federation provider. |
+
+## Related Resources
+
+- [Groups](./groups.md)
+- [Roles](./roles.md)
+- [Default Configuration](./default-config.md)
+- [User Federation](./user-federation.md)
+
+## Workflows
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/workflows/
+
+
+Use workflows when you want Keycloak 26.5+ to react automatically to realm events. They are a good fit for onboarding notifications, password-policy enforcement, or custom event-driven logic when users are created, updated, or perform specific actions. Key fields are `name`, `enabled`, `on` for the trigger event, `step` for the ordered actions, and `realmRef` for the target realm.
+
+## API Reference
+
+| Kind | API Group | Terraform | CRD Explorer |
+|------|-----------|-----------|---|
+| `Workflow` | `workflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_workflow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/workflow) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/workflow.keycloak.crossplane.io/Workflow/v1alpha1) |
+
+## Working YAML examples
+
+### Workflow
+
+```yaml
+apiVersion: workflow.keycloak.crossplane.io/v1alpha1
+kind: Workflow
+metadata:
+  name: onboarding
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    enabled: true
+    name: onboarding-new-users
+    "on": user_created
+    realmRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    step:
+      - config:
+          message: "Welcome to ${realm.displayName}!"
+        uses: notify-user
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+## Related Resources
+
+- [Realms](./realms.md)
+- [Authentication Flows](./authentication-flows.md)
+- [Users](./users.md)
