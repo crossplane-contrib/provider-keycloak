@@ -369,7 +369,6 @@ controller-e2e: $(CHAINSAW)
 	@$(CHAINSAW) test \
 		--test-dir cluster/test/controller \
 		--namespace dev \
-		--timeout 10m \
 		|| $(FAIL)
 	@$(OK) controller e2e tests passed
 
