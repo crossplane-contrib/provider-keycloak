@@ -15,6 +15,17 @@ import (
 type ProviderConfigSpec struct {
 	// Credentials required to authenticate to this provider.
 	Credentials ProviderCredentials `json:"credentials"`
+
+	// ConnectionSecretKeys customizes the connection secret keys published
+	// for managed resources that use this ProviderConfig, e.g. renaming
+	// "clientID"/"clientSecret" to whatever keys a consumer expects (such as
+	// "client-id"/"client-secret" for Envoy Gateway's OIDC SecurityPolicy).
+	// This is applied out-of-band from the managed resource reconciliation
+	// itself: a separate controller republishes a transformed copy of the
+	// connection secret alongside the original. See
+	// internal/controller/cluster/connectionsecrettransform for details.
+	// +optional
+	ConnectionSecretKeys *ConnectionSecretKeys `json:"connectionSecretKeys,omitempty"`
 }
 
 // ProviderCredentials required to authenticate.
@@ -24,6 +35,17 @@ type ProviderCredentials struct {
 	Source xpv1.CredentialsSource `json:"source"`
 
 	xpv1.CommonCredentialSelectors `json:",inline"`
+}
+
+// ConnectionSecretKeys configures how connection secret keys are renamed for
+// managed resources using this ProviderConfig.
+type ConnectionSecretKeys struct {
+	// Rename maps an existing connection secret key (as published by the
+	// provider, e.g. "clientID") to the key name that should be used
+	// instead in the transformed connection secret (e.g. "client-id").
+	// Keys that are not listed here are copied over unchanged.
+	// +optional
+	Rename map[string]string `json:"rename,omitempty"`
 }
 
 // A ProviderConfigStatus reflects the observed state of a ProviderConfig.

@@ -11,3 +11,11 @@ spec:
       name: keycloak-credentials
       key: credentials
       namespace: crossplane-system
+  # Optional: rename the keys published in the connection secrets of
+  # resources (currently Client only) using this ProviderConfig. A separate
+  # "<secret>-transformed" secret is written alongside the original with the
+  # renamed keys; see internal/controller/cluster/connectionsecrettransform.
+  # connectionSecretKeys:
+  #   rename:
+  #     clientID: client-id
+  #     clientSecret: client-secret

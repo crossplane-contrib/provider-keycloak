@@ -18,6 +18,7 @@ import (
 	genericclientrolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/genericclientrolemapper"
 	protocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/protocolmapper"
 	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/rolemapper"
+	connectionsecrettransform "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/connectionsecrettransform"
 	defaultgroups "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/defaults/defaultgroups"
 	roles "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/defaults/roles"
 	adminpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/group/adminpermissions"
@@ -204,6 +205,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		usersessionnoteprotocolmapper.Setup,
 		organization.Setup,
 		providerconfig.Setup,
+		connectionsecrettransform.Setup,
 		clientpolicyprofile.Setup,
 		clientpolicyprofilepolicy.Setup,
 		clientregistrationpolicy.Setup,
@@ -326,6 +328,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		usersessionnoteprotocolmapper.SetupGated,
 		organization.SetupGated,
 		providerconfig.SetupGated,
+		connectionsecrettransform.SetupGated,
 		clientpolicyprofile.SetupGated,
 		clientpolicyprofilepolicy.SetupGated,
 		clientregistrationpolicy.SetupGated,

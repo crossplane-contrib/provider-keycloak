@@ -53,6 +53,27 @@ spec:
               A ProviderConfigSpec defines the desired state of a ProviderConfig.
               A ProviderConfigSpec defines the desired state of a ProviderConfig.
             properties:
+              connectionSecretKeys:
+                description: |-
+                  ConnectionSecretKeys customizes the connection secret keys published
+                  for managed resources that use this ProviderConfig, e.g. renaming
+                  "clientID"/"clientSecret" to whatever keys a consumer expects (such as
+                  "client-id"/"client-secret" for Envoy Gateway's OIDC SecurityPolicy).
+                  This is applied out-of-band from the managed resource reconciliation
+                  itself: a separate controller republishes a transformed copy of the
+                  connection secret alongside the original. See
+                  internal/controller/cluster/connectionsecrettransform for details.
+                properties:
+                  rename:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Rename maps an existing connection secret key (as published by the
+                      provider, e.g. "clientID") to the key name that should be used
+                      instead in the transformed connection secret (e.g. "client-id").
+                      Keys that are not listed here are copied over unchanged.
+                    type: object
+                type: object
               credentials:
                 description: Credentials required to authenticate to this provider.
                 properties:
