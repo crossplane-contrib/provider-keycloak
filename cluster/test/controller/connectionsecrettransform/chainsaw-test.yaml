@@ -286,10 +286,10 @@ spec:
     # -----------------------------------------------------------------------
     # Step 4: Traefik OIDC plugin middleware referencing the SeparateSecret
     #
-    # Deploys a Traefik Middleware of type plugin/traefikoidc (the
-    # keycloak/traefikoidc Traefik plugin) that reads client credentials
-    # directly from the ctrl-e2e-envoy-oidc Secret produced in step 3.
-    # Traefik validates the Middleware CRD on admission; the plugin is
+    # Deploys a Traefik Middleware of type plugin/traefik-oidc-auth (the
+    # sevensolutions/traefik-oidc-auth Traefik plugin) that reads client
+    # credentials directly from the ctrl-e2e-envoy-oidc Secret produced in
+    # step 3.  Traefik validates the Middleware CRD on admission; the plugin is
     # pre-installed by cluster/test/controller/setup.sh so the apply does
     # not require a live plugin catalog lookup.
     # -----------------------------------------------------------------------
@@ -304,27 +304,27 @@ spec:
                 namespace: dev
               spec:
                 plugin:
-                  traefikoidc:
-                    # The issuerUrl, clientID and clientSecret values are
-                    # sourced from the Kubernetes Secret written by the
-                    # connectionsecrettransform controller, using the key
-                    # names it emits: client-id, client-secret, issuerUrl.
-                    issuerURL:
-                      valueFrom:
-                        secretKeyRef:
-                          name: ctrl-e2e-envoy-oidc
-                          key: issuerUrl
-                    clientID:
-                      valueFrom:
-                        secretKeyRef:
-                          name: ctrl-e2e-envoy-oidc
-                          key: client-id
-                    clientSecret:
-                      valueFrom:
-                        secretKeyRef:
-                          name: ctrl-e2e-envoy-oidc
-                          key: client-secret
-                    scopes:
+                  traefik-oidc-auth:
+                    # Provider credentials are sourced from the Kubernetes Secret
+                    # written by the connectionsecrettransform controller, using
+                    # the key names it emits: client-id, client-secret, issuerUrl.
+                    Provider:
+                      Url:
+                        valueFrom:
+                          secretKeyRef:
+                            name: ctrl-e2e-envoy-oidc
+                            key: issuerUrl
+                      ClientId:
+                        valueFrom:
+                          secretKeyRef:
+                            name: ctrl-e2e-envoy-oidc
+                            key: client-id
+                      ClientSecret:
+                        valueFrom:
+                          secretKeyRef:
+                            name: ctrl-e2e-envoy-oidc
+                            key: client-secret
+                    Scopes:
                       - openid
                       - profile
                       - email
