@@ -324,7 +324,10 @@ generated-lst:
 generated-lst-check:
 	@go run ./cmd/generatedlist --check config/generated.lst
 
-generate.done: e2e-index generated-lst
+# `make generate` is the single entry point for all generation: code (upjet,
+# controller-gen), DAG (cluster/test/e2e-index.json) and docs
+# (docs/static/llms.txt, llms-full.txt).
+generate.done: e2e-index generated-lst docs-gen
 
 .PHONY: e2e-index generated-lst generated-lst-check
 
@@ -462,7 +465,7 @@ vendor.check: modules.check
 # Documentation targets
 
 # Regenerate docs/static/llms.txt and docs/static/llms-full.txt from the
-# Hugo content tree.
+# Hugo content tree — run as part of `make generate`.
 docs-gen:
 	@echo "==> generating llms.txt and llms-full.txt"
 	@bash docs/scripts/gen-llms.sh

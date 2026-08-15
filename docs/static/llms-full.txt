@@ -66,17 +66,20 @@ scripts/            Utility scripts
 | Modify CRD generation | `generate/*.go`, run `make generate` |
 | Run unit tests | `make test` |
 | Run e2e tests | `make e2e`, see `cluster/test/cases.txt` for covered resources |
-| Regenerate llms.txt/llms-full.txt | `make docs-gen` |
+| Regenerate llms.txt/llms-full.txt | `make generate` (or `make docs-gen`) |
 | Verify docs freshness | `make docs-freshness-check` |
 
 ## Code Generation
 
 Always run `make generate` after changing `config/` to regenerate CRDs and Go types. **Never** edit files in `apis/` or `package/crds/` by hand — they are generated outputs.
 
+`make generate` is the single entry point for **all** generation — code, DAG and docs. There is no need to run the individual targets by hand.
+
 The generation pipeline:
 1. `generate/main.go` calls Upjet with the Terraform provider schema.
 2. Upjet writes Go type definitions into `apis/<group>/<version>/`.
 3. `make generate` runs `go generate ./...` which invokes controller-gen to write CRDs into `package/crds/`.
+4. `make generate` then runs `e2e-index` (DAG: `cluster/test/e2e-index.json`), `generated-lst` (`config/generated.lst`) and `docs-gen` (`docs/static/llms.txt`, `docs/static/llms-full.txt`).
 
 ## Testing
 
@@ -234,7 +237,8 @@ The docs use [Hugo](https://gohugo.io/) with the [Hextra](https://imfing.github.
 
 ```bash
 cd docs && hugo server --buildDrafts   # local preview
-make docs-gen                          # regenerate llms.txt and llms-full.txt
+make generate                          # regenerates code, DAG and llms.txt
+make docs-gen                          # regenerate llms.txt and llms-full.txt only
 make docs-freshness-check             # CI: verify llms.txt is current
 ```
 
@@ -280,7 +284,7 @@ consuming individual pages.
 |---------|-------------|-----|
 | CRD fields not updating after config change | `make generate` not run | Run `make generate` |
 | `409 Conflict` on resource create | External name collision; resource already exists in Keycloak | Use `lookup.BuildIdentifyingPropertiesLookup` to enable import |
-| `llms-full.txt is stale` in CI | Docs changed but `make docs-gen` not run | Run `make docs-gen` and commit |
+| `llms-full.txt is stale` in CI | Docs changed but `make generate` not run | Run `make generate` and commit |
 | `no matches for kind` in e2e | CRD not yet established when chainsaw runs | `cluster/test/setup.sh` waits for MRDs; check timing |
 | `make generate` produces unexpectedly large/stale diffs | Stale local generator cache/artifacts | Remove `.work/` and `config/schema.json`, then re-run `make generate` |
 | E2E provider version mismatch | Git tags not fetched before build | Add `git fetch --tags` before `make build` |
@@ -346,7 +350,8 @@ Go / Docker-in-Docker features.
 ## Build and code generation
 
 ```bash
-make generate   # regenerate CRDs, API types, controllers, examples
+make generate   # regenerate CRDs, API types, controllers, examples,
+                # the e2e DAG index and llms.txt/llms-full.txt
 make build      # build provider binary and xpkg package
 make test       # unit tests
 ```

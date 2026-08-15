@@ -50,7 +50,8 @@ Go / Docker-in-Docker features.
 ## Build and code generation
 
 ```bash
-make generate   # regenerate CRDs, API types, controllers, examples
+make generate   # regenerate CRDs, API types, controllers, examples,
+                # the e2e DAG index and llms.txt/llms-full.txt
 make build      # build provider binary and xpkg package
 make test       # unit tests
 ```
