@@ -46,18 +46,22 @@
         "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/basic/043-oidc-client-no-redirect-uris.yaml",
         "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/basic/082-connection-secret-transform.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
         "dev/demos/namespaced/043-oidc-client-no-redirect-uris.yaml",
         "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/namespaced/082-connection-secret-transform.yaml",
         "dev/demos/orgs/031-k8s-federated-client.yaml"
       ],
       "used_by": [
         "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/basic/043-oidc-client-no-redirect-uris.yaml",
         "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/basic/082-connection-secret-transform.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
         "dev/demos/namespaced/043-oidc-client-no-redirect-uris.yaml",
         "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/namespaced/082-connection-secret-transform.yaml",
         "dev/demos/orgs/031-k8s-federated-client.yaml"
       ]
     },
@@ -1151,6 +1155,7 @@
         "dev/demos/basic/074-authentication-execution-binding.yaml",
         "dev/demos/basic/080-defaults-groups.yaml",
         "dev/demos/basic/081-defaults-roles.yaml",
+        "dev/demos/basic/082-connection-secret-transform.yaml",
         "dev/demos/basic/085-new-resources.yaml",
         "dev/demos/basic/086-kc-26.5-resources.yaml",
         "dev/demos/basic/090-ldap-user-federation.yaml",
@@ -1857,6 +1862,15 @@
       ],
       "rdeps": []
     },
+    "dev/demos/basic/082-connection-secret-transform.yaml": {
+      "groups": [
+        "openidclient"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
     "dev/demos/basic/085-new-resources.yaml": {
       "groups": [
         "identityprovider",
@@ -2068,6 +2082,7 @@
         "dev/demos/namespaced/074-authentication-execution-binding.yaml",
         "dev/demos/namespaced/080-defaults-groups.yaml",
         "dev/demos/namespaced/081-defaults-roles.yaml",
+        "dev/demos/namespaced/082-connection-secret-transform.yaml",
         "dev/demos/namespaced/085-new-resources.yaml",
         "dev/demos/namespaced/086-kc-26.5-resources.yaml",
         "dev/demos/namespaced/090-ldap-user-federation.yaml",
@@ -2771,6 +2786,15 @@
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/082-connection-secret-transform.yaml": {
+      "groups": [
+        "openidclient"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml"
       ],
       "rdeps": []
     },
