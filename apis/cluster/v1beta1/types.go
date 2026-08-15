@@ -46,6 +46,19 @@ type ConnectionSecretKeys struct {
 	// Keys that are not listed here are copied over unchanged.
 	// +optional
 	Rename map[string]string `json:"rename,omitempty"`
+
+	// Add maps a new connection secret key to a value looked up elsewhere,
+	// so that it is added to the transformed connection secret alongside
+	// the (renamed) values copied from the source. Each value is a source
+	// expression of the form "status:<dot.path>" (a field under the owning
+	// managed resource's status, e.g. "status:atProvider.clientId") or
+	// "providerConfig:<dot.path>" (a field of this ProviderConfig, e.g.
+	// "providerConfig:metadata.name"). Only scalar (string, number,
+	// boolean) fields are supported; the source path is never resolved
+	// against the credentials Secret itself, so secret material referenced
+	// only by name/namespace/key cannot leak this way.
+	// +optional
+	Add map[string]string `json:"add,omitempty"`
 }
 
 // A ProviderConfigStatus reflects the observed state of a ProviderConfig.

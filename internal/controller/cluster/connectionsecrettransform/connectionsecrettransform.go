@@ -46,6 +46,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/validation"
@@ -89,6 +90,28 @@ const (
 	// Gateway SecurityPolicy) requires a specific secret name.
 	AnnotationKeyTransformedName = "keycloak.crossplane.io/connection-secret-transform-name"
 
+	// AnnotationKeyAddFields adds extra keys to the transformed connection
+	// secret, sourced from elsewhere rather than renamed from the secret
+	// itself. Same comma-/newline-separated "<newKey>=<source>" syntax as
+	// AnnotationKeyRename, e.g.
+	//
+	//	keycloak.crossplane.io/connection-secret-add-fields: |
+	//	  issuerUrl=providerConfig:metadata.name
+	//	  internalClientId=status:atProvider.id
+	//
+	// where <source> is one of:
+	//   - "status:<dot.path>": a field under the owning managed resource's
+	//     status (e.g. "status:atProvider.clientId").
+	//   - "providerConfig:<dot.path>": a field of the ProviderConfig the
+	//     resource references (e.g. "providerConfig:metadata.name"). Only
+	//     available for cluster-scoped resources, same restriction as
+	//     ProviderConfig-wide renaming.
+	//
+	// Only scalar (string, number, boolean) fields are supported. Entries
+	// here are merged on top of the ProviderConfig-wide
+	// spec.connectionSecretKeys.add map, same precedence as renaming.
+	AnnotationKeyAddFields = "keycloak.crossplane.io/connection-secret-add-fields"
+
 	// transformedSecretSuffix is appended to the name of the source
 	// connection secret to build the default name of the republished,
 	// transformed one. The two live side by side: the original is left
@@ -128,6 +151,12 @@ const (
 	// this controller watches, so a change there does not produce a Secret
 	// event; the resync is what makes such edits converge.
 	defaultResyncInterval = time.Minute
+
+	// addSourceStatus and addSourceProviderConfig are the recognized source
+	// prefixes for AnnotationKeyAddFields / spec.connectionSecretKeys.add
+	// entries. See AnnotationKeyAddFields for the full syntax.
+	addSourceStatus         = "status:"
+	addSourceProviderConfig = "providerConfig:"
 )
 
 // Event reasons reported on the source connection secret.
@@ -137,6 +166,8 @@ const (
 	reasonInvalidName      event.Reason = "InvalidTransformedSecretName"
 	reasonNotOwned         event.Reason = "TransformedSecretNotOwned"
 	reasonTransformFailure event.Reason = "CannotTransformConnectionSecret"
+	reasonInvalidAddField  event.Reason = "InvalidConnectionSecretFieldAdd"
+	reasonAddFieldConflict event.Reason = "ConnectionSecretFieldAddConflict"
 )
 
 // secretKeyRE matches the key names Kubernetes accepts in a Secret. Renaming
@@ -260,7 +291,20 @@ func (r *Reconciler) Reconcile(ctx context.Context, req reconcile.Request) (reco
 			errors.Errorf("ignoring rename(s) with an unusable target key: %s", strings.Join(invalid, ", "))))
 	}
 
-	if len(rename) == 0 {
+	added, invalidAdd, err := r.addFieldMap(ctx, mr)
+	if err != nil {
+		r.record.Event(secret, event.Warning(reasonTransformFailure, err))
+		return reconcile.Result{}, errors.Wrap(err, "cannot determine the connection secret fields to add")
+	}
+	if len(invalidAdd) > 0 {
+		// Same tolerance as renaming: an unresolved source must not wedge
+		// the resource, the remaining entries are still applied.
+		log.Debug("Ignoring unresolved connection secret field(s) to add", "entries", strings.Join(invalidAdd, ", "))
+		r.record.Event(secret, event.Warning(reasonInvalidAddField,
+			errors.Errorf("ignoring field(s) to add that could not be resolved: %s", strings.Join(invalidAdd, ", "))))
+	}
+
+	if len(rename) == 0 && len(added) == 0 {
 		// Nothing (any more) to transform: collect what we wrote earlier.
 		return r.resync(), errors.Wrap(r.deleteStale(ctx, secret, ""), errDeleteStale)
 	}
@@ -295,6 +339,15 @@ func (r *Reconciler) Reconcile(ctx context.Context, req reconcile.Request) (reco
 		log.Debug("Skipping conflicting connection secret key renames", "entries", strings.Join(conflicts, ", "))
 		r.record.Event(secret, event.Warning(reasonRenameConflict,
 			errors.Errorf("skipping rename(s) that would overwrite another key: %s", strings.Join(conflicts, ", "))))
+	}
+
+	addConflicts := mergeAdded(data, added)
+	if len(addConflicts) > 0 {
+		// Same rule as renaming: never silently drop a value that is
+		// already there.
+		log.Debug("Skipping added connection secret field(s) that would overwrite an existing key", "entries", strings.Join(addConflicts, ", "))
+		r.record.Event(secret, event.Warning(reasonAddFieldConflict,
+			errors.Errorf("skipping added field(s) that would overwrite an existing key: %s", strings.Join(addConflicts, ", "))))
 	}
 
 	out := &corev1.Secret{
@@ -405,6 +458,141 @@ func (r *Reconciler) providerConfig(ctx context.Context, mr *unstructured.Unstru
 		return nil, err
 	}
 	return pc, nil
+}
+
+// addFieldMap merges the ProviderConfig-wide spec.connectionSecretKeys.add
+// map with the managed resource's own AnnotationKeyAddFields annotation (the
+// latter taking precedence per key), and resolves every source expression
+// into a value. Entries with an unusable target key or a source that cannot
+// be resolved are dropped and returned separately so the caller can report
+// them, mirroring renameMap's tolerance for a single bad entry.
+func (r *Reconciler) addFieldMap(ctx context.Context, mr *unstructured.Unstructured) (map[string][]byte, []string, error) {
+	add := map[string]string{}
+
+	// Same restriction as renameMap: the cluster-scoped ProviderConfig is
+	// only available to cluster-scoped resources.
+	var pc *clusterv1beta1.ProviderConfig
+	if mr.GetNamespace() == "" {
+		var err error
+		pc, err = r.providerConfig(ctx, mr)
+		if err != nil {
+			return nil, nil, err
+		}
+		if pc != nil && pc.Spec.ConnectionSecretKeys != nil {
+			for k, v := range pc.Spec.ConnectionSecretKeys.Add {
+				add[k] = v
+			}
+		}
+	}
+
+	for k, v := range parseRenameAnnotation(mr.GetAnnotations()[AnnotationKeyAddFields]) {
+		add[k] = v
+	}
+	if len(add) == 0 {
+		return nil, nil, nil
+	}
+
+	var pcObj map[string]interface{}
+	if pc != nil {
+		conv, err := runtime.DefaultUnstructuredConverter.ToUnstructured(pc)
+		if err != nil {
+			return nil, nil, errors.Wrap(err, "cannot convert ProviderConfig to unstructured")
+		}
+		pcObj = conv
+	}
+
+	keys := make([]string, 0, len(add))
+	for k := range add {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	out := make(map[string][]byte, len(add))
+	var invalid []string
+	for _, k := range keys {
+		expr := add[k]
+		if !secretKeyRE.MatchString(k) {
+			invalid = append(invalid, fmt.Sprintf("%q: not a valid secret key", k))
+			continue
+		}
+		val, err := resolveAddSource(expr, mr.Object, pcObj)
+		if err != nil {
+			invalid = append(invalid, fmt.Sprintf("%s=%s: %s", k, expr, err))
+			continue
+		}
+		out[k] = []byte(val)
+	}
+	sort.Strings(invalid)
+	return out, invalid, nil
+}
+
+// resolveAddSource resolves a single AnnotationKeyAddFields source
+// expression ("status:<dot.path>" or "providerConfig:<dot.path>") against
+// the managed resource's own object or the (possibly nil) ProviderConfig's,
+// converted to unstructured content. Only scalar values are supported: a
+// map or a list would silently coerce to an unhelpful string via fmt.Sprint,
+// which is worse than refusing it outright.
+func resolveAddSource(expr string, mrObj, pcObj map[string]interface{}) (string, error) {
+	var root map[string]interface{}
+	var path string
+	switch {
+	case strings.HasPrefix(expr, addSourceStatus):
+		status, _, err := unstructured.NestedMap(mrObj, "status")
+		if err != nil {
+			return "", err
+		}
+		root = status
+		path = strings.TrimPrefix(expr, addSourceStatus)
+	case strings.HasPrefix(expr, addSourceProviderConfig):
+		if pcObj == nil {
+			return "", errors.New("no ProviderConfig available for this resource")
+		}
+		root = pcObj
+		path = strings.TrimPrefix(expr, addSourceProviderConfig)
+	default:
+		return "", errors.Errorf("unsupported source (expected a %q or %q prefix)", addSourceStatus, addSourceProviderConfig)
+	}
+	if path == "" {
+		return "", errors.New("empty field path")
+	}
+
+	val, found, err := unstructured.NestedFieldNoCopy(root, strings.Split(path, ".")...)
+	if err != nil {
+		return "", err
+	}
+	if !found {
+		return "", errors.Errorf("field %q not found", path)
+	}
+	switch v := val.(type) {
+	case string:
+		return v, nil
+	case bool, int64, float64:
+		return fmt.Sprint(v), nil
+	default:
+		return "", errors.Errorf("field %q is not a scalar value", path)
+	}
+}
+
+// mergeAdded adds the resolved fields into data in place, skipping (and
+// returning, for reporting) any key that data already holds. A field to add
+// therefore never silently overwrites a value copied or renamed from the
+// source secret.
+func mergeAdded(data map[string][]byte, added map[string][]byte) []string {
+	keys := make([]string, 0, len(added))
+	for k := range added {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	var conflicts []string
+	for _, k := range keys {
+		if _, exists := data[k]; exists {
+			conflicts = append(conflicts, k)
+			continue
+		}
+		data[k] = added[k]
+	}
+	return conflicts
 }
 
 // getOwner reads the managed resource owning the connection secret. Only the

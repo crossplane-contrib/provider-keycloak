@@ -12,6 +12,7 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -105,6 +106,15 @@ func providerConfig(rename map[string]string) *clusterv1beta1.ProviderConfig {
 		pc.Spec.ConnectionSecretKeys = &clusterv1beta1.ConnectionSecretKeys{Rename: rename}
 	}
 	return pc
+}
+
+// providerConfigWithAdd returns a ProviderConfig configuring
+// spec.connectionSecretKeys.add.
+func providerConfigWithAdd(add map[string]string) *clusterv1beta1.ProviderConfig {
+	return &clusterv1beta1.ProviderConfig{
+		ObjectMeta: metav1.ObjectMeta{Name: pcName},
+		Spec:       clusterv1beta1.ProviderConfigSpec{ConnectionSecretKeys: &clusterv1beta1.ConnectionSecretKeys{Add: add}},
+	}
 }
 
 func TestReconcile(t *testing.T) {
@@ -677,5 +687,134 @@ func TestIsRelevantSecret(t *testing.T) {
 				t.Errorf("isRelevantSecret(...) = %v, want %v", got, tc.want)
 			}
 		})
+	}
+}
+
+func TestResolveAddSource(t *testing.T) {
+	mrObj := map[string]interface{}{
+		"status": map[string]interface{}{
+			"atProvider": map[string]interface{}{
+				"clientId": "vikunja",
+				"enabled":  true,
+				"count":    int64(3),
+				"nested":   map[string]interface{}{"foo": "bar"},
+			},
+		},
+	}
+	pcObj := map[string]interface{}{
+		"metadata": map[string]interface{}{"name": pcName},
+	}
+
+	cases := map[string]struct {
+		expr    string
+		mrObj   map[string]interface{}
+		pcObj   map[string]interface{}
+		want    string
+		wantErr bool
+	}{
+		"StatusString":      {expr: "status:atProvider.clientId", mrObj: mrObj, want: "vikunja"},
+		"StatusBool":        {expr: "status:atProvider.enabled", mrObj: mrObj, want: "true"},
+		"StatusNumber":      {expr: "status:atProvider.count", mrObj: mrObj, want: "3"},
+		"StatusNotFound":    {expr: "status:atProvider.missing", mrObj: mrObj, wantErr: true},
+		"StatusNonScalar":   {expr: "status:atProvider.nested", mrObj: mrObj, wantErr: true},
+		"ProviderConfig":    {expr: "providerConfig:metadata.name", pcObj: pcObj, want: pcName},
+		"ProviderConfigNil": {expr: "providerConfig:metadata.name", pcObj: nil, wantErr: true},
+		"UnsupportedPrefix": {expr: "spec:forProvider.clientId", mrObj: mrObj, wantErr: true},
+		"EmptyPath":         {expr: "status:", mrObj: mrObj, wantErr: true},
+	}
+
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+			got, err := resolveAddSource(tc.expr, tc.mrObj, tc.pcObj)
+			if tc.wantErr {
+				if err == nil {
+					t.Fatalf("resolveAddSource(%q) = %q, want error", tc.expr, got)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("resolveAddSource(%q): unexpected error: %v", tc.expr, err)
+			}
+			if got != tc.want {
+				t.Errorf("resolveAddSource(%q) = %q, want %q", tc.expr, got, tc.want)
+			}
+		})
+	}
+}
+
+func TestMergeAdded(t *testing.T) {
+	data := map[string][]byte{"clientID": []byte("vikunja")}
+	added := map[string][]byte{
+		"issuerUrl": []byte("https://keycloak.example.com"),
+		"clientID":  []byte("would-overwrite"),
+	}
+
+	conflicts := mergeAdded(data, added)
+	if len(conflicts) != 1 || conflicts[0] != "clientID" {
+		t.Fatalf("mergeAdded(...) conflicts = %v, want [clientID]", conflicts)
+	}
+	if string(data["clientID"]) != "vikunja" {
+		t.Errorf("mergeAdded(...) overwrote data[clientID] = %q, want unchanged", data["clientID"])
+	}
+	if string(data["issuerUrl"]) != "https://keycloak.example.com" {
+		t.Errorf("mergeAdded(...) data[issuerUrl] = %q, want the added value", data["issuerUrl"])
+	}
+}
+
+func TestAddFieldMap(t *testing.T) {
+	s := newScheme(t)
+
+	mr := &unstructured.Unstructured{Object: map[string]interface{}{
+		"apiVersion": "openidclient.keycloak.crossplane.io/v1alpha2",
+		"kind":       "Client",
+		"metadata": map[string]interface{}{
+			"name": "vikunja",
+			"annotations": map[string]interface{}{
+				AnnotationKeyAddFields: "internalId=status:atProvider.id",
+			},
+		},
+		"spec": map[string]interface{}{
+			"providerConfigRef": map[string]interface{}{"name": pcName},
+		},
+		"status": map[string]interface{}{
+			"atProvider": map[string]interface{}{"id": "abc-123"},
+		},
+	}}
+
+	pc := providerConfigWithAdd(map[string]string{"issuerUrl": "providerConfig:metadata.name"})
+	cl := fake.NewClientBuilder().WithScheme(s).WithObjects(pc).Build()
+	r := newReconciler(cl)
+
+	got, invalid, err := r.addFieldMap(context.Background(), mr)
+	if err != nil {
+		t.Fatalf("addFieldMap(...): unexpected error: %v", err)
+	}
+	if len(invalid) != 0 {
+		t.Errorf("addFieldMap(...) invalid = %v, want none", invalid)
+	}
+	if string(got["issuerUrl"]) != pcName {
+		t.Errorf("addFieldMap(...)[issuerUrl] = %q, want %q", got["issuerUrl"], pcName)
+	}
+	if string(got["internalId"]) != "abc-123" {
+		t.Errorf("addFieldMap(...)[internalId] = %q, want %q", got["internalId"], "abc-123")
+	}
+
+	// An unresolved source must not fail the whole reconcile: it is
+	// reported and the resource keeps only the still-resolvable fields.
+	mr.Object["metadata"].(map[string]interface{})["annotations"] = map[string]interface{}{
+		AnnotationKeyAddFields: "internalId=status:atProvider.missing",
+	}
+	got, invalid, err = r.addFieldMap(context.Background(), mr)
+	if err != nil {
+		t.Fatalf("addFieldMap(...): unexpected error: %v", err)
+	}
+	if len(invalid) != 1 {
+		t.Fatalf("addFieldMap(...) invalid = %v, want one entry", invalid)
+	}
+	if _, ok := got["internalId"]; ok {
+		t.Errorf("addFieldMap(...) resolved %q despite an unresolvable source", "internalId")
+	}
+	if string(got["issuerUrl"]) != pcName {
+		t.Errorf("addFieldMap(...)[issuerUrl] = %q, want %q (still applied from ProviderConfig)", got["issuerUrl"], pcName)
 	}
 }
