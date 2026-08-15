@@ -324,12 +324,26 @@ generated-lst:
 generated-lst-check:
 	@go run ./cmd/generatedlist --check config/generated.lst
 
+# Report reference wiring that is inconsistent, missing or incomplete: the same
+# attribute wired differently across resources (drift), references pointing at a
+# single member of a multi-type family (missing-multitype), and reference-shaped
+# attributes that are not wired at all (unclassified). Reporting only — the
+# findings are questions for a reviewer, not failures.
+#
+# Pass arguments with CONFIG_AUDIT_ARGS, e.g.
+#   make config-audit CONFIG_AUDIT_ARGS='--format=json'
+#   make config-audit CONFIG_AUDIT_ARGS='--show-all'
+#   make config-audit CONFIG_AUDIT_ARGS='--fail-on=drift,missing-multitype'
+CONFIG_AUDIT_ARGS ?=
+config-audit:
+	@go run ./cmd/configaudit $(CONFIG_AUDIT_ARGS)
+
 # `make generate` is the single entry point for all generation: code (upjet,
 # controller-gen), DAG (cluster/test/e2e-index.json) and docs
 # (docs/static/llms.txt, llms-full.txt).
 generate.done: e2e-index generated-lst docs-gen
 
-.PHONY: e2e-index generated-lst generated-lst-check
+.PHONY: e2e-index generated-lst generated-lst-check config-audit
 
 local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(INFO) running locally built provider

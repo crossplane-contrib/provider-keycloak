@@ -1,6 +1,6 @@
 # 0001 – Schema-Driven Resource Onboarding
 
-- **Status:** Draft
+- **Status:** Draft (piece A implemented, see below)
 - **Issue:** [#712](https://github.com/crossplane-contrib/provider-keycloak/issues/712)
 - **Scope:** `config/`, `generate/`, `Makefile`, `scripts/`
 
@@ -245,20 +245,50 @@ recorded reason.
 
 ### A. `make config-audit` — tooling that finds missing references and missing multitypes
 
+> **Implemented.** `internal/configaudit` + `cmd/configaudit`, run as
+> `make config-audit` (`CONFIG_AUDIT_ARGS='--format=json --show-all --fail-on=…'`),
+> documented in `docs/content/docs/developing/config-audit.md`. It reports
+> **12 drift**, **3 actionable missing-multitype** (47 further candidates
+> suppressed as protocol-specific) and **31 unclassified** findings on the
+> current tree; nothing fails yet, `--fail-on` is opt-in.
+>
+> Two refinements the implementation added to the sketch below, both because the
+> code had to handle the whole tree rather than the attributes this document
+> enumerated:
+>
+> - Drift is **not** restricted to reference-shaped names, so it also finds
+>   `browser_flow`, `direct_grant_flow`, `registration_flow`,
+>   `reset_credentials_flow`, `docker_authentication_flow` and
+>   `client_authentication_flow` (wired on `keycloak_authentication_bindings`,
+>   unwired on `keycloak_realm`) and `role` (wired on two resources, unwired on
+>   two). Hence 12 findings rather than the five measured by hand.
+> - A resource that is itself the reference target is never counted as unwired,
+>   which removes the only false positives that widening produced
+>   (`keycloak_realm.realm`, `keycloak_openid_client.client_id`).
+>
+> Type families are additionally derived from `config/multitypes` synthetic
+> instances on a single resource (`client_id` + `saml_client_id`), not only from
+> one attribute name resolving to two targets across resources. On the current
+> tree both derivations agree, but the first survives a resource being the only
+> one wiring a family.
+
 A reporting tool over the already-built provider config
 (`config.GetProvider(true)`) plus `config/schema.json`. No refactor, no new
 metadata, no dependency on the registry below. It runs three detectors, and all
 three have been measured against the current tree:
 
 **D1 — inconsistent treatment.** Same attribute name, same type, same
-optionality, treated differently across resources. Five findings today (table
-above). Sub-classified automatically:
+optionality, treated differently across resources. Five findings when restricted
+to reference-shaped names (table above), 12 as implemented. Sub-classified
+automatically:
 
 - *gap*: wired on N resources, unwired on M — e.g. `post_broker_login_flow_alias`
   (2 wired / 7 unwired);
 - *multitype*: one attribute name resolving to two different target types —
-  `client_id`, `client_scope_id`, which are already `multitypes` and should be
-  reported as **satisfied**, not as drift.
+  `client_id`, `client_scope_id`. Reported as **satisfied** rather than as drift
+  once every protocol-neutral resource wiring the attribute covers the whole
+  family, which is true for `client_scope_id` today and not yet for `client_id`
+  (`keycloak_ldap_role_mapper`, which D3 reports).
 
 **D2 — unclassified reference-shaped attributes.** Non-computed, non-sensitive
 `*_id` / `*_ids` / `*_alias` attributes that are neither wired nor documented as
@@ -429,15 +459,16 @@ and costs one function.
 
 ## Rollout
 
-1. Add `make config-audit` with **D1 and D3**, reporting only. No registry, no
-   refactor: it walks the already-built provider config and prints 5 + 3
-   findings. Cheapest possible first step and the one with immediate value —
-   the tooling exists before anything is restructured.
-2. Classify those eight, using the `research-upstream` skill so each verdict
-   arrives with upstream citations: wire the two flow-alias gaps and `parent_id`
-   (or record why not), record `client_id`/`client_scope_id` as intentional
-   multitypes, and decide whether the three protocol-neutral resources need a
-   client/SAML-client multitype. Flip `--fail-on=drift,missing-multitype`.
+1. ~~Add `make config-audit` with **D1 and D3**, reporting only.~~ **Done**:
+   all three detectors are implemented in `internal/configaudit`, reporting
+   only, with `--fail-on` available but unused. No registry, no refactor — it
+   walks the already-built provider config and prints 12 + 3 (+31) findings.
+2. Classify those fifteen, using the `research-upstream` skill so each verdict
+   arrives with upstream citations: wire the flow-alias gaps, the realm flow
+   bindings, `role` and `parent_id` (or record why not), record
+   `client_id`/`client_scope_id` as intentional multitypes, and decide whether
+   the three protocol-neutral resources need a client/SAML-client multitype.
+   Flip `--fail-on=drift,missing-multitype`.
 3. Introduce `config/references` with today's `KnownReferencers()` content moved
    into it, plus the classifications from step 2, and retire the hand-written
    per-resource expectation tests that the detectors now cover.
