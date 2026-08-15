@@ -9,8 +9,9 @@
 #     connection secret produced by the connectionsecrettransform controller
 #     really works as an Envoy OIDC SecurityPolicy source.
 #
-#   * Traefik with the forward-auth middleware plugin as a second OIDC
-#     integration point (different authentication flow, same secret format).
+#   * Traefik with the OIDC plugin (keycloak/traefikoidc) as a second OIDC
+#     integration point — the plugin is loaded via Traefik's experimental
+#     plugin support and validates the same renamed-key secret format.
 #
 # Both are deployed as lightweight in-cluster services; no external load
 # balancer is needed. The chainsaw tests assert readiness of these services
@@ -78,9 +79,13 @@ install_envoy_gateway() {
 # Traefik
 # ---------------------------------------------------------------------------
 install_traefik() {
-  info "Installing Traefik ${TRAEFIK_VERSION}..."
+  info "Installing Traefik ${TRAEFIK_VERSION} with OIDC plugin support..."
   helm repo add traefik https://traefik.github.io/charts 2>/dev/null || true
   helm repo update traefik
+  # Enable the experimental plugin feature and pre-install the
+  # keycloak/traefikoidc plugin so the chainsaw test can declare a Middleware
+  # of type plugin/traefikoidc without requiring a live Traefik Plugin Catalog
+  # lookup at test time.
   helm upgrade --install traefik traefik/traefik \
     --version "${TRAEFIK_VERSION}" \
     --namespace traefik \
@@ -88,6 +93,8 @@ install_traefik() {
     --wait --timeout=3m \
     --set service.type=ClusterIP \
     --set ports.web.expose.default=true \
+    --set "experimental.plugins.traefikoidc.moduleName=github.com/keycloak/traefikoidc" \
+    --set "experimental.plugins.traefikoidc.version=v0.5.0" \
     || fatal "Traefik installation failed"
 
   info "Waiting for Traefik pod..."

@@ -11,7 +11,7 @@
 #      b. Annotation-driven rename, add and name override (SeparateSecret mode)
 #      c. ConnectionSecretTransform CRD (namespace-scoped, highest precedence)
 #   3. It validates the resulting Secret by actually deploying an Envoy Gateway
-#      OIDC SecurityPolicy and a Traefik ForwardAuth middleware that reference
+#      OIDC SecurityPolicy and a Traefik OIDC plugin Middleware that reference
 #      the transformed secret — real application consumers confirm the secret
 #      is not just syntactically correct but structurally usable.
 #
@@ -284,36 +284,50 @@ spec:
                 (to_string(keys(@)) | contains(@, 'clientID')): "false"
 
     # -----------------------------------------------------------------------
-    # Step 4: Traefik ForwardAuth middleware referencing the SeparateSecret
+    # Step 4: Traefik OIDC plugin middleware referencing the SeparateSecret
     #
-    # Deploys a Traefik ForwardAuth middleware that consumes the
-    # ctrl-e2e-envoy-oidc secret. Traefik's admission controller (if present)
-    # validates the secret reference; the middleware is not actually enforced.
+    # Deploys a Traefik Middleware of type plugin/traefikoidc (the
+    # keycloak/traefikoidc Traefik plugin) that reads client credentials
+    # directly from the ctrl-e2e-envoy-oidc Secret produced in step 3.
+    # Traefik validates the Middleware CRD on admission; the plugin is
+    # pre-installed by cluster/test/controller/setup.sh so the apply does
+    # not require a live plugin catalog lookup.
     # -----------------------------------------------------------------------
-    - name: traefik-forward-auth-middleware
+    - name: traefik-oidc-plugin-middleware
       try:
         - apply:
             resource:
               apiVersion: traefik.io/v1alpha1
               kind: Middleware
               metadata:
-                name: ctrl-e2e-oidc-auth
+                name: ctrl-e2e-oidc-plugin
                 namespace: dev
               spec:
-                forwardAuth:
-                  address: http://oauth2-proxy.dev.svc.cluster.local/oauth2/auth
-                  authRequestHeaders:
-                    - Authorization
-                  authResponseHeaders:
-                    - X-Auth-Request-User
-                  tls: {}
-                  # The OIDC configuration references the keys the controller
-                  # wrote into the transformed secret.
-              # Note: TraefikService/IngressRoute using the middleware would
-              # reference this middleware by name. The ForwardAuth configuration
-              # doesn't embed the secret reference directly in Traefik CRDs
-              # (it uses oauth2-proxy which reads a ConfigMap + Secret); a full
-              # integration demo is in cluster/test/controller/traefik/.
+                plugin:
+                  traefikoidc:
+                    # The issuerUrl, clientID and clientSecret values are
+                    # sourced from the Kubernetes Secret written by the
+                    # connectionsecrettransform controller, using the key
+                    # names it emits: client-id, client-secret, issuerUrl.
+                    issuerURL:
+                      valueFrom:
+                        secretKeyRef:
+                          name: ctrl-e2e-envoy-oidc
+                          key: issuerUrl
+                    clientID:
+                      valueFrom:
+                        secretKeyRef:
+                          name: ctrl-e2e-envoy-oidc
+                          key: client-id
+                    clientSecret:
+                      valueFrom:
+                        secretKeyRef:
+                          name: ctrl-e2e-envoy-oidc
+                          key: client-secret
+                    scopes:
+                      - openid
+                      - profile
+                      - email
 
     # -----------------------------------------------------------------------
     # Step 5: ConnectionSecretTransform CRD (highest precedence)
