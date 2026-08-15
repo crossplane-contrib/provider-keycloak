@@ -59,7 +59,7 @@ scripts/            Utility scripts
 | Add/update an example manifest | `examples/<group>/<resource>.yaml` |
 | Modify CRD generation | `generate/*.go`, run `make generate` |
 | Run e2e tests | `make e2e`, see `cluster/test/cases.txt` for covered resources |
-| Regenerate llms.txt/llms-full.txt | `make docs-gen` |
+| Regenerate llms.txt/llms-full.txt | `make generate` (or `make docs-gen`) |
 
 ## Code Generation
 
@@ -67,10 +67,16 @@ Always run `make generate` after changing `config/` to regenerate CRDs and
 Go types. **Never** edit files in `apis/` or `package/crds/` by hand — they
 are generated outputs.
 
+`make generate` is the single entry point for **all** generation — code, DAG
+and docs. There is no need to run the individual targets by hand.
+
 The generation pipeline:
 1. `generate/main.go` calls Upjet with the Terraform provider schema.
 2. Upjet writes Go types into `apis/<group>/<version>/`.
 3. `make generate` runs `go generate ./...` which invokes controller-gen to write CRDs into `package/crds/`.
+4. `make generate` then runs `e2e-index` (DAG: `cluster/test/e2e-index.json`),
+   `generated-lst` (`config/generated.lst`) and `docs-gen`
+   (`docs/static/llms.txt`, `docs/static/llms-full.txt`).
 
 ## Adding a New Resource
 
@@ -126,8 +132,8 @@ issue per missing resource (see "Automated Schema Diff Issues" below).
    `examples/<group>/<resource>.yaml` with realistic field values (do not
    edit `examples-generated/` by hand).
 6. **Docs.** Optionally add/update
-   `docs/content/docs/using/resources/<resource>.md` and run `make docs-gen`
-   to refresh `llms.txt`/`llms-full.txt`.
+   `docs/content/docs/using/resources/<resource>.md`; `make generate`
+   refreshes `llms.txt`/`llms-full.txt`.
 7. **Tests.** If the resource is meant to be covered by end-to-end tests,
    add it to `cluster/test/cases.txt` and provide (or extend) a
    chainsaw/uptest manifest under `cluster/test/` or `dev/demos/`. Run
@@ -296,7 +302,8 @@ Docs use [Hugo](https://gohugo.io/) with the
 
 ```bash
 cd docs && hugo server --buildDrafts   # local preview
-make docs-gen                          # regenerate llms.txt
+make generate                          # regenerates code, DAG and llms.txt
+make docs-gen                          # regenerate llms.txt only
 make docs-freshness-check             # CI: verify llms.txt is current
 ```
 
@@ -330,7 +337,7 @@ make docs-freshness-check             # CI: verify llms.txt is current
 |---------|-------------|-----|
 | CRD fields not updating | `make generate` not run | Run `make generate` |
 | `409 Conflict` on create | Resource already exists in Keycloak | Use `lookup.BuildIdentifyingPropertiesLookup` |
-| `llms-full.txt is stale` in CI | Docs changed, `make docs-gen` not run | Run `make docs-gen` and commit |
+| `llms-full.txt is stale` in CI | Docs changed, `make generate` not run | Run `make generate` and commit |
 | `no matches for kind` in e2e | CRD not established in time | See `cluster/test/setup.sh` MRD wait logic |
 | `make generate` produces unexpectedly large/stale diffs | Stale local generator cache/artifacts | Remove `.work/` and `config/schema.json`, then re-run `make generate` |
 | E2E provider version mismatch | Git tags not fetched before build | Add `git fetch --tags` before `make build` |

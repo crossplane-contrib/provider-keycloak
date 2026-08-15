@@ -13,7 +13,7 @@ It reconciles Kubernetes CRDs against a live Keycloak instance.
 ## Quick Reference
 
 ```
-# Regenerate CRDs + Go types after changing config/
+# Regenerate everything (code, DAG, docs) after changing config/ or docs/
 make generate
 
 # Run unit tests
@@ -22,7 +22,7 @@ make test
 # Preview docs locally
 cd docs && hugo server --buildDrafts
 
-# Regenerate llms.txt / llms-full.txt
+# Regenerate llms.txt / llms-full.txt only (also part of `make generate`)
 make docs-gen
 
 # Verify docs freshness (CI gate)
@@ -32,7 +32,7 @@ make docs-freshness-check
 ## Build and Test
 
 ```bash
-make generate   # regenerate after config/ changes
+make generate   # regenerate code, DAG and docs after config/ or docs/ changes
 make test       # unit tests
 make e2e        # end-to-end tests (requires live cluster + Keycloak)
 ```
