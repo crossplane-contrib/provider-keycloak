@@ -20,6 +20,7 @@ keycloak_generic_client_role_mapper
 keycloak_generic_protocol_mapper
 keycloak_generic_role_mapper
 keycloak_group
+keycloak_group_admin_permissions
 keycloak_group_memberships
 keycloak_group_permissions
 keycloak_group_roles
