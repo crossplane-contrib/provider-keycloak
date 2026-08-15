@@ -32,15 +32,17 @@ resources, all 109 exposed):
 - Most of the 31 are *correctly* unwired: `provider_id`, `tenant_id`,
   `entity_id`, `key_alias`, and the OIDC/SAML `client_id` of a client are plain
   values, not references to another managed resource.
-- But `post_broker_login_flow_alias` is wired on
-  `keycloak_spiffe_identity_provider` and
-  `keycloak_oidc_openshift_v4_identity_provider` and silently missing on
-  `keycloak_oidc_identity_provider`, the four social IdPs,
-  `keycloak_saml_identity_provider` and `keycloak_kubernetes_identity_provider`
-  — even though `first_broker_login_flow_alias` is wired on all of them.
+- But the same attribute is configured differently on resources whose schema is
+  identical. `post_broker_login_flow_alias` is declared as an optional string on
+  exactly the same nine identity-provider resources as
+  `first_broker_login_flow_alias`, yet it is wired on two of them
+  (`keycloak_spiffe_identity_provider`,
+  `keycloak_oidc_openshift_v4_identity_provider`) and unwired on the other
+  seven. `first_broker_login_flow_alias` is wired on eight of the nine and
+  unwired on `keycloak_saml_identity_provider`.
 
 So the real problem is not "too much typing". It is that **the configuration has
-no completeness gate**, which makes drift invisible and makes onboarding a
+no consistency gate**, which makes drift invisible and makes onboarding a
 resource an exercise in imitation.
 
 ## Goals
@@ -65,6 +67,89 @@ resource an exercise in imitation.
 - Auto-generating e2e demos with realistic values. Scaffolding a skeleton is in
   scope; inventing semantics is not.
 
+## What the Schema Can and Cannot Tell Us
+
+This was the first question raised in review, and it is worth answering
+precisely, because the answer decides the whole design.
+
+### It *can* find the drift — via a schema × config cross-check
+
+The schema alone cannot tell us whether an attribute is a reference. But the
+schema plus the current configuration can mechanically tell us that an attribute
+is configured **inconsistently**: same attribute name, same type, same
+optionality, different treatment. Run over the whole tree, that check produces
+exactly five attributes:
+
+| Attribute | Wired to | Unwired |
+|-----------|----------|---------|
+| `post_broker_login_flow_alias` | `keycloak_authentication_flow` (2) | 7 |
+| `first_broker_login_flow_alias` | `keycloak_authentication_flow` (8) | 1 (`keycloak_saml_identity_provider`) |
+| `parent_id` | `keycloak_group` (1) | 1 (`keycloak_custom_user_federation`) |
+| `client_id` | `keycloak_openid_client` (22), `keycloak_saml_client` (3) | 3 |
+| `client_scope_id` | `keycloak_openid_client_scope` (16), `keycloak_saml_client_scope` (2) | 0 |
+
+Five findings for a reviewer to classify once, with **no false positives on the
+question asked** — the check does not claim these are bugs, only that the same
+attribute is treated in more than one way and that the reason should be
+recorded. That is a far sharper signal than the name heuristic in the previous
+section, which needs a human to dismiss roughly a third of its hits. It is also
+strictly cheaper to run: no new metadata, just the provider config the generator
+already builds.
+
+The last two rows are the interesting ones, and they lead straight to the second
+point.
+
+### It *suggests* where multitypes belong — from the shape of the disagreement
+
+`client_id` and `client_scope_id` are not gaps at all: they are wired to an
+OpenID target on some resources and a SAML target on others, which is exactly
+the situation `config/multitypes` exists for, and exactly how the repo already
+handles them (`config/mapper/config.go` applies
+`multitypes.ApplyToWithOptions` to `client_scope_id` on the four SAML-capable
+mappers; `config/role/config.go` does the same for `client_id`).
+
+So **"one attribute name resolving to more than one target type" is a mechanical
+multitype signal**, and the review comment is right that the flow aliases smell
+the same way: `keycloak_authentication_flow` and `keycloak_authentication_subflow`
+both expose a required `alias`, so a `*_flow_alias` has two plausible targets,
+and `parent_flow_alias` in `config/authentication/config.go` is already modelled
+as a multitype over exactly that pair.
+
+Whether the broker-login aliases should follow is a genuine question rather than
+a foregone conclusion, and it is worth stating what was actually verified
+upstream:
+
+- Keycloak resolves both fields with `realm.getFlowByAlias()`
+  (`RepresentationToModel`), which has **no `topLevel` filter** — the server
+  accepts a subflow alias.
+- The admin console only ever offers top-level flows: `GET /authentication/flows`
+  filters on `flow.isTopLevel()`, so a subflow can never be selected in the UI.
+- The Terraform provider validates nothing; the string is passed through.
+- Whether Keycloak *executes* a subflow correctly in the broker-login context
+  was not verified.
+
+That is precisely a decision that must be recorded rather than guessed: wiring
+`post_broker_login_flow_alias` to `keycloak_authentication_flow` on all nine
+resources fixes the inconsistency and matches the admin console, while extending
+it to a flow/subflow multitype matches `parent_flow_alias` and the server's
+actual behaviour. The proposal below is the mechanism that forces the choice to
+be made and written down; it deliberately does not make the choice.
+
+### It *cannot* derive the target set
+
+Deriving "which resource does this attribute point at?" from names does not
+survive contact with the data. Matching an attribute's tokens against resources
+that expose the corresponding bare identifier (`alias` for `*_alias`, `id` for
+`*_id`) yields 17 candidates for `realm_id` (including `keycloak_realm_events`
+and every `keycloak_realm_keystore_*`) and 14 for `role_id`. Worse, for
+`*_flow_alias` it returns **only** `keycloak_authentication_flow` — it misses
+`keycloak_authentication_subflow`, because "subflow" is not the token "flow".
+The one case where a derived target set would have been most useful is the case
+it gets wrong.
+
+Conclusion: the schema is a good **detector** and a poor **decider**. The design
+below leans on it for detection and keeps every decision explicit in Go.
+
 ## Proposed Design
 
 Three independent pieces. Each is useful alone, and each can be adopted without
@@ -80,15 +165,21 @@ The proposal is to turn that switch into data and to make it exhaustive:
 ```go
 // config/references/registry.go
 var Registry = map[string]Rule{
-    "realm_id":                      {Reference: ref("keycloak_realm")},
-    "organization_id":               {Reference: ref("keycloak_organization")},
-    "first_broker_login_flow_alias": {Reference: ref("keycloak_authentication_flow", common.PathAuthenticationFlowAliasExtractor)},
-    "post_broker_login_flow_alias":  {Reference: ref("keycloak_authentication_flow", common.PathAuthenticationFlowAliasExtractor)},
+    "realm_id":        {Reference: ref("keycloak_realm")},
+    "organization_id": {Reference: ref("keycloak_organization")},
+
+    // Multi-typed: declared once here instead of repeated per resource.
+    "client_scope_id": {MultiType: []multitypes.Instance{ /* openid + saml client scope */ }},
 
     // Deliberately not a reference — documented, not just absent.
     "provider_id": {NotAReference: "Keycloak provider implementation id (e.g. `oidc`), not an object id"},
     "tenant_id":   {NotAReference: "Microsoft tenant, external to Keycloak"},
     "entity_id":   {NotAReference: "SAML entity id, a URL chosen by the user"},
+
+    // TODO(#712): single-type today; revisit as a flow/subflow multitype like
+    // parent_flow_alias once subflow execution in the broker-login context is
+    // confirmed upstream.
+    "post_broker_login_flow_alias": {Reference: ref("keycloak_authentication_flow", common.PathAuthenticationFlowAliasExtractor)},
 }
 ```
 
@@ -97,23 +188,35 @@ Rules:
 - A rule may be scoped: `Only: []string{"keycloak_role"}` /
   `Except: []string{"keycloak_openid_client"}`, for attributes such as
   `client_id` whose meaning differs per resource.
-- A rule may point at `multitypes` instead of a single reference, so that
-  multi-type attributes are declared in the same place as single-type ones.
+- A rule carries either a single `Reference`, a `MultiType` instance list, or a
+  `NotAReference` reason — so multi-type attributes are declared in the same
+  place, and in the same vocabulary, as single-type ones. Nothing about
+  `config/multitypes` changes; the registry only moves the *declaration* next to
+  its siblings so that divergence between them is visible.
 - Per-resource configuration in `config/<group>/config.go` keeps working and
   keeps winning: the registry is only a default, applied through the existing
   `WithDefaultResourceOptions` hook.
 
-The important half is the **completeness gate**: a unit test walks the
-generated provider and fails when a non-computed, non-sensitive attribute
-matching `*_id`, `*_ids` or `*_alias` is neither wired as a reference, nor
-covered by a `NotAReference` rule, nor listed with a reason in an explicit
-exception file. That is the same shape as the gates the repo already trusts
-(`generated-lst-check`, `e2e-cases-check`, `docs-freshness-check`), so it costs
-nothing new conceptually. Adding a Terraform resource that introduces an unknown
-`*_id` then *forces* a decision, and that decision is visible in the diff.
+Two gates, in increasing order of strictness:
 
-Expected effect on the current tree: the `post_broker_login_flow_alias` gap
-above is closed as a side effect, and the remaining `provider_id`/`tenant_id`
+1. **Consistency gate** (the cross-check above): fail when one attribute name is
+   treated in more than one way without a registry rule saying so. Five findings
+   today, all of them meaningful.
+2. **Completeness gate**: fail when a non-computed, non-sensitive attribute
+   matching `*_id`, `*_ids` or `*_alias` is neither wired, nor covered by a
+   `NotAReference` rule, nor listed with a reason in an explicit exception file.
+   Broader, noisier, and worth adopting only after the ~31 currently unwired
+   attributes have been triaged once.
+
+Both are the same shape as the gates the repo already trusts
+(`generated-lst-check`, `e2e-cases-check`, `docs-freshness-check`), so they cost
+nothing new conceptually. Adding a Terraform resource that introduces an unknown
+`*_id`, or that diverges from its siblings, then *forces* a decision, and that
+decision is visible in the diff.
+
+Expected effect on the current tree: the two flow-alias gaps and `parent_id` are
+closed or documented, `client_id`/`client_scope_id` are recorded as multitypes
+rather than looking like drift, and the remaining `provider_id`/`tenant_id`
 attributes become documented non-references instead of silent omissions.
 
 ### B. `make new-resource` — scaffolding, not magic
@@ -145,10 +248,11 @@ models do well.
 ### C. Extend the existing schema-diff automation to report *quality*, not just presence
 
 `scripts/schema_diff_issues.py` already files an issue per Terraform resource
-that is not exposed yet. The same script can, in a second pass, report
-configured resources whose configuration is incomplete according to (A) — e.g.
-"`keycloak_saml_identity_provider` has `post_broker_login_flow_alias` unwired
-while its siblings wire it". This reuses machinery the repo already runs weekly,
+that is not exposed yet. The same script can, in a second pass, run the
+consistency check from (A) and report configured resources whose configuration
+diverges from their siblings — e.g. "`keycloak_saml_identity_provider` has
+`post_broker_login_flow_alias` unwired while eight sibling resources with an
+identical schema wire it". This reuses machinery the repo already runs weekly,
 and costs one function.
 
 ## Rejected Alternatives
@@ -157,33 +261,56 @@ and costs one function.
   measurement above shows a false-positive rate of roughly a third
   (`provider_id`, `tenant_id`, `entity_id`, `key_alias`, client `client_id`).
   Silently wiring those would produce wrong CRDs and break users.
+- **Derive the reference *target* from the schema.** Token-matching an attribute
+  against resources exposing the matching bare identifier gives 17 candidates
+  for `realm_id`, 14 for `role_id`, and — decisively — misses
+  `keycloak_authentication_subflow` for `*_flow_alias`, which is the one case
+  where the answer would have mattered most.
 - **A YAML/HCL configuration DSL for resource config.** It would duplicate what
   Go already expresses type-safely, add a parser to maintain, and lose
   compile-time checking of extractors and reference targets.
 - **Round-trippable generated blocks inside `config/<group>/config.go`.** Marker
   comments that a generator rewrites in place are a classic source of merge
-  conflicts and accidental deletions. Scaffold-once plus a completeness gate
-  gives the same guarantee without owning other people's files.
+  conflicts and accidental deletions. Scaffold-once plus the gates above gives
+  the same guarantee without owning other people's files.
 - **Deriving external names from the schema.** The Terraform schema does not
   describe Keycloak's ID semantics. Guessing here produces resources that import
   incorrectly; this must stay explicit until an OpenAPI spec exists.
 
 ## Rollout
 
-1. Introduce `config/references` with today's `KnownReferencers()` content moved
-   into it, plus the completeness gate as a **reporting-only** test.
-2. Triage the ~31 currently unwired attributes: wire the genuine gaps, declare
-   the rest as `NotAReference` with a reason. Flip the gate to failing.
-3. Add `make new-resource`, and use it for the next resource added; refine the
+1. Add the **consistency check** as a standalone reporting-only test. It needs
+   no registry and no refactor: it walks the already-built provider config and
+   prints the five findings above. Cheapest possible first step, and it makes
+   the problem visible before anything is restructured.
+2. Classify those five: wire the two flow-alias gaps and `parent_id` (or record
+   why not), and record `client_id`/`client_scope_id` as intentional
+   multitypes. Flip the check to failing.
+3. Introduce `config/references` with today's `KnownReferencers()` content moved
+   into it, plus the classifications from step 2.
+4. Triage the ~31 currently unwired attributes and enable the broader
+   completeness gate.
+5. Add `make new-resource`, and use it for the next resource added; refine the
    templates against that experience before advertising it.
-4. Extend `scripts/schema_diff_issues.py` with the quality pass.
+6. Extend `scripts/schema_diff_issues.py` with the consistency pass.
 
-Each step is independently revertible and none of them changes generated CRDs
-except step 2, which fixes real gaps (and therefore needs the usual review of
-the `package/crds/` diff).
+Each step is independently revertible. Only step 2 changes generated CRDs, and
+it needs the usual review of the `package/crds/` diff.
 
 ## Open Questions
 
+- **Should the broker-login flow aliases become a flow/subflow multitype?**
+  Raised in review on this proposal. The server accepts a subflow alias and
+  `parent_flow_alias` already models exactly that pair, but the admin console
+  only ever offers top-level flows and subflow execution in the broker-login
+  context is unverified. Worth an upstream question before changing the API
+  shape; the plain single-type wiring fixes the inconsistency in the meantime
+  and is forward-compatible (a later multitype can keep the original field via
+  `Options.KeepOriginalField`).
+- Should the consistency check treat "wired on N resources, unwired on 1" and
+  "wired to two different targets" as the same finding, or as two separate
+  classes? They need different fixes (gap vs multitype), so separate reporting
+  may make triage faster.
 - Should the completeness gate also cover *required* attributes that reference
   nothing (e.g. free-form `parent_id` on custom user federation), or only the
   name-shaped heuristic?

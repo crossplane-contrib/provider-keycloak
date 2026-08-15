@@ -23,5 +23,5 @@ a second place that has to be kept in sync with the shipped behaviour.
 
 | Proposal | Status | Summary |
 |----------|--------|---------|
-| [0001 – Schema-driven resource onboarding](0001-schema-driven-resource-onboarding.md) | Draft | Derive as much resource configuration as possible from `config/schema.json`; scaffold the rest with one `make` command. |
+| [0001 – Schema-driven resource onboarding](0001-schema-driven-resource-onboarding.md) | Draft | Use `config/schema.json` to *detect* configuration drift and multitype candidates; scaffold the rest with one `make` command, keeping every decision explicit in Go. |
 | [0002 – AI skills with a single source of truth](0002-ai-skills-single-source-of-truth.md) | Draft | Author agent guidance once under `ai/skills/`, generate `AGENTS.md`, `CLAUDE.md`, `SKILL.md` and the docs page from it. |

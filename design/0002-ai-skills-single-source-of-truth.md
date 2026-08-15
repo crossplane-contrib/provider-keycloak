@@ -95,6 +95,15 @@ run the verification commands. That combination is what makes the task tractable
 for a cheap model — the scaffolding removes the "where do I put things?" problem
 and the gates remove the "did I get it right?" problem.
 
+The `research-upstream` skill has a concrete worked example available already:
+the question "may an identity provider's `post_broker_login_flow_alias` name a
+subflow?" is answered by reading `RepresentationToModel.getFlowByAlias` (no
+`topLevel` filter), the admin REST endpoint (`flow.isTopLevel()` filter) and the
+Terraform provider schema (no validation) — three sources, one conclusion, and
+one residual unknown to raise upstream rather than guess at. That shape (name
+the files, separate verified from inferred, end with either a decision or an
+upstream question) is what the skill should encode.
+
 ### Generation
 
 ```
