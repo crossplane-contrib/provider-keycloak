@@ -88,6 +88,7 @@ import (
 	usersessionnoteprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/usersessionnoteprotocolmapper"
 	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/organization/organization"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/providerconfig"
+	connectionsecrettransform "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/connectionsecrettransform"
 	clientpolicyprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofile"
 	clientpolicyprofilepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofilepolicy"
 	clientregistrationpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientregistrationpolicy"
@@ -204,6 +205,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		usersessionnoteprotocolmapper.Setup,
 		organization.Setup,
 		providerconfig.Setup,
+		connectionsecrettransform.Setup,
 		clientpolicyprofile.Setup,
 		clientpolicyprofilepolicy.Setup,
 		clientregistrationpolicy.Setup,
@@ -326,6 +328,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		usersessionnoteprotocolmapper.SetupGated,
 		organization.SetupGated,
 		providerconfig.SetupGated,
+		connectionsecrettransform.SetupGated,
 		clientpolicyprofile.SetupGated,
 		clientpolicyprofilepolicy.SetupGated,
 		clientregistrationpolicy.SetupGated,
