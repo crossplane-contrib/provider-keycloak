@@ -84,12 +84,20 @@ type ConnectionSecretKeys struct {
 	// so that it is added to the connection secret alongside the (renamed)
 	// values published by the provider. Each value is a source
 	// expression of the form "status:<dot.path>" (a field under the owning
-	// managed resource's status, e.g. "status:atProvider.clientId") or
+	// managed resource's status, e.g. "status:atProvider.clientId"),
 	// "providerConfig:<dot.path>" (a field of this ProviderConfig, e.g.
-	// "providerConfig:metadata.name"). Only scalar (string, number,
-	// boolean) fields are supported; the source path is never resolved
-	// against the credentials Secret itself, so secret material referenced
-	// only by name/namespace/key cannot leak this way.
+	// "providerConfig:metadata.name") or "keycloak:<field>" (a value
+	// describing the Keycloak deployment the resource lives in, computed
+	// from this ProviderConfig's Keycloak URL and the resource's realm:
+	// "url", "realm", "issuerUrl", "wellKnownUrl", "authorizationUrl",
+	// "tokenUrl", "userinfoUrl", "jwksUrl" or "endSessionUrl" - e.g.
+	// "keycloak:issuerUrl" yields
+	// "https://keycloak.example.com/realms/my-realm"). Only scalar
+	// (string, number, boolean) fields are supported; the source path is
+	// never resolved against the credentials Secret itself, so secret
+	// material referenced only by name/namespace/key cannot leak this way
+	// - "keycloak:" values are derived exclusively from the credentials'
+	// non-secret "url" and "base_path" entries.
 	// +optional
 	Add map[string]string `json:"add,omitempty"`
 }
@@ -199,10 +207,14 @@ type ConnectionSecretTransformSpec struct {
 	// (renamed) values published by the provider. Each value is a source
 	// expression of the form "status:<dot.path>" (a field under the
 	// managed resource owning the source secret, e.g.
-	// "status:atProvider.clientId") or "providerConfig:<dot.path>" (a
+	// "status:atProvider.clientId"), "providerConfig:<dot.path>" (a
 	// field of the ProviderConfig that resource references, e.g.
 	// "providerConfig:metadata.name"; only available when that resource is
-	// cluster-scoped). Only scalar (string, number, boolean) fields are
+	// cluster-scoped) or "keycloak:<field>" (a value describing the
+	// Keycloak deployment the resource lives in, e.g.
+	// "keycloak:issuerUrl"; see the ProviderConfig's
+	// spec.connectionSecretKeys.add for the full list, same cluster-scoped
+	// restriction). Only scalar (string, number, boolean) fields are
 	// supported; the source path is never resolved against the
 	// credentials Secret itself, so secret material referenced only by
 	// name/namespace/key cannot leak this way. Merged on top of (and

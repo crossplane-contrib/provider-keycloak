@@ -89,6 +89,23 @@ assert_managed_keys() {
   done
 }
 
+# assert_added_value <secret> <key> <expected value>
+assert_added_value() {
+  local secret="$1" key="$2" want="$3" got
+  got="$(secret_value "${secret}" "${key}" | base64 -d)"
+  [ "${got}" = "${want}" ] || fail "secret ${NAMESPACE}/${secret} key ${key} is '${got}', want '${want}'"
+}
+
+# assert_added_suffix <secret> <key> <expected suffix>
+assert_added_suffix() {
+  local secret="$1" key="$2" want="$3" got
+  got="$(secret_value "${secret}" "${key}" | base64 -d)"
+  case "${got}" in
+    *"${want}") ;;
+    *) fail "secret ${NAMESPACE}/${secret} key ${key} is '${got}', want a value ending in '${want}'" ;;
+  esac
+}
+
 # assert_owned_by <transformed secret> <source secret>
 assert_owned_by() {
   local dst="$1" src="$2" owner matched
@@ -118,7 +135,14 @@ until [ -n "$(secret_value "conn-secret-transform-pc" "client-secret")" ]; do
 done
 assert_key_aliased "conn-secret-transform-pc" "clientID" "client-id"
 assert_key_aliased "conn-secret-transform-pc" "clientSecret" "client-secret"
-assert_managed_keys "conn-secret-transform-pc" "client-id" "client-secret"
+assert_managed_keys "conn-secret-transform-pc" "client-id" "client-secret" "issuerUrl" "discoveryUrl" "realmName"
+
+# Keycloak-derived fields ("keycloak:" sources): the realm's OIDC issuer is
+# built from the ProviderConfig's Keycloak URL and the client's realm, so it
+# exists on neither object on its own.
+assert_added_value "conn-secret-transform-pc" "realmName" "dev"
+assert_added_suffix "conn-secret-transform-pc" "issuerUrl" "/realms/dev"
+assert_added_suffix "conn-secret-transform-pc" "discoveryUrl" "/realms/dev/.well-known/openid-configuration"
 
 # InPlace is the default, so no second secret may be created for it.
 if "${KUBECTL}" get secret "conn-secret-transform-pc-transformed" --namespace "${NAMESPACE}" >/dev/null 2>&1; then

@@ -138,13 +138,13 @@ const (
 	// (see its doc comment for both forms), e.g.
 	//
 	//	keycloak.crossplane.io/connection-secret-add-fields: |
-	//	  issuerUrl: providerConfig:metadata.name
+	//	  issuerUrl: keycloak:issuerUrl
 	//	  internalClientId: status:atProvider.id
 	//
 	// or, using the "key=value" fallback syntax:
 	//
 	//	keycloak.crossplane.io/connection-secret-add-fields: |
-	//	  issuerUrl=providerConfig:metadata.name
+	//	  issuerUrl=keycloak:issuerUrl
 	//	  internalClientId=status:atProvider.id
 	//
 	// where <source> is one of:
@@ -154,6 +154,14 @@ const (
 	//     resource references (e.g. "providerConfig:metadata.name"). Only
 	//     available for cluster-scoped resources, same restriction as
 	//     ProviderConfig-wide renaming.
+	//   - "keycloak:<field>": a value describing the Keycloak deployment the
+	//     resource lives in, computed from the ProviderConfig's Keycloak URL
+	//     and the resource's realm rather than read from a single object
+	//     field - most notably "keycloak:issuerUrl", the realm's OIDC issuer
+	//     (e.g. "https://keycloak.example.com/realms/my-realm"), which an
+	//     OIDC consumer needs next to the client ID and secret. See
+	//     keycloaksource.go for the full list. Only available for
+	//     cluster-scoped resources, same restriction as "providerConfig:".
 	//
 	// Only scalar (string, number, boolean) fields are supported. Entries
 	// here are merged on top of the ProviderConfig-wide
@@ -237,6 +245,13 @@ const (
 	// entries. See AnnotationKeyAddFields for the full syntax.
 	addSourceStatus         = "status:"
 	addSourceProviderConfig = "providerConfig:"
+
+	// addSourceKeycloak sources a value from the Keycloak deployment the
+	// resource lives in rather than from a field of an existing object: the
+	// realm's OIDC issuer URL and its endpoints, which combine the
+	// ProviderConfig's Keycloak URL with the resource's realm. See
+	// keycloaksource.go for the supported fields.
+	addSourceKeycloak = "keycloak:"
 )
 
 // Event reasons reported on the source connection secret.
@@ -914,6 +929,10 @@ func (r *Reconciler) addFieldMap(ctx context.Context, mr *unstructured.Unstructu
 	}
 	sort.Strings(keys)
 
+	// Resolved lazily, so that the ProviderConfig's credentials Secret is
+	// only read when a "keycloak:" source actually needs it.
+	kc := newKeycloakSource(ctx, r, pc, mr.Object)
+
 	out := make(map[string][]byte, len(add))
 	var invalid []string
 	for _, k := range keys {
@@ -922,7 +941,7 @@ func (r *Reconciler) addFieldMap(ctx context.Context, mr *unstructured.Unstructu
 			invalid = append(invalid, fmt.Sprintf("%q: not a valid secret key", k))
 			continue
 		}
-		val, err := resolveAddSource(expr, mr.Object, pcObj)
+		val, err := resolveAddSource(expr, mr.Object, pcObj, kc)
 		if err != nil {
 			invalid = append(invalid, fmt.Sprintf("%s=%s: %s", k, expr, err))
 			continue
@@ -934,15 +953,23 @@ func (r *Reconciler) addFieldMap(ctx context.Context, mr *unstructured.Unstructu
 }
 
 // resolveAddSource resolves a single AnnotationKeyAddFields source
-// expression ("status:<dot.path>" or "providerConfig:<dot.path>") against
-// the managed resource's own object or the (possibly nil) ProviderConfig's,
-// converted to unstructured content. Only scalar values are supported: a
-// map or a list would silently coerce to an unhelpful string via fmt.Sprint,
-// which is worse than refusing it outright.
-func resolveAddSource(expr string, mrObj, pcObj map[string]interface{}) (string, error) {
+// expression ("status:<dot.path>", "providerConfig:<dot.path>" or
+// "keycloak:<field>") against the managed resource's own object, the
+// (possibly nil) ProviderConfig's, converted to unstructured content, or the
+// (possibly nil) Keycloak deployment source. Only scalar values are
+// supported: a map or a list would silently coerce to an unhelpful string
+// via fmt.Sprint, which is worse than refusing it outright.
+func resolveAddSource(expr string, mrObj, pcObj map[string]interface{}, kc *keycloakSource) (string, error) {
 	var root map[string]interface{}
 	var path string
 	switch {
+	case strings.HasPrefix(expr, addSourceKeycloak):
+		// Not an object field but a value computed from the Keycloak
+		// deployment the resource lives in, see keycloakSource.
+		if kc == nil {
+			return "", errors.New("no Keycloak connection information available for this resource")
+		}
+		return kc.value(strings.TrimPrefix(expr, addSourceKeycloak))
 	case strings.HasPrefix(expr, addSourceStatus):
 		status, _, err := unstructured.NestedMap(mrObj, "status")
 		if err != nil {
@@ -957,7 +984,7 @@ func resolveAddSource(expr string, mrObj, pcObj map[string]interface{}) (string,
 		root = pcObj
 		path = strings.TrimPrefix(expr, addSourceProviderConfig)
 	default:
-		return "", errors.Errorf("unsupported source (expected a %q or %q prefix)", addSourceStatus, addSourceProviderConfig)
+		return "", errors.Errorf("unsupported source (expected a %q, %q or %q prefix)", addSourceStatus, addSourceProviderConfig, addSourceKeycloak)
 	}
 	if path == "" {
 		return "", errors.New("empty field path")

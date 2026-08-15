@@ -879,10 +879,18 @@ func TestResolveAddSource(t *testing.T) {
 		"metadata": map[string]interface{}{"name": pcName},
 	}
 
+	// A keycloakSource with its (otherwise credentials-Secret-backed)
+	// resolution stubbed out, so that the pure expression handling can be
+	// tested without an API server.
+	kc := &keycloakSource{resolve: func() (string, string, error) {
+		return "https://keycloak.example.com", "my-realm", nil
+	}}
+
 	cases := map[string]struct {
 		expr    string
 		mrObj   map[string]interface{}
 		pcObj   map[string]interface{}
+		kc      *keycloakSource
 		want    string
 		wantErr bool
 	}{
@@ -895,11 +903,18 @@ func TestResolveAddSource(t *testing.T) {
 		"ProviderConfigNil": {expr: "providerConfig:metadata.name", pcObj: nil, wantErr: true},
 		"UnsupportedPrefix": {expr: "spec:forProvider.clientId", mrObj: mrObj, wantErr: true},
 		"EmptyPath":         {expr: "status:", mrObj: mrObj, wantErr: true},
+
+		"KeycloakURL":     {expr: "keycloak:url", kc: kc, want: "https://keycloak.example.com"},
+		"KeycloakRealm":   {expr: "keycloak:realm", kc: kc, want: "my-realm"},
+		"KeycloakIssuer":  {expr: "keycloak:issuerUrl", kc: kc, want: "https://keycloak.example.com/realms/my-realm"},
+		"KeycloakToken":   {expr: "keycloak:tokenUrl", kc: kc, want: "https://keycloak.example.com/realms/my-realm/protocol/openid-connect/token"},
+		"KeycloakUnknown": {expr: "keycloak:nope", kc: kc, wantErr: true},
+		"KeycloakNil":     {expr: "keycloak:issuerUrl", kc: nil, wantErr: true},
 	}
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			got, err := resolveAddSource(tc.expr, tc.mrObj, tc.pcObj)
+			got, err := resolveAddSource(tc.expr, tc.mrObj, tc.pcObj, tc.kc)
 			if tc.wantErr {
 				if err == nil {
 					t.Fatalf("resolveAddSource(%q) = %q, want error", tc.expr, got)
