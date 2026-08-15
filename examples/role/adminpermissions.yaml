@@ -1,0 +1,82 @@
+---
+# Fine-grained admin permissions (FGAPv2) for roles.
+#
+# Requires Keycloak 26.2+ started with the `admin-fine-grained-authz:v2`
+# feature and a realm with `adminPermissionsEnabled: true`. Keycloak then
+# creates an `admin-permissions` client that acts as the resource server for
+# all admin permissions of that realm.
+#
+# Each AdminPermissions resource is exactly one permission. It either applies
+# to all roles of the realm, or only to the roles listed in `roleIdsRefs`.
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: example-roleadminpermissions-realm
+spec:
+  forProvider:
+    realm: example-roleadminpermissions
+    enabled: true
+    adminPermissionsEnabled: true
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: example-roleadminpermissions-role
+spec:
+  forProvider:
+    name: example-managed-role
+    realmIdRef:
+      name: example-roleadminpermissions-realm
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+# Example 1: A permission covering every role of the realm.
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: example-admins-map-roles
+spec:
+  forProvider:
+    name: admins-can-map-roles
+    description: Admins can assign any role of the realm
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: example-roleadminpermissions-realm
+    scopes:
+      - map-role
+      - map-role-client-scope
+      - map-role-composite
+  providerConfigRef:
+    name: keycloak-provider-config
+
+---
+# Example 2: A permission restricted to a single role and evaluated against
+# the policies attached to it.
+#
+# Policies have to live on the realm's `admin-permissions` client. Their IDs
+# can either be set directly via `policies`, or resolved from managed policy
+# resources via the typed reference fields (`groupPolicies`, `rolePolicies`,
+# `userPolicies`, ...).
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: example-support-map-managed-role
+spec:
+  forProvider:
+    name: support-can-map-managed-role
+    description: Support can assign the managed role
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: example-roleadminpermissions-realm
+    roleIdsRefs:
+      - name: example-roleadminpermissions-role
+    scopes:
+      - map-role
+    policies:
+      - 4b0b7b4c-4a3f-4d2e-9f24-8b7b1a5d2c11
+  providerConfigRef:
+    name: keycloak-provider-config

@@ -16,6 +16,9 @@ func (tr *ClientAuthorizationClientScopePolicy) Hub() {}
 func (tr *ClientAuthorizationPermission) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *ClientAuthorizationPolicy) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *ClientAuthorizationResource) Hub() {}
 
 // Hub marks this type as a conversion hub.

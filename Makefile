@@ -272,6 +272,15 @@ UPTEST_EXAMPLE_LIST := $(UPTEST_EXAMPLE_LIST),$(shell grep -v '^\#' cluster/test
 endif
 endif
 
+# Fine-grained admin permissions (FGAPv2) test cases run against a Keycloak
+# started with the admin-fine-grained-authz:v2 feature. That feature replaces
+# the v1 feature all other test cases rely on, so the FGAPv2 cases are the only
+# ones executed in such a cluster.
+FGAP_VERSION ?= v1
+ifeq ($(FGAP_VERSION),v2)
+UPTEST_EXAMPLE_LIST := $(shell grep -v '^\#' cluster/test/cases-fgapv2.txt | paste -sd ',' -)
+endif
+
 # This target requires the following environment variables to be set:
 # - UPTEST_EXAMPLE_LIST, a comma-separated list of examples to test
 #   To ensure the proper functioning of the end-to-end test resource pre-deletion hook, it is crucial to arrange your resources appropriately.
@@ -292,17 +301,32 @@ uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW) $(CROSSPLANE_CLI)
 	@KUBECTL=$(KUBECTL) CHAINSAW=$(CHAINSAW) CROSSPLANE_CLI=$(CROSSPLANE_CLI) CROSSPLANE_NAMESPACE=$(CROSSPLANE_NAMESPACE) $(UPTEST) e2e "$(UPTEST_EXAMPLE_LIST)" $(RENDER_ONLY_FLAG) --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=cluster/test/setup.sh --default-conditions="Test" --default-timeout=2400s || $(FAIL)
 	@$(OK) running automated tests
 
+# Two gates: every demo file is listed in a case file, and every managed
+# resource has an e2e demo (or a documented exception in
+# cluster/test/uncovered-resources.txt).
 e2e-cases-check:
 	@./cluster/test/check_cases_coverage.sh
+	@python3 scripts/e2e_dag.py coverage
 
 # Regenerate the e2e resource index + demo DAG (cluster/test/e2e-index.json).
 # Answers "which e2e test uses resource X?" — run as part of `make generate`.
 e2e-index:
 	@python3 scripts/e2e_dag.py index
 
-generate.done: e2e-index
+# Regenerate config/generated.lst, the list of Terraform resources exposed as
+# managed resources. Derived from config.ExternalNameConfigs so it can never
+# drift from the actual configuration — run as part of `make generate`.
+generated-lst:
+	@go run ./cmd/generatedlist config/generated.lst
 
-.PHONY: e2e-index
+# Verify that config/generated.lst matches config.ExternalNameConfigs. Exits
+# non-zero when the file is stale. Run generated-lst to fix.
+generated-lst-check:
+	@go run ./cmd/generatedlist --check config/generated.lst
+
+generate.done: e2e-index generated-lst
+
+.PHONY: e2e-index generated-lst generated-lst-check
 
 local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(INFO) running locally built provider

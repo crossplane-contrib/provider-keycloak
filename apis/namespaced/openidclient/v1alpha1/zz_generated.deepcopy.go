@@ -369,6 +369,29 @@ func (in *ClientAggregatePolicyInitParameters) DeepCopyInto(out *ClientAggregate
 		*out = new(string)
 		**out = **in
 	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.GenericPoliciesRefs != nil {
+		in, out := &in.GenericPoliciesRefs, &out.GenericPoliciesRefs
+		*out = make([]v1.NamespacedReference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.GenericPoliciesSelector != nil {
+		in, out := &in.GenericPoliciesSelector, &out.GenericPoliciesSelector
+		*out = new(v1.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
 		*out = make([]*string, len(*in))
@@ -637,6 +660,17 @@ func (in *ClientAggregatePolicyObservation) DeepCopyInto(out *ClientAggregatePol
 		*out = new(string)
 		**out = **in
 	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
 		*out = make([]*string, len(*in))
@@ -832,6 +866,29 @@ func (in *ClientAggregatePolicyParameters) DeepCopyInto(out *ClientAggregatePoli
 		in, out := &in.Description, &out.Description
 		*out = new(string)
 		**out = **in
+	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.GenericPoliciesRefs != nil {
+		in, out := &in.GenericPoliciesRefs, &out.GenericPoliciesRefs
+		*out = make([]v1.NamespacedReference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.GenericPoliciesSelector != nil {
+		in, out := &in.GenericPoliciesSelector, &out.GenericPoliciesSelector
+		*out = new(v1.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
@@ -1416,6 +1473,29 @@ func (in *ClientAuthorizationPermissionInitParameters) DeepCopyInto(out *ClientA
 		*out = new(string)
 		**out = **in
 	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.GenericPoliciesRefs != nil {
+		in, out := &in.GenericPoliciesRefs, &out.GenericPoliciesRefs
+		*out = make([]v1.NamespacedReference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.GenericPoliciesSelector != nil {
+		in, out := &in.GenericPoliciesSelector, &out.GenericPoliciesSelector
+		*out = new(v1.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
 		*out = make([]*string, len(*in))
@@ -1689,6 +1769,17 @@ func (in *ClientAuthorizationPermissionObservation) DeepCopyInto(out *ClientAuth
 		*out = new(string)
 		**out = **in
 	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
 		*out = make([]*string, len(*in))
@@ -1854,6 +1945,29 @@ func (in *ClientAuthorizationPermissionParameters) DeepCopyInto(out *ClientAutho
 		in, out := &in.Description, &out.Description
 		*out = new(string)
 		**out = **in
+	}
+	if in.GenericPolicies != nil {
+		in, out := &in.GenericPolicies, &out.GenericPolicies
+		*out = make([]*string, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(string)
+				**out = **in
+			}
+		}
+	}
+	if in.GenericPoliciesRefs != nil {
+		in, out := &in.GenericPoliciesRefs, &out.GenericPoliciesRefs
+		*out = make([]v1.NamespacedReference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.GenericPoliciesSelector != nil {
+		in, out := &in.GenericPoliciesSelector, &out.GenericPoliciesSelector
+		*out = new(v1.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.GroupPolicies != nil {
 		in, out := &in.GroupPolicies, &out.GroupPolicies
@@ -2103,6 +2217,295 @@ func (in *ClientAuthorizationPermissionStatus) DeepCopy() *ClientAuthorizationPe
 		return nil
 	}
 	out := new(ClientAuthorizationPermissionStatus)
+	in.DeepCopyInto(out)
+	return out
+}
+
+// DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
+func (in *ClientAuthorizationPolicy) DeepCopyInto(out *ClientAuthorizationPolicy) {
+	*out = *in
+	out.TypeMeta = in.TypeMeta
+	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	in.Spec.DeepCopyInto(&out.Spec)
+	in.Status.DeepCopyInto(&out.Status)
+}
+
+// DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientAuthorizationPolicy.
+func (in *ClientAuthorizationPolicy) DeepCopy() *ClientAuthorizationPolicy {
+	if in == nil {
+		return nil
+	}
+	out := new(ClientAuthorizationPolicy)
+	in.DeepCopyInto(out)
+	return out
+}
+
+// DeepCopyObject is an autogenerated deepcopy function, copying the receiver, creating a new runtime.Object.
+func (in *ClientAuthorizationPolicy) DeepCopyObject() runtime.Object {
+	if c := in.DeepCopy(); c != nil {
+		return c
+	}
+	return nil
+}
+
+// DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
+func (in *ClientAuthorizationPolicyInitParameters) DeepCopyInto(out *ClientAuthorizationPolicyInitParameters) {
+	*out = *in
+	if in.DecisionStrategy != nil {
+		in, out := &in.DecisionStrategy, &out.DecisionStrategy
+		*out = new(string)
+		**out = **in
+	}
+	if in.Description != nil {
+		in, out := &in.Description, &out.Description
+		*out = new(string)
+		**out = **in
+	}
+	if in.Logic != nil {
+		in, out := &in.Logic, &out.Logic
+		*out = new(string)
+		**out = **in
+	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmID != nil {
+		in, out := &in.RealmID, &out.RealmID
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmIDRef != nil {
+		in, out := &in.RealmIDRef, &out.RealmIDRef
+		*out = new(v1.NamespacedReference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmIDSelector != nil {
+		in, out := &in.RealmIDSelector, &out.RealmIDSelector
+		*out = new(v1.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ResourceServerID != nil {
+		in, out := &in.ResourceServerID, &out.ResourceServerID
+		*out = new(string)
+		**out = **in
+	}
+	if in.ResourceServerIDRef != nil {
+		in, out := &in.ResourceServerIDRef, &out.ResourceServerIDRef
+		*out = new(v1.NamespacedReference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ResourceServerIDSelector != nil {
+		in, out := &in.ResourceServerIDSelector, &out.ResourceServerIDSelector
+		*out = new(v1.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.Type != nil {
+		in, out := &in.Type, &out.Type
+		*out = new(string)
+		**out = **in
+	}
+}
+
+// DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientAuthorizationPolicyInitParameters.
+func (in *ClientAuthorizationPolicyInitParameters) DeepCopy() *ClientAuthorizationPolicyInitParameters {
+	if in == nil {
+		return nil
+	}
+	out := new(ClientAuthorizationPolicyInitParameters)
+	in.DeepCopyInto(out)
+	return out
+}
+
+// DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
+func (in *ClientAuthorizationPolicyList) DeepCopyInto(out *ClientAuthorizationPolicyList) {
+	*out = *in
+	out.TypeMeta = in.TypeMeta
+	in.ListMeta.DeepCopyInto(&out.ListMeta)
+	if in.Items != nil {
+		in, out := &in.Items, &out.Items
+		*out = make([]ClientAuthorizationPolicy, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+}
+
+// DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientAuthorizationPolicyList.
+func (in *ClientAuthorizationPolicyList) DeepCopy() *ClientAuthorizationPolicyList {
+	if in == nil {
+		return nil
+	}
+	out := new(ClientAuthorizationPolicyList)
+	in.DeepCopyInto(out)
+	return out
+}
+
+// DeepCopyObject is an autogenerated deepcopy function, copying the receiver, creating a new runtime.Object.
+func (in *ClientAuthorizationPolicyList) DeepCopyObject() runtime.Object {
+	if c := in.DeepCopy(); c != nil {
+		return c
+	}
+	return nil
+}
+
+// DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
+func (in *ClientAuthorizationPolicyObservation) DeepCopyInto(out *ClientAuthorizationPolicyObservation) {
+	*out = *in
+	if in.DecisionStrategy != nil {
+		in, out := &in.DecisionStrategy, &out.DecisionStrategy
+		*out = new(string)
+		**out = **in
+	}
+	if in.Description != nil {
+		in, out := &in.Description, &out.Description
+		*out = new(string)
+		**out = **in
+	}
+	if in.ID != nil {
+		in, out := &in.ID, &out.ID
+		*out = new(string)
+		**out = **in
+	}
+	if in.Logic != nil {
+		in, out := &in.Logic, &out.Logic
+		*out = new(string)
+		**out = **in
+	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmID != nil {
+		in, out := &in.RealmID, &out.RealmID
+		*out = new(string)
+		**out = **in
+	}
+	if in.ResourceServerID != nil {
+		in, out := &in.ResourceServerID, &out.ResourceServerID
+		*out = new(string)
+		**out = **in
+	}
+	if in.Type != nil {
+		in, out := &in.Type, &out.Type
+		*out = new(string)
+		**out = **in
+	}
+}
+
+// DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientAuthorizationPolicyObservation.
+func (in *ClientAuthorizationPolicyObservation) DeepCopy() *ClientAuthorizationPolicyObservation {
+	if in == nil {
+		return nil
+	}
+	out := new(ClientAuthorizationPolicyObservation)
+	in.DeepCopyInto(out)
+	return out
+}
+
+// DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
+func (in *ClientAuthorizationPolicyParameters) DeepCopyInto(out *ClientAuthorizationPolicyParameters) {
+	*out = *in
+	if in.DecisionStrategy != nil {
+		in, out := &in.DecisionStrategy, &out.DecisionStrategy
+		*out = new(string)
+		**out = **in
+	}
+	if in.Description != nil {
+		in, out := &in.Description, &out.Description
+		*out = new(string)
+		**out = **in
+	}
+	if in.Logic != nil {
+		in, out := &in.Logic, &out.Logic
+		*out = new(string)
+		**out = **in
+	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmID != nil {
+		in, out := &in.RealmID, &out.RealmID
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmIDRef != nil {
+		in, out := &in.RealmIDRef, &out.RealmIDRef
+		*out = new(v1.NamespacedReference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmIDSelector != nil {
+		in, out := &in.RealmIDSelector, &out.RealmIDSelector
+		*out = new(v1.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ResourceServerID != nil {
+		in, out := &in.ResourceServerID, &out.ResourceServerID
+		*out = new(string)
+		**out = **in
+	}
+	if in.ResourceServerIDRef != nil {
+		in, out := &in.ResourceServerIDRef, &out.ResourceServerIDRef
+		*out = new(v1.NamespacedReference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ResourceServerIDSelector != nil {
+		in, out := &in.ResourceServerIDSelector, &out.ResourceServerIDSelector
+		*out = new(v1.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.Type != nil {
+		in, out := &in.Type, &out.Type
+		*out = new(string)
+		**out = **in
+	}
+}
+
+// DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientAuthorizationPolicyParameters.
+func (in *ClientAuthorizationPolicyParameters) DeepCopy() *ClientAuthorizationPolicyParameters {
+	if in == nil {
+		return nil
+	}
+	out := new(ClientAuthorizationPolicyParameters)
+	in.DeepCopyInto(out)
+	return out
+}
+
+// DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
+func (in *ClientAuthorizationPolicySpec) DeepCopyInto(out *ClientAuthorizationPolicySpec) {
+	*out = *in
+	in.ManagedResourceSpec.DeepCopyInto(&out.ManagedResourceSpec)
+	in.ForProvider.DeepCopyInto(&out.ForProvider)
+	in.InitProvider.DeepCopyInto(&out.InitProvider)
+}
+
+// DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientAuthorizationPolicySpec.
+func (in *ClientAuthorizationPolicySpec) DeepCopy() *ClientAuthorizationPolicySpec {
+	if in == nil {
+		return nil
+	}
+	out := new(ClientAuthorizationPolicySpec)
+	in.DeepCopyInto(out)
+	return out
+}
+
+// DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
+func (in *ClientAuthorizationPolicyStatus) DeepCopyInto(out *ClientAuthorizationPolicyStatus) {
+	*out = *in
+	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.AtProvider.DeepCopyInto(&out.AtProvider)
+}
+
+// DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientAuthorizationPolicyStatus.
+func (in *ClientAuthorizationPolicyStatus) DeepCopy() *ClientAuthorizationPolicyStatus {
+	if in == nil {
+		return nil
+	}
+	out := new(ClientAuthorizationPolicyStatus)
 	in.DeepCopyInto(out)
 	return out
 }

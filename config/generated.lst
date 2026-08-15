@@ -1,3 +1,8 @@
+# Terraform resources exposed as managed resources by this provider.
+#
+# GENERATED FILE - DO NOT EDIT. Regenerate with 'make generated-lst'
+# (also run as part of 'make generate'). The source of truth is
+# config.ExternalNameConfigs in config/external_name.go.
 keycloak_attribute_importer_identity_provider_mapper
 keycloak_attribute_to_role_identity_provider_mapper
 keycloak_authentication_bindings
@@ -9,11 +14,13 @@ keycloak_custom_identity_provider_mapper
 keycloak_custom_user_federation
 keycloak_default_groups
 keycloak_default_roles
+keycloak_generic_client_authorization_policy
 keycloak_generic_client_protocol_mapper
 keycloak_generic_client_role_mapper
 keycloak_generic_protocol_mapper
 keycloak_generic_role_mapper
 keycloak_group
+keycloak_group_admin_permissions
 keycloak_group_memberships
 keycloak_group_permissions
 keycloak_group_roles
@@ -43,8 +50,11 @@ keycloak_oidc_openshift_v4_identity_provider
 keycloak_openid_audience_protocol_mapper
 keycloak_openid_audience_resolve_protocol_mapper
 keycloak_openid_client
+keycloak_openid_client_aggregate_policy
+keycloak_openid_client_authorization_client_scope_policy
 keycloak_openid_client_authorization_permission
 keycloak_openid_client_authorization_resource
+keycloak_openid_client_authorization_scope
 keycloak_openid_client_client_policy
 keycloak_openid_client_default_scopes
 keycloak_openid_client_group_policy
@@ -56,6 +66,7 @@ keycloak_openid_client_role_policy
 keycloak_openid_client_scope
 keycloak_openid_client_service_account_realm_role
 keycloak_openid_client_service_account_role
+keycloak_openid_client_time_policy
 keycloak_openid_client_user_policy
 keycloak_openid_full_name_protocol_mapper
 keycloak_openid_group_membership_protocol_mapper
@@ -85,6 +96,7 @@ keycloak_realm_optional_client_scopes
 keycloak_realm_user_profile
 keycloak_required_action
 keycloak_role
+keycloak_role_admin_permissions
 keycloak_saml_client
 keycloak_saml_client_default_scopes
 keycloak_saml_client_scope
@@ -96,5 +108,6 @@ keycloak_user
 keycloak_user_groups
 keycloak_user_roles
 keycloak_user_template_importer_identity_provider_mapper
+keycloak_users_admin_permissions
 keycloak_users_permissions
 keycloak_workflow

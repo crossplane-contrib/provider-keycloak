@@ -37,6 +37,20 @@ type ClientAuthorizationPermissionInitParameters struct {
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	// A list of policy IDs that must be applied to the scopes defined by this permission.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientAuthorizationPolicy
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +listType=set
+	GenericPolicies []*string `json:"genericPolicies,omitempty" tf:"generic_policies,omitempty"`
+
+	// References to ClientAuthorizationPolicy in openidclient to populate genericPolicies.
+	// +kubebuilder:validation:Optional
+	GenericPoliciesRefs []v1.NamespacedReference `json:"genericPoliciesRefs,omitempty" tf:"-"`
+
+	// Selector for a list of ClientAuthorizationPolicy in openidclient to populate genericPolicies.
+	// +kubebuilder:validation:Optional
+	GenericPoliciesSelector *v1.NamespacedSelector `json:"genericPoliciesSelector,omitempty" tf:"-"`
+
+	// A list of policy IDs that must be applied to the scopes defined by this permission.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientGroupPolicy
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
@@ -177,6 +191,10 @@ type ClientAuthorizationPermissionObservation struct {
 
 	// A list of policy IDs that must be applied to the scopes defined by this permission.
 	// +listType=set
+	GenericPolicies []*string `json:"genericPolicies,omitempty" tf:"generic_policies,omitempty"`
+
+	// A list of policy IDs that must be applied to the scopes defined by this permission.
+	// +listType=set
 	GroupPolicies []*string `json:"groupPolicies,omitempty" tf:"group_policies,omitempty"`
 
 	// Permission ID representing the permission.
@@ -250,6 +268,21 @@ type ClientAuthorizationPermissionParameters struct {
 	// A description for the authorization permission.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
+	// A list of policy IDs that must be applied to the scopes defined by this permission.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientAuthorizationPolicy
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
+	// +kubebuilder:validation:Optional
+	// +listType=set
+	GenericPolicies []*string `json:"genericPolicies,omitempty" tf:"generic_policies,omitempty"`
+
+	// References to ClientAuthorizationPolicy in openidclient to populate genericPolicies.
+	// +kubebuilder:validation:Optional
+	GenericPoliciesRefs []v1.NamespacedReference `json:"genericPoliciesRefs,omitempty" tf:"-"`
+
+	// Selector for a list of ClientAuthorizationPolicy in openidclient to populate genericPolicies.
+	// +kubebuilder:validation:Optional
+	GenericPoliciesSelector *v1.NamespacedSelector `json:"genericPoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs that must be applied to the scopes defined by this permission.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientGroupPolicy

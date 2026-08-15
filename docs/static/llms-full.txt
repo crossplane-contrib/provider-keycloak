@@ -121,6 +121,12 @@ which diffs `config/schema.json` against `config/generated.lst` and files one
 GitHub issue per missing resource that isn't already tracked by an existing
 open issue (matched by exact resource name in the issue title/body).
 
+`config/generated.lst` is itself generated from `config.ExternalNameConfigs`
+(`make generated-lst`, run as part of `make generate`), and the workflow
+refreshes it before diffing, so an already implemented resource is never
+reported as missing. `make generated-lst-check` fails CI when the committed
+file is stale.
+
 - On `pull_request`, it only runs in dry-run mode (reports only, creates
   nothing) when the automation itself changes (the script or the workflow
   file) — not on every PR.
@@ -200,6 +206,11 @@ Rules and gotchas:
 - `Options.KeepOriginalField: true` is required (and only allowed) when one
   `Instance` reuses the original field name; use it to keep the existing field
   settable for backward compatibility. The helper panics on a mismatch.
+- An `Instance` that reuses the original field name may omit its `Reference`
+  entirely. Such an "untyped" instance gets no Ref/Selector fields; the
+  original field simply stays settable for raw IDs of types that have no
+  managed resource yet, and its value still takes part in consolidation.
+  Omitting the `Reference` on a *synthetic* instance panics.
 - If no `Instance` reuses the original name, the original field becomes
   computed-only (`status.atProvider`). As a side effect, a *required* Terraform
   field no longer emits a required-parameter CEL rule, so no CRD
@@ -207,8 +218,8 @@ Rules and gotchas:
 - For scalar fields only one synthetic field may be set at a time; the
   consolidation injector errors otherwise. For list fields all synthetic lists
   are unioned.
-- Every referenced `TerraformName` must be present in `config/generated.lst`,
-  otherwise `make generate` panics with
+- Every referenced `TerraformName` must have an entry in
+  `config/external_name.go`, otherwise `make generate` panics with
   `cannot find configuration for Terraform resource`.
 - Examples: `config/role/config.go` and `config/mapper/config.go`
   (`client_id`/`saml_client_id`), `config/authentication/config.go`
@@ -240,6 +251,9 @@ consuming individual pages.
 
 - **Never edit `examples-generated/` by hand.** These are auto-generated.
 - **Never edit generated files in `apis/` or `package/crds/` by hand.**
+- **Never edit `config/generated.lst` by hand.** It is generated from
+  `config.ExternalNameConfigs` by `make generated-lst` (part of
+  `make generate`).
 - **`github.com/keycloak/terraform-provider-keycloak` updates are grouped;
   major bumps require manual review.** The go.mod pseudo-version and its
   pinned Makefile version are grouped into a single weekly Renovate PR.
@@ -462,21 +476,60 @@ E2e tests are driven by [uptest](https://github.com/crossplane/uptest) and
 | Path | Purpose |
 |------|---------|
 | `cluster/test/cases.txt` | Ordered list of demo files to test (deletion order is reversed) |
+| `cluster/test/cases-fgapv2.txt` | Ordered list of demo files of the FGAPv2 suite |
 | `cluster/test/setup.sh` | Per-case setup: CRD readiness wait, timeout rewriting, ordered deletion |
 | `dev/demos/basic/` | Cluster-scoped demo manifests |
 | `dev/demos/namespaced/` | Namespace-scoped demo manifests |
+| `dev/demos/fgapv2/` | Demos requiring fine-grained admin permissions v2 |
 | `dev/demos/basic/000-init.yaml` | Prerequisite resources for cluster demos (realm, secrets, etc.) |
 | `dev/demos/namespaced/000-init.yaml` | Prerequisite resources for namespaced demos |
+
+## Test Suites
+
+The demo directory has exactly **one subdirectory per e2e suite**, and each
+suite runs in its own cluster with its own Keycloak configuration:
+
+| Suite | Demos | Case list | Keycloak features | CI job |
+|-------|-------|-----------|-------------------|--------|
+| regular | `dev/demos/basic/`, `dev/demos/namespaced/`, `dev/demos/orgs/` | `cluster/test/cases.txt`, `cases-kc-26.4.txt`, `cases-kc-26.5.txt`, `cases-orgs.txt` | `admin-fine-grained-authz:v1` (+ `organization` from 26.6) | `e2e-tests` |
+| FGAPv2 | `dev/demos/fgapv2/` | `cluster/test/cases-fgapv2.txt` | `admin-fine-grained-authz:v2` | `e2e-tests-fgapv2` |
+
+`dev/demos/orgs/` and the version-specific case lists belong to the regular
+suite: they run in the same cluster and are gated by Keycloak version in the
+`Makefile` (organizations need 26.6+). Targeted runs always use the latest
+Keycloak, so those demos can be selected freely.
+
+The split is a hard Keycloak constraint, not a convenience: the
+`admin-fine-grained-authz` feature can be enabled as **either** v1 **or** v2,
+never both. Demos of one suite therefore must never end up in the other
+suite's run — a v2 demo would fail on a v1 cluster and vice versa.
+
+This is enforced structurally rather than by special-casing individual files:
+`scripts/e2e_dag.py` builds one demo graph per suite (`REGULAR_VARIANTS` /
+`FGAPV2_VARIANTS`) and exposes one selection command per suite (`select` and
+`select-fgapv2`). Adding a suite means adding a variant tuple and a graph, not
+adding exceptions.
+
+Run the FGAPv2 suite locally:
+
+```bash
+./dev/setup_dev_environment.sh --fgap-version v2
+make uptest FGAP_VERSION=v2
+```
 
 ## Adding a New Test
 
 1. Create `dev/demos/basic/<NNN>-<name>.yaml` and/or
-   `dev/demos/namespaced/<NNN>-<name>.yaml`.
-2. Add both paths to `cluster/test/cases.txt` in the correct position
+   `dev/demos/namespaced/<NNN>-<name>.yaml` — or, for resources requiring
+   fine-grained admin permissions v2, `dev/demos/fgapv2/<NNN>-<name>.yaml`.
+2. Add both paths to `cluster/test/cases.txt` (or `cases-fgapv2.txt`) in the
+   correct position
    (higher numbers run first in the list; deletion is in reverse order, so
    resources that depend on earlier resources must have a higher number).
 3. Make sure all prerequisites exist in earlier numbered demo files or in
    `000-init.yaml`.
+4. Reference prerequisites via `*Ref` blocks, never by literal name — the
+   selection DAG derives its edges from those refs.
 
 ## Why Tests Get Stuck
 
@@ -690,7 +743,11 @@ decode errors, then fix the field names or references as described above.
 
 ## Known Limitations
 
-- E2E tests only cover resources listed in `cluster/test/cases.txt`.
+- E2E tests only cover resources listed in `cluster/test/cases.txt` (regular
+  suite) or `cluster/test/cases-fgapv2.txt` (FGAPv2 suite). Every managed
+  resource must be covered by a demo — see "Resource coverage gate" below —
+  unless it is declared in `cluster/test/uncovered-resources.txt` because
+  Keycloak rejects it in a test environment.
 - Chainsaw JMESPath assertions on `status.conditions` can fail if conditions are `nil` immediately after apply; add a wait step or assert only object existence first.
 
 ## Test Selection and the Resource Index
@@ -718,6 +775,63 @@ Both steps compute the changed files against `main` (`git merge-base
 origin/main HEAD`), never against the pull request's recorded base SHA, so the
 selection stays correct even when the branch is behind or the base ref moves.
 
+### Per-suite selection
+
+Each suite is selected independently, so one suite can never silently disable
+the other:
+
+| Command | Output | Gates |
+|---------|--------|-------|
+| `select` | `full`, `skip`, or a comma-separated demo list (`basic/` + `namespaced/` only) | `e2e-tests` (runs unless the tier is `skip`) |
+| `select-fgapv2` | `run` or `skip` | `e2e-tests-fgapv2` |
+
+`select-fgapv2` answers a boolean because the FGAPv2 suite is small and always
+runs its full case list. It returns `run` when the change is `full`-tier, when
+an FGAPv2 demo or `cases-fgapv2.txt` changed, or when a touched resource or
+API group is used by an FGAPv2 demo.
+
+A change that only touches resources covered by one suite therefore runs
+exactly that suite — for example a new FGAPv2-only resource runs the FGAPv2
+suite while the regular suite is skipped, and neither result is derived from
+the other.
+
+### Never zero demos
+
+A `targeted` change set never results in an empty run. If no demo covers the
+touched resources, the selection broadens to all demos of their API group; if
+even that is empty it falls back to `full`. Only a `skip`-tier change set
+(documentation, images, helper scripts) runs no demos at all.
+
+### Resource coverage gate
+
+`make e2e-cases-check` runs two gates:
+
+1. `cluster/test/check_cases_coverage.sh` — every demo file is listed in a case
+   file, and every case entry has a demo file.
+2. `python3 scripts/e2e_dag.py coverage` — every managed resource CRD in
+   `package/crds/` is used by at least one demo.
+
+Adding a managed resource without an e2e demo therefore fails CI. The only
+accepted exception is a resource Keycloak itself rejects in a test environment
+(missing server-side artifact, removed feature, custom SPI deployment); such a
+resource must be declared with its reason in
+`cluster/test/uncovered-resources.txt`:
+
+```text
+Kind (group): reason
+```
+
+The gate also fails on stale entries, so an exception disappears automatically
+once the resource becomes testable.
+
+### Group-scoped configuration
+
+`config/<group>/` holds the Upjet configuration of a whole API group (external
+names, references, lookups). A change there cannot be attributed to a single
+resource, so **all** demos of that group are selected, on top of the demos of
+the concretely touched resources. Generated per-resource files
+(`apis/`, `package/crds/`, `internal/controller/`) stay resource-scoped.
+
 ### Proof
 
 Every selection is accompanied by a proof written to the job summary
@@ -736,6 +850,9 @@ Reproduce it locally:
 ```bash
 git diff --name-only $(git merge-base origin/main HEAD) HEAD | \
   python3 scripts/e2e_dag.py select --changed-files -
+
+git diff --name-only $(git merge-base origin/main HEAD) HEAD | \
+  python3 scripts/e2e_dag.py select-fgapv2 --changed-files -
 ```
 
 The graph is derived from the demo YAML itself: top-level `apiVersion:` and
@@ -745,6 +862,13 @@ manual mapping file is maintained. Only genuine infrastructure names
 (`keycloak-provider-config`, `crossplane-system`) are ignored when building
 those edges — realm names such as `dev`/`dev-ns` are real dependencies, so a
 targeted run always pulls in the realm demo that defines them.
+
+The selected demo list is emitted in the same order as `cluster/test/cases.txt`
+— dependents first, prerequisites last — because uptest deletes the examples in
+the order they are listed. Deleting a prerequisite (for example the realm)
+before its dependents leaves them unable to resolve their references and blocks
+teardown, whereas applying in that order is safe since Crossplane retries
+reference resolution until the prerequisite exists.
 
 `make generate` refreshes `cluster/test/e2e-index.json`, which answers
 "which e2e test uses resource X?":
@@ -1746,6 +1870,7 @@ Use these resources when a client needs Keycloak Authorization Services for fine
 |------|-----------|-------------------|---|
 | ClientAuthorizationResource | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_authorization_resource`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_authorization_resource) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAuthorizationResource/v1alpha1) |
 | ClientAuthorizationPermission | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_authorization_permission`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_authorization_permission) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAuthorizationPermission/v1alpha1) |
+| ClientAuthorizationPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_generic_client_authorization_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/generic_client_authorization_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAuthorizationPolicy/v1alpha1) |
 | ClientClientPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_client_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_client_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientClientPolicy/v1alpha1) |
 | ClientGroupPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_group_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_group_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientGroupPolicy/v1alpha1) |
 | ClientRolePolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_role_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_role_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientRolePolicy/v1alpha1) |
@@ -1816,6 +1941,7 @@ the generated reference fields instead, for example:
 
 - `resourcesRefs` / `resourcesSelector`
 - `clientPoliciesRefs`
+- `genericPoliciesRefs`
 - `groupPoliciesRefs`
 - `regexPoliciesRefs`
 - `rolePoliciesRefs`
@@ -2003,6 +2129,39 @@ spec:
     targetClaim: sample-claim
   providerConfigRef:
     name: "keycloak-provider-config"
+```
+
+### `ClientAuthorizationPolicy`
+
+Addresses any policy provider by its type id. Use it for custom policy providers
+implemented as a Java SPI, and for JavaScript policies deployed in a JAR, whose
+type is the `script-<fileName>` id Keycloak assigns. Stock policy types have
+dedicated resources and those should be preferred. This resource carries no
+provider-specific configuration, so it suits providers that require none.
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAuthorizationPolicy
+metadata:
+  name: my-generic-policy
+spec:
+  providerConfigRef:
+    name: "keycloak-provider-config"
+  deletionPolicy: Delete
+  forProvider:
+    name: my-generic-policy
+    description: Generic authorization policy addressed by provider type
+    type: time
+    decisionStrategy: UNANIMOUS
+    logic: POSITIVE
+    resourceServerIdRef:
+      name: "test"
+      policy:
+        resolve: Always
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
 ```
 
 ### `ClientPermissions`
@@ -2266,6 +2425,7 @@ Use groups when multiple users should share the same roles or when you need a hi
 | Memberships | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_memberships`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_memberships) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Memberships/v1alpha1) |
 | Roles | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_roles) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Roles/v1alpha1) |
 | Permissions | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Permissions/v1alpha1) |
+| AdminPermissions | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/AdminPermissions/v1alpha1) |
 
 ## Examples
 
@@ -2389,6 +2549,51 @@ spec:
     name: "keycloak-provider-config"
 ```
 
+### Fine-grained admin permissions (v2)
+
+`AdminPermissions` manages a single fine-grained admin permission for the groups
+of a realm. It requires Keycloak 26.2 or newer started with the
+`admin-fine-grained-authz:v2` feature and a realm with
+`adminPermissionsEnabled: true`. Keycloak then creates an `admin-permissions`
+client for the realm that acts as the resource server for all of its admin
+permissions.
+
+`admin-fine-grained-authz:v2` replaces `admin-fine-grained-authz:v1`, so
+`AdminPermissions` and the v1 `Permissions` resource cannot be used against the
+same Keycloak instance.
+
+```yaml
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: admins-manage-groups
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: admins-can-manage-groups
+    description: Admins can view and manage the members of the group
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    groupIdsRefs:
+      - name: "test"
+    scopes:
+      - view
+      - manage-members
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+Valid `scopes` for group permissions are `view`, `manage`, `view-members`,
+`manage-members` and `manage-membership`. Without `groupIds` the permission
+applies to every group of the realm, otherwise only to the referenced groups. A
+permission without policies is evaluated as "deny", so attach policies once they
+exist on the realm's `admin-permissions` client, either by ID via `policies` or
+through the typed reference fields (`groupPolicies`, `rolePolicies`,
+`userPolicies`, ...).
+
 ## Key Fields
 
 | Resource | Field | Description |
@@ -2402,6 +2607,11 @@ spec:
 | `Roles` | `roleIdsRefs` | References the roles assigned to the group. |
 | `Permissions` | `realmIdRef` | Enables fine-grained admin permissions for groups in a realm. |
 | `Permissions` | `groupIdRef` | Targets the group for which permissions are managed. |
+| `AdminPermissions` | `realmIdRef` | Realm whose groups the permission applies to. |
+| `AdminPermissions` | `groupIdsRefs` | Restricts the permission to specific groups. Leave empty to target all groups of the realm. |
+| `AdminPermissions` | `scopes` | Admin operations the permission covers: `view`, `manage`, `view-members`, `manage-members`, `manage-membership`. |
+| `AdminPermissions` | `decisionStrategy` | How the attached policies are combined: `UNANIMOUS`, `AFFIRMATIVE` or `CONSENSUS`. |
+| `AdminPermissions` | `policies` | IDs of authorization policies granting the permission. Typed `*Policies` reference fields are also available. |
 
 ## Related Resources
 
@@ -3550,6 +3760,7 @@ Use roles to define permissions in Keycloak. Create realm roles for permissions 
 | Kind | API Group | Terraform Resource | CRD Explorer |
 |------|-----------|-------------------|---|
 | Role | `role.keycloak.crossplane.io/v1alpha1` | [`keycloak_role`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/role) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/role.keycloak.crossplane.io/Role/v1alpha1) |
+| AdminPermissions | `role.keycloak.crossplane.io/v1alpha1` | [`keycloak_role_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/role_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/role.keycloak.crossplane.io/AdminPermissions/v1alpha1) |
 
 ## Examples
 
@@ -3626,6 +3837,49 @@ spec:
     name: "keycloak-provider-config"
 ```
 
+### Fine-grained admin permissions (v2)
+
+`AdminPermissions` manages a single fine-grained admin permission for the roles
+of a realm. It requires Keycloak 26.2 or newer started with the
+`admin-fine-grained-authz:v2` feature and a realm with
+`adminPermissionsEnabled: true`. Keycloak then creates an `admin-permissions`
+client for the realm that acts as the resource server for all of its admin
+permissions.
+
+`admin-fine-grained-authz:v2` replaces `admin-fine-grained-authz:v1`, so
+`AdminPermissions` and the v1 permission resources cannot be used against the
+same Keycloak instance.
+
+```yaml
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: admins-map-roles
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: admins-can-map-roles
+    description: Admins can assign any role of the realm
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    scopes:
+      - map-role
+      - map-role-client-scope
+      - map-role-composite
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+Valid `scopes` for role permissions are `map-role`, `map-role-client-scope` and
+`map-role-composite`. Without `roleIds` the permission applies to every role of
+the realm, otherwise only to the referenced roles. A permission without policies
+is evaluated as "deny", so attach policies once they exist on the realm's
+`admin-permissions` client, either by ID via `policies` or through the typed
+reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
+
 ## Key Fields
 
 | Field | Description |
@@ -3635,6 +3889,11 @@ spec:
 | `clientIdRef` | Set this for a client role so the role is scoped to a specific client. Omit it for a realm role. |
 | `description` | Human-readable role description. |
 | `compositeRoles` | Optional list of roles that should be included in this role as composites. |
+| `AdminPermissions`: `realmIdRef` | Realm whose roles the permission applies to. |
+| `AdminPermissions`: `roleIdsRefs` | Restricts the permission to specific roles. Leave empty to target all roles of the realm. |
+| `AdminPermissions`: `scopes` | Admin operations the permission covers: `map-role`, `map-role-client-scope`, `map-role-composite`. |
+| `AdminPermissions`: `decisionStrategy` | How the attached policies are combined: `UNANIMOUS`, `AFFIRMATIVE` or `CONSENSUS`. |
+| `AdminPermissions`: `policies` | IDs of authorization policies granting the permission. Typed `*Policies` reference fields are also available. |
 
 ## Related Resources
 
@@ -4220,6 +4479,7 @@ Use `User` to declaratively manage people who can authenticate to Keycloak. Use 
 | Groups | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user_groups`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user_groups) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Groups/v1alpha1) |
 | Roles | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user_roles) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Roles/v1alpha1) |
 | Permissions | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_users_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/users_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Permissions/v1alpha1) |
+| AdminPermissions | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_users_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/users_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/AdminPermissions/v1alpha1) |
 | UserFederation | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_custom_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/custom_user_federation) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/UserFederation/v1alpha1) |
 
 ## Examples
@@ -4310,6 +4570,50 @@ spec:
     name: "keycloak-provider-config"
 ```
 
+### Fine-grained admin permissions (v2)
+
+`AdminPermissions` manages a single fine-grained admin permission for the users
+of a realm. It requires Keycloak 26.2 or newer started with the
+`admin-fine-grained-authz:v2` feature and a realm with
+`adminPermissionsEnabled: true`. Keycloak then creates an `admin-permissions`
+client for the realm that acts as the resource server for all of its admin
+permissions.
+
+`admin-fine-grained-authz:v2` replaces `admin-fine-grained-authz:v1`, so
+`AdminPermissions` and the v1 `Permissions` resources cannot be used against the
+same Keycloak instance.
+
+```yaml
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: admins-manage-users
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: admins-can-manage-users
+    description: Admins can view and manage all users
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    scopes:
+      - view
+      - manage
+      - map-roles
+      - manage-group-membership
+      - impersonate
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+Valid `scopes` for user permissions are `view`, `manage`, `map-roles`,
+`manage-group-membership` and `impersonate`. A permission without policies is
+evaluated as "deny", so attach policies once they exist on the realm's
+`admin-permissions` client, either by ID via `policies` or through the typed
+reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
+
 ### Custom user federation
 
 ```yaml
@@ -4343,6 +4647,10 @@ spec:
 | `Roles` | `userIdRef` | Targets the user whose direct roles are managed. |
 | `Roles` | `roleIdsRefs` | References roles to assign to the user. |
 | `Permissions` | `realmIdRef` | Enables fine-grained admin permissions for user management in a realm. |
+| `AdminPermissions` | `realmIdRef` | Realm whose users the permission applies to. |
+| `AdminPermissions` | `scopes` | Admin operations the permission covers, e.g. `view`, `manage`. |
+| `AdminPermissions` | `decisionStrategy` | How the attached policies are combined: `UNANIMOUS`, `AFFIRMATIVE` or `CONSENSUS`. |
+| `AdminPermissions` | `policies` | IDs of authorization policies granting the permission. Typed `*Policies` reference fields are also available. |
 | `UserFederation` | `providerId` | Selects the custom federation provider implementation. |
 | `UserFederation` | `config` | Provider-specific configuration passed to the federation plugin. |
 | `UserFederation` | `enabled` | Enables or disables the federation provider. |

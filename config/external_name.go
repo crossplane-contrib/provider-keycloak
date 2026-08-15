@@ -27,10 +27,12 @@ import (
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
+	"keycloak_generic_client_authorization_policy":               openidclient.AuthzGenericPoliciesIdentifierFromIdentifyingProperties,      // {UUid}
 	"keycloak_generic_client_protocol_mapper":                    mapper.GenericClientProtocolMapperIdentifierFromIdentifyingProperties,     // {UUid}
 	"keycloak_generic_client_role_mapper":                        config.IdentifierFromProvider,                                             // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
 	"keycloak_generic_protocol_mapper":                           mapper.ProtocolMapperIdentifierFromIdentifyingProperties,                  // {UUid}
 	"keycloak_generic_role_mapper":                               config.IdentifierFromProvider,                                             // {realm}/client|client-scope/{Client.UUid}/scope-mappings/{Client.UUid}/{Group.UUid}
+	"keycloak_group_admin_permissions":                           config.IdentifierFromProvider,                                             // {realm}/{Permission.UUid}
 	"keycloak_group_memberships":                                 config.IdentifierFromProvider,                                             // {realm}/group-memberships/{Group.UUid}
 	"keycloak_group_permissions":                                 config.IdentifierFromProvider,                                             // {realm}/{Group.UUid}
 	"keycloak_group_roles":                                       config.IdentifierFromProvider,                                             // {realm}/{Group.UUid}
@@ -70,9 +72,11 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_realm":                                             realm.RealmIdentifierFromIdentifyingProperties,                            // {realm}
 	"keycloak_required_action":                                   config.IdentifierFromProvider,                                             // {realm}/{alias}
 	"keycloak_role":                                              role.IdentifierFromIdentifyingProperties,                                  // {UUid}
+	"keycloak_role_admin_permissions":                            config.IdentifierFromProvider,                                             // {realm}/{Permission.UUid}
 	"keycloak_user_groups":                                       config.IdentifierFromProvider,                                             // {realm}/{User.UUid}
 	"keycloak_user_roles":                                        config.IdentifierFromProvider,                                             // {realm}/{User.UUid}
 	"keycloak_users_permissions":                                 config.IdentifierFromProvider,                                             // {realm}
+	"keycloak_users_admin_permissions":                           config.IdentifierFromProvider,                                             // {realm}/{Permission.UUid}
 	"keycloak_user":                                              user.UserIdentifierFromIdentifyingProperties,                              // {UUid}
 	"keycloak_custom_user_federation":                            config.IdentifierFromProvider,                                             // ???
 	"keycloak_oidc_identity_provider":                            oidc.IdentifierFromIdentifyingProperties,                                  // {alias}

@@ -1,0 +1,16 @@
+# Managed resources that intentionally have no e2e demo.
+#
+# Adding a new managed resource without an e2e demo is NOT allowed. The only
+# accepted reason for an entry here is that Keycloak itself rejects the
+# resource in a test environment (missing server-side artifact, removed
+# feature, custom SPI deployment, ...). "No demo written yet" is not a reason.
+#
+# Format (one per line):
+#   Kind (group): reason
+#
+# Enforced by `make e2e-cases-check` (scripts/e2e_dag.py coverage), which also
+# fails on stale entries once a resource becomes covered or is removed.
+
+ClientJsPolicy (openidclient): Keycloak rejects JS policies unless the script is deployed with the server; uploading scripts through the admin API was removed and the test Keycloak ships no script JAR.
+KeystoreJavaKeystore (realm): requires a Java keystore file on the Keycloak server filesystem; the test container ships none, so Keycloak rejects the component.
+UserFederation (user): keycloak_custom_user_federation requires a custom user storage SPI provider deployed in the server; Keycloak rejects an unknown provider id.

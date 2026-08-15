@@ -141,6 +141,12 @@ issue per missing resource (see "Automated Schema Diff Issues" below).
 `config/generated.lst` and files one GitHub issue per resource that is
 missing and not already tracked by an existing open issue.
 
+`config/generated.lst` is a **generated** file: `make generated-lst` (run as
+part of `make generate`) rewrites it from `config.ExternalNameConfigs`, and
+`make generated-lst-check` fails in CI when the committed file is stale. The
+workflow also refreshes it before diffing, so an already implemented resource
+can never be reported as missing.
+
 - On `pull_request`, it only runs (in `--dry-run` mode; never creates issues)
   when the automation itself changes (`scripts/schema_diff_issues.py` or the
   workflow file) — not on every PR.
@@ -221,6 +227,11 @@ Rules and gotchas:
 - `Options.KeepOriginalField: true` is required (and only allowed) when one
   `Instance` reuses the original field name; use it to keep the existing field
   settable for backward compatibility. The helper panics on a mismatch.
+- An `Instance` that reuses the original field name may omit its `Reference`
+  entirely. Such an "untyped" instance gets no Ref/Selector fields; the
+  original field simply stays settable for raw IDs of types that have no
+  managed resource yet, and its value still takes part in consolidation.
+  Omitting the `Reference` on a *synthetic* instance panics.
 - If no `Instance` reuses the original name, the original field becomes
   computed-only (`status.atProvider`). A useful side effect is that a
   *required* Terraform field no longer emits a required-parameter CEL rule,
@@ -228,8 +239,8 @@ Rules and gotchas:
 - For scalar fields, only one synthetic field may be set at a time; the
   consolidation injector returns an error otherwise. For list fields, all
   synthetic lists are unioned.
-- Every `TerraformName` you reference must be present in
-  `config/generated.lst`; otherwise `make generate` panics with
+- Every `TerraformName` you reference must have an entry in
+  `config/external_name.go`; otherwise `make generate` panics with
   `cannot find configuration for Terraform resource`.
 - Examples in the codebase: `config/role/config.go` and `config/mapper/config.go`
   (`client_id`/`saml_client_id`), `config/authentication/config.go`
@@ -243,6 +254,40 @@ Rules and gotchas:
 - Unit tests: `make test`
 - E2E tests: `make e2e` (requires a running Keycloak and Crossplane cluster)
 - E2E coverage is limited to resources listed in `cluster/test/cases.txt`
+
+### E2E suites
+
+There is exactly one demo subdirectory per e2e suite, and each suite runs in
+its own cluster with its own Keycloak configuration:
+
+| Suite | Demos | Case list | Keycloak features | CI job |
+|-------|-------|-----------|-------------------|--------|
+| regular | `dev/demos/basic/`, `dev/demos/namespaced/` | `cluster/test/cases.txt` | `admin-fine-grained-authz:v1` | `e2e-tests` |
+| FGAPv2 | `dev/demos/fgapv2/` | `cluster/test/cases-fgapv2.txt` | `admin-fine-grained-authz:v2` | `e2e-tests-fgapv2` |
+
+`admin-fine-grained-authz` can be enabled as v1 **or** v2, never both, so a
+demo of one suite must never be selected for the other. `scripts/e2e_dag.py`
+enforces this structurally: one demo graph per suite (`REGULAR_VARIANTS` /
+`FGAPV2_VARIANTS`) and one selection command per suite (`select` /
+`select-fgapv2`), each gating its own CI job. Do not special-case individual
+files; add a variant tuple and a graph if a new suite is needed.
+
+`dev/demos/orgs/` belongs to the regular suite: it runs in the same cluster,
+gated by Keycloak version (organizations need 26.6+).
+
+**Every new managed resource must have an e2e demo.** `make e2e-cases-check`
+fails when a CRD in `package/crds/` is used by no demo. The only accepted
+exception is a resource Keycloak rejects in a test environment (missing
+server-side artifact, removed feature, custom SPI deployment); declare it with
+its reason in `cluster/test/uncovered-resources.txt`. "No demo written yet" is
+not a reason, and stale entries fail the gate too.
+
+A `targeted` selection never runs zero demos: if no demo covers the touched
+resources it broadens to their API group, and otherwise falls back to `full`.
+When you add a resource that is only covered by one suite, make sure that
+suite actually runs: `git diff --name-only <base> HEAD | python3
+scripts/e2e_dag.py select-fgapv2 --changed-files -` must print `run` (and the
+regular `select` must list the demos you expect).
 
 ## Documentation
 
@@ -259,12 +304,18 @@ make docs-freshness-check             # CI: verify llms.txt is current
 
 - Do **not** edit `examples-generated/` by hand.
 - Do **not** edit generated files in `apis/` or `package/crds/` by hand.
+- Do **not** edit `config/generated.lst` by hand — run `make generated-lst`
+  (or `make generate`); it is derived from `config.ExternalNameConfigs`.
 - `github.com/keycloak/terraform-provider-keycloak` (the go.mod pseudo-version
   and its pinned version in the Makefile) is grouped into a single weekly
   Renovate PR. Minor/patch/digest updates auto-merge once tests pass; major
   version bumps are **not** auto-merged since they require deliberate schema
   migration and must be reviewed manually.
-- E2E tests only cover resources listed in `cluster/test/cases.txt`.
+- E2E tests only cover resources listed in `cluster/test/cases.txt`
+  (regular suite) or `cluster/test/cases-fgapv2.txt` (FGAPv2 suite).
+- **No hacks or workarounds.** Prefer an explicit, documented pattern over
+  a special case; if a constraint forces a deviation, document the
+  constraint instead of working around it.
 - **Upjet does not support `+nullable` markers.** The kubebuilder Options struct
   only supports Required, Minimum, Maximum, Default.
 - **Membership ownership:** Avoid managing the same group's membership with both
@@ -284,6 +335,7 @@ make docs-freshness-check             # CI: verify llms.txt is current
 | `make generate` produces unexpectedly large/stale diffs | Stale local generator cache/artifacts | Remove `.work/` and `config/schema.json`, then re-run `make generate` |
 | E2E provider version mismatch | Git tags not fetched before build | Add `git fetch --tags` before `make build` |
 | Reconciliation loop on membership | Both `Memberships` + `Groups` (exhaustive) target same group | Use only one authoritative source |
+| E2E job skipped although the resource changed | No demo of that suite covers the resource | Add a demo + case-list entry, then verify with `scripts/e2e_dag.py select` / `select-fgapv2` |
 
 ## LLM Files
 

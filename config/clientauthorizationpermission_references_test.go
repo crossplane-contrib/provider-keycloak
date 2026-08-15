@@ -22,6 +22,10 @@ func TestClientAuthorizationPermissionReferences(t *testing.T) {
 			terraformName: "keycloak_openid_client_client_policy",
 			extractor:     common.PathUUIDExtractor,
 		},
+		"generic_policies": {
+			terraformName: "keycloak_generic_client_authorization_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
 		"group_policies": {
 			terraformName: "keycloak_openid_client_group_policy",
 			extractor:     common.PathUUIDExtractor,
@@ -123,7 +127,9 @@ func TestClientAuthorizationPermissionPolicyInjector(t *testing.T) {
 				t.Fatalf("user_policies was not removed from tfMap: %v", tfMap)
 			}
 
-			rawJSONMap := map[string]any{}
+			rawJSONMap := map[string]any{
+				"policies": []any{"raw-policy-id"},
+			}
 			rawTFMap := map[string]any{
 				"policies": []any{"raw-policy-id"},
 			}
@@ -132,6 +138,26 @@ func TestClientAuthorizationPermissionPolicyInjector(t *testing.T) {
 			}
 			if !reflect.DeepEqual(rawTFMap["policies"], []any{"raw-policy-id"}) {
 				t.Fatalf("raw policies should remain unchanged, got %v", rawTFMap["policies"])
+			}
+
+			// Raw policy IDs set on the original field are merged with the
+			// resolved values of the typed policy fields.
+			mixedJSONMap := map[string]any{
+				"policies":       []any{"raw-policy-id"},
+				"clientPolicies": []any{"client-policy-id"},
+			}
+			mixedTFMap := map[string]any{
+				"policies":        []any{"raw-policy-id"},
+				"client_policies": []any{"client-policy-id"},
+			}
+			if err := r.TerraformConfigurationInjector(mixedJSONMap, mixedTFMap); err != nil {
+				t.Fatalf("injecting mixed policy IDs: %v", err)
+			}
+			if !reflect.DeepEqual(mixedTFMap["policies"], []any{"raw-policy-id", "client-policy-id"}) {
+				t.Fatalf("raw and typed policies should be merged, got %v", mixedTFMap["policies"])
+			}
+			if _, ok := mixedTFMap["client_policies"]; ok {
+				t.Fatalf("client_policies was not removed from tfMap: %v", mixedTFMap)
 			}
 		})
 	}

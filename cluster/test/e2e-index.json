@@ -48,7 +48,8 @@
         "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
         "dev/demos/namespaced/043-oidc-client-no-redirect-uris.yaml",
-        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml"
+        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/orgs/031-k8s-federated-client.yaml"
       ],
       "used_by": [
         "dev/demos/basic/040-oidc-clients.yaml",
@@ -56,7 +57,8 @@
         "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
         "dev/demos/namespaced/043-oidc-client-no-redirect-uris.yaml",
-        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml"
+        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/orgs/031-k8s-federated-client.yaml"
       ]
     },
     "Client (samlclient)": {
@@ -97,6 +99,16 @@
       "used_by": [
         "dev/demos/basic/049-oidc-client-authorization.yaml",
         "dev/demos/namespaced/049-oidc-client-authorization.yaml"
+      ]
+    },
+    "ClientAuthorizationPolicy (openidclient)": {
+      "defined_in": [
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml"
       ]
     },
     "ClientAuthorizationResource (openidclient)": {
@@ -540,13 +552,15 @@
         "dev/demos/basic/050-oidc-identity-provider.yaml",
         "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
         "dev/demos/namespaced/050-oidc-identity-provider.yaml",
-        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml"
+        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/orgs/010-oidc-identity-provider.yaml"
       ],
       "used_by": [
         "dev/demos/basic/050-oidc-identity-provider.yaml",
         "dev/demos/basic/054-identity-provider-token-exchange-idp.yaml",
         "dev/demos/namespaced/050-oidc-identity-provider.yaml",
-        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml"
+        "dev/demos/namespaced/054-identity-provider-token-exchange-idp.yaml",
+        "dev/demos/orgs/010-oidc-identity-provider.yaml"
       ]
     },
     "IdentityProvider (saml)": {
@@ -633,6 +647,14 @@
         "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
       ]
     },
+    "KubernetesIdentityProvider (identityprovider)": {
+      "defined_in": [
+        "dev/demos/orgs/030-k8s-federated-identity-provider.yaml"
+      ],
+      "used_by": [
+        "dev/demos/orgs/030-k8s-federated-identity-provider.yaml"
+      ]
+    },
     "Memberships (group)": {
       "defined_in": [
         "dev/demos/basic/031-group-memberships.yaml",
@@ -693,6 +715,14 @@
         "dev/demos/namespaced/002-realm-clientscopes.yaml"
       ]
     },
+    "Organization (organization)": {
+      "defined_in": [
+        "dev/demos/orgs/002-org.yaml"
+      ],
+      "used_by": [
+        "dev/demos/orgs/002-org.yaml"
+      ]
+    },
     "Permissions (group)": {
       "defined_in": [
         "dev/demos/basic/033-group-permissions.yaml",
@@ -748,7 +778,8 @@
         "dev/demos/basic/007-existing-realm.yaml",
         "dev/demos/namespaced/001-realm-durations.yaml",
         "dev/demos/namespaced/001-realm.yaml",
-        "dev/demos/namespaced/007-existing-realm.yaml"
+        "dev/demos/namespaced/007-existing-realm.yaml",
+        "dev/demos/orgs/001-realm.yaml"
       ],
       "used_by": [
         "dev/demos/basic/001-realm-durations.yaml",
@@ -756,7 +787,8 @@
         "dev/demos/basic/007-existing-realm.yaml",
         "dev/demos/namespaced/001-realm-durations.yaml",
         "dev/demos/namespaced/001-realm.yaml",
-        "dev/demos/namespaced/007-existing-realm.yaml"
+        "dev/demos/namespaced/007-existing-realm.yaml",
+        "dev/demos/orgs/001-realm.yaml"
       ]
     },
     "RealmEvents (realm)": {
@@ -940,11 +972,13 @@
     "User (user)": {
       "defined_in": [
         "dev/demos/basic/020-user.yaml",
-        "dev/demos/namespaced/020-user.yaml"
+        "dev/demos/namespaced/020-user.yaml",
+        "dev/demos/orgs/020-user.yaml"
       ],
       "used_by": [
         "dev/demos/basic/020-user.yaml",
-        "dev/demos/namespaced/020-user.yaml"
+        "dev/demos/namespaced/020-user.yaml",
+        "dev/demos/orgs/020-user.yaml"
       ]
     },
     "UserAttributeMapper (ldap)": {
@@ -985,6 +1019,16 @@
       "used_by": [
         "dev/demos/basic/090-ldap-user-federation.yaml",
         "dev/demos/namespaced/090-ldap-user-federation.yaml"
+      ]
+    },
+    "UserModelHardcodedAttributeMapper (ldap)": {
+      "defined_in": [
+        "dev/demos/basic/099-ldap-user-model-hardcoded-attribute-mapper.yaml",
+        "dev/demos/namespaced/099-ldap-user-model-hardcoded-attribute-mapper.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/099-ldap-user-model-hardcoded-attribute-mapper.yaml",
+        "dev/demos/namespaced/099-ldap-user-model-hardcoded-attribute-mapper.yaml"
       ]
     },
     "UserProfile (realm)": {
@@ -1081,6 +1125,7 @@
         "dev/demos/basic/046-oidc-client-policies.yaml",
         "dev/demos/basic/047-oidc-client-role-mapper.yaml",
         "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/basic/049-oidc-client-authorization.yaml",
         "dev/demos/basic/050-oidc-identity-provider.yaml",
         "dev/demos/basic/051-saml-identity-provider.yaml",
@@ -1116,7 +1161,8 @@
         "dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml",
         "dev/demos/basic/096-ldap-full-name-mapper.yaml",
         "dev/demos/basic/097-ldap-custom-mapper.yaml",
-        "dev/demos/basic/098-microsoft-identity-provider.yaml"
+        "dev/demos/basic/098-microsoft-identity-provider.yaml",
+        "dev/demos/basic/099-ldap-user-model-hardcoded-attribute-mapper.yaml"
       ]
     },
     "dev/demos/basic/002-realm-clientscopes.yaml": {
@@ -1242,6 +1288,7 @@
         "dev/demos/basic/046-oidc-client-policies.yaml",
         "dev/demos/basic/047-oidc-client-role-mapper.yaml",
         "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/basic/049-oidc-client-authorization.yaml",
         "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/basic/063-saml-client-policies.yaml",
@@ -1276,6 +1323,7 @@
         "dev/demos/basic/046-oidc-client-policies.yaml",
         "dev/demos/basic/047-oidc-client-role-mapper.yaml",
         "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/basic/049-oidc-client-authorization.yaml",
         "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/basic/063-saml-client-policies.yaml",
@@ -1404,6 +1452,7 @@
         "dev/demos/basic/046-oidc-client-policies.yaml",
         "dev/demos/basic/047-oidc-client-role-mapper.yaml",
         "dev/demos/basic/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/basic/049-oidc-client-authorization.yaml",
         "dev/demos/basic/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/basic/063-saml-client-policies.yaml",
@@ -1515,6 +1564,18 @@
         "dev/demos/basic/015-groups.yaml",
         "dev/demos/basic/040-oidc-clients.yaml",
         "dev/demos/basic/041-oidc-client-clientscopes.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/basic/049-oidc-client-authorization-generic-policy.yaml": {
+      "groups": [
+        "openidclient"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml",
+        "dev/demos/basic/010-roles.yaml",
+        "dev/demos/basic/015-groups.yaml",
+        "dev/demos/basic/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -1840,7 +1901,8 @@
         "dev/demos/basic/094-ldap-msad-mapper.yaml",
         "dev/demos/basic/095-ldap-hardcoded-attribute-mapper.yaml",
         "dev/demos/basic/096-ldap-full-name-mapper.yaml",
-        "dev/demos/basic/097-ldap-custom-mapper.yaml"
+        "dev/demos/basic/097-ldap-custom-mapper.yaml",
+        "dev/demos/basic/099-ldap-user-model-hardcoded-attribute-mapper.yaml"
       ]
     },
     "dev/demos/basic/091-ldap-user-attribute-mapper.yaml": {
@@ -1928,6 +1990,16 @@
       ],
       "rdeps": []
     },
+    "dev/demos/basic/099-ldap-user-model-hardcoded-attribute-mapper.yaml": {
+      "groups": [
+        "ldap"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml",
+        "dev/demos/basic/090-ldap-user-federation.yaml"
+      ],
+      "rdeps": []
+    },
     "dev/demos/namespaced/001-realm-durations.yaml": {
       "groups": [
         "realm"
@@ -1970,6 +2042,7 @@
         "dev/demos/namespaced/046-oidc-client-policies.yaml",
         "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
         "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/namespaced/049-oidc-client-authorization.yaml",
         "dev/demos/namespaced/050-oidc-identity-provider.yaml",
         "dev/demos/namespaced/051-saml-identity-provider.yaml",
@@ -2005,7 +2078,8 @@
         "dev/demos/namespaced/095-ldap-hardcoded-attribute-mapper.yaml",
         "dev/demos/namespaced/096-ldap-full-name-mapper.yaml",
         "dev/demos/namespaced/097-ldap-custom-mapper.yaml",
-        "dev/demos/namespaced/098-microsoft-identity-provider.yaml"
+        "dev/demos/namespaced/098-microsoft-identity-provider.yaml",
+        "dev/demos/namespaced/099-ldap-user-model-hardcoded-attribute-mapper.yaml"
       ]
     },
     "dev/demos/namespaced/002-realm-clientscopes.yaml": {
@@ -2131,6 +2205,7 @@
         "dev/demos/namespaced/046-oidc-client-policies.yaml",
         "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
         "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/namespaced/049-oidc-client-authorization.yaml",
         "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/namespaced/063-saml-client-policies.yaml",
@@ -2165,6 +2240,7 @@
         "dev/demos/namespaced/046-oidc-client-policies.yaml",
         "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
         "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/namespaced/049-oidc-client-authorization.yaml",
         "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/namespaced/063-saml-client-policies.yaml",
@@ -2293,6 +2369,7 @@
         "dev/demos/namespaced/046-oidc-client-policies.yaml",
         "dev/demos/namespaced/047-oidc-client-role-mapper.yaml",
         "dev/demos/namespaced/048-oidc-client-protocol-mapper.yaml",
+        "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml",
         "dev/demos/namespaced/049-oidc-client-authorization.yaml",
         "dev/demos/namespaced/059-oidc-protocol-mappers-comprehensive.yaml",
         "dev/demos/namespaced/063-saml-client-policies.yaml",
@@ -2404,6 +2481,18 @@
         "dev/demos/namespaced/015-groups.yaml",
         "dev/demos/namespaced/040-oidc-clients.yaml",
         "dev/demos/namespaced/041-oidc-client-clientscopes.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/049-oidc-client-authorization-generic-policy.yaml": {
+      "groups": [
+        "openidclient"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml",
+        "dev/demos/namespaced/010-roles.yaml",
+        "dev/demos/namespaced/015-groups.yaml",
+        "dev/demos/namespaced/040-oidc-clients.yaml"
       ],
       "rdeps": []
     },
@@ -2729,7 +2818,8 @@
         "dev/demos/namespaced/094-ldap-msad-mapper.yaml",
         "dev/demos/namespaced/095-ldap-hardcoded-attribute-mapper.yaml",
         "dev/demos/namespaced/096-ldap-full-name-mapper.yaml",
-        "dev/demos/namespaced/097-ldap-custom-mapper.yaml"
+        "dev/demos/namespaced/097-ldap-custom-mapper.yaml",
+        "dev/demos/namespaced/099-ldap-user-model-hardcoded-attribute-mapper.yaml"
       ]
     },
     "dev/demos/namespaced/091-ldap-user-attribute-mapper.yaml": {
@@ -2814,6 +2904,79 @@
       ],
       "deps": [
         "dev/demos/namespaced/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/099-ldap-user-model-hardcoded-attribute-mapper.yaml": {
+      "groups": [
+        "ldap"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml",
+        "dev/demos/namespaced/090-ldap-user-federation.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/orgs/001-realm.yaml": {
+      "groups": [
+        "realm"
+      ],
+      "deps": [],
+      "rdeps": [
+        "dev/demos/orgs/002-org.yaml",
+        "dev/demos/orgs/010-oidc-identity-provider.yaml",
+        "dev/demos/orgs/020-user.yaml",
+        "dev/demos/orgs/030-k8s-federated-identity-provider.yaml",
+        "dev/demos/orgs/031-k8s-federated-client.yaml"
+      ]
+    },
+    "dev/demos/orgs/002-org.yaml": {
+      "groups": [
+        "organization"
+      ],
+      "deps": [
+        "dev/demos/orgs/001-realm.yaml"
+      ],
+      "rdeps": [
+        "dev/demos/orgs/010-oidc-identity-provider.yaml",
+        "dev/demos/orgs/030-k8s-federated-identity-provider.yaml"
+      ]
+    },
+    "dev/demos/orgs/010-oidc-identity-provider.yaml": {
+      "groups": [
+        "oidc"
+      ],
+      "deps": [
+        "dev/demos/orgs/001-realm.yaml",
+        "dev/demos/orgs/002-org.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/orgs/020-user.yaml": {
+      "groups": [
+        "user"
+      ],
+      "deps": [
+        "dev/demos/orgs/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/orgs/030-k8s-federated-identity-provider.yaml": {
+      "groups": [
+        "identityprovider"
+      ],
+      "deps": [
+        "dev/demos/orgs/001-realm.yaml",
+        "dev/demos/orgs/002-org.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/orgs/031-k8s-federated-client.yaml": {
+      "groups": [
+        "openidclient"
+      ],
+      "deps": [
+        "dev/demos/orgs/001-realm.yaml"
       ],
       "rdeps": []
     }

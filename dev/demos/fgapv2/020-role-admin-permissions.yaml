@@ -1,0 +1,25 @@
+---
+# Fine-grained admin permission (FGAPv2) controlling who can assign roles of
+# the realm. Keycloak's admin-permissions client allows only one scope-based
+# permission per set of resources, so all desired scopes are combined into a
+# single AdminPermissions resource.
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: manage-roles
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: manage-roles
+    description: Controls who can assign all roles of the realm
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "fgapv2"
+      policy:
+        resolve: Always
+    scopes:
+      - map-role
+      - map-role-client-scope
+      - map-role-composite
+  providerConfigRef:
+    name: "keycloak-provider-config"
