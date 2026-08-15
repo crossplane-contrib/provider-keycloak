@@ -60,4 +60,11 @@ owner="$("${KUBECTL}" get secret "${TRANSFORMED}" --namespace "${NAMESPACE}" \
   -o "jsonpath={.metadata.ownerReferences[?(@.controller==true)].name}")"
 [ "${owner}" = "${SOURCE}" ] || fail "transformed secret ${NAMESPACE}/${TRANSFORMED} is controlled by '${owner}', want '${SOURCE}'"
 
+# The transformed secret must carry the marker labels the controller relies on
+# to recognise its own output and to collect it when it becomes stale. A label
+# selector avoids escaping the dots of the label key in a jsonpath.
+matched="$("${KUBECTL}" get secret "${TRANSFORMED}" --namespace "${NAMESPACE}" -o name \
+  --selector "keycloak.crossplane.io/connection-secret-transform=true,keycloak.crossplane.io/connection-secret-source=${SOURCE}")"
+[ -n "${matched}" ] || fail "transformed secret ${NAMESPACE}/${TRANSFORMED} does not carry the transform/source labels of ${SOURCE}"
+
 echo "Connection secret transform assertions passed."

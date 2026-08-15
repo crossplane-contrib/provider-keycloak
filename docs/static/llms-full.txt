@@ -1601,6 +1601,27 @@ immediately: the provider re-evaluates each connection secret once per poll
 interval (`--poll-interval`, one minute by default) and applies the new
 configuration then.
 
+### Safety rules
+
+The transform never destroys data. A misconfiguration is skipped and reported
+as a Kubernetes event on the connection secret (`kubectl describe secret
+<connection secret>`), so it neither corrupts a secret nor blocks
+reconciliation:
+
+| Situation | Behaviour | Event reason |
+|-----------|-----------|--------------|
+| Rename target is not a valid secret key (`[-._a-zA-Z0-9]+`) | Entry ignored, the remaining renames are applied | `InvalidConnectionSecretKeyRename` |
+| Two keys would end up under the same name | The colliding rename is skipped, the key keeps its original name | `ConnectionSecretKeyRenameConflict` |
+| `connection-secret-transform-name` is not a valid secret name, or names the connection secret itself | Nothing is written | `InvalidTransformedSecretName` |
+| A secret of that name exists and was not written by this controller | Nothing is written, the existing secret is left untouched | `TransformedSecretNotOwned` |
+
+The controller only ever writes secrets it created itself — they carry the
+labels `keycloak.crossplane.io/connection-secret-transform: "true"` and
+`keycloak.crossplane.io/connection-secret-source: <connection secret>` and are
+controller-owned by the connection secret. It only reacts to Crossplane
+connection secrets (type `connection.crossplane.io/v1alpha1`) and to its own
+output; other secrets, including the provider's credentials, are ignored.
+
 ## Troubleshooting
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/troubleshooting/
 

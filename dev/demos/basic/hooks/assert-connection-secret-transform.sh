@@ -56,10 +56,17 @@ assert_key_renamed() {
 
 # assert_owned_by <transformed secret> <source secret>
 assert_owned_by() {
-  local dst="$1" src="$2" owner
+  local dst="$1" src="$2" owner matched
   owner="$("${KUBECTL}" get secret "${dst}" --namespace "${NAMESPACE}" \
     -o "jsonpath={.metadata.ownerReferences[?(@.controller==true)].name}")"
   [ "${owner}" = "${src}" ] || fail "transformed secret ${NAMESPACE}/${dst} is controlled by '${owner}', want '${src}'"
+
+  # The marker labels are what let the controller recognise its own output and
+  # collect it once it becomes stale. Matching them with a label selector
+  # avoids escaping the dots of the label key in a jsonpath.
+  matched="$("${KUBECTL}" get secret "${dst}" --namespace "${NAMESPACE}" -o name \
+    --selector "keycloak.crossplane.io/connection-secret-transform=true,keycloak.crossplane.io/connection-secret-source=${src}")"
+  [ -n "${matched}" ] || fail "transformed secret ${NAMESPACE}/${dst} does not carry the transform/source labels of ${src}"
 }
 
 echo "Verifying ProviderConfig-driven connection secret renaming..."

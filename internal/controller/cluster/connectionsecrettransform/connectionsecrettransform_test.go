@@ -19,6 +19,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
 	xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	"github.com/crossplane/crossplane-runtime/v2/pkg/event"
+	"github.com/crossplane/crossplane-runtime/v2/pkg/logging"
+	xpresource "github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 
 	clientv1alpha2 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2"
 	clusterv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/v1beta1"
@@ -82,6 +85,17 @@ func newConnectionSecret(mr *clientv1alpha2.Client, data map[string][]byte) *cor
 		},
 		Type: "connection.crossplane.io/v1alpha1",
 		Data: data,
+	}
+}
+
+// newReconciler returns a Reconciler wired up like Setup does, minus the
+// manager: events go nowhere and logs are dropped.
+func newReconciler(cl client.Client) *Reconciler {
+	return &Reconciler{
+		client:         cl,
+		log:            logging.NewNopLogger(),
+		record:         event.NewNopRecorder(),
+		resyncInterval: time.Minute,
 	}
 }
 
@@ -184,7 +198,7 @@ func TestReconcile(t *testing.T) {
 				WithObjects(mr, providerConfig(tc.pcRename), secret).
 				Build()
 
-			r := &Reconciler{client: cl}
+			r := newReconciler(cl)
 			if _, err := r.Reconcile(context.Background(), request(secret)); err != nil {
 				t.Fatalf("Reconcile(...): unexpected error: %v", err)
 			}
@@ -288,7 +302,7 @@ func TestReconcileCollectsStaleOutput(t *testing.T) {
 				WithObjects(mr, providerConfig(nil), secret, stale).
 				Build()
 
-			r := &Reconciler{client: cl}
+			r := newReconciler(cl)
 			if _, err := r.Reconcile(context.Background(), request(secret)); err != nil {
 				t.Fatalf("Reconcile(...): unexpected error: %v", err)
 			}
@@ -344,7 +358,7 @@ func TestReconcileForeignSecrets(t *testing.T) {
 	for name, secret := range cases {
 		t.Run(name, func(t *testing.T) {
 			cl := fake.NewClientBuilder().WithScheme(s).WithObjects(secret).Build()
-			r := &Reconciler{client: cl}
+			r := newReconciler(cl)
 			if _, err := r.Reconcile(context.Background(), request(secret)); err != nil {
 				t.Fatalf("Reconcile(...): unexpected error: %v", err)
 			}
@@ -362,7 +376,7 @@ func TestReconcileForeignSecrets(t *testing.T) {
 
 	t.Run("MissingSecret", func(t *testing.T) {
 		cl := fake.NewClientBuilder().WithScheme(s).Build()
-		r := &Reconciler{client: cl}
+		r := newReconciler(cl)
 		if _, err := r.Reconcile(context.Background(), reconcile.Request{
 			NamespacedName: types.NamespacedName{Name: "does-not-exist", Namespace: secretNS},
 		}); err != nil {
@@ -382,7 +396,7 @@ func TestReconcileResync(t *testing.T) {
 	secret := newConnectionSecret(mr, map[string][]byte{"clientID": []byte("vikunja")})
 
 	cl := fake.NewClientBuilder().WithScheme(s).WithObjects(mr, providerConfig(nil), secret).Build()
-	r := &Reconciler{client: cl, resyncInterval: time.Minute}
+	r := newReconciler(cl)
 
 	res, err := r.Reconcile(context.Background(), request(secret))
 	if err != nil {
@@ -395,7 +409,7 @@ func TestReconcileResync(t *testing.T) {
 	// A secret this controller is not responsible for must not be requeued.
 	other := &corev1.Secret{ObjectMeta: metav1.ObjectMeta{Name: "unrelated", Namespace: secretNS}}
 	cl = fake.NewClientBuilder().WithScheme(s).WithObjects(other).Build()
-	r = &Reconciler{client: cl, resyncInterval: time.Minute}
+	r = newReconciler(cl)
 
 	res, err = r.Reconcile(context.Background(), request(other))
 	if err != nil {
@@ -440,4 +454,216 @@ func TestParseRenameAnnotation(t *testing.T) {
 
 func request(s *corev1.Secret) reconcile.Request {
 	return reconcile.Request{NamespacedName: types.NamespacedName{Name: s.Name, Namespace: s.Namespace}}
+}
+
+// TestReconcileRefusesForeignSecret verifies the controller never overwrites a
+// secret it did not write itself, which would otherwise let a stray
+// annotation destroy unrelated data (e.g. the provider's own credentials).
+func TestReconcileRefusesForeignSecret(t *testing.T) {
+	s := newScheme(t)
+	mr := newClient(map[string]string{
+		AnnotationKeyRename:          "clientID=client-id",
+		AnnotationKeyTransformedName: "keycloak-credentials",
+	})
+	secret := newConnectionSecret(mr, map[string][]byte{"clientID": []byte("vikunja")})
+
+	foreign := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{Name: "keycloak-credentials", Namespace: secretNS},
+		Data:       map[string][]byte{"credentials": []byte("do-not-touch")},
+	}
+
+	cl := fake.NewClientBuilder().WithScheme(s).WithObjects(mr, providerConfig(nil), secret, foreign).Build()
+	r := newReconciler(cl)
+
+	if _, err := r.Reconcile(context.Background(), request(secret)); err != nil {
+		t.Fatalf("Reconcile(...): unexpected error: %v", err)
+	}
+
+	got := &corev1.Secret{}
+	if err := cl.Get(context.Background(), types.NamespacedName{Name: foreign.Name, Namespace: secretNS}, got); err != nil {
+		t.Fatalf("cannot get the foreign secret: %v", err)
+	}
+	if !bytes.Equal(got.Data["credentials"], []byte("do-not-touch")) {
+		t.Errorf("foreign secret was modified: %v", got.Data)
+	}
+	if _, renamed := got.Data["client-id"]; renamed {
+		t.Errorf("foreign secret was overwritten with transformed data: %v", got.Data)
+	}
+	if got.Labels[transformedSecretLabel] != "" {
+		t.Errorf("foreign secret was adopted: %v", got.Labels)
+	}
+}
+
+// TestReconcileInvalidTransformName verifies that a transform name that
+// Kubernetes would reject, or that points at the connection secret itself, is
+// skipped instead of retried forever or applied destructively.
+func TestReconcileInvalidTransformName(t *testing.T) {
+	s := newScheme(t)
+	data := map[string][]byte{"clientID": []byte("vikunja")}
+
+	for name, transformName := range map[string]string{
+		"NotADNSName":       "Not A Valid Name",
+		"TheSourceItself":   secretName,
+		"TrailingSeparator": "invalid-",
+	} {
+		t.Run(name, func(t *testing.T) {
+			mr := newClient(map[string]string{
+				AnnotationKeyRename:          "clientID=client-id",
+				AnnotationKeyTransformedName: transformName,
+			})
+			secret := newConnectionSecret(mr, data)
+
+			cl := fake.NewClientBuilder().WithScheme(s).WithObjects(mr, providerConfig(nil), secret).Build()
+			r := newReconciler(cl)
+
+			if _, err := r.Reconcile(context.Background(), request(secret)); err != nil {
+				t.Fatalf("Reconcile(...): unexpected error: %v", err)
+			}
+
+			l := &corev1.SecretList{}
+			if err := cl.List(context.Background(), l, client.InNamespace(secretNS)); err != nil {
+				t.Fatalf("cannot list secrets: %v", err)
+			}
+			if len(l.Items) != 1 || l.Items[0].Name != secretName {
+				t.Fatalf("expected only the untouched connection secret, got %d secrets", len(l.Items))
+			}
+			if _, renamed := l.Items[0].Data["client-id"]; renamed {
+				t.Errorf("the connection secret itself was transformed: %v", l.Items[0].Data)
+			}
+		})
+	}
+}
+
+// TestReconcileSkipsDeletedSecret verifies the controller does not recreate
+// output for a connection secret that is being garbage-collected.
+func TestReconcileSkipsDeletedSecret(t *testing.T) {
+	s := newScheme(t)
+	mr := newClient(map[string]string{AnnotationKeyRename: "clientID=client-id"})
+	secret := newConnectionSecret(mr, map[string][]byte{"clientID": []byte("vikunja")})
+	now := metav1.Now()
+	secret.DeletionTimestamp = &now
+	secret.Finalizers = []string{"keycloak.crossplane.io/test"}
+
+	cl := fake.NewClientBuilder().WithScheme(s).WithObjects(mr, providerConfig(nil), secret).Build()
+	r := newReconciler(cl)
+
+	if _, err := r.Reconcile(context.Background(), request(secret)); err != nil {
+		t.Fatalf("Reconcile(...): unexpected error: %v", err)
+	}
+
+	l := &corev1.SecretList{}
+	if err := cl.List(context.Background(), l, client.InNamespace(secretNS),
+		client.MatchingLabels{transformedSecretLabel: transformedSecretLabelValue}); err != nil {
+		t.Fatalf("cannot list transformed secrets: %v", err)
+	}
+	if len(l.Items) != 0 {
+		t.Fatalf("expected no transformed secret for a deleted source, got %d", len(l.Items))
+	}
+}
+
+func TestTransform(t *testing.T) {
+	data := map[string][]byte{
+		"clientID":     []byte("id"),
+		"clientSecret": []byte("secret"),
+		"extra":        []byte("extra"),
+	}
+
+	cases := map[string]struct {
+		rename        map[string]string
+		want          map[string][]byte
+		wantConflicts []string
+	}{
+		"RenamesAndCopies": {
+			rename: map[string]string{"clientID": "client-id"},
+			want: map[string][]byte{
+				"client-id":    []byte("id"),
+				"clientSecret": []byte("secret"),
+				"extra":        []byte("extra"),
+			},
+		},
+		"IgnoresRenamesForAbsentKeys": {
+			rename: map[string]string{"nonexistent": "whatever"},
+			want:   data,
+		},
+		"DropsRenameOntoAnUntouchedKey": {
+			// clientID -> extra would overwrite the "extra" key, so the
+			// rename is skipped and no value is lost.
+			rename:        map[string]string{"clientID": "extra"},
+			want:          data,
+			wantConflicts: []string{`"clientID"="extra"`},
+		},
+		"DropsRenamesOntoTheSameTarget": {
+			rename: map[string]string{"clientID": "same", "clientSecret": "same"},
+			want: map[string][]byte{
+				"same":         []byte("id"),
+				"clientSecret": []byte("secret"),
+				"extra":        []byte("extra"),
+			},
+			wantConflicts: []string{`"clientSecret"="same"`},
+		},
+		"SwapIsNotAConflict": {
+			rename: map[string]string{"clientID": "clientSecret", "clientSecret": "clientID"},
+			want: map[string][]byte{
+				"clientSecret": []byte("id"),
+				"clientID":     []byte("secret"),
+				"extra":        []byte("extra"),
+			},
+		},
+	}
+
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+			got, conflicts := transform(data, tc.rename)
+			if len(got) != len(tc.want) {
+				t.Fatalf("transform(...) = %v, want %v", got, tc.want)
+			}
+			for k, v := range tc.want {
+				if !bytes.Equal(got[k], v) {
+					t.Errorf("transform(...)[%q] = %q, want %q", k, got[k], v)
+				}
+			}
+			if len(conflicts) != len(tc.wantConflicts) {
+				t.Fatalf("conflicts = %v, want %v", conflicts, tc.wantConflicts)
+			}
+			for i, want := range tc.wantConflicts {
+				if conflicts[i] != want {
+					t.Errorf("conflicts[%d] = %q, want %q", i, conflicts[i], want)
+				}
+			}
+		})
+	}
+}
+
+func TestIsRelevantSecret(t *testing.T) {
+	cases := map[string]struct {
+		object client.Object
+		want   bool
+	}{
+		"ConnectionSecret": {
+			object: &corev1.Secret{Type: xpresource.SecretTypeConnection},
+			want:   true,
+		},
+		"OwnOutput": {
+			object: &corev1.Secret{ObjectMeta: metav1.ObjectMeta{
+				Labels: map[string]string{transformedSecretLabel: transformedSecretLabelValue},
+			}},
+			want: true,
+		},
+		"CredentialsSecret": {
+			object: &corev1.Secret{Type: corev1.SecretTypeOpaque},
+			want:   false,
+		},
+		"NotASecret": {
+			object: &corev1.ConfigMap{},
+			want:   false,
+		},
+	}
+
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+			if got := isRelevantSecret(tc.object); got != tc.want {
+				t.Errorf("isRelevantSecret(...) = %v, want %v", got, tc.want)
+			}
+		})
+	}
 }
