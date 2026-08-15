@@ -28,6 +28,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"time"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -87,6 +88,14 @@ const (
 
 	clusterGroup    = "keycloak.crossplane.io"
 	namespacedGroup = "keycloak.m.crossplane.io"
+
+	// defaultResyncInterval is how often a connection secret owned by a
+	// Keycloak managed resource is re-reconciled when the controller options
+	// do not specify a poll interval. The rename configuration lives on the
+	// managed resource (annotations) and the ProviderConfig, neither of which
+	// this controller watches, so a change there does not produce a Secret
+	// event; the resync is what makes such edits converge.
+	defaultResyncInterval = time.Minute
 )
 
 // secretKeyRE matches the key names Kubernetes accepts in a Secret. Renaming
@@ -98,12 +107,20 @@ var secretKeyRE = regexp.MustCompile(`^[-._a-zA-Z0-9]+$`)
 // map and/or the resource's own rename annotation.
 type Reconciler struct {
 	client client.Client
+
+	// resyncInterval is the interval a Keycloak-owned connection secret is
+	// requeued with, see defaultResyncInterval.
+	resyncInterval time.Duration
 }
 
 // Setup adds a controller that watches connection Secrets owned by Keycloak
 // managed resources and republishes them with renamed keys.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
-	r := &Reconciler{client: mgr.GetClient()}
+	interval := o.PollInterval
+	if interval <= 0 {
+		interval = defaultResyncInterval
+	}
+	r := &Reconciler{client: mgr.GetClient(), resyncInterval: interval}
 
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("connectionsecrettransform").
@@ -153,7 +170,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, req reconcile.Request) (reco
 
 	if len(rename) == 0 {
 		// Nothing (any more) to transform: collect what we wrote earlier.
-		return reconcile.Result{}, r.deleteStale(ctx, secret, "")
+		return r.resync(), r.deleteStale(ctx, secret, "")
 	}
 
 	name := secret.Name + transformedSecretSuffix
@@ -186,7 +203,16 @@ func (r *Reconciler) Reconcile(ctx context.Context, req reconcile.Request) (reco
 		return reconcile.Result{}, err
 	}
 
-	return reconcile.Result{}, r.deleteStale(ctx, secret, name)
+	return r.resync(), r.deleteStale(ctx, secret, name)
+}
+
+// resync returns the result Keycloak-owned connection secrets are requeued
+// with. The rename configuration lives on objects this controller does not
+// watch (the managed resource's annotations and its ProviderConfig), so
+// editing only those produces no Secret event; requeueing periodically is
+// what applies such an edit without touching the connection secret itself.
+func (r *Reconciler) resync() reconcile.Result {
+	return reconcile.Result{RequeueAfter: r.resyncInterval}
 }
 
 // renameMap merges the ProviderConfig-wide renaming with the managed

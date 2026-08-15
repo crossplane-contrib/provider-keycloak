@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"context"
 	"testing"
+	"time"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -368,6 +369,41 @@ func TestReconcileForeignSecrets(t *testing.T) {
 			t.Fatalf("Reconcile(...) for a missing secret should be a no-op, got error: %v", err)
 		}
 	})
+}
+
+// TestReconcileResync verifies that a connection secret owned by a Keycloak
+// managed resource is requeued periodically. The rename configuration lives
+// on the managed resource's annotations and its ProviderConfig, neither of
+// which produces a Secret event, so without the requeue an annotation-only
+// edit would not be picked up.
+func TestReconcileResync(t *testing.T) {
+	s := newScheme(t)
+	mr := newClient(map[string]string{AnnotationKeyRename: "clientID=client-id"})
+	secret := newConnectionSecret(mr, map[string][]byte{"clientID": []byte("vikunja")})
+
+	cl := fake.NewClientBuilder().WithScheme(s).WithObjects(mr, providerConfig(nil), secret).Build()
+	r := &Reconciler{client: cl, resyncInterval: time.Minute}
+
+	res, err := r.Reconcile(context.Background(), request(secret))
+	if err != nil {
+		t.Fatalf("Reconcile(...): unexpected error: %v", err)
+	}
+	if res.RequeueAfter != time.Minute {
+		t.Errorf("RequeueAfter = %v, want %v", res.RequeueAfter, time.Minute)
+	}
+
+	// A secret this controller is not responsible for must not be requeued.
+	other := &corev1.Secret{ObjectMeta: metav1.ObjectMeta{Name: "unrelated", Namespace: secretNS}}
+	cl = fake.NewClientBuilder().WithScheme(s).WithObjects(other).Build()
+	r = &Reconciler{client: cl, resyncInterval: time.Minute}
+
+	res, err = r.Reconcile(context.Background(), request(other))
+	if err != nil {
+		t.Fatalf("Reconcile(...): unexpected error: %v", err)
+	}
+	if res.RequeueAfter != 0 {
+		t.Errorf("RequeueAfter = %v, want 0 for a foreign secret", res.RequeueAfter)
+	}
 }
 
 func TestParseRenameAnnotation(t *testing.T) {

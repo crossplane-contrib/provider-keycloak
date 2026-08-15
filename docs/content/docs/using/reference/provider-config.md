@@ -207,3 +207,9 @@ together with the `Client`.
 Namespaced managed resources (`*.keycloak.m.crossplane.io`) are configured
 with the annotations only, since the `rename` map lives on the cluster-scoped
 `ProviderConfig`.
+
+Editing an annotation (or the `ProviderConfig` map) does not change the
+connection secret itself, so the transformed secret is not updated
+immediately: the provider re-evaluates each connection secret once per poll
+interval (`--poll-interval`, one minute by default) and applies the new
+configuration then.
