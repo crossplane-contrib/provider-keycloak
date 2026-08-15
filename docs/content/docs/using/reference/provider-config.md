@@ -145,9 +145,17 @@ accounts, `serviceAccountUserId`. Consumers frequently expect different key
 names — Envoy Gateway's OIDC `SecurityPolicy`, for example, requires
 `client-id` and `client-secret`.
 
-The provider therefore republishes the connection secret under a second name,
-with the keys renamed. The original secret is never modified, so the provider
-can still rebuild its Terraform state from it.
+The provider therefore adds the keys you configure to the resource's own
+connection secret — the one named by `spec.writeConnectionSecretToRef` — so
+consumers keep pointing at that single secret.
+
+Renaming in place is *additive*: the managed resource's own controller
+republishes every key it owns on each reconcile, so a key it published cannot
+be removed for good. `clientID: client-id` therefore adds `client-id` next to
+`clientID`, both carrying the same value. That is all a consumer such as an
+Envoy Gateway OIDC `SecurityPolicy` needs, since it looks up the keys it wants
+and ignores the rest. If the original names must not appear at all, switch to
+the `SeparateSecret` [mode](#modes).
 
 Configure the renaming centrally, for every resource using a `ProviderConfig`:
 
@@ -177,7 +185,8 @@ central configuration without replacing it:
 |------------|-------------|
 | `keycloak.crossplane.io/connection-secret-key-rename` | `<oldKey>=<newKey>` pairs, or a YAML mapping of `<oldKey>: <newKey>` (see below) |
 | `keycloak.crossplane.io/connection-secret-add-fields` | `<newKey>=<source>` pairs, or a YAML mapping of `<newKey>: <source>` (see [Adding Status/ProviderConfig Fields](#adding-statusproviderconfig-fields)) |
-| `keycloak.crossplane.io/connection-secret-transform-name` | Name of the republished secret (default: `<connection secret>-transformed`) |
+| `keycloak.crossplane.io/connection-secret-transform-mode` | `InPlace` (default) or `SeparateSecret`, see [Modes](#modes) |
+| `keycloak.crossplane.io/connection-secret-transform-name` | `SeparateSecret` mode only: name of the republished secret (default: `<connection secret>-transformed`) |
 
 The rename and add-fields annotations both accept two syntaxes, tried in this
 order:
@@ -214,7 +223,6 @@ metadata:
   name: my-app
   annotations:
     keycloak.crossplane.io/connection-secret-key-rename: "clientID=client-id,clientSecret=client-secret"
-    keycloak.crossplane.io/connection-secret-transform-name: "my-app-oidc"
 spec:
   forProvider:
     clientId: my-app
@@ -228,20 +236,67 @@ spec:
     name: keycloak-provider-config
 ```
 
+`default/my-app-connection` then carries `client-id` and `client-secret` in
+addition to the keys the provider publishes itself:
+
+```console
+$ kubectl get secret my-app-connection -o jsonpath='{.data}' | jq keys
+[
+  "attribute.client_secret",
+  "clientID",
+  "clientSecret",
+  "client-id",
+  "client-secret"
+]
+```
+
+The keys the provider added on your behalf are recorded in the
+`keycloak.crossplane.io/connection-secret-transform-keys` annotation on that
+secret. Only those keys are ever written or removed again, so a key published
+by the resource itself — or one of upjet's `attribute.*` keys, which carry the
+Terraform state — can never be overwritten.
+
+### Modes
+
+| Mode | Behaviour |
+|------|-----------|
+| `InPlace` (default) | The configured keys are added to the resource's own connection secret. No second secret is created. Renaming is additive, i.e. the original key stays. |
+| `SeparateSecret` | The connection secret is left untouched and a second, transformed secret is published next to it, containing only the renamed/added keys. Use it when the original key names must not appear. |
+
+Pick the mode on the `ProviderConfig`
+(`spec.connectionSecretKeys.mode`), per resource with the
+`keycloak.crossplane.io/connection-secret-transform-mode` annotation, or on a
+`ConnectionSecretTransform` (`spec.mode`) — the same precedence as the
+`rename`/`add` maps:
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: my-app
+  annotations:
+    keycloak.crossplane.io/connection-secret-transform-mode: SeparateSecret
+    keycloak.crossplane.io/connection-secret-key-rename: "clientID=client-id,clientSecret=client-secret"
+    keycloak.crossplane.io/connection-secret-transform-name: "my-app-oidc"
+spec:
+  writeConnectionSecretToRef:
+    name: my-app-connection
+    namespace: default
+```
+
 This publishes `default/my-app-oidc` next to the untouched
 `default/my-app-connection`. The republished secret is owned by the connection
 secret, which is in turn owned by the managed resource, so both are deleted
-together with the `Client`.
+together with the `Client`. Switching back to `InPlace` deletes it again.
 
 Namespaced managed resources (`*.keycloak.m.crossplane.io`) are configured
 with the annotations (or a `ConnectionSecretTransform`, see below) only, since
 the `rename`/`add` maps live on the cluster-scoped `ProviderConfig`.
 
 Editing an annotation (or the `ProviderConfig` map) does not change the
-connection secret itself, so the transformed secret is not updated
+connection secret itself, so the new configuration is not applied
 immediately: the provider re-evaluates each connection secret once per poll
-interval (`--poll-interval`, one minute by default) and applies the new
-configuration then.
+interval (`--poll-interval`, one minute by default) and applies it then.
 
 ## Configuring via a `ConnectionSecretTransform` Object
 
@@ -263,6 +318,8 @@ metadata:
 spec:
   sourceSecretRef:
     name: my-app-connection
+  # Omit mode (or set it to InPlace) to write into my-app-connection itself.
+  mode: SeparateSecret
   transformedSecretName: my-app-oidc
   rename:
     clientID: client-id
@@ -300,8 +357,8 @@ $ kubectl get connectionsecrettransform my-app-oidc -o jsonpath='{.status.condit
 
 ## Adding Status/ProviderConfig Fields
 
-Beyond renaming existing keys, the transformed secret can also gain entirely
-new keys, sourced from the owning managed resource's `status.atProvider` or
+Beyond renaming existing keys, the connection secret (or, in `SeparateSecret`
+mode, the transformed copy) can also gain entirely new keys, sourced from the owning managed resource's `status.atProvider` or
 from the referenced `ProviderConfig` object — for example, to publish the
 Keycloak client's internal ID, or which `ProviderConfig` produced the secret,
 alongside the credentials. Values are never sourced from the connection
@@ -381,11 +438,17 @@ reconciliation:
 | Two keys would end up under the same name | The colliding rename is skipped, the key keeps its original name | `ConnectionSecretKeyRenameConflict` |
 | Add-field target is not a valid secret key, or its source expression does not resolve to a scalar | Entry ignored, the remaining added fields are applied | `InvalidConnectionSecretFieldAdd` |
 | An added field's key collides with an existing (or renamed) key | The added field is skipped, the existing key wins | `ConnectionSecretFieldAddConflict` |
-| `connection-secret-transform-name` is not a valid secret name, or names the connection secret itself | Nothing is written | `InvalidTransformedSecretName` |
+| A key would overwrite one the provider publishes itself, or an `attribute.*` key (`InPlace` mode) | The key is skipped, the existing value is kept | `ConnectionSecretKeyConflict` |
+| `connection-secret-transform-mode` is neither `InPlace` nor `SeparateSecret` | The default (`InPlace`) is used | `InvalidConnectionSecretTransformMode` |
+| `connection-secret-transform-name` is not a valid secret name, or names the connection secret itself (`SeparateSecret` mode) | Nothing is written | `InvalidTransformedSecretName` |
 | A secret of that name exists and was not written by this controller | Nothing is written, the existing secret is left untouched | `TransformedSecretNotOwned` |
 | More than one `ConnectionSecretTransform` in a namespace names the same source secret | None of them are applied; each reports the conflict on its own `status.conditions` | `ConnectionSecretTransformAmbiguous` |
 
-The controller only ever writes secrets it created itself — they carry the
+In `InPlace` mode the controller only ever writes or removes the keys listed
+in the connection secret's
+`keycloak.crossplane.io/connection-secret-transform-keys` annotation, i.e. the
+ones it added itself. In `SeparateSecret` mode it only ever writes secrets it
+created itself — they carry the
 labels `keycloak.crossplane.io/connection-secret-transform: "true"` and
 `keycloak.crossplane.io/connection-secret-source: <connection secret>` and are
 controller-owned by the connection secret. It only reacts to Crossplane

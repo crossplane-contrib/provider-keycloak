@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # Post-assert hook for dev/demos/namespaced/082-connection-secret-transform.yaml.
 #
-# Verifies that the connection secret of a namespaced managed resource is
-# republished with the keys renamed by the
-# keycloak.crossplane.io/connection-secret-key-rename annotation, and that the
-# transformed secret is owned by its source secret.
+# Verifies that the connection secret of a namespaced managed resource gains
+# the keys renamed by the
+# keycloak.crossplane.io/connection-secret-key-rename annotation, in the
+# default InPlace mode: the keys are added to the connection secret itself and
+# no second secret is created.
 set -euo pipefail
 
 KUBECTL="${KUBECTL:-kubectl}"
 NAMESPACE="dev-ns"
 SOURCE="conn-secret-transform-annotated"
-TRANSFORMED="conn-secret-transform-annotated-transformed"
 TIMEOUT_SECONDS=180
 
 fail() {
@@ -36,35 +36,52 @@ secret_value() {
   "${KUBECTL}" get secret "$1" --namespace "${NAMESPACE}" -o "jsonpath={.data.${key}}"
 }
 
-assert_key_renamed() {
+# The renamed key carries the value of the original one, in the very same
+# secret. The original key stays: the renaming is additive, because the
+# managed resource's own controller republishes the keys it owns on every
+# reconcile.
+assert_key_aliased() {
   local old="$1" new="$2" want got
 
   want="$(secret_value "${SOURCE}" "${old}")"
-  [ -n "${want}" ] || fail "source secret ${NAMESPACE}/${SOURCE} has no ${old} key"
+  [ -n "${want}" ] || fail "secret ${NAMESPACE}/${SOURCE} has no ${old} key"
 
-  got="$(secret_value "${TRANSFORMED}" "${new}")"
-  [ -n "${got}" ] || fail "transformed secret ${NAMESPACE}/${TRANSFORMED} has no ${new} key"
-  [ "${want}" = "${got}" ] || fail "transformed secret ${NAMESPACE}/${TRANSFORMED} key ${new} does not carry the value of ${SOURCE}/${old}"
-
-  [ -z "$(secret_value "${TRANSFORMED}" "${old}")" ] || fail "transformed secret ${NAMESPACE}/${TRANSFORMED} still carries the original key ${old}"
-  [ -z "$(secret_value "${SOURCE}" "${new}")" ] || fail "source secret ${NAMESPACE}/${SOURCE} was modified: it carries the renamed key ${new}"
+  got="$(secret_value "${SOURCE}" "${new}")"
+  [ -n "${got}" ] || fail "secret ${NAMESPACE}/${SOURCE} has no ${new} key"
+  [ "${want}" = "${got}" ] || fail "secret ${NAMESPACE}/${SOURCE} key ${new} does not carry the value of ${old}"
 }
 
-echo "Verifying annotation-driven connection secret renaming for a namespaced resource..."
+echo "Verifying annotation-driven in-place connection secret renaming for a namespaced resource..."
 wait_for_secret "${SOURCE}"
-wait_for_secret "${TRANSFORMED}"
-assert_key_renamed "clientID" "client-id"
-assert_key_renamed "clientSecret" "client-secret"
 
-owner="$("${KUBECTL}" get secret "${TRANSFORMED}" --namespace "${NAMESPACE}" \
-  -o "jsonpath={.metadata.ownerReferences[?(@.controller==true)].name}")"
-[ "${owner}" = "${SOURCE}" ] || fail "transformed secret ${NAMESPACE}/${TRANSFORMED} is controlled by '${owner}', want '${SOURCE}'"
+# The keys are added asynchronously, after the connection secret itself has
+# been published, so give the transform controller a moment to catch up.
+waited=0
+until [ -n "$(secret_value "${SOURCE}" "client-secret")" ]; do
+  if [ "${waited}" -ge "${TIMEOUT_SECONDS}" ]; then
+    fail "secret ${NAMESPACE}/${SOURCE} did not gain the renamed keys within ${TIMEOUT_SECONDS}s"
+  fi
+  sleep 5
+  waited=$((waited + 5))
+done
 
-# The transformed secret must carry the marker labels the controller relies on
-# to recognise its own output and to collect it when it becomes stale. A label
-# selector avoids escaping the dots of the label key in a jsonpath.
-matched="$("${KUBECTL}" get secret "${TRANSFORMED}" --namespace "${NAMESPACE}" -o name \
-  --selector "keycloak.crossplane.io/connection-secret-transform=true,keycloak.crossplane.io/connection-secret-source=${SOURCE}")"
-[ -n "${matched}" ] || fail "transformed secret ${NAMESPACE}/${TRANSFORMED} does not carry the transform/source labels of ${SOURCE}"
+assert_key_aliased "clientID" "client-id"
+assert_key_aliased "clientSecret" "client-secret"
+
+# The keys the controller added are recorded on the secret, which is what
+# limits it to writing exactly those keys again.
+managed="$("${KUBECTL}" get secret "${SOURCE}" --namespace "${NAMESPACE}" \
+  -o "jsonpath={.metadata.annotations['keycloak\.crossplane\.io/connection-secret-transform-keys']}")"
+for key in "client-id" "client-secret"; do
+  case ",${managed}," in
+    *",${key},"*) ;;
+    *) fail "secret ${NAMESPACE}/${SOURCE} does not record ${key} as a managed key (got '${managed}')" ;;
+  esac
+done
+
+# InPlace is the default, so no second secret may be created.
+if "${KUBECTL}" get secret "${SOURCE}-transformed" --namespace "${NAMESPACE}" >/dev/null 2>&1; then
+  fail "unexpected secret ${NAMESPACE}/${SOURCE}-transformed: the InPlace mode must not publish a second secret"
+fi
 
 echo "Connection secret transform assertions passed."

@@ -3,16 +3,32 @@ Copyright 2022 Upbound Inc.
 */
 
 // Package connectionsecrettransform implements a hand-written (i.e. not
-// upjet-generated) controller that republishes the connection secret of a
-// managed resource with renamed keys. The renaming is configured centrally
-// on the ProviderConfig the resource uses, per resource via annotations on
-// the managed resource itself, and/or via a standalone
+// upjet-generated) controller that adds renamed and/or extra keys to the
+// connection secret of a managed resource. The configuration is read
+// centrally from the ProviderConfig the resource uses, per resource from
+// annotations on the managed resource itself, and/or from a standalone
 // ConnectionSecretTransform custom resource (clusterv1beta1) that names the
 // source secret directly - useful when the managed resource is owned by a
 // Composition or otherwise inconvenient to annotate. All three sources may
 // be combined; a ConnectionSecretTransform takes precedence over the
 // annotation, which in turn takes precedence over the ProviderConfig, per
 // key.
+//
+// Two modes are supported (see AnnotationKeyMode):
+//
+//   - "InPlace" (the default) writes the keys into the managed resource's own
+//     connection secret, i.e. the one named by spec.writeConnectionSecretToRef,
+//     so that no second secret is needed. Because crossplane-runtime's
+//     connection secret publisher re-adds every key the managed resource owns
+//     on each reconcile (with a JSON merge patch), renaming is additive here:
+//     the new name is added as an alias next to the original. The controller
+//     records the keys it added in the AnnotationKeyManagedKeys annotation and
+//     only ever writes or removes those, so it can neither overwrite a key the
+//     provider publishes nor touch upjet's reserved "attribute." keys.
+//   - "SeparateSecret" leaves the connection secret untouched and publishes a
+//     second, transformed secret next to it. Only this mode can drop the
+//     original key names, at the cost of an additional secret consumers have
+//     to point at.
 //
 // Background: connection secret keys are published today via
 // config.Resource.Sensitive.AdditionalConnectionDetailsFn (see
@@ -28,19 +44,23 @@ Copyright 2022 Upbound Inc.
 // ProviderConfig), all of which a normal controller-runtime client can read
 // directly.
 //
-// The controller is deliberately conservative: it only ever writes secrets it
-// created itself (marked with the transform label and controller-owned by the
-// source connection secret), never modifies the source secret, and treats
-// every misconfiguration (an unusable target key, a target name that is not a
-// valid secret name or that belongs to somebody else, two keys renamed onto
-// one another) as a skipped operation reported via a Kubernetes event rather
-// than as a reconcile error. A misconfiguration can therefore neither destroy
-// data nor spin the work queue.
+// The controller is deliberately conservative: in "SeparateSecret" mode it
+// only ever writes secrets it created itself (marked with the transform label
+// and controller-owned by the source connection secret) and never modifies
+// the source secret, in "InPlace" mode it only ever writes or removes the
+// keys it added itself, and in both modes every misconfiguration (an unusable
+// target key, a target name that is not a valid secret name or that belongs
+// to somebody else, two keys renamed onto one another) is a skipped operation
+// reported via a Kubernetes event rather than a reconcile error. A
+// misconfiguration can therefore neither destroy data nor spin the work
+// queue.
 package connectionsecrettransform
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"maps"
 	"regexp"
 	"sort"
 	"strings"
@@ -105,9 +125,11 @@ const (
 	AnnotationKeyRename = "keycloak.crossplane.io/connection-secret-key-rename"
 
 	// AnnotationKeyTransformedName overrides the name of the republished
-	// secret. It defaults to the name of the connection secret plus the
-	// "-transformed" suffix, and is useful when a consumer (e.g. an Envoy
-	// Gateway SecurityPolicy) requires a specific secret name.
+	// secret in "SeparateSecret" mode. It defaults to the name of the
+	// connection secret plus the "-transformed" suffix, and is useful when a
+	// consumer (e.g. an Envoy Gateway SecurityPolicy) requires a specific
+	// secret name. It has no effect in the default "InPlace" mode, where the
+	// keys are written into the connection secret itself.
 	AnnotationKeyTransformedName = "keycloak.crossplane.io/connection-secret-transform-name"
 
 	// AnnotationKeyAddFields adds extra keys to the transformed connection
@@ -138,12 +160,44 @@ const (
 	// spec.connectionSecretKeys.add map, same precedence as renaming.
 	AnnotationKeyAddFields = "keycloak.crossplane.io/connection-secret-add-fields"
 
+	// AnnotationKeyMode selects where the renamed/added keys are written:
+	// "InPlace" (the default) writes them into the managed resource's own
+	// connection secret, i.e. the one named by
+	// spec.writeConnectionSecretToRef, so that consumers need not point at
+	// a second secret; "SeparateSecret" publishes a transformed copy next
+	// to it and leaves the connection secret untouched.
+	//
+	// In-place renaming is necessarily additive: the managed resource's own
+	// controller re-publishes every key it owns on each reconcile (with a
+	// JSON merge patch, see crossplane-runtime's APISecretPublisher), so a
+	// key it published cannot be removed for good. A rename therefore adds
+	// the new name next to the original one - which is what a consumer such
+	// as an Envoy Gateway OIDC SecurityPolicy needs, since it looks up the
+	// keys it wants and ignores the rest. "SeparateSecret" is the mode to
+	// pick when the original names must not appear at all.
+	AnnotationKeyMode = "keycloak.crossplane.io/connection-secret-transform-mode"
+
+	// AnnotationKeyManagedKeys is written by this controller onto the
+	// connection secret in "InPlace" mode and records, comma-separated, the
+	// keys it added there. It is what makes an added key removable again
+	// once it is no longer configured: keys listed here (and only those)
+	// may be deleted from the connection secret, and a key already present
+	// but not listed here belongs to the provider and is never overwritten.
+	AnnotationKeyManagedKeys = "keycloak.crossplane.io/connection-secret-transform-keys"
+
+	// reservedKeyPrefix is upjet's prefix for connection secret keys that
+	// carry sensitive Terraform attributes. upjet reads them back to rebuild
+	// the Terraform state (see upjet's resource.GetSensitiveObservation), so
+	// this controller neither writes nor removes them.
+	reservedKeyPrefix = "attribute."
+
 	// transformedSecretSuffix is appended to the name of the source
 	// connection secret to build the default name of the republished,
-	// transformed one. The two live side by side: the original is left
-	// untouched so that upjet's tfstate-rebuild-from-connection-secret
-	// machinery keeps working, and consumers that need renamed keys point at
-	// the transformed secret instead.
+	// transformed one in "SeparateSecret" mode. The two live side by side:
+	// the original is left untouched so that upjet's
+	// tfstate-rebuild-from-connection-secret machinery keeps working, and
+	// consumers that need renamed keys point at the transformed secret
+	// instead.
 	transformedSecretSuffix = "-transformed"
 
 	// transformedSecretLabel marks secrets written by this controller, so
@@ -195,6 +249,8 @@ const (
 	reasonInvalidAddField    event.Reason = "InvalidConnectionSecretFieldAdd"
 	reasonAddFieldConflict   event.Reason = "ConnectionSecretFieldAddConflict"
 	reasonAmbiguousTransform event.Reason = "ConnectionSecretTransformAmbiguous"
+	reasonInvalidMode        event.Reason = "InvalidConnectionSecretTransformMode"
+	reasonInPlaceConflict    event.Reason = "ConnectionSecretKeyConflict"
 )
 
 // secretKeyRE matches the key names Kubernetes accepts in a Secret. Renaming
@@ -354,6 +410,28 @@ func (r *Reconciler) Reconcile(ctx context.Context, req reconcile.Request) (reco
 			errors.Errorf("ignoring field(s) to add that could not be resolved: %s", strings.Join(invalidAdd, ", "))))
 	}
 
+	mode, invalidMode, err := r.transformMode(ctx, mr, crd)
+	if err != nil {
+		r.record.Event(secret, event.Warning(reasonTransformFailure, err))
+		return reconcile.Result{}, errors.Wrap(err, "cannot determine the connection secret transform mode")
+	}
+	if invalidMode != "" {
+		// An unknown mode falls back to the default rather than wedging the
+		// resource, same tolerance as the rest of the configuration.
+		log.Debug("Ignoring unknown connection secret transform mode", "mode", invalidMode)
+		r.record.Event(secret, event.Warning(reasonInvalidMode,
+			errors.Errorf("ignoring unknown transform mode %q, using %q", invalidMode, mode)))
+	}
+
+	if mode == clusterv1beta1.TransformModeInPlace {
+		// Switching to in-place must not leave the copy published earlier
+		// behind, so collect it before writing into the source secret.
+		if err := r.deleteStale(ctx, secret, ""); err != nil {
+			return reconcile.Result{}, errors.Wrap(err, errDeleteStale)
+		}
+		return r.reconcileInPlace(ctx, log, secret, crd, rename, added)
+	}
+
 	if len(rename) == 0 && len(added) == 0 {
 		// Nothing (any more) to transform: collect what we wrote earlier.
 		r.setTransformStatus(ctx, crd, "", xpv1.Unavailable().WithMessage("nothing to rename or add"))
@@ -435,6 +513,196 @@ func (r *Reconciler) Reconcile(ctx context.Context, req reconcile.Request) (reco
 }
 
 const errDeleteStale = "cannot delete stale transformed secrets"
+
+// reconcileInPlace writes the configured keys into the managed resource's own
+// connection secret, so that consumers can keep pointing at the secret named
+// by spec.writeConnectionSecretToRef and no second secret is needed.
+//
+// The write is deliberately additive with respect to the provider's own keys:
+// crossplane-runtime publishes connection details with a JSON merge patch
+// (APISecretPublisher/APIPatchingApplicator), which re-adds every key the
+// managed resource owns on the next reconcile. Removing one here would
+// therefore only start a fight with that publisher, so a rename adds the new
+// name as an alias next to the original. Keys this controller added are
+// tracked in the AnnotationKeyManagedKeys annotation, which is what lets it
+// remove them again - and only them - once they are no longer configured.
+func (r *Reconciler) reconcileInPlace(ctx context.Context, log logging.Logger, secret *corev1.Secret, crd *clusterv1beta1.ConnectionSecretTransform, rename map[string]string, added map[string][]byte) (reconcile.Result, error) {
+	data, managedKeys, conflicts := inPlaceData(secret, rename, added)
+	if len(conflicts) > 0 {
+		// Writing these would overwrite a key the provider itself
+		// publishes (or upjet's Terraform state), so they are skipped.
+		log.Debug("Skipping connection secret keys that cannot be written in place", "entries", strings.Join(conflicts, ", "))
+		r.record.Event(secret, event.Warning(reasonInPlaceConflict,
+			errors.Errorf("skipping key(s) that would overwrite an existing connection secret key: %s", strings.Join(conflicts, ", "))))
+	}
+
+	if err := r.writeInPlace(ctx, secret, data, managedKeys); err != nil {
+		r.record.Event(secret, event.Warning(reasonTransformFailure, err))
+		r.setTransformStatus(ctx, crd, "", xpv1.Unavailable().WithMessage(err.Error()))
+		return reconcile.Result{}, errors.Wrap(err, "cannot write the transformed keys into the connection secret")
+	}
+
+	if len(managedKeys) == 0 {
+		r.setTransformStatus(ctx, crd, "", xpv1.Unavailable().WithMessage("nothing to rename or add"))
+		return r.resync(), nil
+	}
+	r.setTransformStatus(ctx, crd, secret.Name, xpv1.Available().WithMessage(
+		fmt.Sprintf("published in place into secret %q: %s", secret.Name, strings.Join(managedKeys, ", "))))
+	return r.resync(), nil
+}
+
+// writeInPlace persists the desired connection secret contents, if they
+// differ from what is already there. Doing nothing when nothing changed is
+// what keeps this controller from trading updates with the managed
+// resource's own connection secret publisher.
+func (r *Reconciler) writeInPlace(ctx context.Context, secret *corev1.Secret, data map[string][]byte, managedKeys []string) error {
+	annotation := strings.Join(managedKeys, ",")
+	if maps.EqualFunc(secret.Data, data, bytes.Equal) && secret.Annotations[AnnotationKeyManagedKeys] == annotation {
+		return nil
+	}
+
+	out := secret.DeepCopy()
+	out.Data = data
+	if out.Annotations == nil {
+		out.Annotations = map[string]string{}
+	}
+	if annotation == "" {
+		delete(out.Annotations, AnnotationKeyManagedKeys)
+	} else {
+		out.Annotations[AnnotationKeyManagedKeys] = annotation
+	}
+	return r.client.Update(ctx, out)
+}
+
+// inPlaceData returns the desired contents of the connection secret, the
+// sorted list of keys this controller owns in it, and the entries that had to
+// be skipped.
+//
+// A key is skipped when it would overwrite a key the provider publishes
+// itself (only keys recorded in AnnotationKeyManagedKeys may be written or
+// removed), when two entries claim the same name, or when it falls into
+// upjet's reserved "attribute." namespace, which carries the Terraform state.
+func inPlaceData(secret *corev1.Secret, rename map[string]string, added map[string][]byte) (map[string][]byte, []string, []string) {
+	prev := parseManagedKeys(secret.Annotations[AnnotationKeyManagedKeys])
+
+	desired := map[string][]byte{}
+	var conflicts []string
+
+	for _, k := range sortedKeys(secret.Data) {
+		if prev[k] {
+			// Never alias a key we added ourselves: only the provider's own
+			// keys are renamed, which keeps the result independent of what
+			// a previous reconcile happened to write.
+			continue
+		}
+		target, ok := rename[k]
+		if !ok || target == k {
+			continue
+		}
+		if reason := unusableInPlaceKey(secret, prev, desired, target); reason != "" {
+			conflicts = append(conflicts, fmt.Sprintf("%q=%q: %s", k, target, reason))
+			continue
+		}
+		desired[target] = secret.Data[k]
+	}
+
+	for _, k := range sortedKeys(added) {
+		if reason := unusableInPlaceKey(secret, prev, desired, k); reason != "" {
+			conflicts = append(conflicts, fmt.Sprintf("%q: %s", k, reason))
+			continue
+		}
+		desired[k] = added[k]
+	}
+
+	data := make(map[string][]byte, len(secret.Data)+len(desired))
+	for k, v := range secret.Data {
+		if _, keep := desired[k]; prev[k] && !keep {
+			// A key we added earlier that is no longer configured.
+			continue
+		}
+		data[k] = v
+	}
+	for k, v := range desired {
+		data[k] = v
+	}
+
+	sort.Strings(conflicts)
+	return data, sortedKeys(desired), conflicts
+}
+
+// unusableInPlaceKey returns why the given key must not be written into the
+// connection secret, or an empty string when it may be.
+func unusableInPlaceKey(secret *corev1.Secret, prev map[string]bool, desired map[string][]byte, key string) string {
+	if strings.HasPrefix(key, reservedKeyPrefix) {
+		return fmt.Sprintf("%q is reserved for the Terraform state", key)
+	}
+	if _, taken := desired[key]; taken {
+		return fmt.Sprintf("%q is already written by another entry", key)
+	}
+	if _, exists := secret.Data[key]; exists && !prev[key] {
+		return fmt.Sprintf("%q is published by the provider itself", key)
+	}
+	return ""
+}
+
+// parseManagedKeys reads the AnnotationKeyManagedKeys annotation, i.e. the
+// keys this controller added to a connection secret in an earlier reconcile.
+func parseManagedKeys(v string) map[string]bool {
+	keys := map[string]bool{}
+	for _, k := range strings.Split(v, ",") {
+		if k = strings.TrimSpace(k); k != "" {
+			keys[k] = true
+		}
+	}
+	return keys
+}
+
+// sortedKeys returns the keys of m in a deterministic order.
+func sortedKeys[V any](m map[string]V) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// transformMode resolves where the configured keys are written, merging the
+// ProviderConfig, the managed resource's own annotation and a matching
+// ConnectionSecretTransform in that order of precedence. An unrecognized
+// value is returned as the second result so the caller can report it, and
+// falls back to the default (in place) rather than failing the reconcile.
+func (r *Reconciler) transformMode(ctx context.Context, mr *unstructured.Unstructured, crd *clusterv1beta1.ConnectionSecretTransform) (clusterv1beta1.ConnectionSecretTransformMode, string, error) {
+	mode := clusterv1beta1.TransformModeInPlace
+	var invalid string
+
+	set := func(v clusterv1beta1.ConnectionSecretTransformMode) {
+		switch v {
+		case "":
+		case clusterv1beta1.TransformModeInPlace, clusterv1beta1.TransformModeSeparateSecret:
+			mode = v
+		default:
+			invalid = string(v)
+		}
+	}
+
+	// Same restriction as renameMap: only cluster-scoped resources
+	// reference the cluster-scoped ProviderConfig.
+	if mr.GetNamespace() == "" {
+		pc, err := r.providerConfig(ctx, mr)
+		if err != nil {
+			return mode, "", err
+		}
+		if pc != nil && pc.Spec.ConnectionSecretKeys != nil {
+			set(pc.Spec.ConnectionSecretKeys.Mode)
+		}
+	}
+	set(clusterv1beta1.ConnectionSecretTransformMode(strings.TrimSpace(mr.GetAnnotations()[AnnotationKeyMode])))
+	if crd != nil {
+		set(crd.Spec.Mode)
+	}
+	return mode, invalid, nil
+}
 
 // resync returns the result Keycloak-owned connection secrets are requeued
 // with. The rename configuration lives on objects this controller does not
