@@ -116,6 +116,12 @@ which diffs `config/schema.json` against `config/generated.lst` and files one
 GitHub issue per missing resource that isn't already tracked by an existing
 open issue (matched by exact resource name in the issue title/body).
 
+`config/generated.lst` is itself generated from `config.ExternalNameConfigs`
+(`make generated-lst`, run as part of `make generate`), and the workflow
+refreshes it before diffing, so an already implemented resource is never
+reported as missing. `make generated-lst-check` fails CI when the committed
+file is stale.
+
 - On `pull_request`, it only runs in dry-run mode (reports only, creates
   nothing) when the automation itself changes (the script or the workflow
   file) — not on every PR.
@@ -207,8 +213,8 @@ Rules and gotchas:
 - For scalar fields only one synthetic field may be set at a time; the
   consolidation injector errors otherwise. For list fields all synthetic lists
   are unioned.
-- Every referenced `TerraformName` must be present in `config/generated.lst`,
-  otherwise `make generate` panics with
+- Every referenced `TerraformName` must have an entry in
+  `config/external_name.go`, otherwise `make generate` panics with
   `cannot find configuration for Terraform resource`.
 - Examples: `config/role/config.go` and `config/mapper/config.go`
   (`client_id`/`saml_client_id`), `config/authentication/config.go`
@@ -240,6 +246,9 @@ consuming individual pages.
 
 - **Never edit `examples-generated/` by hand.** These are auto-generated.
 - **Never edit generated files in `apis/` or `package/crds/` by hand.**
+- **Never edit `config/generated.lst` by hand.** It is generated from
+  `config.ExternalNameConfigs` by `make generated-lst` (part of
+  `make generate`).
 - **`github.com/keycloak/terraform-provider-keycloak` updates are grouped;
   major bumps require manual review.** The go.mod pseudo-version and its
   pinned Makefile version are grouped into a single weekly Renovate PR.
