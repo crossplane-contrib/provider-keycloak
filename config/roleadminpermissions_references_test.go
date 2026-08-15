@@ -17,6 +17,42 @@ func TestRoleAdminPermissionsReferences(t *testing.T) {
 			terraformName: "keycloak_role",
 			extractor:     common.PathUUIDExtractor,
 		},
+		"aggregate_policies": {
+			terraformName: "keycloak_openid_client_aggregate_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
+		"client_policies": {
+			terraformName: "keycloak_openid_client_client_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
+		"client_scope_policies": {
+			terraformName: "keycloak_openid_client_authorization_client_scope_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
+		"group_policies": {
+			terraformName: "keycloak_openid_client_group_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
+		"js_policies": {
+			terraformName: "keycloak_openid_client_js_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
+		"regex_policies": {
+			terraformName: "keycloak_openid_client_regex_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
+		"role_policies": {
+			terraformName: "keycloak_openid_client_role_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
+		"time_policies": {
+			terraformName: "keycloak_openid_client_time_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
+		"user_policies": {
+			terraformName: "keycloak_openid_client_user_policy",
+			extractor:     common.PathUUIDExtractor,
+		},
 	}
 
 	flavours := map[string]func() (*ujconfig.Provider, error){
@@ -48,21 +84,10 @@ func TestRoleAdminPermissionsReferences(t *testing.T) {
 				}
 			}
 
-			for _, field := range []string{
-				"policies",
-				"aggregate_policies",
-				"client_policies",
-				"client_scope_policies",
-				"group_policies",
-				"js_policies",
-				"regex_policies",
-				"role_policies",
-				"time_policies",
-				"user_policies",
-			} {
-				if _, ok := r.References[field]; ok {
-					t.Errorf("%s: expected no reference configuration", field)
-				}
+			// The original policies field stays settable for raw IDs of
+			// policy types that are not (yet) exposed as managed resources.
+			if _, ok := r.References["policies"]; ok {
+				t.Errorf("policies: expected no reference configuration on the original field")
 			}
 			s, ok := r.TerraformResource.Schema["policies"]
 			if !ok {
