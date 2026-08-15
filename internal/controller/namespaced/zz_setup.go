@@ -18,6 +18,7 @@ import (
 	genericclientrolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/client/genericclientrolemapper"
 	protocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/client/protocolmapper"
 	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/client/rolemapper"
+	connectionsecrettransform "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/connectionsecrettransform"
 	defaultgroups "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/defaults/defaultgroups"
 	roles "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/defaults/roles"
 	adminpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/group/adminpermissions"
@@ -88,7 +89,6 @@ import (
 	usersessionnoteprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/usersessionnoteprotocolmapper"
 	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/organization/organization"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/providerconfig"
-	connectionsecrettransform "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/connectionsecrettransform"
 	clientpolicyprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofile"
 	clientpolicyprofilepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofilepolicy"
 	clientregistrationpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientregistrationpolicy"
@@ -135,6 +135,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		genericclientrolemapper.Setup,
 		protocolmapper.Setup,
 		rolemapper.Setup,
+		connectionsecrettransform.Setup,
 		defaultgroups.Setup,
 		roles.Setup,
 		adminpermissions.Setup,
@@ -205,7 +206,6 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		usersessionnoteprotocolmapper.Setup,
 		organization.Setup,
 		providerconfig.Setup,
-		connectionsecrettransform.Setup,
 		clientpolicyprofile.Setup,
 		clientpolicyprofilepolicy.Setup,
 		clientregistrationpolicy.Setup,
@@ -258,6 +258,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		genericclientrolemapper.SetupGated,
 		protocolmapper.SetupGated,
 		rolemapper.SetupGated,
+		connectionsecrettransform.SetupGated,
 		defaultgroups.SetupGated,
 		roles.SetupGated,
 		adminpermissions.SetupGated,
@@ -328,7 +329,6 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		usersessionnoteprotocolmapper.SetupGated,
 		organization.SetupGated,
 		providerconfig.SetupGated,
-		connectionsecrettransform.SetupGated,
 		clientpolicyprofile.SetupGated,
 		clientpolicyprofilepolicy.SetupGated,
 		clientregistrationpolicy.SetupGated,
@@ -380,6 +380,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		genericclientrolemapper.SetupWebhookWithManager,
 		protocolmapper.SetupWebhookWithManager,
 		rolemapper.SetupWebhookWithManager,
+		connectionsecrettransform.SetupWebhookWithManager,
 		defaultgroups.SetupWebhookWithManager,
 		roles.SetupWebhookWithManager,
 		adminpermissions.SetupWebhookWithManager,
