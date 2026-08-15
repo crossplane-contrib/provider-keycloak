@@ -104,6 +104,37 @@ one residual unknown to raise upstream rather than guess at. That shape (name
 the files, separate verified from inferred, end with either a decision or an
 upstream question) is what the skill should encode.
 
+Its first-class consumer is the consistency check from
+[0001](0001-schema-driven-resource-onboarding.md): each finding becomes one
+research task, and the skill's output is what makes the finding reviewable.
+
+The skill must pin its corpus, in this order, and must not fall back to
+open-ended web search for anything it asserts:
+
+| Source | How the skill reaches it | Answers |
+|--------|--------------------------|---------|
+| TF provider docs, pinned to `TERRAFORM_PROVIDER_VERSION` | `make pull-docs` → `.work/keycloak/keycloak/docs/resources/<resource>.md` | what an attribute *means*; whether it names another object at all |
+| TF provider Go source, pinned in `go.mod` | `go list -m -f '{{.Dir}}' github.com/keycloak/terraform-provider-keycloak` | validation, defaults, `ForceNew`, how the value is sent to Keycloak |
+| Keycloak server source / admin REST | upstream repository, version noted in the finding | whether the server actually accepts and honours the value |
+
+Both local sources are already materialised by `make generate.init`, at exactly
+the version `config/schema.json` was generated from — so the research is
+reproducible and cannot silently describe a different provider release than the
+one this repository builds against.
+
+Required output shape:
+
+- a claim table with `file:line` citations,
+- an explicit split between **verified** and **inferred**,
+- a recommendation, or an upstream question if the sources do not settle it,
+- **no repository edits**. Configuration changes are proposed as a diff for
+  review; the deterministic gate, not the model, decides whether the tree is
+  correct.
+
+The skill should also record the negative result: an attribute that upstream
+documents nowhere (14 of them today, mostly on the newest identity providers)
+is a finding in its own right and a candidate upstream docs contribution.
+
 ### Generation
 
 ```
@@ -181,3 +212,7 @@ operates and trusts.
   rot: instructions pointing at files that were renamed.
 - Do we want `ai/skills/` to be shipped in the Crossplane package, or is it
   repository-only tooling?
+- Should `research-upstream` ever run unattended (e.g. attached to the weekly
+  schema-diff issues), or only on request? Unattended runs cost tokens on every
+  provider bump and risk confident-sounding text in issues; on-request keeps a
+  human in the loop at the point where the answer is actually needed.

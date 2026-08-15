@@ -150,6 +150,76 @@ it gets wrong.
 Conclusion: the schema is a good **detector** and a poor **decider**. The design
 below leans on it for detection and keeps every decision explicit in Go.
 
+### AI can close the gap between detector and decider — by reading upstream
+
+This is the second question from review, and it fits exactly into the hole left
+above. The cross-check produces findings; what it cannot produce is the
+*reason*. The reason is almost always written down somewhere upstream — in the
+Terraform provider's docs and Go code, and behind that in the Keycloak server.
+Reading those three sources per finding is tedious, repetitive, requires no
+repository-specific judgement, and ends in a citation. That is a good fit for an
+agent, and it is precisely the `research-upstream` skill in
+[0002](0002-ai-skills-single-source-of-truth.md).
+
+The important property is that the corpus is **pinned and local**, so this is
+grounded lookup rather than open-ended web browsing:
+
+- `make pull-docs` already sparse-checks out `docs/resources` of the Terraform
+  provider at `TERRAFORM_PROVIDER_VERSION` (`5.9.0`) into
+  `.work/keycloak/keycloak/`, and `generate.init` depends on it — the corpus is
+  on disk before generation runs, at the same version as `config/schema.json`.
+- The provider's Go source is pinned in `go.mod` and addressable with
+  `go list -m -f '{{.Dir}}' github.com/keycloak/terraform-provider-keycloak`,
+  so `keycloak/identity_provider.go` and friends can be read at the exact
+  revision this repository builds against.
+
+The doc corpus carries the semantics the schema drops. Of the 242 non-computed,
+non-sensitive top-level attributes matching `*_id`/`*_ids`/`*_alias`, **228 are
+described in prose upstream** — including the distinction the name heuristic
+gets wrong (`provider_id` is documented as the provider implementation name,
+`post_broker_login_flow_alias` as "the authentication flow to use after users
+have successfully logged in"). Where a Crossplane reference is warranted, the
+upstream text says so in words.
+
+The remaining **14 are undocumented upstream**, and they cluster tellingly:
+
+| Undocumented attribute | Resources |
+|------------------------|-----------|
+| `organization_id` | 7 (all the social/OIDC IdPs, `kubernetes`, `spiffe`) |
+| `first_broker_login_flow_alias`, `post_broker_login_flow_alias`, `provider_id` | `keycloak_kubernetes_identity_provider`, `keycloak_spiffe_identity_provider` |
+| `client_scope_id` | `keycloak_generic_client_protocol_mapper` |
+
+The newest resources are both the least documented upstream *and* the ones this
+repository configured inconsistently — `keycloak_spiffe_identity_provider` is
+one of the two resources that wired `post_broker_login_flow_alias`. Absent
+upstream prose is therefore itself a useful signal: it marks the findings a
+human must decide, and it is an actionable upstream contribution (a docs PR)
+rather than a local workaround.
+
+The division of labour that follows:
+
+| Layer | Produces | Trust |
+|-------|----------|-------|
+| Cross-check (deterministic) | the finding: "same attribute, different treatment" | authoritative, gates CI |
+| Agent research (upstream docs → provider Go → Keycloak server) | a proposal with `file:line` citations, and what remains unverified | reviewed input, never authoritative |
+| Registry entry / `NotAReference` reason (human-reviewed Go) | the decision | authoritative, in the diff |
+
+Guardrails, so this stays a research aid and not an oracle:
+
+- An agent never edits `config/` unattended as a result of a scan. It produces a
+  proposed diff plus citations; the gate still fails until a human merges it.
+- Every claim cites a file and line in the pinned tree. A claim that cannot be
+  cited is reported as unverified — like "does Keycloak execute a *subflow* in
+  the broker-login context?", which stayed open above and belongs in an upstream
+  question, not in a guess.
+- The deterministic check remains the source of the *finding set*. The agent
+  never decides what to look at, only what a finding means, which keeps the
+  output bounded and reproducible (five findings today, not "whatever the model
+  noticed").
+
+Concretely, this is what turns step 2 of the rollout from "a maintainer reads
+Keycloak source for an afternoon" into "review five annotated findings".
+
 ## Proposed Design
 
 Three independent pieces. Each is useful alone, and each can be adopted without
@@ -285,7 +355,8 @@ and costs one function.
    the problem visible before anything is restructured.
 2. Classify those five: wire the two flow-alias gaps and `parent_id` (or record
    why not), and record `client_id`/`client_scope_id` as intentional
-   multitypes. Flip the check to failing.
+   multitypes. Flip the check to failing. Use the `research-upstream` skill on
+   each finding so the classification arrives with upstream citations attached.
 3. Introduce `config/references` with today's `KnownReferencers()` content moved
    into it, plus the classifications from step 2.
 4. Triage the ~31 currently unwired attributes and enable the broader
@@ -293,6 +364,9 @@ and costs one function.
 5. Add `make new-resource`, and use it for the next resource added; refine the
    templates against that experience before advertising it.
 6. Extend `scripts/schema_diff_issues.py` with the consistency pass.
+7. Optionally let the weekly automation attach agent research to each reported
+   finding (upstream doc excerpt + citations), so the issue arrives
+   pre-triaged. Only worth doing once the reporting itself is trusted.
 
 Each step is independently revertible. Only step 2 changes generated CRDs, and
 it needs the usual review of the `package/crds/` diff.
@@ -320,3 +394,12 @@ it needs the usual review of the `package/crds/` diff.
   reason next to the decision; a separate file is easier to review in bulk.
 - Should `make new-resource` also scaffold `docs/content/docs/using/resources/`
   pages, or would that just create empty pages nobody fills in?
+- Should the agent-attached upstream research be committed (e.g. as the
+  `NotAReference` reason text plus a citation comment) or only live in the PR
+  discussion? Committing it makes the reasoning survive; it also means the
+  citation can go stale on the next provider bump, unless a check verifies the
+  cited file still exists in the pinned tree.
+- Should the 14 upstream-undocumented attributes be raised as a docs
+  contribution to `keycloak/terraform-provider-keycloak`? It would benefit every
+  consumer of the provider, and it is the "report upstream instead of working
+  around it" rule applied to ourselves.
