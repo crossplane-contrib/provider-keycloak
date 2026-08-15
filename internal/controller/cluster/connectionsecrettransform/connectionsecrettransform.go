@@ -56,6 +56,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+	"sigs.k8s.io/yaml"
 
 	"github.com/crossplane/crossplane-runtime/v2/pkg/event"
 	"github.com/crossplane/crossplane-runtime/v2/pkg/logging"
@@ -67,19 +68,30 @@ import (
 
 const (
 	// AnnotationKeyRename configures the renaming for a single managed
-	// resource, as a comma- and/or newline-separated list of
-	// "<oldKey>=<newKey>" pairs, e.g.
+	// resource. Two syntaxes are supported, tried in this order:
 	//
-	//	keycloak.crossplane.io/connection-secret-key-rename: clientID=client-id,clientSecret=client-secret
+	//  1. A YAML block mapping of "<oldKey>: <newKey>" pairs:
 	//
-	// Kubernetes annotations may be multi-line (a YAML block scalar), which
-	// reads better for longer lists:
+	//     keycloak.crossplane.io/connection-secret-key-rename: |
+	//       clientID: client-id
+	//       clientSecret: client-secret
 	//
-	//	keycloak.crossplane.io/connection-secret-key-rename: |
-	//	  clientID=client-id
-	//	  clientSecret=client-secret
+	//  2. A comma- and/or newline-separated list of "<oldKey>=<newKey>"
+	//     pairs, e.g.
 	//
-	// Entries here are merged on top of the ProviderConfig-wide
+	//     keycloak.crossplane.io/connection-secret-key-rename: clientID=client-id,clientSecret=client-secret
+	//
+	//     Kubernetes annotations may be multi-line (a YAML block scalar),
+	//     which reads better for longer lists:
+	//
+	//     keycloak.crossplane.io/connection-secret-key-rename: |
+	//       clientID=client-id
+	//       clientSecret=client-secret
+	//
+	// The value is first tried as a YAML mapping; if it does not parse as
+	// one (e.g. it uses "=" instead of ": ", which YAML treats as a plain
+	// scalar, not a mapping) it falls back to the "key=value" syntax. Either
+	// way, entries here are merged on top of the ProviderConfig-wide
 	// spec.connectionSecretKeys.rename map, so a resource can extend or
 	// override the central configuration without replacing it.
 	AnnotationKeyRename = "keycloak.crossplane.io/connection-secret-key-rename"
@@ -92,8 +104,14 @@ const (
 
 	// AnnotationKeyAddFields adds extra keys to the transformed connection
 	// secret, sourced from elsewhere rather than renamed from the secret
-	// itself. Same comma-/newline-separated "<newKey>=<source>" syntax as
-	// AnnotationKeyRename, e.g.
+	// itself. Same YAML-mapping-or-"key=value" syntax as AnnotationKeyRename
+	// (see its doc comment for both forms), e.g.
+	//
+	//	keycloak.crossplane.io/connection-secret-add-fields: |
+	//	  issuerUrl: providerConfig:metadata.name
+	//	  internalClientId: status:atProvider.id
+	//
+	// or, using the "key=value" fallback syntax:
 	//
 	//	keycloak.crossplane.io/connection-secret-add-fields: |
 	//	  issuerUrl=providerConfig:metadata.name
@@ -728,14 +746,29 @@ func transform(data map[string][]byte, rename map[string]string) (map[string][]b
 	return out, conflicts
 }
 
-// parseRenameAnnotation parses a list of "<oldKey>=<newKey>" pairs separated
-// by commas and/or newlines (Kubernetes annotations may be multi-line YAML
-// block scalars, which is easier to read for longer lists). Malformed
-// entries are ignored rather than failing the whole reconcile, which would
-// otherwise leave a resource stuck on a typo.
+// parseRenameAnnotation parses an annotation value holding a set of
+// "<oldKey>=<newKey>" pairs. Two syntaxes are accepted:
+//
+//   - A YAML block mapping, e.g. "clientID: client-id\nclientSecret:
+//     client-secret". This is tried first: if v unmarshals into a
+//     map[string]string it is used as-is.
+//   - A flat list of "<oldKey>=<newKey>" pairs separated by commas and/or
+//     newlines (Kubernetes annotations may be multi-line YAML block
+//     scalars, which is easier to read for longer lists), e.g.
+//     "clientID=client-id,clientSecret=client-secret" or one pair per line.
+//     This is the fallback used whenever v is not a YAML mapping.
+//
+// Malformed entries are ignored rather than failing the whole reconcile,
+// which would otherwise leave a resource stuck on a typo. The YAML mapping
+// form is all-or-nothing (a malformed YAML document simply fails to parse
+// as a mapping and falls back to the flat-list parser), so per-entry
+// tolerance is preserved either way.
 func parseRenameAnnotation(v string) map[string]string {
 	if v == "" {
 		return nil
+	}
+	if m, ok := parseRenameAnnotationYAML(v); ok {
+		return m
 	}
 	rename := map[string]string{}
 	for _, pair := range strings.FieldsFunc(v, func(r rune) bool { return r == ',' || r == '\n' }) {
@@ -747,6 +780,32 @@ func parseRenameAnnotation(v string) map[string]string {
 		rename[oldKey] = newKey
 	}
 	return rename
+}
+
+// parseRenameAnnotationYAML tries to interpret v as a YAML block mapping of
+// "<oldKey>: <newKey>" pairs. It returns ok == false whenever v does not
+// unmarshal cleanly into a map[string]string (in particular, a "key=value"
+// flat list parses as a YAML scalar rather than a mapping, so it never
+// matches here and safely falls back to the flat-list parser), or whenever
+// it parses to an empty map, so that callers can fall back to the
+// comma/newline "key=value" syntax without ambiguity.
+func parseRenameAnnotationYAML(v string) (map[string]string, bool) {
+	m := map[string]string{}
+	if err := yaml.Unmarshal([]byte(v), &m); err != nil || len(m) == 0 {
+		return nil, false
+	}
+	rename := make(map[string]string, len(m))
+	for oldKey, newKey := range m {
+		oldKey, newKey = strings.TrimSpace(oldKey), strings.TrimSpace(newKey)
+		if oldKey == "" || newKey == "" {
+			continue
+		}
+		rename[oldKey] = newKey
+	}
+	if len(rename) == 0 {
+		return nil, false
+	}
+	return rename, true
 }
 
 // findManagedOwner returns the owner reference pointing at a Keycloak managed

@@ -457,6 +457,21 @@ func TestParseRenameAnnotation(t *testing.T) {
 				"clientSecret":         "client-secret",
 			},
 		},
+		"YAMLMapping": {
+			annotation: "clientID: client-id\nclientSecret: client-secret\n",
+			want: map[string]string{
+				"clientID":     "client-id",
+				"clientSecret": "client-secret",
+			},
+		},
+		"YAMLMappingSingleEntry": {
+			annotation: "clientID: client-id",
+			want:       map[string]string{"clientID": "client-id"},
+		},
+		"YAMLMappingIgnoresEmptyValue": {
+			annotation: "clientID: client-id\nclientSecret:\n",
+			want:       map[string]string{"clientID": "client-id"},
+		},
 	}
 
 	for name, tc := range cases {
