@@ -257,6 +257,134 @@ func TestReconcile(t *testing.T) {
 	}
 }
 
+// TestReconcileConnectionSecretTransformCRD verifies that a
+// ConnectionSecretTransform naming the connection secret contributes its
+// rename/add maps and secret name, at the highest precedence, and that its
+// own status reflects the outcome.
+func TestReconcileConnectionSecretTransformCRD(t *testing.T) {
+	s := newScheme(t)
+	data := map[string][]byte{
+		"clientID":     []byte("vikunja"),
+		"clientSecret": []byte("s3cret"),
+	}
+
+	mr := newClient(map[string]string{
+		AnnotationKeyRename: "clientSecret=oidc-secret",
+	})
+	secret := newConnectionSecret(mr, data)
+
+	crd := &clusterv1beta1.ConnectionSecretTransform{
+		ObjectMeta: metav1.ObjectMeta{Name: "envoy-oidc", Namespace: secretNS},
+		Spec: clusterv1beta1.ConnectionSecretTransformSpec{
+			SourceSecretRef:       clusterv1beta1.LocalSecretReference{Name: secretName},
+			TransformedSecretName: "envoy-oidc",
+			// Overrides the annotation's "oidc-secret" - the CRD wins.
+			Rename: map[string]string{
+				"clientID":     "client-id",
+				"clientSecret": "client-secret",
+			},
+		},
+	}
+
+	cl := fake.NewClientBuilder().
+		WithScheme(s).
+		WithObjects(mr, providerConfig(nil), secret, crd).
+		WithStatusSubresource(crd).
+		Build()
+
+	r := newReconciler(cl)
+	if _, err := r.Reconcile(context.Background(), request(secret)); err != nil {
+		t.Fatalf("Reconcile(...): unexpected error: %v", err)
+	}
+
+	out := &corev1.Secret{}
+	if err := cl.Get(context.Background(), types.NamespacedName{Name: "envoy-oidc", Namespace: secretNS}, out); err != nil {
+		t.Fatalf("cannot get transformed secret: %v", err)
+	}
+	want := map[string][]byte{
+		"client-id":     []byte("vikunja"),
+		"client-secret": []byte("s3cret"),
+	}
+	if len(out.Data) != len(want) {
+		t.Fatalf("transformed secret data = %v, want %v", out.Data, want)
+	}
+	for k, v := range want {
+		if !bytes.Equal(out.Data[k], v) {
+			t.Errorf("transformed secret[%q] = %q, want %q", k, out.Data[k], v)
+		}
+	}
+
+	got := &clusterv1beta1.ConnectionSecretTransform{}
+	if err := cl.Get(context.Background(), types.NamespacedName{Name: "envoy-oidc", Namespace: secretNS}, got); err != nil {
+		t.Fatalf("cannot get ConnectionSecretTransform: %v", err)
+	}
+	if got.Status.TransformedSecretName != "envoy-oidc" {
+		t.Errorf("status.transformedSecretName = %q, want %q", got.Status.TransformedSecretName, "envoy-oidc")
+	}
+	cond := got.Status.GetCondition(xpv1.TypeReady)
+	if cond.Status != corev1.ConditionTrue {
+		t.Errorf("status Ready condition = %v, want True", cond)
+	}
+}
+
+// TestReconcileAmbiguousConnectionSecretTransform verifies that two
+// ConnectionSecretTransforms naming the same secret are both refused (rather
+// than one winning arbitrarily), and that both report why on their own
+// status.
+func TestReconcileAmbiguousConnectionSecretTransform(t *testing.T) {
+	s := newScheme(t)
+	data := map[string][]byte{"clientID": []byte("vikunja")}
+
+	mr := newClient(nil)
+	secret := newConnectionSecret(mr, data)
+
+	first := &clusterv1beta1.ConnectionSecretTransform{
+		ObjectMeta: metav1.ObjectMeta{Name: "first", Namespace: secretNS},
+		Spec: clusterv1beta1.ConnectionSecretTransformSpec{
+			SourceSecretRef: clusterv1beta1.LocalSecretReference{Name: secretName},
+			Rename:          map[string]string{"clientID": "client-id"},
+		},
+	}
+	second := &clusterv1beta1.ConnectionSecretTransform{
+		ObjectMeta: metav1.ObjectMeta{Name: "second", Namespace: secretNS},
+		Spec: clusterv1beta1.ConnectionSecretTransformSpec{
+			SourceSecretRef: clusterv1beta1.LocalSecretReference{Name: secretName},
+			Rename:          map[string]string{"clientID": "other-id"},
+		},
+	}
+
+	cl := fake.NewClientBuilder().
+		WithScheme(s).
+		WithObjects(mr, providerConfig(nil), secret, first, second).
+		WithStatusSubresource(first, second).
+		Build()
+
+	r := newReconciler(cl)
+	if _, err := r.Reconcile(context.Background(), request(secret)); err != nil {
+		t.Fatalf("Reconcile(...): unexpected error: %v", err)
+	}
+
+	l := &corev1.SecretList{}
+	if err := cl.List(context.Background(), l, client.InNamespace(secretNS),
+		client.MatchingLabels{transformedSecretLabel: transformedSecretLabelValue}); err != nil {
+		t.Fatalf("cannot list transformed secrets: %v", err)
+	}
+	if len(l.Items) != 0 {
+		t.Fatalf("expected no transformed secret while ambiguous, got %d", len(l.Items))
+	}
+
+	for _, name := range []string{"first", "second"} {
+		got := &clusterv1beta1.ConnectionSecretTransform{}
+		if err := cl.Get(context.Background(), types.NamespacedName{Name: name, Namespace: secretNS}, got); err != nil {
+			t.Fatalf("cannot get ConnectionSecretTransform %q: %v", name, err)
+		}
+		cond := got.Status.GetCondition(xpv1.TypeReady)
+		if cond.Status != corev1.ConditionFalse {
+			t.Errorf("%s status Ready condition = %v, want False", name, cond)
+		}
+	}
+}
+
 // TestReconcileCollectsStaleOutput verifies that a secret written by an
 // earlier reconcile is removed when it is no longer wanted, both when the
 // target name changed and when the renaming was dropped entirely.
@@ -800,7 +928,7 @@ func TestAddFieldMap(t *testing.T) {
 	cl := fake.NewClientBuilder().WithScheme(s).WithObjects(pc).Build()
 	r := newReconciler(cl)
 
-	got, invalid, err := r.addFieldMap(context.Background(), mr)
+	got, invalid, err := r.addFieldMap(context.Background(), mr, nil)
 	if err != nil {
 		t.Fatalf("addFieldMap(...): unexpected error: %v", err)
 	}
@@ -819,7 +947,7 @@ func TestAddFieldMap(t *testing.T) {
 	mr.Object["metadata"].(map[string]interface{})["annotations"] = map[string]interface{}{
 		AnnotationKeyAddFields: "internalId=status:atProvider.missing",
 	}
-	got, invalid, err = r.addFieldMap(context.Background(), mr)
+	got, invalid, err = r.addFieldMap(context.Background(), mr, nil)
 	if err != nil {
 		t.Fatalf("addFieldMap(...): unexpected error: %v", err)
 	}

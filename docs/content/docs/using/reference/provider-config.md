@@ -234,14 +234,69 @@ secret, which is in turn owned by the managed resource, so both are deleted
 together with the `Client`.
 
 Namespaced managed resources (`*.keycloak.m.crossplane.io`) are configured
-with the annotations only, since the `rename`/`add` maps live on the
-cluster-scoped `ProviderConfig`.
+with the annotations (or a `ConnectionSecretTransform`, see below) only, since
+the `rename`/`add` maps live on the cluster-scoped `ProviderConfig`.
 
 Editing an annotation (or the `ProviderConfig` map) does not change the
 connection secret itself, so the transformed secret is not updated
 immediately: the provider re-evaluates each connection secret once per poll
 interval (`--poll-interval`, one minute by default) and applies the new
 configuration then.
+
+## Configuring via a `ConnectionSecretTransform` Object
+
+Both of the above configure the transform through the managed resource's own
+manifest — the `ProviderConfig` it references, or its own annotations. A
+third option, the namespaced `ConnectionSecretTransform` custom resource,
+names the connection secret to transform directly instead, and is useful when
+you would rather not edit the resource that owns the secret at all — for
+example when it is reconciled by a separate GitOps pipeline you don't
+control, or when several unrelated teams each want to republish the same
+secret differently.
+
+```yaml
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ConnectionSecretTransform
+metadata:
+  name: my-app-oidc
+  namespace: default
+spec:
+  sourceSecretRef:
+    name: my-app-connection
+  transformedSecretName: my-app-oidc
+  rename:
+    clientID: client-id
+    clientSecret: client-secret
+  add:
+    providerConfigName: "providerConfig:metadata.name"
+```
+
+`spec.sourceSecretRef.name` is the name of an existing connection secret in
+the `ConnectionSecretTransform`'s own namespace — connection secrets are
+always namespaced, whether the managed resource that owns them is
+cluster-scoped or namespaced, so `ConnectionSecretTransform` is namespaced
+too, unlike the cluster-scoped `ProviderConfig`. `spec.rename`, `spec.add` and
+`spec.transformedSecretName` accept the same values as the `ProviderConfig`
+map and the annotations respectively (native YAML maps here, since there is
+no annotation string encoding to work around), and are merged on top of
+both — a `ConnectionSecretTransform` entry always wins over the same key
+configured on the `ProviderConfig` or via an annotation. This makes it the
+right tool when a `ConnectionSecretTransform` should override, rather than
+merely extend, another team's central configuration.
+
+Editing, creating or deleting a `ConnectionSecretTransform` reconciles its
+named secret immediately — it does not have to wait for the poll interval,
+unlike editing the `ProviderConfig` or an annotation.
+
+Its own `status.conditions` reports whether it is currently applied
+(`Ready: True`, with `status.transformedSecretName` set) or refused, together
+with the reason (e.g. a name collision, or another `ConnectionSecretTransform`
+in the same namespace naming the same source secret, which is ambiguous and
+so refuses both rather than picking one arbitrarily):
+
+```console
+$ kubectl get connectionsecrettransform my-app-oidc -o jsonpath='{.status.conditions}'
+```
 
 ## Adding Status/ProviderConfig Fields
 
@@ -328,6 +383,7 @@ reconciliation:
 | An added field's key collides with an existing (or renamed) key | The added field is skipped, the existing key wins | `ConnectionSecretFieldAddConflict` |
 | `connection-secret-transform-name` is not a valid secret name, or names the connection secret itself | Nothing is written | `InvalidTransformedSecretName` |
 | A secret of that name exists and was not written by this controller | Nothing is written, the existing secret is left untouched | `TransformedSecretNotOwned` |
+| More than one `ConnectionSecretTransform` in a namespace names the same source secret | None of them are applied; each reports the conflict on its own `status.conditions` | `ConnectionSecretTransformAmbiguous` |
 
 The controller only ever writes secrets it created itself — they carry the
 labels `keycloak.crossplane.io/connection-secret-transform: "true"` and

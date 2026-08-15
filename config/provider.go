@@ -106,7 +106,6 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 	// packages (e.g. providerconfig), the same way upjet does by default for
 	// ProviderConfig. See
 	// internal/controller/cluster/connectionsecrettransform for details.
-	pc.BasePackages.Controller = append(pc.BasePackages.Controller, "connectionsecrettransform")
 	pc.BasePackages.ControllerMap["connectionsecrettransform"] = ujconfig.PackageNameConfig
 
 	for _, configure := range []func(provider *ujconfig.Provider){
