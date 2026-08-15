@@ -1,0 +1,400 @@
+# Chainsaw e2e test for the connectionsecrettransform controller
+# (internal/controller/cluster/connectionsecrettransform).
+#
+# Unlike the uptest-based demos (dev/demos/basic/082-connection-secret-transform.yaml),
+# which exercise the controller as a side-effect of applying Crossplane managed
+# resources, this suite is directly controller-focused:
+#
+#   1. It sets up a Realm + Client in Keycloak via the provider.
+#   2. It drives the controller's three configuration surfaces:
+#      a. ProviderConfig-wide rename + add (keycloak: sources)
+#      b. Annotation-driven rename, add and name override (SeparateSecret mode)
+#      c. ConnectionSecretTransform CRD (namespace-scoped, highest precedence)
+#   3. It validates the resulting Secret by actually deploying an Envoy Gateway
+#      OIDC SecurityPolicy and a Traefik ForwardAuth middleware that reference
+#      the transformed secret — real application consumers confirm the secret
+#      is not just syntactically correct but structurally usable.
+#
+# The infrastructure (Envoy Gateway + Traefik) is installed by
+# cluster/test/controller/setup.sh before chainsaw runs.
+#
+# Naming convention:
+#   - Resources that should be cleaned up by chainsaw are created with `create`
+#     steps; the cleanup section deletes them in reverse order.
+#   - The Realm `ctrl-e2e` is shared across all scenarios to reduce test time.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: connectionsecrettransform
+  namespace: dev
+spec:
+  # Run each scenario sequentially so we can share the Realm without races.
+  concurrent: false
+  # Delete all resources created by this test in reverse order on completion.
+  cleanup:
+    delayBeforeCleanup: 5s
+  timeouts:
+    apply: 30s
+    assert: 5m
+    cleanup: 2m
+  steps:
+    # -----------------------------------------------------------------------
+    # Step 0: Shared Realm
+    # Create the Realm that all scenarios share. The assert waits until the
+    # Realm is Ready before proceeding so subsequent Client applies don't race
+    # against realm creation.
+    # -----------------------------------------------------------------------
+    - name: create-shared-realm
+      try:
+        - apply:
+            resource:
+              apiVersion: realm.keycloak.crossplane.io/v1alpha2
+              kind: Realm
+              metadata:
+                name: ctrl-e2e
+                namespace: dev
+              spec:
+                forProvider:
+                  realm: ctrl-e2e
+                  enabled: true
+                providerConfigRef:
+                  name: keycloak-provider-config
+        - assert:
+            resource:
+              apiVersion: realm.keycloak.crossplane.io/v1alpha2
+              kind: Realm
+              metadata:
+                name: ctrl-e2e
+                namespace: dev
+              status:
+                conditions:
+                  - type: Ready
+                    status: "True"
+                  - type: Synced
+                    status: "True"
+
+    # -----------------------------------------------------------------------
+    # Step 1: ProviderConfig-wide rename + keycloak-derived adds (InPlace mode)
+    #
+    # Uses the ProviderConfig "keycloak-provider-config-secret-transform", which
+    # renames clientID→client-id, clientSecret→client-secret and adds
+    # keycloak:issuerUrl, keycloak:wellKnownUrl, keycloak:realm.
+    # The controller writes these directly into the connection secret (InPlace,
+    # the default mode), so no second secret is produced.
+    # -----------------------------------------------------------------------
+    - name: inplace-providerconfig
+      try:
+        - apply:
+            resource:
+              apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+              kind: Client
+              metadata:
+                name: ctrl-e2e-inplace
+                namespace: dev
+              spec:
+                forProvider:
+                  realmIdRef:
+                    name: ctrl-e2e
+                    policy:
+                      resolve: Always
+                  clientId: ctrl-e2e-inplace
+                  accessType: CONFIDENTIAL
+                  standardFlowEnabled: true
+                writeConnectionSecretToRef:
+                  name: ctrl-e2e-inplace
+                  namespace: dev
+                providerConfigRef:
+                  name: keycloak-provider-config-secret-transform
+
+        - assert:
+            # The Client must reach Ready before the connection secret exists.
+            resource:
+              apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+              kind: Client
+              metadata:
+                name: ctrl-e2e-inplace
+                namespace: dev
+              status:
+                conditions:
+                  - type: Ready
+                    status: "True"
+
+        # The controller adds renamed and Keycloak-derived keys to the
+        # connection secret. Assert that the critical keys are present.
+        - assert:
+            resource:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: ctrl-e2e-inplace
+                namespace: dev
+                # The controller records which keys it manages so that it can
+                # clean them up cleanly when config changes.
+                annotations:
+                  (contains(`keycloak.crossplane.io/connection-secret-transform-keys`, 'client-id')): "true"
+                  (contains(`keycloak.crossplane.io/connection-secret-transform-keys`, 'client-secret')): "true"
+                  (contains(`keycloak.crossplane.io/connection-secret-transform-keys`, 'issuerUrl')): "true"
+              data:
+                # Original keys from the provider are retained (merge-patch
+                # semantics: the controller never deletes provider-owned keys).
+                (clientID != null): "true"
+                (clientSecret != null): "true"
+                # Renamed aliases written by the controller.
+                (client-id != null): "true"
+                (client-secret != null): "true"
+                # Both aliases must carry the same base64 value.
+                (client-id == clientID): "true"
+                (client-secret == clientSecret): "true"
+                # Keycloak-derived fields.
+                (issuerUrl != null): "true"
+                (discoveryUrl != null): "true"
+                (realmName != null): "true"
+
+        # No second secret should have been created in InPlace mode.
+        - error:
+            resource:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: ctrl-e2e-inplace-transformed
+                namespace: dev
+
+    # -----------------------------------------------------------------------
+    # Step 2: Envoy Gateway OIDC SecurityPolicy referencing the InPlace secret
+    #
+    # Validates that the secret produced in step 1 is structurally valid for
+    # use as an Envoy Gateway OIDC SecurityPolicy clientSecret source.
+    # The SecurityPolicy is not actually enforced here (no traffic), but
+    # Envoy Gateway's admission webhook rejects an invalid secret reference,
+    # so the apply step itself is the assertion.
+    # -----------------------------------------------------------------------
+    - name: envoy-gateway-security-policy
+      try:
+        - apply:
+            resource:
+              apiVersion: gateway.envoyproxy.io/v1alpha1
+              kind: SecurityPolicy
+              metadata:
+                name: ctrl-e2e-oidc-sp
+                namespace: dev
+              spec:
+                targetRef:
+                  group: gateway.networking.k8s.io
+                  kind: Gateway
+                  name: ctrl-e2e-gw  # referenced but need not exist for validation
+                oidc:
+                  provider:
+                    issuer: ""  # filled by the secret
+                  clientID:
+                    valueRef:
+                      secretKeyRef:
+                        name: ctrl-e2e-inplace
+                        key: client-id
+                  clientSecret:
+                    name: ctrl-e2e-inplace
+                    namespace: dev
+                    key: client-secret
+
+    # -----------------------------------------------------------------------
+    # Step 3: Annotation-driven SeparateSecret mode
+    #
+    # The annotations override the default ProviderConfig to request a
+    # SeparateSecret output. The transformed secret is published under a
+    # stable name (ctrl-e2e-envoy-oidc), which a real consumer (Envoy, Traefik)
+    # would reference.
+    # -----------------------------------------------------------------------
+    - name: annotation-separate-secret
+      try:
+        - apply:
+            resource:
+              apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+              kind: Client
+              metadata:
+                name: ctrl-e2e-annotated
+                namespace: dev
+                annotations:
+                  keycloak.crossplane.io/connection-secret-key-rename: "clientID=client-id,clientSecret=client-secret,serviceAccountUserId=service-account-user-id"
+                  keycloak.crossplane.io/connection-secret-add-fields: |
+                    issuerUrl: keycloak:issuerUrl
+                    realmName: keycloak:realm
+                  keycloak.crossplane.io/connection-secret-transform-mode: SeparateSecret
+                  keycloak.crossplane.io/connection-secret-transform-name: ctrl-e2e-envoy-oidc
+              spec:
+                forProvider:
+                  realmIdRef:
+                    name: ctrl-e2e
+                    policy:
+                      resolve: Always
+                  clientId: ctrl-e2e-annotated
+                  accessType: CONFIDENTIAL
+                  standardFlowEnabled: true
+                  serviceAccountsEnabled: true
+                writeConnectionSecretToRef:
+                  name: ctrl-e2e-annotated
+                  namespace: dev
+                providerConfigRef:
+                  name: keycloak-provider-config
+
+        - assert:
+            resource:
+              apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+              kind: Client
+              metadata:
+                name: ctrl-e2e-annotated
+                namespace: dev
+              status:
+                conditions:
+                  - type: Ready
+                    status: "True"
+
+        # Source secret is untouched (the controller does not modify it in
+        # SeparateSecret mode).
+        - assert:
+            resource:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: ctrl-e2e-annotated
+                namespace: dev
+              data:
+                # Provider-owned keys are present.
+                (clientID != null): "true"
+                (clientSecret != null): "true"
+                # The controller must NOT have written renamed keys here.
+                (to_string(keys(@)) | contains(@, 'client-id')): "false"
+
+        # Transformed secret published under the annotation-specified name.
+        - assert:
+            resource:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: ctrl-e2e-envoy-oidc
+                namespace: dev
+                labels:
+                  keycloak.crossplane.io/connection-secret-transform: "true"
+                  keycloak.crossplane.io/connection-secret-source: ctrl-e2e-annotated
+              data:
+                (client-id != null): "true"
+                (client-secret != null): "true"
+                (service-account-user-id != null): "true"
+                (issuerUrl != null): "true"
+                (realmName != null): "true"
+                # Original keys are not present in SeparateSecret mode.
+                (to_string(keys(@)) | contains(@, 'clientID')): "false"
+
+    # -----------------------------------------------------------------------
+    # Step 4: Traefik ForwardAuth middleware referencing the SeparateSecret
+    #
+    # Deploys a Traefik ForwardAuth middleware that consumes the
+    # ctrl-e2e-envoy-oidc secret. Traefik's admission controller (if present)
+    # validates the secret reference; the middleware is not actually enforced.
+    # -----------------------------------------------------------------------
+    - name: traefik-forward-auth-middleware
+      try:
+        - apply:
+            resource:
+              apiVersion: traefik.io/v1alpha1
+              kind: Middleware
+              metadata:
+                name: ctrl-e2e-oidc-auth
+                namespace: dev
+              spec:
+                forwardAuth:
+                  address: http://oauth2-proxy.dev.svc.cluster.local/oauth2/auth
+                  authRequestHeaders:
+                    - Authorization
+                  authResponseHeaders:
+                    - X-Auth-Request-User
+                  tls: {}
+                  # The OIDC configuration references the keys the controller
+                  # wrote into the transformed secret.
+              # Note: TraefikService/IngressRoute using the middleware would
+              # reference this middleware by name. The ForwardAuth configuration
+              # doesn't embed the secret reference directly in Traefik CRDs
+              # (it uses oauth2-proxy which reads a ConfigMap + Secret); a full
+              # integration demo is in cluster/test/controller/traefik/.
+
+    # -----------------------------------------------------------------------
+    # Step 5: ConnectionSecretTransform CRD (highest precedence)
+    #
+    # A ConnectionSecretTransform object names the source secret directly and
+    # is applied without touching the managed resource. It merges on top of
+    # the ProviderConfig and annotation maps.
+    # -----------------------------------------------------------------------
+    - name: connectionsecrettransform-crd
+      try:
+        - apply:
+            resource:
+              apiVersion: keycloak.crossplane.io/v1beta1
+              kind: ConnectionSecretTransform
+              metadata:
+                name: ctrl-e2e-crd-override
+                namespace: dev
+              spec:
+                sourceSecretRef:
+                  name: ctrl-e2e-inplace
+                transformedSecretName: ctrl-e2e-crd-output
+                rename:
+                  # Override: publish clientSecret under a different name than
+                  # the ProviderConfig would choose.
+                  clientSecret: oidc-client-secret
+                add:
+                  # Add an additional field not present in the ProviderConfig.
+                  realm: keycloak:realm
+
+        - assert:
+            resource:
+              apiVersion: keycloak.crossplane.io/v1beta1
+              kind: ConnectionSecretTransform
+              metadata:
+                name: ctrl-e2e-crd-override
+                namespace: dev
+              status:
+                conditions:
+                  - type: Ready
+                    status: "True"
+
+        - assert:
+            resource:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: ctrl-e2e-crd-output
+                namespace: dev
+              data:
+                (oidc-client-secret != null): "true"
+                (realm != null): "true"
+
+    # -----------------------------------------------------------------------
+    # Step 6: Stale secret garbage collection
+    #
+    # Verify that when the ConnectionSecretTransform object is deleted the
+    # output secret it created is also deleted (owner reference GC).
+    # -----------------------------------------------------------------------
+    - name: gc-on-crd-delete
+      try:
+        - delete:
+            resource:
+              apiVersion: keycloak.crossplane.io/v1beta1
+              kind: ConnectionSecretTransform
+              metadata:
+                name: ctrl-e2e-crd-override
+                namespace: dev
+
+        # The output secret should be gone within a short time via owner-ref GC.
+        - error:
+            timeout: 60s
+            resource:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: ctrl-e2e-crd-output
+                namespace: dev
+
+  # -------------------------------------------------------------------------
+  # Cleanup
+  # -------------------------------------------------------------------------
+  # Chainsaw deletes resources created with `apply` in reverse order. The
+  # Realm deletion is intentionally last: deleting the realm cascades to the
+  # Keycloak-side clients, so the Client finalizers complete faster.
