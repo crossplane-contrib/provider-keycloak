@@ -2211,6 +2211,7 @@ Use a `Client` when an application or service needs Keycloak to authenticate use
 | Kind | API Group | Terraform Resource | CRD Explorer |
 |------|-----------|-------------------|---|
 | Client | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/Client/v1alpha1) |
+| ClientAdminPermissions | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAdminPermissions/v1alpha1) |
 
 ## Examples
 
@@ -2327,6 +2328,50 @@ spec:
   providerConfigRef:
     name: "keycloak-provider-config"
 ```
+
+### Fine-grained admin permissions (v2)
+
+`ClientAdminPermissions` manages a single fine-grained admin permission for the
+clients of a realm. It requires Keycloak 26.2 or newer started with the
+`admin-fine-grained-authz:v2` feature and a realm with
+`adminPermissionsEnabled: true`. Keycloak then creates an `admin-permissions`
+client for the realm that acts as the resource server for all of its admin
+permissions.
+
+`admin-fine-grained-authz:v2` replaces `admin-fine-grained-authz:v1`, so
+`ClientAdminPermissions` and the v1 permission resources cannot be used against
+the same Keycloak instance.
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAdminPermissions
+metadata:
+  name: admins-manage-clients
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: admins-can-manage-clients
+    description: Admins can view and manage the referenced client
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    clientIdsRefs:
+      - name: "test"
+    scopes:
+      - view
+      - manage
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
+Without `clientIds` the permission applies to every client of the realm,
+otherwise only to the referenced clients. Both OpenID clients (`clientIdsRefs`)
+and SAML clients (`samlClientIdsRefs`) can be referenced. A permission without
+policies is evaluated as "deny", so attach policies once they exist on the
+realm's `admin-permissions` client, either by ID via `policies` or through the
+typed reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
 
 ## Key Fields
 

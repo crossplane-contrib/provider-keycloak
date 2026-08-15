@@ -1,0 +1,43 @@
+---
+# Client used as the target of the client admin permission below.
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: fgapv2-managed-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    clientId: fgapv2-managed-client
+    accessType: CONFIDENTIAL
+    realmIdRef:
+      name: "fgapv2"
+      policy:
+        resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+# Fine-grained admin permission (FGAPv2) controlling who can manage a specific
+# client. Keycloak's admin-permissions client allows only one scope-based
+# permission per set of resources, so all desired scopes are combined into a
+# single AdminPermissions resource.
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientAdminPermissions
+metadata:
+  name: manage-clients
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: manage-clients
+    description: Controls who can view and manage the managed client
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "fgapv2"
+      policy:
+        resolve: Always
+    clientIdsRefs:
+      - name: "fgapv2-managed-client"
+    scopes:
+      - view
+      - manage
+  providerConfigRef:
+    name: "keycloak-provider-config"
