@@ -4,8 +4,6 @@ import (
 	"testing"
 
 	ujconfig "github.com/crossplane/upjet/v2/pkg/config"
-
-	"github.com/crossplane-contrib/provider-keycloak/config/common"
 )
 
 func TestGroupAdminPermissionsReferences(t *testing.T) {
@@ -15,42 +13,6 @@ func TestGroupAdminPermissionsReferences(t *testing.T) {
 	}{
 		"group_ids": {
 			terraformName: "keycloak_group",
-		},
-		"aggregate_policies": {
-			terraformName: "keycloak_openid_client_aggregate_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"client_policies": {
-			terraformName: "keycloak_openid_client_client_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"client_scope_policies": {
-			terraformName: "keycloak_openid_client_authorization_client_scope_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"group_policies": {
-			terraformName: "keycloak_openid_client_group_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"js_policies": {
-			terraformName: "keycloak_openid_client_js_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"regex_policies": {
-			terraformName: "keycloak_openid_client_regex_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"role_policies": {
-			terraformName: "keycloak_openid_client_role_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"time_policies": {
-			terraformName: "keycloak_openid_client_time_policy",
-			extractor:     common.PathUUIDExtractor,
-		},
-		"user_policies": {
-			terraformName: "keycloak_openid_client_user_policy",
-			extractor:     common.PathUUIDExtractor,
 		},
 	}
 
@@ -83,10 +45,21 @@ func TestGroupAdminPermissionsReferences(t *testing.T) {
 				}
 			}
 
-			// The original policies field stays settable for raw IDs of
-			// policy types that are not (yet) exposed as managed resources.
-			if _, ok := r.References["policies"]; ok {
-				t.Errorf("policies: expected no reference configuration on the original field")
+			for _, field := range []string{
+				"policies",
+				"aggregate_policies",
+				"client_policies",
+				"client_scope_policies",
+				"group_policies",
+				"js_policies",
+				"regex_policies",
+				"role_policies",
+				"time_policies",
+				"user_policies",
+			} {
+				if _, ok := r.References[field]; ok {
+					t.Errorf("%s: expected no reference configuration", field)
+				}
 			}
 			s, ok := r.TerraformResource.Schema["policies"]
 			if !ok {

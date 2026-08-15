@@ -15,81 +15,11 @@ import (
 
 type AdminPermissionsInitParameters struct {
 
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientAggregatePolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +listType=set
-	AggregatePolicies []*string `json:"aggregatePolicies,omitempty" tf:"aggregate_policies,omitempty"`
-
-	// References to ClientAggregatePolicy in openidclient to populate aggregatePolicies.
-	// +kubebuilder:validation:Optional
-	AggregatePoliciesRefs []v1.Reference `json:"aggregatePoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientAggregatePolicy in openidclient to populate aggregatePolicies.
-	// +kubebuilder:validation:Optional
-	AggregatePoliciesSelector *v1.Selector `json:"aggregatePoliciesSelector,omitempty" tf:"-"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientClientPolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +listType=set
-	ClientPolicies []*string `json:"clientPolicies,omitempty" tf:"client_policies,omitempty"`
-
-	// References to ClientClientPolicy in openidclient to populate clientPolicies.
-	// +kubebuilder:validation:Optional
-	ClientPoliciesRefs []v1.Reference `json:"clientPoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientClientPolicy in openidclient to populate clientPolicies.
-	// +kubebuilder:validation:Optional
-	ClientPoliciesSelector *v1.Selector `json:"clientPoliciesSelector,omitempty" tf:"-"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientAuthorizationClientScopePolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +listType=set
-	ClientScopePolicies []*string `json:"clientScopePolicies,omitempty" tf:"client_scope_policies,omitempty"`
-
-	// References to ClientAuthorizationClientScopePolicy in openidclient to populate clientScopePolicies.
-	// +kubebuilder:validation:Optional
-	ClientScopePoliciesRefs []v1.Reference `json:"clientScopePoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientAuthorizationClientScopePolicy in openidclient to populate clientScopePolicies.
-	// +kubebuilder:validation:Optional
-	ClientScopePoliciesSelector *v1.Selector `json:"clientScopePoliciesSelector,omitempty" tf:"-"`
-
 	// Decision strategy. One of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientGroupPolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +listType=set
-	GroupPolicies []*string `json:"groupPolicies,omitempty" tf:"group_policies,omitempty"`
-
-	// References to ClientGroupPolicy in openidclient to populate groupPolicies.
-	// +kubebuilder:validation:Optional
-	GroupPoliciesRefs []v1.Reference `json:"groupPoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientGroupPolicy in openidclient to populate groupPolicies.
-	// +kubebuilder:validation:Optional
-	GroupPoliciesSelector *v1.Selector `json:"groupPoliciesSelector,omitempty" tf:"-"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientJsPolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +listType=set
-	JsPolicies []*string `json:"jsPolicies,omitempty" tf:"js_policies,omitempty"`
-
-	// References to ClientJsPolicy in openidclient to populate jsPolicies.
-	// +kubebuilder:validation:Optional
-	JsPoliciesRefs []v1.Reference `json:"jsPoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientJsPolicy in openidclient to populate jsPolicies.
-	// +kubebuilder:validation:Optional
-	JsPoliciesSelector *v1.Selector `json:"jsPoliciesSelector,omitempty" tf:"-"`
 
 	// The name of the permission. Must be unique within the admin-permissions resource server. On first apply, if a permission with this name already exists it is adopted; otherwise a new one is created.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
@@ -110,84 +40,16 @@ type AdminPermissionsInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientRegexPolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +listType=set
-	RegexPolicies []*string `json:"regexPolicies,omitempty" tf:"regex_policies,omitempty"`
-
-	// References to ClientRegexPolicy in openidclient to populate regexPolicies.
-	// +kubebuilder:validation:Optional
-	RegexPoliciesRefs []v1.Reference `json:"regexPoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientRegexPolicy in openidclient to populate regexPolicies.
-	// +kubebuilder:validation:Optional
-	RegexPoliciesSelector *v1.Selector `json:"regexPoliciesSelector,omitempty" tf:"-"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientRolePolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +listType=set
-	RolePolicies []*string `json:"rolePolicies,omitempty" tf:"role_policies,omitempty"`
-
-	// References to ClientRolePolicy in openidclient to populate rolePolicies.
-	// +kubebuilder:validation:Optional
-	RolePoliciesRefs []v1.Reference `json:"rolePoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientRolePolicy in openidclient to populate rolePolicies.
-	// +kubebuilder:validation:Optional
-	RolePoliciesSelector *v1.Selector `json:"rolePoliciesSelector,omitempty" tf:"-"`
-
 	// Set of scopes this permission grants. Valid values: view, manage, map-roles, manage-group-membership, impersonate.
 	// +listType=set
 	Scopes []*string `json:"scopes,omitempty" tf:"scopes,omitempty"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientTimePolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +listType=set
-	TimePolicies []*string `json:"timePolicies,omitempty" tf:"time_policies,omitempty"`
-
-	// References to ClientTimePolicy in openidclient to populate timePolicies.
-	// +kubebuilder:validation:Optional
-	TimePoliciesRefs []v1.Reference `json:"timePoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientTimePolicy in openidclient to populate timePolicies.
-	// +kubebuilder:validation:Optional
-	TimePoliciesSelector *v1.Selector `json:"timePoliciesSelector,omitempty" tf:"-"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientUserPolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +listType=set
-	UserPolicies []*string `json:"userPolicies,omitempty" tf:"user_policies,omitempty"`
-
-	// References to ClientUserPolicy in openidclient to populate userPolicies.
-	// +kubebuilder:validation:Optional
-	UserPoliciesRefs []v1.Reference `json:"userPoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientUserPolicy in openidclient to populate userPolicies.
-	// +kubebuilder:validation:Optional
-	UserPoliciesSelector *v1.Selector `json:"userPoliciesSelector,omitempty" tf:"-"`
 }
 
 type AdminPermissionsObservation struct {
 
-	// Set of policy IDs to attach to the permission.
-	// +listType=set
-	AggregatePolicies []*string `json:"aggregatePolicies,omitempty" tf:"aggregate_policies,omitempty"`
-
 	// The ID of the admin-permissions client, which acts as the resource server for these permissions.
 	// Resource server id of the admin-permissions client on which this permission is managed
 	AuthorizationResourceServerID *string `json:"authorizationResourceServerId,omitempty" tf:"authorization_resource_server_id,omitempty"`
-
-	// Set of policy IDs to attach to the permission.
-	// +listType=set
-	ClientPolicies []*string `json:"clientPolicies,omitempty" tf:"client_policies,omitempty"`
-
-	// Set of policy IDs to attach to the permission.
-	// +listType=set
-	ClientScopePolicies []*string `json:"clientScopePolicies,omitempty" tf:"client_scope_policies,omitempty"`
 
 	// Decision strategy. One of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
@@ -198,15 +60,7 @@ type AdminPermissionsObservation struct {
 	// Always true when the resource exists.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
-	// Set of policy IDs to attach to the permission.
-	// +listType=set
-	GroupPolicies []*string `json:"groupPolicies,omitempty" tf:"group_policies,omitempty"`
-
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
-
-	// Set of policy IDs to attach to the permission.
-	// +listType=set
-	JsPolicies []*string `json:"jsPolicies,omitempty" tf:"js_policies,omitempty"`
 
 	// The name of the permission. Must be unique within the admin-permissions resource server. On first apply, if a permission with this name already exists it is adopted; otherwise a new one is created.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
@@ -221,73 +75,12 @@ type AdminPermissionsObservation struct {
 	// The realm in which to manage this permission.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
-	// Set of policy IDs to attach to the permission.
-	// +listType=set
-	RegexPolicies []*string `json:"regexPolicies,omitempty" tf:"regex_policies,omitempty"`
-
-	// Set of policy IDs to attach to the permission.
-	// +listType=set
-	RolePolicies []*string `json:"rolePolicies,omitempty" tf:"role_policies,omitempty"`
-
 	// Set of scopes this permission grants. Valid values: view, manage, map-roles, manage-group-membership, impersonate.
 	// +listType=set
 	Scopes []*string `json:"scopes,omitempty" tf:"scopes,omitempty"`
-
-	// Set of policy IDs to attach to the permission.
-	// +listType=set
-	TimePolicies []*string `json:"timePolicies,omitempty" tf:"time_policies,omitempty"`
-
-	// Set of policy IDs to attach to the permission.
-	// +listType=set
-	UserPolicies []*string `json:"userPolicies,omitempty" tf:"user_policies,omitempty"`
 }
 
 type AdminPermissionsParameters struct {
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientAggregatePolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	// +listType=set
-	AggregatePolicies []*string `json:"aggregatePolicies,omitempty" tf:"aggregate_policies,omitempty"`
-
-	// References to ClientAggregatePolicy in openidclient to populate aggregatePolicies.
-	// +kubebuilder:validation:Optional
-	AggregatePoliciesRefs []v1.Reference `json:"aggregatePoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientAggregatePolicy in openidclient to populate aggregatePolicies.
-	// +kubebuilder:validation:Optional
-	AggregatePoliciesSelector *v1.Selector `json:"aggregatePoliciesSelector,omitempty" tf:"-"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientClientPolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	// +listType=set
-	ClientPolicies []*string `json:"clientPolicies,omitempty" tf:"client_policies,omitempty"`
-
-	// References to ClientClientPolicy in openidclient to populate clientPolicies.
-	// +kubebuilder:validation:Optional
-	ClientPoliciesRefs []v1.Reference `json:"clientPoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientClientPolicy in openidclient to populate clientPolicies.
-	// +kubebuilder:validation:Optional
-	ClientPoliciesSelector *v1.Selector `json:"clientPoliciesSelector,omitempty" tf:"-"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientAuthorizationClientScopePolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	// +listType=set
-	ClientScopePolicies []*string `json:"clientScopePolicies,omitempty" tf:"client_scope_policies,omitempty"`
-
-	// References to ClientAuthorizationClientScopePolicy in openidclient to populate clientScopePolicies.
-	// +kubebuilder:validation:Optional
-	ClientScopePoliciesRefs []v1.Reference `json:"clientScopePoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientAuthorizationClientScopePolicy in openidclient to populate clientScopePolicies.
-	// +kubebuilder:validation:Optional
-	ClientScopePoliciesSelector *v1.Selector `json:"clientScopePoliciesSelector,omitempty" tf:"-"`
 
 	// Decision strategy. One of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
@@ -296,36 +89,6 @@ type AdminPermissionsParameters struct {
 	// Description of the permission.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientGroupPolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	// +listType=set
-	GroupPolicies []*string `json:"groupPolicies,omitempty" tf:"group_policies,omitempty"`
-
-	// References to ClientGroupPolicy in openidclient to populate groupPolicies.
-	// +kubebuilder:validation:Optional
-	GroupPoliciesRefs []v1.Reference `json:"groupPoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientGroupPolicy in openidclient to populate groupPolicies.
-	// +kubebuilder:validation:Optional
-	GroupPoliciesSelector *v1.Selector `json:"groupPoliciesSelector,omitempty" tf:"-"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientJsPolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	// +listType=set
-	JsPolicies []*string `json:"jsPolicies,omitempty" tf:"js_policies,omitempty"`
-
-	// References to ClientJsPolicy in openidclient to populate jsPolicies.
-	// +kubebuilder:validation:Optional
-	JsPoliciesRefs []v1.Reference `json:"jsPoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientJsPolicy in openidclient to populate jsPolicies.
-	// +kubebuilder:validation:Optional
-	JsPoliciesSelector *v1.Selector `json:"jsPoliciesSelector,omitempty" tf:"-"`
 
 	// The name of the permission. Must be unique within the admin-permissions resource server. On first apply, if a permission with this name already exists it is adopted; otherwise a new one is created.
 	// +kubebuilder:validation:Optional
@@ -349,70 +112,10 @@ type AdminPermissionsParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientRegexPolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	// +listType=set
-	RegexPolicies []*string `json:"regexPolicies,omitempty" tf:"regex_policies,omitempty"`
-
-	// References to ClientRegexPolicy in openidclient to populate regexPolicies.
-	// +kubebuilder:validation:Optional
-	RegexPoliciesRefs []v1.Reference `json:"regexPoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientRegexPolicy in openidclient to populate regexPolicies.
-	// +kubebuilder:validation:Optional
-	RegexPoliciesSelector *v1.Selector `json:"regexPoliciesSelector,omitempty" tf:"-"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientRolePolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	// +listType=set
-	RolePolicies []*string `json:"rolePolicies,omitempty" tf:"role_policies,omitempty"`
-
-	// References to ClientRolePolicy in openidclient to populate rolePolicies.
-	// +kubebuilder:validation:Optional
-	RolePoliciesRefs []v1.Reference `json:"rolePoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientRolePolicy in openidclient to populate rolePolicies.
-	// +kubebuilder:validation:Optional
-	RolePoliciesSelector *v1.Selector `json:"rolePoliciesSelector,omitempty" tf:"-"`
-
 	// Set of scopes this permission grants. Valid values: view, manage, map-roles, manage-group-membership, impersonate.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Scopes []*string `json:"scopes,omitempty" tf:"scopes,omitempty"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientTimePolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	// +listType=set
-	TimePolicies []*string `json:"timePolicies,omitempty" tf:"time_policies,omitempty"`
-
-	// References to ClientTimePolicy in openidclient to populate timePolicies.
-	// +kubebuilder:validation:Optional
-	TimePoliciesRefs []v1.Reference `json:"timePoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientTimePolicy in openidclient to populate timePolicies.
-	// +kubebuilder:validation:Optional
-	TimePoliciesSelector *v1.Selector `json:"timePoliciesSelector,omitempty" tf:"-"`
-
-	// Set of policy IDs to attach to the permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1.ClientUserPolicy
-	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
-	// +kubebuilder:validation:Optional
-	// +listType=set
-	UserPolicies []*string `json:"userPolicies,omitempty" tf:"user_policies,omitempty"`
-
-	// References to ClientUserPolicy in openidclient to populate userPolicies.
-	// +kubebuilder:validation:Optional
-	UserPoliciesRefs []v1.Reference `json:"userPoliciesRefs,omitempty" tf:"-"`
-
-	// Selector for a list of ClientUserPolicy in openidclient to populate userPolicies.
-	// +kubebuilder:validation:Optional
-	UserPoliciesSelector *v1.Selector `json:"userPoliciesSelector,omitempty" tf:"-"`
 }
 
 // AdminPermissionsSpec defines the desired state of AdminPermissions

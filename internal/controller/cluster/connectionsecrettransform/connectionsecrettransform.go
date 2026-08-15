@@ -342,6 +342,12 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 	return Setup(mgr, o)
 }
 
+// SetupWebhookWithManager is a no-op because ConnectionSecretTransform does
+// not use a conversion webhook.
+func SetupWebhookWithManager(_ ctrl.Manager) error {
+	return nil
+}
+
 // logger returns the configured logger, or a no-op one when the options carry
 // none.
 func logger(o controller.Options) logging.Logger {

@@ -25,3 +25,8 @@ func Setup(_ ctrl.Manager, _ controller.Options) error {
 func SetupGated(_ ctrl.Manager, _ controller.Options) error {
 	return nil
 }
+
+// SetupWebhookWithManager is a no-op for the namespaced provider variant.
+func SetupWebhookWithManager(_ ctrl.Manager) error {
+	return nil
+}
