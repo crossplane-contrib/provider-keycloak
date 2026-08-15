@@ -222,10 +222,98 @@ Keycloak source for an afternoon" into "review five annotated findings".
 
 ## Proposed Design
 
-Three independent pieces. Each is useful alone, and each can be adopted without
-the others.
+Four independent pieces. Each is useful alone, and each can be adopted without
+the others. **A** is the tooling — the one thing that produces value on day one,
+before any refactor.
 
-### A. A declarative attribute registry (replaces "imitate the neighbour")
+### Principle: machine-generated first
+
+The dividing line is *judgement*, not effort. Everything that can be derived
+without a Keycloak-semantics decision should be generated or checked
+mechanically; the small remainder should be a short, reviewable Go diff with a
+recorded reason.
+
+| Artifact | Today | Target |
+|----------|-------|--------|
+| CRDs, API types, examples-generated, `config/generated.lst`, e2e index, `llms.txt` | generated | unchanged |
+| Detection of missing references / missing multitypes / drift | nothing | **generated report + CI gate** (A) |
+| Per-resource reference expectation tests (`config/*_references_test.go`, ~735 hand-written lines) | hand-written per resource | subsumed by generic detectors; keep only genuinely special cases |
+| Reference wiring for known attribute names | `KnownReferencers()` switch + per-group repetition | declarative registry (B), applied automatically |
+| Scaffolding for a new resource | manual, by imitation | `make new-resource` (C) |
+| Upstream semantics behind a finding | maintainer reads source | AI research pass with citations (see above) |
+| External name, target choice, multitype-vs-gap | human | human, but *forced* and recorded |
+
+### A. `make config-audit` — tooling that finds missing references and missing multitypes
+
+A reporting tool over the already-built provider config
+(`config.GetProvider(true)`) plus `config/schema.json`. No refactor, no new
+metadata, no dependency on the registry below. It runs three detectors, and all
+three have been measured against the current tree:
+
+**D1 — inconsistent treatment.** Same attribute name, same type, same
+optionality, treated differently across resources. Five findings today (table
+above). Sub-classified automatically:
+
+- *gap*: wired on N resources, unwired on M — e.g. `post_broker_login_flow_alias`
+  (2 wired / 7 unwired);
+- *multitype*: one attribute name resolving to two different target types —
+  `client_id`, `client_scope_id`, which are already `multitypes` and should be
+  reported as **satisfied**, not as drift.
+
+**D2 — unclassified reference-shaped attributes.** Non-computed, non-sensitive
+`*_id` / `*_ids` / `*_alias` attributes that are neither wired nor documented as
+non-references: 31 today. Noisy on its own (~⅓ are correct omissions), which is
+why it only becomes a gate after the registry gives it somewhere to record the
+`NotAReference` reason.
+
+**D3 — missing multitypes, without needing drift to exist first.** This is the
+detector the review asked for, and it does not depend on the attribute already
+being inconsistent. It works in two steps:
+
+1. Derive *type families* from the configuration itself: any attribute already
+   wired to more than one target defines a family. Today that yields exactly two
+   families — `{keycloak_openid_client, keycloak_saml_client}` and
+   `{keycloak_openid_client_scope, keycloak_saml_client_scope}`.
+2. Report every reference that points at **one** member of a family while the
+   resource has no reference to the others.
+
+Raw, that is 51 candidates — too many, and mostly correct: an
+`keycloak_openid_*_protocol_mapper` legitimately only ever attaches to an OpenID
+client. Adding one purely structural filter — the *referencing* resource is
+itself protocol-neutral, i.e. its name is not prefixed `keycloak_openid_` or
+`keycloak_saml_` — takes it from 51 to **3**:
+
+| Resource | Attribute | Wired to | Family member not wired |
+|----------|-----------|----------|--------------------------|
+| `keycloak_ldap_role_mapper` | `client_id` | `keycloak_openid_client` | `keycloak_saml_client` |
+| `keycloak_identity_provider_token_exchange_scope_permission` | `clients` | `keycloak_openid_client` | `keycloak_saml_client` |
+| `keycloak_generic_client_authorization_policy` | `resource_server_id` | `keycloak_openid_client` | `keycloak_saml_client` |
+
+All three are plausible and none is obviously decidable from the schema —
+whether a SAML client can be an authorization *resource server*, or the target
+of a token-exchange permission, is a Keycloak-semantics question. That is the
+handoff point: D3 produces the shortlist, the `research-upstream` pass annotates
+each entry with upstream citations, a human writes the two-line verdict. The
+same resource is also the proof that the detector is not vacuous:
+`keycloak_generic_client_protocol_mapper` — equally protocol-neutral — *is*
+already wired to all four family members and therefore is not reported.
+
+Output and integration:
+
+- Human-readable table on stdout; `--format=json` for the automation in (D).
+- `--fail-on=drift` initially (D1 only), widening to `missing-multitype` and
+  then `unclassified` as each class is triaged. Same shape as
+  `generated-lst-check` / `e2e-cases-check` / `docs-freshness-check`.
+- Findings can be waived only with a reason, in the registry (B) or an explicit
+  exceptions file — the `cluster/test/uncovered-resources.txt` pattern, where
+  "not yet" is not an accepted reason and stale entries fail too.
+
+The existing hand-written expectation tests (`config/*_references_test.go`,
+seven files, ~735 lines listing per-resource expected targets) are the current
+substitute for exactly this. They only cover the resources somebody remembered
+to enumerate; the detectors cover all 109 by construction.
+
+### B. A declarative attribute registry (replaces "imitate the neighbour")
 
 `config/provider.go` already has the right idea in `KnownReferencers()`: a
 `switch` over attribute names that wires `realm_id`, `organization_id`,
@@ -267,29 +355,22 @@ Rules:
   keeps winning: the registry is only a default, applied through the existing
   `WithDefaultResourceOptions` hook.
 
-Two gates, in increasing order of strictness:
+The registry is what gives the detectors in (A) somewhere to record a verdict:
+`NotAReference` answers D2, a `MultiType` rule answers D1/D3, and a scoped rule
+answers "this attribute means something different here". Without it every
+finding can only be silenced, not explained — which is how the current state
+came about.
 
-1. **Consistency gate** (the cross-check above): fail when one attribute name is
-   treated in more than one way without a registry rule saying so. Five findings
-   today, all of them meaningful.
-2. **Completeness gate**: fail when a non-computed, non-sensitive attribute
-   matching `*_id`, `*_ids` or `*_alias` is neither wired, nor covered by a
-   `NotAReference` rule, nor listed with a reason in an explicit exception file.
-   Broader, noisier, and worth adopting only after the ~31 currently unwired
-   attributes have been triaged once.
-
-Both are the same shape as the gates the repo already trusts
-(`generated-lst-check`, `e2e-cases-check`, `docs-freshness-check`), so they cost
-nothing new conceptually. Adding a Terraform resource that introduces an unknown
-`*_id`, or that diverges from its siblings, then *forces* a decision, and that
-decision is visible in the diff.
+Adding a Terraform resource that introduces an unknown `*_id`, or that diverges
+from its siblings, then *forces* a decision, and that decision is visible in the
+diff.
 
 Expected effect on the current tree: the two flow-alias gaps and `parent_id` are
 closed or documented, `client_id`/`client_scope_id` are recorded as multitypes
 rather than looking like drift, and the remaining `provider_id`/`tenant_id`
 attributes become documented non-references instead of silent omissions.
 
-### B. `make new-resource` — scaffolding, not magic
+### C. `make new-resource` — scaffolding, not magic
 
 ```
 make new-resource TF_RESOURCE=keycloak_organization_membership
@@ -301,7 +382,7 @@ each with `TODO(<resource>)` markers where a decision is required:
 | Generated file | Content |
 |----------------|---------|
 | `config/external_name.go` | one entry, defaulted to `config.IdentifierFromProvider`, annotated with the composite ID format read from the schema, plus a `TODO` to switch to an identifying-properties lookup if the object can pre-exist |
-| `config/<group>/config.go` | a configurator stub, pre-filled with every reference the registry (A) can resolve, and a `TODO` per unresolved reference-shaped attribute |
+| `config/<group>/config.go` | a configurator stub, pre-filled with every reference the registry (B) can resolve, and a `TODO` per unresolved reference-shaped attribute |
 | `examples/<group>/<resource>.yaml` | skeleton with all required fields, values left as `TODO` |
 | `dev/demos/<suite>/NNN-<resource>.yaml` + case-list entry | skeleton demo so `make e2e-cases-check` passes only after it is filled in |
 
@@ -315,11 +396,10 @@ This is also the single command an AI agent can be told to run (see
 fill in `TODO`s, which is exactly the kind of local, verifiable work cheap
 models do well.
 
-### C. Extend the existing schema-diff automation to report *quality*, not just presence
+### D. Extend the existing schema-diff automation to report *quality*, not just presence
 
 `scripts/schema_diff_issues.py` already files an issue per Terraform resource
-that is not exposed yet. The same script can, in a second pass, run the
-consistency check from (A) and report configured resources whose configuration
+that is not exposed yet. The same script can, in a second pass, run `make config-audit --format=json` from (A) and report configured resources whose configuration
 diverges from their siblings — e.g. "`keycloak_saml_identity_provider` has
 `post_broker_login_flow_alias` unwired while eight sibling resources with an
 identical schema wire it". This reuses machinery the repo already runs weekly,
@@ -349,27 +429,30 @@ and costs one function.
 
 ## Rollout
 
-1. Add the **consistency check** as a standalone reporting-only test. It needs
-   no registry and no refactor: it walks the already-built provider config and
-   prints the five findings above. Cheapest possible first step, and it makes
-   the problem visible before anything is restructured.
-2. Classify those five: wire the two flow-alias gaps and `parent_id` (or record
-   why not), and record `client_id`/`client_scope_id` as intentional
-   multitypes. Flip the check to failing. Use the `research-upstream` skill on
-   each finding so the classification arrives with upstream citations attached.
+1. Add `make config-audit` with **D1 and D3**, reporting only. No registry, no
+   refactor: it walks the already-built provider config and prints 5 + 3
+   findings. Cheapest possible first step and the one with immediate value —
+   the tooling exists before anything is restructured.
+2. Classify those eight, using the `research-upstream` skill so each verdict
+   arrives with upstream citations: wire the two flow-alias gaps and `parent_id`
+   (or record why not), record `client_id`/`client_scope_id` as intentional
+   multitypes, and decide whether the three protocol-neutral resources need a
+   client/SAML-client multitype. Flip `--fail-on=drift,missing-multitype`.
 3. Introduce `config/references` with today's `KnownReferencers()` content moved
-   into it, plus the classifications from step 2.
-4. Triage the ~31 currently unwired attributes and enable the broader
-   completeness gate.
+   into it, plus the classifications from step 2, and retire the hand-written
+   per-resource expectation tests that the detectors now cover.
+4. Triage the ~31 unclassified attributes (D2) and enable that gate too.
 5. Add `make new-resource`, and use it for the next resource added; refine the
    templates against that experience before advertising it.
-6. Extend `scripts/schema_diff_issues.py` with the consistency pass.
+6. Extend `scripts/schema_diff_issues.py` to consume `config-audit --format=json`.
 7. Optionally let the weekly automation attach agent research to each reported
    finding (upstream doc excerpt + citations), so the issue arrives
    pre-triaged. Only worth doing once the reporting itself is trusted.
 
 Each step is independently revertible. Only step 2 changes generated CRDs, and
-it needs the usual review of the `package/crds/` diff.
+it needs the usual review of the `package/crds/` diff. Steps 1–2 alone already
+deliver what this proposal is mostly about: tooling that finds missing
+references and missing multitypes, and a short list of decisions to make.
 
 ## Open Questions
 
@@ -385,6 +468,17 @@ it needs the usual review of the `package/crds/` diff.
   "wired to two different targets" as the same finding, or as two separate
   classes? They need different fixes (gap vs multitype), so separate reporting
   may make triage faster.
+- Is D3's protocol-neutrality filter (referencing resource is not named
+  `keycloak_openid_*` / `keycloak_saml_*`) the right one? It is a naming
+  heuristic on the *referencing* side and it does the heavy lifting: 51
+  candidates down to 3. It could instead be expressed as an explicit
+  "protocol-neutral resource" list, or D3 could report all 51 with the filtered
+  three highlighted, so nothing is silently dropped.
+- Should families be seedable by hand as well as derived? Today only two
+  families exist because only two attributes are multityped. A family that
+  nobody has ever wired twice (e.g. flow/subflow, were `parent_flow_alias` not
+  already multityped) is invisible to D3 — the detector can only generalise
+  from a precedent.
 - Should the completeness gate also cover *required* attributes that reference
   nothing (e.g. free-form `parent_id` on custom user federation), or only the
   name-shaped heuristic?

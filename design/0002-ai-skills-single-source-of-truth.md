@@ -104,9 +104,14 @@ one residual unknown to raise upstream rather than guess at. That shape (name
 the files, separate verified from inferred, end with either a decision or an
 upstream question) is what the skill should encode.
 
-Its first-class consumer is the consistency check from
+Its first-class consumer is `make config-audit` from
 [0001](0001-schema-driven-resource-onboarding.md): each finding becomes one
 research task, and the skill's output is what makes the finding reviewable.
+That is the intended split of labour throughout — deterministic tooling
+enumerates the gaps, the agent explains them against pinned upstream sources,
+and a human writes the one-line verdict into Go. Today that is eight findings
+(five inconsistencies, three missing-multitype candidates), which is a
+reviewable amount of work precisely because the enumeration is machine-made.
 
 The skill must pin its corpus, in this order, and must not fall back to
 open-ended web search for anything it asserts:
