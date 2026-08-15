@@ -66,11 +66,10 @@ install_envoy_gateway() {
     --set deployment.envoyGateway.image.tag="${ENVOY_GATEWAY_VERSION}" \
     || fatal "Envoy Gateway installation failed"
 
-  info "Waiting for Envoy Gateway controller pod..."
-  "${KUBECTL}" wait pod \
+  info "Waiting for Envoy Gateway deployment..."
+  "${KUBECTL}" wait deployment/envoy-gateway \
     --namespace envoy-gateway-system \
-    --selector app.kubernetes.io/name=gateway \
-    --for=condition=Ready \
+    --for=condition=Available \
     --timeout=3m
   info "Envoy Gateway ready."
 }
