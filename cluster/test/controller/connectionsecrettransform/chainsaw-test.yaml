@@ -48,11 +48,10 @@ spec:
       try:
         - apply:
             resource:
-              apiVersion: realm.keycloak.crossplane.io/v1alpha2
+              apiVersion: realm.keycloak.crossplane.io/v1alpha1
               kind: Realm
               metadata:
                 name: ctrl-e2e
-                namespace: dev
               spec:
                 forProvider:
                   realm: ctrl-e2e
@@ -61,11 +60,10 @@ spec:
                   name: keycloak-provider-config
         - assert:
             resource:
-              apiVersion: realm.keycloak.crossplane.io/v1alpha2
+              apiVersion: realm.keycloak.crossplane.io/v1alpha1
               kind: Realm
               metadata:
                 name: ctrl-e2e
-                namespace: dev
               status:
                 conditions:
                   - type: Ready
@@ -181,19 +179,21 @@ spec:
                 targetRef:
                   group: gateway.networking.k8s.io
                   kind: Gateway
-                  name: ctrl-e2e-gw  # referenced but need not exist for validation
+                  name: ctrl-e2e-gw  # referenced but need not exist for admission validation
                 oidc:
                   provider:
-                    issuer: ""  # filled by the secret
-                  clientID:
-                    valueRef:
-                      secretKeyRef:
-                        name: ctrl-e2e-inplace
-                        key: client-id
+                    # A placeholder issuer — EG's admission webhook only validates
+                    # schema (minLength: 1); live HTTPS enforcement is at runtime.
+                    issuer: "https://placeholder.example.com/realms/ctrl-e2e"
+                  # clientID is a plain string in Envoy Gateway v1.4 (not a secret ref).
+                  clientID: "ctrl-e2e-inplace"
+                  # clientSecret is a SecretObjectReference: only name (+ optional
+                  # namespace) are valid fields — EG hard-codes the key "client-secret".
+                  # The transform controller writes clientSecret under that exact key,
+                  # which is what this step implicitly validates.
                   clientSecret:
                     name: ctrl-e2e-inplace
                     namespace: dev
-                    key: client-secret
 
     # -----------------------------------------------------------------------
     # Step 3: Annotation-driven SeparateSecret mode
