@@ -30,9 +30,6 @@ metadata:
 spec:
   # Run each scenario sequentially so we can share the Realm without races.
   concurrent: false
-  # Delete all resources created by this test in reverse order on completion.
-  cleanup:
-    delayBeforeCleanup: 5s
   timeouts:
     apply: 30s
     assert: 5m
@@ -389,12 +386,11 @@ spec:
     - name: gc-on-crd-delete
       try:
         - delete:
-            resource:
+            ref:
               apiVersion: keycloak.crossplane.io/v1beta1
               kind: ConnectionSecretTransform
-              metadata:
-                name: ctrl-e2e-crd-override
-                namespace: dev
+              name: ctrl-e2e-crd-override
+              namespace: dev
 
         # The output secret should be gone within a short time via owner-ref GC.
         - error:
