@@ -61,9 +61,8 @@ spec:
               kind: Realm
               metadata:
                 name: ctrl-e2e
-              status:
-                (contains(conditions[?type == 'Ready'].status, 'True')): "true"
-                (contains(conditions[?type == 'Synced'].status, 'True')): "true"
+              (contains(status.conditions[?type == 'Ready'].status || `[]`, 'True')): true
+              (contains(status.conditions[?type == 'Synced'].status || `[]`, 'True')): true
 
     # -----------------------------------------------------------------------
     # Step 1: ProviderConfig-wide rename + keycloak-derived adds (InPlace mode)
@@ -106,8 +105,7 @@ spec:
               metadata:
                 name: ctrl-e2e-inplace
                 namespace: dev
-              status:
-                (contains(conditions[?type == 'Ready'].status, 'True')): "true"
+              (contains(status.conditions[?type == 'Ready'].status || `[]`, 'True')): true
 
         # The controller adds renamed and Keycloak-derived keys to the
         # connection secret. Assert that the critical keys are present.
@@ -234,8 +232,7 @@ spec:
               metadata:
                 name: ctrl-e2e-annotated
                 namespace: dev
-              status:
-                (contains(conditions[?type == 'Ready'].status, 'True')): "true"
+              (contains(status.conditions[?type == 'Ready'].status || `[]`, 'True')): true
 
         # Source secret is untouched (the controller does not modify it in
         # SeparateSecret mode).
@@ -354,8 +351,7 @@ spec:
               metadata:
                 name: ctrl-e2e-crd-override
                 namespace: dev
-              status:
-                (contains(conditions[?type == 'Ready'].status, 'True')): "true"
+              (contains(status.conditions[?type == 'Ready'].status || `[]`, 'True')): true
 
         - assert:
             resource:
