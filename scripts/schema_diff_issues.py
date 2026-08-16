@@ -264,16 +264,20 @@ def finding_key(finding):
 def actionable_findings(report, detectors):
     """Return the findings that still need a decision, for the selected detectors.
 
-    Satisfied findings are already handled, and protocol-specific
-    missing-multitype candidates are the ones config-audit itself does not
-    count as actionable (an OpenID-only resource legitimately wires only the
-    OpenID member of a family).
+    Mirrors configaudit.Report.Actionable: satisfied findings are already
+    handled, protocol-specific missing-multitype candidates are the ones
+    config-audit itself does not count as actionable (an OpenID-only resource
+    legitimately wires only the OpenID member of a family), and a multi-type
+    classification names no resource to change - the resource missing a family
+    member is filed from the per-resource missing-multitype finding instead.
     """
     out = []
     for finding in report.get("findings", []):
         if finding.get("detector") not in detectors:
             continue
         if finding.get("status") != "open" or finding.get("protocolSpecific"):
+            continue
+        if finding.get("class") == "multitype":
             continue
         out.append(finding)
     out.sort(key=finding_key)
@@ -300,8 +304,8 @@ def audit_issue_title(finding):
     if cls == "gap":
         unwired = finding.get("unwiredOn") or []
         return (
-            f"fix(config): wire `{attribute}`{qualifier} on {len(unwired)} "
-            "resource(s) that leave it unwired"
+            f"fix(config): decide whether `{attribute}`{qualifier} should be wired on "
+            f"{len(unwired)} resource(s) that leave it unwired"
         )
     if cls == "multitype":
         return (

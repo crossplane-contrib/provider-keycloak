@@ -250,3 +250,50 @@ func TestWriteTableHidesSatisfiedFindings(t *testing.T) {
 		t.Errorf("satisfied finding missing from --show-all output:\n%s", out.String())
 	}
 }
+
+func TestDriftMultitypeStatusIsScopedToTheShapeGroup(t *testing.T) {
+	requiredWired := resource(map[string]string{})
+	requiredWired.TerraformResource.Schema["client_id"] = &schema.Schema{Type: schema.TypeString, Required: true}
+	requiredWired.References["client_id"] = ujconfig.Reference{TerraformName: "keycloak_openid_client"}
+
+	requiredSAML := resource(map[string]string{})
+	requiredSAML.TerraformResource.Schema["client_id"] = &schema.Schema{Type: schema.TypeString, Required: true}
+	requiredSAML.References["client_id"] = ujconfig.Reference{TerraformName: "keycloak_saml_client"}
+
+	report := Audit(provider(map[string]*ujconfig.Resource{
+		// Required shape: only protocol-specific resources wire it, so nothing
+		// is expected to cover the whole family.
+		"keycloak_openid_client_default_scopes": requiredWired,
+		"keycloak_saml_client_default_scopes":   requiredSAML,
+		// Optional shape: a protocol-neutral resource wires one member only.
+		"keycloak_generic_mapper": resource(map[string]string{
+			"client_id":      "keycloak_openid_client",
+			"saml_client_id": "keycloak_saml_client",
+		}),
+		"keycloak_ldap_role_mapper": resource(map[string]string{"client_id": "keycloak_openid_client"}),
+	}))
+
+	for _, f := range findingsOf(report, DetectorDrift) {
+		if f.Attribute != "client_id" {
+			continue
+		}
+		want := StatusOpen
+		if f.Shape == "TypeString/required" {
+			want = StatusSatisfied
+		}
+		if f.Status != want {
+			t.Errorf("client_id %s: got status %q, want %q", f.Shape, f.Status, want)
+		}
+	}
+}
+
+func TestActionableExcludesMultitypeClassifications(t *testing.T) {
+	report := Report{Findings: []Finding{
+		{Detector: DetectorDrift, Class: ClassGap, Status: StatusOpen, Attribute: "a"},
+		{Detector: DetectorDrift, Class: ClassMultitype, Status: StatusOpen, Attribute: "b"},
+	}}
+	actionable := report.Actionable(DetectorDrift)
+	if len(actionable) != 1 || actionable[0].Attribute != "a" {
+		t.Errorf("got %+v, want only the gap finding", actionable)
+	}
+}

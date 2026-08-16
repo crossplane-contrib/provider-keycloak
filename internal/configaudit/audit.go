@@ -122,11 +122,17 @@ type Report struct {
 }
 
 // Actionable returns the findings of a detector that still need a decision,
-// ignoring satisfied findings and protocol-specific candidates.
+// ignoring satisfied findings and protocol-specific candidates. Multi-type
+// classifications are excluded too: they name no resource to change, and the
+// resource that is missing a family member is reported per resource by the
+// missing-multitype detector - counting both would report the same work twice.
 func (r Report) Actionable(detector string) []Finding {
 	out := make([]Finding, 0, len(r.Findings))
 	for _, f := range r.Findings {
 		if f.Detector != detector || f.Status != StatusOpen || f.ProtocolSpecific {
+			continue
+		}
+		if f.Class == ClassMultitype {
 			continue
 		}
 		out = append(out, f)
@@ -289,7 +295,7 @@ func detectDrift(views []*resourceView) []Finding {
 			// One attribute name resolving to more than one target type is the
 			// multitype signal rather than a gap.
 			f.Class = ClassMultitype
-			if multitypeSatisfied(views, g.attribute, targets) {
+			if multitypeSatisfied(views, g.attribute, targets, wiringResources(g.wiredTo)) {
 				f.Status = StatusSatisfied
 			}
 			f.Detail = fmt.Sprintf("%s resolves to %d target types (%s), which is a multi-type field - see config/multitypes",
@@ -316,10 +322,16 @@ func shapeOf(a attribute) string {
 // for an attribute: every protocol-neutral resource wiring it covers the whole
 // family. Protocol-specific resources are skipped for the same reason the
 // missing-multitype detector skips them - an OpenID-only resource legitimately
-// wires only the OpenID member.
-func multitypeSatisfied(views []*resourceView, attr string, family []string) bool {
+// wires only the OpenID member. Only the resources of the finding's own shape
+// group are considered: a required and an optional attribute of the same name
+// are separate findings and must not decide each other's status.
+func multitypeSatisfied(views []*resourceView, attr string, family, group []string) bool {
+	inGroup := map[string]bool{}
+	for _, name := range group {
+		inGroup[name] = true
+	}
 	for _, v := range views {
-		if isProtocolSpecific(v.name) || !v.wires(attr) {
+		if !inGroup[v.name] || isProtocolSpecific(v.name) || !v.wires(attr) {
 			continue
 		}
 		for _, member := range family {
@@ -329,6 +341,16 @@ func multitypeSatisfied(views []*resourceView, attr string, family []string) boo
 		}
 	}
 	return true
+}
+
+// wiringResources flattens a target -> resources map into the list of resources
+// wiring the attribute.
+func wiringResources(wiredTo map[string][]string) []string {
+	var out []string
+	for _, resources := range wiredTo {
+		out = append(out, resources...)
+	}
+	return out
 }
 
 // detectMissingMultitype reports references pointing at a single member of a
