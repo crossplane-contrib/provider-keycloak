@@ -81,7 +81,6 @@ spec:
               kind: Client
               metadata:
                 name: ctrl-e2e-inplace
-                namespace: dev
               spec:
                 forProvider:
                   realmIdRef:
@@ -91,6 +90,8 @@ spec:
                   clientId: ctrl-e2e-inplace
                   accessType: CONFIDENTIAL
                   standardFlowEnabled: true
+                  validRedirectUris:
+                    - "*"
                 writeConnectionSecretToRef:
                   name: ctrl-e2e-inplace
                   namespace: dev
@@ -104,7 +105,6 @@ spec:
               kind: Client
               metadata:
                 name: ctrl-e2e-inplace
-                namespace: dev
               (contains(status.conditions[?type == 'Ready'].status || `[]`, 'True')): true
 
         # The controller adds renamed and Keycloak-derived keys to the
@@ -219,6 +219,8 @@ spec:
                   accessType: CONFIDENTIAL
                   standardFlowEnabled: true
                   serviceAccountsEnabled: true
+                  validRedirectUris:
+                    - "*"
                 writeConnectionSecretToRef:
                   name: ctrl-e2e-annotated
                   namespace: dev
@@ -231,7 +233,6 @@ spec:
               kind: Client
               metadata:
                 name: ctrl-e2e-annotated
-                namespace: dev
               (contains(status.conditions[?type == 'Ready'].status || `[]`, 'True')): true
 
         # Source secret is untouched (the controller does not modify it in
