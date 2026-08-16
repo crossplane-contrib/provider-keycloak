@@ -428,9 +428,10 @@ models do well.
 
 ### D. Extend the existing schema-diff automation to report *quality*, not just presence
 
-`scripts/schema_diff_issues.py` already files an issue per Terraform resource
-that is not exposed yet. The same script can, in a second pass, run `make config-audit --format=json` from (A) and report configured resources whose configuration
-diverges from their siblings — e.g. "`keycloak_saml_identity_provider` has
+**Implemented.** `scripts/schema_diff_issues.py` already filed an issue per
+Terraform resource that is not exposed yet; it now runs, in a second pass,
+`go run ./cmd/configaudit --format=json` from (A) and reports configured
+resources whose configuration diverges from their siblings — e.g. "`keycloak_saml_identity_provider` has
 `post_broker_login_flow_alias` unwired while eight sibling resources with an
 identical schema wire it". This reuses machinery the repo already runs weekly,
 and costs one function.
@@ -475,12 +476,22 @@ and costs one function.
 4. Triage the ~31 unclassified attributes (D2) and enable that gate too.
 5. Add `make new-resource`, and use it for the next resource added; refine the
    templates against that experience before advertising it.
-6. Extend `scripts/schema_diff_issues.py` to consume `config-audit --format=json`.
+6. ~~Extend `scripts/schema_diff_issues.py` to consume `config-audit --format=json`.~~
+   **Done**: the weekly automation now runs a second pass that files one issue
+   per actionable `drift` / `missing-multitype` finding (15 today), skipping
+   satisfied and protocol-specific ones, and deduplicating on an embedded
+   `<!-- config-audit-key: ... -->` marker so re-runs and re-worded titles do
+   not produce duplicates. `unclassified` is off by default; `--audit-detectors`
+   turns it on once step 4 gives those findings somewhere to go. This step was
+   pulled ahead of steps 2–5 because it turns the audit into a work queue: the
+   fifteen decisions become fifteen reviewable issues instead of one list.
 7. Optionally let the weekly automation attach agent research to each reported
    finding (upstream doc excerpt + citations), so the issue arrives
    pre-triaged. Only worth doing once the reporting itself is trusted.
 
-Each step is independently revertible. Only step 2 changes generated CRDs, and
+Steps are numbered by dependency, not by execution order — 6 landed
+immediately after 1 because it needs nothing from 2–5. Each step is
+independently revertible. Only step 2 changes generated CRDs, and
 it needs the usual review of the `package/crds/` diff. Steps 1–2 alone already
 deliver what this proposal is mostly about: tooling that finds missing
 references and missing multitypes, and a short list of decisions to make.

@@ -1,9 +1,14 @@
 name: Schema Diff Issues
 
-# Compares config/schema.json against config/generated.lst to find Terraform
-# provider resources that are not yet exposed as Crossplane managed
-# resources, and files one GitHub issue per resource that isn't already
-# tracked by an existing open issue.
+# Files one GitHub issue per gap in the provider configuration, in two passes:
+#
+# - coverage: Terraform provider resources present in config/schema.json but
+#   missing from config/generated.lst, i.e. not exposed as managed resources.
+# - config audit: actionable `make config-audit` findings on resources that
+#   are exposed but whose reference wiring drifts from their siblings or
+#   misses a member of a multi-type family.
+#
+# Issues that an open issue already tracks are skipped.
 #
 # - pull_request: dry-run only (no issues are created), and only runs when
 #   the automation itself changes, so it doesn't run on every unrelated PR.
@@ -14,6 +19,8 @@ on:
   pull_request:
     paths:
       - 'scripts/schema_diff_issues.py'
+      - 'cmd/configaudit/**'
+      - 'internal/configaudit/**'
       - '.github/workflows/schema-diff-issues.yml'
   push:
     branches:
@@ -65,7 +72,7 @@ jobs:
             echo "dry_run=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Run schema diff issue automation
+      - name: Run configuration gap issue automation
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

@@ -89,6 +89,10 @@ on schedule, on `Makefile` changes on `main`, and on manual dispatch.
 `make generated-lst` (part of `make generate`); never edit it by hand.
 `make generated-lst-check` gates its freshness in CI.
 
+A second pass files an issue per actionable `make config-audit` finding
+(`drift`, `missing-multitype`) — exposed resources whose reference wiring is
+incomplete — deduplicated by an embedded `config-audit-key` marker.
+
 ## Cross-Resource References
 
 ```go

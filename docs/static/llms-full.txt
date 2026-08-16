@@ -130,9 +130,15 @@ refreshes it before diffing, so an already implemented resource is never
 reported as missing. `make generated-lst-check` fails CI when the committed
 file is stale.
 
+The script also runs a second pass over the [config audit](../developing/config-audit.md)
+report and files one issue per actionable `drift` / `missing-multitype`
+finding — resources that *are* exposed but whose reference wiring is
+incomplete. Those issues are deduplicated by an embedded
+`<!-- config-audit-key: ... -->` marker instead of by resource name.
+
 - On `pull_request`, it only runs in dry-run mode (reports only, creates
-  nothing) when the automation itself changes (the script or the workflow
-  file) — not on every PR.
+  nothing) when the automation itself changes (the script, the audit packages
+  or the workflow file) — not on every PR.
 - On a weekly `schedule`, on `push` to `main` that touches the `Makefile`
   (a Terraform provider version bump), and on manual `workflow_dispatch`, it
   creates real issues.
@@ -379,6 +385,27 @@ is not meant to gate CI until there is a place to record the reason.
 `--format=json` prints every finding with a stable `Key()`-style identity
 (`detector/resource/attribute`), so repeated runs can be deduplicated when
 filing follow-up issues.
+
+## Filing follow-up issues
+
+`scripts/schema_diff_issues.py` — run weekly by the `schema-diff-issues`
+workflow — files one issue per finding, in addition to its original pass for
+Terraform resources that are not exposed at all:
+
+```bash
+# What would be filed, without touching GitHub
+./scripts/schema_diff_issues.py --repo <owner/repo> --dry-run --skip-issue-lookup
+
+# Only the audit pass, from a report produced earlier
+make config-audit CONFIG_AUDIT_ARGS='--format=json' > audit.json
+./scripts/schema_diff_issues.py --repo <owner/repo> --skip-coverage --config-audit-json audit.json
+```
+
+Only actionable findings are filed: satisfied and `protocolSpecific` ones are
+skipped, and `unclassified` is off by default (`--audit-detectors` selects the
+detectors). Each issue embeds the finding key as an HTML comment
+(`<!-- config-audit-key: ... -->`), which is what later runs match on, so
+re-runs do not duplicate issues even after a title or wording change.
 
 ## Dev Container
 URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/dev-container/

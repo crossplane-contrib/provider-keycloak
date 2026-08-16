@@ -80,3 +80,24 @@ is not meant to gate CI until there is a place to record the reason.
 `--format=json` prints every finding with a stable `Key()`-style identity
 (`detector/resource/attribute`), so repeated runs can be deduplicated when
 filing follow-up issues.
+
+## Filing follow-up issues
+
+`scripts/schema_diff_issues.py` — run weekly by the `schema-diff-issues`
+workflow — files one issue per finding, in addition to its original pass for
+Terraform resources that are not exposed at all:
+
+```bash
+# What would be filed, without touching GitHub
+./scripts/schema_diff_issues.py --repo <owner/repo> --dry-run --skip-issue-lookup
+
+# Only the audit pass, from a report produced earlier
+make config-audit CONFIG_AUDIT_ARGS='--format=json' > audit.json
+./scripts/schema_diff_issues.py --repo <owner/repo> --skip-coverage --config-audit-json audit.json
+```
+
+Only actionable findings are filed: satisfied and `protocolSpecific` ones are
+skipped, and `unclassified` is off by default (`--audit-detectors` selects the
+detectors). Each issue embeds the finding key as an HTML comment
+(`<!-- config-audit-key: ... -->`), which is what later runs match on, so
+re-runs do not duplicate issues even after a title or wording change.
