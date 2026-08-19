@@ -116,12 +116,11 @@ spec:
               metadata:
                 name: ctrl-e2e-inplace
                 namespace: dev
-                # The controller records which keys it manages so that it can
-                # clean them up cleanly when config changes.
-                annotations:
-                  (contains(`keycloak.crossplane.io/connection-secret-transform-keys`, 'client-id')): "true"
-                  (contains(`keycloak.crossplane.io/connection-secret-transform-keys`, 'client-secret')): "true"
-                  (contains(`keycloak.crossplane.io/connection-secret-transform-keys`, 'issuerUrl')): "true"
+              # The controller records which keys it manages so that it can
+              # clean them up cleanly when config changes.
+              (contains(metadata.annotations."keycloak.crossplane.io/connection-secret-transform-keys" || '', 'client-id')): "true"
+              (contains(metadata.annotations."keycloak.crossplane.io/connection-secret-transform-keys" || '', 'client-secret')): "true"
+              (contains(metadata.annotations."keycloak.crossplane.io/connection-secret-transform-keys" || '', 'issuerUrl')): "true"
               data:
                 # Original keys from the provider are retained (merge-patch
                 # semantics: the controller never deletes provider-owned keys).
