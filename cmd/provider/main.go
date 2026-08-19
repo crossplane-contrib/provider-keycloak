@@ -30,6 +30,7 @@ import (
 	"k8s.io/client-go/tools/leaderelection/resourcelock"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/cache"
+	ctrlconfig "sigs.k8s.io/controller-runtime/pkg/config"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/metrics"
@@ -72,6 +73,7 @@ func main() {
 		leaderElection          = app.Flag("leader-election", "Use leader election for the controller manager.").Short('l').Default("false").OverrideDefaultFromEnvar("LEADER_ELECTION").Bool()
 		maxReconcileRate        = app.Flag("max-reconcile-rate", "The global maximum rate per second at which resources may checked for drift from the desired state.").Default("10").Int()
 		maxConcurrentReconciles = app.Flag("max-concurrent-reconciles", "The maximum number of concurrent reconcile operations per controller.").Default("5").Int()
+		cacheSyncTimeout        = app.Flag("cache-sync-timeout", "The per-controller timeout for waiting for the informer caches to sync, such as 2m or 10m.").Default("10m").Envar("CACHE_SYNC_TIMEOUT").Duration()
 		keycloakClientPoolSize  = app.Flag("keycloak-client-pool-size", "The maximum number of Keycloak client connections created per provider configuration to serve concurrent operations safely.").Default("5").Int()
 		webhookPort             = app.Flag("webhook-port", "The port the webhook listens on").Default("9443").Envar("WEBHOOK_PORT").Int()
 		metricsBindAddress      = app.Flag("metrics-bind-address", "The address the metrics server listens on").Default(":8080").Envar("METRICS_BIND_ADDRESS").String()
@@ -142,11 +144,17 @@ func main() {
 		}
 	}
 
-	mgr, err := ctrl.NewManager(cfg, ctrl.Options{
+	// LimitRESTConfig raises the client-go rate limits (QPS 5, burst 10 by
+	// default), which cannot serve the initial list/watch storm of the
+	// informers for all managed resource kinds within the cache sync timeout.
+	mgr, err := ctrl.NewManager(ratelimiter.LimitRESTConfig(cfg, *maxReconcileRate), ctrl.Options{
 		LeaderElection:   *leaderElection,
 		LeaderElectionID: "crossplane-leader-election-provider-keycloak",
 		Cache: cache.Options{
 			SyncPeriod: syncPeriod,
+		},
+		Controller: ctrlconfig.Controller{
+			CacheSyncTimeout: *cacheSyncTimeout,
 		},
 		Metrics: metricsserver.Options{
 			BindAddress: *metricsBindAddress,
