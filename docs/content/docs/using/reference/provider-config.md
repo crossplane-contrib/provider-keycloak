@@ -136,3 +136,527 @@ spec:
   providerConfigRef:
     name: keycloak-production
 ```
+
+## Connection Secret Key Renaming
+
+Resources that publish connection details (currently `openidclient.Client`)
+write them under fixed keys: `clientID`, `clientSecret` and, for service
+accounts, `serviceAccountUserId`. Consumers frequently expect different key
+names — Envoy Gateway's OIDC `SecurityPolicy`, for example, requires
+`client-id` and `client-secret`.
+
+The provider therefore adds the keys you configure to the resource's own
+connection secret — the one named by `spec.writeConnectionSecretToRef` — so
+consumers keep pointing at that single secret.
+
+Renaming in place is *additive*: the managed resource's own controller
+republishes every key it owns on each reconcile, so a key it published cannot
+be removed for good. `clientID: client-id` therefore adds `client-id` next to
+`clientID`, both carrying the same value. That is all a consumer such as an
+Envoy Gateway OIDC `SecurityPolicy` needs, since it looks up the keys it wants
+and ignores the rest. If the original names must not appear at all, switch to
+the `SeparateSecret` [mode](#modes).
+
+Configure the renaming centrally, for every resource using a `ProviderConfig`:
+
+```yaml
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-provider-config
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-credentials
+      key: credentials
+      namespace: crossplane-system
+  connectionSecretKeys:
+    rename:
+      clientID: client-id
+      clientSecret: client-secret
+```
+
+…or per resource, with annotations. Annotation entries are merged on top of
+the `ProviderConfig` map, so a single resource can extend or override the
+central configuration without replacing it:
+
+| Annotation | Description |
+|------------|-------------|
+| `keycloak.crossplane.io/connection-secret-key-rename` | `<oldKey>=<newKey>` pairs, or a YAML mapping of `<oldKey>: <newKey>` (see below) |
+| `keycloak.crossplane.io/connection-secret-add-fields` | `<newKey>=<source>` pairs, or a YAML mapping of `<newKey>: <source>` (see [Adding Status/ProviderConfig Fields](#adding-statusproviderconfig-fields)) |
+| `keycloak.crossplane.io/connection-secret-transform-mode` | `InPlace` (default) or `SeparateSecret`, see [Modes](#modes) |
+| `keycloak.crossplane.io/connection-secret-transform-name` | `SeparateSecret` mode only: name of the republished secret (default: `<connection secret>-transformed`) |
+
+The rename and add-fields annotations both accept two syntaxes, tried in this
+order:
+
+1. A YAML block mapping — the most natural way to write a list of pairs in a
+   Kubernetes annotation:
+
+   ```yaml
+   keycloak.crossplane.io/connection-secret-key-rename: |
+     clientID: client-id
+     clientSecret: client-secret
+   ```
+
+2. A comma- and/or newline-separated list of `<oldKey>=<newKey>` pairs,
+   used as a fallback whenever the value does not parse as a YAML mapping
+   (e.g. because it uses `=` instead of `: `):
+
+   ```yaml
+   keycloak.crossplane.io/connection-secret-key-rename: "clientID=client-id,clientSecret=client-secret"
+   ```
+
+   or, one pair per line:
+
+   ```yaml
+   keycloak.crossplane.io/connection-secret-key-rename: |
+     clientID=client-id
+     clientSecret=client-secret
+   ```
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: my-app
+  annotations:
+    keycloak.crossplane.io/connection-secret-key-rename: "clientID=client-id,clientSecret=client-secret"
+spec:
+  forProvider:
+    clientId: my-app
+    accessType: CONFIDENTIAL
+    realmIdRef:
+      name: my-realm
+  writeConnectionSecretToRef:
+    name: my-app-connection
+    namespace: default
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+`default/my-app-connection` then carries `client-id` and `client-secret` in
+addition to the keys the provider publishes itself:
+
+```console
+$ kubectl get secret my-app-connection -o jsonpath='{.data}' | jq keys
+[
+  "attribute.client_secret",
+  "clientID",
+  "clientSecret",
+  "client-id",
+  "client-secret"
+]
+```
+
+The keys the provider added on your behalf are recorded in the
+`keycloak.crossplane.io/connection-secret-transform-keys` annotation on that
+secret. Only those keys are ever written or removed again, so a key published
+by the resource itself — or one of upjet's `attribute.*` keys, which carry the
+Terraform state — can never be overwritten.
+
+### Modes
+
+| Mode | Behaviour |
+|------|-----------|
+| `InPlace` (default) | The configured keys are added to the resource's own connection secret. No second secret is created. Renaming is additive, i.e. the original key stays. |
+| `SeparateSecret` | The connection secret is left untouched and a second, transformed secret is published next to it, containing only the renamed/added keys. Use it when the original key names must not appear. |
+
+Pick the mode on the `ProviderConfig`
+(`spec.connectionSecretKeys.mode`), per resource with the
+`keycloak.crossplane.io/connection-secret-transform-mode` annotation, or on a
+`ConnectionSecretTransform` (`spec.mode`) — the same precedence as the
+`rename`/`add` maps:
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: my-app
+  annotations:
+    keycloak.crossplane.io/connection-secret-transform-mode: SeparateSecret
+    keycloak.crossplane.io/connection-secret-key-rename: "clientID=client-id,clientSecret=client-secret"
+    keycloak.crossplane.io/connection-secret-transform-name: "my-app-oidc"
+spec:
+  writeConnectionSecretToRef:
+    name: my-app-connection
+    namespace: default
+```
+
+This publishes `default/my-app-oidc` next to the untouched
+`default/my-app-connection`. The republished secret is owned by the connection
+secret, which is in turn owned by the managed resource, so both are deleted
+together with the `Client`. Switching back to `InPlace` deletes it again.
+
+Namespaced managed resources (`*.keycloak.m.crossplane.io`) are configured
+with the annotations (or a `ConnectionSecretTransform`, see below) only, since
+the `rename`/`add` maps live on the cluster-scoped `ProviderConfig`.
+
+Editing an annotation (or the `ProviderConfig` map) does not change the
+connection secret itself, so the new configuration is not applied
+immediately: the provider re-evaluates each connection secret once per poll
+interval (`--poll-interval`, one minute by default) and applies it then.
+
+## Configuring via a `ConnectionSecretTransform` Object
+
+Both of the above configure the transform through the managed resource's own
+manifest — the `ProviderConfig` it references, or its own annotations. A
+third option, the namespaced `ConnectionSecretTransform` custom resource,
+names the connection secret to transform directly instead, and is useful when
+you would rather not edit the resource that owns the secret at all — for
+example when it is reconciled by a separate GitOps pipeline you don't
+control, or when several unrelated teams each want to republish the same
+secret differently.
+
+```yaml
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ConnectionSecretTransform
+metadata:
+  name: my-app-oidc
+  namespace: default
+spec:
+  sourceSecretRef:
+    name: my-app-connection
+  # Omit mode (or set it to InPlace) to write into my-app-connection itself.
+  mode: SeparateSecret
+  transformedSecretName: my-app-oidc
+  rename:
+    clientID: client-id
+    clientSecret: client-secret
+  add:
+    providerConfigName: "providerConfig:metadata.name"
+```
+
+`spec.sourceSecretRef.name` is the name of an existing connection secret in
+the `ConnectionSecretTransform`'s own namespace — connection secrets are
+always namespaced, whether the managed resource that owns them is
+cluster-scoped or namespaced, so `ConnectionSecretTransform` is namespaced
+too, unlike the cluster-scoped `ProviderConfig`. `spec.rename`, `spec.add` and
+`spec.transformedSecretName` accept the same values as the `ProviderConfig`
+map and the annotations respectively (native YAML maps here, since there is
+no annotation string encoding to work around), and are merged on top of
+both — a `ConnectionSecretTransform` entry always wins over the same key
+configured on the `ProviderConfig` or via an annotation. This makes it the
+right tool when a `ConnectionSecretTransform` should override, rather than
+merely extend, another team's central configuration.
+
+Editing, creating or deleting a `ConnectionSecretTransform` reconciles its
+named secret immediately — it does not have to wait for the poll interval,
+unlike editing the `ProviderConfig` or an annotation.
+
+Its own `status.conditions` reports whether it is currently applied
+(`Ready: True`, with `status.transformedSecretName` set) or refused, together
+with the reason (e.g. a name collision, or another `ConnectionSecretTransform`
+in the same namespace naming the same source secret, which is ambiguous and
+so refuses both rather than picking one arbitrarily):
+
+```console
+$ kubectl get connectionsecrettransform my-app-oidc -o jsonpath='{.status.conditions}'
+```
+
+## Adding Status/ProviderConfig Fields
+
+Beyond renaming existing keys, the connection secret (or, in `SeparateSecret`
+mode, the transformed copy) can also gain entirely new keys, sourced from the
+owning managed resource's `status.atProvider`, from the referenced
+`ProviderConfig` object, or from the Keycloak deployment itself — for example,
+to publish the realm's OIDC issuer URL, the Keycloak client's internal ID, or
+which `ProviderConfig` produced the secret, alongside the credentials. Values
+are never sourced from the connection secret itself, so this cannot be used to
+duplicate or leak an existing secret value under a different key.
+
+Configure it centrally on the `ProviderConfig`:
+
+```yaml
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-provider-config
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-credentials
+      key: credentials
+      namespace: crossplane-system
+  connectionSecretKeys:
+    rename:
+      clientID: client-id
+      clientSecret: client-secret
+    add:
+      issuerUrl: "keycloak:issuerUrl"
+      providerConfigName: "providerConfig:metadata.name"
+```
+
+…or per resource, with the `keycloak.crossplane.io/connection-secret-add-fields`
+annotation, using either of the two syntaxes described above:
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: my-app
+  annotations:
+    keycloak.crossplane.io/connection-secret-add-fields: |
+      internalClientId: status:atProvider.id
+      providerConfigName: providerConfig:metadata.name
+spec:
+  forProvider:
+    clientId: my-app
+    accessType: CONFIDENTIAL
+    realmIdRef:
+      name: my-realm
+  writeConnectionSecretToRef:
+    name: my-app-connection
+    namespace: default
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+Each value is a source expression of the form `<prefix>:<dot.path>`:
+
+| Prefix | Resolved against | Example |
+|--------|-------------------|---------|
+| `status:` | The owning managed resource's `status` | `status:atProvider.clientId` |
+| `providerConfig:` | The referenced `ProviderConfig` object | `providerConfig:metadata.name` |
+| `keycloak:` | The Keycloak deployment the resource lives in (see below) | `keycloak:issuerUrl` |
+
+Only scalar values (string, number, boolean) are supported — a path that
+resolves to a map or a list, or that does not resolve at all, is reported and
+skipped rather than failing the reconcile. `providerConfig:` and `keycloak:`
+sources are only available for cluster-scoped resources, the same restriction
+as `ProviderConfig`-wide renaming.
+
+#### Keycloak-derived values (`keycloak:`)
+
+`keycloak:` sources are not read from a single object field — the OIDC issuer
+URL, for instance, exists on neither the managed resource nor the
+`ProviderConfig`, because it combines the `ProviderConfig`'s Keycloak URL with
+the realm the resource lives in. The provider computes them instead:
+
+| Field | Value (for `url: https://keycloak.example.com`, realm `my-realm`) |
+|-------|-------------------------------------------------------------------|
+| `keycloak:url` | `https://keycloak.example.com` |
+| `keycloak:realm` | `my-realm` |
+| `keycloak:issuerUrl` | `https://keycloak.example.com/realms/my-realm` |
+| `keycloak:wellKnownUrl` | `…/realms/my-realm/.well-known/openid-configuration` |
+| `keycloak:authorizationUrl` | `…/realms/my-realm/protocol/openid-connect/auth` |
+| `keycloak:tokenUrl` | `…/realms/my-realm/protocol/openid-connect/token` |
+| `keycloak:userinfoUrl` | `…/realms/my-realm/protocol/openid-connect/userinfo` |
+| `keycloak:jwksUrl` | `…/realms/my-realm/protocol/openid-connect/certs` |
+| `keycloak:endSessionUrl` | `…/realms/my-realm/protocol/openid-connect/logout` |
+
+The base URL is taken from the `url` (and `base_path`) entry of the
+`ProviderConfig`'s credentials — the same address the provider itself talks
+to, normalized without a trailing slash. Those two entries are addressing
+information, not secret material, and they are the *only* credential entries
+the transform ever reads: `client_secret`, `password` and the JWT signing key
+are never touched, so a `keycloak:` source cannot leak a credential.
+
+The realm is taken from the owning managed resource, in this order:
+`status.atProvider.realmId`, `spec.forProvider.realmId`,
+`status.atProvider.realm`, `spec.forProvider.realm` — i.e. the realm the
+resource was created in, resolved references included. Every field except
+`keycloak:url` needs it; if it cannot be determined (a resource that is not
+realm-scoped, or one that has not been observed yet and only references its
+realm), the entry is reported and skipped like any other unresolvable source,
+and it is filled in on a later reconcile.
+
+Together with the client ID and secret this is everything an OIDC consumer
+needs from a single secret, e.g. for an Envoy Gateway `SecurityPolicy`:
+
+```yaml
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: my-app
+  annotations:
+    keycloak.crossplane.io/connection-secret-key-rename: |
+      clientID: client-id
+      clientSecret: client-secret
+    keycloak.crossplane.io/connection-secret-add-fields: |
+      issuer: keycloak:issuerUrl
+      discovery: keycloak:wellKnownUrl
+spec:
+  forProvider:
+    clientId: my-app
+    accessType: CONFIDENTIAL
+    realmIdRef:
+      name: my-realm
+  writeConnectionSecretToRef:
+    name: my-app-connection
+    namespace: default
+  providerConfigRef:
+    name: keycloak-provider-config
+```
+
+```console
+$ kubectl get secret my-app-connection -o jsonpath='{.data}' | jq keys
+["attribute.client_secret","client-id","client-secret","clientID","clientSecret","discovery","issuer"]
+```
+
+### Safety rules
+
+The transform never destroys data. A misconfiguration is skipped and reported
+as a Kubernetes event on the connection secret (`kubectl describe secret
+<connection secret>`), so it neither corrupts a secret nor blocks
+reconciliation:
+
+| Situation | Behaviour | Event reason |
+|-----------|-----------|--------------|
+| Rename target is not a valid secret key (`[-._a-zA-Z0-9]+`) | Entry ignored, the remaining renames are applied | `InvalidConnectionSecretKeyRename` |
+| Two keys would end up under the same name | The colliding rename is skipped, the key keeps its original name | `ConnectionSecretKeyRenameConflict` |
+| Add-field target is not a valid secret key, or its source expression does not resolve to a scalar | Entry ignored, the remaining added fields are applied | `InvalidConnectionSecretFieldAdd` |
+| An added field's key collides with an existing (or renamed) key | The added field is skipped, the existing key wins | `ConnectionSecretFieldAddConflict` |
+| A key would overwrite one the provider publishes itself, or an `attribute.*` key (`InPlace` mode) | The key is skipped, the existing value is kept | `ConnectionSecretKeyConflict` |
+| `connection-secret-transform-mode` is neither `InPlace` nor `SeparateSecret` | The default (`InPlace`) is used | `InvalidConnectionSecretTransformMode` |
+| `connection-secret-transform-name` is not a valid secret name, or names the connection secret itself (`SeparateSecret` mode) | Nothing is written | `InvalidTransformedSecretName` |
+| A secret of that name exists and was not written by this controller | Nothing is written, the existing secret is left untouched | `TransformedSecretNotOwned` |
+| More than one `ConnectionSecretTransform` in a namespace names the same source secret | None of them are applied; each reports the conflict on its own `status.conditions` | `ConnectionSecretTransformAmbiguous` |
+
+In `InPlace` mode the controller only ever writes or removes the keys listed
+in the connection secret's
+`keycloak.crossplane.io/connection-secret-transform-keys` annotation, i.e. the
+ones it added itself. In `SeparateSecret` mode it only ever writes secrets it
+created itself — they carry the
+labels `keycloak.crossplane.io/connection-secret-transform: "true"` and
+`keycloak.crossplane.io/connection-secret-source: <connection secret>` and are
+controller-owned by the connection secret. It only reacts to Crossplane
+connection secrets (type `connection.crossplane.io/v1alpha1`) and to its own
+output; other secrets, including the provider's credentials, are ignored.
+
+
+## Alternative: a Crossplane v2 Composition
+
+The same secret can be produced without any of the above, by composing it.
+Crossplane v2 no longer aggregates connection details for composite resources
+itself and instead
+[recommends](https://docs.crossplane.io/latest/guides/connection-details-composition/)
+composing a `Secret` alongside the resources it describes. A namespaced
+composite resource can compose core Kubernetes objects directly, so the
+`Secret` needs no `provider-kubernetes`:
+
+```yaml
+- step: render
+  functionRef:
+    name: function-go-templating
+  input:
+    apiVersion: gotemplating.fn.crossplane.io/v1beta1
+    kind: GoTemplate
+    source: Inline
+    inline:
+      template: |
+        {{- $spec := $.observed.composite.resource.spec }}
+        {{- $resources := default dict $.observed.resources }}
+        {{- $connectionDetails := dig "connectionDetails" dict (dig "client" dict $resources) }}
+        ---
+        apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha2
+        kind: Client
+        metadata:
+          annotations:
+            {{ setResourceNameAnnotation "client" }}
+        spec:
+          forProvider:
+            clientId: {{ $spec.clientId | quote }}
+            accessType: CONFIDENTIAL
+            realmIdRef:
+              name: {{ $spec.realm | quote }}
+          writeConnectionSecretToRef:
+            name: {{ printf "%s-client" $.observed.composite.resource.metadata.name | quote }}
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: {{ $spec.writeConnectionSecretToRef.name | quote }}
+          annotations:
+            {{ setResourceNameAnnotation "connection-secret" }}
+        data:
+          client-id: {{ dig "clientID" "" $connectionDetails | quote }}
+          client-secret: {{ dig "clientSecret" "" $connectionDetails | quote }}
+          issuer-url: {{ $spec.issuerUrl | b64enc | quote }}
+```
+
+The full example — functions, XRD, `Composition` and a composite resource —
+is in
+[`examples/composition/connection-secret-transform.yaml`](https://github.com/crossplane-contrib/provider-keycloak/blob/main/examples/composition/connection-secret-transform.yaml).
+
+| | Connection secret transform | Composition |
+|---|---|---|
+| Applies to | Resources that already exist, written by anyone | Only resources the `Composition` itself composes |
+| Extra secret | None in `InPlace` mode — the keys are added to the connection secret | Always: the connection secret is written by the provider and a `Composition` cannot add keys to it |
+| Original key names | Kept (`InPlace`) or dropped (`SeparateSecret`) | Only the keys the template writes exist |
+| Keycloak-derived values | Resolved by the provider (`keycloak:issuerUrl`, …) from the `ProviderConfig`'s credentials | Have to be supplied by whoever writes the composite resource — a `Composition` cannot read the credentials `Secret` |
+| Arbitrary shaping | Renaming and adding scalar fields only | Anything the function can template |
+| Prerequisites | None | A `Composition`, an XRD and the composition functions |
+
+Use the transform to adjust the keys of connection secrets you already have,
+and a `Composition` when the Keycloak client is part of a larger API you
+offer to your users anyway.
+
+## Alternative: External Secrets Operator
+
+[External Secrets Operator (ESO)](https://external-secrets.io) can read keys
+from the Crossplane connection secret and republish them under different names
+into a new `Secret`, entirely outside the provider. No provider feature is
+needed; ESO must be installed separately.
+
+The building blocks are:
+
+1. A **`ClusterSecretStore`** (or `SecretStore`) using the [Kubernetes
+   provider](https://external-secrets.io/latest/provider/kubernetes/), pointed
+   at the namespace where Crossplane writes connection secrets
+   (`crossplane-system` by default).
+2. An **`ExternalSecret`** that selects individual keys from the connection
+   secret, remaps them in the `target.template`, and adds any literal values
+   you need — such as the realm's OIDC issuer URL.
+
+```yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: example-eso-oidc
+  namespace: crossplane-system
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    name: keycloak-connection-secrets
+    kind: ClusterSecretStore
+  target:
+    name: example-eso-oidc
+    creationPolicy: Owner
+    template:
+      type: Opaque
+      data:
+        client-id: "{{ .clientID }}"
+        client-secret: "{{ .clientSecret }}"
+        # The issuer URL must be supplied here; ESO has no access to the
+        # ProviderConfig credentials, so it cannot derive it automatically.
+        issuer-url: "https://keycloak.example.com/realms/example-realm"
+  data:
+    - secretKey: clientID
+      remoteRef:
+        key: example-eso-client   # name of the Crossplane connection secret
+        property: clientID
+    - secretKey: clientSecret
+      remoteRef:
+        key: example-eso-client
+        property: clientSecret
+```
+
+The full example — `ClusterSecretStore`, `Client` and `ExternalSecret` — is in
+[`examples/eso/connection-secret-transform.yaml`](https://github.com/crossplane-contrib/provider-keycloak/blob/main/examples/eso/connection-secret-transform.yaml).
+
+| | Connection secret transform | Crossplane v2 Composition | External Secrets Operator |
+|---|---|---|---|
+| Applies to | Any existing connection secret | Only resources the `Composition` itself composes | Any existing `Secret` (Kubernetes or external vault) |
+| Extra secret | None in `InPlace` mode | Always — `Composition` cannot add keys to provider-written secrets | Always — ESO always writes a separate `Secret` |
+| Original key names | Kept (`InPlace`) or dropped (`SeparateSecret`) | Only the keys the template writes exist | Only the keys `ExternalSecret` selects/templates exist |
+| Keycloak-derived values | Resolved automatically (`keycloak:issuerUrl`, …) | Must be supplied on the composite resource | Must be supplied as literals in the `ExternalSecret` |
+| Arbitrary shaping | Renaming and adding scalar fields only | Anything the function can template | Full Go template over any number of source secrets, vault secrets, etc. |
+| Extra prerequisites | None | `Composition`, XRD, composition functions | ESO installation |
+
+Use ESO when you already have ESO in your cluster and want to bridge from
+Crossplane connection secrets to application secrets in a uniform way —
+especially when your transforms are complex, span multiple source secrets, or
+need to pull from an external vault alongside the connection secret.

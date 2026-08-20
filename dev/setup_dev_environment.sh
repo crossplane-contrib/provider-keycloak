@@ -426,6 +426,7 @@ $kubectl_cmd wait pod --all --namespace crossplane-system --for=condition=Ready 
 $kubectl_cmd wait crd/providerconfigs.keycloak.crossplane.io --for condition=established --timeout=60s
 
 $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml
+$kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config-secret-transform.yaml
 
 echo "########### Setting up non-master-realm service account (KC >= 26.4 empty-version fix) ###########"
 KC_BASE_URL="http://${KEYCLOAK_IP}:${KEYCLOAK_PORT}"

@@ -364,6 +364,27 @@ local-deploy-provider-prebuilt: local.xpkg.deploy.provider.$(PROJECT_NAME)
 
 e2e: local-deploy uptest
 
+# Controller-focused e2e tests using Kyverno chainsaw directly.
+# These test hand-written controllers (e.g. connectionsecrettransform) against
+# a running provider + Keycloak. They run in the same kind cluster as the
+# regular uptest suite, after `make local-deploy`.
+#
+# Prerequisites: the kind cluster (fenrir-1) must be running, the provider
+# must be deployed, and the cluster/test/setup.sh init manifests must have
+# been applied (run `make local-deploy` first, or `dev/setup_dev_environment.sh`).
+#
+# Infrastructure (Envoy Gateway, Traefik) is installed by the setup script
+# cluster/test/controller/setup.sh before chainsaw runs.
+controller-e2e: $(CHAINSAW)
+	@$(INFO) installing controller e2e infrastructure
+	@KUBECTL=$(KUBECTL) ./cluster/test/controller/setup.sh
+	@$(INFO) running controller e2e tests with chainsaw
+	@$(CHAINSAW) test \
+		--test-dir cluster/test/controller \
+		--namespace dev \
+		|| $(FAIL)
+	@$(OK) controller e2e tests passed
+
 # Breaking CRD schema changes are only acceptable in a major release, where
 # they are accompanied by a new API version and a conversion webhook. Set
 # CRDDIFF_ALLOW_BREAKING=true on such a branch to report the changes without

@@ -18,6 +18,7 @@ import (
 	genericclientrolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/genericclientrolemapper"
 	protocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/protocolmapper"
 	rolemapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/client/rolemapper"
+	connectionsecrettransform "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/connectionsecrettransform"
 	defaultgroups "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/defaults/defaultgroups"
 	roles "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/defaults/roles"
 	adminpermissions "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/group/adminpermissions"
@@ -134,6 +135,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		genericclientrolemapper.Setup,
 		protocolmapper.Setup,
 		rolemapper.Setup,
+		connectionsecrettransform.Setup,
 		defaultgroups.Setup,
 		roles.Setup,
 		adminpermissions.Setup,
@@ -256,6 +258,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		genericclientrolemapper.SetupGated,
 		protocolmapper.SetupGated,
 		rolemapper.SetupGated,
+		connectionsecrettransform.SetupGated,
 		defaultgroups.SetupGated,
 		roles.SetupGated,
 		adminpermissions.SetupGated,
@@ -377,6 +380,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		genericclientrolemapper.SetupWebhookWithManager,
 		protocolmapper.SetupWebhookWithManager,
 		rolemapper.SetupWebhookWithManager,
+		connectionsecrettransform.SetupWebhookWithManager,
 		defaultgroups.SetupWebhookWithManager,
 		roles.SetupWebhookWithManager,
 		adminpermissions.SetupWebhookWithManager,
