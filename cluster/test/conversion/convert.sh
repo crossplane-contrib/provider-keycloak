@@ -17,4 +17,18 @@ if [[ -z "${ns}" || -z "${svc}" || -z "${port}" ]]; then
   exit 1
 fi
 
-${KUBECTL} create --raw "/api/v1/namespaces/${ns}/services/https:${svc}:${port}/proxy/convert" -f -
+# A ConversionReview POST is idempotent, so transport-level failures (webhook
+# pod still rolling out after CI setup, endpoints not yet updated) are retried.
+# Conversion failures are HTTP 200 responses and never retried.
+payload=$(cat)
+attempts=24
+for i in $(seq 1 "${attempts}"); do
+  if out=$(printf '%s' "${payload}" | ${KUBECTL} create --raw "/api/v1/namespaces/${ns}/services/https:${svc}:${port}/proxy/convert" -f - 2>/tmp/convert-err.txt); then
+    printf '%s\n' "${out}"
+    exit 0
+  fi
+  echo "attempt ${i}/${attempts}: webhook not reachable yet: $(cat /tmp/convert-err.txt)" >&2
+  sleep 5
+done
+echo "conversion webhook unreachable after ${attempts} attempts" >&2
+exit 1
