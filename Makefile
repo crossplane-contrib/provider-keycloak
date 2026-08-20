@@ -301,6 +301,19 @@ uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW) $(CROSSPLANE_CLI)
 	@KUBECTL=$(KUBECTL) CHAINSAW=$(CHAINSAW) CROSSPLANE_CLI=$(CROSSPLANE_CLI) CROSSPLANE_NAMESPACE=$(CROSSPLANE_NAMESPACE) $(UPTEST) e2e "$(UPTEST_EXAMPLE_LIST)" $(RENDER_ONLY_FLAG) --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=cluster/test/setup.sh --default-conditions="Test" --default-timeout=2400s || $(FAIL)
 	@$(OK) running automated tests
 
+# The CRD conversion regression tests post ConversionReview payloads with the
+# historic stored encodings of clientSecretWoVersion (including the string
+# encoding persisted at v1alpha1 by pre-v3.0.0 builds, #669) directly to the
+# provider's live /convert endpoint, because the current CRD schemas no longer
+# admit such objects through the API server. Requires a cluster with the
+# provider deployed, i.e. the same prerequisites as the `uptest` target.
+uptest-conversion: $(CHAINSAW) $(KUBECTL)
+	@$(INFO) running CRD conversion webhook tests
+	@KUBECTL=$(KUBECTL) $(CHAINSAW) test --test-dir cluster/test/conversion || $(FAIL)
+	@$(OK) running CRD conversion webhook tests
+
+e2e-conversion: local-deploy uptest-conversion
+
 # Two gates: every demo file is listed in a case file, and every managed
 # resource has an e2e demo (or a documented exception in
 # cluster/test/uncovered-resources.txt).

@@ -1,0 +1,263 @@
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: crd-conversion-stored-objects
+spec:
+  # Regression tests for crossplane-contrib/provider-keycloak#669: the
+  # conversion webhook must convert objects with the *stored* encodings of
+  # clientSecretWoVersion, including the string encoding persisted at
+  # v1alpha1 by pre-v3.0.0 development builds. Those objects can no longer be
+  # created through the API server (the current v1alpha1 schema types the
+  # field as number again), so the ConversionReview payloads are posted
+  # directly to the provider's live /convert endpoint via convert.sh —
+  # exactly the request the API server issues for objects at rest.
+  #
+  # Also covers malformed objects: a broken conversion must fail gracefully
+  # per-request instead of taking the webhook (and with it the provider) down.
+  timeouts:
+    assert: 10m
+    exec: 5m
+  steps:
+    - name: assert-the-crds-serve-both-versions-through-a-webhook
+      try:
+        - assert:
+            resource:
+              apiVersion: apiextensions.k8s.io/v1
+              kind: CustomResourceDefinition
+              metadata:
+                name: identityproviders.oidc.keycloak.crossplane.io
+              spec:
+                conversion:
+                  strategy: Webhook
+                  webhook:
+                    clientConfig:
+                      # caBundle and service coordinates are injected by the
+                      # Crossplane package manager. Without them every read of
+                      # a non-storage version fails.
+                      (length(caBundle) > `0`): true
+                      service:
+                        path: /convert
+                versions:
+                  - name: v1alpha1
+                    served: true
+                    storage: false
+                  - name: v1alpha2
+                    served: true
+                    storage: true
+        - assert:
+            resource:
+              apiVersion: apiextensions.k8s.io/v1
+              kind: CustomResourceDefinition
+              metadata:
+                name: identityproviders.oidc.keycloak.m.crossplane.io
+              spec:
+                conversion:
+                  strategy: Webhook
+                  webhook:
+                    clientConfig:
+                      (length(caBundle) > `0`): true
+                      service:
+                        path: /convert
+        - assert:
+            resource:
+              apiVersion: apiextensions.k8s.io/v1
+              kind: CustomResourceDefinition
+              metadata:
+                name: clients.openidclient.keycloak.crossplane.io
+              spec:
+                conversion:
+                  strategy: Webhook
+                  webhook:
+                    clientConfig:
+                      (length(caBundle) > `0`): true
+                      service:
+                        path: /convert
+        - assert:
+            resource:
+              apiVersion: apiextensions.k8s.io/v1
+              kind: CustomResourceDefinition
+              metadata:
+                name: clients.openidclient.keycloak.m.crossplane.io
+              spec:
+                conversion:
+                  strategy: Webhook
+                  webhook:
+                    clientConfig:
+                      (length(caBundle) > `0`): true
+                      service:
+                        path: /convert
+
+    # The encoding written by released v2.x providers: a number at v1alpha1.
+    - name: upgrade-the-stored-number-encoding
+      try:
+        - script:
+            content: |
+              set -euo pipefail
+              resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
+              {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
+               "request": {"uid": "e2e-number-upgrade",
+                 "desiredAPIVersion": "oidc.keycloak.crossplane.io/v1alpha2",
+                 "objects": [{"apiVersion": "oidc.keycloak.crossplane.io/v1alpha1", "kind": "IdentityProvider",
+                   "metadata": {"name": "e2e-conversion"},
+                   "spec": {"forProvider": {"alias": "e2e", "realm": "e2e", "clientSecretWoVersion": 1277175040}},
+                   "status": {"atProvider": {"clientSecretWoVersion": 1277175040}}}]}}
+              EOF
+              )
+              echo "${resp}" | jq -e '.response.result.status == "Success"'
+              echo "${resp}" | jq -e '.response.convertedObjects[0].spec.forProvider.clientSecretWoVersion == "1277175040"'
+              echo "${resp}" | jq -e '.response.convertedObjects[0].status.atProvider.clientSecretWoVersion == "1277175040"'
+            check:
+              ($error == null): true
+
+    # The #669 crash case: the string encoding persisted at v1alpha1 by main
+    # builds between the v5.9.0 bump and the v1alpha2 split. Before the fix
+    # this request failed with "json: cannot unmarshal string into Go struct
+    # field ... of type float64", the informer never synced and the provider
+    # crash-looped.
+    - name: upgrade-the-stored-string-encoding
+      try:
+        - script:
+            content: |
+              set -euo pipefail
+              resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
+              {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
+               "request": {"uid": "e2e-string-upgrade",
+                 "desiredAPIVersion": "oidc.keycloak.crossplane.io/v1alpha2",
+                 "objects": [{"apiVersion": "oidc.keycloak.crossplane.io/v1alpha1", "kind": "IdentityProvider",
+                   "metadata": {"name": "e2e-conversion"},
+                   "spec": {"forProvider": {"alias": "e2e", "realm": "e2e", "clientSecretWoVersion": "1277175040"}},
+                   "status": {"atProvider": {"clientSecretWoVersion": "1277175040"}}}]}}
+              EOF
+              )
+              echo "${resp}" | jq -e '.response.result.status == "Success"'
+              echo "${resp}" | jq -e '.response.convertedObjects[0].spec.forProvider.clientSecretWoVersion == "1277175040"'
+              echo "${resp}" | jq -e '.response.convertedObjects[0].status.atProvider.clientSecretWoVersion == "1277175040"'
+            check:
+              ($error == null): true
+        - script:
+            content: |
+              set -euo pipefail
+              resp=$(./convert.sh identityproviders.oidc.keycloak.m.crossplane.io <<'EOF'
+              {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
+               "request": {"uid": "e2e-string-upgrade-namespaced",
+                 "desiredAPIVersion": "oidc.keycloak.m.crossplane.io/v1alpha2",
+                 "objects": [{"apiVersion": "oidc.keycloak.m.crossplane.io/v1alpha1", "kind": "IdentityProvider",
+                   "metadata": {"name": "e2e-conversion", "namespace": "default"},
+                   "spec": {"forProvider": {"alias": "e2e", "realm": "e2e", "clientSecretWoVersion": "1277175040"}}}]}}
+              EOF
+              )
+              echo "${resp}" | jq -e '.response.result.status == "Success"'
+              echo "${resp}" | jq -e '.response.convertedObjects[0].spec.forProvider.clientSecretWoVersion == "1277175040"'
+            check:
+              ($error == null): true
+        - script:
+            content: |
+              set -euo pipefail
+              resp=$(./convert.sh clients.openidclient.keycloak.crossplane.io <<'EOF'
+              {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
+               "request": {"uid": "e2e-string-upgrade-client",
+                 "desiredAPIVersion": "openidclient.keycloak.crossplane.io/v1alpha2",
+                 "objects": [{"apiVersion": "openidclient.keycloak.crossplane.io/v1alpha1", "kind": "Client",
+                   "metadata": {"name": "e2e-conversion"},
+                   "spec": {"forProvider": {"clientId": "e2e", "realmId": "e2e", "accessType": "CONFIDENTIAL", "clientSecretWoVersion": "202605192"}}}]}}
+              EOF
+              )
+              echo "${resp}" | jq -e '.response.result.status == "Success"'
+              echo "${resp}" | jq -e '.response.convertedObjects[0].spec.forProvider.clientSecretWoVersion == "202605192"'
+            check:
+              ($error == null): true
+        - script:
+            content: |
+              set -euo pipefail
+              resp=$(./convert.sh clients.openidclient.keycloak.m.crossplane.io <<'EOF'
+              {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
+               "request": {"uid": "e2e-string-upgrade-client-namespaced",
+                 "desiredAPIVersion": "openidclient.keycloak.m.crossplane.io/v1alpha2",
+                 "objects": [{"apiVersion": "openidclient.keycloak.m.crossplane.io/v1alpha1", "kind": "Client",
+                   "metadata": {"name": "e2e-conversion", "namespace": "default"},
+                   "spec": {"forProvider": {"clientId": "e2e", "realmId": "e2e", "accessType": "CONFIDENTIAL", "clientSecretWoVersion": "202605192"}}}]}}
+              EOF
+              )
+              echo "${resp}" | jq -e '.response.result.status == "Success"'
+              echo "${resp}" | jq -e '.response.convertedObjects[0].spec.forProvider.clientSecretWoVersion == "202605192"'
+            check:
+              ($error == null): true
+
+    # Downgrade path: clients pinned to v1alpha1 keep seeing a number.
+    - name: downgrade-to-the-number-encoding
+      try:
+        - script:
+            content: |
+              set -euo pipefail
+              resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
+              {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
+               "request": {"uid": "e2e-downgrade",
+                 "desiredAPIVersion": "oidc.keycloak.crossplane.io/v1alpha1",
+                 "objects": [{"apiVersion": "oidc.keycloak.crossplane.io/v1alpha2", "kind": "IdentityProvider",
+                   "metadata": {"name": "e2e-conversion"},
+                   "spec": {"forProvider": {"alias": "e2e", "realm": "e2e", "clientSecretWoVersion": "1277175040"}}}]}}
+              EOF
+              )
+              echo "${resp}" | jq -e '.response.result.status == "Success"'
+              echo "${resp}" | jq -e '.response.convertedObjects[0].spec.forProvider.clientSecretWoVersion == 1277175040'
+            check:
+              ($error == null): true
+
+    # Malformed objects must produce a per-request Failure response with a
+    # useful message — never an unhandled error that kills the webhook.
+    - name: reject-malformed-objects-gracefully
+      try:
+        # A non-numeric string cannot be represented in the numeric v1alpha1
+        # schema; the response must say so instead of silently dropping it.
+        - script:
+            content: |
+              set -euo pipefail
+              resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
+              {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
+               "request": {"uid": "e2e-non-numeric",
+                 "desiredAPIVersion": "oidc.keycloak.crossplane.io/v1alpha2",
+                 "objects": [{"apiVersion": "oidc.keycloak.crossplane.io/v1alpha1", "kind": "IdentityProvider",
+                   "metadata": {"name": "e2e-conversion"},
+                   "spec": {"forProvider": {"alias": "e2e", "realm": "e2e", "clientSecretWoVersion": "version1"}}}]}}
+              EOF
+              )
+              echo "${resp}" | jq -e '.response.result.status == "Failure"'
+              echo "${resp}" | jq -e '.response.result.message | test("non-numeric")'
+            check:
+              ($error == null): true
+        # A structurally broken object (forProvider is not an object).
+        - script:
+            content: |
+              set -euo pipefail
+              resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
+              {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
+               "request": {"uid": "e2e-broken-shape",
+                 "desiredAPIVersion": "oidc.keycloak.crossplane.io/v1alpha2",
+                 "objects": [{"apiVersion": "oidc.keycloak.crossplane.io/v1alpha1", "kind": "IdentityProvider",
+                   "metadata": {"name": "e2e-conversion"},
+                   "spec": {"forProvider": "not-an-object"}}]}}
+              EOF
+              )
+              echo "${resp}" | jq -e '.response.result.status == "Failure"'
+            check:
+              ($error == null): true
+
+    # The webhook (and the provider serving it) must have survived the
+    # malformed requests: the same good conversion still succeeds.
+    - name: assert-the-webhook-survived
+      try:
+        - script:
+            content: |
+              set -euo pipefail
+              resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
+              {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
+               "request": {"uid": "e2e-still-alive",
+                 "desiredAPIVersion": "oidc.keycloak.crossplane.io/v1alpha2",
+                 "objects": [{"apiVersion": "oidc.keycloak.crossplane.io/v1alpha1", "kind": "IdentityProvider",
+                   "metadata": {"name": "e2e-conversion"},
+                   "spec": {"forProvider": {"alias": "e2e", "realm": "e2e", "clientSecretWoVersion": "1277175040"}}}]}}
+              EOF
+              )
+              echo "${resp}" | jq -e '.response.result.status == "Success"'
+            check:
+              ($error == null): true
