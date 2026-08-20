@@ -1,0 +1,23 @@
+# Example XRotatingKeycloakClient.
+#
+# Provisions a rotatable OIDC client and writes a Secret `rotating-client-conn`
+# in crossplane-system containing clientId + clientSecret.
+#
+# To rotate the secret on demand, bump spec.parameters.rotationTrigger:
+#   kubectl patch xrotatingkeycloakclient rotating-client --type merge \
+#     -p '{"spec":{"parameters":{"rotationTrigger":"2"}}}'
+# Keycloak regenerates the secret and the connection Secret is updated in place.
+apiVersion: platform.example.org/v1alpha1
+kind: XRotatingKeycloakClient
+metadata:
+  name: rotating-client
+spec:
+  parameters:
+    realmId: dev
+    clientId: rotating-client
+    validRedirectUris:
+      - https://example.com/callback
+    rotationTrigger: "1"
+  writeConnectionSecretToRef:
+    name: rotating-client-conn
+    namespace: crossplane-system

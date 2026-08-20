@@ -1,0 +1,24 @@
+# Example XKeycloakClient (Crossplane v2 cluster-scoped composite resource).
+#
+# A platform user requests an OIDC client with just a realm + clientId. The
+# composition provisions the underlying Keycloak Client and writes a Secret
+# named `backend-service-client-conn` in the given namespace containing:
+#   clientId      - the OIDC client_id
+#   clientSecret  - the Keycloak-generated client secret
+#
+# Consume it from an application, e.g.:
+#   envFrom:
+#     - secretRef:
+#         name: backend-service-client-conn
+apiVersion: platform.example.org/v1alpha1
+kind: XKeycloakClient
+metadata:
+  name: backend-service-client
+spec:
+  parameters:
+    realmId: dev
+    clientId: backend-service
+    serviceAccountsEnabled: true
+  writeConnectionSecretToRef:
+    name: backend-service-client-conn
+    namespace: crossplane-system

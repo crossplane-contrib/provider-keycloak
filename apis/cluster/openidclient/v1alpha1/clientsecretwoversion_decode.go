@@ -26,16 +26,16 @@ func coerceClientSecretWoVersion(data []byte) ([]byte, error) {
 		return data, nil
 	}
 	var s string
-	if json.Unmarshal(raw, &s) != nil {
-		// Not a string, let the default decoding handle it.
-		return data, nil
+	if json.Unmarshal(raw, &s) == nil {
+		f, err := strconv.ParseFloat(s, 64)
+		if err != nil {
+			return nil, fmt.Errorf("clientSecretWoVersion %q was stored as a non-numeric string by a pre-v3.0.0 development build and cannot be represented in the numeric v1alpha1 schema: update the field to a numeric value or recreate the object at v1alpha2", s)
+		}
+		obj["clientSecretWoVersion"] = json.RawMessage(strconv.FormatFloat(f, 'f', -1, 64))
+		return json.Marshal(obj)
 	}
-	f, err := strconv.ParseFloat(s, 64)
-	if err != nil {
-		return nil, fmt.Errorf("clientSecretWoVersion %q was stored as a non-numeric string by a pre-v3.0.0 development build and cannot be represented in the numeric v1alpha1 schema: update the field to a numeric value or recreate the object at v1alpha2", s)
-	}
-	obj["clientSecretWoVersion"] = json.RawMessage(strconv.FormatFloat(f, 'f', -1, 64))
-	return json.Marshal(obj)
+	// Not a string, let the default decoding handle it.
+	return data, nil
 }
 
 // UnmarshalJSON tolerates the string encoding of clientSecretWoVersion written

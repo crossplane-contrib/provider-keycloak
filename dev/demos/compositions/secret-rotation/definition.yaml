@@ -1,0 +1,65 @@
+# Crossplane v2 CompositeResourceDefinition (XRD) — rotatable OIDC client.
+#
+# Exposes a self-service API where users can rotate a Keycloak client secret on
+# demand simply by changing spec.parameters.rotationTrigger. The composition
+# (composition.yaml) maps that trigger onto the Client's native
+# `clientSecretRegenerateWhenChanged` field, so bumping it makes Keycloak
+# regenerate the secret; the new value is republished to the connection Secret.
+#
+# Verified live against kind-fenrir-1 (provider-keycloak v2.16.1): bumping the
+# trigger rotated the secret within ~10s.
+apiVersion: apiextensions.crossplane.io/v2
+kind: CompositeResourceDefinition
+metadata:
+  name: xrotatingkeycloakclients.platform.example.org
+spec:
+  scope: Cluster
+  group: platform.example.org
+  names:
+    kind: XRotatingKeycloakClient
+    plural: xrotatingkeycloakclients
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  properties:
+                    realmId:
+                      type: string
+                      description: Keycloak realm the client is created in.
+                    clientId:
+                      type: string
+                      description: OIDC client_id as seen by applications.
+                    validRedirectUris:
+                      type: array
+                      items:
+                        type: string
+                      description: Allowed OAuth2 redirect URIs.
+                    rotationTrigger:
+                      type: string
+                      default: "1"
+                      description: >-
+                        Opaque rotation token. Change this value (e.g. bump the
+                        number, or set a timestamp) to force Keycloak to
+                        regenerate the client secret on the next reconcile.
+                  required:
+                    - realmId
+                    - clientId
+                    - validRedirectUris
+              required:
+                - parameters
+            status:
+              type: object
+              properties:
+                clientId:
+                  type: string
+                rotationTrigger:
+                  type: string

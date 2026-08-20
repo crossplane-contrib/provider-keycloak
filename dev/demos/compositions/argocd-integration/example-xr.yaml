@@ -1,0 +1,27 @@
+# Example XOidcAppIntegration — the full ArgoCD SSO integration expressed as a
+# single Crossplane v2 composite resource (derived from the real-world
+# extra-manifests/oidc-client.yaml).
+#
+# This one XR provisions the Client, `groups` scope + mapper, and default/
+# optional scopes, and writes a Secret `argocd-oidc-conn` in crossplane-system
+# containing clientId + clientSecret for ArgoCD to consume.
+apiVersion: platform.example.org/v1alpha1
+kind: XOidcAppIntegration
+metadata:
+  name: argocd
+spec:
+  parameters:
+    realmId: dev
+    clientId: k8s-argocd
+    displayName: k8s-argocd
+    rootUrl: https://argocd.deimos.k8s.corewire.io
+    validRedirectUris:
+      - /auth/callback
+      # CLI redirect uri for `argocd login --sso`
+      - http://localhost:8085/auth/callback
+    validPostLogoutRedirectUris:
+      - /applications
+    groupsClaim: groups
+  writeConnectionSecretToRef:
+    name: argocd-oidc-conn
+    namespace: crossplane-system
