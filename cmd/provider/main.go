@@ -46,6 +46,7 @@ import (
 	controllerCluster "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster"
 	controllerNamespaced "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced"
 	"github.com/crossplane-contrib/provider-keycloak/internal/features"
+	"github.com/crossplane-contrib/provider-keycloak/internal/resilience"
 )
 
 const (
@@ -230,6 +231,10 @@ func main() {
 		log.Info("Beta feature enabled", "flag", features.EnableBetaManagementPolicies)
 	}
 
+	// The managed resource controllers are set up through a wrapper that keeps
+	// a single failing controller (e.g. an informer that cannot list its kind)
+	// from tearing down the manager and the conversion webhook it serves.
+	cmgr := resilience.WrapManager(mgr, log)
 	canSafeStart, err := canWatchCRD(mgr)
 	kingpin.FatalIfError(err, "SafeStart precheck failed")
 	if canSafeStart {
@@ -237,12 +242,12 @@ func main() {
 		optsCluster.Gate = crdGate
 		optsNamespaced.Gate = crdGate
 		kingpin.FatalIfError(customresourcesgate.Setup(mgr, optsNamespaced.Options), "Cannot setup CRD gate")
-		kingpin.FatalIfError(controllerCluster.SetupGated(mgr, optsCluster), "Cannot setup Keycloak controllers")
-		kingpin.FatalIfError(controllerNamespaced.SetupGated(mgr, optsNamespaced), "Cannot setup Keycloak controllers")
+		kingpin.FatalIfError(controllerCluster.SetupGated(cmgr, optsCluster), "Cannot setup Keycloak controllers")
+		kingpin.FatalIfError(controllerNamespaced.SetupGated(cmgr, optsNamespaced), "Cannot setup Keycloak controllers")
 	} else {
 		log.Info("Provider has missing RBAC permissions for watching CRDs, controller SafeStart capability will be disabled")
-		kingpin.FatalIfError(controllerCluster.Setup(mgr, optsCluster), "Cannot setup Keycloak controllers")
-		kingpin.FatalIfError(controllerNamespaced.Setup(mgr, optsNamespaced), "Cannot setup Keycloak controllers")
+		kingpin.FatalIfError(controllerCluster.Setup(cmgr, optsCluster), "Cannot setup Keycloak controllers")
+		kingpin.FatalIfError(controllerNamespaced.Setup(cmgr, optsNamespaced), "Cannot setup Keycloak controllers")
 	}
 
 	// The CRD conversion webhooks are served by every replica, not only by the

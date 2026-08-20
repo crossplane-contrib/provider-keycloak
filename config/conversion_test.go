@@ -23,6 +23,18 @@ const storedV1Alpha1Client = `{
   "status": {"atProvider": {"clientSecretWoVersion": 202605192}}
 }`
 
+// storedStringV1Alpha1Client is a Client as it was persisted at v1alpha1 by
+// the pre-v3.0.0 development builds published between the terraform provider
+// v5.9.0 bump and the v1alpha2 split, i.e. with a string clientSecretWoVersion
+// (crossplane-contrib/provider-keycloak#669).
+const storedStringV1Alpha1Client = `{
+  "apiVersion": "openidclient.keycloak.crossplane.io/v1alpha1",
+  "kind": "Client",
+  "metadata": {"name": "client"},
+  "spec": {"forProvider": {"clientId": "client", "realmId": "realm", "accessType": "CONFIDENTIAL", "clientSecretWoVersion": "202605192"}},
+  "status": {"atProvider": {"clientSecretWoVersion": "202605192"}}
+}`
+
 // TestStoredV1Alpha1ObjectsRequireAConversionWebhook is the proof that the
 // number -> string type change of client_secret_wo_version (introduced by
 // terraform-provider-keycloak v5.9.0) cannot be shipped in-place on v1alpha1.
@@ -121,6 +133,53 @@ func TestClientSecretWoVersionConversion(t *testing.T) {
 		}
 		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != "202605192" {
 			t.Errorf("spec.forProvider.clientSecretWoVersion: want %q, got %v", "202605192", got)
+		}
+	})
+
+	// Pre-v3.0.0 development builds persisted a string clientSecretWoVersion at
+	// v1alpha1 (crossplane-contrib/provider-keycloak#669). The conversion
+	// webhook's typed decode must tolerate that encoding and the upgrade must
+	// still yield the v1alpha2 string.
+	t.Run("StringEncodedV1Alpha1Upgrade", func(t *testing.T) {
+		src := &clientv1alpha1.Client{}
+		if err := json.Unmarshal([]byte(storedStringV1Alpha1Client), src); err != nil {
+			t.Fatalf("cannot decode the string-encoded stored object: %v", err)
+		}
+		if got := src.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != 202605192 {
+			t.Fatalf("spec.forProvider.clientSecretWoVersion: want %v, got %v", 202605192, got)
+		}
+		dst := &clientv1alpha2.Client{}
+		if err := src.ConvertTo(dst); err != nil {
+			t.Fatalf("cannot convert v1alpha1 to v1alpha2: %v", err)
+		}
+		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != "202605192" {
+			t.Errorf("spec.forProvider.clientSecretWoVersion: want %q, got %v", "202605192", got)
+		}
+		if got := dst.Status.AtProvider.ClientSecretWoVersion; got == nil || *got != "202605192" {
+			t.Errorf("status.atProvider.clientSecretWoVersion: want %q, got %v", "202605192", got)
+		}
+	})
+
+	t.Run("StringEncodedV1Alpha1IdentityProvider", func(t *testing.T) {
+		const stored = `{
+  "apiVersion": "oidc.keycloak.m.crossplane.io/v1alpha1",
+  "kind": "IdentityProvider",
+  "metadata": {"name": "idp", "namespace": "ns"},
+  "spec": {"forProvider": {"alias": "idp", "realm": "realm", "clientSecretWoVersion": "1277175040"}}
+}`
+		src := &oidcv1alpha1.IdentityProvider{}
+		if err := json.Unmarshal([]byte(stored), src); err != nil {
+			t.Fatalf("cannot decode the string-encoded stored object: %v", err)
+		}
+		if got := src.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != 1277175040 {
+			t.Fatalf("spec.forProvider.clientSecretWoVersion: want %v, got %v", 1277175040, got)
+		}
+	})
+
+	t.Run("NonNumericStringIsRejected", func(t *testing.T) {
+		src := &clientv1alpha1.Client{}
+		if err := json.Unmarshal([]byte(`{"spec": {"forProvider": {"clientSecretWoVersion": "version1"}}}`), src); err == nil {
+			t.Fatal("expected a descriptive error for a non-numeric string clientSecretWoVersion")
 		}
 	})
 }
