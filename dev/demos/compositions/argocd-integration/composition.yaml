@@ -1,0 +1,189 @@
+# Crossplane v2 Composition for XOidcAppIntegration.
+#
+# Reproduces the real-world ArgoCD Keycloak integration
+# (extra-manifests/oidc-client.yaml) as a single composite resource:
+#   * CONFIDENTIAL Client (PKCE S256, standard + direct-access flows)
+#   * `groups` ClientScope
+#   * oidc-group-membership-mapper ProtocolMapper on that scope
+#   * ClientDefaultScopes (profile, roles, email, web-origins)
+#   * ClientOptionalScopes (groups)
+# and publishes clientId + the Keycloak-generated clientSecret as connection
+# details.
+#
+# Requires function-patch-and-transform to be installed (see composition.yaml).
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xoidcappintegration-keycloak
+spec:
+  compositeTypeRef:
+    apiVersion: platform.example.org/v1alpha1
+    kind: XOidcAppIntegration
+  mode: Pipeline
+  pipeline:
+    - step: patch-and-transform
+      functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+        resources:
+          # --- The OIDC client -------------------------------------------------
+          - name: client
+            base:
+              apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+              kind: Client
+              spec:
+                forProvider:
+                  accessType: CONFIDENTIAL
+                  enabled: true
+                  fullScopeAllowed: false
+                  standardFlowEnabled: true
+                  directAccessGrantsEnabled: true
+                  pkceCodeChallengeMethod: S256
+                providerConfigRef:
+                  name: keycloak-provider-config
+            patches:
+              # Deterministic k8s name so the scopes below can reference it.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.clientId
+                toFieldPath: metadata.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.realmId
+                toFieldPath: spec.forProvider.realmId
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.clientId
+                toFieldPath: spec.forProvider.clientId
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.displayName
+                toFieldPath: spec.forProvider.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.rootUrl
+                toFieldPath: spec.forProvider.rootUrl
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.validRedirectUris
+                toFieldPath: spec.forProvider.validRedirectUris
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.validPostLogoutRedirectUris
+                toFieldPath: spec.forProvider.validPostLogoutRedirectUris
+              - type: ToCompositeFieldPath
+                fromFieldPath: spec.forProvider.clientId
+                toFieldPath: status.clientId
+            connectionDetails:
+              - name: clientId
+                type: FromFieldPath
+                fromFieldPath: spec.forProvider.clientId
+              - name: clientSecret
+                type: FromConnectionSecretKey
+                fromConnectionSecretKey: client_secret
+          # --- The `groups` client scope --------------------------------------
+          - name: groups-scope
+            base:
+              apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+              kind: ClientScope
+              spec:
+                forProvider:
+                  description: Group membership scope
+                providerConfigRef:
+                  name: keycloak-provider-config
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.clientId
+                toFieldPath: metadata.name
+                transforms:
+                  - type: string
+                    string:
+                      type: Format
+                      fmt: "%s-groups-scope"
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.realmId
+                toFieldPath: spec.forProvider.realmId
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.groupsClaim
+                toFieldPath: spec.forProvider.name
+              # Give the composed scope a deterministic external name so the
+              # mapper below can reference it by that Keycloak-side name.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.clientId
+                toFieldPath: metadata.annotations[crossplane.io/external-name]
+                transforms:
+                  - type: string
+                    string:
+                      type: Format
+                      fmt: "%s-groups"
+          # --- The group-membership protocol mapper ---------------------------
+          - name: groups-mapper
+            base:
+              apiVersion: client.keycloak.crossplane.io/v1alpha1
+              kind: ProtocolMapper
+              spec:
+                forProvider:
+                  protocol: openid-connect
+                  protocolMapper: oidc-group-membership-mapper
+                  config:
+                    "full.path": "false"
+                    "id.token.claim": "true"
+                    "access.token.claim": "true"
+                    "userinfo.token.claim": "true"
+                    "introspection.token.claim": "true"
+                    "multivalued": "true"
+                providerConfigRef:
+                  name: keycloak-provider-config
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.realmId
+                toFieldPath: spec.forProvider.realmId
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.groupsClaim
+                toFieldPath: spec.forProvider.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.groupsClaim
+                toFieldPath: spec.forProvider.config[claim.name]
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.clientId
+                toFieldPath: spec.forProvider.clientScopeIdRef.name
+                transforms:
+                  - type: string
+                    string:
+                      type: Format
+                      fmt: "%s-groups-scope"
+          # --- Default scopes on the client -----------------------------------
+          - name: default-scopes
+            base:
+              apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+              kind: ClientDefaultScopes
+              spec:
+                forProvider:
+                  defaultScopes:
+                    - profile
+                    - roles
+                    - email
+                    - web-origins
+                providerConfigRef:
+                  name: keycloak-provider-config
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.realmId
+                toFieldPath: spec.forProvider.realmId
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.clientId
+                toFieldPath: spec.forProvider.clientIdRef.name
+          # --- Optional scopes on the client ----------------------------------
+          - name: optional-scopes
+            base:
+              apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+              kind: ClientOptionalScopes
+              spec:
+                forProvider: {}
+                providerConfigRef:
+                  name: keycloak-provider-config
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.realmId
+                toFieldPath: spec.forProvider.realmId
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.clientId
+                toFieldPath: spec.forProvider.clientIdRef.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.groupsClaim
+                toFieldPath: spec.forProvider.optionalScopes[0]

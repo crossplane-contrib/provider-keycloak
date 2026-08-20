@@ -92,7 +92,7 @@ spec:
       try:
         - script:
             content: |
-              set -euo pipefail
+              set -eu
               resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
               {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
                "request": {"uid": "e2e-number-upgrade",
@@ -118,7 +118,7 @@ spec:
       try:
         - script:
             content: |
-              set -euo pipefail
+              set -eu
               resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
               {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
                "request": {"uid": "e2e-string-upgrade",
@@ -136,7 +136,7 @@ spec:
               ($error == null): true
         - script:
             content: |
-              set -euo pipefail
+              set -eu
               resp=$(./convert.sh identityproviders.oidc.keycloak.m.crossplane.io <<'EOF'
               {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
                "request": {"uid": "e2e-string-upgrade-namespaced",
@@ -152,7 +152,7 @@ spec:
               ($error == null): true
         - script:
             content: |
-              set -euo pipefail
+              set -eu
               resp=$(./convert.sh clients.openidclient.keycloak.crossplane.io <<'EOF'
               {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
                "request": {"uid": "e2e-string-upgrade-client",
@@ -168,7 +168,7 @@ spec:
               ($error == null): true
         - script:
             content: |
-              set -euo pipefail
+              set -eu
               resp=$(./convert.sh clients.openidclient.keycloak.m.crossplane.io <<'EOF'
               {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
                "request": {"uid": "e2e-string-upgrade-client-namespaced",
@@ -188,7 +188,7 @@ spec:
       try:
         - script:
             content: |
-              set -euo pipefail
+              set -eu
               resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
               {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
                "request": {"uid": "e2e-downgrade",
@@ -211,7 +211,7 @@ spec:
         # schema; the response must say so instead of silently dropping it.
         - script:
             content: |
-              set -euo pipefail
+              set -eu
               resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
               {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
                "request": {"uid": "e2e-non-numeric",
@@ -228,7 +228,7 @@ spec:
         # A structurally broken object (forProvider is not an object).
         - script:
             content: |
-              set -euo pipefail
+              set -eu
               resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
               {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
                "request": {"uid": "e2e-broken-shape",
@@ -248,7 +248,7 @@ spec:
       try:
         - script:
             content: |
-              set -euo pipefail
+              set -eu
               resp=$(./convert.sh identityproviders.oidc.keycloak.crossplane.io <<'EOF'
               {"apiVersion": "apiextensions.k8s.io/v1", "kind": "ConversionReview",
                "request": {"uid": "e2e-still-alive",

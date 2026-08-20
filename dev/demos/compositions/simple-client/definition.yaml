@@ -1,0 +1,56 @@
+# Crossplane v2 CompositeResourceDefinition (XRD).
+#
+# Defines a simplified, self-service `KeycloakClient` API. Platform users only
+# provide a realm + clientId; the composition (see composition.yaml) provisions
+# the underlying provider-keycloak Client and publishes clientId + the
+# Keycloak-generated clientSecret into a connection Secret.
+#
+# Crossplane v2 notes:
+#   * apiVersion is apiextensions.crossplane.io/v2
+#   * scope: Cluster -> the XR is cluster-scoped (simpler; matches the
+#     cluster-scoped provider-keycloak API group used below)
+#   * The connection Secret target namespace is given explicitly on the XR.
+apiVersion: apiextensions.crossplane.io/v2
+kind: CompositeResourceDefinition
+metadata:
+  name: xkeycloakclients.platform.example.org
+spec:
+  scope: Cluster
+  group: platform.example.org
+  names:
+    kind: XKeycloakClient
+    plural: xkeycloakclients
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  properties:
+                    realmId:
+                      type: string
+                      description: Keycloak realm the client is created in.
+                    clientId:
+                      type: string
+                      description: OIDC client_id as seen by applications.
+                    serviceAccountsEnabled:
+                      type: boolean
+                      default: false
+                      description: Enable the service-account (client credentials) flow.
+                  required:
+                    - realmId
+                    - clientId
+              required:
+                - parameters
+            status:
+              type: object
+              properties:
+                clientId:
+                  type: string

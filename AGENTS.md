@@ -257,9 +257,16 @@ Rules and gotchas:
 
 ## Testing
 
+- **Before every commit** run `make lint` (golangci-lint, same config as CI —
+  includes checks like `nilerr` that `go build`/`go vet` do not catch) and
+  `go mod tidy` when imports changed (CI runs `make vendor.check`).
 - Unit tests: `make test`
 - E2E tests: `make e2e` (requires a running Keycloak and Crossplane cluster)
 - E2E coverage is limited to resources listed in `cluster/test/cases.txt`
+- CRD conversion regression tests: `make uptest-conversion` (chainsaw suite in
+  `cluster/test/conversion/` posting ConversionReview payloads to the live
+  `/convert` endpoint; covers stored encodings that can no longer be created
+  through the current CRD schemas, see #669).
 
 ### E2E suites
 
@@ -309,6 +316,13 @@ make docs-freshness-check             # CI: verify llms.txt is current
 
 ## Known Constraints and Pitfalls
 
+- **Always run `make lint` before committing.** CI runs golangci-lint v2 with
+  linters (e.g. `nilerr`) that a plain build never surfaces; pushing unlinted
+  code reliably fails the `lint` job.
+- **Chainsaw `script` steps run under `/usr/bin/sh` (dash), not bash.** No
+  bashisms: `set -o pipefail` is an illegal option there — use `set -eu` and
+  POSIX syntax only. Standalone helper scripts invoked from a step may use
+  bash via their own shebang.
 - Do **not** edit `examples-generated/` by hand.
 - Do **not** edit generated files in `apis/` or `package/crds/` by hand.
 - Do **not** edit `config/generated.lst` by hand — run `make generated-lst`

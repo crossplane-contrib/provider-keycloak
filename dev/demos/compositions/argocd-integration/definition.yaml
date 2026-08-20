@@ -1,0 +1,72 @@
+# Crossplane v2 CompositeResourceDefinition (XRD) — full OIDC app integration.
+#
+# This is the "batteries included" variant derived from the real-world ArgoCD
+# manifests (extra-manifests/oidc-client.yaml). A single XR provisions the whole
+# Keycloak-side integration for an application:
+#   * a CONFIDENTIAL OIDC Client
+#   * a `groups` ClientScope + group-membership ProtocolMapper
+#   * default + optional client scopes
+# and publishes clientId + clientSecret as a connection Secret.
+apiVersion: apiextensions.crossplane.io/v2
+kind: CompositeResourceDefinition
+metadata:
+  name: xoidcappintegrations.platform.example.org
+spec:
+  scope: Cluster
+  group: platform.example.org
+  names:
+    kind: XOidcAppIntegration
+    plural: xoidcappintegrations
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  properties:
+                    realmId:
+                      type: string
+                      description: Keycloak realm the client is created in.
+                    clientId:
+                      type: string
+                      description: OIDC client_id as seen by the application.
+                    displayName:
+                      type: string
+                      description: Human-readable client name shown in Keycloak.
+                    rootUrl:
+                      type: string
+                      description: Root URL of the application.
+                    validRedirectUris:
+                      type: array
+                      items:
+                        type: string
+                      description: Allowed OAuth2 redirect URIs.
+                    validPostLogoutRedirectUris:
+                      type: array
+                      items:
+                        type: string
+                      default:
+                        - /applications
+                    groupsClaim:
+                      type: string
+                      default: groups
+                      description: Name of the token claim carrying group memberships.
+                  required:
+                    - realmId
+                    - clientId
+                    - rootUrl
+                    - validRedirectUris
+              required:
+                - parameters
+            status:
+              type: object
+              properties:
+                clientId:
+                  type: string

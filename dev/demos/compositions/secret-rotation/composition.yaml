@@ -1,0 +1,72 @@
+# Crossplane v2 Composition for XRotatingKeycloakClient.
+#
+# Provisions a CONFIDENTIAL Client and wires the XR's rotationTrigger onto the
+# Client's native `clientSecretRegenerateWhenChanged` map. Changing the trigger
+# causes Keycloak to regenerate the client secret; the provider republishes the
+# new value, which we surface as the `clientSecret` connection detail.
+#
+# NOTE: `clientSecretRegenerateWhenChanged` conflicts with clientSecretSecretRef
+# / clientSecretWo* — the secret must be Keycloak-generated (do not set an
+# explicit clientSecretSecretRef when using this rotation mechanism).
+#
+# Requires function-patch-and-transform to be installed:
+#   apiVersion: pkg.crossplane.io/v1
+#   kind: Function
+#   metadata: { name: function-patch-and-transform }
+#   spec: { package: xpkg.crossplane.io/crossplane-contrib/function-patch-and-transform:v0.9.0 }
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xrotatingkeycloakclient-keycloak
+spec:
+  compositeTypeRef:
+    apiVersion: platform.example.org/v1alpha1
+    kind: XRotatingKeycloakClient
+  mode: Pipeline
+  pipeline:
+    - step: patch-and-transform
+      functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+        resources:
+          - name: client
+            base:
+              apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+              kind: Client
+              spec:
+                forProvider:
+                  accessType: CONFIDENTIAL
+                  enabled: true
+                  standardFlowEnabled: true
+                providerConfigRef:
+                  name: keycloak-provider-config
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.realmId
+                toFieldPath: spec.forProvider.realmId
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.clientId
+                toFieldPath: spec.forProvider.clientId
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.validRedirectUris
+                toFieldPath: spec.forProvider.validRedirectUris
+              # The rotation trigger -> native regenerate-when-changed map.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.rotationTrigger
+                toFieldPath: spec.forProvider.clientSecretRegenerateWhenChanged.rotation
+              - type: ToCompositeFieldPath
+                fromFieldPath: spec.forProvider.clientId
+                toFieldPath: status.clientId
+              - type: ToCompositeFieldPath
+                fromFieldPath: spec.forProvider.clientSecretRegenerateWhenChanged.rotation
+                toFieldPath: status.rotationTrigger
+            connectionDetails:
+              - name: clientId
+                type: FromFieldPath
+                fromFieldPath: spec.forProvider.clientId
+              # provider-keycloak publishes the generated secret as this key.
+              - name: clientSecret
+                type: FromConnectionSecretKey
+                fromConnectionSecretKey: attribute.client_secret
