@@ -7,7 +7,7 @@ require (
 	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/crossplane/crossplane-runtime/v2 v2.2.0
 	github.com/crossplane/crossplane-tools v0.0.0-20251017183449-dd4517244339
-	github.com/crossplane/upjet/v2 v2.3.0
+	github.com/crossplane/upjet/v2 v2.4.1
 	github.com/go-logr/logr v1.4.3
 	github.com/hashicorp/terraform-json v0.28.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.1
@@ -58,7 +58,6 @@ require (
 	github.com/go-openapi/swag/stringutils v0.25.5 // indirect
 	github.com/go-openapi/swag/typeutils v0.25.5 // indirect
 	github.com/go-openapi/swag/yamlutils v0.25.5 // indirect
-	github.com/go-test/deep v1.0.8 // indirect
 	github.com/gobuffalo/flect v1.0.3 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
