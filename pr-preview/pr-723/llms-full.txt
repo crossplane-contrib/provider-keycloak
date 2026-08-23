@@ -345,6 +345,12 @@ resolves to more than one target type.
 | `gap` | wired to one target on some resources, unwired on others with an identical schema |
 | `multitype` | one attribute name resolving to several target types — the signal for `config/multitypes` |
 
+A `multitype` class is a classification of the attribute, not a work item: it
+names no resource to change, and the resource missing a family member is
+reported per resource by `missing-multitype`. It is therefore never counted as
+actionable. Its status is decided within its own shape group, so a required and
+an optional attribute of the same name never decide each other's status.
+
 A resource that is itself the reference target is never counted as unwired:
 `keycloak_realm.realm` and `keycloak_openid_client.client_id` name the object
 they configure rather than pointing at another one.
@@ -401,8 +407,8 @@ make config-audit CONFIG_AUDIT_ARGS='--format=json' > audit.json
 ./scripts/schema_diff_issues.py --repo <owner/repo> --skip-coverage --config-audit-json audit.json
 ```
 
-Only actionable findings are filed: satisfied and `protocolSpecific` ones are
-skipped, and `unclassified` is off by default (`--audit-detectors` selects the
+Only actionable findings are filed: satisfied, `protocolSpecific` and
+`multitype`-class ones are skipped, and `unclassified` is off by default (`--audit-detectors` selects the
 detectors). Each issue embeds the finding key as an HTML comment
 (`<!-- config-audit-key: ... -->`), which is what later runs match on, so
 re-runs do not duplicate issues even after a title or wording change.
