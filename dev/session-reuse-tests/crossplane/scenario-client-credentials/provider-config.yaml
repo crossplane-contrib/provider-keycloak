@@ -1,0 +1,39 @@
+# Client-credentials ProviderConfig used as the control group: this grant
+# type does not hit the password-grant re-authentication path described in
+# https://github.com/crossplane-contrib/provider-keycloak/issues/309, so
+# session counts observed with check-sessions.sh should stay flat.
+#
+# Prerequisite: a confidential client with a service account in the "master"
+# realm granted the "realm-admin" role of the "realm-management" client (see
+# ../../README.md for the exact `curl` commands, or reuse the
+# "provider-e2e-client" set up by dev/setup_dev_environment.sh in the
+# "provider-e2e-realm" realm and adjust "realm" below accordingly).
+apiVersion: v1
+kind: Secret
+metadata:
+  name: session-test-client-credentials
+  namespace: crossplane-system
+  labels:
+    type: provider-credentials
+type: Opaque
+stringData:
+  credentials: |
+    {
+      "client_id": "session-test-client",
+      "client_secret": "session-test-secret",
+      "url": "http://$KEYCLOAK_IP:$KEYCLOAK_PORT",
+      "base_path": "",
+      "realm": "master"
+    }
+---
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: session-test-client-credentials
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: session-test-client-credentials
+      key: credentials
+      namespace: crossplane-system

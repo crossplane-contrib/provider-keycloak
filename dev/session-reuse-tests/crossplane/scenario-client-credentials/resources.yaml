@@ -1,0 +1,47 @@
+# Mirrors ../scenario-password-grant/resources.yaml but reconciled through
+# the client-credentials ProviderConfig, so the two scenarios manage
+# independent realms and can be run side by side without interfering.
+#
+# Apply with:
+#   kubectl apply -f resources.yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: session-test-cc-realm
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: "session-test-cc-realm"
+    enabled: true
+  providerConfigRef:
+    name: "session-test-client-credentials"
+---
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: DefaultClientScopes
+metadata:
+  name: session-test-cc-default-scopes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "session-test-cc-realm"
+    defaultScopes:
+      - profile
+      - email
+      - roles
+      - web-origins
+  providerConfigRef:
+    name: "session-test-client-credentials"
+---
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: OptionalClientScopes
+metadata:
+  name: session-test-cc-optional-scopes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "session-test-cc-realm"
+    optionalScopes:
+      - acr
+      - role_list
+  providerConfigRef:
+    name: "session-test-client-credentials"

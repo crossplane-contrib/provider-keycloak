@@ -1122,6 +1122,10 @@ for details.
   not hit this re-authentication path.
 - Track/upvote the upstream fix in
   [`keycloak/terraform-provider-keycloak`](https://github.com/keycloak/terraform-provider-keycloak).
+- To reproduce and compare this behavior locally (Crossplane vs. plain
+  OpenTofu, password grant vs. client credentials grant), see the test
+  scenarios and session-counting tooling in
+  [`dev/session-reuse-tests/`](https://github.com/crossplane-contrib/provider-keycloak/tree/main/dev/session-reuse-tests).
 
 ## Useful Commands
 
