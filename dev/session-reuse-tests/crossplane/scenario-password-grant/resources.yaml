@@ -1,0 +1,47 @@
+# A handful of independent, cheap-to-reconcile resources so that Crossplane's
+# reconciler generates repeated traffic against the ProviderConfig above,
+# similar to a real cluster with several managed resources.
+#
+# Apply with:
+#   kubectl apply -f resources.yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: session-test-realm
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: "session-test-realm"
+    enabled: true
+  providerConfigRef:
+    name: "session-test-password-grant"
+---
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: DefaultClientScopes
+metadata:
+  name: session-test-default-scopes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "session-test-realm"
+    defaultScopes:
+      - profile
+      - email
+      - roles
+      - web-origins
+  providerConfigRef:
+    name: "session-test-password-grant"
+---
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: OptionalClientScopes
+metadata:
+  name: session-test-optional-scopes
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmId: "session-test-realm"
+    optionalScopes:
+      - acr
+      - role_list
+  providerConfigRef:
+    name: "session-test-password-grant"

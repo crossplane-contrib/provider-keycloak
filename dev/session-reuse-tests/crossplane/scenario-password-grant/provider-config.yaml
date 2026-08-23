@@ -1,0 +1,38 @@
+# Password-grant (username/password) ProviderConfig used to reproduce the
+# session-growth behavior reported in
+# https://github.com/crossplane-contrib/provider-keycloak/issues/309.
+#
+# Apply against a running dev cluster (see dev/setup_dev_environment.sh) with
+# envsubst, e.g.:
+#   export KEYCLOAK_IP=... KEYCLOAK_PORT=...
+#   cat provider-config.yaml | envsubst | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: session-test-password-grant
+  namespace: crossplane-system
+  labels:
+    type: provider-credentials
+type: Opaque
+stringData:
+  credentials: |
+    {
+      "client_id": "admin-cli",
+      "username": "admin",
+      "password": "admin",
+      "url": "http://$KEYCLOAK_IP:$KEYCLOAK_PORT",
+      "base_path": "",
+      "realm": "master"
+    }
+---
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: session-test-password-grant
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: session-test-password-grant
+      key: credentials
+      namespace: crossplane-system
