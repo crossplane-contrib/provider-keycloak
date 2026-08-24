@@ -118,24 +118,24 @@ spec:
                 namespace: dev
               # The controller records which keys it manages so that it can
               # clean them up cleanly when config changes.
-              (contains(metadata.annotations."keycloak.crossplane.io/connection-secret-transform-keys" || '', 'client-id')): "true"
-              (contains(metadata.annotations."keycloak.crossplane.io/connection-secret-transform-keys" || '', 'client-secret')): "true"
-              (contains(metadata.annotations."keycloak.crossplane.io/connection-secret-transform-keys" || '', 'issuerUrl')): "true"
+              (contains(metadata.annotations."keycloak.crossplane.io/connection-secret-transform-keys" || '', 'client-id')): true
+              (contains(metadata.annotations."keycloak.crossplane.io/connection-secret-transform-keys" || '', 'client-secret')): true
+              (contains(metadata.annotations."keycloak.crossplane.io/connection-secret-transform-keys" || '', 'issuerUrl')): true
               data:
                 # Original keys from the provider are retained (merge-patch
                 # semantics: the controller never deletes provider-owned keys).
-                (clientID != null): "true"
-                (clientSecret != null): "true"
+                (clientID != null): true
+                (clientSecret != null): true
                 # Renamed aliases written by the controller.
-                (client-id != null): "true"
-                (client-secret != null): "true"
+                (client-id != null): true
+                (client-secret != null): true
                 # Both aliases must carry the same base64 value.
-                (client-id == clientID): "true"
-                (client-secret == clientSecret): "true"
+                (client-id == clientID): true
+                (client-secret == clientSecret): true
                 # Keycloak-derived fields.
-                (issuerUrl != null): "true"
-                (discoveryUrl != null): "true"
-                (realmName != null): "true"
+                (issuerUrl != null): true
+                (discoveryUrl != null): true
+                (realmName != null): true
 
         # No second secret should have been created in InPlace mode.
         - error:
@@ -245,10 +245,10 @@ spec:
                 namespace: dev
               data:
                 # Provider-owned keys are present.
-                (clientID != null): "true"
-                (clientSecret != null): "true"
+                (clientID != null): true
+                (clientSecret != null): true
                 # The controller must NOT have written renamed keys here.
-                (to_string(keys(@)) | contains(@, 'client-id')): "false"
+                (to_string(keys(@)) | contains(@, 'client-id')): false
 
         # Transformed secret published under the annotation-specified name.
         - assert:
@@ -262,13 +262,13 @@ spec:
                   keycloak.crossplane.io/connection-secret-transform: "true"
                   keycloak.crossplane.io/connection-secret-source: ctrl-e2e-annotated
               data:
-                (client-id != null): "true"
-                (client-secret != null): "true"
-                (service-account-user-id != null): "true"
-                (issuerUrl != null): "true"
-                (realmName != null): "true"
+                (client-id != null): true
+                (client-secret != null): true
+                (service-account-user-id != null): true
+                (issuerUrl != null): true
+                (realmName != null): true
                 # Original keys are not present in SeparateSecret mode.
-                (to_string(keys(@)) | contains(@, 'clientID')): "false"
+                (to_string(keys(@)) | contains(@, 'clientID')): false
 
     # -----------------------------------------------------------------------
     # Step 4: Traefik OIDC plugin middleware referencing the SeparateSecret
@@ -361,8 +361,8 @@ spec:
                 name: ctrl-e2e-crd-output
                 namespace: dev
               data:
-                (oidc-client-secret != null): "true"
-                (realm != null): "true"
+                (oidc-client-secret != null): true
+                (realm != null): true
 
     # -----------------------------------------------------------------------
     # Step 6: Stale secret garbage collection
