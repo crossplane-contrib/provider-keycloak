@@ -46,7 +46,21 @@ var (
 	ProviderConfigUsageListGroupVersionKind = SchemeGroupVersion.WithKind(ProviderConfigUsageListKind)
 )
 
+// ConnectionSecretTransform type metadata.
+var (
+	ConnectionSecretTransformKind             = reflect.TypeOf(ConnectionSecretTransform{}).Name()
+	ConnectionSecretTransformGroupKind        = schema.GroupKind{Group: Group, Kind: ConnectionSecretTransformKind}.String()
+	ConnectionSecretTransformKindAPIVersion   = ConnectionSecretTransformKind + "." + SchemeGroupVersion.String()
+	ConnectionSecretTransformGroupVersionKind = SchemeGroupVersion.WithKind(ConnectionSecretTransformKind)
+
+	ConnectionSecretTransformListKind             = reflect.TypeOf(ConnectionSecretTransformList{}).Name()
+	ConnectionSecretTransformListGroupKind        = schema.GroupKind{Group: Group, Kind: ConnectionSecretTransformListKind}.String()
+	ConnectionSecretTransformListKindAPIVersion   = ConnectionSecretTransformListKind + "." + SchemeGroupVersion.String()
+	ConnectionSecretTransformListGroupVersionKind = SchemeGroupVersion.WithKind(ConnectionSecretTransformListKind)
+)
+
 func init() {
 	SchemeBuilder.Register(&ProviderConfig{}, &ProviderConfigList{})
 	SchemeBuilder.Register(&ProviderConfigUsage{}, &ProviderConfigUsageList{})
+	SchemeBuilder.Register(&ConnectionSecretTransform{}, &ConnectionSecretTransformList{})
 }

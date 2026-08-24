@@ -53,6 +53,64 @@ spec:
               A ProviderConfigSpec defines the desired state of a ProviderConfig.
               A ProviderConfigSpec defines the desired state of a ProviderConfig.
             properties:
+              connectionSecretKeys:
+                description: |-
+                  ConnectionSecretKeys customizes the connection secret keys published
+                  for managed resources that use this ProviderConfig, e.g. renaming
+                  "clientID"/"clientSecret" to whatever keys a consumer expects (such as
+                  "client-id"/"client-secret" for Envoy Gateway's OIDC SecurityPolicy).
+                  This is applied out-of-band from the managed resource reconciliation
+                  itself, by a separate controller: by default it adds the configured
+                  keys to the resource's own connection secret (the one named by
+                  spec.writeConnectionSecretToRef), and it can optionally publish a
+                  separate, transformed copy instead. See
+                  internal/controller/cluster/connectionsecrettransform for details.
+                properties:
+                  add:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Add maps a new connection secret key to a value looked up elsewhere,
+                      so that it is added to the connection secret alongside the (renamed)
+                      values published by the provider. Each value is a source
+                      expression of the form "status:<dot.path>" (a field under the owning
+                      managed resource's status, e.g. "status:atProvider.clientId"),
+                      "providerConfig:<dot.path>" (a field of this ProviderConfig, e.g.
+                      "providerConfig:metadata.name") or "keycloak:<field>" (a value
+                      describing the Keycloak deployment the resource lives in, computed
+                      from this ProviderConfig's Keycloak URL and the resource's realm:
+                      "url", "realm", "issuerUrl", "wellKnownUrl", "authorizationUrl",
+                      "tokenUrl", "userinfoUrl", "jwksUrl" or "endSessionUrl" - e.g.
+                      "keycloak:issuerUrl" yields
+                      "https://keycloak.example.com/realms/my-realm"). Only scalar
+                      (string, number, boolean) fields are supported; the source path is
+                      never resolved against the credentials Secret itself, so secret
+                      material referenced only by name/namespace/key cannot leak this way
+                      - "keycloak:" values are derived exclusively from the credentials'
+                      non-secret "url" and "base_path" entries.
+                    type: object
+                  mode:
+                    description: |-
+                      Mode selects whether the renamed/added keys are written into the
+                      managed resource's own connection secret ("InPlace", the default) or
+                      into a separate, transformed secret published next to it
+                      ("SeparateSecret").
+                    enum:
+                    - InPlace
+                    - SeparateSecret
+                    type: string
+                  rename:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Rename maps an existing connection secret key (as published by the
+                      provider, e.g. "clientID") to the key name that should be used
+                      instead (e.g. "client-id"). Keys that are not listed here are left
+                      alone. In the default "InPlace" mode the original key stays as well,
+                      i.e. the new name is an additional alias for the same value; in
+                      "SeparateSecret" mode only the new name is published.
+                    type: object
+                type: object
               credentials:
                 description: Credentials required to authenticate to this provider.
                 properties:
