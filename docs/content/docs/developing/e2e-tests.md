@@ -30,6 +30,8 @@ E2e tests are driven by [uptest](https://github.com/crossplane/uptest) and
 | `dev/demos/fgapv2/` | Demos requiring fine-grained admin permissions v2 |
 | `dev/demos/basic/000-init.yaml` | Prerequisite resources for cluster demos (realm, secrets, etc.) |
 | `dev/demos/namespaced/000-init.yaml` | Prerequisite resources for namespaced demos |
+| `cluster/test/conversion/` | Standalone chainsaw suite (not driven by uptest/`cases.txt`) for CRD conversion webhook regressions, run via `make uptest-conversion` |
+| `cluster/test/restrictedrealmprovider/` | Standalone chainsaw suite for the single-realm `ProviderConfig` limitation ([#742](https://github.com/crossplane-contrib/provider-keycloak/issues/742)), run via `make uptest-restrictedrealmprovider`; see "Standalone Chainsaw Suites" below |
 
 ## Test Suites
 
@@ -63,6 +65,50 @@ Run the FGAPv2 suite locally:
 ./dev/setup_dev_environment.sh --fgap-version v2
 make uptest FGAP_VERSION=v2
 ```
+
+## Standalone Chainsaw Suites
+
+Not every e2e scenario fits the demo/`cases.txt` model, which expects every
+applied resource to reach Ready/Synced and then be deleted cleanly. Two kinds
+of scenarios don't:
+
+- Tests that assert an **expected failure** (e.g. a `ProviderConfig` that
+  must never successfully authenticate).
+- Tests that need imperative setup against the live Keycloak API before any
+  Crossplane resource is applied (e.g. provisioning a service account with a
+  specific, deliberately restricted set of roles).
+
+These live as standalone `chainsaw.kyverno.io/v1alpha1 Test` resources under
+`cluster/test/<suite-name>/`, each with its own Makefile target
+(`uptest-<suite-name>`) and its own CI step, run directly via `chainsaw test
+--test-dir cluster/test/<suite-name>` instead of through `uptest`. They
+still require a cluster with the provider deployed and the
+`keycloak-provider-config` admin `ProviderConfig` already applied — the same
+prerequisites as the `uptest` target.
+
+| Suite | Directory | Makefile target | What it covers |
+|-------|-----------|-----------------|----------------|
+| CRD conversion webhook | `cluster/test/conversion/` | `make uptest-conversion` | Historic stored CRD encodings converted through the live `/convert` endpoint |
+| Restricted single-realm `ProviderConfig` | `cluster/test/restrictedrealmprovider/` | `make uptest-restrictedrealmprovider` | [#742](https://github.com/crossplane-contrib/provider-keycloak/issues/742): a `ProviderConfig` scoped entirely to one realm (no master-realm/realm-management roles) must fail login with a 403, a Keycloak-side constraint this provider cannot work around |
+
+The single-realm suite's `bootstrap.sh` provisions a realm and a fully
+realm-scoped service account client directly against the Keycloak API (there
+is no declarative way to create a *deliberately under-privileged* service
+account through the managed resources themselves), then a chainsaw `assert`
+checks that a probe `Group` resource ends up `Synced=False` with a message
+containing `403` or `Forbidden`. `cleanup.sh` runs as a step `finally` so the
+realm is removed whether the assertion passes or fails.
+
+The complementary "Configuration B" scenario from #742 — a service account
+in `master` whose service-account roles are scoped to a single realm, which
+needs the `keycloak_version` credential key to work around Keycloak
+returning an empty `systemInfo.version` — is instead covered by the existing
+`dev/demos/basic/087-nonmaster-provider.yaml` /
+`dev/demos/namespaced/087-nonmaster-provider.yaml` demos (gated to Keycloak
+>= 26.4 via `cluster/test/cases-kc-26.4.txt`), whose credentials secret
+(`dev/apps/keycloak-provider/keycloak-provider-secret-nonmaster.yaml`) now
+sets `keycloak_version` explicitly so that regular suite regression-tests the
+fix in `internal/clients/keycloak.go`.
 
 ## Adding a New Test
 
