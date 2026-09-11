@@ -3,6 +3,7 @@ package clients
 import (
 	"context"
 	"reflect"
+	"slices"
 	"strconv"
 	"testing"
 
@@ -197,5 +198,53 @@ func TestValidateAndNormalizeURLAndBasePath(t *testing.T) {
 				t.Fatalf("validateAndNormalizeURLAndBasePath() got = %v, want %v", cfg, tt.want)
 			}
 		})
+	}
+}
+
+// TestOptionalKeycloakConfigKeysIncludesKeycloakVersion guards against a
+// regression of https://github.com/crossplane-contrib/provider-keycloak/issues/742:
+// a ProviderConfig scoped to a service account without the master-realm
+// view-system/manage-realms role can only complete its initial login if the
+// keycloak_version credential is forwarded to the underlying Terraform
+// provider so it can skip the version auto-detection that requires that
+// role. If this key is dropped from optionalKeycloakConfigKeys, that
+// escape hatch silently stops working even though ExtractCredentials and
+// config/lookup/keycloak_client.go still read and forward the field.
+func TestOptionalKeycloakConfigKeysIncludesKeycloakVersion(t *testing.T) {
+	if !slices.Contains(optionalKeycloakConfigKeys, "keycloak_version") {
+		t.Fatalf("optionalKeycloakConfigKeys must include \"keycloak_version\" so that ProviderConfigs can pin the Keycloak version when the service account cannot read /admin/serverinfo's version field")
+	}
+}
+
+// TestTerraformSetupBuilderForwardsKeycloakVersion exercises the same
+// required/optional key-copying logic used by TerraformSetupBuilder to
+// build the Terraform provider configuration, verifying that
+// "keycloak_version" supplied via the credentials secret is carried through
+// into the resulting configuration.
+func TestTerraformSetupBuilderForwardsKeycloakVersion(t *testing.T) {
+	creds := map[string]any{
+		"client_id":        "test-client",
+		"client_secret":    "53cr37",
+		"url":              "https://my-keycloak.example.com",
+		"realm":            "demo",
+		"keycloak_version": "26.6.2",
+	}
+
+	configuration := map[string]any{}
+	for _, key := range requiredKeycloakConfigKeys {
+		value, ok := creds[key]
+		if !ok {
+			t.Fatalf("required Keycloak configuration key %q is missing from test fixture", key)
+		}
+		configuration[key] = value
+	}
+	for _, key := range optionalKeycloakConfigKeys {
+		if value, ok := creds[key]; ok {
+			configuration[key] = value
+		}
+	}
+
+	if got, want := configuration["keycloak_version"], "26.6.2"; got != want {
+		t.Fatalf("configuration[\"keycloak_version\"] = %v, want %v", got, want)
 	}
 }

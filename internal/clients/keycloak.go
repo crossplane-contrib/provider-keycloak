@@ -100,6 +100,7 @@ var optionalKeycloakConfigKeys = []string{
 	"jwt_signing_key",
 	"jwt_token",
 	"jwt_token_file",
+	"keycloak_version",
 }
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
