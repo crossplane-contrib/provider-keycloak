@@ -123,6 +123,7 @@ handle_options "$@"
 
 echo "Cluster name: $CLUSTER_NAME"
 echo "Keycloak version: $KEYCLOAK_VERSION"
+export KEYCLOAK_VERSION
 
 if [ "$FGAP_VERSION" != "v1" ] && [ "$FGAP_VERSION" != "v2" ]; then
   echo "Invalid fgap version: $FGAP_VERSION (expected v1 or v2)" >&2
