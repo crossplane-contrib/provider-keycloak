@@ -99,6 +99,15 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 		),
 		ujconfig.WithRootGroup(rootGroup))
 
+	// connectionsecrettransform is a hand-written (non-generated) controller
+	// that republishes a Client's connection secret with keys renamed per its
+	// ProviderConfig. Registering it here makes the code generator wire it
+	// into internal/controller/cluster/zz_setup.go alongside the other base
+	// packages (e.g. providerconfig), the same way upjet does by default for
+	// ProviderConfig. See
+	// internal/controller/cluster/connectionsecrettransform for details.
+	pc.BasePackages.ControllerMap["connectionsecrettransform"] = ujconfig.PackageNameConfig
+
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
 		realm.Configure,
