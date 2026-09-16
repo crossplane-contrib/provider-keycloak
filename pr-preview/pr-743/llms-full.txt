@@ -560,13 +560,15 @@ realm is removed whether the assertion passes or fails.
 The complementary "Configuration B" scenario from #742 — a service account
 in `master` whose service-account roles are scoped to a single realm, which
 needs the `keycloak_version` credential key to work around Keycloak
-returning an empty `systemInfo.version` — is instead covered by the existing
+returning an empty `systemInfo.version` — is covered by the existing
 `dev/demos/basic/087-nonmaster-provider.yaml` /
 `dev/demos/namespaced/087-nonmaster-provider.yaml` demos (gated to Keycloak
->= 26.4 via `cluster/test/cases-kc-26.4.txt`), whose credentials secret
-(`dev/apps/keycloak-provider/keycloak-provider-secret-nonmaster.yaml`) now
-sets `keycloak_version` explicitly so that regular suite regression-tests the
-fix in `internal/clients/keycloak.go`.
+>= 26.4 via `cluster/test/cases-kc-26.4.txt`). Their setup in
+`dev/setup_dev_environment.sh` creates the client in `master`, grants only
+`provider-e2e-realm` admin-client roles, and applies credentials from
+`dev/apps/keycloak-provider/keycloak-provider-secret-nonmaster.yaml` with
+`realm: master` plus `keycloak_version`, so the regular suite regression-tests
+the fix in `internal/clients/keycloak.go`.
 
 ## Adding a New Test
 
@@ -1674,9 +1676,10 @@ set explicitly.
 
 Both configurations are covered by e2e tests: Configuration B by
 `dev/demos/basic/087-nonmaster-provider.yaml` (and its namespaced
-equivalent), and Configuration A's 403 failure mode by the standalone
-`cluster/test/restrictedrealmprovider/` chainsaw suite. See
-[End-to-End Tests](../../developing/e2e-tests.md#standalone-chainsaw-suites)
+equivalent), whose setup creates the client in `master` but grants only
+`provider-e2e-realm` admin-client roles, and Configuration A's 403 failure
+mode by the standalone `cluster/test/restrictedrealmprovider/` chainsaw
+suite. See [End-to-End Tests](../../developing/e2e-tests.md#standalone-chainsaw-suites)
 for details.
 
 ## Troubleshooting

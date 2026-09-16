@@ -237,8 +237,9 @@ set explicitly.
 
 Both configurations are covered by e2e tests: Configuration B by
 `dev/demos/basic/087-nonmaster-provider.yaml` (and its namespaced
-equivalent), and Configuration A's 403 failure mode by the standalone
-`cluster/test/restrictedrealmprovider/` chainsaw suite. See
-[End-to-End Tests](../../developing/e2e-tests.md#standalone-chainsaw-suites)
+equivalent), whose setup creates the client in `master` but grants only
+`provider-e2e-realm` admin-client roles, and Configuration A's 403 failure
+mode by the standalone `cluster/test/restrictedrealmprovider/` chainsaw
+suite. See [End-to-End Tests](../../developing/e2e-tests.md#standalone-chainsaw-suites)
 for details.
 
