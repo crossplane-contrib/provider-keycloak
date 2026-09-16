@@ -1,5 +1,5 @@
-# Tests that the provider successfully initialises via a non-master-realm
-# service account on Keycloak >= 26.4, where /admin/serverinfo returns an
+# Tests that the provider successfully initialises via a master-realm
+# service account on Keycloak >= 26.4 whose roles are scoped to provider-e2e-realm, where /admin/serverinfo returns an
 # empty systemInfo.version.  A Group in "provider-e2e-realm" is used because
 # it is a simple resource that forces a full provider initialisation cycle.
 apiVersion: group.keycloak.m.crossplane.io/v1alpha1

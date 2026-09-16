@@ -428,7 +428,7 @@ $kubectl_cmd wait crd/providerconfigs.keycloak.crossplane.io --for condition=est
 
 $kubectl_cmd apply -f ${SCRIPT_DIR}/apps/keycloak-provider/keycloak-provider-config.yaml
 
-echo "########### Setting up non-master-realm service account (KC >= 26.4 empty-version fix) ###########"
+echo "########### Setting up master-realm service account with realm-scoped roles (KC >= 26.4 empty-version fix) ###########"
 KC_BASE_URL="http://${KEYCLOAK_IP}:${KEYCLOAK_PORT}"
 
 echo "* Obtaining Keycloak admin token..."
@@ -443,22 +443,22 @@ curl -s -o /dev/null -X POST "${KC_BASE_URL}/admin/realms" \
   -H "Content-Type: application/json" \
   -d '{"realm":"provider-e2e-realm","enabled":true}' || true
 
-echo "* Creating service account client provider-e2e-client..."
-curl -s -o /dev/null -X POST "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients" \
+echo "* Creating master-realm service account client provider-e2e-client..."
+curl -s -o /dev/null -X POST "${KC_BASE_URL}/admin/realms/master/clients" \
   -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{"clientId":"provider-e2e-client","serviceAccountsEnabled":true,"secret":"provider-e2e-secret","protocol":"openid-connect","publicClient":false}' || true
 
-echo "* Granting realm-admin role to service account..."
-NM_CLIENT_UUID=$(curl -sf "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients?clientId=provider-e2e-client" \
+echo "* Granting provider-e2e-realm realm-admin role to master-realm service account..."
+NM_CLIENT_UUID=$(curl -sf "${KC_BASE_URL}/admin/realms/master/clients?clientId=provider-e2e-client" \
   -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" | jq -r '.[0].id')
-NM_SA_USER_ID=$(curl -sf "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients/${NM_CLIENT_UUID}/service-account-user" \
+NM_SA_USER_ID=$(curl -sf "${KC_BASE_URL}/admin/realms/master/clients/${NM_CLIENT_UUID}/service-account-user" \
   -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" | jq -r '.id')
 NM_RM_CLIENT_ID=$(curl -sf "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients?clientId=realm-management" \
   -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" | jq -r '.[0].id')
 NM_REALM_ADMIN_ROLE=$(curl -sf "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients/${NM_RM_CLIENT_ID}/roles/realm-admin" \
   -H "Authorization: Bearer ${NM_ADMIN_TOKEN}")
-curl -s -o /dev/null -X POST "${KC_BASE_URL}/admin/realms/provider-e2e-realm/users/${NM_SA_USER_ID}/role-mappings/clients/${NM_RM_CLIENT_ID}" \
+curl -s -o /dev/null -X POST "${KC_BASE_URL}/admin/realms/master/users/${NM_SA_USER_ID}/role-mappings/clients/${NM_RM_CLIENT_ID}" \
   -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" \
   -H "Content-Type: application/json" \
   -d "[${NM_REALM_ADMIN_ROLE}]" || true
