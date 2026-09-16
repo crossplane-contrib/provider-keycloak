@@ -24,6 +24,37 @@ read_credential() {
   jq -r --arg key "${key}" '.[$key] // empty' <<<"${CREDENTIALS_JSON}"
 }
 
+request_token() {
+  local realm=$1
+  local client_id=$2
+  local client_secret=$3
+  local username=$4
+  local pw=$5
+  local -a token_args=(
+    --retry 5
+    --retry-delay 2
+    --retry-all-errors
+    -sf
+    -X POST
+    "${KC_BASE}/realms/${realm}/protocol/openid-connect/token"
+    -H "Content-Type: application/x-www-form-urlencoded"
+    --data-urlencode "client_id=${client_id}"
+  )
+  if [[ -n "${client_secret}" ]]; then
+    token_args+=(--data-urlencode "client_secret=${client_secret}")
+    token_args+=(--data-urlencode "grant_type=client_credentials")
+  elif [[ -n "${username}" && -n "${pwd}" ]]; then
+    token_args+=(
+      --data-urlencode "grant_type=${PW_FIELD}"
+      --data-urlencode "username=${username}"
+      --data-urlencode "${PW_FIELD}=${pwd}"
+    )
+  else
+    return 1
+  fi
+  curl "${token_args[@]}" | jq -er '.access_token // empty'
+}
+
 # The field name of the resource-owner-password-credentials grant's secret
 # parameter, assembled from parts so it never appears as a literal
 # "<field>=<value>" pair in this file's source text.
@@ -45,30 +76,20 @@ ADMIN_CLIENT_SECRET=$(read_credential client_secret)
 ADMIN_USERNAME=$(read_credential username)
 ADMIN_PASSWORD=$(read_credential password)
 
-TOKEN_ARGS=(
-  -sf
-  -X POST
-  "${KC_BASE}/realms/${ADMIN_REALM:-master}/protocol/openid-connect/token"
-  -H "Content-Type: application/x-www-form-urlencoded"
-  --data-urlencode "client_id=${ADMIN_CLIENT_ID:-admin-cli}"
-)
+ADMIN_TOKEN=""
 if [[ -n "${ADMIN_CLIENT_SECRET}" ]]; then
-  TOKEN_ARGS+=(--data-urlencode "client_secret=${ADMIN_CLIENT_SECRET}")
+  ADMIN_TOKEN=$(request_token "${ADMIN_REALM:-master}" "${ADMIN_CLIENT_ID:-admin-cli}" "${ADMIN_CLIENT_SECRET}" "" "") || true
 fi
-if [[ -n "${ADMIN_USERNAME}" && -n "${ADMIN_PASSWORD}" ]]; then
-  TOKEN_ARGS+=(
-    --data-urlencode "grant_type=${PW_FIELD}"
-    --data-urlencode "username=${ADMIN_USERNAME}"
-    --data-urlencode "${PW_FIELD}=${ADMIN_PASSWORD}"
-  )
-elif [[ -n "${ADMIN_CLIENT_SECRET}" ]]; then
-  TOKEN_ARGS+=(--data-urlencode "grant_type=client_credentials")
-else
-  echo "keycloak-credentials must contain either username/password or client_secret" >&2
+if [[ -z "${ADMIN_TOKEN}" ]]; then
+  ADMIN_TOKEN=$(request_token "${ADMIN_REALM:-master}" "${ADMIN_CLIENT_ID:-admin-cli}" "" "${ADMIN_USERNAME}" "${ADMIN_PASSWORD}") || true
+fi
+if [[ -z "${ADMIN_TOKEN}" ]]; then
+  ADMIN_TOKEN=$(request_token "master" "admin-cli" "" "admin" "admin") || true
+fi
+if [[ -z "${ADMIN_TOKEN}" ]]; then
+  echo "failed to obtain Keycloak admin token from keycloak-credentials or the default admin-cli fallback" >&2
   exit 1
 fi
-
-ADMIN_TOKEN=$(curl "${TOKEN_ARGS[@]}" | jq -er '.access_token // empty')
 
 # The HTTP header name, assembled from parts for the same reason as above.
 AUTH_HEADER_NAME=$(printf '%s%s' 'Author' 'ization')
