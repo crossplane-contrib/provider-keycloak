@@ -32,11 +32,11 @@ request_token() {
   if [[ -n "${client_secret}" ]]; then
     token_args+=(--data-urlencode "client_secret=${client_secret}")
     token_args+=(--data-urlencode "grant_type=client_credentials")
-  elif [[ -n "${username}" && -n "${pwd}" ]]; then
+  elif [[ -n "${username}" && -n "${pw}" ]]; then
     token_args+=(
       --data-urlencode "grant_type=${PW_FIELD}"
       --data-urlencode "username=${username}"
-      --data-urlencode "${PW_FIELD}=${pwd}"
+      --data-urlencode "${PW_FIELD}=${pw}"
     )
   else
     return 1
