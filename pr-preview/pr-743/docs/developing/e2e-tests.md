@@ -95,18 +95,14 @@ checks that a probe `Group` resource ends up `Synced=False` with a message
 containing `403` or `Forbidden`. `cleanup.sh` runs as a step `finally` so the
 realm is removed whether the assertion passes or fails.
 
-The complementary "Configuration B" scenario from #742 — a service account
-in `master` whose service-account roles are scoped to a single realm, which
-needs the `keycloak_version` credential key to work around Keycloak
-returning an empty `systemInfo.version` — is covered by the existing
-`dev/demos/basic/087-nonmaster-provider.yaml` /
+The `keycloak_version` forwarding behavior behind Configuration B from #742
+is regression-tested in two ways: unit tests in `internal/clients/keycloak_test.go`
+verify that the credential key is passed through to the Terraform provider,
+and the existing `dev/demos/basic/087-nonmaster-provider.yaml` /
 `dev/demos/namespaced/087-nonmaster-provider.yaml` demos (gated to Keycloak
->= 26.4 via `cluster/test/cases-kc-26.4.txt`). Their setup in
-`dev/setup_dev_environment.sh` creates the client in `master`, grants only
-`provider-e2e-realm` admin-client roles, and applies credentials from
-`dev/apps/keycloak-provider/keycloak-provider-secret-nonmaster.yaml` with
-`realm: master` plus `keycloak_version`, so the regular suite regression-tests
-the fix in `internal/clients/keycloak.go`.
+>= 26.4 via `cluster/test/cases-kc-26.4.txt`) exercise a non-master-realm
+service account path that also depends on `keycloak_version` when Keycloak
+returns an empty `systemInfo.version`.
 
 ## Adding a New Test
 
