@@ -153,6 +153,30 @@ request_token() {
   curl "${token_args[@]}" | jq -er '.access_token // empty'
 }
 
+create_resource() {
+  local path=$1
+  local payload=$2
+  local resource_name=$3
+  local status=""
+
+  status=$(curl -s -o /dev/null -w '%{http_code}' -X POST "${KC_BASE}${path}" \
+    -H "${AUTH_HEADER}" \
+    -H "Content-Type: application/json" \
+    -d "${payload}")
+
+  case "${status}" in
+    201|204)
+      ;;
+    409)
+      echo "* ${resource_name} already exists; reusing it..."
+      ;;
+    *)
+      echo "failed to create ${resource_name}: Keycloak returned HTTP ${status}" >&2
+      exit 1
+      ;;
+  esac
+}
+
 # The field name of the resource-owner-password-credentials grant's secret
 # parameter, assembled from parts so it never appears as a literal
 # "<field>=<value>" pair in this file's source text.
@@ -215,16 +239,16 @@ AUTH_SCHEME=$(printf '%s' 'Bearer')
 AUTH_HEADER="${AUTH_HEADER_NAME}: ${AUTH_SCHEME} ${ADMIN_TOKEN}"
 
 echo "* Creating realm ${REALM}..."
-curl -sf -o /dev/null -X POST "${KC_BASE}/admin/realms" \
-  -H "${AUTH_HEADER}" \
-  -H "Content-Type: application/json" \
-  -d "{\"realm\":\"${REALM}\",\"enabled\":true}" || true
+create_resource \
+  "/admin/realms" \
+  "{\"realm\":\"${REALM}\",\"enabled\":true}" \
+  "realm ${REALM}"
 
 echo "* Creating fully realm-scoped service account client ${CLIENT_ID} (no roles granted)..."
-curl -sf -o /dev/null -X POST "${KC_BASE}/admin/realms/${REALM}/clients" \
-  -H "${AUTH_HEADER}" \
-  -H "Content-Type: application/json" \
-  -d "{\"clientId\":\"${CLIENT_ID}\",\"serviceAccountsEnabled\":true,\"secret\":\"${CLIENT_SECRET}\",\"protocol\":\"openid-connect\",\"publicClient\":false}" || true
+create_resource \
+  "/admin/realms/${REALM}/clients" \
+  "{\"clientId\":\"${CLIENT_ID}\",\"serviceAccountsEnabled\":true,\"secret\":\"${CLIENT_SECRET}\",\"protocol\":\"openid-connect\",\"publicClient\":false}" \
+  "client ${CLIENT_ID} in realm ${REALM}"
 
 echo "* Publishing credentials as a Kubernetes Secret..."
 ${KUBECTL} create secret generic restrictedrealmprovider742-credentials \

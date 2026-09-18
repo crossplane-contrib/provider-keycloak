@@ -74,7 +74,7 @@ spec:
                 conditions:
                   - type: Synced
                     status: "False"
-                    (contains(message, '403') || contains(message, 'Forbidden')): true
+                    (contains(message, 'initial login') && contains(message, '/admin/serverinfo') && (contains(message, '403') || contains(message, 'Forbidden'))): true
         - delete:
             ref:
               apiVersion: group.keycloak.crossplane.io/v1alpha1

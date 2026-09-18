@@ -95,9 +95,11 @@ The single-realm suite's `bootstrap.sh` provisions a realm and a fully
 realm-scoped service account client directly against the Keycloak API (there
 is no declarative way to create a *deliberately under-privileged* service
 account through the managed resources themselves), then a chainsaw `assert`
-checks that a probe `Group` resource ends up `Synced=False` with a message
-containing `403` or `Forbidden`. `cleanup.sh` runs as a step `finally` so the
-realm is removed whether the assertion passes or fails.
+checks that a probe `Group` resource ends up `Synced=False` with the expected
+initial-login `/admin/serverinfo` `403 Forbidden` message. `cleanup.sh` runs
+as the assertion step's `finally` so the bootstrap-created credentials remain
+available until that check completes, and the realm is still removed whether
+the assertion passes or fails.
 
 The `keycloak_version` forwarding behavior behind Configuration B from #742
 is regression-tested in two ways: unit tests in `internal/clients/keycloak_test.go`
