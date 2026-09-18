@@ -74,7 +74,7 @@ spec:
                 conditions:
                   - type: Synced
                     status: "False"
-                    "contains(message, 'error sending GET request to /admin/serverinfo: 403 Forbidden')": true
+                    "contains(message, '/admin/serverinfo') && contains(message, '403 Forbidden')": true
         - delete:
             ref:
               apiVersion: group.keycloak.crossplane.io/v1alpha1
