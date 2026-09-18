@@ -121,7 +121,9 @@ request_token() {
     --retry 5
     --retry-delay 2
     --retry-all-errors
-    -sf
+    --silent
+    --show-error
+    --fail-with-body
     -X POST
     "${KC_BASE}/realms/${realm}/protocol/openid-connect/token"
     -H "Content-Type: application/x-www-form-urlencoded"

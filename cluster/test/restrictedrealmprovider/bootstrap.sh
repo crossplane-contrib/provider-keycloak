@@ -132,7 +132,9 @@ request_token() {
     --retry 5
     --retry-delay 2
     --retry-all-errors
-    -sf
+    --silent
+    --show-error
+    --fail-with-body
     -X POST
     "${KC_BASE}/realms/${realm}/protocol/openid-connect/token"
     -H "Content-Type: application/x-www-form-urlencoded"
@@ -223,7 +225,20 @@ if [[ -z "${KC_BASE_URL}" || -z "${ADMIN_USERNAME}" || -z "${ADMIN_PASSWORD}" ]]
 fi
 
 ADMIN_TOKEN=""
-ADMIN_TOKEN=$(request_token "master" "admin-cli" "" "${ADMIN_USERNAME}" "${ADMIN_PASSWORD}") || true
+TOKEN_ERROR_FILE=$(mktemp)
+if ! ADMIN_TOKEN=$(request_token "master" "admin-cli" "" "${ADMIN_USERNAME}" "${ADMIN_PASSWORD}" 2>"${TOKEN_ERROR_FILE}"); then
+  echo "failed to obtain Keycloak admin token with bootstrap admin credentials" >&2
+  echo "  namespace: ${KEYCLOAK_NAMESPACE}" >&2
+  echo "  deployment: ${KEYCLOAK_DEPLOYMENT:-<none>}" >&2
+  echo "  service: ${KEYCLOAK_SERVICE:-<none>}" >&2
+  echo "  secret candidates: ${KEYCLOAK_SECRET_CANDIDATES:-<none>}" >&2
+  if [[ -s "${TOKEN_ERROR_FILE}" ]]; then
+    sed 's/^/  /' "${TOKEN_ERROR_FILE}" >&2
+  fi
+  rm -f "${TOKEN_ERROR_FILE}"
+  exit 1
+fi
+rm -f "${TOKEN_ERROR_FILE}"
 if [[ -z "${ADMIN_TOKEN}" ]]; then
   echo "failed to obtain Keycloak admin token with bootstrap admin credentials" >&2
   echo "  namespace: ${KEYCLOAK_NAMESPACE}" >&2
