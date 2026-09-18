@@ -9,11 +9,6 @@ KUBECTL=${KUBECTL:-kubectl}
 REALM=${REALM:-restrictedrealmprovider742}
 KEYCLOAK_NAMESPACE=${KEYCLOAK_NAMESPACE:-keycloak}
 
-read_credential() {
-  local key=$1
-  jq -r --arg key "${key}" '.[$key] // empty' <<<"${CREDENTIALS_JSON}"
-}
-
 decode_secret_field() {
   local encoded=${1:-}
   if [[ -z "${encoded}" ]]; then
@@ -78,15 +73,6 @@ read_deployment_env() {
   if [[ -n "${secret_name}" && -n "${secret_key}" ]]; then
     read_secret_data "${secret_name}" "${secret_key}"
   fi
-}
-
-read_provider_admin_credential() {
-  local key=$1
-  CREDENTIALS_JSON=$(${KUBECTL} get secret keycloak-credentials -n crossplane-system -o jsonpath='{.data.credentials}' 2>/dev/null | base64 -d 2>/dev/null || true)
-  if [[ -z "${CREDENTIALS_JSON}" ]]; then
-    return 0
-  fi
-  read_credential "${key}"
 }
 
 discover_keycloak_url() {
@@ -185,12 +171,6 @@ if [[ -z "${ADMIN_USERNAME}" && -n "${KEYCLOAK_SECRET_NAME}" ]]; then
 fi
 if [[ -z "${ADMIN_PASSWORD}" && -n "${KEYCLOAK_SECRET_NAME}" ]]; then
   ADMIN_PASSWORD=$(read_secret_data "${KEYCLOAK_SECRET_NAME}" "KC_BOOTSTRAP_ADMIN_PASSWORD")
-fi
-if [[ -z "${ADMIN_USERNAME}" ]]; then
-  ADMIN_USERNAME=$(read_provider_admin_credential username)
-fi
-if [[ -z "${ADMIN_PASSWORD}" ]]; then
-  ADMIN_PASSWORD=$(read_provider_admin_credential password)
 fi
 
 ADMIN_TOKEN=""
