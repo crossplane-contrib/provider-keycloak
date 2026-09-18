@@ -32,11 +32,6 @@ spec:
             content: ./bootstrap.sh
             check:
               ($error == null): true
-      finally:
-        - script:
-            content: ./cleanup.sh
-            check:
-              ($error == null): true
 
     - name: point-a-restricted-providerconfig-at-that-client
       try:
@@ -90,3 +85,8 @@ spec:
               apiVersion: keycloak.crossplane.io/v1beta1
               kind: ProviderConfig
               name: restrictedrealmprovider742-provider-config
+      finally:
+        - script:
+            content: ./cleanup.sh
+            check:
+              ($error == null): true
