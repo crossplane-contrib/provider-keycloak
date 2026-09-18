@@ -339,6 +339,14 @@ export KEYCLOAK_USER=admin
 export KEYCLOAK_PASSWORD=admin
 fi
 
+echo "* Creating deterministic Keycloak bootstrap admin credentials secret..."
+$kubectl_cmd -n keycloak create secret generic keycloak-credentials \
+  --from-literal=username="${KEYCLOAK_USER}" \
+  --from-literal=****** \
+  --from-literal=KC_BOOTSTRAP_ADMIN_USERNAME="${KEYCLOAK_USER}" \
+  --from-literal=KC_BOOTSTRAP_ADMIN_PASSWORD="${KEYCLOAK_PASSWORD}" \
+  --dry-run=client -o yaml | $kubectl_cmd apply -f -
+
 
 echo "########### Installing Crossplane ###########"
 pushd "${SCRIPT_DIR}/.." > /dev/null

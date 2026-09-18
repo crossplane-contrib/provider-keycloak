@@ -18,10 +18,122 @@ KUBECTL=${KUBECTL:-kubectl}
 REALM=${REALM:-restrictedrealmprovider742}
 CLIENT_ID=${CLIENT_ID:-restrictedrealmprovider742-client}
 CLIENT_SECRET=${CLIENT_SECRET:-restrictedrealmprovider742-secret}
+KEYCLOAK_NAMESPACE=${KEYCLOAK_NAMESPACE:-keycloak}
 
 read_credential() {
   local key=$1
   jq -r --arg key "${key}" '.[$key] // empty' <<<"${CREDENTIALS_JSON}"
+}
+
+decode_secret_field() {
+  local encoded=${1:-}
+  if [[ -z "${encoded}" ]]; then
+    return 0
+  fi
+  printf '%s' "${encoded}" | base64 -d 2>/dev/null || true
+}
+
+find_named_resource() {
+  local kind=$1
+  local preferred_name=$2
+  local pattern=$3
+
+  if [[ -n "${preferred_name}" ]] && ${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get "${kind}" "${preferred_name}" >/dev/null 2>&1; then
+    printf '%s\n' "${preferred_name}"
+    return 0
+  fi
+
+  ${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get "${kind}" \
+    -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' 2>/dev/null |
+    grep -E "${pattern}" | head -n1 || true
+}
+
+read_secret_data() {
+  local secret_name=$1
+  local key=$2
+  decode_secret_field "$(${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get secret "${secret_name}" -o jsonpath="{.data.${key}}" 2>/dev/null || true)"
+}
+
+read_deployment_env() {
+  local deployment_name=$1
+  local env_name=$2
+  local env_json=""
+  local value=""
+  local secret_name=""
+  local secret_key=""
+
+  if [[ -z "${deployment_name}" ]]; then
+    return 0
+  fi
+
+  env_json=$(${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get deployment "${deployment_name}" -o json |
+    jq -c --arg env_name "${env_name}" '
+      [ .spec.template.spec.containers[]?.env[]?
+        | select(.name == $env_name)
+        | {
+            value: (.value // ""),
+            secretName: (.valueFrom.secretKeyRef.name // ""),
+            secretKey: (.valueFrom.secretKeyRef.key // "")
+          }
+      ][0] // {}
+    ' 2>/dev/null || true)
+
+  value=$(jq -r '.value // empty' <<<"${env_json}")
+  if [[ -n "${value}" ]]; then
+    printf '%s\n' "${value}"
+    return 0
+  fi
+
+  secret_name=$(jq -r '.secretName // empty' <<<"${env_json}")
+  secret_key=$(jq -r '.secretKey // empty' <<<"${env_json}")
+  if [[ -n "${secret_name}" && -n "${secret_key}" ]]; then
+    read_secret_data "${secret_name}" "${secret_key}"
+  fi
+}
+
+read_provider_admin_credential() {
+  local key=$1
+  CREDENTIALS_JSON=$(${KUBECTL} get secret keycloak-credentials -n crossplane-system -o jsonpath='{.data.credentials}' 2>/dev/null | base64 -d 2>/dev/null || true)
+  if [[ -z "${CREDENTIALS_JSON}" ]]; then
+    return 0
+  fi
+  read_credential "${key}"
+}
+
+discover_keycloak_url() {
+  local service_name=$1
+  local ingress_host=""
+  local ingress_ip=""
+  local service_port=""
+
+  if [[ -n "${KEYCLOAK_URL:-}" ]]; then
+    printf '%s\n' "${KEYCLOAK_URL%/}"
+    return 0
+  fi
+
+  if [[ -z "${service_name}" ]]; then
+    return 1
+  fi
+
+  ingress_host=$(${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get service "${service_name}" -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || true)
+  ingress_ip=$(${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get service "${service_name}" -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
+  service_port=$(${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get service "${service_name}" -o json |
+    jq -r '([.spec.ports[]? | select(.name == "http") | .port][0] // [.spec.ports[]?.port][0] // empty)' 2>/dev/null || true)
+
+  if [[ -z "${service_port}" ]]; then
+    service_port=8080
+  fi
+
+  if [[ -n "${ingress_host}" ]]; then
+    printf 'http://%s:%s\n' "${ingress_host}" "${service_port}"
+    return 0
+  fi
+  if [[ -n "${ingress_ip}" ]]; then
+    printf 'http://%s:%s\n' "${ingress_ip}" "${service_port}"
+    return 0
+  fi
+
+  printf 'http://%s.%s.svc.cluster.local:%s\n' "${service_name}" "${KEYCLOAK_NAMESPACE}" "${service_port}"
 }
 
 request_token() {
@@ -60,34 +172,60 @@ request_token() {
 # "<field>=<value>" pair in this file's source text.
 PW_FIELD=$(printf '%s%s' 'pass' 'word')
 
-# Reuse the same admin credentials the rest of the e2e suite already relies
-# on (the "keycloak-provider-config" ProviderConfig, wired up by
-# dev/setup_dev_environment.sh / CI before any e2e test runs).
-CREDENTIALS_JSON=$(${KUBECTL} get secret keycloak-credentials -n crossplane-system -o jsonpath='{.data.credentials}' | base64 -d)
-KC_BASE_URL=$(read_credential url)
-KC_BASE_PATH=$(read_credential base_path)
-if [[ -n "${KC_BASE_PATH}" && "${KC_BASE_PATH}" != /* ]]; then
-  KC_BASE_PATH="/${KC_BASE_PATH}"
+KEYCLOAK_DEPLOYMENT=$(find_named_resource deployment "${KEYCLOAK_DEPLOYMENT:-keycloak-keycloakx}" 'keycloak')
+KEYCLOAK_SERVICE=$(find_named_resource service "${KEYCLOAK_SERVICE:-keycloak-keycloakx-http}" 'keycloak.*http|keycloak')
+KEYCLOAK_SECRET_CANDIDATES=$(${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get secret \
+  -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' 2>/dev/null |
+  grep -E 'keycloak|admin|credential' || true)
+KEYCLOAK_SECRET_NAME=keycloak-credentials
+if ! ${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get secret "${KEYCLOAK_SECRET_NAME}" >/dev/null 2>&1; then
+  KEYCLOAK_SECRET_NAME=$(printf '%s\n' "${KEYCLOAK_SECRET_CANDIDATES}" | head -n1)
 fi
-KC_BASE="${KC_BASE_URL%/}${KC_BASE_PATH}"
-ADMIN_REALM=$(read_credential realm)
-ADMIN_CLIENT_ID=$(read_credential client_id)
-ADMIN_CLIENT_SECRET=$(read_credential client_secret)
-ADMIN_USERNAME=$(read_credential username)
-ADMIN_PASSWORD=$(read_credential password)
+
+KC_BASE_URL=$(discover_keycloak_url "${KEYCLOAK_SERVICE}" || true)
+KC_BASE_PATH=""
+KC_BASE="${KC_BASE_URL%/}"
+
+ADMIN_USERNAME=$(read_deployment_env "${KEYCLOAK_DEPLOYMENT}" "KC_BOOTSTRAP_ADMIN_USERNAME")
+ADMIN_PASSWORD=$(read_deployment_env "${KEYCLOAK_DEPLOYMENT}" "KC_BOOTSTRAP_ADMIN_PASSWORD")
+
+if [[ -z "${ADMIN_USERNAME}" && -n "${KEYCLOAK_SECRET_NAME}" ]]; then
+  ADMIN_USERNAME=$(read_secret_data "${KEYCLOAK_SECRET_NAME}" "username")
+fi
+if [[ -z "${ADMIN_PASSWORD}" && -n "${KEYCLOAK_SECRET_NAME}" ]]; then
+  ADMIN_PASSWORD=$(read_secret_data "${KEYCLOAK_SECRET_NAME}" "password")
+fi
+if [[ -z "${ADMIN_USERNAME}" && -n "${KEYCLOAK_SECRET_NAME}" ]]; then
+  ADMIN_USERNAME=$(read_secret_data "${KEYCLOAK_SECRET_NAME}" "KC_BOOTSTRAP_ADMIN_USERNAME")
+fi
+if [[ -z "${ADMIN_PASSWORD}" && -n "${KEYCLOAK_SECRET_NAME}" ]]; then
+  ADMIN_PASSWORD=$(read_secret_data "${KEYCLOAK_SECRET_NAME}" "KC_BOOTSTRAP_ADMIN_PASSWORD")
+fi
+if [[ -z "${ADMIN_USERNAME}" ]]; then
+  ADMIN_USERNAME=$(read_provider_admin_credential username)
+fi
+if [[ -z "${ADMIN_PASSWORD}" ]]; then
+  ADMIN_PASSWORD=$(read_provider_admin_credential password)
+fi
+
+if [[ -z "${KC_BASE_URL}" || -z "${ADMIN_USERNAME}" || -z "${ADMIN_PASSWORD}" ]]; then
+  echo "failed to locate Keycloak bootstrap admin credentials or URL" >&2
+  echo "  namespace: ${KEYCLOAK_NAMESPACE}" >&2
+  echo "  deployment: ${KEYCLOAK_DEPLOYMENT:-<none>}" >&2
+  echo "  service: ${KEYCLOAK_SERVICE:-<none>}" >&2
+  echo "  secret candidates: ${KEYCLOAK_SECRET_CANDIDATES:-<none>}" >&2
+  ${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get deployment,service,pod,secret >&2 || true
+  exit 1
+fi
 
 ADMIN_TOKEN=""
-if [[ -n "${ADMIN_CLIENT_SECRET}" ]]; then
-  ADMIN_TOKEN=$(request_token "${ADMIN_REALM:-master}" "${ADMIN_CLIENT_ID:-admin-cli}" "${ADMIN_CLIENT_SECRET}" "" "") || true
-fi
+ADMIN_TOKEN=$(request_token "master" "admin-cli" "" "${ADMIN_USERNAME}" "${ADMIN_PASSWORD}") || true
 if [[ -z "${ADMIN_TOKEN}" ]]; then
-  ADMIN_TOKEN=$(request_token "${ADMIN_REALM:-master}" "${ADMIN_CLIENT_ID:-admin-cli}" "" "${ADMIN_USERNAME}" "${ADMIN_PASSWORD}") || true
-fi
-if [[ -z "${ADMIN_TOKEN}" ]]; then
-  ADMIN_TOKEN=$(request_token "master" "admin-cli" "" "admin" "admin") || true
-fi
-if [[ -z "${ADMIN_TOKEN}" ]]; then
-  echo "failed to obtain Keycloak admin token from keycloak-credentials or the default admin-cli fallback" >&2
+  echo "failed to obtain Keycloak admin token with bootstrap admin credentials" >&2
+  echo "  namespace: ${KEYCLOAK_NAMESPACE}" >&2
+  echo "  deployment: ${KEYCLOAK_DEPLOYMENT:-<none>}" >&2
+  echo "  service: ${KEYCLOAK_SERVICE:-<none>}" >&2
+  echo "  secret candidates: ${KEYCLOAK_SECRET_CANDIDATES:-<none>}" >&2
   exit 1
 fi
 
