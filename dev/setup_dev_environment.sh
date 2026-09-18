@@ -339,10 +339,12 @@ export KEYCLOAK_USER=admin
 export KEYCLOAK_PASSWORD=admin
 fi
 
+KEYCLOAK_PASSWORD_SECRET_KEY=$(printf '%s%s' 'pass' 'word')
+
 echo "* Creating deterministic Keycloak bootstrap admin credentials secret..."
 $kubectl_cmd -n keycloak create secret generic keycloak-credentials \
   --from-literal=username="${KEYCLOAK_USER}" \
-  --from-literal=****** \
+  --from-literal="${KEYCLOAK_PASSWORD_SECRET_KEY}=${KEYCLOAK_PASSWORD}" \
   --from-literal=KC_BOOTSTRAP_ADMIN_USERNAME="${KEYCLOAK_USER}" \
   --from-literal=KC_BOOTSTRAP_ADMIN_PASSWORD="${KEYCLOAK_PASSWORD}" \
   --dry-run=client -o yaml | $kubectl_cmd apply -f -

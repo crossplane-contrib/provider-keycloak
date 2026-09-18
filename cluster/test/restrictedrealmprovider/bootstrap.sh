@@ -214,7 +214,7 @@ if [[ -z "${KC_BASE_URL}" || -z "${ADMIN_USERNAME}" || -z "${ADMIN_PASSWORD}" ]]
   echo "  deployment: ${KEYCLOAK_DEPLOYMENT:-<none>}" >&2
   echo "  service: ${KEYCLOAK_SERVICE:-<none>}" >&2
   echo "  secret candidates: ${KEYCLOAK_SECRET_CANDIDATES:-<none>}" >&2
-  ${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get deployment,service,pod,secret >&2 || true
+  ${KUBECTL} -n "${KEYCLOAK_NAMESPACE}" get deployment,service,pod >&2 || true
   exit 1
 fi
 
