@@ -314,6 +314,20 @@ uptest-conversion: $(CHAINSAW) $(KUBECTL)
 
 e2e-conversion: local-deploy uptest-conversion
 
+# Regression/documentation test for crossplane-contrib/provider-keycloak#742:
+# asserts that a ProviderConfig scoped entirely to a single realm (no
+# master-realm or realm-management roles) fails with a 403 during login, a
+# Keycloak server-side authorization constraint that cannot be fixed in this
+# provider. Requires a cluster with the provider deployed and the
+# "keycloak-provider-config" admin ProviderConfig already applied, i.e. the
+# same prerequisites as the `uptest` target.
+uptest-restrictedrealmprovider: $(CHAINSAW) $(KUBECTL)
+	@$(INFO) running restricted single-realm ProviderConfig tests
+	@KUBECTL=$(KUBECTL) $(CHAINSAW) test --test-dir cluster/test/restrictedrealmprovider || $(FAIL)
+	@$(OK) running restricted single-realm ProviderConfig tests
+
+e2e-restrictedrealmprovider: local-deploy uptest-restrictedrealmprovider
+
 # Two gates: every demo file is listed in a case file, and every managed
 # resource has an e2e demo (or a documented exception in
 # cluster/test/uncovered-resources.txt).
