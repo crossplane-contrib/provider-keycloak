@@ -16,10 +16,14 @@ on:
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
   check-and-release:
     runs-on: ubuntu-24.04
+    outputs:
+      skip: ${{ steps.changes.outputs.skip }}
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -109,3 +113,17 @@ jobs:
           gh release create "$VERSION" \
             --title "$VERSION" \
             --generate-notes
+
+  # Auto releases must ship a consumable package, so build and publish the xpkg
+  # for the freshly created tag instead of only creating the GitHub release.
+  publish-package:
+    needs: check-and-release
+    if: needs.check-and-release.outputs.skip != 'true'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/quick-release.yml
+    secrets: inherit
+    with:
+      version: ${{ needs.check-and-release.outputs.version }}
+      push-to-upbound: true
