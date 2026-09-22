@@ -11,6 +11,18 @@ on:
         required: false
         type: boolean
         default: true
+  workflow_call:
+    inputs:
+      push-to-upbound:
+        description: 'Mirror to Upbound registry'
+        required: false
+        type: boolean
+        default: true
+      version:
+        description: 'Version to publish (e.g. v3.0.2). Defaults to the version derived from git.'
+        required: false
+        type: string
+        default: ''
 
 env:
   # Common versions
@@ -88,7 +100,14 @@ jobs:
 
       - name: Find the version
         id: version
-        run: make common.buildvars >> $GITHUB_OUTPUT
+        env:
+          VERSION_INPUT: ${{ inputs.version }}
+        run: |
+          if [[ -n "${VERSION_INPUT}" ]]; then
+            echo "VERSION=${VERSION_INPUT}" >> $GITHUB_OUTPUT
+          else
+            make common.buildvars >> $GITHUB_OUTPUT
+          fi
 
       - name: Build Artifacts
         run: |-
