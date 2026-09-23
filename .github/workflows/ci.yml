@@ -632,6 +632,144 @@ jobs:
         if: steps.e2eTests.outcome == 'failure'
         run: exit 1
 
+  # Controller-focused e2e tests using Kyverno chainsaw directly.
+  # These exercise hand-written controllers (currently: connectionsecrettransform)
+  # in a real kind cluster with Keycloak and the provider running, and with
+  # Envoy Gateway + Traefik deployed as actual OIDC consumers that validate
+  # the secrets the controller produces.
+  #
+  # Runs on every PR against main when the controller code or tests change.
+  # Always runs on push to main.
+  e2e-controller-tests:
+    runs-on: ubuntu-24.04
+    needs: [detect-noop, build-provider]
+    if: needs.detect-noop.outputs.noop != 'true'
+    concurrency:
+      group: ${{ github.head_ref || github.run_id }}-controller-e2e
+      cancel-in-progress: true
+    permissions:
+      contents: read
+    env:
+      CONTROLLER_E2E_KEYCLOAK_VERSION: "26.7.0"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          submodules: true
+
+      - name: Fetch History
+        run: git fetch --prune --unshallow
+
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Find the Go Build Cache
+        id: go
+        run: echo "cache=$(make go.cachedir)" >> $GITHUB_OUTPUT
+
+      - name: Cache the Go Build Cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ steps.go.outputs.cache }}
+          key: ${{ runner.os }}-build-controller-e2e-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-build-controller-e2e-
+
+      - name: Cache Go Dependencies
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: .work/pkg
+          key: ${{ runner.os }}-pkg-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-pkg-
+
+      - name: Cache Build Tools
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: .cache/tools
+          key: ${{ runner.os }}-${{ runner.arch }}-tools-${{ hashFiles('Makefile', 'build/makelib/**/*.mk') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-tools-
+
+      - name: Vendor Dependencies
+        run: make vendor vendor.check
+
+      - name: Download Provider Image
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: provider-image
+          path: /tmp
+
+      - name: Download Provider Package
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: provider-xpkg
+          path: _output/xpkg/linux_amd64/
+
+      - name: Load Provider Image
+        run: docker load -i /tmp/provider-image.tar
+
+      - name: Pull Keycloak Image
+        run: docker pull quay.io/keycloak/keycloak:${{ env.CONTROLLER_E2E_KEYCLOAK_VERSION }}
+
+      - name: Starting test environment
+        id: setup
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          mkdir -p logs
+          ./dev/setup_dev_environment.sh \
+            --cluster-name fenrir-1 \
+            --deploy-local-provider \
+            --direct-helm \
+            --keycloak-version ${{ env.CONTROLLER_E2E_KEYCLOAK_VERSION }} \
+            | tee logs/setup-environment.log
+        env:
+          PROVIDER_PREBUILT: "true"
+
+      - name: Collect setup logs on failure
+        if: steps.setup.outcome == 'failure'
+        run: |
+          kind export kubeconfig --name fenrir-1 || true
+          ./dev/collect-logs.sh || true
+
+      - name: Upload setup logs
+        if: steps.setup.outcome == 'failure'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: controller-e2e-setup-logs
+          path: logs/
+
+      - name: Fail on setup error
+        if: steps.setup.outcome == 'failure'
+        run: exit 1
+
+      - name: Set kind cluster as context
+        run: kind export kubeconfig --name fenrir-1
+
+      - name: Running controller e2e tests
+        id: controllerE2e
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          make controller-e2e | tee logs/controller-e2e.log
+
+      - name: Collect controller e2e logs on failure
+        if: steps.controllerE2e.outcome == 'failure'
+        run: |
+          kind export kubeconfig --name fenrir-1 || true
+          ./dev/collect-logs.sh || true
+
+      - name: Upload controller e2e logs
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: controller-e2e-logs
+          path: logs/
+
+      - name: Fail on test error
+        if: steps.controllerE2e.outcome == 'failure'
+        run: exit 1
+
   # Fine-grained admin permissions v2 (FGAPv2) resources need Keycloak to run
   # with the admin-fine-grained-authz:v2 feature. That feature replaces the v1
   # feature the regular e2e suite depends on, so these demos get their own
