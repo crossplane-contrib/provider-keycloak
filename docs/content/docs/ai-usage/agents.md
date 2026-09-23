@@ -129,9 +129,15 @@ refreshes it before diffing, so an already implemented resource is never
 reported as missing. `make generated-lst-check` fails CI when the committed
 file is stale.
 
+The script also runs a second pass over the [config audit](../developing/config-audit.md)
+report and files one issue per actionable `drift` / `missing-multitype`
+finding — resources that *are* exposed but whose reference wiring is
+incomplete. Those issues are deduplicated by an embedded
+`<!-- config-audit-key: ... -->` marker instead of by resource name.
+
 - On `pull_request`, it only runs in dry-run mode (reports only, creates
-  nothing) when the automation itself changes (the script or the workflow
-  file) — not on every PR.
+  nothing) when the automation itself changes (the script, the audit packages
+  or the workflow file) — not on every PR.
 - On a weekly `schedule`, on `push` to `main` that touches the `Makefile`
   (a Terraform provider version bump), and on manual `workflow_dispatch`, it
   creates real issues.

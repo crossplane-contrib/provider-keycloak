@@ -162,6 +162,13 @@ can never be reported as missing.
 - Dedup is based on whether the exact resource name (as a whole token, not a
   substring) already appears in an open issue's title or body.
 
+The same script runs a second pass over `make config-audit --format=json`
+(see `docs/content/docs/developing/config-audit.md`) and files one issue per
+actionable `drift` / `missing-multitype` finding, i.e. for resources that *are*
+exposed but whose reference wiring is incomplete. Those issues are deduplicated
+by an embedded `<!-- config-audit-key: ... -->` marker rather than by resource
+name. Use `--skip-coverage` / `--skip-config-audit` to run only one pass.
+
 ## Cross-Resource References
 
 References are wired in `config/<group>/config.go` via `r.References`:
