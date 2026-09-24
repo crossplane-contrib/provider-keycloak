@@ -123,6 +123,7 @@ handle_options "$@"
 
 echo "Cluster name: $CLUSTER_NAME"
 echo "Keycloak version: $KEYCLOAK_VERSION"
+export KEYCLOAK_VERSION
 
 if [ "$FGAP_VERSION" != "v1" ] && [ "$FGAP_VERSION" != "v2" ]; then
   echo "Invalid fgap version: $FGAP_VERSION (expected v1 or v2)" >&2
@@ -337,6 +338,14 @@ export KEYCLOAK_PORT=$($kubectl_cmd -n keycloak get svc keycloak-keycloakx-http 
 export KEYCLOAK_USER=admin
 export KEYCLOAK_PASSWORD=admin
 fi
+
+echo "* Creating deterministic Keycloak bootstrap admin credentials secret..."
+$kubectl_cmd -n keycloak create secret generic keycloak-credentials \
+  --from-literal=username="${KEYCLOAK_USER}" \
+  --from-literal=password="${KEYCLOAK_PASSWORD}" \
+  --from-literal=KC_BOOTSTRAP_ADMIN_USERNAME="${KEYCLOAK_USER}" \
+  --from-literal=KC_BOOTSTRAP_ADMIN_PASSWORD="${KEYCLOAK_PASSWORD}" \
+  --dry-run=client -o yaml | $kubectl_cmd apply -f -
 
 
 echo "########### Installing Crossplane ###########"

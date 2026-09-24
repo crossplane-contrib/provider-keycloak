@@ -1,0 +1,92 @@
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: restricted-realm-provider-config-403
+spec:
+  # Regression/documentation test for crossplane-contrib/provider-keycloak#742
+  # ("Configuration A"): a ProviderConfig whose service account is scoped
+  # entirely to a single realm (no master-realm or realm-management roles at
+  # all) can never successfully authenticate, because the provider's login
+  # handshake unconditionally calls Keycloak's /admin/serverinfo endpoint,
+  # which requires master-realm view-system/manage-realms roles. Keycloak
+  # returns 403 before any managed resource can be reconciled.
+  #
+  # This is a Keycloak server-side authorization constraint enforced in
+  # terraform-provider-keycloak's login() (an external Go module vendored by
+  # this provider, not a local fork) — it cannot be fixed in
+  # provider-keycloak. This test documents and asserts the failure mode
+  # described in docs/content/docs/using/reference/provider-config.md's
+  # "Scoping the Provider to a Single Realm" section, so a future fix
+  # (upstream or here) that silently changes this behavior gets noticed.
+  #
+  # Requires a cluster with the provider deployed and the "keycloak-provider-
+  # config" admin ProviderConfig already applied — the same prerequisites as
+  # the `uptest` and `uptest-conversion` targets.
+  timeouts:
+    assert: 5m
+    exec: 5m
+  steps:
+    - name: bootstrap-a-fully-realm-scoped-service-account
+      try:
+        - script:
+            content: ./bootstrap.sh
+            check:
+              ($error == null): true
+
+    - name: point-a-restricted-providerconfig-at-that-client
+      try:
+        - apply:
+            resource:
+              apiVersion: keycloak.crossplane.io/v1beta1
+              kind: ProviderConfig
+              metadata:
+                name: restrictedrealmprovider742-provider-config
+              spec:
+                credentials:
+                  source: Secret
+                  secretRef:
+                    name: restrictedrealmprovider742-credentials
+                    key: credentials
+                    namespace: crossplane-system
+
+    - name: assert-the-known-403-limitation
+      try:
+        - apply:
+            resource:
+              apiVersion: group.keycloak.crossplane.io/v1alpha1
+              kind: Group
+              metadata:
+                name: restrictedrealmprovider742-probe-group
+              spec:
+                deletionPolicy: Orphan
+                forProvider:
+                  name: restrictedrealmprovider742-probe-group
+                  realmId: restrictedrealmprovider742
+                providerConfigRef:
+                  name: restrictedrealmprovider742-provider-config
+        - assert:
+            resource:
+              apiVersion: group.keycloak.crossplane.io/v1alpha1
+              kind: Group
+              metadata:
+                name: restrictedrealmprovider742-probe-group
+              status:
+                conditions:
+                  - type: Synced
+                    status: "False"
+                    "(contains(message, '/admin/serverinfo') && contains(message, '403 Forbidden'))": true
+        - delete:
+            ref:
+              apiVersion: group.keycloak.crossplane.io/v1alpha1
+              kind: Group
+              name: restrictedrealmprovider742-probe-group
+        - delete:
+            ref:
+              apiVersion: keycloak.crossplane.io/v1beta1
+              kind: ProviderConfig
+              name: restrictedrealmprovider742-provider-config
+      finally:
+        - script:
+            content: ./cleanup.sh
+            check:
+              ($error == null): true
