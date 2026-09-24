@@ -161,47 +161,84 @@ spec:
 
 ## Scoping the Provider to a Single Realm
 
-Keycloak's `/admin/serverinfo` endpoint (used once, on initial login, to
-detect the server version) is a **global**, master-realm-only endpoint — it
-cannot be scoped to a single realm. This has two practical consequences when
-you try to restrict the provider's service account so it can only administer
-one non-master realm (say, `demo`), as described in
-[crossplane-contrib/provider-keycloak#742](https://github.com/crossplane-contrib/provider-keycloak/issues/742).
+To restrict the provider to one non-master realm, create its service-account
+client in `master`, then grant that service account only the roles it needs
+from the target realm's admin client. Do not create the client in the target
+realm: Keycloak's `/admin/serverinfo` endpoint is global and requires a client
+in `master` during the initial login.
 
-### Service account confined entirely to the `demo` realm
+The following example configures a client in `master` that can administer the
+`demo` realm. Adjust the role list to the resources that you intend to manage.
+The `demo-realm` client is the built-in admin client for the `demo` realm; use
+the corresponding admin client ID if your realm uses a different name.
 
-If the client used by the `ProviderConfig` lives in, and only has roles
-scoped to, the `demo` realm, login fails immediately with:
+### 1. Create the service account and grant realm roles
 
-```text
-failed to perform initial login to Keycloak:
-error sending GET request to /admin/serverinfo: 403 Forbidden
+```terraform
+resource "keycloak_openid_client" "crossplane_provider" {
+  realm_id  = keycloak_realm.master.id
+  name      = "Crossplane Provider"
+  client_id = "crossplane-provider"
+
+  enabled                   = true
+  access_type               = "CONFIDENTIAL"
+  standard_flow_enabled    = false
+  service_accounts_enabled = true
+}
+
+data "keycloak_openid_client" "demo_realm_admin_client" {
+  realm_id  = keycloak_realm.master.id
+  client_id = "demo-realm"
+}
+
+data "keycloak_role" "demo_realm_admin_roles" {
+  for_each = toset([
+    "create-client",
+    "manage-authorization",
+    "manage-clients",
+    "manage-events",
+    "manage-organizations",
+    "manage-realm",
+    "manage-users",
+    "query-clients",
+    "query-groups",
+    "query-organizations",
+    "query-realms",
+    "query-users",
+    "view-authorization",
+    "view-clients",
+    "view-events",
+    "view-identity-providers",
+    "view-organizations",
+    "view-realm",
+    "view-users",
+  ])
+
+  realm_id  = keycloak_realm.master.id
+  client_id = data.keycloak_openid_client.demo_realm_admin_client.id
+  name      = each.value
+}
+
+resource "keycloak_user_roles" "crossplane_provider_service_account" {
+  realm_id = keycloak_realm.master.id
+  user_id  = keycloak_openid_client.crossplane_provider.service_account_user_id
+
+  role_ids = [
+    for role in data.keycloak_role.demo_realm_admin_roles : role.id
+  ]
+}
 ```
 
-This happens because `/admin/serverinfo` requires the `view-system` role (or,
-since Keycloak 26.5.4, `manage-realms`) from the **master realm's**
-`master-realm` client — a role that cannot be granted to a service account
-that only holds `demo`-realm-scoped roles. There is currently no way to work
-around this: the provider must authenticate with a client that has at least
-one of those two roles in `master`.
+Apply this configuration and obtain the generated client secret. The client
+must be in the `master` realm, and the `realm_id` values for the admin roles
+must refer to `master`; the roles themselves belong to the `demo-realm` admin
+client and authorize operations in `demo`.
 
-### Service account in `master`, but only with `demo`-realm-admin roles
+### 2. Create the credentials Secret
 
-A client created in the `master` realm whose service account is only granted
-roles from the `demo` realm's admin client (e.g. `manage-realm`,
-`manage-clients`, `manage-users`, ...) can reach `/admin/serverinfo`
-successfully, but the response has an empty version field, because the
-account still lacks `view-system`/`manage-realms`. Older provider builds
-failed with:
-
-```text
-failed to perform initial login to Keycloak: malformed version: []
-```
-
-**This case is fixed** by setting the `keycloak_version` credential key (see
-[Supported Credential Keys](#supported-credential-keys)) to the version of
-your Keycloak server. When the server reports an empty version, the provider
-falls back to this configured value instead of failing:
+Set `keycloak_version` to the actual Keycloak server version. This is required
+when the service account can administer `demo` but cannot read the version from
+`/admin/serverinfo`.
 
 ```yaml
 apiVersion: v1
@@ -211,36 +248,54 @@ metadata:
   namespace: crossplane-system
 type: Opaque
 stringData:
-  client_id: "crossplane-provider"
-  client_secret: "<client-secret>"
-  url: "https://keycloak.example.com"
-  realm: "master"
-  keycloak_version: "26.6.2"
+  credentials: |
+    {
+      "client_id": "crossplane-provider",
+      "client_secret": "<client-secret-from-keycloak>",
+      "url": "https://keycloak.example.com",
+      "realm": "master",
+      "keycloak_version": "26.6.2"
+    }
 ```
 
-With `keycloak_version` set, this client can successfully log in and manage
-only the resources its service account roles permit (e.g. everything under
-the `demo` realm), without holding broader administrative access to other
+### 3. Create the ProviderConfig
+
+```yaml
+apiVersion: keycloak.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: keycloak-demo-provider
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: keycloak-credentials
+      key: credentials
+      namespace: crossplane-system
+```
+
+Apply the Secret and ProviderConfig, then reference the ProviderConfig from
+resources in the `demo` realm:
+
+```yaml
+spec:
+  forProvider:
+    realmId: demo
+  providerConfigRef:
+    name: keycloak-demo-provider
+```
+
+The provider authenticates in `master`, but the service account has only the
+roles granted through the `demo-realm` admin client. It can therefore manage
+the permitted resources in `demo` without broad administrator access to other
 realms.
 
-### Known limitation
+### Unsupported configuration
 
-A service account with **no** roles in `master` at all (the fully
-realm-scoped setup above) cannot be supported without changes to the
-underlying [`terraform-provider-keycloak`](https://github.com/keycloak/terraform-provider-keycloak)
-client, which currently treats any non-2xx response from
-`/admin/serverinfo` — including on the initial login handshake — as fatal.
-Until that is addressed upstream, a single-realm-only `ProviderConfig` must
-use a client credential located in `master`, granted only the target
-realm's admin-client roles (Configuration B above) plus `keycloak_version`
-set explicitly.
-
-Configuration A's 403 failure mode is covered by the standalone
-`cluster/test/restrictedrealmprovider/` chainsaw suite. The
-`keycloak_version` forwarding that makes Configuration B work is covered by
-unit tests in `internal/clients/keycloak_test.go`, and the existing
-`dev/demos/basic/087-nonmaster-provider.yaml` demo (plus its namespaced
-equivalent) provides end-to-end coverage for the same empty-version fallback
-behavior on Keycloak >= 26.4. See [End-to-End Tests](../../developing/e2e-tests.md#standalone-chainsaw-suites)
-for details.
+A client created in `demo` with no roles in `master` cannot be used for this
+purpose. Its initial request to `/admin/serverinfo` fails with `403 Forbidden`
+before `keycloak_version` can be used. This is a limitation of the underlying
+[`terraform-provider-keycloak`](https://github.com/keycloak/terraform-provider-keycloak)
+client, not a ProviderConfig setting. See [End-to-End Tests](../../developing/e2e-tests.md#standalone-chainsaw-suites)
+for the regression test covering this limitation.
 
