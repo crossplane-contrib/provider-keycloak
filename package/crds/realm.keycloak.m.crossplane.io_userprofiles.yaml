@@ -112,6 +112,7 @@ spec:
                                 type: array
                                 x-kubernetes-list-type: set
                             type: object
+                          maxItems: 1
                           type: array
                         requiredForRoles:
                           description: A list of roles for which the attribute will
@@ -325,6 +326,7 @@ spec:
                                 type: array
                                 x-kubernetes-list-type: set
                             type: object
+                          maxItems: 1
                           type: array
                         requiredForRoles:
                           description: A list of roles for which the attribute will
@@ -588,6 +590,7 @@ spec:
                                 type: array
                                 x-kubernetes-list-type: set
                             type: object
+                          maxItems: 1
                           type: array
                         requiredForRoles:
                           description: A list of roles for which the attribute will
