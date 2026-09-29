@@ -18,3 +18,7 @@ dev/e2e-broken
 docs/public/
 docs/resources/_gen/
 docs/.hugo_build.lock
+
+# Python bytecode caches (scripts/)
+__pycache__/
+*.py[cod]
