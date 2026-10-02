@@ -51,7 +51,6 @@ func main() {
 		os.Exit(1)
 	}
 	patched := 0
-	permissionsPatched := 0
 	for _, e := range entries {
 		if e.IsDir() || filepath.Ext(e.Name()) != ".yaml" {
 			continue
@@ -65,19 +64,8 @@ func main() {
 		if ok {
 			patched++
 		}
-		if e.Name() == "realm.keycloak.crossplane.io_userprofiles.yaml" || e.Name() == "realm.keycloak.m.crossplane.io_userprofiles.yaml" {
-			changed, err := patchUserProfilePermissions(p)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "cannot patch %s: %v\n", p, err)
-				os.Exit(1)
-			}
-			if changed {
-				permissionsPatched++
-			}
-		}
 	}
 	fmt.Printf("Enabled the conversion webhook for %d multi-version CRD(s)\n", patched)
-	fmt.Printf("Added UserProfile permissions limits to %d CRD(s)\n", permissionsPatched)
 }
 
 func patch(path string) (bool, error) {
@@ -106,37 +94,4 @@ func patch(path string) (bool, error) {
 	sb.WriteString(conversionStanza)
 	sb.Write(b[i+len(marker):])
 	return true, os.WriteFile(path, []byte(sb.String()), 0o644) //nolint:gosec // generated CRD files are world-readable
-}
-
-func patchUserProfilePermissions(path string) (bool, error) {
-	b, err := os.ReadFile(path) //nolint:gosec // the path is a generated CRD file
-	if err != nil {
-		return false, err
-	}
-	lines := strings.SplitAfter(string(b), "\n")
-	changed := false
-	for i := 0; i < len(lines); i++ {
-		if !strings.HasSuffix(lines[i], "permissions:\n") {
-			continue
-		}
-		indent := len(lines[i]) - len(strings.TrimLeft(lines[i], " "))
-		for j := i + 1; j < len(lines); j++ {
-			lineIndent := len(lines[j]) - len(strings.TrimLeft(lines[j], " "))
-			if lineIndent <= indent && strings.TrimSpace(lines[j]) != "" {
-				break
-			}
-			if strings.TrimSpace(lines[j]) == "type: array" && lineIndent == indent+2 {
-				if j > i+1 && strings.TrimSpace(lines[j-1]) == "maxItems: 1" {
-					break
-				}
-				lines[j] = strings.Repeat(" ", lineIndent) + "maxItems: 1\n" + lines[j]
-				changed = true
-				break
-			}
-		}
-	}
-	if !changed {
-		return false, nil
-	}
-	return true, os.WriteFile(path, []byte(strings.Join(lines, "")), 0o644) //nolint:gosec // generated CRD files are world-readable
 }
