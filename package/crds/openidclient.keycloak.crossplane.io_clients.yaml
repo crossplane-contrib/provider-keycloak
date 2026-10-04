@@ -6,6 +6,14 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.20.0
   name: clients.openidclient.keycloak.crossplane.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          path: /convert
+      conversionReviewVersions:
+      - v1
   group: openidclient.keycloak.crossplane.io
   names:
     categories:
