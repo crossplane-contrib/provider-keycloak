@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type RoleMapperInitParameters struct {
@@ -24,11 +23,11 @@ type RoleMapperInitParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The ID of the client scope this role mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
 	// The destination client scope of the role. Cannot be used at the same time as client_id.
@@ -37,11 +36,11 @@ type RoleMapperInitParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// The realm this role mapper exists within.
 	// The realm id where the associated client or client scope exists.
@@ -50,11 +49,11 @@ type RoleMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the role to be added to this role mapper.
 	// Id of the role to assign
@@ -63,11 +62,11 @@ type RoleMapperInitParameters struct {
 
 	// Reference to a Role in role to populate roleId.
 	// +kubebuilder:validation:Optional
-	RoleIDRef *v1.NamespacedReference `json:"roleIdRef,omitempty" tf:"-"`
+	RoleIDRef *v2.NamespacedReference `json:"roleIdRef,omitempty" tf:"-"`
 
 	// Selector for a Role in role to populate roleId.
 	// +kubebuilder:validation:Optional
-	RoleIDSelector *v1.NamespacedSelector `json:"roleIdSelector,omitempty" tf:"-"`
+	RoleIDSelector *v2.NamespacedSelector `json:"roleIdSelector,omitempty" tf:"-"`
 
 	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The destination client of the role. Cannot be used at the same time as client_scope_id.
@@ -77,11 +76,11 @@ type RoleMapperInitParameters struct {
 
 	// Reference to a Client in samlclient to populate samlClientId.
 	// +kubebuilder:validation:Optional
-	SAMLClientIDRef *v1.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
+	SAMLClientIDRef *v2.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in samlclient to populate samlClientId.
 	// +kubebuilder:validation:Optional
-	SAMLClientIDSelector *v1.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
+	SAMLClientIDSelector *v2.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
 
 	// The ID of the client scope this role mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
 	// The destination client scope of the role. Cannot be used at the same time as client_id.
@@ -90,11 +89,11 @@ type RoleMapperInitParameters struct {
 
 	// Reference to a ClientScope in samlclient to populate samlClientScopeId.
 	// +kubebuilder:validation:Optional
-	SAMLClientScopeIDRef *v1.NamespacedReference `json:"samlClientScopeIdRef,omitempty" tf:"-"`
+	SAMLClientScopeIDRef *v2.NamespacedReference `json:"samlClientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in samlclient to populate samlClientScopeId.
 	// +kubebuilder:validation:Optional
-	SAMLClientScopeIDSelector *v1.NamespacedSelector `json:"samlClientScopeIdSelector,omitempty" tf:"-"`
+	SAMLClientScopeIDSelector *v2.NamespacedSelector `json:"samlClientScopeIdSelector,omitempty" tf:"-"`
 }
 
 type RoleMapperObservation struct {
@@ -137,11 +136,11 @@ type RoleMapperParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The ID of the client scope this role mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
 	// The destination client scope of the role. Cannot be used at the same time as client_id.
@@ -151,11 +150,11 @@ type RoleMapperParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// The realm this role mapper exists within.
 	// The realm id where the associated client or client scope exists.
@@ -165,11 +164,11 @@ type RoleMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the role to be added to this role mapper.
 	// Id of the role to assign
@@ -179,11 +178,11 @@ type RoleMapperParameters struct {
 
 	// Reference to a Role in role to populate roleId.
 	// +kubebuilder:validation:Optional
-	RoleIDRef *v1.NamespacedReference `json:"roleIdRef,omitempty" tf:"-"`
+	RoleIDRef *v2.NamespacedReference `json:"roleIdRef,omitempty" tf:"-"`
 
 	// Selector for a Role in role to populate roleId.
 	// +kubebuilder:validation:Optional
-	RoleIDSelector *v1.NamespacedSelector `json:"roleIdSelector,omitempty" tf:"-"`
+	RoleIDSelector *v2.NamespacedSelector `json:"roleIdSelector,omitempty" tf:"-"`
 
 	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The destination client of the role. Cannot be used at the same time as client_scope_id.
@@ -194,11 +193,11 @@ type RoleMapperParameters struct {
 
 	// Reference to a Client in samlclient to populate samlClientId.
 	// +kubebuilder:validation:Optional
-	SAMLClientIDRef *v1.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
+	SAMLClientIDRef *v2.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in samlclient to populate samlClientId.
 	// +kubebuilder:validation:Optional
-	SAMLClientIDSelector *v1.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
+	SAMLClientIDSelector *v2.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
 
 	// The ID of the client scope this role mapper should be added to. Conflicts with client_id. This argument is required if client_id is not set.
 	// The destination client scope of the role. Cannot be used at the same time as client_id.
@@ -208,11 +207,11 @@ type RoleMapperParameters struct {
 
 	// Reference to a ClientScope in samlclient to populate samlClientScopeId.
 	// +kubebuilder:validation:Optional
-	SAMLClientScopeIDRef *v1.NamespacedReference `json:"samlClientScopeIdRef,omitempty" tf:"-"`
+	SAMLClientScopeIDRef *v2.NamespacedReference `json:"samlClientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in samlclient to populate samlClientScopeId.
 	// +kubebuilder:validation:Optional
-	SAMLClientScopeIDSelector *v1.NamespacedSelector `json:"samlClientScopeIdSelector,omitempty" tf:"-"`
+	SAMLClientScopeIDSelector *v2.NamespacedSelector `json:"samlClientScopeIdSelector,omitempty" tf:"-"`
 }
 
 // RoleMapperSpec defines the desired state of RoleMapper
@@ -234,8 +233,8 @@ type RoleMapperSpec struct {
 
 // RoleMapperStatus defines the observed state of RoleMapper.
 type RoleMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        RoleMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               RoleMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

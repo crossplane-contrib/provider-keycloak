@@ -10,8 +10,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v1 "github.com/crossplane/crossplane/apis/v2/core/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type IdentityProviderInitParameters struct {
@@ -564,8 +564,8 @@ type IdentityProviderSpec struct {
 
 // IdentityProviderStatus defines the observed state of IdentityProvider.
 type IdentityProviderStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        IdentityProviderObservation `json:"atProvider,omitempty"`
+	v1.ManagedResourceStatus `json:",inline"`
+	AtProvider               IdentityProviderObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

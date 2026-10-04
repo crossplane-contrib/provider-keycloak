@@ -9,7 +9,7 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 import (
-	"github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	"github.com/crossplane/crossplane/apis/v2/core/v2"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -50,12 +50,12 @@ func (in *BindingsInitParameters) DeepCopyInto(out *BindingsInitParameters) {
 	}
 	if in.BrowserFlowRef != nil {
 		in, out := &in.BrowserFlowRef, &out.BrowserFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.BrowserFlowSelector != nil {
 		in, out := &in.BrowserFlowSelector, &out.BrowserFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientAuthenticationFlow != nil {
@@ -65,12 +65,12 @@ func (in *BindingsInitParameters) DeepCopyInto(out *BindingsInitParameters) {
 	}
 	if in.ClientAuthenticationFlowRef != nil {
 		in, out := &in.ClientAuthenticationFlowRef, &out.ClientAuthenticationFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientAuthenticationFlowSelector != nil {
 		in, out := &in.ClientAuthenticationFlowSelector, &out.ClientAuthenticationFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.DirectGrantFlow != nil {
@@ -80,12 +80,12 @@ func (in *BindingsInitParameters) DeepCopyInto(out *BindingsInitParameters) {
 	}
 	if in.DirectGrantFlowRef != nil {
 		in, out := &in.DirectGrantFlowRef, &out.DirectGrantFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.DirectGrantFlowSelector != nil {
 		in, out := &in.DirectGrantFlowSelector, &out.DirectGrantFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.DockerAuthenticationFlow != nil {
@@ -95,12 +95,12 @@ func (in *BindingsInitParameters) DeepCopyInto(out *BindingsInitParameters) {
 	}
 	if in.DockerAuthenticationFlowRef != nil {
 		in, out := &in.DockerAuthenticationFlowRef, &out.DockerAuthenticationFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.DockerAuthenticationFlowSelector != nil {
 		in, out := &in.DockerAuthenticationFlowSelector, &out.DockerAuthenticationFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FirstBrokerLoginFlow != nil {
@@ -115,12 +115,12 @@ func (in *BindingsInitParameters) DeepCopyInto(out *BindingsInitParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RegistrationFlow != nil {
@@ -130,12 +130,12 @@ func (in *BindingsInitParameters) DeepCopyInto(out *BindingsInitParameters) {
 	}
 	if in.RegistrationFlowRef != nil {
 		in, out := &in.RegistrationFlowRef, &out.RegistrationFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RegistrationFlowSelector != nil {
 		in, out := &in.RegistrationFlowSelector, &out.RegistrationFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ResetCredentialsFlow != nil {
@@ -145,12 +145,12 @@ func (in *BindingsInitParameters) DeepCopyInto(out *BindingsInitParameters) {
 	}
 	if in.ResetCredentialsFlowRef != nil {
 		in, out := &in.ResetCredentialsFlowRef, &out.ResetCredentialsFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ResetCredentialsFlowSelector != nil {
 		in, out := &in.ResetCredentialsFlowSelector, &out.ResetCredentialsFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -267,12 +267,12 @@ func (in *BindingsParameters) DeepCopyInto(out *BindingsParameters) {
 	}
 	if in.BrowserFlowRef != nil {
 		in, out := &in.BrowserFlowRef, &out.BrowserFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.BrowserFlowSelector != nil {
 		in, out := &in.BrowserFlowSelector, &out.BrowserFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientAuthenticationFlow != nil {
@@ -282,12 +282,12 @@ func (in *BindingsParameters) DeepCopyInto(out *BindingsParameters) {
 	}
 	if in.ClientAuthenticationFlowRef != nil {
 		in, out := &in.ClientAuthenticationFlowRef, &out.ClientAuthenticationFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientAuthenticationFlowSelector != nil {
 		in, out := &in.ClientAuthenticationFlowSelector, &out.ClientAuthenticationFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.DirectGrantFlow != nil {
@@ -297,12 +297,12 @@ func (in *BindingsParameters) DeepCopyInto(out *BindingsParameters) {
 	}
 	if in.DirectGrantFlowRef != nil {
 		in, out := &in.DirectGrantFlowRef, &out.DirectGrantFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.DirectGrantFlowSelector != nil {
 		in, out := &in.DirectGrantFlowSelector, &out.DirectGrantFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.DockerAuthenticationFlow != nil {
@@ -312,12 +312,12 @@ func (in *BindingsParameters) DeepCopyInto(out *BindingsParameters) {
 	}
 	if in.DockerAuthenticationFlowRef != nil {
 		in, out := &in.DockerAuthenticationFlowRef, &out.DockerAuthenticationFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.DockerAuthenticationFlowSelector != nil {
 		in, out := &in.DockerAuthenticationFlowSelector, &out.DockerAuthenticationFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FirstBrokerLoginFlow != nil {
@@ -332,12 +332,12 @@ func (in *BindingsParameters) DeepCopyInto(out *BindingsParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RegistrationFlow != nil {
@@ -347,12 +347,12 @@ func (in *BindingsParameters) DeepCopyInto(out *BindingsParameters) {
 	}
 	if in.RegistrationFlowRef != nil {
 		in, out := &in.RegistrationFlowRef, &out.RegistrationFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RegistrationFlowSelector != nil {
 		in, out := &in.RegistrationFlowSelector, &out.RegistrationFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ResetCredentialsFlow != nil {
@@ -362,12 +362,12 @@ func (in *BindingsParameters) DeepCopyInto(out *BindingsParameters) {
 	}
 	if in.ResetCredentialsFlowRef != nil {
 		in, out := &in.ResetCredentialsFlowRef, &out.ResetCredentialsFlowRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ResetCredentialsFlowSelector != nil {
 		in, out := &in.ResetCredentialsFlowSelector, &out.ResetCredentialsFlowSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -385,7 +385,7 @@ func (in *BindingsParameters) DeepCopy() *BindingsParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *BindingsSpec) DeepCopyInto(out *BindingsSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -403,7 +403,7 @@ func (in *BindingsSpec) DeepCopy() *BindingsSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *BindingsStatus) DeepCopyInto(out *BindingsStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -502,12 +502,12 @@ func (in *ExecutionConfigInitParameters) DeepCopyInto(out *ExecutionConfigInitPa
 	}
 	if in.ExecutionIDRef != nil {
 		in, out := &in.ExecutionIDRef, &out.ExecutionIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ExecutionIDSelector != nil {
 		in, out := &in.ExecutionIDSelector, &out.ExecutionIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
@@ -517,12 +517,12 @@ func (in *ExecutionConfigInitParameters) DeepCopyInto(out *ExecutionConfigInitPa
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -651,12 +651,12 @@ func (in *ExecutionConfigParameters) DeepCopyInto(out *ExecutionConfigParameters
 	}
 	if in.ExecutionIDRef != nil {
 		in, out := &in.ExecutionIDRef, &out.ExecutionIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ExecutionIDSelector != nil {
 		in, out := &in.ExecutionIDSelector, &out.ExecutionIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
@@ -666,12 +666,12 @@ func (in *ExecutionConfigParameters) DeepCopyInto(out *ExecutionConfigParameters
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -689,7 +689,7 @@ func (in *ExecutionConfigParameters) DeepCopy() *ExecutionConfigParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *ExecutionConfigSpec) DeepCopyInto(out *ExecutionConfigSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -707,7 +707,7 @@ func (in *ExecutionConfigSpec) DeepCopy() *ExecutionConfigSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *ExecutionConfigStatus) DeepCopyInto(out *ExecutionConfigStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -736,12 +736,12 @@ func (in *ExecutionInitParameters) DeepCopyInto(out *ExecutionInitParameters) {
 	}
 	if in.ParentFlowAliasRef != nil {
 		in, out := &in.ParentFlowAliasRef, &out.ParentFlowAliasRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ParentFlowAliasSelector != nil {
 		in, out := &in.ParentFlowAliasSelector, &out.ParentFlowAliasSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ParentSubflowAlias != nil {
@@ -751,12 +751,12 @@ func (in *ExecutionInitParameters) DeepCopyInto(out *ExecutionInitParameters) {
 	}
 	if in.ParentSubflowAliasRef != nil {
 		in, out := &in.ParentSubflowAliasRef, &out.ParentSubflowAliasRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ParentSubflowAliasSelector != nil {
 		in, out := &in.ParentSubflowAliasSelector, &out.ParentSubflowAliasSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Priority != nil {
@@ -771,12 +771,12 @@ func (in *ExecutionInitParameters) DeepCopyInto(out *ExecutionInitParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Requirement != nil {
@@ -893,12 +893,12 @@ func (in *ExecutionParameters) DeepCopyInto(out *ExecutionParameters) {
 	}
 	if in.ParentFlowAliasRef != nil {
 		in, out := &in.ParentFlowAliasRef, &out.ParentFlowAliasRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ParentFlowAliasSelector != nil {
 		in, out := &in.ParentFlowAliasSelector, &out.ParentFlowAliasSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ParentSubflowAlias != nil {
@@ -908,12 +908,12 @@ func (in *ExecutionParameters) DeepCopyInto(out *ExecutionParameters) {
 	}
 	if in.ParentSubflowAliasRef != nil {
 		in, out := &in.ParentSubflowAliasRef, &out.ParentSubflowAliasRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ParentSubflowAliasSelector != nil {
 		in, out := &in.ParentSubflowAliasSelector, &out.ParentSubflowAliasSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Priority != nil {
@@ -928,12 +928,12 @@ func (in *ExecutionParameters) DeepCopyInto(out *ExecutionParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Requirement != nil {
@@ -956,7 +956,7 @@ func (in *ExecutionParameters) DeepCopy() *ExecutionParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *ExecutionSpec) DeepCopyInto(out *ExecutionSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -974,7 +974,7 @@ func (in *ExecutionSpec) DeepCopy() *ExecutionSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *ExecutionStatus) DeepCopyInto(out *ExecutionStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -1040,12 +1040,12 @@ func (in *FlowInitParameters) DeepCopyInto(out *FlowInitParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1157,12 +1157,12 @@ func (in *FlowParameters) DeepCopyInto(out *FlowParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1180,7 +1180,7 @@ func (in *FlowParameters) DeepCopy() *FlowParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *FlowSpec) DeepCopyInto(out *FlowSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -1198,7 +1198,7 @@ func (in *FlowSpec) DeepCopy() *FlowSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *FlowStatus) DeepCopyInto(out *FlowStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -1264,12 +1264,12 @@ func (in *SubflowInitParameters) DeepCopyInto(out *SubflowInitParameters) {
 	}
 	if in.ParentFlowAliasRef != nil {
 		in, out := &in.ParentFlowAliasRef, &out.ParentFlowAliasRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ParentFlowAliasSelector != nil {
 		in, out := &in.ParentFlowAliasSelector, &out.ParentFlowAliasSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Priority != nil {
@@ -1289,12 +1289,12 @@ func (in *SubflowInitParameters) DeepCopyInto(out *SubflowInitParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Requirement != nil {
@@ -1431,12 +1431,12 @@ func (in *SubflowParameters) DeepCopyInto(out *SubflowParameters) {
 	}
 	if in.ParentFlowAliasRef != nil {
 		in, out := &in.ParentFlowAliasRef, &out.ParentFlowAliasRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ParentFlowAliasSelector != nil {
 		in, out := &in.ParentFlowAliasSelector, &out.ParentFlowAliasSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Priority != nil {
@@ -1456,12 +1456,12 @@ func (in *SubflowParameters) DeepCopyInto(out *SubflowParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Requirement != nil {
@@ -1484,7 +1484,7 @@ func (in *SubflowParameters) DeepCopy() *SubflowParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *SubflowSpec) DeepCopyInto(out *SubflowSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -1502,7 +1502,7 @@ func (in *SubflowSpec) DeepCopy() *SubflowSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *SubflowStatus) DeepCopyInto(out *SubflowStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 

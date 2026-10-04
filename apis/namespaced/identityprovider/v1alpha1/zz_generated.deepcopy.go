@@ -9,7 +9,7 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 import (
-	"github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	"github.com/crossplane/crossplane/apis/v2/core/v2"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -76,12 +76,12 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -91,12 +91,12 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -106,12 +106,12 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -121,12 +121,12 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -136,12 +136,12 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -151,12 +151,12 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -171,12 +171,12 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -186,12 +186,12 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAlias != nil {
@@ -201,12 +201,12 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -216,12 +216,12 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserSession != nil {
@@ -415,12 +415,12 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -430,12 +430,12 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -445,12 +445,12 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -460,12 +460,12 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -475,12 +475,12 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -490,12 +490,12 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -510,12 +510,12 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -525,12 +525,12 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAlias != nil {
@@ -540,12 +540,12 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -555,12 +555,12 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserSession != nil {
@@ -601,7 +601,7 @@ func (in *AttributeIdentityProviderMapperSpec) DeepCopy() *AttributeIdentityProv
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *AttributeIdentityProviderMapperStatus) DeepCopyInto(out *AttributeIdentityProviderMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -668,12 +668,12 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -683,12 +683,12 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -698,12 +698,12 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Group != nil {
@@ -718,12 +718,12 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -733,12 +733,12 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -748,12 +748,12 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -768,12 +768,12 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -783,12 +783,12 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAlias != nil {
@@ -798,12 +798,12 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -813,12 +813,12 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -987,12 +987,12 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -1002,12 +1002,12 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -1017,12 +1017,12 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Group != nil {
@@ -1037,12 +1037,12 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -1052,12 +1052,12 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -1067,12 +1067,12 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -1087,12 +1087,12 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -1102,12 +1102,12 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAlias != nil {
@@ -1117,12 +1117,12 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -1132,12 +1132,12 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1173,7 +1173,7 @@ func (in *GroupIdentityProviderMapperSpec) DeepCopy() *GroupIdentityProviderMapp
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *GroupIdentityProviderMapperStatus) DeepCopyInto(out *GroupIdentityProviderMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -1240,12 +1240,12 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -1255,12 +1255,12 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -1270,12 +1270,12 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -1285,12 +1285,12 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderMapper != nil {
@@ -1305,12 +1305,12 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -1320,12 +1320,12 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -1340,12 +1340,12 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -1355,12 +1355,12 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAlias != nil {
@@ -1370,12 +1370,12 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -1385,12 +1385,12 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1559,12 +1559,12 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -1574,12 +1574,12 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -1589,12 +1589,12 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -1604,12 +1604,12 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderMapper != nil {
@@ -1624,12 +1624,12 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -1639,12 +1639,12 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -1659,12 +1659,12 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -1674,12 +1674,12 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAlias != nil {
@@ -1689,12 +1689,12 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -1704,12 +1704,12 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1745,7 +1745,7 @@ func (in *IdentityProviderMapperSpec) DeepCopy() *IdentityProviderMapperSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *IdentityProviderMapperStatus) DeepCopyInto(out *IdentityProviderMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -1827,12 +1827,12 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -1842,12 +1842,12 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -1857,12 +1857,12 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -1872,12 +1872,12 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -1887,12 +1887,12 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -1902,12 +1902,12 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -1922,12 +1922,12 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -1937,12 +1937,12 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAlias != nil {
@@ -1952,12 +1952,12 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -1967,12 +1967,12 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserAttribute != nil {
@@ -2176,12 +2176,12 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -2191,12 +2191,12 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -2206,12 +2206,12 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -2221,12 +2221,12 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -2236,12 +2236,12 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -2251,12 +2251,12 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -2271,12 +2271,12 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -2286,12 +2286,12 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAlias != nil {
@@ -2301,12 +2301,12 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -2316,12 +2316,12 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserAttribute != nil {
@@ -2362,7 +2362,7 @@ func (in *ImporterIdentityProviderMapperSpec) DeepCopy() *ImporterIdentityProvid
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *ImporterIdentityProviderMapperStatus) DeepCopyInto(out *ImporterIdentityProviderMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -2454,12 +2454,12 @@ func (in *KubernetesIdentityProviderInitParameters) DeepCopyInto(out *Kubernetes
 	}
 	if in.FirstBrokerLoginFlowAliasRef != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasRef, &out.FirstBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FirstBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasSelector, &out.FirstBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GuiOrder != nil {
@@ -2494,12 +2494,12 @@ func (in *KubernetesIdentityProviderInitParameters) DeepCopyInto(out *Kubernetes
 	}
 	if in.OrganizationIDRef != nil {
 		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OrganizationIDSelector != nil {
 		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
@@ -2519,12 +2519,12 @@ func (in *KubernetesIdentityProviderInitParameters) DeepCopyInto(out *Kubernetes
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.StoreToken != nil {
@@ -2773,12 +2773,12 @@ func (in *KubernetesIdentityProviderParameters) DeepCopyInto(out *KubernetesIden
 	}
 	if in.FirstBrokerLoginFlowAliasRef != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasRef, &out.FirstBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FirstBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasSelector, &out.FirstBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GuiOrder != nil {
@@ -2813,12 +2813,12 @@ func (in *KubernetesIdentityProviderParameters) DeepCopyInto(out *KubernetesIden
 	}
 	if in.OrganizationIDRef != nil {
 		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OrganizationIDSelector != nil {
 		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
@@ -2838,12 +2838,12 @@ func (in *KubernetesIdentityProviderParameters) DeepCopyInto(out *KubernetesIden
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.StoreToken != nil {
@@ -2894,7 +2894,7 @@ func (in *KubernetesIdentityProviderSpec) DeepCopy() *KubernetesIdentityProvider
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *KubernetesIdentityProviderStatus) DeepCopyInto(out *KubernetesIdentityProviderStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -2963,7 +2963,7 @@ func (in *OidcOpenShiftV4IdentityProviderInitParameters) DeepCopyInto(out *OidcO
 		*out = new(string)
 		**out = **in
 	}
-	in.ClientSecretSecretRef.DeepCopyInto(&out.ClientSecretSecretRef)
+	out.ClientSecretSecretRef = in.ClientSecretSecretRef
 	if in.DefaultScopes != nil {
 		in, out := &in.DefaultScopes, &out.DefaultScopes
 		*out = new(string)
@@ -3002,12 +3002,12 @@ func (in *OidcOpenShiftV4IdentityProviderInitParameters) DeepCopyInto(out *OidcO
 	}
 	if in.FirstBrokerLoginFlowAliasRef != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasRef, &out.FirstBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FirstBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasSelector, &out.FirstBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GuiOrder != nil {
@@ -3042,12 +3042,12 @@ func (in *OidcOpenShiftV4IdentityProviderInitParameters) DeepCopyInto(out *OidcO
 	}
 	if in.OrganizationIDRef != nil {
 		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OrganizationIDSelector != nil {
 		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
@@ -3057,12 +3057,12 @@ func (in *OidcOpenShiftV4IdentityProviderInitParameters) DeepCopyInto(out *OidcO
 	}
 	if in.PostBrokerLoginFlowAliasRef != nil {
 		in, out := &in.PostBrokerLoginFlowAliasRef, &out.PostBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.PostBrokerLoginFlowAliasSelector, &out.PostBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ProviderID != nil {
@@ -3077,12 +3077,12 @@ func (in *OidcOpenShiftV4IdentityProviderInitParameters) DeepCopyInto(out *OidcO
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.StoreToken != nil {
@@ -3318,7 +3318,7 @@ func (in *OidcOpenShiftV4IdentityProviderParameters) DeepCopyInto(out *OidcOpenS
 		*out = new(string)
 		**out = **in
 	}
-	in.ClientSecretSecretRef.DeepCopyInto(&out.ClientSecretSecretRef)
+	out.ClientSecretSecretRef = in.ClientSecretSecretRef
 	if in.DefaultScopes != nil {
 		in, out := &in.DefaultScopes, &out.DefaultScopes
 		*out = new(string)
@@ -3357,12 +3357,12 @@ func (in *OidcOpenShiftV4IdentityProviderParameters) DeepCopyInto(out *OidcOpenS
 	}
 	if in.FirstBrokerLoginFlowAliasRef != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasRef, &out.FirstBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FirstBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasSelector, &out.FirstBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GuiOrder != nil {
@@ -3397,12 +3397,12 @@ func (in *OidcOpenShiftV4IdentityProviderParameters) DeepCopyInto(out *OidcOpenS
 	}
 	if in.OrganizationIDRef != nil {
 		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OrganizationIDSelector != nil {
 		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
@@ -3412,12 +3412,12 @@ func (in *OidcOpenShiftV4IdentityProviderParameters) DeepCopyInto(out *OidcOpenS
 	}
 	if in.PostBrokerLoginFlowAliasRef != nil {
 		in, out := &in.PostBrokerLoginFlowAliasRef, &out.PostBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.PostBrokerLoginFlowAliasSelector, &out.PostBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ProviderID != nil {
@@ -3432,12 +3432,12 @@ func (in *OidcOpenShiftV4IdentityProviderParameters) DeepCopyInto(out *OidcOpenS
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.StoreToken != nil {
@@ -3488,7 +3488,7 @@ func (in *OidcOpenShiftV4IdentityProviderSpec) DeepCopy() *OidcOpenShiftV4Identi
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *OidcOpenShiftV4IdentityProviderStatus) DeepCopyInto(out *OidcOpenShiftV4IdentityProviderStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -3545,14 +3545,14 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.ClientsRefs != nil {
 		in, out := &in.ClientsRefs, &out.ClientsRefs
-		*out = make([]v1.NamespacedReference, len(*in))
+		*out = make([]v2.NamespacedReference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.ClientsSelector != nil {
 		in, out := &in.ClientsSelector, &out.ClientsSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookProviderAlias != nil {
@@ -3562,12 +3562,12 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.FacebookProviderAliasRef != nil {
 		in, out := &in.FacebookProviderAliasRef, &out.FacebookProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookProviderAliasSelector != nil {
 		in, out := &in.FacebookProviderAliasSelector, &out.FacebookProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubProviderAlias != nil {
@@ -3577,12 +3577,12 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.GithubProviderAliasRef != nil {
 		in, out := &in.GithubProviderAliasRef, &out.GithubProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubProviderAliasSelector != nil {
 		in, out := &in.GithubProviderAliasSelector, &out.GithubProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleProviderAlias != nil {
@@ -3592,12 +3592,12 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.GoogleProviderAliasRef != nil {
 		in, out := &in.GoogleProviderAliasRef, &out.GoogleProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleProviderAliasSelector != nil {
 		in, out := &in.GoogleProviderAliasSelector, &out.GoogleProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesProviderAlias != nil {
@@ -3607,12 +3607,12 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.KubernetesProviderAliasRef != nil {
 		in, out := &in.KubernetesProviderAliasRef, &out.KubernetesProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesProviderAliasSelector != nil {
 		in, out := &in.KubernetesProviderAliasSelector, &out.KubernetesProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftProviderAlias != nil {
@@ -3622,12 +3622,12 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.MicrosoftProviderAliasRef != nil {
 		in, out := &in.MicrosoftProviderAliasRef, &out.MicrosoftProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftProviderAliasSelector != nil {
 		in, out := &in.MicrosoftProviderAliasSelector, &out.MicrosoftProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4ProviderAlias != nil {
@@ -3637,12 +3637,12 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.OpenshiftV4ProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4ProviderAliasRef, &out.OpenshiftV4ProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4ProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4ProviderAliasSelector, &out.OpenshiftV4ProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PolicyType != nil {
@@ -3657,12 +3657,12 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.ProviderAliasRef != nil {
 		in, out := &in.ProviderAliasRef, &out.ProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ProviderAliasSelector != nil {
 		in, out := &in.ProviderAliasSelector, &out.ProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
@@ -3672,12 +3672,12 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLProviderAlias != nil {
@@ -3687,12 +3687,12 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.SAMLProviderAliasRef != nil {
 		in, out := &in.SAMLProviderAliasRef, &out.SAMLProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLProviderAliasSelector != nil {
 		in, out := &in.SAMLProviderAliasSelector, &out.SAMLProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeProviderAlias != nil {
@@ -3702,12 +3702,12 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 	}
 	if in.SpiffeProviderAliasRef != nil {
 		in, out := &in.SpiffeProviderAliasRef, &out.SpiffeProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeProviderAliasSelector != nil {
 		in, out := &in.SpiffeProviderAliasSelector, &out.SpiffeProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -3876,14 +3876,14 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.ClientsRefs != nil {
 		in, out := &in.ClientsRefs, &out.ClientsRefs
-		*out = make([]v1.NamespacedReference, len(*in))
+		*out = make([]v2.NamespacedReference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.ClientsSelector != nil {
 		in, out := &in.ClientsSelector, &out.ClientsSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookProviderAlias != nil {
@@ -3893,12 +3893,12 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.FacebookProviderAliasRef != nil {
 		in, out := &in.FacebookProviderAliasRef, &out.FacebookProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookProviderAliasSelector != nil {
 		in, out := &in.FacebookProviderAliasSelector, &out.FacebookProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubProviderAlias != nil {
@@ -3908,12 +3908,12 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.GithubProviderAliasRef != nil {
 		in, out := &in.GithubProviderAliasRef, &out.GithubProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubProviderAliasSelector != nil {
 		in, out := &in.GithubProviderAliasSelector, &out.GithubProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleProviderAlias != nil {
@@ -3923,12 +3923,12 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.GoogleProviderAliasRef != nil {
 		in, out := &in.GoogleProviderAliasRef, &out.GoogleProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleProviderAliasSelector != nil {
 		in, out := &in.GoogleProviderAliasSelector, &out.GoogleProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesProviderAlias != nil {
@@ -3938,12 +3938,12 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.KubernetesProviderAliasRef != nil {
 		in, out := &in.KubernetesProviderAliasRef, &out.KubernetesProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesProviderAliasSelector != nil {
 		in, out := &in.KubernetesProviderAliasSelector, &out.KubernetesProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftProviderAlias != nil {
@@ -3953,12 +3953,12 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.MicrosoftProviderAliasRef != nil {
 		in, out := &in.MicrosoftProviderAliasRef, &out.MicrosoftProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftProviderAliasSelector != nil {
 		in, out := &in.MicrosoftProviderAliasSelector, &out.MicrosoftProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4ProviderAlias != nil {
@@ -3968,12 +3968,12 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.OpenshiftV4ProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4ProviderAliasRef, &out.OpenshiftV4ProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4ProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4ProviderAliasSelector, &out.OpenshiftV4ProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PolicyType != nil {
@@ -3988,12 +3988,12 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.ProviderAliasRef != nil {
 		in, out := &in.ProviderAliasRef, &out.ProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ProviderAliasSelector != nil {
 		in, out := &in.ProviderAliasSelector, &out.ProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
@@ -4003,12 +4003,12 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLProviderAlias != nil {
@@ -4018,12 +4018,12 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.SAMLProviderAliasRef != nil {
 		in, out := &in.SAMLProviderAliasRef, &out.SAMLProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLProviderAliasSelector != nil {
 		in, out := &in.SAMLProviderAliasSelector, &out.SAMLProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeProviderAlias != nil {
@@ -4033,12 +4033,12 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 	}
 	if in.SpiffeProviderAliasRef != nil {
 		in, out := &in.SpiffeProviderAliasRef, &out.SpiffeProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeProviderAliasSelector != nil {
 		in, out := &in.SpiffeProviderAliasSelector, &out.SpiffeProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -4074,7 +4074,7 @@ func (in *ProviderTokenExchangeScopePermissionSpec) DeepCopy() *ProviderTokenExc
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *ProviderTokenExchangeScopePermissionStatus) DeepCopyInto(out *ProviderTokenExchangeScopePermissionStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -4141,12 +4141,12 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -4156,12 +4156,12 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -4171,12 +4171,12 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -4186,12 +4186,12 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -4201,12 +4201,12 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -4216,12 +4216,12 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -4236,12 +4236,12 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -4251,12 +4251,12 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Role != nil {
@@ -4271,12 +4271,12 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -4286,12 +4286,12 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -4460,12 +4460,12 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -4475,12 +4475,12 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -4490,12 +4490,12 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -4505,12 +4505,12 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -4520,12 +4520,12 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -4535,12 +4535,12 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -4555,12 +4555,12 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -4570,12 +4570,12 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Role != nil {
@@ -4590,12 +4590,12 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -4605,12 +4605,12 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -4646,7 +4646,7 @@ func (in *RoleIdentityProviderMapperSpec) DeepCopy() *RoleIdentityProviderMapper
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *RoleIdentityProviderMapperStatus) DeepCopyInto(out *RoleIdentityProviderMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -4743,12 +4743,12 @@ func (in *SpiffeIdentityProviderInitParameters) DeepCopyInto(out *SpiffeIdentity
 	}
 	if in.FirstBrokerLoginFlowAliasRef != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasRef, &out.FirstBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FirstBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasSelector, &out.FirstBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GuiOrder != nil {
@@ -4778,12 +4778,12 @@ func (in *SpiffeIdentityProviderInitParameters) DeepCopyInto(out *SpiffeIdentity
 	}
 	if in.OrganizationIDRef != nil {
 		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OrganizationIDSelector != nil {
 		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
@@ -4793,12 +4793,12 @@ func (in *SpiffeIdentityProviderInitParameters) DeepCopyInto(out *SpiffeIdentity
 	}
 	if in.PostBrokerLoginFlowAliasRef != nil {
 		in, out := &in.PostBrokerLoginFlowAliasRef, &out.PostBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.PostBrokerLoginFlowAliasSelector, &out.PostBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ProviderID != nil {
@@ -4813,12 +4813,12 @@ func (in *SpiffeIdentityProviderInitParameters) DeepCopyInto(out *SpiffeIdentity
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.StoreToken != nil {
@@ -5082,12 +5082,12 @@ func (in *SpiffeIdentityProviderParameters) DeepCopyInto(out *SpiffeIdentityProv
 	}
 	if in.FirstBrokerLoginFlowAliasRef != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasRef, &out.FirstBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FirstBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasSelector, &out.FirstBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GuiOrder != nil {
@@ -5117,12 +5117,12 @@ func (in *SpiffeIdentityProviderParameters) DeepCopyInto(out *SpiffeIdentityProv
 	}
 	if in.OrganizationIDRef != nil {
 		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OrganizationIDSelector != nil {
 		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
@@ -5132,12 +5132,12 @@ func (in *SpiffeIdentityProviderParameters) DeepCopyInto(out *SpiffeIdentityProv
 	}
 	if in.PostBrokerLoginFlowAliasRef != nil {
 		in, out := &in.PostBrokerLoginFlowAliasRef, &out.PostBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.PostBrokerLoginFlowAliasSelector, &out.PostBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ProviderID != nil {
@@ -5152,12 +5152,12 @@ func (in *SpiffeIdentityProviderParameters) DeepCopyInto(out *SpiffeIdentityProv
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.StoreToken != nil {
@@ -5213,7 +5213,7 @@ func (in *SpiffeIdentityProviderSpec) DeepCopy() *SpiffeIdentityProviderSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *SpiffeIdentityProviderStatus) DeepCopyInto(out *SpiffeIdentityProviderStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -5280,12 +5280,12 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -5295,12 +5295,12 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -5310,12 +5310,12 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -5325,12 +5325,12 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -5340,12 +5340,12 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -5355,12 +5355,12 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -5375,12 +5375,12 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -5390,12 +5390,12 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAlias != nil {
@@ -5405,12 +5405,12 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -5420,12 +5420,12 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Template != nil {
@@ -5599,12 +5599,12 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -5614,12 +5614,12 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -5629,12 +5629,12 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -5644,12 +5644,12 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -5659,12 +5659,12 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -5674,12 +5674,12 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -5694,12 +5694,12 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -5709,12 +5709,12 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAlias != nil {
@@ -5724,12 +5724,12 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -5739,12 +5739,12 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Template != nil {
@@ -5785,7 +5785,7 @@ func (in *TemplateImporterIdentityProviderMapperSpec) DeepCopy() *TemplateImport
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *TemplateImporterIdentityProviderMapperStatus) DeepCopyInto(out *TemplateImporterIdentityProviderMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -5877,12 +5877,12 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -5892,12 +5892,12 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -5907,12 +5907,12 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -5922,12 +5922,12 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -5937,12 +5937,12 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -5952,12 +5952,12 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -5972,12 +5972,12 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -5987,12 +5987,12 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Role != nil {
@@ -6007,12 +6007,12 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -6022,12 +6022,12 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -6246,12 +6246,12 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.FacebookIdentityProviderAliasRef != nil {
 		in, out := &in.FacebookIdentityProviderAliasRef, &out.FacebookIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FacebookIdentityProviderAliasSelector != nil {
 		in, out := &in.FacebookIdentityProviderAliasSelector, &out.FacebookIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAlias != nil {
@@ -6261,12 +6261,12 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.GithubIdentityProviderAliasRef != nil {
 		in, out := &in.GithubIdentityProviderAliasRef, &out.GithubIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GithubIdentityProviderAliasSelector != nil {
 		in, out := &in.GithubIdentityProviderAliasSelector, &out.GithubIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAlias != nil {
@@ -6276,12 +6276,12 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.GoogleIdentityProviderAliasRef != nil {
 		in, out := &in.GoogleIdentityProviderAliasRef, &out.GoogleIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GoogleIdentityProviderAliasSelector != nil {
 		in, out := &in.GoogleIdentityProviderAliasSelector, &out.GoogleIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAlias != nil {
@@ -6291,12 +6291,12 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.IdentityProviderAliasRef != nil {
 		in, out := &in.IdentityProviderAliasRef, &out.IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IdentityProviderAliasSelector != nil {
 		in, out := &in.IdentityProviderAliasSelector, &out.IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAlias != nil {
@@ -6306,12 +6306,12 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.KubernetesIdentityProviderAliasRef != nil {
 		in, out := &in.KubernetesIdentityProviderAliasRef, &out.KubernetesIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.KubernetesIdentityProviderAliasSelector != nil {
 		in, out := &in.KubernetesIdentityProviderAliasSelector, &out.KubernetesIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAlias != nil {
@@ -6321,12 +6321,12 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.MicrosoftIdentityProviderAliasRef != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasRef, &out.MicrosoftIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.MicrosoftIdentityProviderAliasSelector != nil {
 		in, out := &in.MicrosoftIdentityProviderAliasSelector, &out.MicrosoftIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -6341,12 +6341,12 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.OpenshiftV4IdentityProviderAliasRef != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasRef, &out.OpenshiftV4IdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OpenshiftV4IdentityProviderAliasSelector != nil {
 		in, out := &in.OpenshiftV4IdentityProviderAliasSelector, &out.OpenshiftV4IdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Realm != nil {
@@ -6356,12 +6356,12 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Role != nil {
@@ -6376,12 +6376,12 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.SAMLIdentityProviderAliasRef != nil {
 		in, out := &in.SAMLIdentityProviderAliasRef, &out.SAMLIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLIdentityProviderAliasSelector != nil {
 		in, out := &in.SAMLIdentityProviderAliasSelector, &out.SAMLIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAlias != nil {
@@ -6391,12 +6391,12 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.SpiffeIdentityProviderAliasRef != nil {
 		in, out := &in.SpiffeIdentityProviderAliasRef, &out.SpiffeIdentityProviderAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SpiffeIdentityProviderAliasSelector != nil {
 		in, out := &in.SpiffeIdentityProviderAliasSelector, &out.SpiffeIdentityProviderAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -6432,7 +6432,7 @@ func (in *ToRoleIdentityProviderMapperSpec) DeepCopy() *ToRoleIdentityProviderMa
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *ToRoleIdentityProviderMapperStatus) DeepCopyInto(out *ToRoleIdentityProviderMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 

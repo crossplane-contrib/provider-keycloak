@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type DomainInitParameters struct {
@@ -73,11 +72,11 @@ type OrganizationInitParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
 	// The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.
 	// Landing page after successful login.
@@ -155,11 +154,11 @@ type OrganizationParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
 	// The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.
 	// Landing page after successful login.
@@ -186,8 +185,8 @@ type OrganizationSpec struct {
 
 // OrganizationStatus defines the observed state of Organization.
 type OrganizationStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        OrganizationObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               OrganizationObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

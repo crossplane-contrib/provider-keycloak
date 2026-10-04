@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ClientAggregatePolicyInitParameters struct {
@@ -24,11 +23,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// References to ClientAggregatePolicy in openidclient to populate aggregatePolicies.
 	// +kubebuilder:validation:Optional
-	AggregatePoliciesRefs []v1.NamespacedReference `json:"aggregatePoliciesRefs,omitempty" tf:"-"`
+	AggregatePoliciesRefs []v2.NamespacedReference `json:"aggregatePoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientAggregatePolicy in openidclient to populate aggregatePolicies.
 	// +kubebuilder:validation:Optional
-	AggregatePoliciesSelector *v1.NamespacedSelector `json:"aggregatePoliciesSelector,omitempty" tf:"-"`
+	AggregatePoliciesSelector *v2.NamespacedSelector `json:"aggregatePoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientClientPolicy
@@ -38,11 +37,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// References to ClientClientPolicy in openidclient to populate clientPolicies.
 	// +kubebuilder:validation:Optional
-	ClientPoliciesRefs []v1.NamespacedReference `json:"clientPoliciesRefs,omitempty" tf:"-"`
+	ClientPoliciesRefs []v2.NamespacedReference `json:"clientPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientClientPolicy in openidclient to populate clientPolicies.
 	// +kubebuilder:validation:Optional
-	ClientPoliciesSelector *v1.NamespacedSelector `json:"clientPoliciesSelector,omitempty" tf:"-"`
+	ClientPoliciesSelector *v2.NamespacedSelector `json:"clientPoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientAuthorizationClientScopePolicy
@@ -52,11 +51,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// References to ClientAuthorizationClientScopePolicy in openidclient to populate clientScopePolicies.
 	// +kubebuilder:validation:Optional
-	ClientScopePoliciesRefs []v1.NamespacedReference `json:"clientScopePoliciesRefs,omitempty" tf:"-"`
+	ClientScopePoliciesRefs []v2.NamespacedReference `json:"clientScopePoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientAuthorizationClientScopePolicy in openidclient to populate clientScopePolicies.
 	// +kubebuilder:validation:Optional
-	ClientScopePoliciesSelector *v1.NamespacedSelector `json:"clientScopePoliciesSelector,omitempty" tf:"-"`
+	ClientScopePoliciesSelector *v2.NamespacedSelector `json:"clientScopePoliciesSelector,omitempty" tf:"-"`
 
 	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
@@ -72,11 +71,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// References to ClientAuthorizationPolicy in openidclient to populate genericPolicies.
 	// +kubebuilder:validation:Optional
-	GenericPoliciesRefs []v1.NamespacedReference `json:"genericPoliciesRefs,omitempty" tf:"-"`
+	GenericPoliciesRefs []v2.NamespacedReference `json:"genericPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientAuthorizationPolicy in openidclient to populate genericPolicies.
 	// +kubebuilder:validation:Optional
-	GenericPoliciesSelector *v1.NamespacedSelector `json:"genericPoliciesSelector,omitempty" tf:"-"`
+	GenericPoliciesSelector *v2.NamespacedSelector `json:"genericPoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientGroupPolicy
@@ -86,11 +85,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// References to ClientGroupPolicy in openidclient to populate groupPolicies.
 	// +kubebuilder:validation:Optional
-	GroupPoliciesRefs []v1.NamespacedReference `json:"groupPoliciesRefs,omitempty" tf:"-"`
+	GroupPoliciesRefs []v2.NamespacedReference `json:"groupPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientGroupPolicy in openidclient to populate groupPolicies.
 	// +kubebuilder:validation:Optional
-	GroupPoliciesSelector *v1.NamespacedSelector `json:"groupPoliciesSelector,omitempty" tf:"-"`
+	GroupPoliciesSelector *v2.NamespacedSelector `json:"groupPoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientJsPolicy
@@ -100,11 +99,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// References to ClientJsPolicy in openidclient to populate jsPolicies.
 	// +kubebuilder:validation:Optional
-	JsPoliciesRefs []v1.NamespacedReference `json:"jsPoliciesRefs,omitempty" tf:"-"`
+	JsPoliciesRefs []v2.NamespacedReference `json:"jsPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientJsPolicy in openidclient to populate jsPolicies.
 	// +kubebuilder:validation:Optional
-	JsPoliciesSelector *v1.NamespacedSelector `json:"jsPoliciesSelector,omitempty" tf:"-"`
+	JsPoliciesSelector *v2.NamespacedSelector `json:"jsPoliciesSelector,omitempty" tf:"-"`
 
 	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	Logic *string `json:"logic,omitempty" tf:"logic,omitempty"`
@@ -118,11 +117,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientRegexPolicy
@@ -132,11 +131,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// References to ClientRegexPolicy in openidclient to populate regexPolicies.
 	// +kubebuilder:validation:Optional
-	RegexPoliciesRefs []v1.NamespacedReference `json:"regexPoliciesRefs,omitempty" tf:"-"`
+	RegexPoliciesRefs []v2.NamespacedReference `json:"regexPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientRegexPolicy in openidclient to populate regexPolicies.
 	// +kubebuilder:validation:Optional
-	RegexPoliciesSelector *v1.NamespacedSelector `json:"regexPoliciesSelector,omitempty" tf:"-"`
+	RegexPoliciesSelector *v2.NamespacedSelector `json:"regexPoliciesSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
@@ -145,11 +144,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientRolePolicy
@@ -159,11 +158,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// References to ClientRolePolicy in openidclient to populate rolePolicies.
 	// +kubebuilder:validation:Optional
-	RolePoliciesRefs []v1.NamespacedReference `json:"rolePoliciesRefs,omitempty" tf:"-"`
+	RolePoliciesRefs []v2.NamespacedReference `json:"rolePoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientRolePolicy in openidclient to populate rolePolicies.
 	// +kubebuilder:validation:Optional
-	RolePoliciesSelector *v1.NamespacedSelector `json:"rolePoliciesSelector,omitempty" tf:"-"`
+	RolePoliciesSelector *v2.NamespacedSelector `json:"rolePoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientTimePolicy
@@ -173,11 +172,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// References to ClientTimePolicy in openidclient to populate timePolicies.
 	// +kubebuilder:validation:Optional
-	TimePoliciesRefs []v1.NamespacedReference `json:"timePoliciesRefs,omitempty" tf:"-"`
+	TimePoliciesRefs []v2.NamespacedReference `json:"timePoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientTimePolicy in openidclient to populate timePolicies.
 	// +kubebuilder:validation:Optional
-	TimePoliciesSelector *v1.NamespacedSelector `json:"timePoliciesSelector,omitempty" tf:"-"`
+	TimePoliciesSelector *v2.NamespacedSelector `json:"timePoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientUserPolicy
@@ -187,11 +186,11 @@ type ClientAggregatePolicyInitParameters struct {
 
 	// References to ClientUserPolicy in openidclient to populate userPolicies.
 	// +kubebuilder:validation:Optional
-	UserPoliciesRefs []v1.NamespacedReference `json:"userPoliciesRefs,omitempty" tf:"-"`
+	UserPoliciesRefs []v2.NamespacedReference `json:"userPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientUserPolicy in openidclient to populate userPolicies.
 	// +kubebuilder:validation:Optional
-	UserPoliciesSelector *v1.NamespacedSelector `json:"userPoliciesSelector,omitempty" tf:"-"`
+	UserPoliciesSelector *v2.NamespacedSelector `json:"userPoliciesSelector,omitempty" tf:"-"`
 }
 
 type ClientAggregatePolicyObservation struct {
@@ -273,11 +272,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// References to ClientAggregatePolicy in openidclient to populate aggregatePolicies.
 	// +kubebuilder:validation:Optional
-	AggregatePoliciesRefs []v1.NamespacedReference `json:"aggregatePoliciesRefs,omitempty" tf:"-"`
+	AggregatePoliciesRefs []v2.NamespacedReference `json:"aggregatePoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientAggregatePolicy in openidclient to populate aggregatePolicies.
 	// +kubebuilder:validation:Optional
-	AggregatePoliciesSelector *v1.NamespacedSelector `json:"aggregatePoliciesSelector,omitempty" tf:"-"`
+	AggregatePoliciesSelector *v2.NamespacedSelector `json:"aggregatePoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientClientPolicy
@@ -288,11 +287,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// References to ClientClientPolicy in openidclient to populate clientPolicies.
 	// +kubebuilder:validation:Optional
-	ClientPoliciesRefs []v1.NamespacedReference `json:"clientPoliciesRefs,omitempty" tf:"-"`
+	ClientPoliciesRefs []v2.NamespacedReference `json:"clientPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientClientPolicy in openidclient to populate clientPolicies.
 	// +kubebuilder:validation:Optional
-	ClientPoliciesSelector *v1.NamespacedSelector `json:"clientPoliciesSelector,omitempty" tf:"-"`
+	ClientPoliciesSelector *v2.NamespacedSelector `json:"clientPoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientAuthorizationClientScopePolicy
@@ -303,11 +302,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// References to ClientAuthorizationClientScopePolicy in openidclient to populate clientScopePolicies.
 	// +kubebuilder:validation:Optional
-	ClientScopePoliciesRefs []v1.NamespacedReference `json:"clientScopePoliciesRefs,omitempty" tf:"-"`
+	ClientScopePoliciesRefs []v2.NamespacedReference `json:"clientScopePoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientAuthorizationClientScopePolicy in openidclient to populate clientScopePolicies.
 	// +kubebuilder:validation:Optional
-	ClientScopePoliciesSelector *v1.NamespacedSelector `json:"clientScopePoliciesSelector,omitempty" tf:"-"`
+	ClientScopePoliciesSelector *v2.NamespacedSelector `json:"clientScopePoliciesSelector,omitempty" tf:"-"`
 
 	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	// +kubebuilder:validation:Optional
@@ -326,11 +325,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// References to ClientAuthorizationPolicy in openidclient to populate genericPolicies.
 	// +kubebuilder:validation:Optional
-	GenericPoliciesRefs []v1.NamespacedReference `json:"genericPoliciesRefs,omitempty" tf:"-"`
+	GenericPoliciesRefs []v2.NamespacedReference `json:"genericPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientAuthorizationPolicy in openidclient to populate genericPolicies.
 	// +kubebuilder:validation:Optional
-	GenericPoliciesSelector *v1.NamespacedSelector `json:"genericPoliciesSelector,omitempty" tf:"-"`
+	GenericPoliciesSelector *v2.NamespacedSelector `json:"genericPoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientGroupPolicy
@@ -341,11 +340,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// References to ClientGroupPolicy in openidclient to populate groupPolicies.
 	// +kubebuilder:validation:Optional
-	GroupPoliciesRefs []v1.NamespacedReference `json:"groupPoliciesRefs,omitempty" tf:"-"`
+	GroupPoliciesRefs []v2.NamespacedReference `json:"groupPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientGroupPolicy in openidclient to populate groupPolicies.
 	// +kubebuilder:validation:Optional
-	GroupPoliciesSelector *v1.NamespacedSelector `json:"groupPoliciesSelector,omitempty" tf:"-"`
+	GroupPoliciesSelector *v2.NamespacedSelector `json:"groupPoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientJsPolicy
@@ -356,11 +355,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// References to ClientJsPolicy in openidclient to populate jsPolicies.
 	// +kubebuilder:validation:Optional
-	JsPoliciesRefs []v1.NamespacedReference `json:"jsPoliciesRefs,omitempty" tf:"-"`
+	JsPoliciesRefs []v2.NamespacedReference `json:"jsPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientJsPolicy in openidclient to populate jsPolicies.
 	// +kubebuilder:validation:Optional
-	JsPoliciesSelector *v1.NamespacedSelector `json:"jsPoliciesSelector,omitempty" tf:"-"`
+	JsPoliciesSelector *v2.NamespacedSelector `json:"jsPoliciesSelector,omitempty" tf:"-"`
 
 	// The logic, can be one of POSITIVE or NEGATIVE. Defaults to POSITIVE.
 	// +kubebuilder:validation:Optional
@@ -377,11 +376,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientRegexPolicy
@@ -392,11 +391,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// References to ClientRegexPolicy in openidclient to populate regexPolicies.
 	// +kubebuilder:validation:Optional
-	RegexPoliciesRefs []v1.NamespacedReference `json:"regexPoliciesRefs,omitempty" tf:"-"`
+	RegexPoliciesRefs []v2.NamespacedReference `json:"regexPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientRegexPolicy in openidclient to populate regexPolicies.
 	// +kubebuilder:validation:Optional
-	RegexPoliciesSelector *v1.NamespacedSelector `json:"regexPoliciesSelector,omitempty" tf:"-"`
+	RegexPoliciesSelector *v2.NamespacedSelector `json:"regexPoliciesSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
@@ -406,11 +405,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientRolePolicy
@@ -421,11 +420,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// References to ClientRolePolicy in openidclient to populate rolePolicies.
 	// +kubebuilder:validation:Optional
-	RolePoliciesRefs []v1.NamespacedReference `json:"rolePoliciesRefs,omitempty" tf:"-"`
+	RolePoliciesRefs []v2.NamespacedReference `json:"rolePoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientRolePolicy in openidclient to populate rolePolicies.
 	// +kubebuilder:validation:Optional
-	RolePoliciesSelector *v1.NamespacedSelector `json:"rolePoliciesSelector,omitempty" tf:"-"`
+	RolePoliciesSelector *v2.NamespacedSelector `json:"rolePoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientTimePolicy
@@ -436,11 +435,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// References to ClientTimePolicy in openidclient to populate timePolicies.
 	// +kubebuilder:validation:Optional
-	TimePoliciesRefs []v1.NamespacedReference `json:"timePoliciesRefs,omitempty" tf:"-"`
+	TimePoliciesRefs []v2.NamespacedReference `json:"timePoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientTimePolicy in openidclient to populate timePolicies.
 	// +kubebuilder:validation:Optional
-	TimePoliciesSelector *v1.NamespacedSelector `json:"timePoliciesSelector,omitempty" tf:"-"`
+	TimePoliciesSelector *v2.NamespacedSelector `json:"timePoliciesSelector,omitempty" tf:"-"`
 
 	// A list of policy IDs to aggregate.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha1.ClientUserPolicy
@@ -451,11 +450,11 @@ type ClientAggregatePolicyParameters struct {
 
 	// References to ClientUserPolicy in openidclient to populate userPolicies.
 	// +kubebuilder:validation:Optional
-	UserPoliciesRefs []v1.NamespacedReference `json:"userPoliciesRefs,omitempty" tf:"-"`
+	UserPoliciesRefs []v2.NamespacedReference `json:"userPoliciesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientUserPolicy in openidclient to populate userPolicies.
 	// +kubebuilder:validation:Optional
-	UserPoliciesSelector *v1.NamespacedSelector `json:"userPoliciesSelector,omitempty" tf:"-"`
+	UserPoliciesSelector *v2.NamespacedSelector `json:"userPoliciesSelector,omitempty" tf:"-"`
 }
 
 // ClientAggregatePolicySpec defines the desired state of ClientAggregatePolicy
@@ -477,8 +476,8 @@ type ClientAggregatePolicySpec struct {
 
 // ClientAggregatePolicyStatus defines the observed state of ClientAggregatePolicy.
 type ClientAggregatePolicyStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ClientAggregatePolicyObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ClientAggregatePolicyObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -10,13 +10,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type AuthInitParameters struct {
 
 	// The SMTP server password.
-	PasswordSecretRef v1.SecretKeySelector `json:"passwordSecretRef" tf:"-"`
+	PasswordSecretRef v2.SecretKeySelector `json:"passwordSecretRef" tf:"-"`
 
 	// The SMTP server username.
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
@@ -32,7 +32,7 @@ type AuthParameters struct {
 
 	// The SMTP server password.
 	// +kubebuilder:validation:Optional
-	PasswordSecretRef v1.SecretKeySelector `json:"passwordSecretRef" tf:"-"`
+	PasswordSecretRef v2.SecretKeySelector `json:"passwordSecretRef" tf:"-"`
 
 	// The SMTP server username.
 	// +kubebuilder:validation:Optional
@@ -1127,7 +1127,7 @@ type TokenAuthInitParameters struct {
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
 	// The auth token client secret.
-	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef v2.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
 
 	// The auth token scope.
 	Scope *string `json:"scope,omitempty" tf:"scope,omitempty"`
@@ -1162,7 +1162,7 @@ type TokenAuthParameters struct {
 
 	// The auth token client secret.
 	// +kubebuilder:validation:Optional
-	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef v2.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
 
 	// The auth token scope.
 	// +kubebuilder:validation:Optional
@@ -1504,8 +1504,8 @@ type WebAuthnPolicyParameters struct {
 
 // RealmSpec defines the desired state of Realm
 type RealmSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     RealmParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   RealmParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -1521,8 +1521,8 @@ type RealmSpec struct {
 
 // RealmStatus defines the observed state of Realm.
 type RealmStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        RealmObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               RealmObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
