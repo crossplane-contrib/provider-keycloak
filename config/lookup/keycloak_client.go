@@ -299,6 +299,7 @@ func CleanupLookupSessions(ctx context.Context) {
 	keycloakClientCache.Range(func(key, value any) bool {
 		entry := value.(*cachedKeycloakClient)
 		keycloaksession.LogoutSession(ctx, entry.config, entry.client)
+		keycloaksession.ForgetToken(entry.client)
 		keycloakClientCache.Delete(key)
 		return true
 	})

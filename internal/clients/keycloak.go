@@ -360,12 +360,14 @@ func CleanupSessions(ctx context.Context) {
 		if entry.pool != nil {
 			for _, c := range entry.pool.Clients() {
 				keycloaksession.LogoutSession(ctx, entry.config, c)
+				keycloaksession.ForgetToken(c)
 			}
 			if primary, ok := entry.meta.(*keycloak.KeycloakClient); ok {
 				tfconcurrency.Unregister(primary)
 			}
 		} else if kcClient, ok := entry.meta.(*keycloak.KeycloakClient); ok {
 			keycloaksession.LogoutSession(ctx, entry.config, kcClient)
+			keycloaksession.ForgetToken(kcClient)
 		}
 		metaCache.Delete(key)
 		return true
