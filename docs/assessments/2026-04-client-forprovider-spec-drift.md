@@ -433,3 +433,36 @@ So: shipping Option C now does **not** burn the bridge to Option B
 later. Option C is the surgical, non-breaking subset; Option B is the
 follow-up that requires the v1beta1 + conversion-webhook investment we
 don't yet have.
+
+---
+
+## 9. Follow-up: resolver pruned the whole list (#750)
+
+Reported against v3.1.0: adding `authenticationFlowBindingOverrides` with a
+`browserIdRef` to an **existing** `Client` never reached Keycloak, and the
+list disappeared from `spec.forProvider` while the MR stayed
+`Synced=True/Ready=True`.
+
+Root cause: crossplane-runtime's `managed.APISimpleReferenceResolver`
+persists the resolved values as a **server-side apply** of the JSON merge
+patch between the object before and after `ResolveReferences`, i.e. only
+the values that changed in the current reconcile, with `ForceOwnership`.
+Server-side apply treats every request as the manager's complete intent,
+so:
+
+1. Adding the override resolves `browserId`; the resolver applies only the
+   list. `ForceOwnership` takes sole ownership of the atomic list from the
+   applier (Argo CD), and `realmId` (applied by the resolver at create time)
+   is pruned.
+2. The next reconcile re-resolves `realmId` and applies only `realmId`; the
+   list, now owned by the resolver alone, is pruned.
+
+The same mechanism made values resolved in different reconciles evict each
+other for every resource, and turned `null`s of the merge patch into invalid
+apply configurations (`spec.initProvider: Invalid value: "null"`).
+
+Fix: `internal/clients/refpatch` wraps the manager's client and sends the
+resolver's patch as what it is, a JSON merge patch (field manager unchanged,
+operation `Update`), with the object's `resourceVersion` as precondition so a
+patch computed from a stale object fails with a conflict and is retried.
+Merge patches never prune fields they do not mention.
