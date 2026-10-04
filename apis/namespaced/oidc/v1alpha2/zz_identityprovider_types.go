@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type IdentityProviderInitParameters struct {
@@ -41,15 +40,15 @@ type IdentityProviderInitParameters struct {
 
 	// The client or client identifier registered within the identity provider.
 	// Client ID.
-	ClientIDSecretRef v1.LocalSecretKeySelector `json:"clientIdSecretRef" tf:"-"`
+	ClientIDSecretRef v2.LocalSecretKeySelector `json:"clientIdSecretRef" tf:"-"`
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
 	// Client Secret.
-	ClientSecretSecretRef *v1.LocalSecretKeySelector `json:"clientSecretSecretRef,omitempty" tf:"-"`
+	ClientSecretSecretRef *v2.LocalSecretKeySelector `json:"clientSecretSecretRef,omitempty" tf:"-"`
 
 	// The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
 	// Client Secret as write-only argument
-	ClientSecretWoSecretRef *v1.LocalSecretKeySelector `json:"clientSecretWoSecretRef,omitempty" tf:"-"`
+	ClientSecretWoSecretRef *v2.LocalSecretKeySelector `json:"clientSecretWoSecretRef,omitempty" tf:"-"`
 
 	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
 	// Version of the Client secret write-only argument
@@ -87,11 +86,11 @@ type IdentityProviderInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasRef *v1.NamespacedReference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasRef *v2.NamespacedReference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasSelector *v1.NamespacedSelector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasSelector *v2.NamespacedSelector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// A number defining the order of this identity provider in the GUI.
 	// GUI Order
@@ -134,11 +133,11 @@ type IdentityProviderInitParameters struct {
 
 	// Reference to a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDRef *v1.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
+	OrganizationIDRef *v2.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
 
 	// Selector for a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDSelector *v1.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
+	OrganizationIDSelector *v2.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -155,11 +154,11 @@ type IdentityProviderInitParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
 	// When true, tokens will be stored after authenticating users. Defaults to true.
 	// Enable/disable if tokens must be stored after authenticating users.
@@ -366,17 +365,17 @@ type IdentityProviderParameters struct {
 	// The client or client identifier registered within the identity provider.
 	// Client ID.
 	// +kubebuilder:validation:Optional
-	ClientIDSecretRef v1.LocalSecretKeySelector `json:"clientIdSecretRef" tf:"-"`
+	ClientIDSecretRef v2.LocalSecretKeySelector `json:"clientIdSecretRef" tf:"-"`
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.
 	// Client Secret.
 	// +kubebuilder:validation:Optional
-	ClientSecretSecretRef *v1.LocalSecretKeySelector `json:"clientSecretSecretRef,omitempty" tf:"-"`
+	ClientSecretSecretRef *v2.LocalSecretKeySelector `json:"clientSecretSecretRef,omitempty" tf:"-"`
 
 	// The secret for clients with an access_type of CONFIDENTIAL or BEARER-ONLY. If omitted, this will fallback to use client_secret.
 	// Client Secret as write-only argument
 	// +kubebuilder:validation:Optional
-	ClientSecretWoSecretRef *v1.LocalSecretKeySelector `json:"clientSecretWoSecretRef,omitempty" tf:"-"`
+	ClientSecretWoSecretRef *v2.LocalSecretKeySelector `json:"clientSecretWoSecretRef,omitempty" tf:"-"`
 
 	// The value of this argument is stored in the state and plan files. Required when using client_secret_wo.
 	// Version of the Client secret write-only argument
@@ -422,11 +421,11 @@ type IdentityProviderParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasRef *v1.NamespacedReference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasRef *v2.NamespacedReference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasSelector *v1.NamespacedSelector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasSelector *v2.NamespacedSelector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// A number defining the order of this identity provider in the GUI.
 	// GUI Order
@@ -479,11 +478,11 @@ type IdentityProviderParameters struct {
 
 	// Reference to a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDRef *v1.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
+	OrganizationIDRef *v2.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
 
 	// Selector for a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDSelector *v1.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
+	OrganizationIDSelector *v2.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -503,11 +502,11 @@ type IdentityProviderParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
 	// When true, tokens will be stored after authenticating users. Defaults to true.
 	// Enable/disable if tokens must be stored after authenticating users.
@@ -564,8 +563,8 @@ type IdentityProviderSpec struct {
 
 // IdentityProviderStatus defines the observed state of IdentityProvider.
 type IdentityProviderStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        IdentityProviderObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               IdentityProviderObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

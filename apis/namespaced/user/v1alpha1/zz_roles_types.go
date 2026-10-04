@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type RolesInitParameters struct {
@@ -25,11 +24,11 @@ type RolesInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of role IDs to map to the user
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role
@@ -39,11 +38,11 @@ type RolesInitParameters struct {
 
 	// References to Role in role to populate roleIds.
 	// +kubebuilder:validation:Optional
-	RoleIdsRefs []v1.NamespacedReference `json:"roleIdsRefs,omitempty" tf:"-"`
+	RoleIdsRefs []v2.NamespacedReference `json:"roleIdsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate roleIds.
 	// +kubebuilder:validation:Optional
-	RoleIdsSelector *v1.NamespacedSelector `json:"roleIdsSelector,omitempty" tf:"-"`
+	RoleIdsSelector *v2.NamespacedSelector `json:"roleIdsSelector,omitempty" tf:"-"`
 
 	// The ID of the user this resource should manage roles for.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/user/v1alpha1.User
@@ -51,11 +50,11 @@ type RolesInitParameters struct {
 
 	// Reference to a User in user to populate userId.
 	// +kubebuilder:validation:Optional
-	UserIDRef *v1.NamespacedReference `json:"userIdRef,omitempty" tf:"-"`
+	UserIDRef *v2.NamespacedReference `json:"userIdRef,omitempty" tf:"-"`
 
 	// Selector for a User in user to populate userId.
 	// +kubebuilder:validation:Optional
-	UserIDSelector *v1.NamespacedSelector `json:"userIdSelector,omitempty" tf:"-"`
+	UserIDSelector *v2.NamespacedSelector `json:"userIdSelector,omitempty" tf:"-"`
 }
 
 type RolesObservation struct {
@@ -89,11 +88,11 @@ type RolesParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of role IDs to map to the user
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role
@@ -104,11 +103,11 @@ type RolesParameters struct {
 
 	// References to Role in role to populate roleIds.
 	// +kubebuilder:validation:Optional
-	RoleIdsRefs []v1.NamespacedReference `json:"roleIdsRefs,omitempty" tf:"-"`
+	RoleIdsRefs []v2.NamespacedReference `json:"roleIdsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate roleIds.
 	// +kubebuilder:validation:Optional
-	RoleIdsSelector *v1.NamespacedSelector `json:"roleIdsSelector,omitempty" tf:"-"`
+	RoleIdsSelector *v2.NamespacedSelector `json:"roleIdsSelector,omitempty" tf:"-"`
 
 	// The ID of the user this resource should manage roles for.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/user/v1alpha1.User
@@ -117,11 +116,11 @@ type RolesParameters struct {
 
 	// Reference to a User in user to populate userId.
 	// +kubebuilder:validation:Optional
-	UserIDRef *v1.NamespacedReference `json:"userIdRef,omitempty" tf:"-"`
+	UserIDRef *v2.NamespacedReference `json:"userIdRef,omitempty" tf:"-"`
 
 	// Selector for a User in user to populate userId.
 	// +kubebuilder:validation:Optional
-	UserIDSelector *v1.NamespacedSelector `json:"userIdSelector,omitempty" tf:"-"`
+	UserIDSelector *v2.NamespacedSelector `json:"userIdSelector,omitempty" tf:"-"`
 }
 
 // RolesSpec defines the desired state of Roles
@@ -143,8 +142,8 @@ type RolesSpec struct {
 
 // RolesStatus defines the observed state of Roles.
 type RolesStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        RolesObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               RolesObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

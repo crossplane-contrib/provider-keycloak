@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type FederatedIdentityInitParameters struct {
@@ -59,7 +58,7 @@ type InitialPasswordInitParameters struct {
 	Temporary *bool `json:"temporary,omitempty" tf:"temporary,omitempty"`
 
 	// The initial password.
-	ValueSecretRef v1.LocalSecretKeySelector `json:"valueSecretRef" tf:"-"`
+	ValueSecretRef v2.LocalSecretKeySelector `json:"valueSecretRef" tf:"-"`
 }
 
 type InitialPasswordObservation struct {
@@ -76,7 +75,7 @@ type InitialPasswordParameters struct {
 
 	// The initial password.
 	// +kubebuilder:validation:Optional
-	ValueSecretRef v1.LocalSecretKeySelector `json:"valueSecretRef" tf:"-"`
+	ValueSecretRef v2.LocalSecretKeySelector `json:"valueSecretRef" tf:"-"`
 }
 
 type UserInitParameters struct {
@@ -115,11 +114,11 @@ type UserInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of required user actions.
 	// +listType=set
@@ -218,11 +217,11 @@ type UserParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of required user actions.
 	// +kubebuilder:validation:Optional
@@ -253,8 +252,8 @@ type UserSpec struct {
 
 // UserStatus defines the observed state of User.
 type UserStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        UserObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               UserObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

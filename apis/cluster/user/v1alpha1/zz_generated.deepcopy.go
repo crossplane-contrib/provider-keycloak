@@ -9,7 +9,7 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 import (
-	"github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	"github.com/crossplane/crossplane/apis/v2/core/v2"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -56,14 +56,14 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 	}
 	if in.AggregatePoliciesRefs != nil {
 		in, out := &in.AggregatePoliciesRefs, &out.AggregatePoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.AggregatePoliciesSelector != nil {
 		in, out := &in.AggregatePoliciesSelector, &out.AggregatePoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientPolicies != nil {
@@ -79,14 +79,14 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 	}
 	if in.ClientPoliciesRefs != nil {
 		in, out := &in.ClientPoliciesRefs, &out.ClientPoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.ClientPoliciesSelector != nil {
 		in, out := &in.ClientPoliciesSelector, &out.ClientPoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopePolicies != nil {
@@ -102,14 +102,14 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 	}
 	if in.ClientScopePoliciesRefs != nil {
 		in, out := &in.ClientScopePoliciesRefs, &out.ClientScopePoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.ClientScopePoliciesSelector != nil {
 		in, out := &in.ClientScopePoliciesSelector, &out.ClientScopePoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.DecisionStrategy != nil {
@@ -135,14 +135,14 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 	}
 	if in.GroupPoliciesRefs != nil {
 		in, out := &in.GroupPoliciesRefs, &out.GroupPoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.GroupPoliciesSelector != nil {
 		in, out := &in.GroupPoliciesSelector, &out.GroupPoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.JsPolicies != nil {
@@ -158,14 +158,14 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 	}
 	if in.JsPoliciesRefs != nil {
 		in, out := &in.JsPoliciesRefs, &out.JsPoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.JsPoliciesSelector != nil {
 		in, out := &in.JsPoliciesSelector, &out.JsPoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -191,12 +191,12 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RegexPolicies != nil {
@@ -212,14 +212,14 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 	}
 	if in.RegexPoliciesRefs != nil {
 		in, out := &in.RegexPoliciesRefs, &out.RegexPoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.RegexPoliciesSelector != nil {
 		in, out := &in.RegexPoliciesSelector, &out.RegexPoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RolePolicies != nil {
@@ -235,14 +235,14 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 	}
 	if in.RolePoliciesRefs != nil {
 		in, out := &in.RolePoliciesRefs, &out.RolePoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.RolePoliciesSelector != nil {
 		in, out := &in.RolePoliciesSelector, &out.RolePoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Scopes != nil {
@@ -269,14 +269,14 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 	}
 	if in.TimePoliciesRefs != nil {
 		in, out := &in.TimePoliciesRefs, &out.TimePoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.TimePoliciesSelector != nil {
 		in, out := &in.TimePoliciesSelector, &out.TimePoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserPolicies != nil {
@@ -292,14 +292,14 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 	}
 	if in.UserPoliciesRefs != nil {
 		in, out := &in.UserPoliciesRefs, &out.UserPoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.UserPoliciesSelector != nil {
 		in, out := &in.UserPoliciesSelector, &out.UserPoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -538,14 +538,14 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 	}
 	if in.AggregatePoliciesRefs != nil {
 		in, out := &in.AggregatePoliciesRefs, &out.AggregatePoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.AggregatePoliciesSelector != nil {
 		in, out := &in.AggregatePoliciesSelector, &out.AggregatePoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientPolicies != nil {
@@ -561,14 +561,14 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 	}
 	if in.ClientPoliciesRefs != nil {
 		in, out := &in.ClientPoliciesRefs, &out.ClientPoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.ClientPoliciesSelector != nil {
 		in, out := &in.ClientPoliciesSelector, &out.ClientPoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopePolicies != nil {
@@ -584,14 +584,14 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 	}
 	if in.ClientScopePoliciesRefs != nil {
 		in, out := &in.ClientScopePoliciesRefs, &out.ClientScopePoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.ClientScopePoliciesSelector != nil {
 		in, out := &in.ClientScopePoliciesSelector, &out.ClientScopePoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.DecisionStrategy != nil {
@@ -617,14 +617,14 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 	}
 	if in.GroupPoliciesRefs != nil {
 		in, out := &in.GroupPoliciesRefs, &out.GroupPoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.GroupPoliciesSelector != nil {
 		in, out := &in.GroupPoliciesSelector, &out.GroupPoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.JsPolicies != nil {
@@ -640,14 +640,14 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 	}
 	if in.JsPoliciesRefs != nil {
 		in, out := &in.JsPoliciesRefs, &out.JsPoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.JsPoliciesSelector != nil {
 		in, out := &in.JsPoliciesSelector, &out.JsPoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Name != nil {
@@ -673,12 +673,12 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RegexPolicies != nil {
@@ -694,14 +694,14 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 	}
 	if in.RegexPoliciesRefs != nil {
 		in, out := &in.RegexPoliciesRefs, &out.RegexPoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.RegexPoliciesSelector != nil {
 		in, out := &in.RegexPoliciesSelector, &out.RegexPoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RolePolicies != nil {
@@ -717,14 +717,14 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 	}
 	if in.RolePoliciesRefs != nil {
 		in, out := &in.RolePoliciesRefs, &out.RolePoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.RolePoliciesSelector != nil {
 		in, out := &in.RolePoliciesSelector, &out.RolePoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Scopes != nil {
@@ -751,14 +751,14 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 	}
 	if in.TimePoliciesRefs != nil {
 		in, out := &in.TimePoliciesRefs, &out.TimePoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.TimePoliciesSelector != nil {
 		in, out := &in.TimePoliciesSelector, &out.TimePoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserPolicies != nil {
@@ -774,14 +774,14 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 	}
 	if in.UserPoliciesRefs != nil {
 		in, out := &in.UserPoliciesRefs, &out.UserPoliciesRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.UserPoliciesSelector != nil {
 		in, out := &in.UserPoliciesSelector, &out.UserPoliciesSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -799,7 +799,7 @@ func (in *AdminPermissionsParameters) DeepCopy() *AdminPermissionsParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *AdminPermissionsSpec) DeepCopyInto(out *AdminPermissionsSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -817,7 +817,7 @@ func (in *AdminPermissionsSpec) DeepCopy() *AdminPermissionsSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *AdminPermissionsStatus) DeepCopyInto(out *AdminPermissionsStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -969,14 +969,14 @@ func (in *GroupsInitParameters) DeepCopyInto(out *GroupsInitParameters) {
 	}
 	if in.GroupIdsRefs != nil {
 		in, out := &in.GroupIdsRefs, &out.GroupIdsRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.GroupIdsSelector != nil {
 		in, out := &in.GroupIdsSelector, &out.GroupIdsSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
@@ -986,12 +986,12 @@ func (in *GroupsInitParameters) DeepCopyInto(out *GroupsInitParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserID != nil {
@@ -1001,12 +1001,12 @@ func (in *GroupsInitParameters) DeepCopyInto(out *GroupsInitParameters) {
 	}
 	if in.UserIDRef != nil {
 		in, out := &in.UserIDRef, &out.UserIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserIDSelector != nil {
 		in, out := &in.UserIDSelector, &out.UserIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1120,14 +1120,14 @@ func (in *GroupsParameters) DeepCopyInto(out *GroupsParameters) {
 	}
 	if in.GroupIdsRefs != nil {
 		in, out := &in.GroupIdsRefs, &out.GroupIdsRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.GroupIdsSelector != nil {
 		in, out := &in.GroupIdsSelector, &out.GroupIdsSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
@@ -1137,12 +1137,12 @@ func (in *GroupsParameters) DeepCopyInto(out *GroupsParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserID != nil {
@@ -1152,12 +1152,12 @@ func (in *GroupsParameters) DeepCopyInto(out *GroupsParameters) {
 	}
 	if in.UserIDRef != nil {
 		in, out := &in.UserIDRef, &out.UserIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserIDSelector != nil {
 		in, out := &in.UserIDSelector, &out.UserIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1175,7 +1175,7 @@ func (in *GroupsParameters) DeepCopy() *GroupsParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *GroupsSpec) DeepCopyInto(out *GroupsSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -1193,7 +1193,7 @@ func (in *GroupsSpec) DeepCopy() *GroupsSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *GroupsStatus) DeepCopyInto(out *GroupsStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -1323,7 +1323,7 @@ func (in *InitialPasswordInitParameters) DeepCopyInto(out *InitialPasswordInitPa
 		*out = new(bool)
 		**out = **in
 	}
-	in.ValueSecretRef.DeepCopyInto(&out.ValueSecretRef)
+	out.ValueSecretRef = in.ValueSecretRef
 }
 
 // DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new InitialPasswordInitParameters.
@@ -1364,7 +1364,7 @@ func (in *InitialPasswordParameters) DeepCopyInto(out *InitialPasswordParameters
 		*out = new(bool)
 		**out = **in
 	}
-	in.ValueSecretRef.DeepCopyInto(&out.ValueSecretRef)
+	out.ValueSecretRef = in.ValueSecretRef
 }
 
 // DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new InitialPasswordParameters.
@@ -1766,12 +1766,12 @@ func (in *PermissionsInitParameters) DeepCopyInto(out *PermissionsInitParameters
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserImpersonatedScope != nil {
@@ -1947,12 +1947,12 @@ func (in *PermissionsParameters) DeepCopyInto(out *PermissionsParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserImpersonatedScope != nil {
@@ -1984,7 +1984,7 @@ func (in *PermissionsParameters) DeepCopy() *PermissionsParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *PermissionsSpec) DeepCopyInto(out *PermissionsSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -2002,7 +2002,7 @@ func (in *PermissionsSpec) DeepCopy() *PermissionsSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *PermissionsStatus) DeepCopyInto(out *PermissionsStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -2058,12 +2058,12 @@ func (in *RolesInitParameters) DeepCopyInto(out *RolesInitParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleIds != nil {
@@ -2079,14 +2079,14 @@ func (in *RolesInitParameters) DeepCopyInto(out *RolesInitParameters) {
 	}
 	if in.RoleIdsRefs != nil {
 		in, out := &in.RoleIdsRefs, &out.RoleIdsRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.RoleIdsSelector != nil {
 		in, out := &in.RoleIdsSelector, &out.RoleIdsSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserID != nil {
@@ -2096,12 +2096,12 @@ func (in *RolesInitParameters) DeepCopyInto(out *RolesInitParameters) {
 	}
 	if in.UserIDRef != nil {
 		in, out := &in.UserIDRef, &out.UserIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserIDSelector != nil {
 		in, out := &in.UserIDSelector, &out.UserIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -2209,12 +2209,12 @@ func (in *RolesParameters) DeepCopyInto(out *RolesParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleIds != nil {
@@ -2230,14 +2230,14 @@ func (in *RolesParameters) DeepCopyInto(out *RolesParameters) {
 	}
 	if in.RoleIdsRefs != nil {
 		in, out := &in.RoleIdsRefs, &out.RoleIdsRefs
-		*out = make([]v1.Reference, len(*in))
+		*out = make([]v2.Reference, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.RoleIdsSelector != nil {
 		in, out := &in.RoleIdsSelector, &out.RoleIdsSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserID != nil {
@@ -2247,12 +2247,12 @@ func (in *RolesParameters) DeepCopyInto(out *RolesParameters) {
 	}
 	if in.UserIDRef != nil {
 		in, out := &in.UserIDRef, &out.UserIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.UserIDSelector != nil {
 		in, out := &in.UserIDSelector, &out.UserIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -2270,7 +2270,7 @@ func (in *RolesParameters) DeepCopy() *RolesParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *RolesSpec) DeepCopyInto(out *RolesSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -2288,7 +2288,7 @@ func (in *RolesSpec) DeepCopy() *RolesSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *RolesStatus) DeepCopyInto(out *RolesStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -2422,12 +2422,12 @@ func (in *UserFederationInitParameters) DeepCopyInto(out *UserFederationInitPara
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -2621,12 +2621,12 @@ func (in *UserFederationParameters) DeepCopyInto(out *UserFederationParameters) 
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -2644,7 +2644,7 @@ func (in *UserFederationParameters) DeepCopy() *UserFederationParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *UserFederationSpec) DeepCopyInto(out *UserFederationSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -2662,7 +2662,7 @@ func (in *UserFederationSpec) DeepCopy() *UserFederationSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *UserFederationStatus) DeepCopyInto(out *UserFederationStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -2854,12 +2854,12 @@ func (in *UserInitParameters) DeepCopyInto(out *UserInitParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RequiredActions != nil {
@@ -3093,12 +3093,12 @@ func (in *UserParameters) DeepCopyInto(out *UserParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RequiredActions != nil {
@@ -3132,7 +3132,7 @@ func (in *UserParameters) DeepCopy() *UserParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *UserSpec) DeepCopyInto(out *UserSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -3150,7 +3150,7 @@ func (in *UserSpec) DeepCopy() *UserSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *UserStatus) DeepCopyInto(out *UserStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 

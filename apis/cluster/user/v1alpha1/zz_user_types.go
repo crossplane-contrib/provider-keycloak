@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type FederatedIdentityInitParameters struct {
@@ -58,7 +58,7 @@ type InitialPasswordInitParameters struct {
 	Temporary *bool `json:"temporary,omitempty" tf:"temporary,omitempty"`
 
 	// The initial password.
-	ValueSecretRef v1.SecretKeySelector `json:"valueSecretRef" tf:"-"`
+	ValueSecretRef v2.SecretKeySelector `json:"valueSecretRef" tf:"-"`
 }
 
 type InitialPasswordObservation struct {
@@ -75,7 +75,7 @@ type InitialPasswordParameters struct {
 
 	// The initial password.
 	// +kubebuilder:validation:Optional
-	ValueSecretRef v1.SecretKeySelector `json:"valueSecretRef" tf:"-"`
+	ValueSecretRef v2.SecretKeySelector `json:"valueSecretRef" tf:"-"`
 }
 
 type UserInitParameters struct {
@@ -114,11 +114,11 @@ type UserInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of required user actions.
 	// +listType=set
@@ -217,11 +217,11 @@ type UserParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of required user actions.
 	// +kubebuilder:validation:Optional
@@ -235,8 +235,8 @@ type UserParameters struct {
 
 // UserSpec defines the desired state of User
 type UserSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     UserParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   UserParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -252,8 +252,8 @@ type UserSpec struct {
 
 // UserStatus defines the observed state of User.
 type UserStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        UserObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               UserObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

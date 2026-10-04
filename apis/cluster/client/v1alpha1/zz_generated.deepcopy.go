@@ -9,7 +9,7 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 import (
-	"github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	"github.com/crossplane/crossplane/apis/v2/core/v2"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -50,12 +50,12 @@ func (in *GenericClientProtocolMapperInitParameters) DeepCopyInto(out *GenericCl
 	}
 	if in.ClientIDRef != nil {
 		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientIDSelector != nil {
 		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeID != nil {
@@ -65,12 +65,12 @@ func (in *GenericClientProtocolMapperInitParameters) DeepCopyInto(out *GenericCl
 	}
 	if in.ClientScopeIDRef != nil {
 		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeIDSelector != nil {
 		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Config != nil {
@@ -111,12 +111,12 @@ func (in *GenericClientProtocolMapperInitParameters) DeepCopyInto(out *GenericCl
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientID != nil {
@@ -126,12 +126,12 @@ func (in *GenericClientProtocolMapperInitParameters) DeepCopyInto(out *GenericCl
 	}
 	if in.SAMLClientIDRef != nil {
 		in, out := &in.SAMLClientIDRef, &out.SAMLClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientIDSelector != nil {
 		in, out := &in.SAMLClientIDSelector, &out.SAMLClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeID != nil {
@@ -141,12 +141,12 @@ func (in *GenericClientProtocolMapperInitParameters) DeepCopyInto(out *GenericCl
 	}
 	if in.SAMLClientScopeIDRef != nil {
 		in, out := &in.SAMLClientScopeIDRef, &out.SAMLClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeIDSelector != nil {
 		in, out := &in.SAMLClientScopeIDSelector, &out.SAMLClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -279,12 +279,12 @@ func (in *GenericClientProtocolMapperParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.ClientIDRef != nil {
 		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientIDSelector != nil {
 		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeID != nil {
@@ -294,12 +294,12 @@ func (in *GenericClientProtocolMapperParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.ClientScopeIDRef != nil {
 		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeIDSelector != nil {
 		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Config != nil {
@@ -340,12 +340,12 @@ func (in *GenericClientProtocolMapperParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientID != nil {
@@ -355,12 +355,12 @@ func (in *GenericClientProtocolMapperParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.SAMLClientIDRef != nil {
 		in, out := &in.SAMLClientIDRef, &out.SAMLClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientIDSelector != nil {
 		in, out := &in.SAMLClientIDSelector, &out.SAMLClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeID != nil {
@@ -370,12 +370,12 @@ func (in *GenericClientProtocolMapperParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.SAMLClientScopeIDRef != nil {
 		in, out := &in.SAMLClientScopeIDRef, &out.SAMLClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeIDSelector != nil {
 		in, out := &in.SAMLClientScopeIDSelector, &out.SAMLClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -393,7 +393,7 @@ func (in *GenericClientProtocolMapperParameters) DeepCopy() *GenericClientProtoc
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *GenericClientProtocolMapperSpec) DeepCopyInto(out *GenericClientProtocolMapperSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -411,7 +411,7 @@ func (in *GenericClientProtocolMapperSpec) DeepCopy() *GenericClientProtocolMapp
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *GenericClientProtocolMapperStatus) DeepCopyInto(out *GenericClientProtocolMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -462,12 +462,12 @@ func (in *GenericClientRoleMapperInitParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.ClientIDRef != nil {
 		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientIDSelector != nil {
 		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeID != nil {
@@ -477,12 +477,12 @@ func (in *GenericClientRoleMapperInitParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.ClientScopeIDRef != nil {
 		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeIDSelector != nil {
 		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
@@ -492,12 +492,12 @@ func (in *GenericClientRoleMapperInitParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleID != nil {
@@ -507,12 +507,12 @@ func (in *GenericClientRoleMapperInitParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.RoleIDRef != nil {
 		in, out := &in.RoleIDRef, &out.RoleIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleIDSelector != nil {
 		in, out := &in.RoleIDSelector, &out.RoleIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientID != nil {
@@ -522,12 +522,12 @@ func (in *GenericClientRoleMapperInitParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.SAMLClientIDRef != nil {
 		in, out := &in.SAMLClientIDRef, &out.SAMLClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientIDSelector != nil {
 		in, out := &in.SAMLClientIDSelector, &out.SAMLClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeID != nil {
@@ -537,12 +537,12 @@ func (in *GenericClientRoleMapperInitParameters) DeepCopyInto(out *GenericClient
 	}
 	if in.SAMLClientScopeIDRef != nil {
 		in, out := &in.SAMLClientScopeIDRef, &out.SAMLClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeIDSelector != nil {
 		in, out := &in.SAMLClientScopeIDSelector, &out.SAMLClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -649,12 +649,12 @@ func (in *GenericClientRoleMapperParameters) DeepCopyInto(out *GenericClientRole
 	}
 	if in.ClientIDRef != nil {
 		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientIDSelector != nil {
 		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeID != nil {
@@ -664,12 +664,12 @@ func (in *GenericClientRoleMapperParameters) DeepCopyInto(out *GenericClientRole
 	}
 	if in.ClientScopeIDRef != nil {
 		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeIDSelector != nil {
 		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
@@ -679,12 +679,12 @@ func (in *GenericClientRoleMapperParameters) DeepCopyInto(out *GenericClientRole
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleID != nil {
@@ -694,12 +694,12 @@ func (in *GenericClientRoleMapperParameters) DeepCopyInto(out *GenericClientRole
 	}
 	if in.RoleIDRef != nil {
 		in, out := &in.RoleIDRef, &out.RoleIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleIDSelector != nil {
 		in, out := &in.RoleIDSelector, &out.RoleIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientID != nil {
@@ -709,12 +709,12 @@ func (in *GenericClientRoleMapperParameters) DeepCopyInto(out *GenericClientRole
 	}
 	if in.SAMLClientIDRef != nil {
 		in, out := &in.SAMLClientIDRef, &out.SAMLClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientIDSelector != nil {
 		in, out := &in.SAMLClientIDSelector, &out.SAMLClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeID != nil {
@@ -724,12 +724,12 @@ func (in *GenericClientRoleMapperParameters) DeepCopyInto(out *GenericClientRole
 	}
 	if in.SAMLClientScopeIDRef != nil {
 		in, out := &in.SAMLClientScopeIDRef, &out.SAMLClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeIDSelector != nil {
 		in, out := &in.SAMLClientScopeIDSelector, &out.SAMLClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -747,7 +747,7 @@ func (in *GenericClientRoleMapperParameters) DeepCopy() *GenericClientRoleMapper
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *GenericClientRoleMapperSpec) DeepCopyInto(out *GenericClientRoleMapperSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -765,7 +765,7 @@ func (in *GenericClientRoleMapperSpec) DeepCopy() *GenericClientRoleMapperSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *GenericClientRoleMapperStatus) DeepCopyInto(out *GenericClientRoleMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -816,12 +816,12 @@ func (in *ProtocolMapperInitParameters) DeepCopyInto(out *ProtocolMapperInitPara
 	}
 	if in.ClientIDRef != nil {
 		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientIDSelector != nil {
 		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeID != nil {
@@ -831,12 +831,12 @@ func (in *ProtocolMapperInitParameters) DeepCopyInto(out *ProtocolMapperInitPara
 	}
 	if in.ClientScopeIDRef != nil {
 		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeIDSelector != nil {
 		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Config != nil {
@@ -877,12 +877,12 @@ func (in *ProtocolMapperInitParameters) DeepCopyInto(out *ProtocolMapperInitPara
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientID != nil {
@@ -892,12 +892,12 @@ func (in *ProtocolMapperInitParameters) DeepCopyInto(out *ProtocolMapperInitPara
 	}
 	if in.SAMLClientIDRef != nil {
 		in, out := &in.SAMLClientIDRef, &out.SAMLClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientIDSelector != nil {
 		in, out := &in.SAMLClientIDSelector, &out.SAMLClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeID != nil {
@@ -907,12 +907,12 @@ func (in *ProtocolMapperInitParameters) DeepCopyInto(out *ProtocolMapperInitPara
 	}
 	if in.SAMLClientScopeIDRef != nil {
 		in, out := &in.SAMLClientScopeIDRef, &out.SAMLClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeIDSelector != nil {
 		in, out := &in.SAMLClientScopeIDSelector, &out.SAMLClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1045,12 +1045,12 @@ func (in *ProtocolMapperParameters) DeepCopyInto(out *ProtocolMapperParameters) 
 	}
 	if in.ClientIDRef != nil {
 		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientIDSelector != nil {
 		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeID != nil {
@@ -1060,12 +1060,12 @@ func (in *ProtocolMapperParameters) DeepCopyInto(out *ProtocolMapperParameters) 
 	}
 	if in.ClientScopeIDRef != nil {
 		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeIDSelector != nil {
 		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Config != nil {
@@ -1106,12 +1106,12 @@ func (in *ProtocolMapperParameters) DeepCopyInto(out *ProtocolMapperParameters) 
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientID != nil {
@@ -1121,12 +1121,12 @@ func (in *ProtocolMapperParameters) DeepCopyInto(out *ProtocolMapperParameters) 
 	}
 	if in.SAMLClientIDRef != nil {
 		in, out := &in.SAMLClientIDRef, &out.SAMLClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientIDSelector != nil {
 		in, out := &in.SAMLClientIDSelector, &out.SAMLClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeID != nil {
@@ -1136,12 +1136,12 @@ func (in *ProtocolMapperParameters) DeepCopyInto(out *ProtocolMapperParameters) 
 	}
 	if in.SAMLClientScopeIDRef != nil {
 		in, out := &in.SAMLClientScopeIDRef, &out.SAMLClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeIDSelector != nil {
 		in, out := &in.SAMLClientScopeIDSelector, &out.SAMLClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1159,7 +1159,7 @@ func (in *ProtocolMapperParameters) DeepCopy() *ProtocolMapperParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *ProtocolMapperSpec) DeepCopyInto(out *ProtocolMapperSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -1177,7 +1177,7 @@ func (in *ProtocolMapperSpec) DeepCopy() *ProtocolMapperSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *ProtocolMapperStatus) DeepCopyInto(out *ProtocolMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 
@@ -1228,12 +1228,12 @@ func (in *RoleMapperInitParameters) DeepCopyInto(out *RoleMapperInitParameters) 
 	}
 	if in.ClientIDRef != nil {
 		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientIDSelector != nil {
 		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeID != nil {
@@ -1243,12 +1243,12 @@ func (in *RoleMapperInitParameters) DeepCopyInto(out *RoleMapperInitParameters) 
 	}
 	if in.ClientScopeIDRef != nil {
 		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeIDSelector != nil {
 		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
@@ -1258,12 +1258,12 @@ func (in *RoleMapperInitParameters) DeepCopyInto(out *RoleMapperInitParameters) 
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleID != nil {
@@ -1273,12 +1273,12 @@ func (in *RoleMapperInitParameters) DeepCopyInto(out *RoleMapperInitParameters) 
 	}
 	if in.RoleIDRef != nil {
 		in, out := &in.RoleIDRef, &out.RoleIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleIDSelector != nil {
 		in, out := &in.RoleIDSelector, &out.RoleIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientID != nil {
@@ -1288,12 +1288,12 @@ func (in *RoleMapperInitParameters) DeepCopyInto(out *RoleMapperInitParameters) 
 	}
 	if in.SAMLClientIDRef != nil {
 		in, out := &in.SAMLClientIDRef, &out.SAMLClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientIDSelector != nil {
 		in, out := &in.SAMLClientIDSelector, &out.SAMLClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeID != nil {
@@ -1303,12 +1303,12 @@ func (in *RoleMapperInitParameters) DeepCopyInto(out *RoleMapperInitParameters) 
 	}
 	if in.SAMLClientScopeIDRef != nil {
 		in, out := &in.SAMLClientScopeIDRef, &out.SAMLClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeIDSelector != nil {
 		in, out := &in.SAMLClientScopeIDSelector, &out.SAMLClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1415,12 +1415,12 @@ func (in *RoleMapperParameters) DeepCopyInto(out *RoleMapperParameters) {
 	}
 	if in.ClientIDRef != nil {
 		in, out := &in.ClientIDRef, &out.ClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientIDSelector != nil {
 		in, out := &in.ClientIDSelector, &out.ClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeID != nil {
@@ -1430,12 +1430,12 @@ func (in *RoleMapperParameters) DeepCopyInto(out *RoleMapperParameters) {
 	}
 	if in.ClientScopeIDRef != nil {
 		in, out := &in.ClientScopeIDRef, &out.ClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ClientScopeIDSelector != nil {
 		in, out := &in.ClientScopeIDSelector, &out.ClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmID != nil {
@@ -1445,12 +1445,12 @@ func (in *RoleMapperParameters) DeepCopyInto(out *RoleMapperParameters) {
 	}
 	if in.RealmIDRef != nil {
 		in, out := &in.RealmIDRef, &out.RealmIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmIDSelector != nil {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleID != nil {
@@ -1460,12 +1460,12 @@ func (in *RoleMapperParameters) DeepCopyInto(out *RoleMapperParameters) {
 	}
 	if in.RoleIDRef != nil {
 		in, out := &in.RoleIDRef, &out.RoleIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RoleIDSelector != nil {
 		in, out := &in.RoleIDSelector, &out.RoleIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientID != nil {
@@ -1475,12 +1475,12 @@ func (in *RoleMapperParameters) DeepCopyInto(out *RoleMapperParameters) {
 	}
 	if in.SAMLClientIDRef != nil {
 		in, out := &in.SAMLClientIDRef, &out.SAMLClientIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientIDSelector != nil {
 		in, out := &in.SAMLClientIDSelector, &out.SAMLClientIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeID != nil {
@@ -1490,12 +1490,12 @@ func (in *RoleMapperParameters) DeepCopyInto(out *RoleMapperParameters) {
 	}
 	if in.SAMLClientScopeIDRef != nil {
 		in, out := &in.SAMLClientScopeIDRef, &out.SAMLClientScopeIDRef
-		*out = new(v1.Reference)
+		*out = new(v2.Reference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SAMLClientScopeIDSelector != nil {
 		in, out := &in.SAMLClientScopeIDSelector, &out.SAMLClientScopeIDSelector
-		*out = new(v1.Selector)
+		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -1513,7 +1513,7 @@ func (in *RoleMapperParameters) DeepCopy() *RoleMapperParameters {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *RoleMapperSpec) DeepCopyInto(out *RoleMapperSpec) {
 	*out = *in
-	in.ResourceSpec.DeepCopyInto(&out.ResourceSpec)
+	in.ClusterManagedResourceSpec.DeepCopyInto(&out.ClusterManagedResourceSpec)
 	in.ForProvider.DeepCopyInto(&out.ForProvider)
 	in.InitProvider.DeepCopyInto(&out.InitProvider)
 }
@@ -1531,7 +1531,7 @@ func (in *RoleMapperSpec) DeepCopy() *RoleMapperSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *RoleMapperStatus) DeepCopyInto(out *RoleMapperStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 

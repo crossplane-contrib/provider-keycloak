@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type MembershipsInitParameters struct {
@@ -21,11 +21,11 @@ type MembershipsInitParameters struct {
 
 	// Reference to a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
-	GroupIDRef *v1.Reference `json:"groupIdRef,omitempty" tf:"-"`
+	GroupIDRef *v2.Reference `json:"groupIdRef,omitempty" tf:"-"`
 
 	// Selector for a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
-	GroupIDSelector *v1.Selector `json:"groupIdSelector,omitempty" tf:"-"`
+	GroupIDSelector *v2.Selector `json:"groupIdSelector,omitempty" tf:"-"`
 
 	// A list of usernames that belong to this group.
 	// +listType=set
@@ -37,11 +37,11 @@ type MembershipsInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type MembershipsObservation struct {
@@ -68,11 +68,11 @@ type MembershipsParameters struct {
 
 	// Reference to a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
-	GroupIDRef *v1.Reference `json:"groupIdRef,omitempty" tf:"-"`
+	GroupIDRef *v2.Reference `json:"groupIdRef,omitempty" tf:"-"`
 
 	// Selector for a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
-	GroupIDSelector *v1.Selector `json:"groupIdSelector,omitempty" tf:"-"`
+	GroupIDSelector *v2.Selector `json:"groupIdSelector,omitempty" tf:"-"`
 
 	// A list of usernames that belong to this group.
 	// +kubebuilder:validation:Optional
@@ -86,17 +86,17 @@ type MembershipsParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // MembershipsSpec defines the desired state of Memberships
 type MembershipsSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     MembershipsParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   MembershipsParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -112,8 +112,8 @@ type MembershipsSpec struct {
 
 // MembershipsStatus defines the observed state of Memberships.
 type MembershipsStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        MembershipsObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               MembershipsObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type DomainInitParameters struct {
@@ -72,11 +72,11 @@ type OrganizationInitParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.
 	// Landing page after successful login.
@@ -154,11 +154,11 @@ type OrganizationParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.
 	// Landing page after successful login.
@@ -168,8 +168,8 @@ type OrganizationParameters struct {
 
 // OrganizationSpec defines the desired state of Organization
 type OrganizationSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     OrganizationParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   OrganizationParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -185,8 +185,8 @@ type OrganizationSpec struct {
 
 // OrganizationStatus defines the observed state of Organization.
 type OrganizationStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        OrganizationObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               OrganizationObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

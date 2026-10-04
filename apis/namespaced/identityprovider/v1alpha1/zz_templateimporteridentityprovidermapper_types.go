@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type TemplateImporterIdentityProviderMapperInitParameters struct {
@@ -28,11 +27,11 @@ type TemplateImporterIdentityProviderMapperInitParameters struct {
 
 	// Reference to a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	FacebookIdentityProviderAliasRef *v1.NamespacedReference `json:"facebookIdentityProviderAliasRef,omitempty" tf:"-"`
+	FacebookIdentityProviderAliasRef *v2.NamespacedReference `json:"facebookIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	FacebookIdentityProviderAliasSelector *v1.NamespacedSelector `json:"facebookIdentityProviderAliasSelector,omitempty" tf:"-"`
+	FacebookIdentityProviderAliasSelector *v2.NamespacedSelector `json:"facebookIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -42,11 +41,11 @@ type TemplateImporterIdentityProviderMapperInitParameters struct {
 
 	// Reference to a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GithubIdentityProviderAliasRef *v1.NamespacedReference `json:"githubIdentityProviderAliasRef,omitempty" tf:"-"`
+	GithubIdentityProviderAliasRef *v2.NamespacedReference `json:"githubIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GithubIdentityProviderAliasSelector *v1.NamespacedSelector `json:"githubIdentityProviderAliasSelector,omitempty" tf:"-"`
+	GithubIdentityProviderAliasSelector *v2.NamespacedSelector `json:"githubIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -56,11 +55,11 @@ type TemplateImporterIdentityProviderMapperInitParameters struct {
 
 	// Reference to a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GoogleIdentityProviderAliasRef *v1.NamespacedReference `json:"googleIdentityProviderAliasRef,omitempty" tf:"-"`
+	GoogleIdentityProviderAliasRef *v2.NamespacedReference `json:"googleIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GoogleIdentityProviderAliasSelector *v1.NamespacedSelector `json:"googleIdentityProviderAliasSelector,omitempty" tf:"-"`
+	GoogleIdentityProviderAliasSelector *v2.NamespacedSelector `json:"googleIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -70,11 +69,11 @@ type TemplateImporterIdentityProviderMapperInitParameters struct {
 
 	// Reference to a IdentityProvider in oidc to populate identityProviderAlias.
 	// +kubebuilder:validation:Optional
-	IdentityProviderAliasRef *v1.NamespacedReference `json:"identityProviderAliasRef,omitempty" tf:"-"`
+	IdentityProviderAliasRef *v2.NamespacedReference `json:"identityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a IdentityProvider in oidc to populate identityProviderAlias.
 	// +kubebuilder:validation:Optional
-	IdentityProviderAliasSelector *v1.NamespacedSelector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
+	IdentityProviderAliasSelector *v2.NamespacedSelector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -84,11 +83,11 @@ type TemplateImporterIdentityProviderMapperInitParameters struct {
 
 	// Reference to a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	KubernetesIdentityProviderAliasRef *v1.NamespacedReference `json:"kubernetesIdentityProviderAliasRef,omitempty" tf:"-"`
+	KubernetesIdentityProviderAliasRef *v2.NamespacedReference `json:"kubernetesIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	KubernetesIdentityProviderAliasSelector *v1.NamespacedSelector `json:"kubernetesIdentityProviderAliasSelector,omitempty" tf:"-"`
+	KubernetesIdentityProviderAliasSelector *v2.NamespacedSelector `json:"kubernetesIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -98,11 +97,11 @@ type TemplateImporterIdentityProviderMapperInitParameters struct {
 
 	// Reference to a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	MicrosoftIdentityProviderAliasRef *v1.NamespacedReference `json:"microsoftIdentityProviderAliasRef,omitempty" tf:"-"`
+	MicrosoftIdentityProviderAliasRef *v2.NamespacedReference `json:"microsoftIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	MicrosoftIdentityProviderAliasSelector *v1.NamespacedSelector `json:"microsoftIdentityProviderAliasSelector,omitempty" tf:"-"`
+	MicrosoftIdentityProviderAliasSelector *v2.NamespacedSelector `json:"microsoftIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The name of the mapper.
 	// IDP Mapper Name
@@ -116,11 +115,11 @@ type TemplateImporterIdentityProviderMapperInitParameters struct {
 
 	// Reference to a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	OpenshiftV4IdentityProviderAliasRef *v1.NamespacedReference `json:"openshiftV4IdentityProviderAliasRef,omitempty" tf:"-"`
+	OpenshiftV4IdentityProviderAliasRef *v2.NamespacedReference `json:"openshiftV4IdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	OpenshiftV4IdentityProviderAliasSelector *v1.NamespacedSelector `json:"openshiftV4IdentityProviderAliasSelector,omitempty" tf:"-"`
+	OpenshiftV4IdentityProviderAliasSelector *v2.NamespacedSelector `json:"openshiftV4IdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The name of the realm.
 	// Realm Name
@@ -129,11 +128,11 @@ type TemplateImporterIdentityProviderMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -143,11 +142,11 @@ type TemplateImporterIdentityProviderMapperInitParameters struct {
 
 	// Reference to a IdentityProvider in saml to populate samlIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SAMLIdentityProviderAliasRef *v1.NamespacedReference `json:"samlIdentityProviderAliasRef,omitempty" tf:"-"`
+	SAMLIdentityProviderAliasRef *v2.NamespacedReference `json:"samlIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a IdentityProvider in saml to populate samlIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SAMLIdentityProviderAliasSelector *v1.NamespacedSelector `json:"samlIdentityProviderAliasSelector,omitempty" tf:"-"`
+	SAMLIdentityProviderAliasSelector *v2.NamespacedSelector `json:"samlIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -157,11 +156,11 @@ type TemplateImporterIdentityProviderMapperInitParameters struct {
 
 	// Reference to a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SpiffeIdentityProviderAliasRef *v1.NamespacedReference `json:"spiffeIdentityProviderAliasRef,omitempty" tf:"-"`
+	SpiffeIdentityProviderAliasRef *v2.NamespacedReference `json:"spiffeIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SpiffeIdentityProviderAliasSelector *v1.NamespacedSelector `json:"spiffeIdentityProviderAliasSelector,omitempty" tf:"-"`
+	SpiffeIdentityProviderAliasSelector *v2.NamespacedSelector `json:"spiffeIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// Template to use to format the username to import. Substitutions are enclosed in ${}. For example: '$${ALIAS}.$${CLAIM.sub}'. ALIAS is the provider alias. CLAIM.<NAME> references an ID or Access token claim.
 	// Username For Template Import
@@ -241,11 +240,11 @@ type TemplateImporterIdentityProviderMapperParameters struct {
 
 	// Reference to a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	FacebookIdentityProviderAliasRef *v1.NamespacedReference `json:"facebookIdentityProviderAliasRef,omitempty" tf:"-"`
+	FacebookIdentityProviderAliasRef *v2.NamespacedReference `json:"facebookIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	FacebookIdentityProviderAliasSelector *v1.NamespacedSelector `json:"facebookIdentityProviderAliasSelector,omitempty" tf:"-"`
+	FacebookIdentityProviderAliasSelector *v2.NamespacedSelector `json:"facebookIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -256,11 +255,11 @@ type TemplateImporterIdentityProviderMapperParameters struct {
 
 	// Reference to a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GithubIdentityProviderAliasRef *v1.NamespacedReference `json:"githubIdentityProviderAliasRef,omitempty" tf:"-"`
+	GithubIdentityProviderAliasRef *v2.NamespacedReference `json:"githubIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GithubIdentityProviderAliasSelector *v1.NamespacedSelector `json:"githubIdentityProviderAliasSelector,omitempty" tf:"-"`
+	GithubIdentityProviderAliasSelector *v2.NamespacedSelector `json:"githubIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -271,11 +270,11 @@ type TemplateImporterIdentityProviderMapperParameters struct {
 
 	// Reference to a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GoogleIdentityProviderAliasRef *v1.NamespacedReference `json:"googleIdentityProviderAliasRef,omitempty" tf:"-"`
+	GoogleIdentityProviderAliasRef *v2.NamespacedReference `json:"googleIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GoogleIdentityProviderAliasSelector *v1.NamespacedSelector `json:"googleIdentityProviderAliasSelector,omitempty" tf:"-"`
+	GoogleIdentityProviderAliasSelector *v2.NamespacedSelector `json:"googleIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -286,11 +285,11 @@ type TemplateImporterIdentityProviderMapperParameters struct {
 
 	// Reference to a IdentityProvider in oidc to populate identityProviderAlias.
 	// +kubebuilder:validation:Optional
-	IdentityProviderAliasRef *v1.NamespacedReference `json:"identityProviderAliasRef,omitempty" tf:"-"`
+	IdentityProviderAliasRef *v2.NamespacedReference `json:"identityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a IdentityProvider in oidc to populate identityProviderAlias.
 	// +kubebuilder:validation:Optional
-	IdentityProviderAliasSelector *v1.NamespacedSelector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
+	IdentityProviderAliasSelector *v2.NamespacedSelector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -301,11 +300,11 @@ type TemplateImporterIdentityProviderMapperParameters struct {
 
 	// Reference to a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	KubernetesIdentityProviderAliasRef *v1.NamespacedReference `json:"kubernetesIdentityProviderAliasRef,omitempty" tf:"-"`
+	KubernetesIdentityProviderAliasRef *v2.NamespacedReference `json:"kubernetesIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	KubernetesIdentityProviderAliasSelector *v1.NamespacedSelector `json:"kubernetesIdentityProviderAliasSelector,omitempty" tf:"-"`
+	KubernetesIdentityProviderAliasSelector *v2.NamespacedSelector `json:"kubernetesIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -316,11 +315,11 @@ type TemplateImporterIdentityProviderMapperParameters struct {
 
 	// Reference to a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	MicrosoftIdentityProviderAliasRef *v1.NamespacedReference `json:"microsoftIdentityProviderAliasRef,omitempty" tf:"-"`
+	MicrosoftIdentityProviderAliasRef *v2.NamespacedReference `json:"microsoftIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	MicrosoftIdentityProviderAliasSelector *v1.NamespacedSelector `json:"microsoftIdentityProviderAliasSelector,omitempty" tf:"-"`
+	MicrosoftIdentityProviderAliasSelector *v2.NamespacedSelector `json:"microsoftIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The name of the mapper.
 	// IDP Mapper Name
@@ -336,11 +335,11 @@ type TemplateImporterIdentityProviderMapperParameters struct {
 
 	// Reference to a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	OpenshiftV4IdentityProviderAliasRef *v1.NamespacedReference `json:"openshiftV4IdentityProviderAliasRef,omitempty" tf:"-"`
+	OpenshiftV4IdentityProviderAliasRef *v2.NamespacedReference `json:"openshiftV4IdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	OpenshiftV4IdentityProviderAliasSelector *v1.NamespacedSelector `json:"openshiftV4IdentityProviderAliasSelector,omitempty" tf:"-"`
+	OpenshiftV4IdentityProviderAliasSelector *v2.NamespacedSelector `json:"openshiftV4IdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The name of the realm.
 	// Realm Name
@@ -350,11 +349,11 @@ type TemplateImporterIdentityProviderMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -365,11 +364,11 @@ type TemplateImporterIdentityProviderMapperParameters struct {
 
 	// Reference to a IdentityProvider in saml to populate samlIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SAMLIdentityProviderAliasRef *v1.NamespacedReference `json:"samlIdentityProviderAliasRef,omitempty" tf:"-"`
+	SAMLIdentityProviderAliasRef *v2.NamespacedReference `json:"samlIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a IdentityProvider in saml to populate samlIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SAMLIdentityProviderAliasSelector *v1.NamespacedSelector `json:"samlIdentityProviderAliasSelector,omitempty" tf:"-"`
+	SAMLIdentityProviderAliasSelector *v2.NamespacedSelector `json:"samlIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The alias of the associated identity provider.
 	// IDP Alias
@@ -380,11 +379,11 @@ type TemplateImporterIdentityProviderMapperParameters struct {
 
 	// Reference to a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SpiffeIdentityProviderAliasRef *v1.NamespacedReference `json:"spiffeIdentityProviderAliasRef,omitempty" tf:"-"`
+	SpiffeIdentityProviderAliasRef *v2.NamespacedReference `json:"spiffeIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SpiffeIdentityProviderAliasSelector *v1.NamespacedSelector `json:"spiffeIdentityProviderAliasSelector,omitempty" tf:"-"`
+	SpiffeIdentityProviderAliasSelector *v2.NamespacedSelector `json:"spiffeIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// Template to use to format the username to import. Substitutions are enclosed in ${}. For example: '$${ALIAS}.$${CLAIM.sub}'. ALIAS is the provider alias. CLAIM.<NAME> references an ID or Access token claim.
 	// Username For Template Import
@@ -411,8 +410,8 @@ type TemplateImporterIdentityProviderMapperSpec struct {
 
 // TemplateImporterIdentityProviderMapperStatus defines the observed state of TemplateImporterIdentityProviderMapper.
 type TemplateImporterIdentityProviderMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        TemplateImporterIdentityProviderMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               TemplateImporterIdentityProviderMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

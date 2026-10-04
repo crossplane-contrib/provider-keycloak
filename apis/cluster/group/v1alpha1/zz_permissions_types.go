@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ManageMembersScopeInitParameters struct {
@@ -147,11 +147,11 @@ type PermissionsInitParameters struct {
 
 	// Reference to a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
-	GroupIDRef *v1.Reference `json:"groupIdRef,omitempty" tf:"-"`
+	GroupIDRef *v2.Reference `json:"groupIdRef,omitempty" tf:"-"`
 
 	// Selector for a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
-	GroupIDSelector *v1.Selector `json:"groupIdSelector,omitempty" tf:"-"`
+	GroupIDSelector *v2.Selector `json:"groupIdSelector,omitempty" tf:"-"`
 
 	// Policies that decide if the admin can manage the users that belong to this group.
 	ManageMembersScope []ManageMembersScopeInitParameters `json:"manageMembersScope,omitempty" tf:"manage_members_scope,omitempty"`
@@ -168,11 +168,11 @@ type PermissionsInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Policies that decide if the admin can view the user details of members of the group.
 	ViewMembersScope []ViewMembersScopeInitParameters `json:"viewMembersScope,omitempty" tf:"view_members_scope,omitempty"`
@@ -223,11 +223,11 @@ type PermissionsParameters struct {
 
 	// Reference to a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
-	GroupIDRef *v1.Reference `json:"groupIdRef,omitempty" tf:"-"`
+	GroupIDRef *v2.Reference `json:"groupIdRef,omitempty" tf:"-"`
 
 	// Selector for a Group in group to populate groupId.
 	// +kubebuilder:validation:Optional
-	GroupIDSelector *v1.Selector `json:"groupIdSelector,omitempty" tf:"-"`
+	GroupIDSelector *v2.Selector `json:"groupIdSelector,omitempty" tf:"-"`
 
 	// Policies that decide if the admin can manage the users that belong to this group.
 	// +kubebuilder:validation:Optional
@@ -248,11 +248,11 @@ type PermissionsParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Policies that decide if the admin can view the user details of members of the group.
 	// +kubebuilder:validation:Optional
@@ -349,8 +349,8 @@ type ViewScopeParameters struct {
 
 // PermissionsSpec defines the desired state of Permissions
 type PermissionsSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     PermissionsParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   PermissionsParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -366,8 +366,8 @@ type PermissionsSpec struct {
 
 // PermissionsStatus defines the observed state of Permissions.
 type PermissionsStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        PermissionsObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               PermissionsObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

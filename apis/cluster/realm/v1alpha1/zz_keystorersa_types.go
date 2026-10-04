@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type KeystoreRsaInitParameters struct {
@@ -25,7 +25,7 @@ type KeystoreRsaInitParameters struct {
 
 	// X509 Certificate encoded in PEM format.
 	// X509 Certificate encoded in PEM format
-	CertificateSecretRef v1.SecretKeySelector `json:"certificateSecretRef" tf:"-"`
+	CertificateSecretRef v2.SecretKeySelector `json:"certificateSecretRef" tf:"-"`
 
 	// When false, key is not accessible in this realm. Defaults to true.
 	// Set if the keys are enabled
@@ -45,7 +45,7 @@ type KeystoreRsaInitParameters struct {
 
 	// Private RSA Key encoded in PEM format.
 	// Private RSA Key encoded in PEM format
-	PrivateKeySecretRef v1.SecretKeySelector `json:"privateKeySecretRef" tf:"-"`
+	PrivateKeySecretRef v2.SecretKeySelector `json:"privateKeySecretRef" tf:"-"`
 
 	// Use rsa for signing keys, rsa-enc for encryption keys
 	// RSA key provider id
@@ -57,11 +57,11 @@ type KeystoreRsaInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type KeystoreRsaObservation struct {
@@ -115,7 +115,7 @@ type KeystoreRsaParameters struct {
 	// X509 Certificate encoded in PEM format.
 	// X509 Certificate encoded in PEM format
 	// +kubebuilder:validation:Optional
-	CertificateSecretRef v1.SecretKeySelector `json:"certificateSecretRef" tf:"-"`
+	CertificateSecretRef v2.SecretKeySelector `json:"certificateSecretRef" tf:"-"`
 
 	// When false, key is not accessible in this realm. Defaults to true.
 	// Set if the keys are enabled
@@ -140,7 +140,7 @@ type KeystoreRsaParameters struct {
 	// Private RSA Key encoded in PEM format.
 	// Private RSA Key encoded in PEM format
 	// +kubebuilder:validation:Optional
-	PrivateKeySecretRef v1.SecretKeySelector `json:"privateKeySecretRef" tf:"-"`
+	PrivateKeySecretRef v2.SecretKeySelector `json:"privateKeySecretRef" tf:"-"`
 
 	// Use rsa for signing keys, rsa-enc for encryption keys
 	// RSA key provider id
@@ -154,17 +154,17 @@ type KeystoreRsaParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // KeystoreRsaSpec defines the desired state of KeystoreRsa
 type KeystoreRsaSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     KeystoreRsaParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   KeystoreRsaParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -180,8 +180,8 @@ type KeystoreRsaSpec struct {
 
 // KeystoreRsaStatus defines the observed state of KeystoreRsa.
 type KeystoreRsaStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        KeystoreRsaObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               KeystoreRsaObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

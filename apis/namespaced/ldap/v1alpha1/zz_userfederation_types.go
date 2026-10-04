@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type CacheInitParameters struct {
@@ -154,7 +153,7 @@ type UserFederationInitParameters struct {
 
 	// Password of LDAP admin. This attribute must be set if bind_dn is set.
 	// Password of LDAP admin.
-	BindCredentialSecretRef *v1.LocalSecretKeySelector `json:"bindCredentialSecretRef,omitempty" tf:"-"`
+	BindCredentialSecretRef *v2.LocalSecretKeySelector `json:"bindCredentialSecretRef,omitempty" tf:"-"`
 
 	// DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.
 	// DN of LDAP admin, which will be used by Keycloak to access LDAP server.
@@ -243,11 +242,11 @@ type UserFederationInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
 	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
@@ -455,7 +454,7 @@ type UserFederationParameters struct {
 	// Password of LDAP admin. This attribute must be set if bind_dn is set.
 	// Password of LDAP admin.
 	// +kubebuilder:validation:Optional
-	BindCredentialSecretRef *v1.LocalSecretKeySelector `json:"bindCredentialSecretRef,omitempty" tf:"-"`
+	BindCredentialSecretRef *v2.LocalSecretKeySelector `json:"bindCredentialSecretRef,omitempty" tf:"-"`
 
 	// DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.
 	// DN of LDAP admin, which will be used by Keycloak to access LDAP server.
@@ -565,11 +564,11 @@ type UserFederationParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
 	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
@@ -655,8 +654,8 @@ type UserFederationSpec struct {
 
 // UserFederationStatus defines the observed state of UserFederation.
 type UserFederationStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        UserFederationObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               UserFederationObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

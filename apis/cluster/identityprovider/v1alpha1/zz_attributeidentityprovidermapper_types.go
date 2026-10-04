@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type AttributeIdentityProviderMapperInitParameters struct {
@@ -35,11 +35,11 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// Reference to a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	FacebookIdentityProviderAliasRef *v1.Reference `json:"facebookIdentityProviderAliasRef,omitempty" tf:"-"`
+	FacebookIdentityProviderAliasRef *v2.Reference `json:"facebookIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	FacebookIdentityProviderAliasSelector *v1.Selector `json:"facebookIdentityProviderAliasSelector,omitempty" tf:"-"`
+	FacebookIdentityProviderAliasSelector *v2.Selector `json:"facebookIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -49,11 +49,11 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// Reference to a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GithubIdentityProviderAliasRef *v1.Reference `json:"githubIdentityProviderAliasRef,omitempty" tf:"-"`
+	GithubIdentityProviderAliasRef *v2.Reference `json:"githubIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GithubIdentityProviderAliasSelector *v1.Selector `json:"githubIdentityProviderAliasSelector,omitempty" tf:"-"`
+	GithubIdentityProviderAliasSelector *v2.Selector `json:"githubIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -63,11 +63,11 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// Reference to a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GoogleIdentityProviderAliasRef *v1.Reference `json:"googleIdentityProviderAliasRef,omitempty" tf:"-"`
+	GoogleIdentityProviderAliasRef *v2.Reference `json:"googleIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GoogleIdentityProviderAliasSelector *v1.Selector `json:"googleIdentityProviderAliasSelector,omitempty" tf:"-"`
+	GoogleIdentityProviderAliasSelector *v2.Selector `json:"googleIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -77,11 +77,11 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// Reference to a IdentityProvider in oidc to populate identityProviderAlias.
 	// +kubebuilder:validation:Optional
-	IdentityProviderAliasRef *v1.Reference `json:"identityProviderAliasRef,omitempty" tf:"-"`
+	IdentityProviderAliasRef *v2.Reference `json:"identityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a IdentityProvider in oidc to populate identityProviderAlias.
 	// +kubebuilder:validation:Optional
-	IdentityProviderAliasSelector *v1.Selector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
+	IdentityProviderAliasSelector *v2.Selector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -91,11 +91,11 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// Reference to a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	KubernetesIdentityProviderAliasRef *v1.Reference `json:"kubernetesIdentityProviderAliasRef,omitempty" tf:"-"`
+	KubernetesIdentityProviderAliasRef *v2.Reference `json:"kubernetesIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	KubernetesIdentityProviderAliasSelector *v1.Selector `json:"kubernetesIdentityProviderAliasSelector,omitempty" tf:"-"`
+	KubernetesIdentityProviderAliasSelector *v2.Selector `json:"kubernetesIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -105,11 +105,11 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// Reference to a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	MicrosoftIdentityProviderAliasRef *v1.Reference `json:"microsoftIdentityProviderAliasRef,omitempty" tf:"-"`
+	MicrosoftIdentityProviderAliasRef *v2.Reference `json:"microsoftIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	MicrosoftIdentityProviderAliasSelector *v1.Selector `json:"microsoftIdentityProviderAliasSelector,omitempty" tf:"-"`
+	MicrosoftIdentityProviderAliasSelector *v2.Selector `json:"microsoftIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// Display name of this mapper when displayed in the console.
 	// IDP Mapper Name
@@ -123,11 +123,11 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// Reference to a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	OpenshiftV4IdentityProviderAliasRef *v1.Reference `json:"openshiftV4IdentityProviderAliasRef,omitempty" tf:"-"`
+	OpenshiftV4IdentityProviderAliasRef *v2.Reference `json:"openshiftV4IdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	OpenshiftV4IdentityProviderAliasSelector *v1.Selector `json:"openshiftV4IdentityProviderAliasSelector,omitempty" tf:"-"`
+	OpenshiftV4IdentityProviderAliasSelector *v2.Selector `json:"openshiftV4IdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The realm ID that this mapper will exist in.
 	// Realm Name
@@ -136,11 +136,11 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -150,11 +150,11 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// Reference to a IdentityProvider in saml to populate samlIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SAMLIdentityProviderAliasRef *v1.Reference `json:"samlIdentityProviderAliasRef,omitempty" tf:"-"`
+	SAMLIdentityProviderAliasRef *v2.Reference `json:"samlIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a IdentityProvider in saml to populate samlIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SAMLIdentityProviderAliasSelector *v1.Selector `json:"samlIdentityProviderAliasSelector,omitempty" tf:"-"`
+	SAMLIdentityProviderAliasSelector *v2.Selector `json:"samlIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -164,11 +164,11 @@ type AttributeIdentityProviderMapperInitParameters struct {
 
 	// Reference to a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SpiffeIdentityProviderAliasRef *v1.Reference `json:"spiffeIdentityProviderAliasRef,omitempty" tf:"-"`
+	SpiffeIdentityProviderAliasRef *v2.Reference `json:"spiffeIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SpiffeIdentityProviderAliasSelector *v1.Selector `json:"spiffeIdentityProviderAliasSelector,omitempty" tf:"-"`
+	SpiffeIdentityProviderAliasSelector *v2.Selector `json:"spiffeIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// Is Attribute related to a User Session.
 	// Is Attribute Related To a User Session
@@ -266,11 +266,11 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// Reference to a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	FacebookIdentityProviderAliasRef *v1.Reference `json:"facebookIdentityProviderAliasRef,omitempty" tf:"-"`
+	FacebookIdentityProviderAliasRef *v2.Reference `json:"facebookIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a FacebookIdentityProvider in oidc to populate facebookIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	FacebookIdentityProviderAliasSelector *v1.Selector `json:"facebookIdentityProviderAliasSelector,omitempty" tf:"-"`
+	FacebookIdentityProviderAliasSelector *v2.Selector `json:"facebookIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -281,11 +281,11 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// Reference to a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GithubIdentityProviderAliasRef *v1.Reference `json:"githubIdentityProviderAliasRef,omitempty" tf:"-"`
+	GithubIdentityProviderAliasRef *v2.Reference `json:"githubIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a GithubIdentityProvider in oidc to populate githubIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GithubIdentityProviderAliasSelector *v1.Selector `json:"githubIdentityProviderAliasSelector,omitempty" tf:"-"`
+	GithubIdentityProviderAliasSelector *v2.Selector `json:"githubIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -296,11 +296,11 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// Reference to a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GoogleIdentityProviderAliasRef *v1.Reference `json:"googleIdentityProviderAliasRef,omitempty" tf:"-"`
+	GoogleIdentityProviderAliasRef *v2.Reference `json:"googleIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a GoogleIdentityProvider in oidc to populate googleIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	GoogleIdentityProviderAliasSelector *v1.Selector `json:"googleIdentityProviderAliasSelector,omitempty" tf:"-"`
+	GoogleIdentityProviderAliasSelector *v2.Selector `json:"googleIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -311,11 +311,11 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// Reference to a IdentityProvider in oidc to populate identityProviderAlias.
 	// +kubebuilder:validation:Optional
-	IdentityProviderAliasRef *v1.Reference `json:"identityProviderAliasRef,omitempty" tf:"-"`
+	IdentityProviderAliasRef *v2.Reference `json:"identityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a IdentityProvider in oidc to populate identityProviderAlias.
 	// +kubebuilder:validation:Optional
-	IdentityProviderAliasSelector *v1.Selector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
+	IdentityProviderAliasSelector *v2.Selector `json:"identityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -326,11 +326,11 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// Reference to a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	KubernetesIdentityProviderAliasRef *v1.Reference `json:"kubernetesIdentityProviderAliasRef,omitempty" tf:"-"`
+	KubernetesIdentityProviderAliasRef *v2.Reference `json:"kubernetesIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a KubernetesIdentityProvider in identityprovider to populate kubernetesIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	KubernetesIdentityProviderAliasSelector *v1.Selector `json:"kubernetesIdentityProviderAliasSelector,omitempty" tf:"-"`
+	KubernetesIdentityProviderAliasSelector *v2.Selector `json:"kubernetesIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -341,11 +341,11 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// Reference to a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	MicrosoftIdentityProviderAliasRef *v1.Reference `json:"microsoftIdentityProviderAliasRef,omitempty" tf:"-"`
+	MicrosoftIdentityProviderAliasRef *v2.Reference `json:"microsoftIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a MicrosoftIdentityProvider in oidc to populate microsoftIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	MicrosoftIdentityProviderAliasSelector *v1.Selector `json:"microsoftIdentityProviderAliasSelector,omitempty" tf:"-"`
+	MicrosoftIdentityProviderAliasSelector *v2.Selector `json:"microsoftIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// Display name of this mapper when displayed in the console.
 	// IDP Mapper Name
@@ -361,11 +361,11 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// Reference to a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	OpenshiftV4IdentityProviderAliasRef *v1.Reference `json:"openshiftV4IdentityProviderAliasRef,omitempty" tf:"-"`
+	OpenshiftV4IdentityProviderAliasRef *v2.Reference `json:"openshiftV4IdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a OidcOpenShiftV4IdentityProvider in identityprovider to populate openshiftV4IdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	OpenshiftV4IdentityProviderAliasSelector *v1.Selector `json:"openshiftV4IdentityProviderAliasSelector,omitempty" tf:"-"`
+	OpenshiftV4IdentityProviderAliasSelector *v2.Selector `json:"openshiftV4IdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The realm ID that this mapper will exist in.
 	// Realm Name
@@ -375,11 +375,11 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -390,11 +390,11 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// Reference to a IdentityProvider in saml to populate samlIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SAMLIdentityProviderAliasRef *v1.Reference `json:"samlIdentityProviderAliasRef,omitempty" tf:"-"`
+	SAMLIdentityProviderAliasRef *v2.Reference `json:"samlIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a IdentityProvider in saml to populate samlIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SAMLIdentityProviderAliasSelector *v1.Selector `json:"samlIdentityProviderAliasSelector,omitempty" tf:"-"`
+	SAMLIdentityProviderAliasSelector *v2.Selector `json:"samlIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// The IDP alias of the attribute to set.
 	// IDP Alias
@@ -405,11 +405,11 @@ type AttributeIdentityProviderMapperParameters struct {
 
 	// Reference to a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SpiffeIdentityProviderAliasRef *v1.Reference `json:"spiffeIdentityProviderAliasRef,omitempty" tf:"-"`
+	SpiffeIdentityProviderAliasRef *v2.Reference `json:"spiffeIdentityProviderAliasRef,omitempty" tf:"-"`
 
 	// Selector for a SpiffeIdentityProvider in identityprovider to populate spiffeIdentityProviderAlias.
 	// +kubebuilder:validation:Optional
-	SpiffeIdentityProviderAliasSelector *v1.Selector `json:"spiffeIdentityProviderAliasSelector,omitempty" tf:"-"`
+	SpiffeIdentityProviderAliasSelector *v2.Selector `json:"spiffeIdentityProviderAliasSelector,omitempty" tf:"-"`
 
 	// Is Attribute related to a User Session.
 	// Is Attribute Related To a User Session
@@ -419,8 +419,8 @@ type AttributeIdentityProviderMapperParameters struct {
 
 // AttributeIdentityProviderMapperSpec defines the desired state of AttributeIdentityProviderMapper
 type AttributeIdentityProviderMapperSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     AttributeIdentityProviderMapperParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   AttributeIdentityProviderMapperParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -436,8 +436,8 @@ type AttributeIdentityProviderMapperSpec struct {
 
 // AttributeIdentityProviderMapperStatus defines the observed state of AttributeIdentityProviderMapper.
 type AttributeIdentityProviderMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        AttributeIdentityProviderMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               AttributeIdentityProviderMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
