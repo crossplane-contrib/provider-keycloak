@@ -47,6 +47,14 @@ func TestLateInitIgnoredFields(t *testing.T) {
 			"client_authentication_flow",
 			"docker_authentication_flow",
 		},
+		"keycloak_realm": {
+			"browser_flow",
+			"registration_flow",
+			"direct_grant_flow",
+			"reset_credentials_flow",
+			"client_authentication_flow",
+			"docker_authentication_flow",
+		},
 		"keycloak_generic_protocol_mapper": {
 			"config",
 		},

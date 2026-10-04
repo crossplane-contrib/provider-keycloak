@@ -224,12 +224,46 @@ spec:
 | Field | Why it matters |
 |-------|----------------|
 | `realmIdRef` | Selects the realm whose authentication bindings are being changed. |
-| `browserAuthenticationFlowRef` | Binds a custom flow to browser logins. |
+| `browserFlowRef` | Binds a custom flow to browser logins. |
 | `registrationFlowRef` | Binds a custom flow to self-registration. |
 | `directGrantFlowRef` | Binds a flow to direct access grant authentication. |
 | `resetCredentialsFlowRef` | Binds a flow to reset-credentials behavior. |
 | `clientAuthenticationFlowRef` | Binds a flow to client authentication. |
 | `dockerAuthenticationFlowRef` | Binds a flow to Docker authentication. |
+
+## Realm vs. Bindings ownership
+
+The six flow bindings (`browserFlow`, `registrationFlow`, `directGrantFlow`,
+`resetCredentialsFlow`, `clientAuthenticationFlow`, `dockerAuthenticationFlow`)
+are fields of the Keycloak realm itself. They can be set either on the `Realm`
+managed resource or through a `Bindings` resource. Pick **one** owner per field:
+
+- Declare a binding on **either** the `Realm` **or** the `Bindings` resource,
+  never on both. If both declare different values, each reconcile of one
+  resource undoes the other and the value oscillates.
+- A `Realm` that leaves these fields unset does not manage them: the provider
+  does not late-initialize them into `spec.forProvider`, and a realm update
+  re-sends the currently observed value, so a `Bindings` resource for the same
+  realm keeps its value.
+- Realms created with an older provider version may already carry
+  late-initialized values (for example `browserFlow: browser`) in
+  `spec.forProvider`. Remove those fields from the `Realm` (for example with
+  `kubectl edit`) if a `Bindings` resource should own them; otherwise the
+  `Realm` keeps resetting them.
+
+### Binding a custom flow on a new realm
+
+Keycloak rejects a realm update whose binding references a flow alias that
+does not exist yet (`500 Failed to update realm`; the previous value is kept).
+A `Realm` that declares `browserFlow: my-custom-flow` in the same change that
+creates the realm therefore stays `Synced=False` until the flow exists, which
+can deadlock sync-wave ordered GitOps setups (the flow can only be created
+after the realm). Either:
+
+- use a `Bindings` resource with `browserFlowRef` (it waits for the referenced
+  `Flow` to resolve before applying the binding), or
+- roll out in two phases: create the realm and the flow first, then set the
+  binding on the `Realm` in a follow-up change.
 
 ## Related Resources
 
