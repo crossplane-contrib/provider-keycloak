@@ -1,0 +1,5 @@
+{{- .Title | replaceRE "\n" " " | printf "# %s" }}
+
+[llms.txt]({{ "llms.txt" | absURL }})
+
+{{ .RawContent }}

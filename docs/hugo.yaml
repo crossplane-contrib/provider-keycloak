@@ -1,6 +1,7 @@
 baseURL: https://crossplane-contrib.github.io/provider-keycloak/
 title: Provider Keycloak
 languageCode: en-us
+disableKinds: [taxonomy, term]
 
 module:
   imports:
@@ -14,7 +15,7 @@ markup:
     noClasses: false
 
 outputs:
-  home: [HTML]
+  home: [HTML, markdown]
   section: [HTML, markdown]
   page: [HTML, markdown]
 
@@ -31,6 +32,8 @@ menu:
       weight: 3
 
 params:
+  banner:
+    message: 'AI documentation index: [llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)'
   navbar:
     displayTitle: true
     displayLogo: true
