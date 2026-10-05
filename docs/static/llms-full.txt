@@ -1,8 +1,60 @@
 # provider-keycloak — full content for AI assistants
 # Generated from docs/content. See https://llmstxt.org/
 
+## Provider Keycloak
+URL: https://crossplane-contrib.github.io/provider-keycloak/index.md
+
+
+<div class="hx:mt-6 hx:mb-6">
+{{< hextra/hero-headline >}}Declarative Keycloak on Kubernetes{{< /hextra/hero-headline >}}
+{{< hextra/hero-subtitle >}}
+Manage Keycloak realms, clients, users, and roles as Kubernetes resources.
+Built on [Crossplane](https://crossplane.io/) and [Upjet](https://github.com/crossplane/upjet).
+{{< /hextra/hero-subtitle >}}
+</div>
+
+<div class="hx:mb-12 hx:flex hx:flex-wrap hx:gap-3">
+{{< hextra/hero-button text="Get Started" link="docs/using/getting-started/installation/" >}}
+{{< hextra/hero-badge link="https://github.com/crossplane-contrib/provider-keycloak" >}}⭐ GitHub{{< /hextra/hero-badge >}}
+{{< hextra/hero-badge link="https://github.com/crossplane-contrib/provider-keycloak/releases" >}}📦 Releases{{< /hextra/hero-badge >}}
+</div>
+
+{{< cards cols="3" >}}
+  {{< card link="docs/using/getting-started/installation/" title="Installation" icon="server" subtitle="Add the provider to your Crossplane cluster" >}}
+  {{< card link="docs/using/getting-started/configuration/" title="Configuration" icon="adjustments" subtitle="Connect to your Keycloak instance" >}}
+  {{< card link="docs/using/getting-started/first-realm/" title="First Realm" icon="academic-cap" subtitle="Create a realm, client, and user" >}}
+{{< /cards >}}
+
+{{< cards cols="2" >}}
+  {{< card link="docs/using/resources/" title="Managed Resources" icon="book-open" subtitle="Reference for all CRD types: realms, clients, users, roles, groups, identity providers, and more" >}}
+  {{< card link="docs/using/reference/" title="Reference" icon="puzzle" subtitle="ProviderConfig, credentials, common patterns, and troubleshooting" >}}
+  {{< card link="docs/developing/" title="Developing" icon="terminal" subtitle="Set up a local dev environment, contribute code, or work on the docs" >}}
+  {{< card link="docs/ai-usage/" title="AI Usage" icon="sparkles" subtitle="llms.txt, agents.md, and AI-oriented entry points for this project" >}}
+{{< /cards >}}
+
+## Documentation
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/index.md
+
+
+{{< cards >}}
+  {{< card link="using/" title="Using" icon="book-open" subtitle="Install, configure, and operate provider-keycloak" >}}
+  {{< card link="developing/" title="Developing" icon="terminal" subtitle="Contribute to the provider or documentation" >}}
+  {{< card link="ai-usage/" title="AI Usage" icon="sparkles" subtitle="LLM files, agents.md, and AI-oriented entry points" >}}
+{{< /cards >}}
+
+## AI Usage
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/index.md
+
+
+AI-oriented documentation entry points for provider-keycloak.
+
+{{< cards >}}
+  {{< card link="llms/" title="LLM Files" icon="sparkles" subtitle="llms.txt and llms-full.txt for AI assistant context" >}}
+  {{< card link="agents/" title="Agents" icon="chatgpt" subtitle="Instructions and context for AI coding agents working on provider-keycloak" >}}
+{{< /cards >}}
+
 ## Agents
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/agents/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/agents.md
 
 
 # Agent Instructions for provider-keycloak
@@ -291,16 +343,41 @@ consuming individual pages.
 | Reconciliation loop on group membership | Both `Memberships` and `Groups` (exhaustive) target same group | Use only one authoritative source per group |
 
 ## LLM Files
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/llms/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/llms.md
 
 
 The docs site ships AI-oriented reference files:
 
-- [`/llms.txt`](/llms.txt)
-- [`/llms-full.txt`](/llms-full.txt)
+- [`llms.txt`](https://crossplane-contrib.github.io/provider-keycloak/llms.txt):
+  an index of all documentation pages and section landing pages, linking directly
+  to their Markdown representations.
+- [`llms-full.txt`](https://crossplane-contrib.github.io/provider-keycloak/llms-full.txt):
+  the full documentation content in one file.
+
+HTML pages advertise the index and their Markdown alternative in link elements.
+Markdown pages also link back to `llms.txt`. Guides are available at `.md` URLs
+(for example, [Realms](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realms.md));
+section landing pages use `index.md` (for example,
+[Resources](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/index.md)).
+
+The site is hosted on GitHub Pages, which does not support `Accept: text/markdown`
+content negotiation. Request the explicit Markdown URL rather than sending that
+header to an HTML URL.
+
+## Developing
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/index.md
+
+
+Development-focused guidance for working on provider-keycloak docs and examples.
+
+{{< cards >}}
+  {{< card link="dev-container/" title="Dev Container" icon="cube" subtitle="Build the provider and run e2e tests in a ready-to-use container" >}}
+  {{< card link="local-docs/" title="Local Docs" icon="terminal" subtitle="Build and preview the Hugo documentation site locally" >}}
+  {{< card link="documentation-model/" title="Documentation Model" icon="book-open" subtitle="What to author by hand versus generate from CRDs" >}}
+{{< /cards >}}
 
 ## Dev Container
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/dev-container/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/dev-container.md
 
 
 # Dev Container
@@ -411,7 +488,7 @@ binary is not part of the container image; install it separately (for example
 `go install sigs.k8s.io/cloud-provider-kind@latest`) if you take this path.
 
 ## Documentation Model
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/documentation-model/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/documentation-model.md
 
 
 Provider Keycloak has a large API surface. Keep the documentation useful by
@@ -459,7 +536,7 @@ Avoid hand-maintaining complete field tables in Markdown unless they are
 generated from the CRD OpenAPI schema.
 
 ## End-to-End Tests
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/e2e-tests/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/e2e-tests.md
 
 
 # End-to-End Tests
@@ -932,7 +1009,7 @@ The same file holds the demo DAG under `.demos`. It is committed, so
 `make check-diff` fails if it is stale.
 
 ## Local Docs Development
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs.md
 
 
 Run the documentation site locally:
@@ -951,8 +1028,32 @@ hugo --minify
 
 The generated site is written to `docs/public/`.
 
+## Using
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/index.md
+
+
+Install, configure, and operate provider-keycloak.
+
+{{< cards >}}
+  {{< card link="getting-started/" title="Getting Started" icon="server" subtitle="Install the provider, configure credentials, and create your first realm" >}}
+  {{< card link="resources/" title="Managed Resources" icon="book-open" subtitle="Reference for all CRD types: realms, clients, users, groups, and more" >}}
+  {{< card link="reference/" title="Reference" icon="puzzle" subtitle="ProviderConfig, credentials, common patterns, and troubleshooting" >}}
+{{< /cards >}}
+
+## Getting Started
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/index.md
+
+
+Get provider-keycloak up and running in three steps.
+
+{{< cards >}}
+  {{< card link="installation/" title="Installation" icon="server" subtitle="Add the provider to your Crossplane cluster" >}}
+  {{< card link="configuration/" title="Configuration" icon="adjustments" subtitle="Create a ProviderConfig pointing at your Keycloak instance" >}}
+  {{< card link="first-realm/" title="First Realm" icon="academic-cap" subtitle="Declare a realm, client, and user — then watch them appear in Keycloak" >}}
+{{< /cards >}}
+
 ## Configuration
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/configuration/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/configuration.md
 
 
 Every Keycloak instance you manage requires a `ProviderConfig` resource that specifies how to connect to the Keycloak API.
@@ -1062,7 +1163,7 @@ spec:
 - [Create your first realm](./first-realm.md)
 
 ## First Realm
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/first-realm/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/first-realm.md
 
 
 # Create Your First Realm
@@ -1165,7 +1266,7 @@ The provider continuously reconciles your desired state (the YAML manifests) wit
 - Set up [Roles](../resources/roles.md) and [Groups](../resources/groups.md)
 
 ## Installation
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/installation/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/installation.md
 
 
 ## Prerequisites
@@ -1238,8 +1339,25 @@ spec:
 - [Configure credentials](./configuration.md) to connect to your Keycloak instance
 - [Create your first realm](./first-realm.md)
 
+## Reference
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/index.md
+
+
+Reference pages collect reusable provider concepts that apply across many
+resources, such as credentials, ProviderConfig, troubleshooting, and common
+Crossplane manifest patterns.
+
+For resource-specific field schemas, use the generated CRDs in `package/crds/`.
+
+{{< cards >}}
+  {{< card link="provider-config/" title="ProviderConfig" icon="adjustments" subtitle="Connection details and authentication for a Keycloak instance" >}}
+  {{< card link="credentials/" title="Credentials" icon="lock-closed" subtitle="All supported credential fields and authentication methods" >}}
+  {{< card link="common-patterns/" title="Common Patterns" icon="puzzle" subtitle="Cross-cutting Crossplane patterns: references, selectors, policies" >}}
+  {{< card link="troubleshooting/" title="Troubleshooting" icon="support" subtitle="Diagnose and resolve common issues" >}}
+{{< /cards >}}
+
 ## Common Patterns
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/common-patterns/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/common-patterns.md
 
 
 Most provider-keycloak resources follow the same Crossplane manifest structure.
@@ -1345,7 +1463,7 @@ Resource pages show common fields and examples. The generated CRDs in
 references, selectors, status, and connection details.
 
 ## Credentials
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/credentials/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/credentials.md
 
 
 # Credentials Reference
@@ -1435,7 +1553,7 @@ Older versions of Keycloak (before v17) served the application under `/auth`. Mo
 | ≥ 17 (Quarkus) | `` (empty) |
 
 ## ProviderConfig
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/provider-config/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/provider-config.md
 
 
 # ProviderConfig Reference
@@ -1737,7 +1855,7 @@ client, not a ProviderConfig setting. See [End-to-End Tests](../../developing/e2
 for the regression test covering this limitation.
 
 ## Troubleshooting
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/troubleshooting/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/troubleshooting.md
 
 
 ## Common Issues
@@ -1838,8 +1956,43 @@ kubectl get managed -l crossplane.io/provider=provider-keycloak
 - Join the [Crossplane Slack](https://slack.crossplane.io/) community
 - Check the [Resource Reference](/docs/using/resources/) for CRD documentation and examples
 
+## Resources
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/index.md
+
+
+Complete reference for all provider-keycloak managed resources. Every CRD is
+documented with working examples taken from the project's end-to-end tests,
+links to the underlying Terraform resource, and guidance on when to use each
+resource.
+
+For exhaustive field schemas, default values, references, selectors, and status
+fields, see the generated CRDs in
+[`package/crds/`](https://github.com/crossplane-contrib/provider-keycloak/tree/main/package/crds)
+or browse all CRDs interactively on the
+[Upbound Marketplace CRD Explorer](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/crds).
+
+{{< cards >}}
+  {{< card link="realms/" title="Realms" icon="template" subtitle="Realm · realm.keycloak.crossplane.io" >}}
+  {{< card link="realm-settings/" title="Realm Settings" icon="adjustments" subtitle="RealmEvents · RequiredAction · UserProfile · Keystores · Client Policies" >}}
+  {{< card link="clients/" title="Clients (OIDC)" icon="shield-check" subtitle="Client · openidclient.keycloak.crossplane.io" >}}
+  {{< card link="saml-clients/" title="SAML Clients" icon="shield-check" subtitle="Client · ClientScope · samlclient.keycloak.crossplane.io" >}}
+  {{< card link="openid-client-scopes/" title="Client Scopes" icon="tag" subtitle="ClientScope · ClientDefaultScopes · ClientOptionalScopes" >}}
+  {{< card link="client-authorization/" title="Client Authorization" icon="lock-closed" subtitle="Resources · Permissions · Policies" >}}
+  {{< card link="service-accounts/" title="Service Accounts" icon="user-circle" subtitle="ServiceAccountRealmRole · ServiceAccountRole" >}}
+  {{< card link="users/" title="Users" icon="users" subtitle="User · Groups · Roles · Permissions · user.keycloak.crossplane.io" >}}
+  {{< card link="roles/" title="Roles" icon="badge-check" subtitle="Role · role.keycloak.crossplane.io" >}}
+  {{< card link="groups/" title="Groups" icon="user-group" subtitle="Group · Memberships · Roles · Permissions" >}}
+  {{< card link="protocol-mappers/" title="Protocol Mappers" icon="paper-clip" subtitle="ProtocolMapper · RoleMapper · GroupMembershipProtocolMapper" >}}
+  {{< card link="identity-providers/" title="Identity Providers" icon="switch-horizontal" subtitle="OIDC · SAML · Google · Kubernetes · OpenShift · SPIFFE" >}}
+  {{< card link="user-federation/" title="User Federation" icon="server" subtitle="LDAP/AD federation and all mapper types" >}}
+  {{< card link="authentication-flows/" title="Authentication Flows" icon="arrows-expand" subtitle="Flow · Subflow · Execution · ExecutionConfig · Bindings" >}}
+  {{< card link="default-config/" title="Default Config" icon="star" subtitle="DefaultGroups · DefaultRoles" >}}
+  {{< card link="organizations/" title="Organizations" icon="office-building" subtitle="Organization · Keycloak 26.6+ multi-tenancy" >}}
+  {{< card link="workflows/" title="Workflows" icon="chip" subtitle="Workflow · event-driven automation (Keycloak 26.5+)" >}}
+{{< /cards >}}
+
 ## Authentication Flows
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/authentication-flows/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/authentication-flows.md
 
 
 Use authentication flow resources when the default Keycloak login process is not enough. They let you define custom browser, registration, direct-grant, or client-authentication flows; nest subflows; add execution steps such as MFA, OTP, WebAuthn, or identity-provider redirects; and bind the finished flow to the realm behavior that should use it.
@@ -2076,7 +2229,7 @@ spec:
 - **[Realms](./realms.md)** — Manage the realm that owns the flows and bindings.
 
 ## Client Authorization
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/client-authorization/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/client-authorization.md
 
 
 Use these resources when a client needs Keycloak Authorization Services for fine-grained access control and UMA-style policy evaluation. Define resources, permissions, and policies to protect APIs and services. The client must have `authorization` enabled.
@@ -2413,7 +2566,7 @@ spec:
 - [Realms](./realms.md)
 
 ## Clients
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/clients/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/clients.md
 
 
 Use a `Client` when an application or service needs Keycloak to authenticate users with OpenID Connect. This is the resource for web apps, SPAs, backend services, service accounts, and federated workloads.
@@ -2608,7 +2761,7 @@ typed reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
 - [Protocol Mappers](./protocol-mappers.md)
 
 ## Default Configuration
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/default-config/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/default-config.md
 
 
 Use these resources when every new user in a realm should start with the same baseline access. `DefaultGroups` adds new users to groups automatically, and `Roles` assigns the realm roles that should always be present.
@@ -2674,7 +2827,7 @@ spec:
 - [Realms](./realms.md)
 
 ## Groups
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/groups/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/groups.md
 
 
 Use groups when multiple users should share the same roles or when you need a hierarchical structure such as teams, departments, or environments. Groups let you model organization structure once and then manage access in bulk.
@@ -2882,7 +3035,7 @@ through the typed reference fields (`groupPolicies`, `rolePolicies`,
 - [Default Configuration](./default-config.md)
 
 ## Identity Providers
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/identity-providers/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/identity-providers.md
 
 
 Use identity providers when users should sign in to Keycloak with an external identity system instead of local usernames and passwords. This is the right fit for social login, corporate SAML or OIDC federation, Kubernetes or OpenShift workload identity, SPIFFE-based trust, and controlled token exchange between clients and external providers.
@@ -3214,7 +3367,7 @@ spec:
 - **[Users](./users.md)** — Understand how federated identities map to Keycloak user records.
 
 ## OpenID Client Scopes
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/openid-client-scopes/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/openid-client-scopes.md
 
 
 Use these resources when you want to group protocol mappers and role scope mappings so they can be reused across multiple clients. Default scopes are always included in tokens, while optional scopes are only added when explicitly requested.
@@ -3314,7 +3467,7 @@ spec:
 - [Realms](./realms.md)
 
 ## Organizations
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/organizations/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/organizations.md
 
 
 Use `Organization` when you need Keycloak multi-tenancy support in Keycloak 26.6 and later. Organizations let you group users under tenant-like entities and configure domain-based identity provider routing. The realm must have `organizationsEnabled: true`.
@@ -3354,7 +3507,7 @@ spec:
 - [Users](./users.md)
 
 ## Protocol Mappers
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/protocol-mappers/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/protocol-mappers.md
 
 
 Use these resources when you need to control what Keycloak emits in OIDC tokens or SAML assertions. Use `ProtocolMapper` for custom claim mapping, `RoleMapper` to include roles from one client or client scope in another, and `GroupMembershipProtocolMapper` to expose group membership as a JWT claim.
@@ -3574,7 +3727,7 @@ spec:
 - [Realms](./realms.md)
 
 ## Realm Settings
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realm-settings/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realm-settings.md
 
 
 Use these resources after a `Realm` exists and you need to shape how that realm behaves in production. They cover audit logging, user onboarding requirements, custom profile fields, signing keys, default scopes, and client policy enforcement.
@@ -3882,7 +4035,7 @@ spec:
 - [Default Configuration](./default-config.md)
 
 ## Realms
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realms/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realms.md
 
 
 Use a `Realm` when you need an isolated Keycloak boundary for a tenant, environment, or application domain. Because every other Keycloak resource belongs to a realm, this is usually the first resource you create for a new deployment.
@@ -4012,7 +4165,7 @@ spec:
 - [Default Configuration](./default-config.md)
 
 ## Roles
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/roles/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/roles.md
 
 
 Use roles to define permissions in Keycloak. Create realm roles for permissions shared across a realm, and client roles when access should be scoped to a specific application or service.
@@ -4165,7 +4318,7 @@ reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
 - [Service Accounts](./service-accounts.md)
 
 ## SAML Clients
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/saml-clients/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/saml-clients.md
 
 
 Use SAML clients when an application or service provider expects SAML 2.0 instead of OpenID Connect. This is common for legacy enterprise applications and commercial service providers such as Salesforce, Jira, or other platforms that rely on SAML metadata, signed assertions, and SSO endpoints.
@@ -4300,7 +4453,7 @@ spec:
 - **[Realms](./realms.md)** — Create the realm that owns the client and scopes.
 
 ## Service Accounts
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/service-accounts/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/service-accounts.md
 
 
 Use these resources when a client needs to authenticate as itself for machine-to-machine access. They assign realm or client roles to a client's service account. The client must have `serviceAccountsEnabled: true`.
@@ -4371,7 +4524,7 @@ spec:
 - [Realms](./realms.md)
 
 ## User Federation
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/user-federation/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/user-federation.md
 
 
 Use user federation when Keycloak should authenticate users against an external directory or user store instead of managing every account in its own database. LDAP and Active Directory federation let users sign in with their existing directory credentials, while mapper resources control how LDAP attributes, groups, and roles are projected into Keycloak. Use the custom user federation CRD when you have a Keycloak user storage SPI provider that is not LDAP-based.
@@ -4728,7 +4881,7 @@ spec:
 - [Identity Providers](./identity-providers.md)
 
 ## Users
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/users/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/users.md
 
 
 Use `User` to declaratively manage people who can authenticate to Keycloak. Use `Groups`, `Roles`, and `Permissions` to manage access around those users, and `UserFederation` when you need a custom external user store integration.
@@ -4925,7 +5078,7 @@ spec:
 - [User Federation](./user-federation.md)
 
 ## Workflows
-URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/workflows/
+URL: https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/workflows.md
 
 
 Use workflows when you want Keycloak 26.5+ to react automatically to realm events. They are a good fit for onboarding notifications, password-policy enforcement, or custom event-driven logic when users are created, updated, or perform specific actions. Key fields are `name`, `enabled`, `on` for the trigger event, `step` for the ordered actions, and `realmRef` for the target realm.

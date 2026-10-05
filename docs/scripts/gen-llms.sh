@@ -33,11 +33,19 @@ extract_field() {
 
 # Emit one llms.txt line for a file.
 # Prefers llmsDescription over description; skips if no title.
+markdown_url() {
+  local rel="${1#"${CONTENT_DIR}/"}"
+  if [[ "$rel" == "_index.md" ]]; then
+    rel="index.md"
+  elif [[ "$rel" == */_index.md ]]; then
+    rel="${rel%/_index.md}/index.md"
+  fi
+  printf '%s/%s' "$BASE_URL" "$rel"
+}
+
 emit_line() {
   local file="$1"
-  local rel="${file#"${CONTENT_DIR}/"}"
-  rel="${rel%.md}"
-  local url="${BASE_URL}/${rel}/"
+  local url; url=$(markdown_url "$file")
   local title; title=$(extract_field "$file" "title")
   [[ -z "$title" ]] && return
   local desc; desc=$(extract_field "$file" "llmsDescription")
@@ -60,13 +68,27 @@ generate_llms_txt() {
 
 > provider-keycloak is a Crossplane provider that manages Keycloak (IAM/SSO) resources as Kubernetes custom resources. It is generated with Upjet from the Keycloak Terraform provider. Declare Keycloak realms, clients, users, groups, roles, identity providers, and more as YAML; the provider reconciles them continuously.
 
-## Getting Started
+## Overview
 
 HEADER
 
+  # Include landing pages and content outside the curated categories below.
   while IFS= read -r -d '' file; do
     emit_line "$file"
-  done < <(find "${CONTENT_DIR}/docs/using/getting-started" -name "*.md" ! -name "_index.md" -print0 | sort -z)
+  done < <(find "${CONTENT_DIR}" -name "*.md" \
+    ! -path "${CONTENT_DIR}/docs/using/getting-started/*" \
+    ! -path "${CONTENT_DIR}/docs/using/resources/*" \
+    ! -path "${CONTENT_DIR}/docs/using/reference/*" \
+    ! -path "${CONTENT_DIR}/docs/ai-usage/*" \
+    ! -path "${CONTENT_DIR}/docs/developing/*" -print0 | sort -z)
+
+  echo ""
+  echo "## Getting Started"
+  echo ""
+
+  while IFS= read -r -d '' file; do
+    emit_line "$file"
+  done < <(find "${CONTENT_DIR}/docs/using/getting-started" -name "*.md" -print0 | sort -z)
 
   echo ""
   echo "## Resources"
@@ -74,7 +96,7 @@ HEADER
 
   while IFS= read -r -d '' file; do
     emit_line "$file"
-  done < <(find "${CONTENT_DIR}/docs/using/resources" -name "*.md" ! -name "_index.md" -print0 | sort -z)
+  done < <(find "${CONTENT_DIR}/docs/using/resources" -name "*.md" -print0 | sort -z)
 
   echo ""
   echo "## Reference"
@@ -82,7 +104,7 @@ HEADER
 
   while IFS= read -r -d '' file; do
     emit_line "$file"
-  done < <(find "${CONTENT_DIR}/docs/using/reference" -name "*.md" ! -name "_index.md" -print0 | sort -z)
+  done < <(find "${CONTENT_DIR}/docs/using/reference" -name "*.md" -print0 | sort -z)
 
   echo ""
   echo "## AI"
@@ -90,7 +112,7 @@ HEADER
 
   while IFS= read -r -d '' file; do
     emit_line "$file"
-  done < <(find "${CONTENT_DIR}/docs/ai-usage" -name "*.md" ! -name "_index.md" -print0 | sort -z)
+  done < <(find "${CONTENT_DIR}/docs/ai-usage" -name "*.md" -print0 | sort -z)
 
   echo ""
   echo "## Optional"
@@ -98,7 +120,7 @@ HEADER
 
   while IFS= read -r -d '' file; do
     emit_line "$file"
-  done < <(find "${CONTENT_DIR}/docs/developing" -name "*.md" ! -name "_index.md" -print0 | sort -z)
+  done < <(find "${CONTENT_DIR}/docs/developing" -name "*.md" -print0 | sort -z)
 }
 
 # ---------------------------------------------------------------------------
@@ -112,12 +134,10 @@ generate_llms_full_txt() {
   out+=""$'\n'
 
   while IFS= read -r -d '' file; do
-    rel="${file#"${CONTENT_DIR}/"}"
-    rel="${rel%.md}"
-    url="${BASE_URL}/${rel}/"
+    url=$(markdown_url "$file")
 
     title=$(extract_field "$file" "title")
-    [[ -z "$title" ]] && title="$(basename "$rel")"
+    [[ -z "$title" ]] && title="$(basename "$file" .md)"
 
     out+="## ${title}"$'\n'
     out+="URL: ${url}"$'\n'
@@ -126,7 +146,7 @@ generate_llms_full_txt() {
     body=$(awk '/^---/{found++; next} found>=2' "$file")
     out+="${body}"$'\n'
     out+=""$'\n'
-  done < <(find "${CONTENT_DIR}/docs" -name "*.md" ! -name "_index.md" -print0 | sort -z)
+  done < <(find "${CONTENT_DIR}" -name "*.md" -print0 | sort -z)
 
   echo "$out"
 }
