@@ -48,6 +48,12 @@ Run `make docs-gen` from the repository root after changing content to regenerat
 pages as well as guides and links directly to their Markdown representations.
 `make docs-freshness-check` verifies that the committed indexes are current.
 
+The PR preview workflow regenerates both indexes with `DOCS_BASE_URL` set to
+the same base URL passed to Hugo. Committed indexes always use the production
+URL. Discovery links in Hugo templates use the active site base URL.
+Markdown output expands Hugo shortcodes so card titles, descriptions, and hero
+content are available rather than leaving unprocessed template syntax.
+
 GitHub Pages serves static files and does not support `Accept: text/markdown`
 content negotiation. Clients must request the advertised Markdown URL.
 Passing a content-negotiation check on the HTML URLs requires a different host

@@ -33,7 +33,7 @@ menu:
 
 params:
   banner:
-    message: 'AI documentation index: [llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)'
+    message: 'AI documentation index'
   navbar:
     displayTitle: true
     displayLogo: true
