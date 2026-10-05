@@ -45,12 +45,12 @@ spec:
     extraConfig:
       clientAuthMethod: client_secret_post
     realmRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     tokenUrl: https://tokenurl.com
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### OIDC Identity Provider with organization binding
@@ -78,7 +78,7 @@ spec:
     extraConfig:
       clientAuthMethod: client_secret_post
     realmRef:
-      name: &#34;orgs&#34;
+      name: "orgs"
       policy:
         resolve: Always
     tokenUrl: https://tokenurl.com
@@ -89,7 +89,7 @@ spec:
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Google Identity Provider
@@ -114,13 +114,13 @@ spec:
       namespace: dev
     hostedDomain: example.com
     realmRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     syncMode: IMPORT
     trustEmail: true
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### SAML Identity Provider
@@ -143,7 +143,7 @@ spec:
     postBindingLogout: true
     postBindingResponse: true
     realmRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     singleLogoutServiceUrl: https://domain.com/adfs/ls/?wa=wsignout1.0
@@ -151,7 +151,7 @@ spec:
     storeToken: false
     trustEmail: true
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Identity Provider Mapper
@@ -171,14 +171,14 @@ spec:
       UserAttribute: email
       syncMode: INHERIT
     identityProviderAlias: my-idp
-    identityProviderMapper: &#39;%s-user-attribute-idp-mapper&#39;
+    identityProviderMapper: '%s-user-attribute-idp-mapper'
     name: email-attribute-importer
     realmRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Kubernetes Identity Provider
@@ -195,7 +195,7 @@ spec:
   forProvider:
     alias: k8s-federated
     realmRef:
-      name: &#34;orgs&#34;
+      name: "orgs"
       policy:
         resolve: Always
     organizationIdRef:
@@ -207,12 +207,12 @@ spec:
     syncMode: FORCE
     enabled: true
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### OpenShift V4 Identity Provider
 
-Use this resource to federate with OpenShift 4 clusters through the provider&#39;s purpose-built OIDC integration.
+Use this resource to federate with OpenShift 4 clusters through the provider's purpose-built OIDC integration.
 
 ```yaml
 apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
@@ -231,18 +231,18 @@ spec:
       namespace: dev
     defaultScopes: user:full
     realmRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     syncMode: IMPORT
     trustEmail: true
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### SPIFFE Identity Provider
 
-Use this resource with Keycloak 26.5&#43; when workload identities should be validated through a SPIFFE trust domain and bundle endpoint.
+Use this resource with Keycloak 26.5+ when workload identities should be validated through a SPIFFE trust domain and bundle endpoint.
 
 ```yaml
 apiVersion: identityprovider.keycloak.crossplane.io/v1alpha1
@@ -255,12 +255,12 @@ spec:
     alias: spiffe-idp
     bundleEndpoint: https://example.com/spiffe/bundle
     realmRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     trustDomain: spiffe://test-domain.example
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Provider Token Exchange Scope Permission
@@ -289,7 +289,7 @@ spec:
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ## Key fields
@@ -319,7 +319,7 @@ spec:
 | `identityProviderAlias` | `IdentityProviderMapper` | Attaches the mapper to a specific provider alias. |
 | `extraConfig` | OIDC providers and mappers | Holds provider- or mapper-specific settings such as client auth method or claim mapping. |
 | `issuer` | `KubernetesIdentityProvider` | Expected token issuer for Kubernetes service account tokens. |
-| `baseUrl` | `OidcOpenShiftV4IdentityProvider` | Base URL for the OpenShift cluster&#39;s OIDC endpoints. |
+| `baseUrl` | `OidcOpenShiftV4IdentityProvider` | Base URL for the OpenShift cluster's OIDC endpoints. |
 | `bundleEndpoint` | `SpiffeIdentityProvider` | URL that publishes the SPIFFE bundle used for trust validation. |
 | `trustDomain` | `SpiffeIdentityProvider` | SPIFFE trust domain accepted by the identity provider. |
 | `providerAliasRef` | `ProviderTokenExchangeScopePermission` | Refers to the external provider whose tokens may be exchanged. |

@@ -29,11 +29,11 @@ spec:
         policy:
           resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### `Roles`
@@ -51,11 +51,11 @@ spec:
         policy:
           resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ## Related Resources

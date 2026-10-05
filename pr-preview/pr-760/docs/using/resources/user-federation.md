@@ -50,7 +50,7 @@ spec:
     rdnLdapAttribute: cn
     readTimeout: 10s
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     userObjectClasses:
@@ -61,7 +61,7 @@ spec:
     uuidLdapAttribute: entryDN
     deleteDefaultMappers: false
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### UserAttributeMapper
@@ -81,12 +81,12 @@ spec:
         resolve: Always
     name: user-attribute-mapper
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     userModelAttribute: foo
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### FullNameMapper
@@ -106,11 +106,11 @@ spec:
         resolve: Always
     name: full-name-mapper
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### GroupMapper
@@ -137,11 +137,11 @@ spec:
     membershipUserLdapAttribute: cn
     name: group-mapper
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### RoleMapper
@@ -165,7 +165,7 @@ spec:
     membershipUserLdapAttribute: cn
     name: role-mapper
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     roleNameLdapAttribute: cn
@@ -173,7 +173,7 @@ spec:
       - groupOfNames
     userRolesRetrieveStrategy: GET_ROLES_FROM_USER_MEMBEROF_ATTRIBUTE
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### HardcodedRoleMapper
@@ -192,13 +192,13 @@ spec:
         resolve: Always
     name: assign-test-role-to-all-users
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     roleRef:
       name: test
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### HardcodedGroupMapper
@@ -219,11 +219,11 @@ spec:
         resolve: Always
     name: assign-group-to-users
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### HardcodedAttributeMapper
@@ -244,11 +244,11 @@ spec:
         resolve: Always
     name: assign-foo-to-bar
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### MsadUserAccountControlMapper
@@ -267,11 +267,11 @@ spec:
         resolve: Always
     name: msad-user-account-control-mapper
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### MsadLdsUserAccountControlMapper
@@ -290,11 +290,11 @@ spec:
         resolve: Always
     name: msad-lds-user-account-control-mapper
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### CustomMapper
@@ -314,14 +314,14 @@ spec:
       policy:
         resolve: Always
     name: custom-mapper
-    providerId: &#34;full-name-ldap-mapper&#34;
-    providerType: &#34;org.keycloak.storage.ldap.mappers.LDAPStorageMapper&#34;
+    providerId: "full-name-ldap-mapper"
+    providerType: "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Custom UserFederation
@@ -345,7 +345,7 @@ spec:
       matchLabels:
         testing.upbound.io/example-name: realm
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ## Related Resources

@@ -30,7 +30,7 @@ spec:
     name: test
     realmId: dev
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Child groups with the same name under different parents
@@ -49,7 +49,7 @@ spec:
     name: test-parent-1
     realmId: dev
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ---
 apiVersion: group.keycloak.crossplane.io/v1alpha1
 kind: Group
@@ -65,7 +65,7 @@ spec:
         role: parent
         parent: test1
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Group memberships
@@ -87,7 +87,7 @@ spec:
       - tim-tester
     realmId: dev
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Group roles
@@ -101,7 +101,7 @@ spec:
   deletionPolicy: Delete
   forProvider:
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     groupIdRef:
@@ -109,11 +109,11 @@ spec:
       policy:
         resolve: Always
     roleIdsRefs:
-      - name: &#34;test-client&#34;
+      - name: "test-client"
         policy:
           resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Group permissions
@@ -124,18 +124,18 @@ kind: Permissions
 metadata:
   name: my-group-permission
 spec:
-  managementPolicies: [&#34;Create&#34;, &#34;Update&#34;, &#34;Observe&#34;]
+  managementPolicies: ["Create", "Update", "Observe"]
   forProvider:
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     groupIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Fine-grained admin permissions (v2)
@@ -163,23 +163,23 @@ spec:
     description: Admins can view and manage the members of the group
     decisionStrategy: UNANIMOUS
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     groupIdsRefs:
-      - name: &#34;test&#34;
+      - name: "test"
     scopes:
       - view
       - manage-members
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 Valid `scopes` for group permissions are `view`, `manage`, `view-members`,
 `manage-members` and `manage-membership`. Without `groupIds` the permission
 applies to every group of the realm, otherwise only to the referenced groups. A
-permission without policies is evaluated as &#34;deny&#34;, so attach policies once they
-exist on the realm&#39;s `admin-permissions` client, either by ID via `policies` or
+permission without policies is evaluated as "deny", so attach policies once they
+exist on the realm's `admin-permissions` client, either by ID via `policies` or
 through the typed reference fields (`groupPolicies`, `rolePolicies`,
 `userPolicies`, ...).
 

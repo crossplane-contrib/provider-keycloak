@@ -23,14 +23,14 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    realm: &#34;orgs&#34;
+    realm: "orgs"
     name: example
     enabled: true
     domain:
       - name: example.com
       - name: example.org
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ## Related Resources

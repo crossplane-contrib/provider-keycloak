@@ -3,7 +3,7 @@
 [llms.txt](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-760/llms.txt)
 
 
-Use workflows when you want Keycloak 26.5&#43; to react automatically to realm events. They are a good fit for onboarding notifications, password-policy enforcement, or custom event-driven logic when users are created, updated, or perform specific actions. Key fields are `name`, `enabled`, `on` for the trigger event, `step` for the ordered actions, and `realmRef` for the target realm.
+Use workflows when you want Keycloak 26.5+ to react automatically to realm events. They are a good fit for onboarding notifications, password-policy enforcement, or custom event-driven logic when users are created, updated, or perform specific actions. Key fields are `name`, `enabled`, `on` for the trigger event, `step` for the ordered actions, and `realmRef` for the target realm.
 
 ## API Reference
 
@@ -25,17 +25,17 @@ spec:
   forProvider:
     enabled: true
     name: onboarding-new-users
-    &#34;on&#34;: user_created
+    "on": user_created
     realmRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     step:
       - config:
-          message: &#34;Welcome to ${realm.displayName}!&#34;
+          message: "Welcome to ${realm.displayName}!"
         uses: notify-user
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ## Related Resources

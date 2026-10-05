@@ -10,7 +10,7 @@ The repository ships a [Dev Container](https://containers.dev/) under
 provider** and **run the end-to-end (uptest) suite** — Go, Docker-in-Docker and
 kind included. Use it to avoid installing the toolchain on your host.
 
-## What&#39;s inside
+## What's inside
 
 | Tool | Version | Source |
 |------|---------|--------|
@@ -21,7 +21,7 @@ kind included. Use it to avoid installing the toolchain on your host.
 | goimports | latest | `post-create.sh` |
 
 `kind`, `kubectl` and `helm` are **not** version-pinned in the container.
-`post-create.sh` downloads them through the repository&#39;s existing Makefile
+`post-create.sh` downloads them through the repository's existing Makefile
 targets (`build/makelib/k8s_tools.mk`) into `.cache/tools/` and symlinks them
 onto `PATH`, so the Makefile stays the single source of truth for their
 versions. `yq`, `chainsaw`, `uptest`, `crossplane` and `terraform` are consumed
@@ -30,7 +30,7 @@ only by the Makefile and are fetched by it on demand, so they are not placed on
 
 ## Getting started
 
-Open the folder in VS Code and **&#34;Reopen in Container&#34;**, or use the
+Open the folder in VS Code and **"Reopen in Container"**, or use the
 [`devcontainer` CLI](https://github.com/devcontainers/cli):
 
 ```bash
@@ -43,9 +43,9 @@ submodule, fetches the k8s CLIs via the Makefile, installs `goimports`, and wire
 up shell completion. Everything else comes from the base image and the
 Go / Docker-in-Docker features.
 
-&gt; Recommended host resources: **4 CPUs / 8 GB RAM / 32 GB disk**. The e2e stack
-&gt; (2-node kind cluster &#43; Keycloak &#43; Crossplane &#43; provider) is memory hungry;
-&gt; less than this risks OOM-killed pods.
+> Recommended host resources: **4 CPUs / 8 GB RAM / 32 GB disk**. The e2e stack
+> (2-node kind cluster + Keycloak + Crossplane + provider) is memory hungry;
+> less than this risks OOM-killed pods.
 
 ## Build and code generation
 
@@ -61,12 +61,12 @@ provider **v5.8.0**); it does not upgrade the provider dependency.
 
 ## End-to-end tests
 
-`make e2e` (= `local-deploy` &#43; `uptest`) builds and deploys the provider into a
+`make e2e` (= `local-deploy` + `uptest`) builds and deploys the provider into a
 fresh kind cluster but **does not install Keycloak**. For a complete, runnable
 environment use the dev setup script, then run uptest:
 
 ```bash
-# 1. kind cluster &#43; Keycloak (via Helm) &#43; Crossplane &#43; locally-built provider
+# 1. kind cluster + Keycloak (via Helm) + Crossplane + locally-built provider
 ./dev/setup_dev_environment.sh --direct-helm --deploy-local-provider -k 26.6.2
 
 # 2. point kubectl at the kind cluster (fenrir-1)
@@ -94,7 +94,7 @@ make uptest RENDER_ONLY=true KEYCLOAK_VERSION=26.6.2
 `post-create.sh` enables command completion for **kubectl**, **kind** and
 **docker** in both `bash` and `zsh`, and adds a `k` alias for `kubectl`. The
 configuration is appended to `~/.bashrc` / `~/.zshrc` behind a marker, so
-container rebuilds don&#39;t duplicate it. It takes effect in any new shell — in your
+container rebuilds don't duplicate it. It takes effect in any new shell — in your
 current one, run `source ~/.bashrc` (or `source ~/.zshrc`).
 
 ## Networking note

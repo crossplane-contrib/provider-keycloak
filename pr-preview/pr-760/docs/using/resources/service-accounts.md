@@ -3,7 +3,7 @@
 [llms.txt](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-760/llms.txt)
 
 
-Use these resources when a client needs to authenticate as itself for machine-to-machine access. They assign realm or client roles to a client&#39;s service account. The client must have `serviceAccountsEnabled: true`.
+Use these resources when a client needs to authenticate as itself for machine-to-machine access. They assign realm or client roles to a client's service account. The client must have `serviceAccountsEnabled: true`.
 
 ## API Reference
 
@@ -23,13 +23,13 @@ metadata:
   name: service-account-realm-role
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
-    realmId: &#34;dev&#34;
-    role: &#34;svc-realm-role&#34;
+    realmId: "dev"
+    role: "svc-realm-role"
     serviceAccountUserClientIdRef:
-      name: &#34;service-acc-1&#34;
+      name: "service-acc-1"
       policy:
         resolve: Always
 ```
@@ -43,23 +43,23 @@ metadata:
   name: service-account-role
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     clientIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     roleRef:
-      name: &#34;svc-role&#34;
+      name: "svc-role"
       policy:
         resolve: Always
     serviceAccountUserClientIdRef:
-      name: &#34;service-acc-1&#34;
+      name: "service-acc-1"
       policy:
         resolve: Always
 ```

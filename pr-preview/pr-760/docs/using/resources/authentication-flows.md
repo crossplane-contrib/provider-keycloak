@@ -31,11 +31,11 @@ spec:
   forProvider:
     alias: my-flow-alias
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Subflow
@@ -59,12 +59,12 @@ spec:
         resolve: Always
     providerId: basic-flow
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     requirement: ALTERNATIVE
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Execution using `parentFlowAliasRef`
@@ -85,12 +85,12 @@ spec:
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     requirement: ALTERNATIVE
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Execution using `parentSubflowAliasRef`
@@ -111,12 +111,12 @@ spec:
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     requirement: REQUIRED
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Execution using `parentSubflowAliasSelector`
@@ -136,12 +136,12 @@ spec:
       matchLabels:
         subflow-type: test-subflow
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     requirement: REQUIRED
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### ExecutionConfig
@@ -164,11 +164,11 @@ spec:
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Bindings
@@ -184,15 +184,15 @@ spec:
   deletionPolicy: Delete
   forProvider:
     dockerAuthenticationFlowRef:
-      name: &#34;flow&#34;
+      name: "flow"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ## Key fields

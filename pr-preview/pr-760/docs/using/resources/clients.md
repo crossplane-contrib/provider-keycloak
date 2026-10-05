@@ -25,17 +25,17 @@ spec:
   deletionPolicy: Delete
   forProvider:
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
-    accessType: &#34;CONFIDENTIAL&#34;
-    clientId: &#34;test&#34;
+    accessType: "CONFIDENTIAL"
+    clientId: "test"
     fullScopeAllowed: false
     serviceAccountsEnabled: true
     authorization:
-      - policyEnforcementMode: &#34;PERMISSIVE&#34;
+      - policyEnforcementMode: "PERMISSIVE"
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Managing a built-in client without deleting it
@@ -46,16 +46,16 @@ kind: Client
 metadata:
   name: account
 spec:
-  managementPolicies: [&#34;Create&#34;, &#34;Update&#34;, &#34;Observe&#34;]
+  managementPolicies: ["Create", "Update", "Observe"]
   forProvider:
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
-    accessType: &#34;CONFIDENTIAL&#34;
-    clientId: &#34;account&#34;
+    accessType: "CONFIDENTIAL"
+    clientId: "account"
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Managing another built-in client (account-console)
@@ -70,13 +70,13 @@ spec:
   deletionPolicy: Orphan
   forProvider:
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
-    accessType: &#34;PUBLIC&#34;
-    clientId: &#34;account-console&#34;
+    accessType: "PUBLIC"
+    clientId: "account-console"
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Service account client
@@ -90,14 +90,14 @@ spec:
   deletionPolicy: Delete
   forProvider:
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
-    accessType: &#34;CONFIDENTIAL&#34;
-    clientId: &#34;service-acc-1&#34;
+    accessType: "CONFIDENTIAL"
+    clientId: "service-acc-1"
     serviceAccountsEnabled: true
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Kubernetes federated JWT client
@@ -116,7 +116,7 @@ spec:
     enabled: true
     name: k8s-federated-client
     realmIdRef:
-      name: &#34;orgs&#34;
+      name: "orgs"
       policy:
         resolve: Always
     serviceAccountsEnabled: true
@@ -125,7 +125,7 @@ spec:
       federated.idp: k8s-federated
       federated.sub: system:serviceaccount:default:k8s-federated-test-sa
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Fine-grained admin permissions (v2)
@@ -153,23 +153,23 @@ spec:
     description: Admins can view and manage the referenced client
     decisionStrategy: UNANIMOUS
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     clientIdsRefs:
-      - name: &#34;test&#34;
+      - name: "test"
     scopes:
       - view
       - manage
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 Without `clientIds` the permission applies to every client of the realm,
 otherwise only to the referenced clients. Both OpenID clients (`clientIdsRefs`)
 and SAML clients (`samlClientIdsRefs`) can be referenced. A permission without
-policies is evaluated as &#34;deny&#34;, so attach policies once they exist on the
-realm&#39;s `admin-permissions` client, either by ID via `policies` or through the
+policies is evaluated as "deny", so attach policies once they exist on the
+realm's `admin-permissions` client, either by ID via `policies` or through the
 typed reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
 
 ## Key Fields

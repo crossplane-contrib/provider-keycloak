@@ -3,31 +3,58 @@
 [llms.txt](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-760/llms.txt)
 
 
-&lt;div class=&#34;hx:mt-6 hx:mb-6&#34;&gt;
-{{&lt; hextra/hero-headline &gt;}}Declarative Keycloak on Kubernetes{{&lt; /hextra/hero-headline &gt;}}
-{{&lt; hextra/hero-subtitle &gt;}}
-Manage Keycloak realms, clients, users, and roles as Kubernetes resources.
-Built on [Crossplane](https://crossplane.io/) and [Upjet](https://github.com/crossplane/upjet).
-{{&lt; /hextra/hero-subtitle &gt;}}
-&lt;/div&gt;
+<div class="hx:mt-6 hx:mb-6">
+<h1 class="not-prose hx:text-4xl hx:font-bold hx:leading-none hx:tracking-tighter hx:md:text-5xl hx:py-2 hx:bg-clip-text hx:text-transparent hx:bg-gradient-to-r hx:from-gray-900 hx:to-gray-600 hx:dark:from-gray-100 hx:dark:to-gray-400">
+  Declarative Keycloak on Kubernetes
+</h1>
 
-&lt;div class=&#34;hx:mb-12 hx:flex hx:flex-wrap hx:gap-3&#34;&gt;
-{{&lt; hextra/hero-button text=&#34;Get Started&#34; link=&#34;docs/using/getting-started/installation/&#34; &gt;}}
-{{&lt; hextra/hero-badge link=&#34;https://github.com/crossplane-contrib/provider-keycloak&#34; &gt;}}⭐ GitHub{{&lt; /hextra/hero-badge &gt;}}
-{{&lt; hextra/hero-badge link=&#34;https://github.com/crossplane-contrib/provider-keycloak/releases&#34; &gt;}}📦 Releases{{&lt; /hextra/hero-badge &gt;}}
-&lt;/div&gt;
+<p class="not-prose hx:text-xl hx:text-gray-600 hx:dark:text-gray-400 hx:sm:text-xl">
+  Manage Keycloak realms, clients, users, and roles as Kubernetes resources.
+Built on <a href="https://crossplane.io/" target="_blank" rel="noopener">Crossplane</a> and <a href="https://github.com/crossplane/upjet" target="_blank" rel="noopener">Upjet</a>.
+</p>
 
-{{&lt; cards cols=&#34;3&#34; &gt;}}
-  {{&lt; card link=&#34;docs/using/getting-started/installation/&#34; title=&#34;Installation&#34; icon=&#34;server&#34; subtitle=&#34;Add the provider to your Crossplane cluster&#34; &gt;}}
-  {{&lt; card link=&#34;docs/using/getting-started/configuration/&#34; title=&#34;Configuration&#34; icon=&#34;adjustments&#34; subtitle=&#34;Connect to your Keycloak instance&#34; &gt;}}
-  {{&lt; card link=&#34;docs/using/getting-started/first-realm/&#34; title=&#34;First Realm&#34; icon=&#34;academic-cap&#34; subtitle=&#34;Create a realm, client, and user&#34; &gt;}}
-{{&lt; /cards &gt;}}
+</div>
 
-{{&lt; cards cols=&#34;2&#34; &gt;}}
-  {{&lt; card link=&#34;docs/using/resources/&#34; title=&#34;Managed Resources&#34; icon=&#34;book-open&#34; subtitle=&#34;Reference for all CRD types: realms, clients, users, roles, groups, identity providers, and more&#34; &gt;}}
-  {{&lt; card link=&#34;docs/using/reference/&#34; title=&#34;Reference&#34; icon=&#34;puzzle&#34; subtitle=&#34;ProviderConfig, credentials, common patterns, and troubleshooting&#34; &gt;}}
-  {{&lt; card link=&#34;docs/developing/&#34; title=&#34;Developing&#34; icon=&#34;terminal&#34; subtitle=&#34;Set up a local dev environment, contribute code, or work on the docs&#34; &gt;}}
-  {{&lt; card link=&#34;docs/ai-usage/&#34; title=&#34;AI Usage&#34; icon=&#34;sparkles&#34; subtitle=&#34;llms.txt, agents.md, and AI-oriented entry points for this project&#34; &gt;}}
-{{&lt; /cards &gt;}}
+<div class="hx:mb-12 hx:flex hx:flex-wrap hx:gap-3">
+<a href="docs/using/getting-started/installation/" class="not-prose hx:font-medium hx:cursor-pointer hx:px-6 hx:py-3 hx:rounded-full hx:text-center hx:text-white hx:inline-block hx:bg-primary-600 hx:hover:bg-primary-700 hx:hextra-focus-visible hx:dark:bg-primary-600 hx:dark:hover:bg-primary-700 hx:transition-all hx:ease-in hx:duration-200">Get Started</a>
+
+<a href="https://github.com/crossplane-contrib/provider-keycloak" class=" not-prose hx:inline-flex hx:items-center hx:rounded-full hx:gap-2 hx:px-3 hx:py-1 hx:text-xs hx:text-gray-600 hx:dark:text-gray-400 hx:bg-gray-100 hx:dark:bg-neutral-800 hx:border-gray-200 hx:dark:border-neutral-800 hx:border hx:hover:border-gray-400 hx:dark:hover:text-gray-50 hx:dark:hover:border-gray-600 hx:transition-all hx:ease-in hx:duration-200" target="_blank" rel="noreferrer">
+  ⭐ GitHub
+</a>
+
+<a href="https://github.com/crossplane-contrib/provider-keycloak/releases" class=" not-prose hx:inline-flex hx:items-center hx:rounded-full hx:gap-2 hx:px-3 hx:py-1 hx:text-xs hx:text-gray-600 hx:dark:text-gray-400 hx:bg-gray-100 hx:dark:bg-neutral-800 hx:border-gray-200 hx:dark:border-neutral-800 hx:border hx:hover:border-gray-400 hx:dark:hover:text-gray-50 hx:dark:hover:border-gray-600 hx:transition-all hx:ease-in hx:duration-200" target="_blank" rel="noreferrer">
+  📦 Releases
+</a>
+
+</div>
+
+
+  
+  - [Installation](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-760/docs/using/getting-started/installation.md): Add the provider to your Crossplane cluster
+
+  
+  - [Configuration](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-760/docs/using/getting-started/configuration.md): Connect to your Keycloak instance
+
+  
+  - [First Realm](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-760/docs/using/getting-started/first-realm.md): Create a realm, client, and user
+
+
+
+
+
+  
+  - [Managed Resources](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-760/docs/using/resources/index.md): Reference for all CRD types: realms, clients, users, roles, groups, identity providers, and more
+
+  
+  - [Reference](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-760/docs/using/reference/index.md): ProviderConfig, credentials, common patterns, and troubleshooting
+
+  
+  - [Developing](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-760/docs/developing/index.md): Set up a local dev environment, contribute code, or work on the docs
+
+  
+  - [AI Usage](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-760/docs/ai-usage/index.md): llms.txt, agents.md, and AI-oriented entry points for this project
+
+
+
 
 

@@ -25,14 +25,14 @@ metadata:
 spec:
   deletionPolicy: Delete
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   forProvider:
-    description: When requested, this scope will map a user&#39;s group memberships to a claim
+    description: When requested, this scope will map a user's group memberships to a claim
     guiOrder: 1
     includeInTokenScope: true
     name: my-groups
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
 ```
@@ -48,7 +48,7 @@ spec:
   deletionPolicy: Delete
   forProvider:
     clientIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     defaultScopes:
@@ -57,11 +57,11 @@ spec:
       - roles
       - web-origins
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### `ClientOptionalScopes`
@@ -75,7 +75,7 @@ spec:
   deletionPolicy: Delete
   forProvider:
     clientIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     optionalScopes:
@@ -85,11 +85,11 @@ spec:
       - microprofile-jwt
       - my-groups
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ## Related Resources

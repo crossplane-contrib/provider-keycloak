@@ -31,11 +31,11 @@ The most common method using username and password:
 
 ```json
 {
-  &#34;client_id&#34;: &#34;admin-cli&#34;,
-  &#34;username&#34;: &#34;admin&#34;,
-  &#34;password&#34;: &#34;admin&#34;,
-  &#34;url&#34;: &#34;https://keycloak.example.com&#34;,
-  &#34;realm&#34;: &#34;master&#34;
+  "client_id": "admin-cli",
+  "username": "admin",
+  "password": "admin",
+  "url": "https://keycloak.example.com",
+  "realm": "master"
 }
 ```
 
@@ -45,10 +45,10 @@ For automated systems using a service account:
 
 ```json
 {
-  &#34;client_id&#34;: &#34;my-service-account&#34;,
-  &#34;client_secret&#34;: &#34;client-secret-value&#34;,
-  &#34;url&#34;: &#34;https://keycloak.example.com&#34;,
-  &#34;realm&#34;: &#34;master&#34;
+  "client_id": "my-service-account",
+  "client_secret": "client-secret-value",
+  "url": "https://keycloak.example.com",
+  "realm": "master"
 }
 ```
 
@@ -63,7 +63,7 @@ The provider validates URLs before use:
 | No fragments | ✗ `https://keycloak.example.com#section` |
 | Trailing slash removed | `https://kc.example.com/` → `https://kc.example.com` |
 | `base_path` must start with `/` | ✓ `/auth` |
-| `base_path: &#34;/&#34;` normalized to empty | `/` → `` |
+| `base_path: "/"` normalized to empty | `/` → `` |
 | Trailing slash on base_path removed | `/auth/` → `/auth` |
 
 ## Custom TLS Certificate
@@ -72,11 +72,11 @@ For self-signed or internal CA certificates:
 
 ```json
 {
-  &#34;client_id&#34;: &#34;admin-cli&#34;,
-  &#34;username&#34;: &#34;admin&#34;,
-  &#34;password&#34;: &#34;admin&#34;,
-  &#34;url&#34;: &#34;https://keycloak.internal.example.com&#34;,
-  &#34;root_ca_certificate&#34;: &#34;-----BEGIN CERTIFICATE-----\nMIIC...\n-----END CERTIFICATE-----&#34;
+  "client_id": "admin-cli",
+  "username": "admin",
+  "password": "admin",
+  "url": "https://keycloak.internal.example.com",
+  "root_ca_certificate": "-----BEGIN CERTIFICATE-----\nMIIC...\n-----END CERTIFICATE-----"
 }
 ```
 
@@ -86,7 +86,7 @@ Older versions of Keycloak (before v17) served the application under `/auth`. Mo
 
 | Keycloak Version | Base Path |
 |-----------------|-----------|
-| &lt; 17 (WildFly) | `/auth` |
+| < 17 (WildFly) | `/auth` |
 | ≥ 17 (Quarkus) | `` (empty) |
 
 

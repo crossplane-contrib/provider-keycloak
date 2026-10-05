@@ -60,7 +60,7 @@ the external identifier explicitly:
 ```yaml
 metadata:
   annotations:
-    crossplane.io/external-name: &#34;&lt;provider-id&gt;&#34;
+    crossplane.io/external-name: "<provider-id>"
 ```
 
 ## References and selectors

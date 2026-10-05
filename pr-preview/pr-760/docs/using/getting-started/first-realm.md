@@ -21,9 +21,9 @@ metadata:
   name: my-app-realm
 spec:
   forProvider:
-    realm: &#34;my-app&#34;
+    realm: "my-app"
     enabled: true
-    displayName: &#34;My Application&#34;
+    displayName: "My Application"
   providerConfigRef:
     name: keycloak-provider-config
 ```
@@ -55,7 +55,7 @@ spec:
     accessType: public
     standardFlowEnabled: true
     validRedirectUris:
-      - &#34;http://localhost:3000/callback&#34;
+      - "http://localhost:3000/callback"
   providerConfigRef:
     name: keycloak-provider-config
 ```
@@ -69,11 +69,11 @@ metadata:
   name: demo-user
 spec:
   forProvider:
-    realmId: &#34;my-app&#34;
-    username: &#34;demo&#34;
-    email: &#34;demo@example.com&#34;
-    firstName: &#34;Demo&#34;
-    lastName: &#34;User&#34;
+    realmId: "my-app"
+    username: "demo"
+    email: "demo@example.com"
+    firstName: "Demo"
+    lastName: "User"
     enabled: true
   providerConfigRef:
     name: keycloak-provider-config

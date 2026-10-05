@@ -30,7 +30,7 @@ E2e tests are driven by [uptest](https://github.com/crossplane/uptest) and
 | `dev/demos/basic/000-init.yaml` | Prerequisite resources for cluster demos (realm, secrets, etc.) |
 | `dev/demos/namespaced/000-init.yaml` | Prerequisite resources for namespaced demos |
 | `cluster/test/conversion/` | Standalone chainsaw suite (not driven by uptest/`cases.txt`) for CRD conversion webhook regressions, run via `make uptest-conversion` |
-| `cluster/test/restrictedrealmprovider/` | Standalone chainsaw suite for the single-realm `ProviderConfig` limitation ([#742](https://github.com/crossplane-contrib/provider-keycloak/issues/742)), run via `make uptest-restrictedrealmprovider`; see &#34;Standalone Chainsaw Suites&#34; below |
+| `cluster/test/restrictedrealmprovider/` | Standalone chainsaw suite for the single-realm `ProviderConfig` limitation ([#742](https://github.com/crossplane-contrib/provider-keycloak/issues/742)), run via `make uptest-restrictedrealmprovider`; see "Standalone Chainsaw Suites" below |
 
 ## Test Suites
 
@@ -39,18 +39,18 @@ suite runs in its own cluster with its own Keycloak configuration:
 
 | Suite | Demos | Case list | Keycloak features | CI job |
 |-------|-------|-----------|-------------------|--------|
-| regular | `dev/demos/basic/`, `dev/demos/namespaced/`, `dev/demos/orgs/` | `cluster/test/cases.txt`, `cases-kc-26.4.txt`, `cases-kc-26.5.txt`, `cases-orgs.txt` | `admin-fine-grained-authz:v1` (&#43; `organization` from 26.6) | `e2e-tests` |
+| regular | `dev/demos/basic/`, `dev/demos/namespaced/`, `dev/demos/orgs/` | `cluster/test/cases.txt`, `cases-kc-26.4.txt`, `cases-kc-26.5.txt`, `cases-orgs.txt` | `admin-fine-grained-authz:v1` (+ `organization` from 26.6) | `e2e-tests` |
 | FGAPv2 | `dev/demos/fgapv2/` | `cluster/test/cases-fgapv2.txt` | `admin-fine-grained-authz:v2` | `e2e-tests-fgapv2` |
 
 `dev/demos/orgs/` and the version-specific case lists belong to the regular
 suite: they run in the same cluster and are gated by Keycloak version in the
-`Makefile` (organizations need 26.6&#43;). Targeted runs always use the latest
+`Makefile` (organizations need 26.6+). Targeted runs always use the latest
 Keycloak, so those demos can be selected freely.
 
 The split is a hard Keycloak constraint, not a convenience: the
 `admin-fine-grained-authz` feature can be enabled as **either** v1 **or** v2,
 never both. Demos of one suite therefore must never end up in the other
-suite&#39;s run — a v2 demo would fail on a v1 cluster and vice versa.
+suite's run — a v2 demo would fail on a v1 cluster and vice versa.
 
 This is enforced structurally rather than by special-casing individual files:
 `scripts/e2e_dag.py` builds one demo graph per suite (`REGULAR_VARIANTS` /
@@ -69,7 +69,7 @@ make uptest FGAP_VERSION=v2
 
 Not every e2e scenario fits the demo/`cases.txt` model, which expects every
 applied resource to reach Ready/Synced and then be deleted cleanly. Two kinds
-of scenarios don&#39;t:
+of scenarios don't:
 
 - Tests that assert an **expected failure** (e.g. a `ProviderConfig` that
   must never successfully authenticate).
@@ -78,9 +78,9 @@ of scenarios don&#39;t:
   specific, deliberately restricted set of roles).
 
 These live as standalone `chainsaw.kyverno.io/v1alpha1 Test` resources under
-`cluster/test/&lt;suite-name&gt;/`, each with its own Makefile target
-(`uptest-&lt;suite-name&gt;`) and its own CI step, run directly via `chainsaw test
---test-dir cluster/test/&lt;suite-name&gt;` instead of through `uptest`. They
+`cluster/test/<suite-name>/`, each with its own Makefile target
+(`uptest-<suite-name>`) and its own CI step, run directly via `chainsaw test
+--test-dir cluster/test/<suite-name>` instead of through `uptest`. They
 still require a cluster with the provider deployed and the
 `keycloak-provider-config` admin `ProviderConfig` already applied — the same
 prerequisites as the `uptest` target.
@@ -90,13 +90,13 @@ prerequisites as the `uptest` target.
 | CRD conversion webhook | `cluster/test/conversion/` | `make uptest-conversion` | Historic stored CRD encodings converted through the live `/convert` endpoint |
 | Restricted single-realm `ProviderConfig` | `cluster/test/restrictedrealmprovider/` | `make uptest-restrictedrealmprovider` | [#742](https://github.com/crossplane-contrib/provider-keycloak/issues/742): a `ProviderConfig` scoped entirely to one realm (no master-realm/realm-management roles) must fail login with a 403, a Keycloak-side constraint this provider cannot work around |
 
-The single-realm suite&#39;s `bootstrap.sh` provisions a realm and a fully
+The single-realm suite's `bootstrap.sh` provisions a realm and a fully
 realm-scoped service account client directly against the Keycloak API (there
 is no declarative way to create a *deliberately under-privileged* service
 account through the managed resources themselves), then a chainsaw `assert`
 checks that a probe `Group` resource ends up `Synced=False` with the expected
 initial-login `/admin/serverinfo` `403 Forbidden` message. `cleanup.sh` runs
-as the assertion step&#39;s `finally` so the bootstrap-created credentials remain
+as the assertion step's `finally` so the bootstrap-created credentials remain
 available until that check completes, and the realm is still removed whether
 the assertion passes or fails.
 
@@ -105,15 +105,15 @@ is regression-tested in two ways: unit tests in `internal/clients/keycloak_test.
 verify that the credential key is passed through to the Terraform provider,
 and the existing `dev/demos/basic/087-nonmaster-provider.yaml` /
 `dev/demos/namespaced/087-nonmaster-provider.yaml` demos (gated to Keycloak
-&gt;= 26.4 via `cluster/test/cases-kc-26.4.txt`) exercise a non-master-realm
+>= 26.4 via `cluster/test/cases-kc-26.4.txt`) exercise a non-master-realm
 service account path that also depends on `keycloak_version` when Keycloak
 returns an empty `systemInfo.version`.
 
 ## Adding a New Test
 
-1. Create `dev/demos/basic/&lt;NNN&gt;-&lt;name&gt;.yaml` and/or
-   `dev/demos/namespaced/&lt;NNN&gt;-&lt;name&gt;.yaml` — or, for resources requiring
-   fine-grained admin permissions v2, `dev/demos/fgapv2/&lt;NNN&gt;-&lt;name&gt;.yaml`.
+1. Create `dev/demos/basic/<NNN>-<name>.yaml` and/or
+   `dev/demos/namespaced/<NNN>-<name>.yaml` — or, for resources requiring
+   fine-grained admin permissions v2, `dev/demos/fgapv2/<NNN>-<name>.yaml`.
 2. Add both paths to `cluster/test/cases.txt` (or `cases-fgapv2.txt`) in the
    correct position
    (higher numbers run first in the list; deletion is in reverse order, so
@@ -142,8 +142,8 @@ kind: ClientTimePolicy
 ```
 
 The generated API group for cluster-scoped resources is
-`&lt;group&gt;.keycloak.crossplane.io`; for namespaced resources it is
-`&lt;group&gt;.keycloak.m.crossplane.io`.
+`<group>.keycloak.crossplane.io`; for namespaced resources it is
+`<group>.keycloak.m.crossplane.io`.
 
 Symptoms: `no matches for kind` error in chainsaw/uptest logs, or the
 resource is immediately rejected by the API server with an unknown-kind error.
@@ -220,29 +220,29 @@ value. `ClientTimePolicy` is the canonical case: omitting `notBefore` /
 `notOnOrAfter` yields
 
 ```text
-400 Bad Request: {&#34;error&#34;:&#34;Unable not parse a date using format []&#34;}
+400 Bad Request: {"error":"Unable not parse a date using format []"}
 ```
 
 Mitigation: set both fields (format `yyyy-MM-dd HH:mm:ss`), as the upstream
-Terraform provider&#39;s own acceptance test does.
+Terraform provider's own acceptance test does.
 
-### 8. Lookup Helper Not Recognising &#34;Not Found&#34;
+### 8. Lookup Helper Not Recognising "Not Found"
 
 Resources wired to `lookup.BuildIdentifyingPropertiesLookup` call an upstream
 `Get...ByName` client function. Several of those return a plain
-`fmt.Errorf(&#34;no ... with name %s found&#34;, ...)` rather than a typed not-found
-error. If the helper in `config/&lt;group&gt;/config.go` does not treat that message
-as &#34;not found&#34;, the very first reconcile fails with
+`fmt.Errorf("no ... with name %s found", ...)` rather than a typed not-found
+error. If the helper in `config/<group>/config.go` does not treat that message
+as "not found", the very first reconcile fails with
 
 ```text
 connect failed: cannot initialize the Terraform plugin SDK async external client:
-failed to get the extended parameters for resource &#34;/&lt;name&gt;&#34;: cannot get ID: ...
+failed to get the extended parameters for resource "/<name>": cannot get ID: ...
 ```
 
 and the resource is never created, blocking everything that references it.
 
-Mitigation: check the upstream function&#39;s not-found error string and return
-`(&#34;&#34;, nil)` for it — see `getAuthzScopeIDByIdentifyingProperties` in
+Mitigation: check the upstream function's not-found error string and return
+`("", nil)` for it — see `getAuthzScopeIDByIdentifyingProperties` in
 `config/openidclient/config.go`.
 
 ## Methodology: Writing a Demo File
@@ -253,10 +253,10 @@ Follow these steps when writing a new demo file.
 
 ```bash
 # Find the generated types file
-ls apis/cluster/openidclient/v1alpha1/ | grep &lt;resource&gt;
+ls apis/cluster/openidclient/v1alpha1/ | grep <resource>
 
 # Confirm the Kind constant
-grep &#39;Kind\s*=&#39; apis/cluster/openidclient/v1alpha1/zz_&lt;resource&gt;_types.go
+grep 'Kind\s*=' apis/cluster/openidclient/v1alpha1/zz_<resource>_types.go
 ```
 
 Use the generated `examples-generated/` file as a reference for fields and
@@ -265,8 +265,8 @@ structure.
 ### Step 2 – Check required fields
 
 ```bash
-grep &#39;kubebuilder:validation:XValidation&#39; \
-  apis/cluster/openidclient/v1alpha1/zz_&lt;resource&gt;_types.go
+grep 'kubebuilder:validation:XValidation' \
+  apis/cluster/openidclient/v1alpha1/zz_<resource>_types.go
 ```
 
 Every field listed in a `required parameter` message must be present in
@@ -284,8 +284,8 @@ For each `*Ref` field, confirm the referenced resource:
 Demos must be self-contained: every referenced object is created by the demo
 itself (or a lower-numbered one), never by hardcoding a Keycloak UUID. If a
 field only accepts raw IDs, configure a cross-resource reference for it in
-`config/&lt;group&gt;/config.go`. When a single Terraform field accepts IDs of
-several different resource types (e.g. `keycloak_openid_client_aggregate_policy`&#39;s
+`config/<group>/config.go`. When a single Terraform field accepts IDs of
+several different resource types (e.g. `keycloak_openid_client_aggregate_policy`'s
 `policies`), use the `config/multitypes` helpers to expose one strongly-typed
 list field per referenceable type — see `keycloak_openid_client_client_policy`
 (`clients`/`saml_clients`) and `keycloak_openid_client_aggregate_policy`
@@ -307,14 +307,14 @@ top of the basic block, since the file is sorted descending by number).
 
 ```bash
 # Apply the demo manifest and watch for readiness
-kubectl apply -f dev/demos/basic/&lt;NNN&gt;-&lt;name&gt;.yaml
-kubectl get -f dev/demos/basic/&lt;NNN&gt;-&lt;name&gt;.yaml -w
+kubectl apply -f dev/demos/basic/<NNN>-<name>.yaml
+kubectl get -f dev/demos/basic/<NNN>-<name>.yaml -w
 ```
 
 Check for stuck resources:
 
 ```bash
-kubectl describe &lt;kind&gt; &lt;name&gt; | grep -A5 &#39;Status\|Message\|Reason&#39;
+kubectl describe <kind> <name> | grep -A5 'Status\|Message\|Reason'
 ```
 
 Common resolution: look for `WaitingForReferencedResourceReady` or strict
@@ -329,15 +329,15 @@ decode errors, then fix the field names or references as described above.
 | ProviderConfig kind | *(omit kind field)* | `kind: ProviderConfig` |
 | Resource namespace | *(none)* | `namespace: dev-ns` |
 
-&gt; **Note:** Do **not** use `providerConfigRef.kind: ClusterProviderConfig` in
-&gt; namespaced demos; the namespaced provider expects a `ProviderConfig`
-&gt; (namespace-scoped).
+> **Note:** Do **not** use `providerConfigRef.kind: ClusterProviderConfig` in
+> namespaced demos; the namespaced provider expects a `ProviderConfig`
+> (namespace-scoped).
 
 ## Known Limitations
 
 - E2E tests only cover resources listed in `cluster/test/cases.txt` (regular
   suite) or `cluster/test/cases-fgapv2.txt` (FGAPv2 suite). Every managed
-  resource must be covered by a demo — see &#34;Resource coverage gate&#34; below —
+  resource must be covered by a demo — see "Resource coverage gate" below —
   unless it is declared in `cluster/test/uncovered-resources.txt` because
   Keycloak rejects it in a test environment.
 - Chainsaw JMESPath assertions on `status.conditions` can fail if conditions are `nil` immediately after apply; add a wait step or assert only object existence first.
@@ -354,9 +354,9 @@ resulting tier wins:
 | `targeted` | `generated controller` (`internal/controller/**/zz_*.go`), `API types` (`apis/`), `resource config` (`config/`), `CRD schema` (`package/crds/`), `generated example` / `example manifest`, `demo manifest` (`dev/demos/`), `e2e harness` (`cluster/test/`), plus any unclassified path as a safe fallback | resource-focused DAG slice (falling back to API groups only when the path is too broad) × latest Keycloak only |
 | `full` | `go module` (`go.mod`, `go.sum`), `build system` (`Makefile`, `build/`), `provider runtime code` (`internal/`, `cmd/` — excluding generated controllers), `CI workflow` (`.github/workflows/ci.yml`), `e2e environment` (`dev/` outside `dev/demos/`), or any non-PR event | all demos × all Keycloak versions |
 
-Generated per-resource controller code (`internal/controller/&lt;scope&gt;/&lt;group&gt;/&lt;resource&gt;/zz_controller.go`
+Generated per-resource controller code (`internal/controller/<scope>/<group>/<resource>/zz_controller.go`
 and `zz_setup.go`) is deliberately **not** full-tier: it belongs to a single API
-group and is treated like `apis/&lt;group&gt;/`. Only hand-written provider runtime
+group and is treated like `apis/<group>/`. Only hand-written provider runtime
 code forces a full run.
 
 The `detect-noop` job determines the tier (and therefore the Keycloak version
@@ -364,7 +364,7 @@ matrix). The `e2e-tests` job then has a **Calculate E2E test selection** step
 that resolves the concrete demo list for the run.
 
 Both steps compute the changed files against `main` (`git merge-base
-origin/main HEAD`), never against the pull request&#39;s recorded base SHA, so the
+origin/main HEAD`), never against the pull request's recorded base SHA, so the
 selection stays correct even when the branch is behind or the base ref moves.
 
 ### Per-suite selection
@@ -374,7 +374,7 @@ the other:
 
 | Command | Output | Gates |
 |---------|--------|-------|
-| `select` | `full`, `skip`, or a comma-separated demo list (`basic/` &#43; `namespaced/` only) | `e2e-tests` (runs unless the tier is `skip`) |
+| `select` | `full`, `skip`, or a comma-separated demo list (`basic/` + `namespaced/` only) | `e2e-tests` (runs unless the tier is `skip`) |
 | `select-fgapv2` | `run` or `skip` | `e2e-tests-fgapv2` |
 
 `select-fgapv2` answers a boolean because the FGAPv2 suite is small and always
@@ -418,7 +418,7 @@ once the resource becomes testable.
 
 ### Group-scoped configuration
 
-`config/&lt;group&gt;/` holds the Upjet configuration of a whole API group (external
+`config/<group>/` holds the Upjet configuration of a whole API group (external
 names, references, lookups). A change there cannot be attributed to a single
 resource, so **all** demos of that group are selected, on top of the demos of
 the concretely touched resources. Generated per-resource files
@@ -434,8 +434,8 @@ Every selection is accompanied by a proof written to the job summary
 2. the touched resources (and touched API groups as fallback context), plus
    which changed paths implied them;
 3. every selected demo with the reason it is in the set — `defines Kind (group)`,
-   `uses Kind (group)`, `uses API group &#39;x&#39;`, `changed directly`,
-   `prerequisite of &lt;demo&gt;` or `depends on &lt;demo&gt;`.
+   `uses Kind (group)`, `uses API group 'x'`, `changed directly`,
+   `prerequisite of <demo>` or `depends on <demo>`.
 
 Reproduce it locally:
 
@@ -463,10 +463,10 @@ teardown, whereas applying in that order is safe since Crossplane retries
 reference resolution until the prerequisite exists.
 
 `make generate` refreshes `cluster/test/e2e-index.json`, which answers
-&#34;which e2e test uses resource X?&#34;:
+"which e2e test uses resource X?":
 
 ```bash
-jq &#39;.resources[&#34;ClientTimePolicy (openidclient)&#34;]&#39; cluster/test/e2e-index.json
+jq '.resources["ClientTimePolicy (openidclient)"]' cluster/test/e2e-index.json
 ```
 
 The same file holds the demo DAG under `.demos`. It is committed, so

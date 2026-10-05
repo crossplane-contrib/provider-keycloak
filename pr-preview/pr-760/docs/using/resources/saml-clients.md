@@ -31,7 +31,7 @@ spec:
     includeAuthnStatement: true
     name: saml-client
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     signAssertions: true
@@ -45,7 +45,7 @@ spec:
       namespace: dev
       key: priv
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### SAML Client Scope
@@ -60,15 +60,15 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    description: This scope will map a user&#39;s group memberships to SAML assertion
+    description: This scope will map a user's group memberships to SAML assertion
     guiOrder: 1
     name: groups
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### SAML Client Default Scopes
@@ -90,11 +90,11 @@ spec:
     defaultScopes:
       - groups
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ## Key fields

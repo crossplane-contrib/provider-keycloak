@@ -41,11 +41,11 @@ spec:
     eventsListeners:
       - jboss-logging
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### RequiredAction
@@ -64,11 +64,11 @@ spec:
     enabled: true
     name: Webauthn Register
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### UserProfile
@@ -84,12 +84,12 @@ spec:
   deletionPolicy: Delete
   forProvider:
     attribute:
-      - displayName: &#34;&#34;
-        group: &#34;&#34;
+      - displayName: ""
+        group: ""
         multiValued: false
         name: username
-      - displayName: &#34;&#34;
-        group: &#34;&#34;
+      - displayName: ""
+        group: ""
         multiValued: false
         name: email
       - annotations:
@@ -115,22 +115,22 @@ spec:
           - name: person-name-prohibited-characters
           - config:
               error-message: Nope
-              pattern: ^[a-z]&#43;$
+              pattern: ^[a-z]+$
             name: pattern
     group:
       - annotations:
           foo: bar
-          foo2: &#39;{&#34;key&#34;:&#34;val&#34;}&#39;
+          foo2: '{"key":"val"}'
         displayDescription: A first group
         displayHeader: Group 1
         name: group1
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     unmanagedAttributePolicy: ENABLED
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### RealmLocalization
@@ -146,15 +146,15 @@ spec:
   deletionPolicy: Delete
   forProvider:
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
-    locale: &#34;de&#34;
+    locale: "de"
     texts:
-      Hello: &#34;Hallo&#34;
-      loginTitle: &#34;Willkommen&#34;
+      Hello: "Hallo"
+      loginTitle: "Willkommen"
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### KeystoreRsa
@@ -184,11 +184,11 @@ spec:
       namespace: dev
     providerId: rsa
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### DefaultClientScopes
@@ -203,7 +203,7 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    realmId: &#34;dev&#34;
+    realmId: "dev"
     defaultScopes:
       - profile
       - email
@@ -211,7 +211,7 @@ spec:
       - web-origins
       - phone
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### OptionalClientScopes
@@ -226,12 +226,12 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    realmId: &#34;dev&#34;
+    realmId: "dev"
     optionalScopes:
       - acr
       - role_list
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### ClientPolicyProfile
@@ -248,16 +248,16 @@ spec:
   forProvider:
     executor:
       - configuration:
-          auto-configure: &#34;true&#34;
+          auto-configure: "true"
         name: intent-client-bind-checker
       - name: secure-session
     name: my-profile
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### ClientPolicyProfilePolicy
@@ -281,11 +281,11 @@ spec:
     profilesRefs:
       - name: client-policy-profile
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ## Key Fields

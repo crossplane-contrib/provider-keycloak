@@ -24,11 +24,11 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    realmId: &#34;dev&#34;
-    name: &#34;test&#34;
-    description: &#34;abc&#34;
+    realmId: "dev"
+    name: "test"
+    description: "abc"
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Client role
@@ -41,15 +41,15 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    realmId: &#34;dev&#34;
-    name: &#34;test-client&#34;
+    realmId: "dev"
+    name: "test-client"
     clientIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
-    description: &#34;abc&#34;
+    description: "abc"
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Managing a built-in realm role without deleting it
@@ -63,10 +63,10 @@ spec:
   managementPolicies: [Observe, Update]
   deletionPolicy: Orphan
   forProvider:
-    realmId: &#34;dev&#34;
-    name: &#34;offline_access&#34;
+    realmId: "dev"
+    name: "offline_access"
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Managing a built-in client role without deleting it
@@ -80,11 +80,11 @@ spec:
   managementPolicies: [Observe, Update]
   deletionPolicy: Orphan
   forProvider:
-    realmId: &#34;dev&#34;
-    clientId: &#34;account&#34;
-    name: &#34;view-profile&#34;
+    realmId: "dev"
+    clientId: "account"
+    name: "view-profile"
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Fine-grained admin permissions (v2)
@@ -112,7 +112,7 @@ spec:
     description: Admins can assign any role of the realm
     decisionStrategy: UNANIMOUS
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     scopes:
@@ -120,13 +120,13 @@ spec:
       - map-role-client-scope
       - map-role-composite
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 Valid `scopes` for role permissions are `map-role`, `map-role-client-scope` and
 `map-role-composite`. Without `roleIds` the permission applies to every role of
 the realm, otherwise only to the referenced roles. A permission without policies
-is evaluated as &#34;deny&#34;, so attach policies once they exist on the realm&#39;s
+is evaluated as "deny", so attach policies once they exist on the realm's
 `admin-permissions` client, either by ID via `policies` or through the typed
 reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
 

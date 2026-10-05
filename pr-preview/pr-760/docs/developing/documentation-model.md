@@ -15,7 +15,7 @@ Write and review these pages by hand:
 - Troubleshooting pages that explain symptoms, causes, and fixes.
 - AI usage pages that describe how to consume the docs.
 
-Authored pages should answer &#34;when and why should I use this?&#34; and include
+Authored pages should answer "when and why should I use this?" and include
 tested examples or links to manifests in `examples/`.
 
 ## Generated or schema-derived content

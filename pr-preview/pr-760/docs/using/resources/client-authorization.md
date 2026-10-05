@@ -30,20 +30,20 @@ metadata:
   name: my-authz-resource
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     name: my-authz-resource
     displayName: My Authorization Resource
-    type: &#34;urn:test:resources:default&#34;
+    type: "urn:test:resources:default"
     uris:
-      - &#34;/protected/resource&#34;
+      - "/protected/resource"
     resourceServerIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
 ```
@@ -57,20 +57,20 @@ metadata:
   name: my-authz-permission
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     name: my-authz-permission
     description: Permission covering all resources of a given type
     type: resource
-    resourceType: &#34;urn:test:resources:default&#34;
+    resourceType: "urn:test:resources:default"
     decisionStrategy: UNANIMOUS
     resourceServerIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
 ```
@@ -101,22 +101,22 @@ metadata:
   name: my-client-policy
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     name: my-client-policy
     clientsRefs:
-      - name: &#34;test&#34;
+      - name: "test"
         policy:
           resolve: Always
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
 ```
@@ -132,12 +132,12 @@ metadata:
   name: my-oidc-and-saml-client-policy
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     name: my-oidc-and-saml-client-policy
     clientsRefs:
-      - name: &#34;test&#34;
+      - name: "test"
         policy:
           resolve: Always
     samlClientsRefs:
@@ -147,11 +147,11 @@ spec:
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
 ```
@@ -165,7 +165,7 @@ metadata:
   name: my-group-policy
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     name: my-group-policy
@@ -173,15 +173,15 @@ spec:
       - path: /test
         extendChildren: false
         idRef:
-          name: &#34;test&#34;
+          name: "test"
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
 ```
@@ -195,7 +195,7 @@ metadata:
   name: my-role-policy
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     name: my-role-policy
@@ -203,15 +203,15 @@ spec:
     role:
       - required: true
         idRef:
-          name: &#34;test&#34;
+          name: "test"
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
 ```
@@ -225,22 +225,22 @@ metadata:
   name: my-user-policy
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     name: my-user-policy
     usersRefs:
-      - name: &#34;tim-tester&#34;
+      - name: "tim-tester"
         policy:
           resolve: Always
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
 ```
@@ -258,25 +258,25 @@ spec:
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     name: regex-policy
-    pattern: ^sample.&#43;$
+    pattern: ^sample.+$
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     resourceServerIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     targetClaim: sample-claim
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### `ClientAuthorizationPolicy`
 
 Addresses any policy provider by its type id. Use it for custom policy providers
 implemented as a Java SPI, and for JavaScript policies deployed in a JAR, whose
-type is the `script-&lt;fileName&gt;` id Keycloak assigns. Stock policy types have
+type is the `script-<fileName>` id Keycloak assigns. Stock policy types have
 dedicated resources and those should be preferred. This resource carries no
 provider-specific configuration, so it suits providers that require none.
 
@@ -287,7 +287,7 @@ metadata:
   name: my-generic-policy
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     name: my-generic-policy
@@ -296,11 +296,11 @@ spec:
     decisionStrategy: UNANIMOUS
     logic: POSITIVE
     resourceServerIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
 ```
@@ -314,15 +314,15 @@ metadata:
   name: my-permission
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     clientIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
 ```

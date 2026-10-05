@@ -25,7 +25,7 @@ Users declare Keycloak resources as YAML (`spec.forProvider` maps to Terraform a
 ## Repository Layout
 
 ```
-apis/               Crossplane API types (generated &#43; hand-authored)
+apis/               Crossplane API types (generated + hand-authored)
 cmd/                provider and generator entry points
 config/             Upjet resource configuration (external names, references, cross-resource refs)
 docs/               Hugo (hextra) documentation site
@@ -50,17 +50,17 @@ scripts/            Utility scripts
 - **External Name** – the Keycloak-side identifier wired in `config/external_name.go`.
   This is the ID or name that Keycloak assigns to the resource.
 - **References** – cross-resource references (e.g., `realmIdRef`) are configured
-  in `config/&lt;group&gt;/config.go`. They wire one managed resource&#39;s external name
-  into another resource&#39;s field.
+  in `config/<group>/config.go`. They wire one managed resource's external name
+  into another resource's field.
 
 ## Key Files for Common Tasks
 
 | Task | File(s) |
 |------|---------|
-| Add a new resource | `config/external_name.go`, `config/&lt;group&gt;/config.go` |
-| Change reference resolution | `config/&lt;group&gt;/config.go` |
-| Update docs for a resource | `docs/content/docs/using/resources/&lt;resource&gt;.md` |
-| Add/update an example manifest | `examples/&lt;group&gt;/&lt;resource&gt;.yaml` |
+| Add a new resource | `config/external_name.go`, `config/<group>/config.go` |
+| Change reference resolution | `config/<group>/config.go` |
+| Update docs for a resource | `docs/content/docs/using/resources/<resource>.md` |
+| Add/update an example manifest | `examples/<group>/<resource>.yaml` |
 | Modify CRD generation | `generate/*.go`, run `make generate` |
 | Run unit tests | `make test` |
 | Run e2e tests | `make e2e`, see `cluster/test/cases.txt` for covered resources |
@@ -75,7 +75,7 @@ Always run `make generate` after changing `config/` to regenerate CRDs and Go ty
 
 The generation pipeline:
 1. `generate/main.go` calls Upjet with the Terraform provider schema.
-2. Upjet writes Go type definitions into `apis/&lt;group&gt;/&lt;version&gt;/`.
+2. Upjet writes Go type definitions into `apis/<group>/<version>/`.
 3. `make generate` runs `go generate ./...` which invokes controller-gen to write CRDs into `package/crds/`.
 4. `make generate` then runs `e2e-index` (DAG: `cluster/test/e2e-index.json`), `generated-lst` (`config/generated.lst`) and `docs-gen` (`docs/static/llms.txt`, `docs/static/llms-full.txt`).
 
@@ -90,36 +90,36 @@ explicitly listed in `cluster/test/cases.txt` receive e2e coverage.
 
 ## Adding a New Resource
 
-Use `make schema-diff OLD_PROVIDER_VERSION=&lt;prev&gt;` (or compare
+Use `make schema-diff OLD_PROVIDER_VERSION=<prev>` (or compare
 `config/generated.lst` against `config/schema.json`) to find Terraform
-resources that aren&#39;t yet exposed as managed resources. The
+resources that aren't yet exposed as managed resources. The
 `schema-diff-issues` GitHub Actions workflow automates this and files one
-issue per missing resource that isn&#39;t already tracked.
+issue per missing resource that isn't already tracked.
 
 1. Add an entry to `config/external_name.go`. Choose `config.IdentifierFromProvider`
    when the Terraform provider already returns a stable ID (including composite
-   `{realm}/...` IDs), or a `&lt;group&gt;.&lt;Resource&gt;IdentifierFromIdentifyingProperties`
+   `{realm}/...` IDs), or a `<group>.<Resource>IdentifierFromIdentifyingProperties`
    helper (see `config/openidclient/` or `config/group/`) when the ID must be
-   derived from identifying attributes such as name &#43; realm.
-2. Create or update `config/&lt;group&gt;/config.go` to configure references and any
+   derived from identifying attributes such as name + realm.
+2. Create or update `config/<group>/config.go` to configure references and any
    custom behaviors. If an attribute can reference more than one resource type,
    use `config/multitypes` (see [Multi-Type References](#multi-type-references))
    rather than leaving it as a raw ID field.
 3. Run `make generate` to regenerate CRDs and Go types.
-4. Add a hand-authored example to `examples/&lt;group&gt;/&lt;resource&gt;.yaml`.
-5. Optionally add a docs page to `docs/content/docs/using/resources/&lt;resource&gt;.md`.
+4. Add a hand-authored example to `examples/<group>/<resource>.yaml`.
+5. Optionally add a docs page to `docs/content/docs/using/resources/<resource>.md`.
 6. Optionally add the resource to `cluster/test/cases.txt` plus a chainsaw/uptest
    manifest under `cluster/test/` or `dev/demos/` for e2e coverage.
 
 To allow a resource to be imported/observed by its properties (avoiding 409 on create),
 wire its `external_name.go` entry to a `lookup.BuildIdentifyingPropertiesLookup` config
-in the `config/&lt;group&gt;` package (see `config/openidclient/config.go` for an example).
+in the `config/<group>` package (see `config/openidclient/config.go` for an example).
 
 ## Automated Schema Diff Issues
 
 `.github/workflows/schema-diff-issues.yml` runs `scripts/schema_diff_issues.py`,
 which diffs `config/schema.json` against `config/generated.lst` and files one
-GitHub issue per missing resource that isn&#39;t already tracked by an existing
+GitHub issue per missing resource that isn't already tracked by an existing
 open issue (matched by exact resource name in the issue title/body).
 
 `config/generated.lst` is itself generated from `config.ExternalNameConfigs`
@@ -137,13 +137,13 @@ file is stale.
 
 ## Cross-Resource References
 
-References are wired in `config/&lt;group&gt;/config.go` using `r.References` on the
+References are wired in `config/<group>/config.go` using `r.References` on the
 Upjet resource configuration. The reference resolver fills in the referenced
-resource&#39;s external name at reconciliation time. Example pattern:
+resource's external name at reconciliation time. Example pattern:
 
 ```go
-r.References[&#34;realm_id&#34;] = config.Reference{
-    TerraformName: &#34;keycloak_realm&#34;,
+r.References["realm_id"] = config.Reference{
+    TerraformName: "keycloak_realm",
 }
 ```
 
@@ -157,22 +157,22 @@ synthetic, strongly-typed field per referenceable type and consolidates the
 resolved values back into the original Terraform field before the request is
 sent to Terraform.
 
-Scalar field — a role&#39;s `client_id` may point at an OpenID or a SAML client:
+Scalar field — a role's `client_id` may point at an OpenID or a SAML client:
 
 ```go
-multitypes.ApplyToWithOptions(r, &#34;client_id&#34;,
-    &amp;multitypes.Options{KeepOriginalField: true}, // keep client_id settable
+multitypes.ApplyToWithOptions(r, "client_id",
+    &multitypes.Options{KeepOriginalField: true}, // keep client_id settable
     multitypes.Instance{
-        Name: &#34;client_id&#34;,
+        Name: "client_id",
         Reference: config.Reference{
-            TerraformName: &#34;keycloak_openid_client&#34;,
+            TerraformName: "keycloak_openid_client",
             Extractor:     common.PathUUIDExtractor,
         },
     },
     multitypes.Instance{
-        Name: &#34;saml_client_id&#34;,
+        Name: "saml_client_id",
         Reference: config.Reference{
-            TerraformName: &#34;keycloak_saml_client&#34;,
+            TerraformName: "keycloak_saml_client",
             Extractor:     common.PathUUIDExtractor,
         },
     },
@@ -183,18 +183,18 @@ List/set field — `keycloak_openid_client_aggregate_policy.policies` holds IDs
 of any authorization policy type:
 
 ```go
-multitypes.ApplyToAsList(r, &#34;policies&#34;,
+multitypes.ApplyToAsList(r, "policies",
     multitypes.Instance{
-        Name: &#34;time_policies&#34;,
+        Name: "time_policies",
         Reference: config.Reference{
-            TerraformName: &#34;keycloak_openid_client_time_policy&#34;,
+            TerraformName: "keycloak_openid_client_time_policy",
             Extractor:     common.PathUUIDExtractor,
         },
     },
     multitypes.Instance{
-        Name: &#34;role_policies&#34;,
+        Name: "role_policies",
         Reference: config.Reference{
-            TerraformName: &#34;keycloak_openid_client_role_policy&#34;,
+            TerraformName: "keycloak_openid_client_role_policy",
             Extractor:     common.PathUUIDExtractor,
         },
     },
@@ -208,7 +208,7 @@ Rules and gotchas:
   `Instance` reuses the original field name; use it to keep the existing field
   settable for backward compatibility. The helper panics on a mismatch.
 - An `Instance` that reuses the original field name may omit its `Reference`
-  entirely. Such an &#34;untyped&#34; instance gets no Ref/Selector fields; the
+  entirely. Such an "untyped" instance gets no Ref/Selector fields; the
   original field simply stays settable for raw IDs of types that have no
   managed resource yet, and its value still takes part in consolidation.
   Omitting the `Reference` on a *synthetic* instance panics.
@@ -234,7 +234,7 @@ Rules and gotchas:
 The docs use [Hugo](https://gohugo.io/) with the [Hextra](https://imfing.github.io/hextra/) theme.
 
 ```bash
-cd docs &amp;&amp; hugo server --buildDrafts   # local preview
+cd docs && hugo server --buildDrafts   # local preview
 make generate                          # regenerates code, DAG and llms.txt
 make docs-gen                          # regenerate llms.txt and llms-full.txt only
 make docs-freshness-check             # CI: verify llms.txt is current
@@ -263,10 +263,10 @@ consuming individual pages.
   are not auto-merged since upgrading requires deliberate schema migration.
 - **E2E tests only cover resources in `cluster/test/cases.txt`.** New resources
   are not automatically e2e tested.
-- **Upjet does not support `&#43;nullable` markers.** Do not add nullable annotations
+- **Upjet does not support `+nullable` markers.** Do not add nullable annotations
   to generated types; the `kubebuilder` Options struct only supports Required,
   Minimum, Maximum, Default.
-- **Membership ownership:** Avoid managing the same group&#39;s membership with both
+- **Membership ownership:** Avoid managing the same group's membership with both
   a `Memberships` resource and a `Groups` resource with `exhaustive=true` at the
   same time; this can cause reconciliation loops.
 - **E2E Crossplane startup:** When waiting for Crossplane to be ready in CI/dev

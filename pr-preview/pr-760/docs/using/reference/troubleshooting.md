@@ -5,13 +5,13 @@
 
 ## Common Issues
 
-### Resource Stuck in &#34;Creating&#34; State
+### Resource Stuck in "Creating" State
 
 **Symptoms**: Resource shows `SYNCED: False` and never becomes `READY`.
 
 **Diagnosis**:
 ```bash
-kubectl describe &lt;resource-type&gt; &lt;resource-name&gt;
+kubectl describe <resource-type> <resource-name>
 ```
 
 Look at the `Events` section and `status.conditions` for error messages.
@@ -20,7 +20,7 @@ Look at the `Events` section and `status.conditions` for error messages.
 - Invalid `providerConfigRef` — ensure the referenced `ProviderConfig` exists
 - Incorrect credentials — verify username/password or client secret
 - Network connectivity — the provider pod cannot reach the Keycloak URL
-- Invalid field values — check the resource spec against Keycloak&#39;s requirements
+- Invalid field values — check the resource spec against Keycloak's requirements
 
 ### Authentication Failures
 
@@ -29,11 +29,11 @@ Look at the `Events` section and `status.conditions` for error messages.
 **Steps**:
 1. Verify the credentials secret exists and has correct data:
    ```bash
-   kubectl get secret keycloak-credentials -n crossplane-system -o jsonpath=&#39;{.data.credentials}&#39; | base64 -d
+   kubectl get secret keycloak-credentials -n crossplane-system -o jsonpath='{.data.credentials}' | base64 -d
    ```
 2. Test connectivity from the provider pod:
    ```bash
-   kubectl exec -it -n crossplane-system &lt;provider-pod&gt; -- curl -k https://keycloak.example.com
+   kubectl exec -it -n crossplane-system <provider-pod> -- curl -k https://keycloak.example.com
    ```
 3. Confirm the `client_id` has admin privileges in Keycloak
 

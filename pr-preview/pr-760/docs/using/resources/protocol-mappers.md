@@ -24,28 +24,28 @@ metadata:
   name: openid-client-protocol-mapper
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
-    name: &#34;picture&#34;
-    protocol: &#34;openid-connect&#34;
+    name: "picture"
+    protocol: "openid-connect"
     clientIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
-    protocolMapper: &#34;oidc-usermodel-attribute-mapper&#34;
+    protocolMapper: "oidc-usermodel-attribute-mapper"
     config:
-      userinfo.token.claim: &#34;true&#34;
-      user.attribute: &#34;picture&#34;
-      id.token.claim: &#34;true&#34;
-      access.token.claim: &#34;true&#34;
-      claim.name: &#34;picture&#34;
-      jsonType.label: &#34;String&#34;
-      introspection.token.claim: &#34;true&#34;
+      userinfo.token.claim: "true"
+      user.attribute: "picture"
+      id.token.claim: "true"
+      access.token.claim: "true"
+      claim.name: "picture"
+      jsonType.label: "String"
+      introspection.token.claim: "true"
 ```
 
 ### OIDC client role `ProtocolMapper` on a client scope
@@ -57,27 +57,27 @@ metadata:
   name: openid-client-scope-protocol-mapper
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
-    name: &#34;client roles&#34;
-    protocol: &#34;openid-connect&#34;
+    name: "client roles"
+    protocol: "openid-connect"
     clientScopeIdRef:
-      name: &#34;openid-client-scope&#34;
+      name: "openid-client-scope"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
-    protocolMapper: &#34;oidc-usermodel-client-role-mapper&#34;
+    protocolMapper: "oidc-usermodel-client-role-mapper"
     config:
-      multivalued: &#34;true&#34;
-      user.attribute: &#34;foo&#34;
-      access.token.claim: &#34;true&#34;
-      claim.name: &#34;resource_access.${client_id}.roles&#34;
-      jsonType.label: &#34;String&#34;
-      introspection.token.claim: &#34;true&#34;
+      multivalued: "true"
+      user.attribute: "foo"
+      access.token.claim: "true"
+      claim.name: "resource_access.${client_id}.roles"
+      jsonType.label: "String"
+      introspection.token.claim: "true"
 ```
 
 ### SAML role list `ProtocolMapper`
@@ -89,25 +89,25 @@ metadata:
   name: saml-client-protocol-mapper
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
-    name: &#34;user roles&#34;
-    protocol: &#34;saml&#34;
+    name: "user roles"
+    protocol: "saml"
     samlClientIdRef:
-      name: &#34;saml-client&#34;
+      name: "saml-client"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
-    protocolMapper: &#34;saml-role-list-mapper&#34;
+    protocolMapper: "saml-role-list-mapper"
     config:
-      attribute.name: &#34;Role&#34;
-      attribute.nameformat: &#34;Basic&#34;
-      friendly.name: &#34;test&#34;
-      single: &#34;true&#34;
+      attribute.name: "Role"
+      attribute.nameformat: "Basic"
+      friendly.name: "test"
+      single: "true"
 ```
 
 ### `RoleMapper` on a client
@@ -119,19 +119,19 @@ metadata:
   name: openid-client-role-mapper
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     clientIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     roleIdRef:
-      name: &#34;test-client&#34;
+      name: "test-client"
       policy:
         resolve: Always
 ```
@@ -145,19 +145,19 @@ metadata:
   name: openid-client-scope-role-mapper
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
     clientScopeIdRef:
-      name: &#34;openid-client-scope&#34;
+      name: "openid-client-scope"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     roleIdRef:
-      name: &#34;test-client&#34;
+      name: "test-client"
       policy:
         resolve: Always
 ```
@@ -171,19 +171,19 @@ metadata:
   name: openid-client-group-membership-protocol-mapper
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
-    name: &#34;my-mapper&#34;
+    name: "my-mapper"
     clientIdRef:
-      name: &#34;test&#34;
+      name: "test"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
-    claimName: &#34;test&#34;
+    claimName: "test"
 ```
 
 ### `GroupMembershipProtocolMapper` on a client scope
@@ -195,19 +195,19 @@ metadata:
   name: openid-client-scope-group-membership-protocol-mapper
 spec:
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   deletionPolicy: Delete
   forProvider:
-    name: &#34;my-mapper&#34;
+    name: "my-mapper"
     clientScopeIdRef:
-      name: &#34;openid-client-scope&#34;
+      name: "openid-client-scope"
       policy:
         resolve: Always
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
-    claimName: &#34;test&#34;
+    claimName: "test"
 ```
 
 ## Related Resources

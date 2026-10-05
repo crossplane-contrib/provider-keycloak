@@ -19,12 +19,12 @@ type: Opaque
 stringData:
   credentials: |
     {
-      &#34;client_id&#34;: &#34;admin-cli&#34;,
-      &#34;username&#34;: &#34;admin&#34;,
-      &#34;password&#34;: &#34;admin&#34;,
-      &#34;url&#34;: &#34;https://keycloak.example.com&#34;,
-      &#34;base_path&#34;: &#34;/auth&#34;,
-      &#34;realm&#34;: &#34;master&#34;
+      "client_id": "admin-cli",
+      "username": "admin",
+      "password": "admin",
+      "url": "https://keycloak.example.com",
+      "base_path": "/auth",
+      "realm": "master"
     }
 ```
 
@@ -53,12 +53,12 @@ metadata:
   namespace: crossplane-system
 type: Opaque
 stringData:
-  client_id: &#34;admin-cli&#34;
-  username: &#34;admin&#34;
-  password: &#34;admin&#34;
-  url: &#34;https://keycloak.example.com&#34;
-  base_path: &#34;/auth&#34;
-  realm: &#34;master&#34;
+  client_id: "admin-cli"
+  username: "admin"
+  password: "admin"
+  url: "https://keycloak.example.com"
+  base_path: "/auth"
+  realm: "master"
 ```
 
 ## Create a ProviderConfig
@@ -86,7 +86,7 @@ The provider validates and normalizes URL fields:
 - `url` must be an absolute URL with scheme and host
 - Trailing slashes are removed automatically
 - `base_path` must be empty or start with `/`
-- `base_path: &#34;/&#34;` is normalized to an empty string
+- `base_path: "/"` is normalized to an empty string
 - Query parameters and fragments are not allowed in URLs
 
 ## Multiple Keycloak Instances
@@ -100,7 +100,7 @@ metadata:
   name: my-realm
 spec:
   forProvider:
-    realm: &#34;my-realm&#34;
+    realm: "my-realm"
   providerConfigRef:
     name: keycloak-provider-config  # References a specific ProviderConfig
 ```

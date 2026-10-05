@@ -28,10 +28,10 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    realmId: &#34;dev&#34;
-    username: &#34;bree&#34;
+    realmId: "dev"
+    username: "bree"
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### User roles
@@ -45,7 +45,7 @@ spec:
   deletionPolicy: Delete
   forProvider:
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     roleIdsRefs:
@@ -53,11 +53,11 @@ spec:
         policy:
           resolve: Always
     userIdRef:
-      name: &#34;tim-tester&#34;
+      name: "tim-tester"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### User groups
@@ -71,7 +71,7 @@ spec:
   deletionPolicy: Delete
   forProvider:
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     groupIdsRefs:
@@ -79,11 +79,11 @@ spec:
         policy:
           resolve: Always
     userIdRef:
-      name: &#34;tim-tester&#34;
+      name: "tim-tester"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### User permissions
@@ -97,11 +97,11 @@ spec:
   deletionPolicy: Delete
   forProvider:
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Fine-grained admin permissions (v2)
@@ -129,7 +129,7 @@ spec:
     description: Admins can view and manage all users
     decisionStrategy: UNANIMOUS
     realmIdRef:
-      name: &#34;dev&#34;
+      name: "dev"
       policy:
         resolve: Always
     scopes:
@@ -139,12 +139,12 @@ spec:
       - manage-group-membership
       - impersonate
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 Valid `scopes` for user permissions are `view`, `manage`, `map-roles`,
 `manage-group-membership` and `impersonate`. A permission without policies is
-evaluated as &#34;deny&#34;, so attach policies once they exist on the realm&#39;s
+evaluated as "deny", so attach policies once they exist on the realm's
 `admin-permissions` client, either by ID via `policies` or through the typed
 reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
 

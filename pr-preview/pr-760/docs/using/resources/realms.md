@@ -21,11 +21,11 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    realm: &#34;dev&#34;
+    realm: "dev"
     attributes:
-      userProfileEnabled: &#34;true&#34;
+      userProfileEnabled: "true"
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Realm with timeouts and lifespans
@@ -38,27 +38,27 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    realm: &#34;dev-durations&#34;
+    realm: "dev-durations"
     enabled: true
-    accessTokenLifespan: &#34;5m0s&#34;
-    accessTokenLifespanForImplicitFlow: &#34;1800s&#34;
-    ssoSessionIdleTimeout: &#34;30m0s&#34;
-    ssoSessionMaxLifespan: &#34;10h0m0s&#34;
-    ssoSessionIdleTimeoutRememberMe: &#34;0s&#34;
-    ssoSessionMaxLifespanRememberMe: &#34;0s&#34;
-    offlineSessionIdleTimeout: &#34;720h0m0s&#34;
-    offlineSessionMaxLifespan: &#34;1440h0m0s&#34;
-    clientSessionIdleTimeout: &#34;0s&#34;
-    clientSessionMaxLifespan: &#34;0s&#34;
-    accessCodeLifespan: &#34;1m0s&#34;
-    accessCodeLifespanUserAction: &#34;5m0s&#34;
-    accessCodeLifespanLogin: &#34;30m0s&#34;
-    actionTokenGeneratedByAdminLifespan: &#34;12h0m0s&#34;
-    actionTokenGeneratedByUserLifespan: &#34;5m0s&#34;
-    oauth2DeviceCodeLifespan: &#34;10m0s&#34;
+    accessTokenLifespan: "5m0s"
+    accessTokenLifespanForImplicitFlow: "1800s"
+    ssoSessionIdleTimeout: "30m0s"
+    ssoSessionMaxLifespan: "10h0m0s"
+    ssoSessionIdleTimeoutRememberMe: "0s"
+    ssoSessionMaxLifespanRememberMe: "0s"
+    offlineSessionIdleTimeout: "720h0m0s"
+    offlineSessionMaxLifespan: "1440h0m0s"
+    clientSessionIdleTimeout: "0s"
+    clientSessionMaxLifespan: "0s"
+    accessCodeLifespan: "1m0s"
+    accessCodeLifespanUserAction: "5m0s"
+    accessCodeLifespanLogin: "30m0s"
+    actionTokenGeneratedByAdminLifespan: "12h0m0s"
+    actionTokenGeneratedByUserLifespan: "5m0s"
+    oauth2DeviceCodeLifespan: "10m0s"
     oauth2DevicePollingInterval: 5
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ### Managing an existing realm without deleting it
@@ -74,7 +74,7 @@ spec:
     realm: master
     displayName: Customized Keycloak
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
   managementPolicies: [Observe, Update]
 ```
 
@@ -88,10 +88,10 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    realm: &#34;orgs&#34;
+    realm: "orgs"
     organizationsEnabled: true
   providerConfigRef:
-    name: &#34;keycloak-provider-config&#34;
+    name: "keycloak-provider-config"
 ```
 
 ## Key Fields

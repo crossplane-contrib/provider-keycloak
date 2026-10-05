@@ -46,7 +46,7 @@ optional and only needs to be set when it applies to your setup.
 | `username` / `password` | No | Credentials for the resource owner password grant. |
 | `access_token` | No | A pre-obtained access token, used instead of any grant. |
 | `realm` | No | Realm the client/user used for authentication belongs to. Defaults to `master`. |
-| `base_path` | No | Path prefix (e.g. `/auth`) if Keycloak isn&#39;t served at the URL root. |
+| `base_path` | No | Path prefix (e.g. `/auth`) if Keycloak isn't served at the URL root. |
 | `admin_url` | No | Admin URL, if different from `url`. |
 | `initial_login` | No | Whether to log in during provider initialization. Defaults to `true`. |
 | `client_timeout` | No | Client HTTP timeout in seconds. Defaults to `15`. |
@@ -74,12 +74,12 @@ type: Opaque
 stringData:
   credentials: |
     {
-      &#34;client_id&#34;: &#34;admin-cli&#34;,
-      &#34;username&#34;: &#34;admin&#34;,
-      &#34;password&#34;: &#34;admin&#34;,
-      &#34;url&#34;: &#34;https://keycloak.example.com&#34;,
-      &#34;base_path&#34;: &#34;/auth&#34;,
-      &#34;realm&#34;: &#34;master&#34;
+      "client_id": "admin-cli",
+      "username": "admin",
+      "password": "admin",
+      "url": "https://keycloak.example.com",
+      "base_path": "/auth",
+      "realm": "master"
     }
 ```
 
@@ -95,12 +95,12 @@ metadata:
   namespace: crossplane-system
 type: Opaque
 stringData:
-  client_id: &#34;admin-cli&#34;
-  username: &#34;admin&#34;
-  password: &#34;admin&#34;
-  url: &#34;https://keycloak.example.com&#34;
-  base_path: &#34;/auth&#34;
-  realm: &#34;master&#34;
+  client_id: "admin-cli"
+  username: "admin"
+  password: "admin"
+  url: "https://keycloak.example.com"
+  base_path: "/auth"
+  realm: "master"
 ```
 
 ### Client Credentials Grant
@@ -117,10 +117,10 @@ type: Opaque
 stringData:
   credentials: |
     {
-      &#34;client_id&#34;: &#34;my-service-account&#34;,
-      &#34;client_secret&#34;: &#34;secret-value&#34;,
-      &#34;url&#34;: &#34;https://keycloak.example.com&#34;,
-      &#34;realm&#34;: &#34;master&#34;
+      "client_id": "my-service-account",
+      "client_secret": "secret-value",
+      "url": "https://keycloak.example.com",
+      "realm": "master"
     }
 ```
 
@@ -166,8 +166,8 @@ spec:
 
 To restrict the provider to one non-master realm, create its service-account
 client in `master`, then grant that service account only the roles it needs
-from the target realm&#39;s admin client. Do not create the client in the target
-realm: Keycloak&#39;s `/admin/serverinfo` endpoint is global and requires a client
+from the target realm's admin client. Do not create the client in the target
+realm: Keycloak's `/admin/serverinfo` endpoint is global and requires a client
 in `master` during the initial login.
 
 The following example configures a client in `master` that can administer the
@@ -178,43 +178,43 @@ the corresponding admin client ID if your realm uses a different name.
 ### 1. Create the service account and grant realm roles
 
 ```terraform
-resource &#34;keycloak_openid_client&#34; &#34;crossplane_provider&#34; {
+resource "keycloak_openid_client" "crossplane_provider" {
   realm_id  = keycloak_realm.master.id
-  name      = &#34;Crossplane Provider&#34;
-  client_id = &#34;crossplane-provider&#34;
+  name      = "Crossplane Provider"
+  client_id = "crossplane-provider"
 
   enabled                   = true
-  access_type               = &#34;CONFIDENTIAL&#34;
+  access_type               = "CONFIDENTIAL"
   standard_flow_enabled    = false
   service_accounts_enabled = true
 }
 
-data &#34;keycloak_openid_client&#34; &#34;demo_realm_admin_client&#34; {
+data "keycloak_openid_client" "demo_realm_admin_client" {
   realm_id  = keycloak_realm.master.id
-  client_id = &#34;demo-realm&#34;
+  client_id = "demo-realm"
 }
 
-data &#34;keycloak_role&#34; &#34;demo_realm_admin_roles&#34; {
+data "keycloak_role" "demo_realm_admin_roles" {
   for_each = toset([
-    &#34;create-client&#34;,
-    &#34;manage-authorization&#34;,
-    &#34;manage-clients&#34;,
-    &#34;manage-events&#34;,
-    &#34;manage-organizations&#34;,
-    &#34;manage-realm&#34;,
-    &#34;manage-users&#34;,
-    &#34;query-clients&#34;,
-    &#34;query-groups&#34;,
-    &#34;query-organizations&#34;,
-    &#34;query-realms&#34;,
-    &#34;query-users&#34;,
-    &#34;view-authorization&#34;,
-    &#34;view-clients&#34;,
-    &#34;view-events&#34;,
-    &#34;view-identity-providers&#34;,
-    &#34;view-organizations&#34;,
-    &#34;view-realm&#34;,
-    &#34;view-users&#34;,
+    "create-client",
+    "manage-authorization",
+    "manage-clients",
+    "manage-events",
+    "manage-organizations",
+    "manage-realm",
+    "manage-users",
+    "query-clients",
+    "query-groups",
+    "query-organizations",
+    "query-realms",
+    "query-users",
+    "view-authorization",
+    "view-clients",
+    "view-events",
+    "view-identity-providers",
+    "view-organizations",
+    "view-realm",
+    "view-users",
   ])
 
   realm_id  = keycloak_realm.master.id
@@ -222,7 +222,7 @@ data &#34;keycloak_role&#34; &#34;demo_realm_admin_roles&#34; {
   name      = each.value
 }
 
-resource &#34;keycloak_user_roles&#34; &#34;crossplane_provider_service_account&#34; {
+resource "keycloak_user_roles" "crossplane_provider_service_account" {
   realm_id = keycloak_realm.master.id
   user_id  = keycloak_openid_client.crossplane_provider.service_account_user_id
 
@@ -253,11 +253,11 @@ type: Opaque
 stringData:
   credentials: |
     {
-      &#34;client_id&#34;: &#34;crossplane-provider&#34;,
-      &#34;client_secret&#34;: &#34;&lt;client-secret-from-keycloak&gt;&#34;,
-      &#34;url&#34;: &#34;https://keycloak.example.com&#34;,
-      &#34;realm&#34;: &#34;master&#34;,
-      &#34;keycloak_version&#34;: &#34;26.6.2&#34;
+      "client_id": "crossplane-provider",
+      "client_secret": "<client-secret-from-keycloak>",
+      "url": "https://keycloak.example.com",
+      "realm": "master",
+      "keycloak_version": "26.6.2"
     }
 ```
 
