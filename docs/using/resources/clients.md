@@ -1,5 +1,8 @@
 # Clients
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use a `Client` when an application or service needs Keycloak to authenticate users with OpenID Connect. This is the resource for web apps, SPAs, backend services, service accounts, and federated workloads.
 
 ## API Reference
@@ -190,4 +193,5 @@ typed reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
 - [Service Accounts](./service-accounts.md)
 - [SAML Clients](./saml-clients.md)
 - [Protocol Mappers](./protocol-mappers.md)
+
 

@@ -1,5 +1,8 @@
 # Roles
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use roles to define permissions in Keycloak. Create realm roles for permissions shared across a realm, and client roles when access should be scoped to a specific application or service.
 
 ## API Reference
@@ -148,4 +151,5 @@ reference fields (`groupPolicies`, `rolePolicies`, `userPolicies`, ...).
 - [Users](./users.md)
 - [Default Configuration](./default-config.md)
 - [Service Accounts](./service-accounts.md)
+
 

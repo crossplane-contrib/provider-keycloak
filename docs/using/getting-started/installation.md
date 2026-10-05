@@ -1,5 +1,8 @@
 # Installation
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 ## Prerequisites
 
 - A Kubernetes cluster with [Crossplane](https://docs.crossplane.io/latest/software/install/) installed
@@ -69,4 +72,5 @@ spec:
 
 - [Configure credentials](./configuration.md) to connect to your Keycloak instance
 - [Create your first realm](./first-realm.md)
+
 

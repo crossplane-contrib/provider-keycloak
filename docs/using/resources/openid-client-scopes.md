@@ -1,5 +1,8 @@
 # OpenID Client Scopes
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use these resources when you want to group protocol mappers and role scope mappings so they can be reused across multiple clients. Default scopes are always included in tokens, while optional scopes are only added when explicitly requested.
 
 ## API Reference
@@ -95,4 +98,5 @@ spec:
 - [Protocol Mappers](./protocol-mappers.md)
 - [Roles](./roles.md)
 - [Realms](./realms.md)
+
 

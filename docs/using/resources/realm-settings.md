@@ -1,5 +1,8 @@
 # Realm Settings
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use these resources after a `Realm` exists and you need to shape how that realm behaves in production. They cover audit logging, user onboarding requirements, custom profile fields, signing keys, default scopes, and client policy enforcement.
 
 ## API Reference
@@ -303,4 +306,5 @@ spec:
 
 - [Realms](./realms.md)
 - [Default Configuration](./default-config.md)
+
 

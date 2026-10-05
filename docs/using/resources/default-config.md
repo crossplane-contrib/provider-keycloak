@@ -1,5 +1,8 @@
 # Default Configuration
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use these resources when every new user in a realm should start with the same baseline access. `DefaultGroups` adds new users to groups automatically, and `Roles` assigns the realm roles that should always be present.
 
 ## API Reference
@@ -61,4 +64,5 @@ spec:
 - [Roles](./roles.md)
 - [Users](./users.md)
 - [Realms](./realms.md)
+
 

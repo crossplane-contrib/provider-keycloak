@@ -1,5 +1,8 @@
 # Protocol Mappers
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use these resources when you need to control what Keycloak emits in OIDC tokens or SAML assertions. Use `ProtocolMapper` for custom claim mapping, `RoleMapper` to include roles from one client or client scope in another, and `GroupMembershipProtocolMapper` to expose group membership as a JWT claim.
 
 ## API Reference
@@ -215,4 +218,5 @@ spec:
 - [Roles](./roles.md)
 - [SAML Clients](./saml-clients.md)
 - [Realms](./realms.md)
+
 

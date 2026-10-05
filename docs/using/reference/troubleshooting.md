@@ -1,5 +1,8 @@
 # Troubleshooting
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 ## Common Issues
 
 ### Resource Stuck in "Creating" State
@@ -97,4 +100,5 @@ kubectl get managed -l crossplane.io/provider=provider-keycloak
 - [Open an issue](https://github.com/crossplane-contrib/provider-keycloak/issues) on GitHub
 - Join the [Crossplane Slack](https://slack.crossplane.io/) community
 - Check the [Resource Reference](/docs/using/resources/) for CRD documentation and examples
+
 

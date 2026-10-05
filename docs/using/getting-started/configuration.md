@@ -1,5 +1,8 @@
 # Configuration
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Every Keycloak instance you manage requires a `ProviderConfig` resource that specifies how to connect to the Keycloak API.
 
 ## Create a Credentials Secret
@@ -105,4 +108,5 @@ spec:
 ## Next Steps
 
 - [Create your first realm](./first-realm.md)
+
 

@@ -1,10 +1,21 @@
 # Developing
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Development-focused guidance for working on provider-keycloak docs and examples.
 
-{{< cards >}}
-  {{< card link="dev-container/" title="Dev Container" icon="cube" subtitle="Build the provider and run e2e tests in a ready-to-use container" >}}
-  {{< card link="local-docs/" title="Local Docs" icon="terminal" subtitle="Build and preview the Hugo documentation site locally" >}}
-  {{< card link="documentation-model/" title="Documentation Model" icon="book-open" subtitle="What to author by hand versus generate from CRDs" >}}
-{{< /cards >}}
+
+  
+  - [Dev Container](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/dev-container.md): Build the provider and run e2e tests in a ready-to-use container
+
+  
+  - [Local Docs](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/local-docs.md): Build and preview the Hugo documentation site locally
+
+  
+  - [Documentation Model](https://crossplane-contrib.github.io/provider-keycloak/docs/developing/documentation-model.md): What to author by hand versus generate from CRDs
+
+
+
+
 

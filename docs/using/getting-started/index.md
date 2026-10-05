@@ -1,10 +1,21 @@
 # Getting Started
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Get provider-keycloak up and running in three steps.
 
-{{< cards >}}
-  {{< card link="installation/" title="Installation" icon="server" subtitle="Add the provider to your Crossplane cluster" >}}
-  {{< card link="configuration/" title="Configuration" icon="adjustments" subtitle="Create a ProviderConfig pointing at your Keycloak instance" >}}
-  {{< card link="first-realm/" title="First Realm" icon="academic-cap" subtitle="Declare a realm, client, and user — then watch them appear in Keycloak" >}}
-{{< /cards >}}
+
+  
+  - [Installation](https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/installation.md): Add the provider to your Crossplane cluster
+
+  
+  - [Configuration](https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/configuration.md): Create a ProviderConfig pointing at your Keycloak instance
+
+  
+  - [First Realm](https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/first-realm.md): Declare a realm, client, and user — then watch them appear in Keycloak
+
+
+
+
 

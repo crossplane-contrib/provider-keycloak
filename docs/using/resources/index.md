@@ -1,5 +1,8 @@
 # Resources
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Complete reference for all provider-keycloak managed resources. Every CRD is
 documented with working examples taken from the project's end-to-end tests,
 links to the underlying Terraform resource, and guidance on when to use each
@@ -11,23 +14,59 @@ fields, see the generated CRDs in
 or browse all CRDs interactively on the
 [Upbound Marketplace CRD Explorer](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/crds).
 
-{{< cards >}}
-  {{< card link="realms/" title="Realms" icon="template" subtitle="Realm · realm.keycloak.crossplane.io" >}}
-  {{< card link="realm-settings/" title="Realm Settings" icon="adjustments" subtitle="RealmEvents · RequiredAction · UserProfile · Keystores · Client Policies" >}}
-  {{< card link="clients/" title="Clients (OIDC)" icon="shield-check" subtitle="Client · openidclient.keycloak.crossplane.io" >}}
-  {{< card link="saml-clients/" title="SAML Clients" icon="shield-check" subtitle="Client · ClientScope · samlclient.keycloak.crossplane.io" >}}
-  {{< card link="openid-client-scopes/" title="Client Scopes" icon="tag" subtitle="ClientScope · ClientDefaultScopes · ClientOptionalScopes" >}}
-  {{< card link="client-authorization/" title="Client Authorization" icon="lock-closed" subtitle="Resources · Permissions · Policies" >}}
-  {{< card link="service-accounts/" title="Service Accounts" icon="user-circle" subtitle="ServiceAccountRealmRole · ServiceAccountRole" >}}
-  {{< card link="users/" title="Users" icon="users" subtitle="User · Groups · Roles · Permissions · user.keycloak.crossplane.io" >}}
-  {{< card link="roles/" title="Roles" icon="badge-check" subtitle="Role · role.keycloak.crossplane.io" >}}
-  {{< card link="groups/" title="Groups" icon="user-group" subtitle="Group · Memberships · Roles · Permissions" >}}
-  {{< card link="protocol-mappers/" title="Protocol Mappers" icon="paper-clip" subtitle="ProtocolMapper · RoleMapper · GroupMembershipProtocolMapper" >}}
-  {{< card link="identity-providers/" title="Identity Providers" icon="switch-horizontal" subtitle="OIDC · SAML · Google · Kubernetes · OpenShift · SPIFFE" >}}
-  {{< card link="user-federation/" title="User Federation" icon="server" subtitle="LDAP/AD federation and all mapper types" >}}
-  {{< card link="authentication-flows/" title="Authentication Flows" icon="arrows-expand" subtitle="Flow · Subflow · Execution · ExecutionConfig · Bindings" >}}
-  {{< card link="default-config/" title="Default Config" icon="star" subtitle="DefaultGroups · DefaultRoles" >}}
-  {{< card link="organizations/" title="Organizations" icon="office-building" subtitle="Organization · Keycloak 26.6+ multi-tenancy" >}}
-  {{< card link="workflows/" title="Workflows" icon="chip" subtitle="Workflow · event-driven automation (Keycloak 26.5+)" >}}
-{{< /cards >}}
+
+  
+  - [Realms](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realms.md): Realm · realm.keycloak.crossplane.io
+
+  
+  - [Realm Settings](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realm-settings.md): RealmEvents · RequiredAction · UserProfile · Keystores · Client Policies
+
+  
+  - [Clients (OIDC)](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/clients.md): Client · openidclient.keycloak.crossplane.io
+
+  
+  - [SAML Clients](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/saml-clients.md): Client · ClientScope · samlclient.keycloak.crossplane.io
+
+  
+  - [Client Scopes](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/openid-client-scopes.md): ClientScope · ClientDefaultScopes · ClientOptionalScopes
+
+  
+  - [Client Authorization](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/client-authorization.md): Resources · Permissions · Policies
+
+  
+  - [Service Accounts](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/service-accounts.md): ServiceAccountRealmRole · ServiceAccountRole
+
+  
+  - [Users](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/users.md): User · Groups · Roles · Permissions · user.keycloak.crossplane.io
+
+  
+  - [Roles](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/roles.md): Role · role.keycloak.crossplane.io
+
+  
+  - [Groups](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/groups.md): Group · Memberships · Roles · Permissions
+
+  
+  - [Protocol Mappers](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/protocol-mappers.md): ProtocolMapper · RoleMapper · GroupMembershipProtocolMapper
+
+  
+  - [Identity Providers](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/identity-providers.md): OIDC · SAML · Google · Kubernetes · OpenShift · SPIFFE
+
+  
+  - [User Federation](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/user-federation.md): LDAP/AD federation and all mapper types
+
+  
+  - [Authentication Flows](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/authentication-flows.md): Flow · Subflow · Execution · ExecutionConfig · Bindings
+
+  
+  - [Default Config](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/default-config.md): DefaultGroups · DefaultRoles
+
+  
+  - [Organizations](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/organizations.md): Organization · Keycloak 26.6+ multi-tenancy
+
+  
+  - [Workflows](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/workflows.md): Workflow · event-driven automation (Keycloak 26.5+)
+
+
+
+
 

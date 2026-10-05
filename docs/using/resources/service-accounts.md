@@ -1,5 +1,8 @@
 # Service Accounts
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use these resources when a client needs to authenticate as itself for machine-to-machine access. They assign realm or client roles to a client's service account. The client must have `serviceAccountsEnabled: true`.
 
 ## API Reference
@@ -66,4 +69,5 @@ spec:
 - [Clients](./clients.md)
 - [Roles](./roles.md)
 - [Realms](./realms.md)
+
 

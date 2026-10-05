@@ -1,5 +1,8 @@
 # Users
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use `User` to declaratively manage people who can authenticate to Keycloak. Use `Groups`, `Roles`, and `Permissions` to manage access around those users, and `UserFederation` when you need a custom external user store integration.
 
 ## API Reference
@@ -192,4 +195,5 @@ spec:
 - [Roles](./roles.md)
 - [Default Configuration](./default-config.md)
 - [User Federation](./user-federation.md)
+
 

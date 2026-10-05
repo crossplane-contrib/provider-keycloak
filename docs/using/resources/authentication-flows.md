@@ -1,5 +1,8 @@
 # Authentication Flows
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use authentication flow resources when the default Keycloak login process is not enough. They let you define custom browser, registration, direct-grant, or client-authentication flows; nest subflows; add execution steps such as MFA, OTP, WebAuthn, or identity-provider redirects; and bind the finished flow to the realm behavior that should use it.
 
 ## API Reference
@@ -232,5 +235,6 @@ spec:
 - **[Identity Providers](./identity-providers.md)** — Combine IdP redirectors and external authentication with custom flows.
 - **[Clients](./clients.md)** — Understand which applications consume the flows you bind.
 - **[Realms](./realms.md)** — Manage the realm that owns the flows and bindings.
+
 
 

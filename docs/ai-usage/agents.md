@@ -1,5 +1,8 @@
 # Agents
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 # Agent Instructions for provider-keycloak
 
 This page collects context and instructions for AI coding agents (GitHub Copilot,
@@ -284,4 +287,5 @@ consuming individual pages.
 | `make generate` produces unexpectedly large/stale diffs | Stale local generator cache/artifacts | Remove `.work/` and `config/schema.json`, then re-run `make generate` |
 | E2E provider version mismatch | Git tags not fetched before build | Add `git fetch --tags` before `make build` |
 | Reconciliation loop on group membership | Both `Memberships` and `Groups` (exhaustive) target same group | Use only one authoritative source per group |
+
 

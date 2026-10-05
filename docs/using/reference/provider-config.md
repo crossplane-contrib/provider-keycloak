@@ -1,5 +1,8 @@
 # ProviderConfig
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 # ProviderConfig Reference
 
 The `ProviderConfig` resource stores connection details for a Keycloak instance.
@@ -298,4 +301,5 @@ before `keycloak_version` can be used. This is a limitation of the underlying
 [`terraform-provider-keycloak`](https://github.com/keycloak/terraform-provider-keycloak)
 client, not a ProviderConfig setting. See [End-to-End Tests](../../developing/e2e-tests.md#standalone-chainsaw-suites)
 for the regression test covering this limitation.
+
 

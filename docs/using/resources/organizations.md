@@ -1,5 +1,8 @@
 # Organizations
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use `Organization` when you need Keycloak multi-tenancy support in Keycloak 26.6 and later. Organizations let you group users under tenant-like entities and configure domain-based identity provider routing. The realm must have `organizationsEnabled: true`.
 
 ## API Reference
@@ -35,4 +38,5 @@ spec:
 - [Realms](./realms.md)
 - [Identity Providers](./identity-providers.md)
 - [Users](./users.md)
+
 

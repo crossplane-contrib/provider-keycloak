@@ -1,5 +1,8 @@
 # End-to-End Tests
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 # End-to-End Tests
 
 This page explains the e2e test infrastructure, common causes of **stuck
@@ -468,4 +471,5 @@ jq '.resources["ClientTimePolicy (openidclient)"]' cluster/test/e2e-index.json
 
 The same file holds the demo DAG under `.demos`. It is committed, so
 `make check-diff` fails if it is stale.
+
 

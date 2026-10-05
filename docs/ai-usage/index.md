@@ -1,9 +1,18 @@
 # AI Usage
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 AI-oriented documentation entry points for provider-keycloak.
 
-{{< cards >}}
-  {{< card link="llms/" title="LLM Files" icon="sparkles" subtitle="llms.txt and llms-full.txt for AI assistant context" >}}
-  {{< card link="agents/" title="Agents" icon="chatgpt" subtitle="Instructions and context for AI coding agents working on provider-keycloak" >}}
-{{< /cards >}}
+
+  
+  - [LLM Files](https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/llms.md): llms.txt and llms-full.txt for AI assistant context
+
+  
+  - [Agents](https://crossplane-contrib.github.io/provider-keycloak/docs/ai-usage/agents.md): Instructions and context for AI coding agents working on provider-keycloak
+
+
+
+
 

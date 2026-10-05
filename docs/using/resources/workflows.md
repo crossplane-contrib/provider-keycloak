@@ -1,5 +1,8 @@
 # Workflows
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use workflows when you want Keycloak 26.5+ to react automatically to realm events. They are a good fit for onboarding notifications, password-policy enforcement, or custom event-driven logic when users are created, updated, or perform specific actions. Key fields are `name`, `enabled`, `on` for the trigger event, `step` for the ordered actions, and `realmRef` for the target realm.
 
 ## API Reference
@@ -40,4 +43,5 @@ spec:
 - [Realms](./realms.md)
 - [Authentication Flows](./authentication-flows.md)
 - [Users](./users.md)
+
 

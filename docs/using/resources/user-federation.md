@@ -1,5 +1,8 @@
 # User Federation
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use user federation when Keycloak should authenticate users against an external directory or user store instead of managing every account in its own database. LDAP and Active Directory federation let users sign in with their existing directory credentials, while mapper resources control how LDAP attributes, groups, and roles are projected into Keycloak. Use the custom user federation CRD when you have a Keycloak user storage SPI provider that is not LDAP-based.
 
 ## API Reference
@@ -352,4 +355,5 @@ spec:
 - [Groups](./groups.md)
 - [Roles](./roles.md)
 - [Identity Providers](./identity-providers.md)
+
 

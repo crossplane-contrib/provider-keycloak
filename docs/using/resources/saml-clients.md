@@ -1,5 +1,8 @@
 # SAML Clients
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use SAML clients when an application or service provider expects SAML 2.0 instead of OpenID Connect. This is common for legacy enterprise applications and commercial service providers such as Salesforce, Jira, or other platforms that rely on SAML metadata, signed assertions, and SSO endpoints.
 
 ## API Reference
@@ -130,5 +133,6 @@ spec:
 - **[Clients](./clients.md)** — Compare SAML clients with OpenID Connect clients.
 - **[Protocol Mappers](./protocol-mappers.md)** — Add mappers that shape SAML assertions and attributes.
 - **[Realms](./realms.md)** — Create the realm that owns the client and scopes.
+
 
 

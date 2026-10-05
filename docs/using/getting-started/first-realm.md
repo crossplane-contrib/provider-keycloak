@@ -1,5 +1,8 @@
 # First Realm
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 # Create Your First Realm
 
 This guide walks you through creating a complete Keycloak realm with a client and user.
@@ -98,4 +101,5 @@ The provider continuously reconciles your desired state (the YAML manifests) wit
 
 - Learn about [Clients](../resources/clients.md) for more advanced configurations
 - Set up [Roles](../resources/roles.md) and [Groups](../resources/groups.md)
+
 

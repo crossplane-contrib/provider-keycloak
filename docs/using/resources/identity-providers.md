@@ -1,5 +1,8 @@
 # Identity Providers
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use identity providers when users should sign in to Keycloak with an external identity system instead of local usernames and passwords. This is the right fit for social login, corporate SAML or OIDC federation, Kubernetes or OpenShift workload identity, SPIFFE-based trust, and controlled token exchange between clients and external providers.
 
 ## API Reference
@@ -327,5 +330,6 @@ spec:
 - **[Organizations](./organizations.md)** — Bind identity providers to Keycloak organizations.
 - **[Authentication Flows](./authentication-flows.md)** — Redirect users through identity providers as part of custom login flows.
 - **[Users](./users.md)** — Understand how federated identities map to Keycloak user records.
+
 
 

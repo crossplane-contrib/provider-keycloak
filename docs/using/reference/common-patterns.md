@@ -1,5 +1,8 @@
 # Common Patterns
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Most provider-keycloak resources follow the same Crossplane manifest structure.
 Use these patterns across guides and examples instead of repeating long
 explanations on every resource page.
@@ -101,4 +104,5 @@ See [Credentials](/docs/using/reference/credentials/) for secret formats.
 Resource pages show common fields and examples. The generated CRDs in
 `package/crds/` contain the complete OpenAPI schema for every field, including
 references, selectors, status, and connection details.
+
 

@@ -1,5 +1,8 @@
 # Documentation Model
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Provider Keycloak has a large API surface. Keep the documentation useful by
 separating authored guidance from generated reference material.
 
@@ -43,4 +46,5 @@ Each resource page should include:
 
 Avoid hand-maintaining complete field tables in Markdown unless they are
 generated from the CRD OpenAPI schema.
+
 

@@ -1,5 +1,8 @@
 # Client Authorization
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use these resources when a client needs Keycloak Authorization Services for fine-grained access control and UMA-style policy evaluation. Define resources, permissions, and policies to protect APIs and services. The client must have `authorization` enabled.
 
 ## API Reference
@@ -332,4 +335,5 @@ spec:
 - [Users](./users.md)
 - [SAML Clients](./saml-clients.md)
 - [Realms](./realms.md)
+
 

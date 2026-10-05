@@ -1,5 +1,8 @@
 # Groups
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Use groups when multiple users should share the same roles or when you need a hierarchical structure such as teams, departments, or environments. Groups let you model organization structure once and then manage access in bulk.
 
 ## API Reference
@@ -204,4 +207,5 @@ through the typed reference fields (`groupPolicies`, `rolePolicies`,
 - [Users](./users.md)
 - [Roles](./roles.md)
 - [Default Configuration](./default-config.md)
+
 

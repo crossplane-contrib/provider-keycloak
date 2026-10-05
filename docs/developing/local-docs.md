@@ -1,5 +1,8 @@
 # Local Docs Development
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Run the documentation site locally:
 
 ```bash
@@ -15,4 +18,5 @@ hugo --minify
 ```
 
 The generated site is written to `docs/public/`.
+
 

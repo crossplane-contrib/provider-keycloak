@@ -1,5 +1,8 @@
 # Dev Container
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 # Dev Container
 
 The repository ships a [Dev Container](https://containers.dev/) under
@@ -106,4 +109,5 @@ Alternatively, run it with `--skip-metal-lb --start-cloud-provider-kind` to use
 the LoadBalancer implementation for kind clusters — instead of MetalLB. That
 binary is not part of the container image; install it separately (for example
 `go install sigs.k8s.io/cloud-provider-kind@latest`) if you take this path.
+
 

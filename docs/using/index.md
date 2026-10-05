@@ -1,10 +1,21 @@
 # Using
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 Install, configure, and operate provider-keycloak.
 
-{{< cards >}}
-  {{< card link="getting-started/" title="Getting Started" icon="server" subtitle="Install the provider, configure credentials, and create your first realm" >}}
-  {{< card link="resources/" title="Managed Resources" icon="book-open" subtitle="Reference for all CRD types: realms, clients, users, groups, and more" >}}
-  {{< card link="reference/" title="Reference" icon="puzzle" subtitle="ProviderConfig, credentials, common patterns, and troubleshooting" >}}
-{{< /cards >}}
+
+  
+  - [Getting Started](https://crossplane-contrib.github.io/provider-keycloak/docs/using/getting-started/index.md): Install the provider, configure credentials, and create your first realm
+
+  
+  - [Managed Resources](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/index.md): Reference for all CRD types: realms, clients, users, groups, and more
+
+  
+  - [Reference](https://crossplane-contrib.github.io/provider-keycloak/docs/using/reference/index.md): ProviderConfig, credentials, common patterns, and troubleshooting
+
+
+
+
 

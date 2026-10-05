@@ -1,5 +1,8 @@
 # Credentials
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/llms.txt)
+
+
 # Credentials Reference
 
 This page documents all supported credential fields for connecting to a Keycloak instance.
@@ -85,4 +88,5 @@ Older versions of Keycloak (before v17) served the application under `/auth`. Mo
 |-----------------|-----------|
 | < 17 (WildFly) | `/auth` |
 | ≥ 17 (Quarkus) | `` (empty) |
+
 
