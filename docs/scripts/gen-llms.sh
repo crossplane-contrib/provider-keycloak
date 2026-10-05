@@ -12,7 +12,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 CONTENT_DIR="${REPO_ROOT}/docs/content"
 STATIC_DIR="${REPO_ROOT}/docs/static"
-BASE_URL="https://crossplane-contrib.github.io/provider-keycloak"
+BASE_URL="${DOCS_BASE_URL:-https://crossplane-contrib.github.io/provider-keycloak}"
+BASE_URL="${BASE_URL%/}"
 
 CHECK_MODE=false
 if [[ "${1:-}" == "--check" ]]; then
