@@ -6,8 +6,8 @@ spec:
   deletionPolicy: Delete
   forProvider:
     extraConfig:
-      Claim: my-email-claim
-      UserAttribute: email
+      claim: my-email-claim
+      "user.attribute": email
       syncMode: INHERIT
     identityProviderAliasRef:
       name: oidc-identity-provider
