@@ -33,7 +33,7 @@ type KeystoreJavaKeystoreInitParameters struct {
 
 	// Password for the private key.
 	// Password for the private key
-	KeyPassword *string `json:"keyPassword,omitempty" tf:"key_password,omitempty"`
+	KeyPasswordSecretRef v2.SecretKeySelector `json:"keyPasswordSecretRef" tf:"-"`
 
 	// Intended use for the key
 	KeyUse *string `json:"keyUse,omitempty" tf:"key_use,omitempty"`
@@ -44,7 +44,7 @@ type KeystoreJavaKeystoreInitParameters struct {
 
 	// Password for the keys.
 	// Password for the keys
-	KeystorePassword *string `json:"keystorePassword,omitempty" tf:"keystore_password,omitempty"`
+	KeystorePasswordSecretRef v2.SecretKeySelector `json:"keystorePasswordSecretRef" tf:"-"`
 
 	// Display name of provider when linked in admin console.
 	// Display name of provider when linked in admin console.
@@ -87,20 +87,12 @@ type KeystoreJavaKeystoreObservation struct {
 	// Alias for the private key
 	KeyAlias *string `json:"keyAlias,omitempty" tf:"key_alias,omitempty"`
 
-	// Password for the private key.
-	// Password for the private key
-	KeyPassword *string `json:"keyPassword,omitempty" tf:"key_password,omitempty"`
-
 	// Intended use for the key
 	KeyUse *string `json:"keyUse,omitempty" tf:"key_use,omitempty"`
 
 	// Path to keys file on keycloak instance.
 	// Path to keys file
 	Keystore *string `json:"keystore,omitempty" tf:"keystore,omitempty"`
-
-	// Password for the keys.
-	// Password for the keys
-	KeystorePassword *string `json:"keystorePassword,omitempty" tf:"keystore_password,omitempty"`
 
 	// Display name of provider when linked in admin console.
 	// Display name of provider when linked in admin console.
@@ -141,7 +133,7 @@ type KeystoreJavaKeystoreParameters struct {
 	// Password for the private key.
 	// Password for the private key
 	// +kubebuilder:validation:Optional
-	KeyPassword *string `json:"keyPassword,omitempty" tf:"key_password,omitempty"`
+	KeyPasswordSecretRef v2.SecretKeySelector `json:"keyPasswordSecretRef" tf:"-"`
 
 	// Intended use for the key
 	// +kubebuilder:validation:Optional
@@ -155,7 +147,7 @@ type KeystoreJavaKeystoreParameters struct {
 	// Password for the keys.
 	// Password for the keys
 	// +kubebuilder:validation:Optional
-	KeystorePassword *string `json:"keystorePassword,omitempty" tf:"keystore_password,omitempty"`
+	KeystorePasswordSecretRef v2.SecretKeySelector `json:"keystorePasswordSecretRef" tf:"-"`
 
 	// Display name of provider when linked in admin console.
 	// Display name of provider when linked in admin console.
@@ -218,9 +210,9 @@ type KeystoreJavaKeystore struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.keyAlias) || (has(self.initProvider) && has(self.initProvider.keyAlias))",message="spec.forProvider.keyAlias is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.keyPassword) || (has(self.initProvider) && has(self.initProvider.keyPassword))",message="spec.forProvider.keyPassword is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.keyPasswordSecretRef)",message="spec.forProvider.keyPasswordSecretRef is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.keystore) || (has(self.initProvider) && has(self.initProvider.keystore))",message="spec.forProvider.keystore is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.keystorePassword) || (has(self.initProvider) && has(self.initProvider.keystorePassword))",message="spec.forProvider.keystorePassword is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.keystorePasswordSecretRef)",message="spec.forProvider.keystorePasswordSecretRef is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	Spec   KeystoreJavaKeystoreSpec   `json:"spec"`
 	Status KeystoreJavaKeystoreStatus `json:"status,omitempty"`

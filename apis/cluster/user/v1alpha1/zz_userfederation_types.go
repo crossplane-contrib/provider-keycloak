@@ -38,8 +38,8 @@ type UserFederationInitParameters struct {
 	// Display name of the provider when displayed in the console.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// Must be set to the realms' internal_id  when it differs from the realm. This can happen when existing resources are imported into the state.
-	// The parent_id of the generated component. will use realm_id if not specified.
+	// Deprecated The internal id of the realm this component is attached to. This is now resolved automatically, so it no longer needs to be set, even when the realm's internal_id differs from its name. This attribute will be removed in a future release.
+	// The parent_id of the generated component. Keycloak resolves this to the realm's internal id automatically.
 	ParentID *string `json:"parentId,omitempty" tf:"parent_id,omitempty"`
 
 	// Priority of this provider when looking up users. Lower values are first. Defaults to 0.
@@ -91,8 +91,8 @@ type UserFederationObservation struct {
 	// Display name of the provider when displayed in the console.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// Must be set to the realms' internal_id  when it differs from the realm. This can happen when existing resources are imported into the state.
-	// The parent_id of the generated component. will use realm_id if not specified.
+	// Deprecated The internal id of the realm this component is attached to. This is now resolved automatically, so it no longer needs to be set, even when the realm's internal_id differs from its name. This attribute will be removed in a future release.
+	// The parent_id of the generated component. Keycloak resolves this to the realm's internal id automatically.
 	ParentID *string `json:"parentId,omitempty" tf:"parent_id,omitempty"`
 
 	// Priority of this provider when looking up users. Lower values are first. Defaults to 0.
@@ -139,8 +139,8 @@ type UserFederationParameters struct {
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// Must be set to the realms' internal_id  when it differs from the realm. This can happen when existing resources are imported into the state.
-	// The parent_id of the generated component. will use realm_id if not specified.
+	// Deprecated The internal id of the realm this component is attached to. This is now resolved automatically, so it no longer needs to be set, even when the realm's internal_id differs from its name. This attribute will be removed in a future release.
+	// The parent_id of the generated component. Keycloak resolves this to the realm's internal id automatically.
 	// +kubebuilder:validation:Optional
 	ParentID *string `json:"parentId,omitempty" tf:"parent_id,omitempty"`
 

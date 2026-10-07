@@ -152,7 +152,7 @@ type AdminPermissionsInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RolePoliciesSelector *v2.NamespacedSelector `json:"rolePoliciesSelector,omitempty" tf:"-"`
 
-	// Set of scopes this permission grants. Valid values: view, manage, view-members, manage-members, manage-membership.
+	// Set of scopes this permission grants. Valid values: view, manage, view-members, manage-members, manage-membership, manage-membership-of-members, impersonate-members.
 	// +listType=set
 	Scopes []*string `json:"scopes,omitempty" tf:"scopes,omitempty"`
 
@@ -248,7 +248,7 @@ type AdminPermissionsObservation struct {
 	// +listType=set
 	RolePolicies []*string `json:"rolePolicies,omitempty" tf:"role_policies,omitempty"`
 
-	// Set of scopes this permission grants. Valid values: view, manage, view-members, manage-members, manage-membership.
+	// Set of scopes this permission grants. Valid values: view, manage, view-members, manage-members, manage-membership, manage-membership-of-members, impersonate-members.
 	// +listType=set
 	Scopes []*string `json:"scopes,omitempty" tf:"scopes,omitempty"`
 
@@ -413,7 +413,7 @@ type AdminPermissionsParameters struct {
 	// +kubebuilder:validation:Optional
 	RolePoliciesSelector *v2.NamespacedSelector `json:"rolePoliciesSelector,omitempty" tf:"-"`
 
-	// Set of scopes this permission grants. Valid values: view, manage, view-members, manage-members, manage-membership.
+	// Set of scopes this permission grants. Valid values: view, manage, view-members, manage-members, manage-membership, manage-membership-of-members, impersonate-members.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Scopes []*string `json:"scopes,omitempty" tf:"scopes,omitempty"`

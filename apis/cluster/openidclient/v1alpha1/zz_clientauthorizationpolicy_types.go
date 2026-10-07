@@ -15,6 +15,14 @@ import (
 
 type ClientAuthorizationPolicyInitParameters struct {
 
+	// A map of provider-specific settings, passed through as-is to the policy's
+	// config object. This is how a custom Java SPI provider that reads its own settings (connection
+	// details, thresholds, anything the provider defines) receives them; Keycloak's generic
+	// PolicyRepresentation carries these as a flat string-to-string map, so values must be strings
+	// and nested structures are not supported.
+	// +mapType=granular
+	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
+
 	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -58,6 +66,14 @@ type ClientAuthorizationPolicyInitParameters struct {
 
 type ClientAuthorizationPolicyObservation struct {
 
+	// A map of provider-specific settings, passed through as-is to the policy's
+	// config object. This is how a custom Java SPI provider that reads its own settings (connection
+	// details, thresholds, anything the provider defines) receives them; Keycloak's generic
+	// PolicyRepresentation carries these as a flat string-to-string map, so values must be strings
+	// and nested structures are not supported.
+	// +mapType=granular
+	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
+
 	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -84,6 +100,15 @@ type ClientAuthorizationPolicyObservation struct {
 }
 
 type ClientAuthorizationPolicyParameters struct {
+
+	// A map of provider-specific settings, passed through as-is to the policy's
+	// config object. This is how a custom Java SPI provider that reads its own settings (connection
+	// details, thresholds, anything the provider defines) receives them; Keycloak's generic
+	// PolicyRepresentation carries these as a flat string-to-string map, so values must be strings
+	// and nested structures are not supported.
+	// +kubebuilder:validation:Optional
+	// +mapType=granular
+	Config map[string]*string `json:"config,omitempty" tf:"config,omitempty"`
 
 	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	// +kubebuilder:validation:Optional

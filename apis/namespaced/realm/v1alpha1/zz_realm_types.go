@@ -50,6 +50,9 @@ type BruteForceDetectionInitParameters struct {
 	// How many failures before wait is triggered.
 	MaxLoginFailures *float64 `json:"maxLoginFailures,omitempty" tf:"max_login_failures,omitempty"`
 
+	// How many failures of the secondary authentication factor (e.g. OTP) are permitted before the wait is triggered. Defaults to 0. Requires Keycloak 26.6 or higher.
+	MaxSecondaryAuthFailures *float64 `json:"maxSecondaryAuthFailures,omitempty" tf:"max_secondary_auth_failures,omitempty"`
+
 	// How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0
 	MaxTemporaryLockouts *float64 `json:"maxTemporaryLockouts,omitempty" tf:"max_temporary_lockouts,omitempty"`
 
@@ -76,6 +79,9 @@ type BruteForceDetectionObservation struct {
 
 	// How many failures before wait is triggered.
 	MaxLoginFailures *float64 `json:"maxLoginFailures,omitempty" tf:"max_login_failures,omitempty"`
+
+	// How many failures of the secondary authentication factor (e.g. OTP) are permitted before the wait is triggered. Defaults to 0. Requires Keycloak 26.6 or higher.
+	MaxSecondaryAuthFailures *float64 `json:"maxSecondaryAuthFailures,omitempty" tf:"max_secondary_auth_failures,omitempty"`
 
 	// How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0
 	MaxTemporaryLockouts *float64 `json:"maxTemporaryLockouts,omitempty" tf:"max_temporary_lockouts,omitempty"`
@@ -108,6 +114,10 @@ type BruteForceDetectionParameters struct {
 	// How many failures before wait is triggered.
 	// +kubebuilder:validation:Optional
 	MaxLoginFailures *float64 `json:"maxLoginFailures,omitempty" tf:"max_login_failures,omitempty"`
+
+	// How many failures of the secondary authentication factor (e.g. OTP) are permitted before the wait is triggered. Defaults to 0. Requires Keycloak 26.6 or higher.
+	// +kubebuilder:validation:Optional
+	MaxSecondaryAuthFailures *float64 `json:"maxSecondaryAuthFailures,omitempty" tf:"max_secondary_auth_failures,omitempty"`
 
 	// How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0
 	// +kubebuilder:validation:Optional

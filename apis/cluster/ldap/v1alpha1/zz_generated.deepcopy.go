@@ -3405,6 +3405,16 @@ func (in *UserFederationInitParameters) DeepCopyInto(out *UserFederationInitPara
 		*out = new(v2.SecretKeySelector)
 		**out = **in
 	}
+	if in.BindCredentialWoSecretRef != nil {
+		in, out := &in.BindCredentialWoSecretRef, &out.BindCredentialWoSecretRef
+		*out = new(v2.SecretKeySelector)
+		**out = **in
+	}
+	if in.BindCredentialWoVersion != nil {
+		in, out := &in.BindCredentialWoVersion, &out.BindCredentialWoVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.BindDn != nil {
 		in, out := &in.BindDn, &out.BindDn
 		*out = new(string)
@@ -3647,6 +3657,11 @@ func (in *UserFederationObservation) DeepCopyInto(out *UserFederationObservation
 		*out = new(float64)
 		**out = **in
 	}
+	if in.BindCredentialWoVersion != nil {
+		in, out := &in.BindCredentialWoVersion, &out.BindCredentialWoVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.BindDn != nil {
 		in, out := &in.BindDn, &out.BindDn
 		*out = new(string)
@@ -3855,6 +3870,16 @@ func (in *UserFederationParameters) DeepCopyInto(out *UserFederationParameters) 
 	if in.BindCredentialSecretRef != nil {
 		in, out := &in.BindCredentialSecretRef, &out.BindCredentialSecretRef
 		*out = new(v2.SecretKeySelector)
+		**out = **in
+	}
+	if in.BindCredentialWoSecretRef != nil {
+		in, out := &in.BindCredentialWoSecretRef, &out.BindCredentialWoSecretRef
+		*out = new(v2.SecretKeySelector)
+		**out = **in
+	}
+	if in.BindCredentialWoVersion != nil {
+		in, out := &in.BindCredentialWoVersion, &out.BindCredentialWoVersion
+		*out = new(string)
 		**out = **in
 	}
 	if in.BindDn != nil {

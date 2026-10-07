@@ -1023,6 +1023,11 @@ func (in *FlowInitParameters) DeepCopyInto(out *FlowInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.CopyFrom != nil {
+		in, out := &in.CopyFrom, &out.CopyFrom
+		*out = new(string)
+		**out = **in
+	}
 	if in.Description != nil {
 		in, out := &in.Description, &out.Description
 		*out = new(string)
@@ -1100,6 +1105,11 @@ func (in *FlowObservation) DeepCopyInto(out *FlowObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.CopyFrom != nil {
+		in, out := &in.CopyFrom, &out.CopyFrom
+		*out = new(string)
+		**out = **in
+	}
 	if in.Description != nil {
 		in, out := &in.Description, &out.Description
 		*out = new(string)
@@ -1137,6 +1147,11 @@ func (in *FlowParameters) DeepCopyInto(out *FlowParameters) {
 	*out = *in
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
+		*out = new(string)
+		**out = **in
+	}
+	if in.CopyFrom != nil {
+		in, out := &in.CopyFrom, &out.CopyFrom
 		*out = new(string)
 		**out = **in
 	}

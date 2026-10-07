@@ -61,12 +61,19 @@ spec:
                   alias:
                     description: The alias for this authentication flow.
                     type: string
+                  copyFrom:
+                    description: |-
+                      The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow. Changing this attribute will force creation of a new resource.
+                      The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow, which - unlike a built-in flow - can then be freely modified.
+                    type: string
                   description:
                     description: A description for the authentication flow.
                     type: string
                   providerId:
                     description: The type of authentication flow to create. Valid
                       choices include basic-flow and client-flow. Defaults to basic-flow.
+                      Ignored when copy_from is set, since the copy inherits its type
+                      from the source flow.
                     type: string
                   realmId:
                     description: The realm that the authentication flow exists in.
@@ -168,12 +175,19 @@ spec:
                   alias:
                     description: The alias for this authentication flow.
                     type: string
+                  copyFrom:
+                    description: |-
+                      The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow. Changing this attribute will force creation of a new resource.
+                      The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow, which - unlike a built-in flow - can then be freely modified.
+                    type: string
                   description:
                     description: A description for the authentication flow.
                     type: string
                   providerId:
                     description: The type of authentication flow to create. Valid
                       choices include basic-flow and client-flow. Defaults to basic-flow.
+                      Ignored when copy_from is set, since the copy inherits its type
+                      from the source flow.
                     type: string
                   realmId:
                     description: The realm that the authentication flow exists in.
@@ -330,6 +344,11 @@ spec:
                   alias:
                     description: The alias for this authentication flow.
                     type: string
+                  copyFrom:
+                    description: |-
+                      The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow. Changing this attribute will force creation of a new resource.
+                      The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow, which - unlike a built-in flow - can then be freely modified.
+                    type: string
                   description:
                     description: A description for the authentication flow.
                     type: string
@@ -338,6 +357,8 @@ spec:
                   providerId:
                     description: The type of authentication flow to create. Valid
                       choices include basic-flow and client-flow. Defaults to basic-flow.
+                      Ignored when copy_from is set, since the copy inherits its type
+                      from the source flow.
                     type: string
                   realmId:
                     description: The realm that the authentication flow exists in.

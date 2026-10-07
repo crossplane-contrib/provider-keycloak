@@ -79,7 +79,7 @@ spec:
                     type: number
                   bindCredentialSecretRef:
                     description: |-
-                      Password of LDAP admin. This attribute must be set if bind_dn is set.
+                      Password of LDAP admin. This attribute must be set if bind_dn is set. Conflicts with bind_credential_wo and bind_credential_wo_version.
                       Password of LDAP admin.
                     properties:
                       key:
@@ -96,9 +96,33 @@ spec:
                     - name
                     - namespace
                     type: object
+                  bindCredentialWoSecretRef:
+                    description: |-
+                      Password of LDAP admin as a write-only argument for ephemeral values. Must be set together with bind_credential_wo_version and conflicts with bind_credential.
+                      Password of LDAP admin as a write-only argument.
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  bindCredentialWoVersion:
+                    description: |-
+                      Version for bind_credential_wo. Change this value to rotate the write-only credential. Must be set together with bind_credential_wo and conflicts with bind_credential.
+                      Version of the bind credential write-only argument.
+                    type: string
                   bindDn:
                     description: |-
-                      DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.
+                      DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential or bind_credential_wo is set.
                       DN of LDAP admin, which will be used by Keycloak to access LDAP server.
                     type: string
                   cache:
@@ -411,7 +435,7 @@ spec:
                     type: number
                   bindCredentialSecretRef:
                     description: |-
-                      Password of LDAP admin. This attribute must be set if bind_dn is set.
+                      Password of LDAP admin. This attribute must be set if bind_dn is set. Conflicts with bind_credential_wo and bind_credential_wo_version.
                       Password of LDAP admin.
                     properties:
                       key:
@@ -428,9 +452,33 @@ spec:
                     - name
                     - namespace
                     type: object
+                  bindCredentialWoSecretRef:
+                    description: |-
+                      Password of LDAP admin as a write-only argument for ephemeral values. Must be set together with bind_credential_wo_version and conflicts with bind_credential.
+                      Password of LDAP admin as a write-only argument.
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  bindCredentialWoVersion:
+                    description: |-
+                      Version for bind_credential_wo. Change this value to rotate the write-only credential. Must be set together with bind_credential_wo and conflicts with bind_credential.
+                      Version of the bind credential write-only argument.
+                    type: string
                   bindDn:
                     description: |-
-                      DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.
+                      DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential or bind_credential_wo is set.
                       DN of LDAP admin, which will be used by Keycloak to access LDAP server.
                     type: string
                   cache:
@@ -848,9 +896,14 @@ spec:
                       The number of users to sync within a single transaction. Defaults to 1000.
                       The number of users to sync within a single transaction.
                     type: number
+                  bindCredentialWoVersion:
+                    description: |-
+                      Version for bind_credential_wo. Change this value to rotate the write-only credential. Must be set together with bind_credential_wo and conflicts with bind_credential.
+                      Version of the bind credential write-only argument.
+                    type: string
                   bindDn:
                     description: |-
-                      DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.
+                      DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential or bind_credential_wo is set.
                       DN of LDAP admin, which will be used by Keycloak to access LDAP server.
                     type: string
                   cache:
