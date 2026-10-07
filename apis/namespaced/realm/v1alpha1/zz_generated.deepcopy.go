@@ -407,6 +407,11 @@ func (in *BruteForceDetectionInitParameters) DeepCopyInto(out *BruteForceDetecti
 		*out = new(float64)
 		**out = **in
 	}
+	if in.MaxSecondaryAuthFailures != nil {
+		in, out := &in.MaxSecondaryAuthFailures, &out.MaxSecondaryAuthFailures
+		*out = new(float64)
+		**out = **in
+	}
 	if in.MaxTemporaryLockouts != nil {
 		in, out := &in.MaxTemporaryLockouts, &out.MaxTemporaryLockouts
 		*out = new(float64)
@@ -467,6 +472,11 @@ func (in *BruteForceDetectionObservation) DeepCopyInto(out *BruteForceDetectionO
 		*out = new(float64)
 		**out = **in
 	}
+	if in.MaxSecondaryAuthFailures != nil {
+		in, out := &in.MaxSecondaryAuthFailures, &out.MaxSecondaryAuthFailures
+		*out = new(float64)
+		**out = **in
+	}
 	if in.MaxTemporaryLockouts != nil {
 		in, out := &in.MaxTemporaryLockouts, &out.MaxTemporaryLockouts
 		*out = new(float64)
@@ -524,6 +534,11 @@ func (in *BruteForceDetectionParameters) DeepCopyInto(out *BruteForceDetectionPa
 	}
 	if in.MaxLoginFailures != nil {
 		in, out := &in.MaxLoginFailures, &out.MaxLoginFailures
+		*out = new(float64)
+		**out = **in
+	}
+	if in.MaxSecondaryAuthFailures != nil {
+		in, out := &in.MaxSecondaryAuthFailures, &out.MaxSecondaryAuthFailures
 		*out = new(float64)
 		**out = **in
 	}
@@ -3019,11 +3034,7 @@ func (in *KeystoreJavaKeystoreInitParameters) DeepCopyInto(out *KeystoreJavaKeys
 		*out = new(string)
 		**out = **in
 	}
-	if in.KeyPassword != nil {
-		in, out := &in.KeyPassword, &out.KeyPassword
-		*out = new(string)
-		**out = **in
-	}
+	out.KeyPasswordSecretRef = in.KeyPasswordSecretRef
 	if in.KeyUse != nil {
 		in, out := &in.KeyUse, &out.KeyUse
 		*out = new(string)
@@ -3034,11 +3045,7 @@ func (in *KeystoreJavaKeystoreInitParameters) DeepCopyInto(out *KeystoreJavaKeys
 		*out = new(string)
 		**out = **in
 	}
-	if in.KeystorePassword != nil {
-		in, out := &in.KeystorePassword, &out.KeystorePassword
-		*out = new(string)
-		**out = **in
-	}
+	out.KeystorePasswordSecretRef = in.KeystorePasswordSecretRef
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
@@ -3136,11 +3143,6 @@ func (in *KeystoreJavaKeystoreObservation) DeepCopyInto(out *KeystoreJavaKeystor
 		*out = new(string)
 		**out = **in
 	}
-	if in.KeyPassword != nil {
-		in, out := &in.KeyPassword, &out.KeyPassword
-		*out = new(string)
-		**out = **in
-	}
 	if in.KeyUse != nil {
 		in, out := &in.KeyUse, &out.KeyUse
 		*out = new(string)
@@ -3148,11 +3150,6 @@ func (in *KeystoreJavaKeystoreObservation) DeepCopyInto(out *KeystoreJavaKeystor
 	}
 	if in.Keystore != nil {
 		in, out := &in.Keystore, &out.Keystore
-		*out = new(string)
-		**out = **in
-	}
-	if in.KeystorePassword != nil {
-		in, out := &in.KeystorePassword, &out.KeystorePassword
 		*out = new(string)
 		**out = **in
 	}
@@ -3211,11 +3208,7 @@ func (in *KeystoreJavaKeystoreParameters) DeepCopyInto(out *KeystoreJavaKeystore
 		*out = new(string)
 		**out = **in
 	}
-	if in.KeyPassword != nil {
-		in, out := &in.KeyPassword, &out.KeyPassword
-		*out = new(string)
-		**out = **in
-	}
+	out.KeyPasswordSecretRef = in.KeyPasswordSecretRef
 	if in.KeyUse != nil {
 		in, out := &in.KeyUse, &out.KeyUse
 		*out = new(string)
@@ -3226,11 +3219,7 @@ func (in *KeystoreJavaKeystoreParameters) DeepCopyInto(out *KeystoreJavaKeystore
 		*out = new(string)
 		**out = **in
 	}
-	if in.KeystorePassword != nil {
-		in, out := &in.KeystorePassword, &out.KeystorePassword
-		*out = new(string)
-		**out = **in
-	}
+	out.KeystorePasswordSecretRef = in.KeystorePasswordSecretRef
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
@@ -3612,7 +3601,21 @@ func (in *KeystoreRsaInitParameters) DeepCopyInto(out *KeystoreRsaInitParameters
 		*out = new(string)
 		**out = **in
 	}
-	out.CertificateSecretRef = in.CertificateSecretRef
+	if in.CertificateSecretRef != nil {
+		in, out := &in.CertificateSecretRef, &out.CertificateSecretRef
+		*out = new(v2.LocalSecretKeySelector)
+		**out = **in
+	}
+	if in.CertificateWoSecretRef != nil {
+		in, out := &in.CertificateWoSecretRef, &out.CertificateWoSecretRef
+		*out = new(v2.LocalSecretKeySelector)
+		**out = **in
+	}
+	if in.CertificateWoVersion != nil {
+		in, out := &in.CertificateWoVersion, &out.CertificateWoVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.Enabled != nil {
 		in, out := &in.Enabled, &out.Enabled
 		*out = new(bool)
@@ -3644,7 +3647,21 @@ func (in *KeystoreRsaInitParameters) DeepCopyInto(out *KeystoreRsaInitParameters
 		*out = new(float64)
 		**out = **in
 	}
-	out.PrivateKeySecretRef = in.PrivateKeySecretRef
+	if in.PrivateKeySecretRef != nil {
+		in, out := &in.PrivateKeySecretRef, &out.PrivateKeySecretRef
+		*out = new(v2.LocalSecretKeySelector)
+		**out = **in
+	}
+	if in.PrivateKeyWoSecretRef != nil {
+		in, out := &in.PrivateKeyWoSecretRef, &out.PrivateKeyWoSecretRef
+		*out = new(v2.LocalSecretKeySelector)
+		**out = **in
+	}
+	if in.PrivateKeyWoVersion != nil {
+		in, out := &in.PrivateKeyWoVersion, &out.PrivateKeyWoVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.ProviderID != nil {
 		in, out := &in.ProviderID, &out.ProviderID
 		*out = new(string)
@@ -3722,6 +3739,11 @@ func (in *KeystoreRsaObservation) DeepCopyInto(out *KeystoreRsaObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.CertificateWoVersion != nil {
+		in, out := &in.CertificateWoVersion, &out.CertificateWoVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.Enabled != nil {
 		in, out := &in.Enabled, &out.Enabled
 		*out = new(bool)
@@ -3756,6 +3778,11 @@ func (in *KeystoreRsaObservation) DeepCopyInto(out *KeystoreRsaObservation) {
 	if in.Priority != nil {
 		in, out := &in.Priority, &out.Priority
 		*out = new(float64)
+		**out = **in
+	}
+	if in.PrivateKeyWoVersion != nil {
+		in, out := &in.PrivateKeyWoVersion, &out.PrivateKeyWoVersion
+		*out = new(string)
 		**out = **in
 	}
 	if in.ProviderID != nil {
@@ -3793,7 +3820,21 @@ func (in *KeystoreRsaParameters) DeepCopyInto(out *KeystoreRsaParameters) {
 		*out = new(string)
 		**out = **in
 	}
-	out.CertificateSecretRef = in.CertificateSecretRef
+	if in.CertificateSecretRef != nil {
+		in, out := &in.CertificateSecretRef, &out.CertificateSecretRef
+		*out = new(v2.LocalSecretKeySelector)
+		**out = **in
+	}
+	if in.CertificateWoSecretRef != nil {
+		in, out := &in.CertificateWoSecretRef, &out.CertificateWoSecretRef
+		*out = new(v2.LocalSecretKeySelector)
+		**out = **in
+	}
+	if in.CertificateWoVersion != nil {
+		in, out := &in.CertificateWoVersion, &out.CertificateWoVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.Enabled != nil {
 		in, out := &in.Enabled, &out.Enabled
 		*out = new(bool)
@@ -3825,7 +3866,21 @@ func (in *KeystoreRsaParameters) DeepCopyInto(out *KeystoreRsaParameters) {
 		*out = new(float64)
 		**out = **in
 	}
-	out.PrivateKeySecretRef = in.PrivateKeySecretRef
+	if in.PrivateKeySecretRef != nil {
+		in, out := &in.PrivateKeySecretRef, &out.PrivateKeySecretRef
+		*out = new(v2.LocalSecretKeySelector)
+		**out = **in
+	}
+	if in.PrivateKeyWoSecretRef != nil {
+		in, out := &in.PrivateKeyWoSecretRef, &out.PrivateKeyWoSecretRef
+		*out = new(v2.LocalSecretKeySelector)
+		**out = **in
+	}
+	if in.PrivateKeyWoVersion != nil {
+		in, out := &in.PrivateKeyWoVersion, &out.PrivateKeyWoVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.ProviderID != nil {
 		in, out := &in.ProviderID, &out.ProviderID
 		*out = new(string)

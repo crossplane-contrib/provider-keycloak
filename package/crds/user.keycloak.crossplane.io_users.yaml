@@ -123,7 +123,7 @@ spec:
                     type: boolean
                   initialPassword:
                     description: When given, the user's initial password will be set.
-                      This attribute is only respected during initial user creation.
+                      Exactly one of value and value_wo must be given.
                     items:
                       properties:
                         temporary:
@@ -131,7 +131,9 @@ spec:
                             up for renewal on first use. Default to false.
                           type: boolean
                         valueSecretRef:
-                          description: The initial password.
+                          description: The initial password. This argument is only
+                            respected during initial user creation; later changes
+                            to it are ignored. Conflicts with value_wo and value_wo_version.
                           properties:
                             key:
                               description: The key to select.
@@ -147,6 +149,30 @@ spec:
                           - name
                           - namespace
                           type: object
+                        valueWoSecretRef:
+                          description: |-
+                            The initial password. Conflicts with value. Required when using value_wo_version. Must not be an empty string.
+                            The initial password as write-only argument
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
+                        valueWoVersion:
+                          description: |-
+                            The value of this argument is stored in the state and plan files. Changing it resets the password of an existing user. Conflicts with value. Required when using value_wo. Must not be an empty string.
+                            Version of the initial password write-only argument
+                          type: string
                       type: object
                     type: array
                   lastName:
@@ -303,7 +329,7 @@ spec:
                     type: boolean
                   initialPassword:
                     description: When given, the user's initial password will be set.
-                      This attribute is only respected during initial user creation.
+                      Exactly one of value and value_wo must be given.
                     items:
                       properties:
                         temporary:
@@ -311,7 +337,9 @@ spec:
                             up for renewal on first use. Default to false.
                           type: boolean
                         valueSecretRef:
-                          description: The initial password.
+                          description: The initial password. This argument is only
+                            respected during initial user creation; later changes
+                            to it are ignored. Conflicts with value_wo and value_wo_version.
                           properties:
                             key:
                               description: The key to select.
@@ -327,8 +355,30 @@ spec:
                           - name
                           - namespace
                           type: object
-                      required:
-                      - valueSecretRef
+                        valueWoSecretRef:
+                          description: |-
+                            The initial password. Conflicts with value. Required when using value_wo_version. Must not be an empty string.
+                            The initial password as write-only argument
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
+                        valueWoVersion:
+                          description: |-
+                            The value of this argument is stored in the state and plan files. Changing it resets the password of an existing user. Conflicts with value. Required when using value_wo. Must not be an empty string.
+                            Version of the initial password write-only argument
+                          type: string
                       type: object
                     type: array
                   lastName:
@@ -570,13 +620,18 @@ spec:
                     type: boolean
                   initialPassword:
                     description: When given, the user's initial password will be set.
-                      This attribute is only respected during initial user creation.
+                      Exactly one of value and value_wo must be given.
                     items:
                       properties:
                         temporary:
                           description: If set to true, the initial password is set
                             up for renewal on first use. Default to false.
                           type: boolean
+                        valueWoVersion:
+                          description: |-
+                            The value of this argument is stored in the state and plan files. Changing it resets the password of an existing user. Conflicts with value. Required when using value_wo. Must not be an empty string.
+                            Version of the initial password write-only argument
+                          type: string
                       type: object
                     type: array
                   lastName:

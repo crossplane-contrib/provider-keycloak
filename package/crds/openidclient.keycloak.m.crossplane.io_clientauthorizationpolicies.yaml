@@ -60,6 +60,17 @@ spec:
             properties:
               forProvider:
                 properties:
+                  config:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      A map of provider-specific settings, passed through as-is to the policy's
+                      config object. This is how a custom Java SPI provider that reads its own settings (connection
+                      details, thresholds, anything the provider defines) receives them; Keycloak's generic
+                      PolicyRepresentation carries these as a flat string-to-string map, so values must be strings
+                      and nested structures are not supported.
+                    type: object
+                    x-kubernetes-map-type: granular
                   decisionStrategy:
                     description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
                       or CONSENSUS.
@@ -260,6 +271,17 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
+                  config:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      A map of provider-specific settings, passed through as-is to the policy's
+                      config object. This is how a custom Java SPI provider that reads its own settings (connection
+                      details, thresholds, anything the provider defines) receives them; Keycloak's generic
+                      PolicyRepresentation carries these as a flat string-to-string map, so values must be strings
+                      and nested structures are not supported.
+                    type: object
+                    x-kubernetes-map-type: granular
                   decisionStrategy:
                     description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
                       or CONSENSUS.
@@ -524,6 +546,17 @@ spec:
             properties:
               atProvider:
                 properties:
+                  config:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      A map of provider-specific settings, passed through as-is to the policy's
+                      config object. This is how a custom Java SPI provider that reads its own settings (connection
+                      details, thresholds, anything the provider defines) receives them; Keycloak's generic
+                      PolicyRepresentation carries these as a flat string-to-string map, so values must be strings
+                      and nested structures are not supported.
+                    type: object
+                    x-kubernetes-map-type: granular
                   decisionStrategy:
                     description: The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE,
                       or CONSENSUS.

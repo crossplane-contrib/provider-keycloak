@@ -93,8 +93,8 @@ spec:
                     type: string
                   parentId:
                     description: |-
-                      Must be set to the realms' internal_id  when it differs from the realm. This can happen when existing resources are imported into the state.
-                      The parent_id of the generated component. will use realm_id if not specified.
+                      Deprecated The internal id of the realm this component is attached to. This is now resolved automatically, so it no longer needs to be set, even when the realm's internal_id differs from its name. This attribute will be removed in a future release.
+                      The parent_id of the generated component. Keycloak resolves this to the realm's internal id automatically.
                     type: string
                   priority:
                     description: |-
@@ -240,8 +240,8 @@ spec:
                     type: string
                   parentId:
                     description: |-
-                      Must be set to the realms' internal_id  when it differs from the realm. This can happen when existing resources are imported into the state.
-                      The parent_id of the generated component. will use realm_id if not specified.
+                      Deprecated The internal id of the realm this component is attached to. This is now resolved automatically, so it no longer needs to be set, even when the realm's internal_id differs from its name. This attribute will be removed in a future release.
+                      The parent_id of the generated component. Keycloak resolves this to the realm's internal id automatically.
                     type: string
                   priority:
                     description: |-
@@ -448,8 +448,8 @@ spec:
                     type: string
                   parentId:
                     description: |-
-                      Must be set to the realms' internal_id  when it differs from the realm. This can happen when existing resources are imported into the state.
-                      The parent_id of the generated component. will use realm_id if not specified.
+                      Deprecated The internal id of the realm this component is attached to. This is now resolved automatically, so it no longer needs to be set, even when the realm's internal_id differs from its name. This attribute will be removed in a future release.
+                      The parent_id of the generated component. Keycloak resolves this to the realm's internal id automatically.
                     type: string
                   priority:
                     description: |-
