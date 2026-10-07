@@ -84,6 +84,10 @@ jobs:
         if: steps.mode.outputs.dry_run != 'true'
         run: make vendor vendor.check
 
+      - name: Install goimports
+        if: steps.mode.outputs.dry_run != 'true'
+        run: go install golang.org/x/tools/cmd/goimports@v0.49.0
+
       - name: Bump provider version and regenerate schema/CRDs
         if: steps.mode.outputs.dry_run != 'true'
         id: bump
