@@ -70,6 +70,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_openid_client_service_account_realm_role":          config.IdentifierFromProvider,                                             // {serviceAccountUserId.UUid}/{role.UUid}
 	"keycloak_openid_client_service_account_role":                config.IdentifierFromProvider,                                             // {serviceAccountUserId.UUid}/{role.UUid}
 	"keycloak_organization":                                      config.IdentifierFromProvider,                                             // {UUid}
+	"keycloak_organization_memberships":                          config.IdentifierFromProvider,                                             // {realm}/organization-memberships/{Organization.UUid}
 	"keycloak_realm":                                             realm.RealmIdentifierFromIdentifyingProperties,                            // {realm}
 	"keycloak_required_action":                                   config.IdentifierFromProvider,                                             // {realm}/{alias}
 	"keycloak_role":                                              role.IdentifierFromIdentifyingProperties,                                  // {UUid}

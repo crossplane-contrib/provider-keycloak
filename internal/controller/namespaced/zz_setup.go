@@ -86,6 +86,7 @@ import (
 	userpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/userpropertyprotocolmapper"
 	userrealmroleprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/userrealmroleprotocolmapper"
 	usersessionnoteprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/openidgroup/usersessionnoteprotocolmapper"
+	membershipsorganization "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/organization/memberships"
 	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/organization/organization"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/providerconfig"
 	clientpolicyprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofile"
@@ -202,6 +203,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		userpropertyprotocolmapper.Setup,
 		userrealmroleprotocolmapper.Setup,
 		usersessionnoteprotocolmapper.Setup,
+		membershipsorganization.Setup,
 		organization.Setup,
 		providerconfig.Setup,
 		clientpolicyprofile.Setup,
@@ -324,6 +326,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		userpropertyprotocolmapper.SetupGated,
 		userrealmroleprotocolmapper.SetupGated,
 		usersessionnoteprotocolmapper.SetupGated,
+		membershipsorganization.SetupGated,
 		organization.SetupGated,
 		providerconfig.SetupGated,
 		clientpolicyprofile.SetupGated,
@@ -445,6 +448,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		userpropertyprotocolmapper.SetupWebhookWithManager,
 		userrealmroleprotocolmapper.SetupWebhookWithManager,
 		usersessionnoteprotocolmapper.SetupWebhookWithManager,
+		membershipsorganization.SetupWebhookWithManager,
 		organization.SetupWebhookWithManager,
 		providerconfig.SetupWebhookWithManager,
 		clientpolicyprofile.SetupWebhookWithManager,
