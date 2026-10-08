@@ -637,6 +637,16 @@
         "dev/demos/namespaced/004-realm-keystore-rsa.yaml"
       ]
     },
+    "KeystoreRsaEncGenerated (realm)": {
+      "defined_in": [
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
+      ]
+    },
     "KeystoreRsaGenerated (realm)": {
       "defined_in": [
         "dev/demos/basic/005-realm-keystores-comprehensive.yaml",

@@ -457,6 +457,56 @@ func (mg *KeystoreRsa) SetWriteConnectionSecretToReference(r *xpv2.SecretReferen
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this KeystoreRsaEncGenerated.
+func (mg *KeystoreRsaEncGenerated) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this KeystoreRsaEncGenerated.
+func (mg *KeystoreRsaEncGenerated) GetDeletionPolicy() xpv2.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this KeystoreRsaEncGenerated.
+func (mg *KeystoreRsaEncGenerated) GetManagementPolicies() xpv2.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this KeystoreRsaEncGenerated.
+func (mg *KeystoreRsaEncGenerated) GetProviderConfigReference() *xpv2.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this KeystoreRsaEncGenerated.
+func (mg *KeystoreRsaEncGenerated) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this KeystoreRsaEncGenerated.
+func (mg *KeystoreRsaEncGenerated) SetConditions(c ...xpv2.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this KeystoreRsaEncGenerated.
+func (mg *KeystoreRsaEncGenerated) SetDeletionPolicy(r xpv2.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this KeystoreRsaEncGenerated.
+func (mg *KeystoreRsaEncGenerated) SetManagementPolicies(r xpv2.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this KeystoreRsaEncGenerated.
+func (mg *KeystoreRsaEncGenerated) SetProviderConfigReference(r *xpv2.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this KeystoreRsaEncGenerated.
+func (mg *KeystoreRsaEncGenerated) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this KeystoreRsaGenerated.
 func (mg *KeystoreRsaGenerated) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
