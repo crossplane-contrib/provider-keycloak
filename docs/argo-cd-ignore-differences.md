@@ -46,7 +46,9 @@ spec:
         - '.spec.forProvider.authenticationFlowBindingOverrides[].directGrantIdRef'
 
     # Realm authentication bindings — flow IDs returned by Keycloak.
-    - group: authentication.keycloak.crossplane.io
+    # Do not also declare these bindings on the Realm resource for the
+    # same realm; pick one owner per field or the values oscillate (#751).
+    - group: authenticationflow.keycloak.crossplane.io
       kind: Bindings
       jqPathExpressions:
         - '.spec.forProvider.browserFlow'

@@ -71,6 +71,26 @@ func Configure(p *config.Provider) {
 				s.ValidateFunc = validateDurationString
 			}
 		}
+
+		// The realm flow binding attributes are Optional+Computed and can
+		// also be managed by a separate keycloak_authentication_bindings
+		// (Bindings) resource. Without this, late-initialization would copy
+		// the server-side value (e.g. "browser") into spec.forProvider on
+		// the first reconcile, after which the Realm would keep resetting
+		// whatever the Bindings resource applied, so both resources would
+		// oscillate forever. Leaving them unset keeps Terraform semantics:
+		// an undeclared field retains the observed value on update.
+		// See: https://github.com/crossplane-contrib/provider-keycloak/issues/751
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{
+				"browser_flow",
+				"registration_flow",
+				"direct_grant_flow",
+				"reset_credentials_flow",
+				"client_authentication_flow",
+				"docker_authentication_flow",
+			},
+		}
 	})
 
 	p.AddResourceConfigurator("keycloak_required_action", func(r *config.Resource) {
