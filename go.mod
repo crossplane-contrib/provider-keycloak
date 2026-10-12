@@ -10,7 +10,7 @@ require (
 	github.com/crossplane/crossplane/apis/v2 v2.4.2
 	github.com/crossplane/upjet/v2 v2.5.1
 	github.com/go-logr/logr v1.4.4
-	github.com/hashicorp/terraform-json v0.28.0
+	github.com/hashicorp/terraform-json v0.29.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.1
 	github.com/keycloak/terraform-provider-keycloak v0.0.0-20261005161453-d12e0479b988
 	github.com/pkg/errors v0.9.1
