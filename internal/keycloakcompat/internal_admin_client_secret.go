@@ -108,11 +108,9 @@ func (t *internalAdminClientSecretTransport) isInternalAdminClient(req *http.Req
 	clientURL.Path = strings.TrimSuffix(clientURL.Path, "/client-secret")
 	clientURL.RawPath = strings.TrimSuffix(clientURL.RawPath, "/client-secret")
 
-	lookup, err := http.NewRequestWithContext(req.Context(), http.MethodGet, clientURL.String(), nil)
-	if err != nil {
-		return false
-	}
-	lookup.Header = req.Header.Clone()
+	lookup := req.Clone(req.Context())
+	lookup.URL = &clientURL
+	lookup.RequestURI = ""
 
 	resp, err := t.next.RoundTrip(lookup)
 	if err != nil {
