@@ -1,5 +1,8 @@
 # Realms
 
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-755/llms.txt)
+
+
 Use a `Realm` when you need an isolated Keycloak boundary for a tenant, environment, or application domain. Because every other Keycloak resource belongs to a realm, this is usually the first resource you create for a new deployment.
 
 ## API Reference
@@ -126,4 +129,5 @@ spec:
 
 - [Realm Settings](./realm-settings.md)
 - [Default Configuration](./default-config.md)
+
 
