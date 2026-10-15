@@ -328,6 +328,19 @@ uptest-restrictedrealmprovider: $(CHAINSAW) $(KUBECTL)
 
 e2e-restrictedrealmprovider: local-deploy uptest-restrictedrealmprovider
 
+# Regression test for crossplane-contrib/provider-keycloak#751: a Realm that
+# does not declare its flow bindings must not late-initialize them and must
+# not reset the browser flow applied by a Bindings resource on update.
+# Requires a cluster with the provider deployed and the
+# "keycloak-provider-config" ProviderConfig already applied, i.e. the same
+# prerequisites as the `uptest` target.
+uptest-realmflowbindings: $(CHAINSAW) $(KUBECTL)
+	@$(INFO) running Realm/Bindings flow binding ownership tests
+	@KUBECTL=$(KUBECTL) $(CHAINSAW) test --test-dir cluster/test/realmflowbindings || $(FAIL)
+	@$(OK) running Realm/Bindings flow binding ownership tests
+
+e2e-realmflowbindings: local-deploy uptest-realmflowbindings
+
 # Two gates: every demo file is listed in a case file, and every managed
 # resource has an e2e demo (or a documented exception in
 # cluster/test/uncovered-resources.txt).

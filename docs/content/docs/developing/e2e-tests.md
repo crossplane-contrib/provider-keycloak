@@ -32,6 +32,7 @@ E2e tests are driven by [uptest](https://github.com/crossplane/uptest) and
 | `dev/demos/namespaced/000-init.yaml` | Prerequisite resources for namespaced demos |
 | `cluster/test/conversion/` | Standalone chainsaw suite (not driven by uptest/`cases.txt`) for CRD conversion webhook regressions, run via `make uptest-conversion` |
 | `cluster/test/restrictedrealmprovider/` | Standalone chainsaw suite for the single-realm `ProviderConfig` limitation ([#742](https://github.com/crossplane-contrib/provider-keycloak/issues/742)), run via `make uptest-restrictedrealmprovider`; see "Standalone Chainsaw Suites" below |
+| `cluster/test/realmflowbindings/` | Standalone chainsaw suite for `Realm`/`Bindings` flow binding ownership ([#751](https://github.com/crossplane-contrib/provider-keycloak/issues/751)), run via `make uptest-realmflowbindings` |
 
 ## Test Suites
 
@@ -90,6 +91,7 @@ prerequisites as the `uptest` target.
 |-------|-----------|-----------------|----------------|
 | CRD conversion webhook | `cluster/test/conversion/` | `make uptest-conversion` | Historic stored CRD encodings converted through the live `/convert` endpoint |
 | Restricted single-realm `ProviderConfig` | `cluster/test/restrictedrealmprovider/` | `make uptest-restrictedrealmprovider` | [#742](https://github.com/crossplane-contrib/provider-keycloak/issues/742): a `ProviderConfig` scoped entirely to one realm (no master-realm/realm-management roles) must fail login with a 403, a Keycloak-side constraint this provider cannot work around |
+| `Realm`/`Bindings` flow binding ownership | `cluster/test/realmflowbindings/` | `make uptest-realmflowbindings` | [#751](https://github.com/crossplane-contrib/provider-keycloak/issues/751): a `Realm` that does not declare its flow bindings must not late-initialize them, and a `Realm` update must keep the browser flow applied by a `Bindings` resource |
 
 The single-realm suite's `bootstrap.sh` provisions a realm and a fully
 realm-scoped service account client directly against the Keycloak API (there
