@@ -602,15 +602,6 @@ jobs:
           make uptest-restrictedrealmprovider | tee logs/uptest-restrictedrealmprovider.log;
           exit $?;
 
-      - name: Running Realm/Bindings Flow Binding Ownership Tests
-        id: realmFlowBindingsTests
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -o pipefail;
-          make uptest-realmflowbindings | tee logs/uptest-realmflowbindings.log;
-          exit $?;
-
       - name: Running E2E Tests
         id: e2eTests
         continue-on-error: true
@@ -631,12 +622,12 @@ jobs:
           fi
 
       - name: Collect logs
-        if: steps.e2eTests.outcome == 'failure' || steps.conversionTests.outcome == 'failure' || steps.restrictedRealmProviderTests.outcome == 'failure' || steps.realmFlowBindingsTests.outcome == 'failure'
+        if: steps.e2eTests.outcome == 'failure' || steps.conversionTests.outcome == 'failure' || steps.restrictedRealmProviderTests.outcome == 'failure'
         shell: bash
         run: ./dev/collect-logs.sh
 
       - name: Upload logs
-        if: steps.e2eTests.outcome == 'failure' || steps.conversionTests.outcome == 'failure' || steps.restrictedRealmProviderTests.outcome == 'failure' || steps.realmFlowBindingsTests.outcome == 'failure'
+        if: steps.e2eTests.outcome == 'failure' || steps.conversionTests.outcome == 'failure' || steps.restrictedRealmProviderTests.outcome == 'failure'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: e2e-logs-${{ matrix.keycloak-version }}
@@ -649,10 +640,6 @@ jobs:
 
       - name: Fail on restricted single-realm ProviderConfig test error
         if: steps.restrictedRealmProviderTests.outcome == 'failure'
-        run: exit 1
-
-      - name: Fail on Realm/Bindings flow binding ownership test error
-        if: steps.realmFlowBindingsTests.outcome == 'failure'
         run: exit 1
 
       - name: Fail on error

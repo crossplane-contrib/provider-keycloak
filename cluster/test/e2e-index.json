@@ -372,11 +372,15 @@
     "Flow (authenticationflow)": {
       "defined_in": [
         "dev/demos/basic/070-authentication-flows.yaml",
-        "dev/demos/namespaced/070-authentication-flows.yaml"
+        "dev/demos/basic/075-realm-flow-bindings-ownership.yaml",
+        "dev/demos/namespaced/070-authentication-flows.yaml",
+        "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml"
       ],
       "used_by": [
         "dev/demos/basic/070-authentication-flows.yaml",
-        "dev/demos/namespaced/070-authentication-flows.yaml"
+        "dev/demos/basic/075-realm-flow-bindings-ownership.yaml",
+        "dev/demos/namespaced/070-authentication-flows.yaml",
+        "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml"
       ]
     },
     "FullNameMapper (ldap)": {
@@ -776,18 +780,22 @@
         "dev/demos/basic/001-realm-durations.yaml",
         "dev/demos/basic/001-realm.yaml",
         "dev/demos/basic/007-existing-realm.yaml",
+        "dev/demos/basic/075-realm-flow-bindings-ownership.yaml",
         "dev/demos/namespaced/001-realm-durations.yaml",
         "dev/demos/namespaced/001-realm.yaml",
         "dev/demos/namespaced/007-existing-realm.yaml",
+        "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml",
         "dev/demos/orgs/001-realm.yaml"
       ],
       "used_by": [
         "dev/demos/basic/001-realm-durations.yaml",
         "dev/demos/basic/001-realm.yaml",
         "dev/demos/basic/007-existing-realm.yaml",
+        "dev/demos/basic/075-realm-flow-bindings-ownership.yaml",
         "dev/demos/namespaced/001-realm-durations.yaml",
         "dev/demos/namespaced/001-realm.yaml",
         "dev/demos/namespaced/007-existing-realm.yaml",
+        "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml",
         "dev/demos/orgs/001-realm.yaml"
       ]
     },
@@ -1833,6 +1841,14 @@
       ],
       "rdeps": []
     },
+    "dev/demos/basic/075-realm-flow-bindings-ownership.yaml": {
+      "groups": [
+        "authenticationflow",
+        "realm"
+      ],
+      "deps": [],
+      "rdeps": []
+    },
     "dev/demos/basic/080-defaults-groups.yaml": {
       "groups": [
         "defaults"
@@ -2748,6 +2764,14 @@
         "dev/demos/namespaced/001-realm.yaml",
         "dev/demos/namespaced/070-authentication-flows.yaml"
       ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml": {
+      "groups": [
+        "authenticationflow",
+        "realm"
+      ],
+      "deps": [],
       "rdeps": []
     },
     "dev/demos/namespaced/080-defaults-groups.yaml": {
