@@ -30,6 +30,7 @@ import (
 	clusterv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/v1beta1"
 	namespacedv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/namespaced/v1beta1"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients/stalerefs"
+	"github.com/crossplane-contrib/provider-keycloak/internal/keycloakcompat"
 	"github.com/crossplane-contrib/provider-keycloak/internal/keycloaksession"
 	"github.com/crossplane-contrib/provider-keycloak/internal/tfconcurrency"
 )
@@ -347,6 +348,7 @@ func newConfiguredKeycloakClient(ctx context.Context, config map[string]any) (*k
 	if !ok {
 		return nil, fmt.Errorf("configured provider meta is not a *keycloak.KeycloakClient")
 	}
+	keycloakcompat.InstallInternalAdminClientSecretShim(client)
 	return client, nil
 }
 
