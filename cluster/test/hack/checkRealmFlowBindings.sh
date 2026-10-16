@@ -40,7 +40,7 @@ wait_for() {
 
 check_not_late_initialized() {
   local field value
-  for field in browserFlow registrationFlow directGrantFlow resetCredentialsFlow clientAuthenticationFlow dockerAuthenticationFlow; do
+  for field in browserFlow registrationFlow directGrantFlow resetCredentialsFlow clientAuthenticationFlow dockerAuthenticationFlow firstBrokerLoginFlow; do
     value="$(get "{.spec.forProvider.${field}}")"
     if [[ -n "${value}" ]]; then
       echo "spec.forProvider.${field} was late-initialized to '${value}' on ${KIND_GROUP}/${NAME}"

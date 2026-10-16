@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/crossplane/upjet/v2/pkg/config"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
@@ -77,9 +79,9 @@ func Configure(p *config.Provider) {
 		// (Bindings) resource. Without this, late-initialization would copy
 		// the server-side value (e.g. "browser") into spec.forProvider on
 		// the first reconcile, after which the Realm would keep resetting
-		// whatever the Bindings resource applied, so both resources would
-		// oscillate forever. Leaving them unset keeps Terraform semantics:
-		// an undeclared field retains the observed value on update.
+		// whatever the Bindings resource applied. The Terraform provider also
+		// defaults omitted flow bindings during updates, so preserve their
+		// observed values before invoking its update handler.
 		// See: https://github.com/crossplane-contrib/provider-keycloak/issues/751
 		r.LateInitializer = config.LateInitializer{
 			IgnoredFields: []string{
@@ -89,7 +91,21 @@ func Configure(p *config.Provider) {
 				"reset_credentials_flow",
 				"client_authentication_flow",
 				"docker_authentication_flow",
+				"first_broker_login_flow",
 			},
+		}
+
+		update := r.TerraformResource.UpdateContext
+		r.TerraformResource.UpdateContext = func(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+			client := meta.(*keycloak.KeycloakClient)
+			observed, err := client.GetRealm(ctx, data.Id())
+			if err != nil {
+				return diag.FromErr(err)
+			}
+			if err := preserveUnconfiguredFlowBindings(data, observed); err != nil {
+				return diag.FromErr(err)
+			}
+			return update(ctx, data, meta)
 		}
 	})
 
@@ -105,6 +121,7 @@ func Configure(p *config.Provider) {
 		if s, ok := r.TerraformResource.Schema["private_key"]; ok {
 			s.Sensitive = true
 		}
+
 		if s, ok := r.TerraformResource.Schema["certificate"]; ok {
 			s.Sensitive = true
 		}
@@ -147,6 +164,27 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("keycloak_realm_client_registration_policy", func(r *config.Resource) {
 		r.ShortGroup = Group
 	})
+}
+
+func preserveUnconfiguredFlowBindings(data *schema.ResourceData, observed *keycloak.Realm) error {
+	flows := map[string]*string{
+		"browser_flow":               observed.BrowserFlow,
+		"registration_flow":          observed.RegistrationFlow,
+		"direct_grant_flow":          observed.DirectGrantFlow,
+		"reset_credentials_flow":     observed.ResetCredentialsFlow,
+		"client_authentication_flow": observed.ClientAuthenticationFlow,
+		"docker_authentication_flow": observed.DockerAuthenticationFlow,
+		"first_broker_login_flow":    observed.FirstBrokerLoginFlow,
+	}
+	for name, value := range flows {
+		if _, configured := data.GetOk(name); configured || value == nil {
+			continue
+		}
+		if err := data.Set(name, *value); err != nil {
+			return fmt.Errorf("cannot preserve observed %s: %w", name, err)
+		}
+	}
+	return nil
 }
 
 var realmIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{
