@@ -343,6 +343,12 @@ spec:
                               maxLoginFailures:
                                 description: How many failures before wait is triggered.
                                 type: number
+                              maxSecondaryAuthFailures:
+                                description: How many failures of the secondary authentication
+                                  factor (e.g. OTP) are permitted before the wait
+                                  is triggered. Defaults to 0. Requires Keycloak 26.6
+                                  or higher.
+                                type: number
                               maxTemporaryLockouts:
                                 description: How many temporary lockouts are permitted
                                   before a user is permanently locked out. permanent_lockout
@@ -973,6 +979,12 @@ spec:
                                 type: number
                               maxLoginFailures:
                                 description: How many failures before wait is triggered.
+                                type: number
+                              maxSecondaryAuthFailures:
+                                description: How many failures of the secondary authentication
+                                  factor (e.g. OTP) are permitted before the wait
+                                  is triggered. Defaults to 0. Requires Keycloak 26.6
+                                  or higher.
                                 type: number
                               maxTemporaryLockouts:
                                 description: How many temporary lockouts are permitted
@@ -1694,6 +1706,12 @@ spec:
                               maxLoginFailures:
                                 description: How many failures before wait is triggered.
                                 type: number
+                              maxSecondaryAuthFailures:
+                                description: How many failures of the secondary authentication
+                                  factor (e.g. OTP) are permitted before the wait
+                                  is triggered. Defaults to 0. Requires Keycloak 26.6
+                                  or higher.
+                                type: number
                               maxTemporaryLockouts:
                                 description: How many temporary lockouts are permitted
                                   before a user is permanently locked out. permanent_lockout
@@ -2053,6 +2071,13 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              lastHandledReconcileAt:
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile-requested-at annotation token that the controller has
+                  processed. Users can compare this to the annotation to determine
+                  whether a reconcile request has been handled.
+                type: string
               observedGeneration:
                 description: |-
                   ObservedGeneration is the latest metadata.generation

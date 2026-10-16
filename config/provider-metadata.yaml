@@ -272,10 +272,33 @@ resources:
                       "enabled": true,
                       "realm": "my-realm"
                     }
+            - name: custom_browser
+              manifest: |-
+                {
+                  "alias": "my-custom-browser",
+                  "copy_from": "browser",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_authentication_bindings.bindings: |-
+                    {
+                      "browser_flow": "${keycloak_authentication_flow.custom_browser.alias}",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_authentication_execution.webauthn_passwordless: |-
+                    {
+                      "authenticator": "webauthn-authenticator-passwordless",
+                      "parent_flow_alias": "${keycloak_authentication_flow.custom_browser.alias}",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "requirement": "ALTERNATIVE"
+                    }
         argumentDocs:
             alias: '- (Required) The alias for this authentication flow.'
+            copy_from: '- (Optional) The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow. Changing this attribute will force creation of a new resource.'
             description: '- (Optional) A description for the authentication flow.'
-            provider_id: '- (Optional) The type of authentication flow to create. Valid choices include basic-flow and client-flow. Defaults to basic-flow.'
+            provider_id: '- (Optional) The type of authentication flow to create. Valid choices include basic-flow and client-flow. Defaults to basic-flow. Ignored when copy_from is set, since the copy inherits its type from the source flow.'
             realm_id: '- (Required) The realm that the authentication flow exists in.'
         importStatements: []
     keycloak_authentication_subflow:
@@ -408,7 +431,7 @@ resources:
             enabled: '- (Optional) When false, this provider will not be used when performing queries for users. Defaults to true.'
             full_sync_period: '- (Optional) How frequently Keycloak should sync all users, in seconds. Omit this property to disable periodic full sync.'
             name: '- (Required) Display name of the provider when displayed in the console.'
-            parent_id: '- (Optional) Must be set to the realms'' internal_id  when it differs from the realm. This can happen when existing resources are imported into the state.'
+            parent_id: '- (Optional) Deprecated The internal id of the realm this component is attached to. This is now resolved automatically, so it no longer needs to be set, even when the realm''s internal_id differs from its name. This attribute will be removed in a future release.'
             priority: '- (Optional) Priority of this provider when looking up users. Lower values are first. Defaults to 0.'
             provider_id: '- (Required) The unique ID of the custom provider, specified in the getId implementation for the UserStorageProviderFactory interface.'
             realm_id: '- (Required) The realm that this provider will provide user federation for.'
@@ -555,6 +578,40 @@ resources:
                       "enabled": true,
                       "realm": "my-realm"
                     }
+            - name: custom_with_config
+              manifest: |-
+                {
+                  "config": {
+                    "some_setting": "some_value"
+                  },
+                  "decision_strategy": "UNANIMOUS",
+                  "logic": "POSITIVE",
+                  "name": "my-configurable-policy",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "resource_server_id": "${keycloak_openid_client.test.resource_server_id}",
+                  "type": "my-custom-policy-provider"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+                resource_server_id: keycloak_openid_client.test.resource_server_id
+              dependencies:
+                keycloak_openid_client.test: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "authorization": [
+                        {
+                          "policy_enforcement_mode": "ENFORCING"
+                        }
+                      ],
+                      "client_id": "client_id",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "service_accounts_enabled": true
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
         argumentDocs:
             META-INF/keycloak-scripts.json: |-
                 descriptor), Keycloak generates the
@@ -564,6 +621,12 @@ resources:
                 type = "script-my-policy.js".
                 (Modern Keycloak no longer allows uploading the JavaScript code through the API, so the script must be
                 deployed alongside Keycloak and only referenced here.)
+            config: |-
+                - (Optional) A map of provider-specific settings, passed through as-is to the policy's
+                config object. This is how a custom Java SPI provider that reads its own settings (connection
+                details, thresholds, anything the provider defines) receives them; Keycloak's generic
+                PolicyRepresentation carries these as a flat string-to-string map, so values must be strings
+                and nested structures are not supported.
             decision_strategy: '- (Required) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.'
             description: '- (Optional) A description for the authorization policy.'
             id: '- Policy ID representing the policy.'
@@ -1185,14 +1248,16 @@ resources:
             description: '- (Optional) Description of the permission.'
             enabled: '- Always true when the resource exists.'
             group_ids: '- (Optional) Set of group UUIDs (keycloak_group.xxx.id) this permission applies to. When omitted or empty, the permission applies to all groups in the realm.'
+            impersonate-members: — impersonate the users that belong to this group
             manage: — change the group's configuration
             manage-members: — manage the users that belong to this group
             manage-membership: — add or remove members from this group
+            manage-membership-of-members: — change the group memberships of this group's members (requires Keycloak 26.6 or later)
             name: '- (Required) The name of the permission. Must be unique within the admin-permissions resource server. On first apply, if a permission with this name already exists it is adopted; otherwise a new one is created.'
             permission_id: '- The internal Keycloak UUID of the permission.'
             policies: '- (Optional) Set of policy IDs to attach to the permission.'
             realm_id: '- (Required, ForceNew) The realm in which to manage this permission.'
-            scopes: '- (Required) Set of scopes this permission grants. Valid values: view, manage, view-members, manage-members, manage-membership.'
+            scopes: '- (Required) Set of scopes this permission grants. Valid values: view, manage, view-members, manage-members, manage-membership, manage-membership-of-members, impersonate-members.'
             view: — view the group's configuration
             view-members: — view user details of the group's members
         importStatements: []
@@ -2373,14 +2438,17 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
+            '{{realm_id}}/{{ldap_user_federation_id}}/{{bind_credential}}': (required when using bind_credential and LDAP bind authentication)
             ALWAYS: '- Always use the truststore SPI for LDAP connections.'
             NEVER: '- Never use the truststore SPI for LDAP connections.'
             ONE_LEVEL: ': Only search for users in the DN specified by user_dn.'
             ONLY_FOR_LDAPS: '- Only use the truststore SPI if your LDAP connection uses the ldaps protocol.'
             SUBTREE: ': Search entire LDAP subtree.'
             batch_size_for_sync: '- (Optional) The number of users to sync within a single transaction. Defaults to 1000.'
-            bind_credential: '- (Optional) Password of LDAP admin. This attribute must be set if bind_dn is set.'
-            bind_dn: '- (Optional) DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.'
+            bind_credential: '- (Optional) Password of LDAP admin. This attribute must be set if bind_dn is set. Conflicts with bind_credential_wo and bind_credential_wo_version.'
+            bind_credential_wo: '- (Optional, Write-Only) Password of LDAP admin as a write-only argument for ephemeral values. Must be set together with bind_credential_wo_version and conflicts with bind_credential.'
+            bind_credential_wo_version: '- (Optional) Version for bind_credential_wo. Change this value to rotate the write-only credential. Must be set together with bind_credential_wo and conflicts with bind_credential.'
+            bind_dn: '- (Optional) DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential or bind_credential_wo is set.'
             cache: '- (Optional) A block containing the cache settings.'
             cache_policy: '- (Optional) Deprecated Can be one of DEFAULT, EVICT_DAILY, EVICT_WEEKLY, MAX_LIFESPAN, or NO_CACHE. Defaults to DEFAULT.'
             changed_sync_period: '- (Optional) How frequently Keycloak should sync changed LDAP users, in seconds. Omit this property to disable periodic changed users sync.'
@@ -5151,6 +5219,58 @@ resources:
             redirect_url: '- (Optional) The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.'
             verified: '- (Optional) Whether domain is verified or not. Default is false.'
         importStatements: []
+    keycloak_organization_memberships:
+        subCategory: ""
+        name: keycloak_organization_memberships
+        title: keycloak_organization_memberships Resource
+        examples:
+            - name: org_members
+              manifest: |-
+                {
+                  "members": [
+                    "${keycloak_user.alice.username}",
+                    "${keycloak_user.bob.username}"
+                  ],
+                  "organization_id": "${keycloak_organization.org.id}",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                members: keycloak_user.alice.username
+                organization_id: keycloak_organization.org.id
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_organization.org: |-
+                    {
+                      "domain": [
+                        {
+                          "name": "example.com"
+                        }
+                      ],
+                      "name": "my-org",
+                      "realm": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+                keycloak_user.alice: |-
+                    {
+                      "email": "alice@example.com",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "username": "alice"
+                    }
+                keycloak_user.bob: |-
+                    {
+                      "email": "bob@example.com",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "username": "bob"
+                    }
+        argumentDocs:
+            members: '- (Required) A set of usernames to assign as members of the organization.'
+            organization_id: '- (Required) The ID of the organization to manage memberships for.'
+            realm_id: '- (Required) The realm the organization belongs to.'
+        importStatements: []
     keycloak_realm:
         subCategory: ""
         name: keycloak_realm
@@ -5186,6 +5306,7 @@ resources:
                           "failure_reset_time_seconds": 43200,
                           "max_failure_wait_seconds": 900,
                           "max_login_failures": 30,
+                          "max_secondary_auth_failures": 0,
                           "minimum_quick_login_wait_seconds": 60,
                           "permanent_lockout": false,
                           "quick_login_check_milli_seconds": 1000,
@@ -5249,6 +5370,7 @@ resources:
             brute_force_detection.failure_reset_time_seconds: '- (Optional) When will failure count be reset?'
             'brute_force_detection.max_failure_wait_seconds ': '- (Optional) Max. time a user will be locked out.'
             brute_force_detection.max_login_failures: '- (Optional) How many failures before wait is triggered.'
+            brute_force_detection.max_secondary_auth_failures: '- (Optional) How many failures of the secondary authentication factor (e.g. OTP) are permitted before the wait is triggered. Defaults to 0. Requires Keycloak 26.6 or higher.'
             brute_force_detection.max_temporary_lockouts: '- (Optional) How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0'
             brute_force_detection.minimum_quick_login_wait_seconds: '- (Optional) How long to wait after a quick login failure.'
             brute_force_detection.permanent_lockout: '- (Optional) When true, this will lock the user permanently when the user exceeds the maximum login failures.'
@@ -5722,17 +5844,69 @@ resources:
                     {
                       "realm": "my-realm"
                     }
+            - name: keystore_rsa
+              manifest: |-
+                {
+                  "certificate_wo": "${ephemeral.azurerm_key_vault_certificate.my-cert.pem}",
+                  "certificate_wo_version": "${ephemeral.azurerm_key_vault_certificate.my-cert.expiration_date}",
+                  "name": "my-rsa-key",
+                  "private_key_wo": "${ephemeral.azurerm_key_vault_certificate.my-cert.key}",
+                  "private_key_wo_version": "${ephemeral.azurerm_key_vault_certificate.my-cert.expiration_date}",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                certificate_wo: ephemeral.azurerm_key_vault_certificate.my-cert.pem
+                certificate_wo_version: ephemeral.azurerm_key_vault_certificate.my-cert.expiration_date
+                private_key_wo: ephemeral.azurerm_key_vault_certificate.my-cert.key
+                private_key_wo_version: ephemeral.azurerm_key_vault_certificate.my-cert.expiration_date
+                realm_id: keycloak_realm.realm.id
         argumentDocs:
             active: '- (Optional) When false, key in not used for signing. Defaults to true.'
             algorithm: '- (Optional) Intended algorithm for the key. Defaults to RS256. Use RSA-OAEP for encryption keys'
-            certificate: '- (Required) X509 Certificate encoded in PEM format.'
+            certificate: '- (Optional) X509 Certificate encoded in PEM format. Required without certificate_wo and certificate_wo_version.'
+            certificate_wo: '- (Optional, Write-Only) X509 Certificate encoded in PEM format. Not stored in state or plan files. Requires certificate_wo_version. The certificate is sent on every update, since Keycloak requires it.'
+            certificate_wo_version: '- (Optional) Version of the certificate_wo argument. Stored in state.'
             enabled: '- (Optional) When false, key is not accessible in this realm. Defaults to true.'
             extra_config: '- (Optional) Map of additional provider configuration options passed through to the Keycloak component config. For RSA keystores this can include keys like kid.'
             keystore_size: '- (Optional) Size for the generated keys. Defaults to 2048.'
             name: '- (Required) Display name of provider when linked in admin console.'
             priority: '- (Optional) Priority for the provider. Defaults to 0'
-            private_key: '- (Required) Private RSA Key encoded in PEM format.'
+            private_key: '- (Optional) Private RSA Key encoded in PEM format. Required without private_key_wo and private_key_wo_version.'
+            private_key_wo: '- (Optional, Write-Only) Private RSA Key encoded in PEM format. Not stored in state or plan files. Requires private_key_wo_version.'
+            private_key_wo_version: '- (Optional) Trigger for private_key_wo: the key is only sent to Keycloak when this value changes. Stored in state.'
             provider_id: '- (Optional) Use rsa for signing keys, rsa-enc for encryption keys'
+            realm_id: '- (Required) The realm this keystore exists in.'
+        importStatements: []
+    keycloak_realm_keystore_rsa_enc_generated:
+        subCategory: ""
+        name: keycloak_realm_keystore_rsa_enc_generated
+        title: keycloak_realm_keystore_rsa_enc_generated Resources
+        examples:
+            - name: keystore_rsa_enc_generated
+              manifest: |-
+                {
+                  "active": true,
+                  "algorithm": "RSA-OAEP",
+                  "enabled": true,
+                  "key_size": 2048,
+                  "name": "my-rsa-enc-generated-key",
+                  "priority": 100,
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            active: '- (Optional) When false, key is not used for encryption. Defaults to true.'
+            algorithm: '- (Optional) Intended algorithm for the key. Defaults to RSA-OAEP'
+            enabled: '- (Optional) When false, key is not accessible in this realm. Defaults to true.'
+            key_size: '- (Optional) Size for the generated keys. Defaults to 2048.'
+            name: '- (Required) Display name of provider when linked in admin console.'
+            priority: '- (Optional) Priority for the provider. Defaults to 0'
             realm_id: '- (Required) The realm this keystore exists in.'
         importStatements: []
     keycloak_realm_keystore_rsa_generated:
@@ -6741,6 +6915,29 @@ resources:
                       "enabled": true,
                       "realm": "my-realm"
                     }
+            - name: user_with_initial_password
+              manifest: |-
+                {
+                  "enabled": true,
+                  "initial_password": [
+                    {
+                      "temporary": true,
+                      "value_wo": "${ephemeral.random_password.user_password.result}",
+                      "value_wo_version": "version1"
+                    }
+                  ],
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "username": "alice"
+                }
+              references:
+                initial_password.value_wo: ephemeral.random_password.user_password.result
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
         argumentDocs:
             attributes: '- (Optional) A map representing attributes for the user. In order to add multivalue attributes, use ## to seperate the values. Max length for each value is 255 chars'
             email: '- (Optional) The user''s email.'
@@ -6750,7 +6947,7 @@ resources:
             first_name: '- (Optional) The user''s first name.'
             identity_provider: '- (Required) The name of the identity provider'
             import: '- (Optional) When true, the user with the specified username is assumed to already exist, and it will be imported into state instead of being created. This attribute is useful when dealing with users that Keycloak creates automatically during realm creation, such as admin. Note, that the user will not be removed during destruction if import is true.'
-            initial_password: '- (Optional) When given, the user''s initial password will be set. This attribute is only respected during initial user creation.'
+            initial_password: '- (Optional) When given, the user''s initial password will be set. Exactly one of value and value_wo must be given.'
             last_name: '- (Optional) The user''s last name.'
             realm_id: '- (Required) The realm this user belongs to.'
             required_actions: '- (Optional) A list of required user actions.'
@@ -6758,7 +6955,9 @@ resources:
             user_id: '- (Required) The ID of the user defined in the identity provider'
             user_name: '- (Required) The username of the user defined in the identity provider'
             username: '- (Required) The unique username of this user.'
-            value: '- (Required) The initial password.'
+            value: '- (Optional) The initial password. This argument is only respected during initial user creation; later changes to it are ignored. Conflicts with value_wo and value_wo_version.'
+            value_wo: '- (Optional, Write-Only) The initial password. This is a write-only argument and Terraform does not store it in state or plan files. Conflicts with value. Required when using value_wo_version. Must not be an empty string.'
+            value_wo_version: '- (Optional) Functions as a flag and/or trigger to indicate to Terraform when to use the input value in value_wo to execute a Create or Update operation. The value of this argument is stored in the state and plan files. Changing it resets the password of an existing user. Conflicts with value. Required when using value_wo. Must not be an empty string.'
         importStatements: []
     keycloak_user_groups:
         subCategory: ""

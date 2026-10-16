@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ClientServiceAccountRoleInitParameters struct {
@@ -23,11 +22,11 @@ type ClientServiceAccountRoleInitParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The realm the clients and roles belong to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
@@ -35,11 +34,11 @@ type ClientServiceAccountRoleInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The name of the role that is assigned.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role
@@ -48,19 +47,19 @@ type ClientServiceAccountRoleInitParameters struct {
 
 	// Reference to a Role in role to populate role.
 	// +kubebuilder:validation:Optional
-	RoleRef *v1.NamespacedReference `json:"roleRef,omitempty" tf:"-"`
+	RoleRef *v2.NamespacedReference `json:"roleRef,omitempty" tf:"-"`
 
 	// Selector for a Role in role to populate role.
 	// +kubebuilder:validation:Optional
-	RoleSelector *v1.NamespacedSelector `json:"roleSelector,omitempty" tf:"-"`
+	RoleSelector *v2.NamespacedSelector `json:"roleSelector,omitempty" tf:"-"`
 
 	// Reference to a Client in openidclient to populate serviceAccountUserId.
 	// +kubebuilder:validation:Optional
-	ServiceAccountUserClientIDRef *v1.NamespacedReference `json:"serviceAccountUserClientIdRef,omitempty" tf:"-"`
+	ServiceAccountUserClientIDRef *v2.NamespacedReference `json:"serviceAccountUserClientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate serviceAccountUserId.
 	// +kubebuilder:validation:Optional
-	ServiceAccountUserClientIDSelector *v1.NamespacedSelector `json:"serviceAccountUserClientIdSelector,omitempty" tf:"-"`
+	ServiceAccountUserClientIDSelector *v2.NamespacedSelector `json:"serviceAccountUserClientIdSelector,omitempty" tf:"-"`
 
 	// The id of the service account that is assigned the role (the service account of the client that "consumes" the role).
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
@@ -97,11 +96,11 @@ type ClientServiceAccountRoleParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The realm the clients and roles belong to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
@@ -110,11 +109,11 @@ type ClientServiceAccountRoleParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The name of the role that is assigned.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role
@@ -124,19 +123,19 @@ type ClientServiceAccountRoleParameters struct {
 
 	// Reference to a Role in role to populate role.
 	// +kubebuilder:validation:Optional
-	RoleRef *v1.NamespacedReference `json:"roleRef,omitempty" tf:"-"`
+	RoleRef *v2.NamespacedReference `json:"roleRef,omitempty" tf:"-"`
 
 	// Selector for a Role in role to populate role.
 	// +kubebuilder:validation:Optional
-	RoleSelector *v1.NamespacedSelector `json:"roleSelector,omitempty" tf:"-"`
+	RoleSelector *v2.NamespacedSelector `json:"roleSelector,omitempty" tf:"-"`
 
 	// Reference to a Client in openidclient to populate serviceAccountUserId.
 	// +kubebuilder:validation:Optional
-	ServiceAccountUserClientIDRef *v1.NamespacedReference `json:"serviceAccountUserClientIdRef,omitempty" tf:"-"`
+	ServiceAccountUserClientIDRef *v2.NamespacedReference `json:"serviceAccountUserClientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate serviceAccountUserId.
 	// +kubebuilder:validation:Optional
-	ServiceAccountUserClientIDSelector *v1.NamespacedSelector `json:"serviceAccountUserClientIdSelector,omitempty" tf:"-"`
+	ServiceAccountUserClientIDSelector *v2.NamespacedSelector `json:"serviceAccountUserClientIdSelector,omitempty" tf:"-"`
 
 	// The id of the service account that is assigned the role (the service account of the client that "consumes" the role).
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
@@ -166,8 +165,8 @@ type ClientServiceAccountRoleSpec struct {
 
 // ClientServiceAccountRoleStatus defines the observed state of ClientServiceAccountRole.
 type ClientServiceAccountRoleStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ClientServiceAccountRoleObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ClientServiceAccountRoleObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

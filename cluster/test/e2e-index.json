@@ -641,6 +641,16 @@
         "dev/demos/namespaced/004-realm-keystore-rsa.yaml"
       ]
     },
+    "KeystoreRsaEncGenerated (realm)": {
+      "defined_in": [
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
+      ]
+    },
     "KeystoreRsaGenerated (realm)": {
       "defined_in": [
         "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
@@ -667,6 +677,14 @@
       "used_by": [
         "dev/demos/basic/031-group-memberships.yaml",
         "dev/demos/namespaced/031-group-memberships.yaml"
+      ]
+    },
+    "Memberships (organization)": {
+      "defined_in": [
+        "dev/demos/orgs/021-org-memberships.yaml"
+      ],
+      "used_by": [
+        "dev/demos/orgs/021-org-memberships.yaml"
       ]
     },
     "MicrosoftIdentityProvider (oidc)": {
@@ -2952,6 +2970,7 @@
         "dev/demos/orgs/002-org.yaml",
         "dev/demos/orgs/010-oidc-identity-provider.yaml",
         "dev/demos/orgs/020-user.yaml",
+        "dev/demos/orgs/021-org-memberships.yaml",
         "dev/demos/orgs/030-k8s-federated-identity-provider.yaml",
         "dev/demos/orgs/031-k8s-federated-client.yaml"
       ]
@@ -2965,6 +2984,7 @@
       ],
       "rdeps": [
         "dev/demos/orgs/010-oidc-identity-provider.yaml",
+        "dev/demos/orgs/021-org-memberships.yaml",
         "dev/demos/orgs/030-k8s-federated-identity-provider.yaml"
       ]
     },
@@ -2984,6 +3004,19 @@
       ],
       "deps": [
         "dev/demos/orgs/001-realm.yaml"
+      ],
+      "rdeps": [
+        "dev/demos/orgs/021-org-memberships.yaml"
+      ]
+    },
+    "dev/demos/orgs/021-org-memberships.yaml": {
+      "groups": [
+        "organization"
+      ],
+      "deps": [
+        "dev/demos/orgs/001-realm.yaml",
+        "dev/demos/orgs/002-org.yaml",
+        "dev/demos/orgs/020-user.yaml"
       ],
       "rdeps": []
     },

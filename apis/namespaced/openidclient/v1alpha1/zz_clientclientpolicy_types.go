@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ClientClientPolicyInitParameters struct {
@@ -24,11 +23,11 @@ type ClientClientPolicyInitParameters struct {
 
 	// References to Client in openidclient to populate clients.
 	// +kubebuilder:validation:Optional
-	ClientsRefs []v1.NamespacedReference `json:"clientsRefs,omitempty" tf:"-"`
+	ClientsRefs []v2.NamespacedReference `json:"clientsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Client in openidclient to populate clients.
 	// +kubebuilder:validation:Optional
-	ClientsSelector *v1.NamespacedSelector `json:"clientsSelector,omitempty" tf:"-"`
+	ClientsSelector *v2.NamespacedSelector `json:"clientsSelector,omitempty" tf:"-"`
 
 	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
@@ -48,11 +47,11 @@ type ClientClientPolicyInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
@@ -61,11 +60,11 @@ type ClientClientPolicyInitParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
 	// A list of client IDs that this policy applies to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
@@ -75,11 +74,11 @@ type ClientClientPolicyInitParameters struct {
 
 	// References to Client in samlclient to populate samlClients.
 	// +kubebuilder:validation:Optional
-	SAMLClientsRefs []v1.NamespacedReference `json:"samlClientsRefs,omitempty" tf:"-"`
+	SAMLClientsRefs []v2.NamespacedReference `json:"samlClientsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Client in samlclient to populate samlClients.
 	// +kubebuilder:validation:Optional
-	SAMLClientsSelector *v1.NamespacedSelector `json:"samlClientsSelector,omitempty" tf:"-"`
+	SAMLClientsSelector *v2.NamespacedSelector `json:"samlClientsSelector,omitempty" tf:"-"`
 }
 
 type ClientClientPolicyObservation struct {
@@ -125,11 +124,11 @@ type ClientClientPolicyParameters struct {
 
 	// References to Client in openidclient to populate clients.
 	// +kubebuilder:validation:Optional
-	ClientsRefs []v1.NamespacedReference `json:"clientsRefs,omitempty" tf:"-"`
+	ClientsRefs []v2.NamespacedReference `json:"clientsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Client in openidclient to populate clients.
 	// +kubebuilder:validation:Optional
-	ClientsSelector *v1.NamespacedSelector `json:"clientsSelector,omitempty" tf:"-"`
+	ClientsSelector *v2.NamespacedSelector `json:"clientsSelector,omitempty" tf:"-"`
 
 	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
 	// +kubebuilder:validation:Optional
@@ -154,11 +153,11 @@ type ClientClientPolicyParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
@@ -168,11 +167,11 @@ type ClientClientPolicyParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
 	// A list of client IDs that this policy applies to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
@@ -183,11 +182,11 @@ type ClientClientPolicyParameters struct {
 
 	// References to Client in samlclient to populate samlClients.
 	// +kubebuilder:validation:Optional
-	SAMLClientsRefs []v1.NamespacedReference `json:"samlClientsRefs,omitempty" tf:"-"`
+	SAMLClientsRefs []v2.NamespacedReference `json:"samlClientsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Client in samlclient to populate samlClients.
 	// +kubebuilder:validation:Optional
-	SAMLClientsSelector *v1.NamespacedSelector `json:"samlClientsSelector,omitempty" tf:"-"`
+	SAMLClientsSelector *v2.NamespacedSelector `json:"samlClientsSelector,omitempty" tf:"-"`
 }
 
 // ClientClientPolicySpec defines the desired state of ClientClientPolicy
@@ -209,8 +208,8 @@ type ClientClientPolicySpec struct {
 
 // ClientClientPolicyStatus defines the observed state of ClientClientPolicy.
 type ClientClientPolicyStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ClientClientPolicyObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ClientClientPolicyObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -10,7 +10,7 @@ on:
 
 env:
   # Common versions
-  GO_VERSION: '1.26.6'
+  GO_VERSION: '1.26.8'
   GOLANGCI_VERSION: 'v2.12.2'
   DOCKER_BUILDX_VERSION: 'v0.22.0'
   UP_VERSION: 'v0.38.4'
@@ -60,8 +60,8 @@ jobs:
         id: e2e-scope
         run: |
           # Full Keycloak version matrix (all supported releases)
-          ALL_VERSIONS='["26.7.0","26.6.2","26.5.1","26.4.4","26.3.5","26.2.5","26.1.5","26.0.8"]'
-          LATEST_VERSION='["26.7.0"]'
+          ALL_VERSIONS='["26.8.0","26.7.0","26.6.2","26.5.1","26.4.4","26.3.5","26.2.5","26.1.5","26.0.8"]'
+          LATEST_VERSION='["26.8.0"]'
 
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
           if echo "$COMMIT_MESSAGE" | grep -iq "\[skip e2e\]"; then
@@ -584,7 +584,7 @@ jobs:
 
       - name: Running CRD Conversion Webhook Tests
         id: conversionTests
-        if: matrix.keycloak-version == '26.7.0'
+        if: matrix.keycloak-version == '26.8.0'
         continue-on-error: true
         shell: bash
         run: |
@@ -594,7 +594,7 @@ jobs:
 
       - name: Running Restricted Single-Realm ProviderConfig Tests
         id: restrictedRealmProviderTests
-        if: matrix.keycloak-version == '26.7.0'
+        if: matrix.keycloak-version == '26.8.0'
         continue-on-error: true
         shell: bash
         run: |

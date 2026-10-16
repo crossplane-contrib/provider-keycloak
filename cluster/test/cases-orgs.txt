@@ -3,6 +3,7 @@
 # Ordered by deletion order: dependents first, base resources last
 dev/demos/orgs/031-k8s-federated-client.yaml
 dev/demos/orgs/030-k8s-federated-identity-provider.yaml
+dev/demos/orgs/021-org-memberships.yaml
 dev/demos/orgs/020-user.yaml
 dev/demos/orgs/010-oidc-identity-provider.yaml
 dev/demos/orgs/002-org.yaml

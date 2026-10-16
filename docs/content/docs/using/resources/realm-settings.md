@@ -13,6 +13,7 @@ Use these resources after a `Realm` exists and you need to shape how that realm 
 - **`UserProfile`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_user_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_user_profile) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/UserProfile/v1alpha1)
 - **`RealmLocalization`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_localization`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_localization) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RealmLocalization/v1alpha1)
 - **`KeystoreRsa`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_keystore_rsa`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_keystore_rsa) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/KeystoreRsa/v1alpha1)
+- **`KeystoreRsaEncGenerated`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_keystore_rsa_enc_generated`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_keystore_rsa_enc_generated) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/KeystoreRsaEncGenerated/v1alpha1)
 - **`DefaultClientScopes`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_default_client_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_default_client_scopes) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/DefaultClientScopes/v1alpha1)
 - **`OptionalClientScopes`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_optional_client_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_optional_client_scopes) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/OptionalClientScopes/v1alpha1)
 - **`ClientPolicyProfile`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_client_policy_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_client_policy_profile) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/ClientPolicyProfile/v1alpha1)
@@ -192,6 +193,29 @@ spec:
     name: "keycloak-provider-config"
 ```
 
+### KeystoreRsaEncGenerated
+
+Use `KeystoreRsaEncGenerated` to let Keycloak generate an RSA key pair used for encryption (e.g. encrypted ID tokens or encrypted request objects).
+
+```yaml
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: KeystoreRsaEncGenerated
+metadata:
+  name: rsa-enc-generated-keystore
+spec:
+  forProvider:
+    active: true
+    algorithm: RSA-OAEP
+    enabled: true
+    keySize: 2048
+    name: crossplane-rsa-enc-generated-key
+    priority: 100
+    realmIdRef:
+      name: "dev"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+```
+
 ### DefaultClientScopes
 
 Use `DefaultClientScopes` to define which client scopes are assigned automatically to new clients in the realm.
@@ -298,6 +322,7 @@ spec:
 | `UserProfile` | `realmIdRef`, `attribute`, `group`, `unmanagedAttributePolicy` | Defines custom profile schema, validation, permissions, and grouping. |
 | `RealmLocalization` | `realmIdRef`, `locale`, `texts` | Overrides localized message texts for a realm and locale. |
 | `KeystoreRsa` | `realmIdRef`, `name`, `providerId`, `algorithm`, `active`, `enabled`, `priority`, `privateKeySecretRef`, `certificateSecretRef` | Manages RSA key material used by the realm. |
+| `KeystoreRsaEncGenerated` | `realmIdRef`, `name`, `algorithm`, `keySize`, `active`, `enabled`, `priority` | Lets Keycloak generate an RSA key pair used for encryption. |
 | `DefaultClientScopes` | `realmId`, `defaultScopes` | Declares scopes assigned automatically to new clients. |
 | `OptionalClientScopes` | `realmId`, `optionalScopes` | Declares scopes clients can request optionally. |
 | `ClientPolicyProfile` | `realmIdRef`, `name`, `executor` | Defines reusable client policy executors. |

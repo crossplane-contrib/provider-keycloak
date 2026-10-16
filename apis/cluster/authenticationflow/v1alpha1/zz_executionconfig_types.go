@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ExecutionConfigInitParameters struct {
@@ -29,11 +29,11 @@ type ExecutionConfigInitParameters struct {
 
 	// Reference to a Execution in authenticationflow to populate executionId.
 	// +kubebuilder:validation:Optional
-	ExecutionIDRef *v1.Reference `json:"executionIdRef,omitempty" tf:"-"`
+	ExecutionIDRef *v2.Reference `json:"executionIdRef,omitempty" tf:"-"`
 
 	// Selector for a Execution in authenticationflow to populate executionId.
 	// +kubebuilder:validation:Optional
-	ExecutionIDSelector *v1.Selector `json:"executionIdSelector,omitempty" tf:"-"`
+	ExecutionIDSelector *v2.Selector `json:"executionIdSelector,omitempty" tf:"-"`
 
 	// The realm the authentication execution exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
@@ -41,11 +41,11 @@ type ExecutionConfigInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type ExecutionConfigObservation struct {
@@ -85,11 +85,11 @@ type ExecutionConfigParameters struct {
 
 	// Reference to a Execution in authenticationflow to populate executionId.
 	// +kubebuilder:validation:Optional
-	ExecutionIDRef *v1.Reference `json:"executionIdRef,omitempty" tf:"-"`
+	ExecutionIDRef *v2.Reference `json:"executionIdRef,omitempty" tf:"-"`
 
 	// Selector for a Execution in authenticationflow to populate executionId.
 	// +kubebuilder:validation:Optional
-	ExecutionIDSelector *v1.Selector `json:"executionIdSelector,omitempty" tf:"-"`
+	ExecutionIDSelector *v2.Selector `json:"executionIdSelector,omitempty" tf:"-"`
 
 	// The realm the authentication execution exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
@@ -98,17 +98,17 @@ type ExecutionConfigParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // ExecutionConfigSpec defines the desired state of ExecutionConfig
 type ExecutionConfigSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     ExecutionConfigParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   ExecutionConfigParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -124,8 +124,8 @@ type ExecutionConfigSpec struct {
 
 // ExecutionConfigStatus defines the observed state of ExecutionConfig.
 type ExecutionConfigStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ExecutionConfigObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ExecutionConfigObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

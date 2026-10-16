@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type UserClientRoleProtocolMapperInitParameters struct {
@@ -49,19 +48,19 @@ type UserClientRoleProtocolMapperInitParameters struct {
 
 	// Reference to a Client in openidclient to populate clientIdForRoleMappings.
 	// +kubebuilder:validation:Optional
-	ClientIDForRoleMappingsRef *v1.NamespacedReference `json:"clientIdForRoleMappingsRef,omitempty" tf:"-"`
+	ClientIDForRoleMappingsRef *v2.NamespacedReference `json:"clientIdForRoleMappingsRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientIdForRoleMappings.
 	// +kubebuilder:validation:Optional
-	ClientIDForRoleMappingsSelector *v1.NamespacedSelector `json:"clientIdForRoleMappingsSelector,omitempty" tf:"-"`
+	ClientIDForRoleMappingsSelector *v2.NamespacedSelector `json:"clientIdForRoleMappingsSelector,omitempty" tf:"-"`
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// A prefix for each Client Role.
 	// Prefix that will be added to each client role.
@@ -74,11 +73,11 @@ type UserClientRoleProtocolMapperInitParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// Indicates if attribute supports multiple values. If true, then the list of all values of this attribute will be set as claim. If false, then just first value will be set as claim. Defaults to false.
 	// Indicates whether this attribute is a single value or an array of values.
@@ -95,11 +94,11 @@ type UserClientRoleProtocolMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type UserClientRoleProtocolMapperObservation struct {
@@ -196,19 +195,19 @@ type UserClientRoleProtocolMapperParameters struct {
 
 	// Reference to a Client in openidclient to populate clientIdForRoleMappings.
 	// +kubebuilder:validation:Optional
-	ClientIDForRoleMappingsRef *v1.NamespacedReference `json:"clientIdForRoleMappingsRef,omitempty" tf:"-"`
+	ClientIDForRoleMappingsRef *v2.NamespacedReference `json:"clientIdForRoleMappingsRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientIdForRoleMappings.
 	// +kubebuilder:validation:Optional
-	ClientIDForRoleMappingsSelector *v1.NamespacedSelector `json:"clientIdForRoleMappingsSelector,omitempty" tf:"-"`
+	ClientIDForRoleMappingsSelector *v2.NamespacedSelector `json:"clientIdForRoleMappingsSelector,omitempty" tf:"-"`
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// A prefix for each Client Role.
 	// Prefix that will be added to each client role.
@@ -223,11 +222,11 @@ type UserClientRoleProtocolMapperParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// Indicates if attribute supports multiple values. If true, then the list of all values of this attribute will be set as claim. If false, then just first value will be set as claim. Defaults to false.
 	// Indicates whether this attribute is a single value or an array of values.
@@ -247,11 +246,11 @@ type UserClientRoleProtocolMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // UserClientRoleProtocolMapperSpec defines the desired state of UserClientRoleProtocolMapper
@@ -273,8 +272,8 @@ type UserClientRoleProtocolMapperSpec struct {
 
 // UserClientRoleProtocolMapperStatus defines the observed state of UserClientRoleProtocolMapper.
 type UserClientRoleProtocolMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        UserClientRoleProtocolMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               UserClientRoleProtocolMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

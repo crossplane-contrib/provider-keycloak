@@ -5,204 +5,204 @@ Copyright 2022 Upbound Inc.
 
 package v1alpha1
 
-import xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+import xpv2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 
 // GetCondition of this GenericClientProtocolMapper.
-func (mg *GenericClientProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+func (mg *GenericClientProtocolMapper) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
 // GetDeletionPolicy of this GenericClientProtocolMapper.
-func (mg *GenericClientProtocolMapper) GetDeletionPolicy() xpv1.DeletionPolicy {
+func (mg *GenericClientProtocolMapper) GetDeletionPolicy() xpv2.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
 // GetManagementPolicies of this GenericClientProtocolMapper.
-func (mg *GenericClientProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+func (mg *GenericClientProtocolMapper) GetManagementPolicies() xpv2.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
 // GetProviderConfigReference of this GenericClientProtocolMapper.
-func (mg *GenericClientProtocolMapper) GetProviderConfigReference() *xpv1.Reference {
+func (mg *GenericClientProtocolMapper) GetProviderConfigReference() *xpv2.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
 // GetWriteConnectionSecretToReference of this GenericClientProtocolMapper.
-func (mg *GenericClientProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+func (mg *GenericClientProtocolMapper) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
 // SetConditions of this GenericClientProtocolMapper.
-func (mg *GenericClientProtocolMapper) SetConditions(c ...xpv1.Condition) {
+func (mg *GenericClientProtocolMapper) SetConditions(c ...xpv2.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
 // SetDeletionPolicy of this GenericClientProtocolMapper.
-func (mg *GenericClientProtocolMapper) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+func (mg *GenericClientProtocolMapper) SetDeletionPolicy(r xpv2.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
 // SetManagementPolicies of this GenericClientProtocolMapper.
-func (mg *GenericClientProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+func (mg *GenericClientProtocolMapper) SetManagementPolicies(r xpv2.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this GenericClientProtocolMapper.
-func (mg *GenericClientProtocolMapper) SetProviderConfigReference(r *xpv1.Reference) {
+func (mg *GenericClientProtocolMapper) SetProviderConfigReference(r *xpv2.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
 // SetWriteConnectionSecretToReference of this GenericClientProtocolMapper.
-func (mg *GenericClientProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+func (mg *GenericClientProtocolMapper) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
 // GetCondition of this GenericClientRoleMapper.
-func (mg *GenericClientRoleMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+func (mg *GenericClientRoleMapper) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
 // GetDeletionPolicy of this GenericClientRoleMapper.
-func (mg *GenericClientRoleMapper) GetDeletionPolicy() xpv1.DeletionPolicy {
+func (mg *GenericClientRoleMapper) GetDeletionPolicy() xpv2.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
 // GetManagementPolicies of this GenericClientRoleMapper.
-func (mg *GenericClientRoleMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+func (mg *GenericClientRoleMapper) GetManagementPolicies() xpv2.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
 // GetProviderConfigReference of this GenericClientRoleMapper.
-func (mg *GenericClientRoleMapper) GetProviderConfigReference() *xpv1.Reference {
+func (mg *GenericClientRoleMapper) GetProviderConfigReference() *xpv2.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
 // GetWriteConnectionSecretToReference of this GenericClientRoleMapper.
-func (mg *GenericClientRoleMapper) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+func (mg *GenericClientRoleMapper) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
 // SetConditions of this GenericClientRoleMapper.
-func (mg *GenericClientRoleMapper) SetConditions(c ...xpv1.Condition) {
+func (mg *GenericClientRoleMapper) SetConditions(c ...xpv2.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
 // SetDeletionPolicy of this GenericClientRoleMapper.
-func (mg *GenericClientRoleMapper) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+func (mg *GenericClientRoleMapper) SetDeletionPolicy(r xpv2.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
 // SetManagementPolicies of this GenericClientRoleMapper.
-func (mg *GenericClientRoleMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+func (mg *GenericClientRoleMapper) SetManagementPolicies(r xpv2.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this GenericClientRoleMapper.
-func (mg *GenericClientRoleMapper) SetProviderConfigReference(r *xpv1.Reference) {
+func (mg *GenericClientRoleMapper) SetProviderConfigReference(r *xpv2.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
 // SetWriteConnectionSecretToReference of this GenericClientRoleMapper.
-func (mg *GenericClientRoleMapper) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+func (mg *GenericClientRoleMapper) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
 // GetCondition of this ProtocolMapper.
-func (mg *ProtocolMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+func (mg *ProtocolMapper) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
 // GetDeletionPolicy of this ProtocolMapper.
-func (mg *ProtocolMapper) GetDeletionPolicy() xpv1.DeletionPolicy {
+func (mg *ProtocolMapper) GetDeletionPolicy() xpv2.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
 // GetManagementPolicies of this ProtocolMapper.
-func (mg *ProtocolMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+func (mg *ProtocolMapper) GetManagementPolicies() xpv2.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
 // GetProviderConfigReference of this ProtocolMapper.
-func (mg *ProtocolMapper) GetProviderConfigReference() *xpv1.Reference {
+func (mg *ProtocolMapper) GetProviderConfigReference() *xpv2.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
 // GetWriteConnectionSecretToReference of this ProtocolMapper.
-func (mg *ProtocolMapper) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+func (mg *ProtocolMapper) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
 // SetConditions of this ProtocolMapper.
-func (mg *ProtocolMapper) SetConditions(c ...xpv1.Condition) {
+func (mg *ProtocolMapper) SetConditions(c ...xpv2.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
 // SetDeletionPolicy of this ProtocolMapper.
-func (mg *ProtocolMapper) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+func (mg *ProtocolMapper) SetDeletionPolicy(r xpv2.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
 // SetManagementPolicies of this ProtocolMapper.
-func (mg *ProtocolMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+func (mg *ProtocolMapper) SetManagementPolicies(r xpv2.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this ProtocolMapper.
-func (mg *ProtocolMapper) SetProviderConfigReference(r *xpv1.Reference) {
+func (mg *ProtocolMapper) SetProviderConfigReference(r *xpv2.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
 // SetWriteConnectionSecretToReference of this ProtocolMapper.
-func (mg *ProtocolMapper) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+func (mg *ProtocolMapper) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
 // GetCondition of this RoleMapper.
-func (mg *RoleMapper) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+func (mg *RoleMapper) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
 // GetDeletionPolicy of this RoleMapper.
-func (mg *RoleMapper) GetDeletionPolicy() xpv1.DeletionPolicy {
+func (mg *RoleMapper) GetDeletionPolicy() xpv2.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
 // GetManagementPolicies of this RoleMapper.
-func (mg *RoleMapper) GetManagementPolicies() xpv1.ManagementPolicies {
+func (mg *RoleMapper) GetManagementPolicies() xpv2.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
 // GetProviderConfigReference of this RoleMapper.
-func (mg *RoleMapper) GetProviderConfigReference() *xpv1.Reference {
+func (mg *RoleMapper) GetProviderConfigReference() *xpv2.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
 // GetWriteConnectionSecretToReference of this RoleMapper.
-func (mg *RoleMapper) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+func (mg *RoleMapper) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
 // SetConditions of this RoleMapper.
-func (mg *RoleMapper) SetConditions(c ...xpv1.Condition) {
+func (mg *RoleMapper) SetConditions(c ...xpv2.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
 // SetDeletionPolicy of this RoleMapper.
-func (mg *RoleMapper) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+func (mg *RoleMapper) SetDeletionPolicy(r xpv2.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
 // SetManagementPolicies of this RoleMapper.
-func (mg *RoleMapper) SetManagementPolicies(r xpv1.ManagementPolicies) {
+func (mg *RoleMapper) SetManagementPolicies(r xpv2.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this RoleMapper.
-func (mg *RoleMapper) SetProviderConfigReference(r *xpv1.Reference) {
+func (mg *RoleMapper) SetProviderConfigReference(r *xpv2.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
 // SetWriteConnectionSecretToReference of this RoleMapper.
-func (mg *RoleMapper) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+func (mg *RoleMapper) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }

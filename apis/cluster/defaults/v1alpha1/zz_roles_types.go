@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type RolesInitParameters struct {
@@ -24,11 +24,11 @@ type RolesInitParameters struct {
 
 	// References to Role in role to populate defaultRoles.
 	// +kubebuilder:validation:Optional
-	DefaultRolesRefs []v1.Reference `json:"defaultRolesRefs,omitempty" tf:"-"`
+	DefaultRolesRefs []v2.Reference `json:"defaultRolesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate defaultRoles.
 	// +kubebuilder:validation:Optional
-	DefaultRolesSelector *v1.Selector `json:"defaultRolesSelector,omitempty" tf:"-"`
+	DefaultRolesSelector *v2.Selector `json:"defaultRolesSelector,omitempty" tf:"-"`
 
 	// The realm this role exists within.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
@@ -36,11 +36,11 @@ type RolesInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type RolesObservation struct {
@@ -68,11 +68,11 @@ type RolesParameters struct {
 
 	// References to Role in role to populate defaultRoles.
 	// +kubebuilder:validation:Optional
-	DefaultRolesRefs []v1.Reference `json:"defaultRolesRefs,omitempty" tf:"-"`
+	DefaultRolesRefs []v2.Reference `json:"defaultRolesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate defaultRoles.
 	// +kubebuilder:validation:Optional
-	DefaultRolesSelector *v1.Selector `json:"defaultRolesSelector,omitempty" tf:"-"`
+	DefaultRolesSelector *v2.Selector `json:"defaultRolesSelector,omitempty" tf:"-"`
 
 	// The realm this role exists within.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
@@ -81,17 +81,17 @@ type RolesParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // RolesSpec defines the desired state of Roles
 type RolesSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     RolesParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   RolesParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -107,8 +107,8 @@ type RolesSpec struct {
 
 // RolesStatus defines the observed state of Roles.
 type RolesStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        RolesObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               RolesObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

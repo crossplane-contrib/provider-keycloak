@@ -1,0 +1,21 @@
+apiVersion: organization.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: example-org-memberships
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "orgs"
+      policy:
+        resolve: Always
+    organizationIdRef:
+      name: example
+      policy:
+        resolve: Always
+    membersRefs:
+      - name: example-user
+        policy:
+          resolve: Always
+  providerConfigRef:
+    name: "keycloak-provider-config"

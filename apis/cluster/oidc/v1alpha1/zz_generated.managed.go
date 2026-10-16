@@ -5,254 +5,254 @@ Copyright 2022 Upbound Inc.
 
 package v1alpha1
 
-import xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+import xpv2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 
 // GetCondition of this FacebookIdentityProvider.
-func (mg *FacebookIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+func (mg *FacebookIdentityProvider) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
 // GetDeletionPolicy of this FacebookIdentityProvider.
-func (mg *FacebookIdentityProvider) GetDeletionPolicy() xpv1.DeletionPolicy {
+func (mg *FacebookIdentityProvider) GetDeletionPolicy() xpv2.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
 // GetManagementPolicies of this FacebookIdentityProvider.
-func (mg *FacebookIdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+func (mg *FacebookIdentityProvider) GetManagementPolicies() xpv2.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
 // GetProviderConfigReference of this FacebookIdentityProvider.
-func (mg *FacebookIdentityProvider) GetProviderConfigReference() *xpv1.Reference {
+func (mg *FacebookIdentityProvider) GetProviderConfigReference() *xpv2.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
 // GetWriteConnectionSecretToReference of this FacebookIdentityProvider.
-func (mg *FacebookIdentityProvider) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+func (mg *FacebookIdentityProvider) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
 // SetConditions of this FacebookIdentityProvider.
-func (mg *FacebookIdentityProvider) SetConditions(c ...xpv1.Condition) {
+func (mg *FacebookIdentityProvider) SetConditions(c ...xpv2.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
 // SetDeletionPolicy of this FacebookIdentityProvider.
-func (mg *FacebookIdentityProvider) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+func (mg *FacebookIdentityProvider) SetDeletionPolicy(r xpv2.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
 // SetManagementPolicies of this FacebookIdentityProvider.
-func (mg *FacebookIdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+func (mg *FacebookIdentityProvider) SetManagementPolicies(r xpv2.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this FacebookIdentityProvider.
-func (mg *FacebookIdentityProvider) SetProviderConfigReference(r *xpv1.Reference) {
+func (mg *FacebookIdentityProvider) SetProviderConfigReference(r *xpv2.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
 // SetWriteConnectionSecretToReference of this FacebookIdentityProvider.
-func (mg *FacebookIdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+func (mg *FacebookIdentityProvider) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
 // GetCondition of this GithubIdentityProvider.
-func (mg *GithubIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+func (mg *GithubIdentityProvider) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
 // GetDeletionPolicy of this GithubIdentityProvider.
-func (mg *GithubIdentityProvider) GetDeletionPolicy() xpv1.DeletionPolicy {
+func (mg *GithubIdentityProvider) GetDeletionPolicy() xpv2.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
 // GetManagementPolicies of this GithubIdentityProvider.
-func (mg *GithubIdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+func (mg *GithubIdentityProvider) GetManagementPolicies() xpv2.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
 // GetProviderConfigReference of this GithubIdentityProvider.
-func (mg *GithubIdentityProvider) GetProviderConfigReference() *xpv1.Reference {
+func (mg *GithubIdentityProvider) GetProviderConfigReference() *xpv2.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
 // GetWriteConnectionSecretToReference of this GithubIdentityProvider.
-func (mg *GithubIdentityProvider) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+func (mg *GithubIdentityProvider) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
 // SetConditions of this GithubIdentityProvider.
-func (mg *GithubIdentityProvider) SetConditions(c ...xpv1.Condition) {
+func (mg *GithubIdentityProvider) SetConditions(c ...xpv2.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
 // SetDeletionPolicy of this GithubIdentityProvider.
-func (mg *GithubIdentityProvider) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+func (mg *GithubIdentityProvider) SetDeletionPolicy(r xpv2.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
 // SetManagementPolicies of this GithubIdentityProvider.
-func (mg *GithubIdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+func (mg *GithubIdentityProvider) SetManagementPolicies(r xpv2.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this GithubIdentityProvider.
-func (mg *GithubIdentityProvider) SetProviderConfigReference(r *xpv1.Reference) {
+func (mg *GithubIdentityProvider) SetProviderConfigReference(r *xpv2.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
 // SetWriteConnectionSecretToReference of this GithubIdentityProvider.
-func (mg *GithubIdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+func (mg *GithubIdentityProvider) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
 // GetCondition of this GoogleIdentityProvider.
-func (mg *GoogleIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+func (mg *GoogleIdentityProvider) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
 // GetDeletionPolicy of this GoogleIdentityProvider.
-func (mg *GoogleIdentityProvider) GetDeletionPolicy() xpv1.DeletionPolicy {
+func (mg *GoogleIdentityProvider) GetDeletionPolicy() xpv2.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
 // GetManagementPolicies of this GoogleIdentityProvider.
-func (mg *GoogleIdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+func (mg *GoogleIdentityProvider) GetManagementPolicies() xpv2.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
 // GetProviderConfigReference of this GoogleIdentityProvider.
-func (mg *GoogleIdentityProvider) GetProviderConfigReference() *xpv1.Reference {
+func (mg *GoogleIdentityProvider) GetProviderConfigReference() *xpv2.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
 // GetWriteConnectionSecretToReference of this GoogleIdentityProvider.
-func (mg *GoogleIdentityProvider) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+func (mg *GoogleIdentityProvider) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
 // SetConditions of this GoogleIdentityProvider.
-func (mg *GoogleIdentityProvider) SetConditions(c ...xpv1.Condition) {
+func (mg *GoogleIdentityProvider) SetConditions(c ...xpv2.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
 // SetDeletionPolicy of this GoogleIdentityProvider.
-func (mg *GoogleIdentityProvider) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+func (mg *GoogleIdentityProvider) SetDeletionPolicy(r xpv2.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
 // SetManagementPolicies of this GoogleIdentityProvider.
-func (mg *GoogleIdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+func (mg *GoogleIdentityProvider) SetManagementPolicies(r xpv2.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this GoogleIdentityProvider.
-func (mg *GoogleIdentityProvider) SetProviderConfigReference(r *xpv1.Reference) {
+func (mg *GoogleIdentityProvider) SetProviderConfigReference(r *xpv2.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
 // SetWriteConnectionSecretToReference of this GoogleIdentityProvider.
-func (mg *GoogleIdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+func (mg *GoogleIdentityProvider) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
 // GetCondition of this IdentityProvider.
-func (mg *IdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+func (mg *IdentityProvider) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
 // GetDeletionPolicy of this IdentityProvider.
-func (mg *IdentityProvider) GetDeletionPolicy() xpv1.DeletionPolicy {
+func (mg *IdentityProvider) GetDeletionPolicy() xpv2.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
 // GetManagementPolicies of this IdentityProvider.
-func (mg *IdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+func (mg *IdentityProvider) GetManagementPolicies() xpv2.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
 // GetProviderConfigReference of this IdentityProvider.
-func (mg *IdentityProvider) GetProviderConfigReference() *xpv1.Reference {
+func (mg *IdentityProvider) GetProviderConfigReference() *xpv2.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
 // GetWriteConnectionSecretToReference of this IdentityProvider.
-func (mg *IdentityProvider) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+func (mg *IdentityProvider) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
 // SetConditions of this IdentityProvider.
-func (mg *IdentityProvider) SetConditions(c ...xpv1.Condition) {
+func (mg *IdentityProvider) SetConditions(c ...xpv2.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
 // SetDeletionPolicy of this IdentityProvider.
-func (mg *IdentityProvider) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+func (mg *IdentityProvider) SetDeletionPolicy(r xpv2.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
 // SetManagementPolicies of this IdentityProvider.
-func (mg *IdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+func (mg *IdentityProvider) SetManagementPolicies(r xpv2.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this IdentityProvider.
-func (mg *IdentityProvider) SetProviderConfigReference(r *xpv1.Reference) {
+func (mg *IdentityProvider) SetProviderConfigReference(r *xpv2.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
 // SetWriteConnectionSecretToReference of this IdentityProvider.
-func (mg *IdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+func (mg *IdentityProvider) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
 // GetCondition of this MicrosoftIdentityProvider.
-func (mg *MicrosoftIdentityProvider) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+func (mg *MicrosoftIdentityProvider) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
 // GetDeletionPolicy of this MicrosoftIdentityProvider.
-func (mg *MicrosoftIdentityProvider) GetDeletionPolicy() xpv1.DeletionPolicy {
+func (mg *MicrosoftIdentityProvider) GetDeletionPolicy() xpv2.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
 // GetManagementPolicies of this MicrosoftIdentityProvider.
-func (mg *MicrosoftIdentityProvider) GetManagementPolicies() xpv1.ManagementPolicies {
+func (mg *MicrosoftIdentityProvider) GetManagementPolicies() xpv2.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
 // GetProviderConfigReference of this MicrosoftIdentityProvider.
-func (mg *MicrosoftIdentityProvider) GetProviderConfigReference() *xpv1.Reference {
+func (mg *MicrosoftIdentityProvider) GetProviderConfigReference() *xpv2.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
 // GetWriteConnectionSecretToReference of this MicrosoftIdentityProvider.
-func (mg *MicrosoftIdentityProvider) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+func (mg *MicrosoftIdentityProvider) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
 // SetConditions of this MicrosoftIdentityProvider.
-func (mg *MicrosoftIdentityProvider) SetConditions(c ...xpv1.Condition) {
+func (mg *MicrosoftIdentityProvider) SetConditions(c ...xpv2.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
 // SetDeletionPolicy of this MicrosoftIdentityProvider.
-func (mg *MicrosoftIdentityProvider) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+func (mg *MicrosoftIdentityProvider) SetDeletionPolicy(r xpv2.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
 // SetManagementPolicies of this MicrosoftIdentityProvider.
-func (mg *MicrosoftIdentityProvider) SetManagementPolicies(r xpv1.ManagementPolicies) {
+func (mg *MicrosoftIdentityProvider) SetManagementPolicies(r xpv2.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
 // SetProviderConfigReference of this MicrosoftIdentityProvider.
-func (mg *MicrosoftIdentityProvider) SetProviderConfigReference(r *xpv1.Reference) {
+func (mg *MicrosoftIdentityProvider) SetProviderConfigReference(r *xpv2.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
 // SetWriteConnectionSecretToReference of this MicrosoftIdentityProvider.
-func (mg *MicrosoftIdentityProvider) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+func (mg *MicrosoftIdentityProvider) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }

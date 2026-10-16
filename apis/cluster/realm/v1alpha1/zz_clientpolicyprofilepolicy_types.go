@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ClientPolicyProfilePolicyInitParameters struct {
@@ -32,11 +32,11 @@ type ClientPolicyProfilePolicyInitParameters struct {
 
 	// References to ClientPolicyProfile in realm to populate profiles.
 	// +kubebuilder:validation:Optional
-	ProfilesRefs []v1.Reference `json:"profilesRefs,omitempty" tf:"-"`
+	ProfilesRefs []v2.Reference `json:"profilesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientPolicyProfile in realm to populate profiles.
 	// +kubebuilder:validation:Optional
-	ProfilesSelector *v1.Selector `json:"profilesSelector,omitempty" tf:"-"`
+	ProfilesSelector *v2.Selector `json:"profilesSelector,omitempty" tf:"-"`
 
 	// The realm id.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
@@ -44,11 +44,11 @@ type ClientPolicyProfilePolicyInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type ClientPolicyProfilePolicyObservation struct {
@@ -96,11 +96,11 @@ type ClientPolicyProfilePolicyParameters struct {
 
 	// References to ClientPolicyProfile in realm to populate profiles.
 	// +kubebuilder:validation:Optional
-	ProfilesRefs []v1.Reference `json:"profilesRefs,omitempty" tf:"-"`
+	ProfilesRefs []v2.Reference `json:"profilesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of ClientPolicyProfile in realm to populate profiles.
 	// +kubebuilder:validation:Optional
-	ProfilesSelector *v1.Selector `json:"profilesSelector,omitempty" tf:"-"`
+	ProfilesSelector *v2.Selector `json:"profilesSelector,omitempty" tf:"-"`
 
 	// The realm id.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
@@ -109,11 +109,11 @@ type ClientPolicyProfilePolicyParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type ConditionInitParameters struct {
@@ -150,8 +150,8 @@ type ConditionParameters struct {
 
 // ClientPolicyProfilePolicySpec defines the desired state of ClientPolicyProfilePolicy
 type ClientPolicyProfilePolicySpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     ClientPolicyProfilePolicyParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   ClientPolicyProfilePolicyParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -167,8 +167,8 @@ type ClientPolicyProfilePolicySpec struct {
 
 // ClientPolicyProfilePolicyStatus defines the observed state of ClientPolicyProfilePolicy.
 type ClientPolicyProfilePolicyStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ClientPolicyProfilePolicyObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ClientPolicyProfilePolicyObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

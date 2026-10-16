@@ -20,10 +20,9 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/crossplane/crossplane-runtime/v2/apis/common"
-	xpv1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
 	"github.com/crossplane/crossplane-runtime/v2/pkg/errors"
 	"github.com/crossplane/crossplane-runtime/v2/pkg/resource"
+	xpv2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 
 	"github.com/crossplane/upjet/v2/pkg/terraform"
 	keycloakProvider "github.com/keycloak/terraform-provider-keycloak/provider"
@@ -31,6 +30,7 @@ import (
 	clusterv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/v1beta1"
 	namespacedv1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/namespaced/v1beta1"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients/stalerefs"
+	"github.com/crossplane-contrib/provider-keycloak/internal/keycloakcompat"
 	"github.com/crossplane-contrib/provider-keycloak/internal/keycloaksession"
 	"github.com/crossplane-contrib/provider-keycloak/internal/tfconcurrency"
 )
@@ -270,7 +270,7 @@ func normalizeURLField(config map[string]any, key, errMessage string) error {
 }
 
 // ExtractCredentials Function that extracts credentials from the secret provided to providerconfig
-func ExtractCredentials(ctx context.Context, source xpv1.CredentialsSource, client client.Client, selector xpv1.CommonCredentialSelectors) (map[string]any, error) {
+func ExtractCredentials(ctx context.Context, source xpv2.CredentialsSource, client client.Client, selector xpv2.CommonCredentialSelectors) (map[string]any, error) {
 	creds := make(map[string]any)
 
 	// first try to see if the secret contains a proper key-value map
@@ -348,6 +348,7 @@ func newConfiguredKeycloakClient(ctx context.Context, config map[string]any) (*k
 	if !ok {
 		return nil, fmt.Errorf("configured provider meta is not a *keycloak.KeycloakClient")
 	}
+	keycloakcompat.InstallInternalAdminClientSecretShim(client)
 	return client, nil
 }
 
@@ -442,10 +443,10 @@ func resolveProviderConfigModern(ctx context.Context, crClient client.Client, mg
 		pcSpec = namespacedv1beta1.ClusterProviderConfigSpec{
 			Credentials: namespacedv1beta1.ClusterProviderCredentials{
 				Source: "Secret",
-				CommonCredentialSelectors: common.CommonCredentialSelectors{
-					SecretRef: &common.SecretKeySelector{
+				CommonCredentialSelectors: xpv2.CommonCredentialSelectors{
+					SecretRef: &xpv2.SecretKeySelector{
 						Key: pc.Spec.CredentialsSecretRef.Key,
-						SecretReference: common.SecretReference{
+						SecretReference: xpv2.SecretReference{
 							Name:      pc.Spec.CredentialsSecretRef.Name,
 							Namespace: mg.GetNamespace(),
 						},

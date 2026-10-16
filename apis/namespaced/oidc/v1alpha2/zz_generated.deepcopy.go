@@ -9,7 +9,7 @@ Copyright 2022 Upbound Inc.
 package v1alpha2
 
 import (
-	"github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	"github.com/crossplane/crossplane/apis/v2/core/v2"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -73,15 +73,15 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(bool)
 		**out = **in
 	}
-	in.ClientIDSecretRef.DeepCopyInto(&out.ClientIDSecretRef)
+	out.ClientIDSecretRef = in.ClientIDSecretRef
 	if in.ClientSecretSecretRef != nil {
 		in, out := &in.ClientSecretSecretRef, &out.ClientSecretSecretRef
-		*out = new(v1.LocalSecretKeySelector)
+		*out = new(v2.LocalSecretKeySelector)
 		**out = **in
 	}
 	if in.ClientSecretWoSecretRef != nil {
 		in, out := &in.ClientSecretWoSecretRef, &out.ClientSecretWoSecretRef
-		*out = new(v1.LocalSecretKeySelector)
+		*out = new(v2.LocalSecretKeySelector)
 		**out = **in
 	}
 	if in.ClientSecretWoVersion != nil {
@@ -137,12 +137,12 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 	}
 	if in.FirstBrokerLoginFlowAliasRef != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasRef, &out.FirstBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FirstBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasSelector, &out.FirstBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GuiOrder != nil {
@@ -197,12 +197,12 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 	}
 	if in.OrganizationIDRef != nil {
 		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OrganizationIDSelector != nil {
 		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
@@ -222,12 +222,12 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.StoreToken != nil {
@@ -548,15 +548,15 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 		*out = new(bool)
 		**out = **in
 	}
-	in.ClientIDSecretRef.DeepCopyInto(&out.ClientIDSecretRef)
+	out.ClientIDSecretRef = in.ClientIDSecretRef
 	if in.ClientSecretSecretRef != nil {
 		in, out := &in.ClientSecretSecretRef, &out.ClientSecretSecretRef
-		*out = new(v1.LocalSecretKeySelector)
+		*out = new(v2.LocalSecretKeySelector)
 		**out = **in
 	}
 	if in.ClientSecretWoSecretRef != nil {
 		in, out := &in.ClientSecretWoSecretRef, &out.ClientSecretWoSecretRef
-		*out = new(v1.LocalSecretKeySelector)
+		*out = new(v2.LocalSecretKeySelector)
 		**out = **in
 	}
 	if in.ClientSecretWoVersion != nil {
@@ -612,12 +612,12 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 	}
 	if in.FirstBrokerLoginFlowAliasRef != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasRef, &out.FirstBrokerLoginFlowAliasRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.FirstBrokerLoginFlowAliasSelector != nil {
 		in, out := &in.FirstBrokerLoginFlowAliasSelector, &out.FirstBrokerLoginFlowAliasSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GuiOrder != nil {
@@ -672,12 +672,12 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 	}
 	if in.OrganizationIDRef != nil {
 		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.OrganizationIDSelector != nil {
 		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.PostBrokerLoginFlowAlias != nil {
@@ -697,12 +697,12 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
-		*out = new(v1.NamespacedReference)
+		*out = new(v2.NamespacedReference)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RealmSelector != nil {
 		in, out := &in.RealmSelector, &out.RealmSelector
-		*out = new(v1.NamespacedSelector)
+		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.StoreToken != nil {
@@ -773,7 +773,7 @@ func (in *IdentityProviderSpec) DeepCopy() *IdentityProviderSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *IdentityProviderStatus) DeepCopyInto(out *IdentityProviderStatus) {
 	*out = *in
-	in.ResourceStatus.DeepCopyInto(&out.ResourceStatus)
+	in.ManagedResourceStatus.DeepCopyInto(&out.ManagedResourceStatus)
 	in.AtProvider.DeepCopyInto(&out.AtProvider)
 }
 

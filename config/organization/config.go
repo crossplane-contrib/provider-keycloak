@@ -19,6 +19,18 @@ func Configure(p *config.Provider) {
 			TerraformName: "keycloak_realm",
 		}
 	})
+	p.AddResourceConfigurator("keycloak_organization_memberships", func(r *config.Resource) {
+		// We need to override the default group that upjet generated for
+		r.ShortGroup = "organization"
+		r.References["organization_id"] = config.Reference{
+			TerraformName: "keycloak_organization",
+		}
+		// members holds usernames, so resolve them from the referenced User's username.
+		r.References["members"] = config.Reference{
+			TerraformName: "keycloak_user",
+			Extractor:     `github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("username", false)`,
+		}
+	})
 }
 
 var organizationIdentifyingPropertiesLookup = lookup.IdentifyingPropertiesLookupConfig{

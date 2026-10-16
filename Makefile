@@ -14,7 +14,7 @@ TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAF
 export TERRAFORM_PROVIDER_SOURCE ?= keycloak/keycloak
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/keycloak/terraform-provider-keycloak
 # renovate: datasource=github-releases depName=keycloak/terraform-provider-keycloak
-export TERRAFORM_PROVIDER_VERSION ?= 5.9.0
+export TERRAFORM_PROVIDER_VERSION ?= 5.10.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-keycloak
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= ${TERRAFORM_PROVIDER_REPO}/releases/download/v$(TERRAFORM_PROVIDER_VERSION)
 export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-keycloak_v$(TERRAFORM_PROVIDER_VERSION)
@@ -49,7 +49,7 @@ NPROCS ?= 1
 # to half the number of CPU cores.
 GO_TEST_PARALLEL := $(shell echo $$(( $(NPROCS) / 2 )))
 
-GO_REQUIRED_VERSION ?= 1.26.6
+GO_REQUIRED_VERSION ?= 1.26.8
 GO_STATIC_PACKAGES = $(GO_PROJECT)/cmd/provider $(GO_PROJECT)/cmd/generator
 GO_LDFLAGS += -X $(GO_PROJECT)/internal/version.Version=$(VERSION)
 GO_SUBDIRS += cmd internal apis generate

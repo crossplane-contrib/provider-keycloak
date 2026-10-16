@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type GroupMapperInitParameters struct {
@@ -44,11 +43,11 @@ type GroupMapperInitParameters struct {
 
 	// Reference to a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDRef *v1.NamespacedReference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
+	LdapUserFederationIDRef *v2.NamespacedReference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
 
 	// Selector for a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDSelector *v1.NamespacedSelector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
+	LdapUserFederationIDSelector *v2.NamespacedSelector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
 
 	// Array of strings representing attributes on the LDAP group which will be mapped to attributes on the Keycloak group.
 	MappedGroupAttributes []*string `json:"mappedGroupAttributes,omitempty" tf:"mapped_group_attributes,omitempty"`
@@ -82,11 +81,11 @@ type GroupMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Can be one of LOAD_GROUPS_BY_MEMBER_ATTRIBUTE, GET_GROUPS_FROM_USER_MEMBEROF_ATTRIBUTE, or LOAD_GROUPS_BY_MEMBER_ATTRIBUTE_RECURSIVELY. Defaults to LOAD_GROUPS_BY_MEMBER_ATTRIBUTE.
 	UserRolesRetrieveStrategy *string `json:"userRolesRetrieveStrategy,omitempty" tf:"user_roles_retrieve_strategy,omitempty"`
@@ -192,11 +191,11 @@ type GroupMapperParameters struct {
 
 	// Reference to a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDRef *v1.NamespacedReference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
+	LdapUserFederationIDRef *v2.NamespacedReference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
 
 	// Selector for a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDSelector *v1.NamespacedSelector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
+	LdapUserFederationIDSelector *v2.NamespacedSelector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
 
 	// Array of strings representing attributes on the LDAP group which will be mapped to attributes on the Keycloak group.
 	// +kubebuilder:validation:Optional
@@ -239,11 +238,11 @@ type GroupMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Can be one of LOAD_GROUPS_BY_MEMBER_ATTRIBUTE, GET_GROUPS_FROM_USER_MEMBEROF_ATTRIBUTE, or LOAD_GROUPS_BY_MEMBER_ATTRIBUTE_RECURSIVELY. Defaults to LOAD_GROUPS_BY_MEMBER_ATTRIBUTE.
 	// +kubebuilder:validation:Optional
@@ -269,8 +268,8 @@ type GroupMapperSpec struct {
 
 // GroupMapperStatus defines the observed state of GroupMapper.
 type GroupMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        GroupMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               GroupMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type SamlUserAttributeProtocolMapperInitParameters struct {
@@ -27,11 +26,11 @@ type SamlUserAttributeProtocolMapperInitParameters struct {
 
 	// Reference to a Client in samlclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in samlclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.ClientScope
@@ -39,11 +38,11 @@ type SamlUserAttributeProtocolMapperInitParameters struct {
 
 	// Reference to a ClientScope in samlclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in samlclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// An optional human-friendly name for this attribute.
 	FriendlyName *string `json:"friendlyName,omitempty" tf:"friendly_name,omitempty"`
@@ -57,11 +56,11 @@ type SamlUserAttributeProtocolMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The name of the SAML attribute.
 	SAMLAttributeName *string `json:"samlAttributeName,omitempty" tf:"saml_attribute_name,omitempty"`
@@ -121,11 +120,11 @@ type SamlUserAttributeProtocolMapperParameters struct {
 
 	// Reference to a Client in samlclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in samlclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.ClientScope
@@ -134,11 +133,11 @@ type SamlUserAttributeProtocolMapperParameters struct {
 
 	// Reference to a ClientScope in samlclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in samlclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// An optional human-friendly name for this attribute.
 	// +kubebuilder:validation:Optional
@@ -155,11 +154,11 @@ type SamlUserAttributeProtocolMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The name of the SAML attribute.
 	// +kubebuilder:validation:Optional
@@ -193,8 +192,8 @@ type SamlUserAttributeProtocolMapperSpec struct {
 
 // SamlUserAttributeProtocolMapperStatus defines the observed state of SamlUserAttributeProtocolMapper.
 type SamlUserAttributeProtocolMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        SamlUserAttributeProtocolMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               SamlUserAttributeProtocolMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -1,0 +1,1 @@
+{{ partial "markdown-content.html" . }}

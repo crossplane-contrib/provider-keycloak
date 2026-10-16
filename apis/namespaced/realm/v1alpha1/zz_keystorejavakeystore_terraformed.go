@@ -21,7 +21,7 @@ func (mg *KeystoreJavaKeystore) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this KeystoreJavaKeystore
 func (tr *KeystoreJavaKeystore) GetConnectionDetailsMapping() map[string]string {
-	return nil
+	return map[string]string{"key_password": "keyPasswordSecretRef", "keystore_password": "keystorePasswordSecretRef"}
 }
 
 // GetObservation of this KeystoreJavaKeystore

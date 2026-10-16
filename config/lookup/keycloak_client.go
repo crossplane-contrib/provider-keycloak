@@ -10,6 +10,7 @@ import (
 	"github.com/crossplane/upjet/v2/pkg/terraform"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 
+	"github.com/crossplane-contrib/provider-keycloak/internal/keycloakcompat"
 	"github.com/crossplane-contrib/provider-keycloak/internal/keycloaksession"
 )
 
@@ -124,6 +125,7 @@ func newKeycloakClient(ctx context.Context, terraformProviderConfig map[string]a
 	if err != nil {
 		return nil, err
 	}
+	keycloakcompat.InstallInternalAdminClientSecretShim(keycloakClient)
 
 	// Store only the fields needed for logout to reduce sensitive
 	// credential exposure in process memory.

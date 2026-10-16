@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type HardcodedRoleMapperInitParameters struct {
@@ -23,11 +22,11 @@ type HardcodedRoleMapperInitParameters struct {
 
 	// Reference to a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDRef *v1.NamespacedReference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
+	LdapUserFederationIDRef *v2.NamespacedReference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
 
 	// Selector for a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDSelector *v1.NamespacedSelector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
+	LdapUserFederationIDSelector *v2.NamespacedSelector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
 
 	// Display name of this mapper when displayed in the console.
 	// Display name of the mapper when displayed in the console.
@@ -40,11 +39,11 @@ type HardcodedRoleMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The name of the role which should be assigned to the users. Client roles should use the format {{client_id}}.{{client_role_name}}.
 	// Role to grant to user.
@@ -54,11 +53,11 @@ type HardcodedRoleMapperInitParameters struct {
 
 	// Reference to a Role in role to populate role.
 	// +kubebuilder:validation:Optional
-	RoleRef *v1.NamespacedReference `json:"roleRef,omitempty" tf:"-"`
+	RoleRef *v2.NamespacedReference `json:"roleRef,omitempty" tf:"-"`
 
 	// Selector for a Role in role to populate role.
 	// +kubebuilder:validation:Optional
-	RoleSelector *v1.NamespacedSelector `json:"roleSelector,omitempty" tf:"-"`
+	RoleSelector *v2.NamespacedSelector `json:"roleSelector,omitempty" tf:"-"`
 }
 
 type HardcodedRoleMapperObservation struct {
@@ -91,11 +90,11 @@ type HardcodedRoleMapperParameters struct {
 
 	// Reference to a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDRef *v1.NamespacedReference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
+	LdapUserFederationIDRef *v2.NamespacedReference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
 
 	// Selector for a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDSelector *v1.NamespacedSelector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
+	LdapUserFederationIDSelector *v2.NamespacedSelector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
 
 	// Display name of this mapper when displayed in the console.
 	// Display name of the mapper when displayed in the console.
@@ -110,11 +109,11 @@ type HardcodedRoleMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The name of the role which should be assigned to the users. Client roles should use the format {{client_id}}.{{client_role_name}}.
 	// Role to grant to user.
@@ -125,11 +124,11 @@ type HardcodedRoleMapperParameters struct {
 
 	// Reference to a Role in role to populate role.
 	// +kubebuilder:validation:Optional
-	RoleRef *v1.NamespacedReference `json:"roleRef,omitempty" tf:"-"`
+	RoleRef *v2.NamespacedReference `json:"roleRef,omitempty" tf:"-"`
 
 	// Selector for a Role in role to populate role.
 	// +kubebuilder:validation:Optional
-	RoleSelector *v1.NamespacedSelector `json:"roleSelector,omitempty" tf:"-"`
+	RoleSelector *v2.NamespacedSelector `json:"roleSelector,omitempty" tf:"-"`
 }
 
 // HardcodedRoleMapperSpec defines the desired state of HardcodedRoleMapper
@@ -151,8 +150,8 @@ type HardcodedRoleMapperSpec struct {
 
 // HardcodedRoleMapperStatus defines the observed state of HardcodedRoleMapper.
 type HardcodedRoleMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        HardcodedRoleMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               HardcodedRoleMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

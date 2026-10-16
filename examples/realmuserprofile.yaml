@@ -20,7 +20,7 @@ spec:
           - edit:
               - admin
               - user
-          - view:
+            view:
               - admin
               - user
         validator:
@@ -36,7 +36,7 @@ spec:
           - edit:
               - admin
               - user
-          - view:
+            view:
               - admin
               - user
         validator:
@@ -53,4 +53,3 @@ spec:
     realmId: my-realm  # Replace with your realm ID
   providerConfigRef:
     name: "keycloak-provider-config"
-

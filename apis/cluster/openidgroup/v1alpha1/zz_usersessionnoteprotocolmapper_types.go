@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type UserSessionNoteProtocolMapperInitParameters struct {
@@ -46,11 +46,11 @@ type UserSessionNoteProtocolMapperInitParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.Reference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client scope. Cannot be used at the same time as client_id.
@@ -59,11 +59,11 @@ type UserSessionNoteProtocolMapperInitParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// The display name of this protocol mapper in the GUI.
 	// A human-friendly name that will appear in the Keycloak console.
@@ -76,11 +76,11 @@ type UserSessionNoteProtocolMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// String value being the name of stored user session note within the UserSessionModel.note map.
 	// String value being the name of stored user session note within the UserSessionModel.note map.
@@ -175,11 +175,11 @@ type UserSessionNoteProtocolMapperParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.Reference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client scope. Cannot be used at the same time as client_id.
@@ -189,11 +189,11 @@ type UserSessionNoteProtocolMapperParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// The display name of this protocol mapper in the GUI.
 	// A human-friendly name that will appear in the Keycloak console.
@@ -208,11 +208,11 @@ type UserSessionNoteProtocolMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// String value being the name of stored user session note within the UserSessionModel.note map.
 	// String value being the name of stored user session note within the UserSessionModel.note map.
@@ -222,8 +222,8 @@ type UserSessionNoteProtocolMapperParameters struct {
 
 // UserSessionNoteProtocolMapperSpec defines the desired state of UserSessionNoteProtocolMapper
 type UserSessionNoteProtocolMapperSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     UserSessionNoteProtocolMapperParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   UserSessionNoteProtocolMapperParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -239,8 +239,8 @@ type UserSessionNoteProtocolMapperSpec struct {
 
 // UserSessionNoteProtocolMapperStatus defines the observed state of UserSessionNoteProtocolMapper.
 type UserSessionNoteProtocolMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        UserSessionNoteProtocolMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               UserSessionNoteProtocolMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

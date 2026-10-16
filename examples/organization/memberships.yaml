@@ -1,0 +1,37 @@
+# Organization Memberships assign existing users (by username) to a Keycloak
+# organization. Requires Keycloak >= 26.6 and a realm with
+# organizationsEnabled: true.
+
+# Basic example: organizationId, members and realmId are provided directly.
+---
+apiVersion: organization.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: basic-org-memberships
+spec:
+  forProvider:
+    realmId: "orgs"
+    organizationId: "00000000-0000-0000-0000-000000000000"  # UUID of the organization
+    members:
+      - "alice"
+      - "bob"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+
+# Reference example: realm, organization and members are resolved from
+# Realm, Organization and User managed resources.
+---
+apiVersion: organization.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  name: org-memberships-with-refs
+spec:
+  forProvider:
+    realmIdRef:
+      name: "orgs"
+    organizationIdRef:
+      name: "example"
+    membersRefs:
+      - name: "example-user"
+  providerConfigRef:
+    name: "keycloak-provider-config"

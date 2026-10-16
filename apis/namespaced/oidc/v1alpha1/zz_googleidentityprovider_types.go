@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type GoogleIdentityProviderInitParameters struct {
@@ -33,11 +32,11 @@ type GoogleIdentityProviderInitParameters struct {
 
 	// The client or client identifier registered within the identity provider.
 	// Client ID.
-	ClientIDSecretRef v1.LocalSecretKeySelector `json:"clientIdSecretRef" tf:"-"`
+	ClientIDSecretRef v2.LocalSecretKeySelector `json:"clientIdSecretRef" tf:"-"`
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
 	// Client Secret.
-	ClientSecretSecretRef v1.LocalSecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef v2.LocalSecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
 
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid profile email.
 	// The scopes to be sent when asking for authorization. See the documentation for possible values, separator and default value'. Default: 'openid profile email'
@@ -67,11 +66,11 @@ type GoogleIdentityProviderInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasRef *v1.NamespacedReference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasRef *v2.NamespacedReference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasSelector *v1.NamespacedSelector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasSelector *v2.NamespacedSelector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// A number defining the order of this identity provider in the GUI.
 	// GUI Order
@@ -103,11 +102,11 @@ type GoogleIdentityProviderInitParameters struct {
 
 	// Reference to a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDRef *v1.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
+	OrganizationIDRef *v2.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
 
 	// Selector for a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDSelector *v1.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
+	OrganizationIDSelector *v2.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -124,11 +123,11 @@ type GoogleIdentityProviderInitParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
 	// Sets the "access_type" query parameter to "offline" when redirecting to google authorization endpoint,to get a refresh token back. This is useful for using Token Exchange to retrieve a Google token to access Google APIs when the user is offline.
 	// Set 'access_type' query parameter to 'offline' when redirecting to google authorization endpoint, to get a refresh token back. Useful if planning to use Token Exchange to retrieve Google token to access Google APIs when the user is not at the browser.
@@ -282,12 +281,12 @@ type GoogleIdentityProviderParameters struct {
 	// The client or client identifier registered within the identity provider.
 	// Client ID.
 	// +kubebuilder:validation:Optional
-	ClientIDSecretRef v1.LocalSecretKeySelector `json:"clientIdSecretRef" tf:"-"`
+	ClientIDSecretRef v2.LocalSecretKeySelector `json:"clientIdSecretRef" tf:"-"`
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
 	// Client Secret.
 	// +kubebuilder:validation:Optional
-	ClientSecretSecretRef v1.LocalSecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef v2.LocalSecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
 
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid profile email.
 	// The scopes to be sent when asking for authorization. See the documentation for possible values, separator and default value'. Default: 'openid profile email'
@@ -323,11 +322,11 @@ type GoogleIdentityProviderParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasRef *v1.NamespacedReference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasRef *v2.NamespacedReference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasSelector *v1.NamespacedSelector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasSelector *v2.NamespacedSelector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// A number defining the order of this identity provider in the GUI.
 	// GUI Order
@@ -367,11 +366,11 @@ type GoogleIdentityProviderParameters struct {
 
 	// Reference to a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDRef *v1.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
+	OrganizationIDRef *v2.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
 
 	// Selector for a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDSelector *v1.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
+	OrganizationIDSelector *v2.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -391,11 +390,11 @@ type GoogleIdentityProviderParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
 	// Sets the "access_type" query parameter to "offline" when redirecting to google authorization endpoint,to get a refresh token back. This is useful for using Token Exchange to retrieve a Google token to access Google APIs when the user is offline.
 	// Set 'access_type' query parameter to 'offline' when redirecting to google authorization endpoint, to get a refresh token back. Useful if planning to use Token Exchange to retrieve Google token to access Google APIs when the user is not at the browser.
@@ -442,8 +441,8 @@ type GoogleIdentityProviderSpec struct {
 
 // GoogleIdentityProviderStatus defines the observed state of GoogleIdentityProvider.
 type GoogleIdentityProviderStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        GoogleIdentityProviderObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               GoogleIdentityProviderObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

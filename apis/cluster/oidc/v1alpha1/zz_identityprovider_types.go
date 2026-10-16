@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v1 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type IdentityProviderInitParameters struct {
@@ -546,8 +546,8 @@ type IdentityProviderParameters struct {
 
 // IdentityProviderSpec defines the desired state of IdentityProvider
 type IdentityProviderSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     IdentityProviderParameters `json:"forProvider"`
+	v1.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   IdentityProviderParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -563,8 +563,8 @@ type IdentityProviderSpec struct {
 
 // IdentityProviderStatus defines the observed state of IdentityProvider.
 type IdentityProviderStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        IdentityProviderObservation `json:"atProvider,omitempty"`
+	v1.ManagedResourceStatus `json:",inline"`
+	AtProvider               IdentityProviderObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

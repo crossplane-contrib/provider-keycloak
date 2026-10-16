@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type CacheInitParameters struct {
@@ -152,11 +151,19 @@ type UserFederationInitParameters struct {
 	// The number of users to sync within a single transaction.
 	BatchSizeForSync *float64 `json:"batchSizeForSync,omitempty" tf:"batch_size_for_sync,omitempty"`
 
-	// Password of LDAP admin. This attribute must be set if bind_dn is set.
+	// Password of LDAP admin. This attribute must be set if bind_dn is set. Conflicts with bind_credential_wo and bind_credential_wo_version.
 	// Password of LDAP admin.
-	BindCredentialSecretRef *v1.LocalSecretKeySelector `json:"bindCredentialSecretRef,omitempty" tf:"-"`
+	BindCredentialSecretRef *v2.LocalSecretKeySelector `json:"bindCredentialSecretRef,omitempty" tf:"-"`
 
-	// DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.
+	// Password of LDAP admin as a write-only argument for ephemeral values. Must be set together with bind_credential_wo_version and conflicts with bind_credential.
+	// Password of LDAP admin as a write-only argument.
+	BindCredentialWoSecretRef *v2.LocalSecretKeySelector `json:"bindCredentialWoSecretRef,omitempty" tf:"-"`
+
+	// Version for bind_credential_wo. Change this value to rotate the write-only credential. Must be set together with bind_credential_wo and conflicts with bind_credential.
+	// Version of the bind credential write-only argument.
+	BindCredentialWoVersion *string `json:"bindCredentialWoVersion,omitempty" tf:"bind_credential_wo_version,omitempty"`
+
+	// DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential or bind_credential_wo is set.
 	// DN of LDAP admin, which will be used by Keycloak to access LDAP server.
 	BindDn *string `json:"bindDn,omitempty" tf:"bind_dn,omitempty"`
 
@@ -243,11 +250,11 @@ type UserFederationInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
 	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
@@ -307,7 +314,11 @@ type UserFederationObservation struct {
 	// The number of users to sync within a single transaction.
 	BatchSizeForSync *float64 `json:"batchSizeForSync,omitempty" tf:"batch_size_for_sync,omitempty"`
 
-	// DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.
+	// Version for bind_credential_wo. Change this value to rotate the write-only credential. Must be set together with bind_credential_wo and conflicts with bind_credential.
+	// Version of the bind credential write-only argument.
+	BindCredentialWoVersion *string `json:"bindCredentialWoVersion,omitempty" tf:"bind_credential_wo_version,omitempty"`
+
+	// DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential or bind_credential_wo is set.
 	// DN of LDAP admin, which will be used by Keycloak to access LDAP server.
 	BindDn *string `json:"bindDn,omitempty" tf:"bind_dn,omitempty"`
 
@@ -452,12 +463,22 @@ type UserFederationParameters struct {
 	// +kubebuilder:validation:Optional
 	BatchSizeForSync *float64 `json:"batchSizeForSync,omitempty" tf:"batch_size_for_sync,omitempty"`
 
-	// Password of LDAP admin. This attribute must be set if bind_dn is set.
+	// Password of LDAP admin. This attribute must be set if bind_dn is set. Conflicts with bind_credential_wo and bind_credential_wo_version.
 	// Password of LDAP admin.
 	// +kubebuilder:validation:Optional
-	BindCredentialSecretRef *v1.LocalSecretKeySelector `json:"bindCredentialSecretRef,omitempty" tf:"-"`
+	BindCredentialSecretRef *v2.LocalSecretKeySelector `json:"bindCredentialSecretRef,omitempty" tf:"-"`
 
-	// DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential is set.
+	// Password of LDAP admin as a write-only argument for ephemeral values. Must be set together with bind_credential_wo_version and conflicts with bind_credential.
+	// Password of LDAP admin as a write-only argument.
+	// +kubebuilder:validation:Optional
+	BindCredentialWoSecretRef *v2.LocalSecretKeySelector `json:"bindCredentialWoSecretRef,omitempty" tf:"-"`
+
+	// Version for bind_credential_wo. Change this value to rotate the write-only credential. Must be set together with bind_credential_wo and conflicts with bind_credential.
+	// Version of the bind credential write-only argument.
+	// +kubebuilder:validation:Optional
+	BindCredentialWoVersion *string `json:"bindCredentialWoVersion,omitempty" tf:"bind_credential_wo_version,omitempty"`
+
+	// DN of LDAP admin, which will be used by Keycloak to access LDAP server. This attribute must be set if bind_credential or bind_credential_wo is set.
 	// DN of LDAP admin, which will be used by Keycloak to access LDAP server.
 	// +kubebuilder:validation:Optional
 	BindDn *string `json:"bindDn,omitempty" tf:"bind_dn,omitempty"`
@@ -565,11 +586,11 @@ type UserFederationParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
 	// Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
@@ -655,8 +676,8 @@ type UserFederationSpec struct {
 
 // UserFederationStatus defines the observed state of UserFederation.
 type UserFederationStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        UserFederationObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               UserFederationObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -34,6 +34,9 @@ func (tr *KeystoreJavaKeystore) Hub() {}
 func (tr *KeystoreRsa) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *KeystoreRsaEncGenerated) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *KeystoreRsaGenerated) Hub() {}
 
 // Hub marks this type as a conversion hub.

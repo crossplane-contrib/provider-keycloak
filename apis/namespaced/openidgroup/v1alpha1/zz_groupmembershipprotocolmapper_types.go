@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type GroupMembershipProtocolMapperInitParameters struct {
@@ -39,11 +38,11 @@ type GroupMembershipProtocolMapperInitParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client scope. Cannot be used at the same time as client_id.
@@ -52,11 +51,11 @@ type GroupMembershipProtocolMapperInitParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// Indicates whether the full path of the group including its parents will be used. Defaults to true.
 	FullPath *bool `json:"fullPath,omitempty" tf:"full_path,omitempty"`
@@ -72,11 +71,11 @@ type GroupMembershipProtocolMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type GroupMembershipProtocolMapperObservation struct {
@@ -149,11 +148,11 @@ type GroupMembershipProtocolMapperParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client scope. Cannot be used at the same time as client_id.
@@ -163,11 +162,11 @@ type GroupMembershipProtocolMapperParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.NamespacedReference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.NamespacedSelector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// Indicates whether the full path of the group including its parents will be used. Defaults to true.
 	// +kubebuilder:validation:Optional
@@ -186,11 +185,11 @@ type GroupMembershipProtocolMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // GroupMembershipProtocolMapperSpec defines the desired state of GroupMembershipProtocolMapper
@@ -212,8 +211,8 @@ type GroupMembershipProtocolMapperSpec struct {
 
 // GroupMembershipProtocolMapperStatus defines the observed state of GroupMembershipProtocolMapper.
 type GroupMembershipProtocolMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        GroupMembershipProtocolMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               GroupMembershipProtocolMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

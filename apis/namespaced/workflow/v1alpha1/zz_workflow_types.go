@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ScheduleInitParameters struct {
@@ -162,11 +161,11 @@ type WorkflowInitParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
 	// Whether to restart an already in-progress execution (resetting it to the first step) when the workflow is re-triggered for the same resource. Set to "true" to enable.
 	// Event that restarts an in-progress workflow execution.
@@ -261,11 +260,11 @@ type WorkflowParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.NamespacedSelector `json:"realmSelector,omitempty" tf:"-"`
 
 	// Whether to restart an already in-progress execution (resetting it to the first step) when the workflow is re-triggered for the same resource. Set to "true" to enable.
 	// Event that restarts an in-progress workflow execution.
@@ -302,8 +301,8 @@ type WorkflowSpec struct {
 
 // WorkflowStatus defines the observed state of Workflow.
 type WorkflowStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        WorkflowObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               WorkflowObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
