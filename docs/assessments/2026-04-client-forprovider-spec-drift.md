@@ -466,3 +466,11 @@ resolver's patch as what it is, a JSON merge patch (field manager unchanged,
 operation `Update`), with the object's `resourceVersion` as precondition so a
 patch computed from a stale object fails with a conflict and is retried.
 Merge patches never prune fields they do not mention.
+
+Regression coverage: the e2e demos
+`dev/demos/{basic,namespaced}/076-oidc-client-flow-binding-overrides.yaml`
+create a Client without overrides, and their post-assert hook
+(`cluster/test/hack/checkClientFlowBindingOverrides.sh`) then adds a
+`browserIdRef` override via server-side apply. The hook asserts that the
+override reaches Keycloak (`status.atProvider`) and that neither it nor
+`realmId` is pruned from `spec.forProvider`.
