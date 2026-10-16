@@ -13,6 +13,7 @@
 ./dev/demos/namespaced/090-ldap-user-federation.yaml
 ./dev/demos/namespaced/081-defaults-roles.yaml
 ./dev/demos/namespaced/080-defaults-groups.yaml
+./dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml
 ./dev/demos/namespaced/074-authentication-execution-binding.yaml
 ./dev/demos/namespaced/073-authentication-execution-config.yaml
 ./dev/demos/namespaced/072-authentication-execution.yaml
@@ -82,6 +83,7 @@
 ./dev/demos/basic/090-ldap-user-federation.yaml
 ./dev/demos/basic/081-defaults-roles.yaml
 ./dev/demos/basic/080-defaults-groups.yaml
+./dev/demos/basic/075-realm-flow-bindings-ownership.yaml
 ./dev/demos/basic/074-authentication-execution-binding.yaml
 ./dev/demos/basic/073-authentication-execution-config.yaml
 ./dev/demos/basic/072-authentication-execution.yaml

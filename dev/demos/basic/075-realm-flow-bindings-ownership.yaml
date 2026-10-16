@@ -1,0 +1,46 @@
+# Regression demo for crossplane-contrib/provider-keycloak#751: a Realm that
+# does not declare its flow bindings must not take ownership of them, so a
+# Bindings resource for the same realm keeps its browser flow across Realm
+# updates. The post-assert hook on the Realm asserts that no flow binding is
+# late-initialized and that a Realm update keeps the Bindings' browser flow.
+#
+# Resources are listed in deletion order (Bindings, Flow, Realm).
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Bindings
+metadata:
+  name: flow-bindings-751
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    browserFlowRef:
+      name: flow-bindings-751-browser
+    realmIdRef:
+      name: flow-bindings-751
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: authenticationflow.keycloak.crossplane.io/v1alpha1
+kind: Flow
+metadata:
+  name: flow-bindings-751-browser
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    alias: flow-bindings-751-browser
+    realmIdRef:
+      name: flow-bindings-751
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: flow-bindings-751
+  annotations:
+    uptest.upbound.io/post-assert-hook: 075-realm-flow-bindings-ownership.sh
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realm: flow-bindings-751
+  providerConfigRef:
+    name: "keycloak-provider-config"

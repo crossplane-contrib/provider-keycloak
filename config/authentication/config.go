@@ -122,6 +122,7 @@ func Configure(p *config.Provider) {
 				"reset_credentials_flow",
 				"client_authentication_flow",
 				"docker_authentication_flow",
+				"first_broker_login_flow",
 			},
 		}
 	})
