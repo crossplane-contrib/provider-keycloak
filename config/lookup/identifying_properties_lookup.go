@@ -7,6 +7,8 @@ import (
 	"github.com/crossplane/crossplane-runtime/v2/pkg/errors"
 	"github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+
+	"github.com/crossplane-contrib/provider-keycloak/internal/keycloaksession"
 )
 
 type IdentifyingPropertiesLookupConfig struct {
@@ -49,6 +51,10 @@ func GetIDFromIdentifyingProperties(ctx context.Context, externalName string, pa
 
 	unlock := lockForLookupConfig(terraformProviderConfig)
 	defer unlock()
+	// Refresh the access token before it expires instead of waiting for a
+	// 401; the upstream refresh-on-401 remains as a fallback.
+	_ = keycloaksession.RefreshTokenIfExpiring(ctx, kcClient)
+	defer keycloaksession.ObserveToken(kcClient)
 
 	processedParameters := make(map[string]any)
 
