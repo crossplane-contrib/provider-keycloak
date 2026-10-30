@@ -34,7 +34,7 @@ jobs:
         if: github.event.action != 'closed'
         uses: peaceiris/actions-hugo@2752ce1d29631191ea3f27c23495fa06139a5b78 # v3
         with:
-          hugo-version: '0.168.0'
+          hugo-version: '0.169.0'
           extended: true
 
       - name: Build documentation (PR preview)
@@ -48,7 +48,7 @@ jobs:
           hugo --minify --baseURL "$DOCS_BASE_URL"
 
       - name: Deploy PR preview
-        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1
+        uses: rossjrw/pr-preview-action@873417d2df72380da1f3978378fb58560bcde976 # v1
         with:
           source-dir: docs/public
           preview-branch: gh-pages
