@@ -124,6 +124,7 @@ spec:
 | `actionTokenGeneratedByUserLifespan` | Lifetime for user-generated action tokens. |
 | `oauth2DeviceCodeLifespan` | Lifetime for OAuth 2.0 device codes. |
 | `oauth2DevicePollingInterval` | Polling interval for device authorization clients. |
+| `browserFlow`, `registrationFlow`, `directGrantFlow`, `resetCredentialsFlow`, `clientAuthenticationFlow`, `dockerAuthenticationFlow` | Realm authentication flow bindings. Only managed when declared; not late-initialized. Declare each binding on either the `Realm` or a `Bindings` resource, never both — see [Realm vs. Bindings ownership](./authentication-flows.md#realm-vs-bindings-ownership). |
 
 ## Related Resources
 
