@@ -263,7 +263,7 @@ type ClientInitParameters struct {
 
 	Oauth2JwtAuthorizationGrantIdp *string `json:"oauth2JwtAuthorizationGrantIdp,omitempty" tf:"oauth2_jwt_authorization_grant_idp,omitempty"`
 
-	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value “.
+	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value ``.
 	PkceCodeChallengeMethod *string `json:"pkceCodeChallengeMethod,omitempty" tf:"pkce_code_challenge_method,omitempty"`
 
 	// The realm this client is attached to.
@@ -441,7 +441,7 @@ type ClientObservation struct {
 
 	Oauth2JwtAuthorizationGrantIdp *string `json:"oauth2JwtAuthorizationGrantIdp,omitempty" tf:"oauth2_jwt_authorization_grant_idp,omitempty"`
 
-	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value “.
+	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value ``.
 	PkceCodeChallengeMethod *string `json:"pkceCodeChallengeMethod,omitempty" tf:"pkce_code_challenge_method,omitempty"`
 
 	// The realm this client is attached to.
@@ -663,7 +663,7 @@ type ClientParameters struct {
 	// +kubebuilder:validation:Optional
 	Oauth2JwtAuthorizationGrantIdp *string `json:"oauth2JwtAuthorizationGrantIdp,omitempty" tf:"oauth2_jwt_authorization_grant_idp,omitempty"`
 
-	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value “.
+	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value ``.
 	// +kubebuilder:validation:Optional
 	PkceCodeChallengeMethod *string `json:"pkceCodeChallengeMethod,omitempty" tf:"pkce_code_challenge_method,omitempty"`
 
