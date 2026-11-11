@@ -36,6 +36,16 @@
       "automerge": true
     },
     {
+      "groupName": "kubernetes dependencies",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchPackageNames": [
+        "/^k8s\\.io\\//",
+        "/^sigs\\.k8s\\.io\\//"
+      ]
+    },
+    {
       "groupName": "makefile dependencies",
       "matchManagers": [
         "custom.regex"
