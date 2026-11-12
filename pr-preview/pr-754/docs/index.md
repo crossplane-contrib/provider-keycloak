@@ -1,8 +1,19 @@
 # Documentation
 
-{{< cards >}}
-  {{< card link="using/" title="Using" icon="book-open" subtitle="Install, configure, and operate provider-keycloak" >}}
-  {{< card link="developing/" title="Developing" icon="terminal" subtitle="Contribute to the provider or documentation" >}}
-  {{< card link="ai-usage/" title="AI Usage" icon="sparkles" subtitle="LLM files, agents.md, and AI-oriented entry points" >}}
-{{< /cards >}}
+[llms.txt](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-754/llms.txt)
+
+
+
+  
+  - [Using](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-754/docs/using/index.md): Install, configure, and operate provider-keycloak
+
+  
+  - [Developing](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-754/docs/developing/index.md): Contribute to the provider or documentation
+
+  
+  - [AI Usage](https://crossplane-contrib.github.io/provider-keycloak/pr-preview/pr-754/docs/ai-usage/index.md): LLM files, agents.md, and AI-oriented entry points
+
+
+
+
 
