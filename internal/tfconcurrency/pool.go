@@ -29,6 +29,8 @@ import (
 	"sync"
 
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+
+	"github.com/crossplane-contrib/provider-keycloak/internal/keycloaksession"
 )
 
 // ClientFactory creates a new, independent *keycloak.KeycloakClient for a
@@ -84,6 +86,7 @@ func (p *Pool) Seed(c *keycloak.KeycloakClient) {
 	if p == nil || c == nil {
 		return
 	}
+	keycloaksession.ObserveToken(c)
 	p.mu.Lock()
 	p.idle = append(p.idle, c)
 	p.all = append(p.all, c)
@@ -131,6 +134,7 @@ func (p *Pool) create(ctx context.Context) (*keycloak.KeycloakClient, error) {
 	if err != nil {
 		return nil, err
 	}
+	keycloaksession.ObserveToken(c)
 	p.mu.Lock()
 	p.all = append(p.all, c)
 	p.mu.Unlock()

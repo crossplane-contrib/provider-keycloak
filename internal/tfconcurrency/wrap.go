@@ -11,6 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/keycloak/terraform-provider-keycloak/keycloak"
+
+	"github.com/crossplane-contrib/provider-keycloak/internal/keycloaksession"
 )
 
 // registry maps a provider's primary (cached) *keycloak.KeycloakClient — the
@@ -59,13 +61,22 @@ func poolFor(meta any) *Pool {
 // is registered it returns the original meta guarded by a per-client mutex so
 // the callback is still serialized and therefore race-free. The returned
 // release function must always be called (defer) exactly once.
+//
+// Before the client is handed out, its access token is refreshed if it is about
+// to expire, so routine token expiry does not cause a 401 (see
+// keycloaksession.RefreshTokenIfExpiring). The refresh is best-effort: on
+// failure the upstream client's refresh-on-401 remains as a fallback.
 func borrow(ctx context.Context, meta any) (client any, release func(), err error) {
 	if pool := poolFor(meta); pool != nil {
 		c, berr := pool.Borrow(ctx)
 		if berr != nil {
 			return nil, func() {}, berr
 		}
-		return c, func() { pool.Return(c) }, nil
+		_ = keycloaksession.RefreshTokenIfExpiring(ctx, c)
+		return c, func() {
+			keycloaksession.ObserveToken(c)
+			pool.Return(c)
+		}, nil
 	}
 
 	kc, ok := meta.(*keycloak.KeycloakClient)
@@ -75,7 +86,11 @@ func borrow(ctx context.Context, meta any) (client any, release func(), err erro
 	v, _ := fallbackMu.LoadOrStore(kc, &sync.Mutex{})
 	m := v.(*sync.Mutex)
 	m.Lock()
-	return meta, m.Unlock, nil
+	_ = keycloaksession.RefreshTokenIfExpiring(ctx, kc)
+	return meta, func() {
+		keycloaksession.ObserveToken(kc)
+		m.Unlock()
+	}, nil
 }
 
 // WrapProvider wraps every resource and data source in p so that their
