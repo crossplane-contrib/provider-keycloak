@@ -43,6 +43,7 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
 	resolverapis "github.com/crossplane-contrib/provider-keycloak/internal/apis"
 	"github.com/crossplane-contrib/provider-keycloak/internal/clients"
+	"github.com/crossplane-contrib/provider-keycloak/internal/clients/refpatch"
 	controllerCluster "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster"
 	controllerNamespaced "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced"
 	"github.com/crossplane-contrib/provider-keycloak/internal/features"
@@ -149,6 +150,10 @@ func main() {
 	// default), which cannot serve the initial list/watch storm of the
 	// informers for all managed resource kinds within the cache sync timeout.
 	mgr, err := ctrl.NewManager(ratelimiter.LimitRESTConfig(cfg, *maxReconcileRate), ctrl.Options{
+		// Persist resolved references with JSON merge patches instead of
+		// server-side apply, which prunes spec fields resolved in earlier
+		// reconciles (see internal/clients/refpatch).
+		NewClient:        refpatch.NewClientFunc(nil),
 		LeaderElection:   *leaderElection,
 		LeaderElectionID: "crossplane-leader-election-provider-keycloak",
 		Cache: cache.Options{

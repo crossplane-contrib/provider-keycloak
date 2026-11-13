@@ -1,0 +1,49 @@
+# Regression demo for crossplane-contrib/provider-keycloak#750: an
+# authenticationFlowBindingOverrides entry with browserIdRef that is added to
+# an already existing Client must reach Keycloak and stay in the spec. The
+# Client is created without the override; the post-assert hook on the Realm
+# (asserted last) adds it via server-side apply and checks the result.
+#
+# Resources are listed in deletion order (Client, Flow, Realm).
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: flow-overrides-750-ns
+  namespace: dev-ns
+spec:
+  forProvider:
+    realmIdRef:
+      name: flow-overrides-750-ns
+    accessType: "CONFIDENTIAL"
+    clientId: "flow-overrides-750-ns"
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: authenticationflow.keycloak.m.crossplane.io/v1alpha1
+kind: Flow
+metadata:
+  name: flow-overrides-750-ns-browser
+  namespace: dev-ns
+spec:
+  forProvider:
+    alias: flow-overrides-750-ns-browser
+    realmIdRef:
+      name: flow-overrides-750-ns
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
+---
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  name: flow-overrides-750-ns
+  namespace: dev-ns
+  annotations:
+    uptest.upbound.io/post-assert-hook: 076-oidc-client-flow-binding-overrides.sh
+spec:
+  forProvider:
+    realm: flow-overrides-750-ns
+  providerConfigRef:
+    name: "keycloak-provider-config"
+    kind: ProviderConfig
