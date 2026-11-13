@@ -373,14 +373,18 @@
       "defined_in": [
         "dev/demos/basic/070-authentication-flows.yaml",
         "dev/demos/basic/075-realm-flow-bindings-ownership.yaml",
+        "dev/demos/basic/076-oidc-client-flow-binding-overrides.yaml",
         "dev/demos/namespaced/070-authentication-flows.yaml",
-        "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml"
+        "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml",
+        "dev/demos/namespaced/076-oidc-client-flow-binding-overrides.yaml"
       ],
       "used_by": [
         "dev/demos/basic/070-authentication-flows.yaml",
         "dev/demos/basic/075-realm-flow-bindings-ownership.yaml",
+        "dev/demos/basic/076-oidc-client-flow-binding-overrides.yaml",
         "dev/demos/namespaced/070-authentication-flows.yaml",
-        "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml"
+        "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml",
+        "dev/demos/namespaced/076-oidc-client-flow-binding-overrides.yaml"
       ]
     },
     "FullNameMapper (ldap)": {
@@ -641,6 +645,16 @@
         "dev/demos/namespaced/004-realm-keystore-rsa.yaml"
       ]
     },
+    "KeystoreRsaEncGenerated (realm)": {
+      "defined_in": [
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
+        "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
+      ]
+    },
     "KeystoreRsaGenerated (realm)": {
       "defined_in": [
         "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
@@ -667,6 +681,14 @@
       "used_by": [
         "dev/demos/basic/031-group-memberships.yaml",
         "dev/demos/namespaced/031-group-memberships.yaml"
+      ]
+    },
+    "Memberships (organization)": {
+      "defined_in": [
+        "dev/demos/orgs/021-org-memberships.yaml"
+      ],
+      "used_by": [
+        "dev/demos/orgs/021-org-memberships.yaml"
       ]
     },
     "MicrosoftIdentityProvider (oidc)": {
@@ -781,10 +803,12 @@
         "dev/demos/basic/001-realm.yaml",
         "dev/demos/basic/007-existing-realm.yaml",
         "dev/demos/basic/075-realm-flow-bindings-ownership.yaml",
+        "dev/demos/basic/076-oidc-client-flow-binding-overrides.yaml",
         "dev/demos/namespaced/001-realm-durations.yaml",
         "dev/demos/namespaced/001-realm.yaml",
         "dev/demos/namespaced/007-existing-realm.yaml",
         "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml",
+        "dev/demos/namespaced/076-oidc-client-flow-binding-overrides.yaml",
         "dev/demos/orgs/001-realm.yaml"
       ],
       "used_by": [
@@ -792,10 +816,12 @@
         "dev/demos/basic/001-realm.yaml",
         "dev/demos/basic/007-existing-realm.yaml",
         "dev/demos/basic/075-realm-flow-bindings-ownership.yaml",
+        "dev/demos/basic/076-oidc-client-flow-binding-overrides.yaml",
         "dev/demos/namespaced/001-realm-durations.yaml",
         "dev/demos/namespaced/001-realm.yaml",
         "dev/demos/namespaced/007-existing-realm.yaml",
         "dev/demos/namespaced/075-realm-flow-bindings-ownership.yaml",
+        "dev/demos/namespaced/076-oidc-client-flow-binding-overrides.yaml",
         "dev/demos/orgs/001-realm.yaml"
       ]
     },
@@ -1849,6 +1875,15 @@
       "deps": [],
       "rdeps": []
     },
+    "dev/demos/basic/076-oidc-client-flow-binding-overrides.yaml": {
+      "groups": [
+        "authenticationflow",
+        "openidclient",
+        "realm"
+      ],
+      "deps": [],
+      "rdeps": []
+    },
     "dev/demos/basic/080-defaults-groups.yaml": {
       "groups": [
         "defaults"
@@ -2774,6 +2809,15 @@
       "deps": [],
       "rdeps": []
     },
+    "dev/demos/namespaced/076-oidc-client-flow-binding-overrides.yaml": {
+      "groups": [
+        "authenticationflow",
+        "openidclient",
+        "realm"
+      ],
+      "deps": [],
+      "rdeps": []
+    },
     "dev/demos/namespaced/080-defaults-groups.yaml": {
       "groups": [
         "defaults"
@@ -2950,6 +2994,7 @@
         "dev/demos/orgs/002-org.yaml",
         "dev/demos/orgs/010-oidc-identity-provider.yaml",
         "dev/demos/orgs/020-user.yaml",
+        "dev/demos/orgs/021-org-memberships.yaml",
         "dev/demos/orgs/030-k8s-federated-identity-provider.yaml",
         "dev/demos/orgs/031-k8s-federated-client.yaml"
       ]
@@ -2963,6 +3008,7 @@
       ],
       "rdeps": [
         "dev/demos/orgs/010-oidc-identity-provider.yaml",
+        "dev/demos/orgs/021-org-memberships.yaml",
         "dev/demos/orgs/030-k8s-federated-identity-provider.yaml"
       ]
     },
@@ -2982,6 +3028,19 @@
       ],
       "deps": [
         "dev/demos/orgs/001-realm.yaml"
+      ],
+      "rdeps": [
+        "dev/demos/orgs/021-org-memberships.yaml"
+      ]
+    },
+    "dev/demos/orgs/021-org-memberships.yaml": {
+      "groups": [
+        "organization"
+      ],
+      "deps": [
+        "dev/demos/orgs/001-realm.yaml",
+        "dev/demos/orgs/002-org.yaml",
+        "dev/demos/orgs/020-user.yaml"
       ],
       "rdeps": []
     },

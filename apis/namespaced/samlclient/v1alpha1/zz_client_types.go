@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type AuthenticationFlowBindingOverridesInitParameters struct {
@@ -85,7 +84,7 @@ type ClientInitParameters struct {
 	EncryptionAlgorithm *string `json:"encryptionAlgorithm,omitempty" tf:"encryption_algorithm,omitempty"`
 
 	// If assertions for the client are encrypted, this certificate will be used for encryption.
-	EncryptionCertificateSecretRef *v1.LocalSecretKeySelector `json:"encryptionCertificateSecretRef,omitempty" tf:"-"`
+	EncryptionCertificateSecretRef *v2.LocalSecretKeySelector `json:"encryptionCertificateSecretRef,omitempty" tf:"-"`
 
 	// Digest method used with SAML encryption. Allowed values: SHA-512, SHA-256, or SHA-1. Only valid when encryption_key_algorithm is RSA-OAEP-11 or RSA-OAEP-MGF1P. Default is SHA-256.
 	EncryptionDigestMethod *string `json:"encryptionDigestMethod,omitempty" tf:"encryption_digest_method,omitempty"`
@@ -145,11 +144,11 @@ type ClientInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// When specified, this value is prepended to all relative URLs.
 	RootURL *string `json:"rootUrl,omitempty" tf:"root_url,omitempty"`
@@ -167,10 +166,10 @@ type ClientInitParameters struct {
 	SignatureKeyName *string `json:"signatureKeyName,omitempty" tf:"signature_key_name,omitempty"`
 
 	// If documents or assertions from the client are signed, this certificate will be used to verify the signature.
-	SigningCertificateSecretRef *v1.LocalSecretKeySelector `json:"signingCertificateSecretRef,omitempty" tf:"-"`
+	SigningCertificateSecretRef *v2.LocalSecretKeySelector `json:"signingCertificateSecretRef,omitempty" tf:"-"`
 
 	// If documents or assertions from the client are signed, this private key will be used to verify the signature.
-	SigningPrivateKeySecretRef *v1.LocalSecretKeySelector `json:"signingPrivateKeySecretRef,omitempty" tf:"-"`
+	SigningPrivateKeySecretRef *v2.LocalSecretKeySelector `json:"signingPrivateKeySecretRef,omitempty" tf:"-"`
 
 	// When specified, Keycloak will use this list to validate given Assertion Consumer URLs specified in the authentication request.
 	// +listType=set
@@ -360,7 +359,7 @@ type ClientParameters struct {
 
 	// If assertions for the client are encrypted, this certificate will be used for encryption.
 	// +kubebuilder:validation:Optional
-	EncryptionCertificateSecretRef *v1.LocalSecretKeySelector `json:"encryptionCertificateSecretRef,omitempty" tf:"-"`
+	EncryptionCertificateSecretRef *v2.LocalSecretKeySelector `json:"encryptionCertificateSecretRef,omitempty" tf:"-"`
 
 	// Digest method used with SAML encryption. Allowed values: SHA-512, SHA-256, or SHA-1. Only valid when encryption_key_algorithm is RSA-OAEP-11 or RSA-OAEP-MGF1P. Default is SHA-256.
 	// +kubebuilder:validation:Optional
@@ -438,11 +437,11 @@ type ClientParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// When specified, this value is prepended to all relative URLs.
 	// +kubebuilder:validation:Optional
@@ -466,11 +465,11 @@ type ClientParameters struct {
 
 	// If documents or assertions from the client are signed, this certificate will be used to verify the signature.
 	// +kubebuilder:validation:Optional
-	SigningCertificateSecretRef *v1.LocalSecretKeySelector `json:"signingCertificateSecretRef,omitempty" tf:"-"`
+	SigningCertificateSecretRef *v2.LocalSecretKeySelector `json:"signingCertificateSecretRef,omitempty" tf:"-"`
 
 	// If documents or assertions from the client are signed, this private key will be used to verify the signature.
 	// +kubebuilder:validation:Optional
-	SigningPrivateKeySecretRef *v1.LocalSecretKeySelector `json:"signingPrivateKeySecretRef,omitempty" tf:"-"`
+	SigningPrivateKeySecretRef *v2.LocalSecretKeySelector `json:"signingPrivateKeySecretRef,omitempty" tf:"-"`
 
 	// When specified, Keycloak will use this list to validate given Assertion Consumer URLs specified in the authentication request.
 	// +kubebuilder:validation:Optional
@@ -497,8 +496,8 @@ type ClientSpec struct {
 
 // ClientStatus defines the observed state of Client.
 type ClientStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ClientObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ClientObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

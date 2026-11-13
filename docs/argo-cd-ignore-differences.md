@@ -16,6 +16,15 @@ drift unless explicitly ignored.
    [`docs/assessments/2026-04-client-forprovider-spec-drift.md`](assessments/2026-04-client-forprovider-spec-drift.md)),
    so for new installs you should only need to handle case 1.
 
+The resolved values are persisted by the field manager
+`managed.crossplane.io/api-simple-reference-resolver` as a JSON merge patch
+(operation `Update`). The provider deliberately does not use server-side
+apply for this: crossplane-runtime only applies the values resolved in the
+current reconcile, so server-side apply pruned values resolved in earlier
+reconciles and could drop a whole user-authored list such as
+`authenticationFlowBindingOverrides` from the spec
+([#750](https://github.com/crossplane-contrib/provider-keycloak/issues/750)).
+
 If you manage Keycloak resources via ArgoCD, you almost certainly want to
 ignore the reference write-back fields. Two options:
 

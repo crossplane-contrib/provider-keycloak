@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type DefaultGroupsInitParameters struct {
@@ -23,11 +22,11 @@ type DefaultGroupsInitParameters struct {
 
 	// References to Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	GroupIdsRefs []v1.NamespacedReference `json:"groupIdsRefs,omitempty" tf:"-"`
+	GroupIdsRefs []v2.NamespacedReference `json:"groupIdsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	GroupIdsSelector *v1.NamespacedSelector `json:"groupIdsSelector,omitempty" tf:"-"`
+	GroupIdsSelector *v2.NamespacedSelector `json:"groupIdsSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
@@ -35,11 +34,11 @@ type DefaultGroupsInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type DefaultGroupsObservation struct {
@@ -64,11 +63,11 @@ type DefaultGroupsParameters struct {
 
 	// References to Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	GroupIdsRefs []v1.NamespacedReference `json:"groupIdsRefs,omitempty" tf:"-"`
+	GroupIdsRefs []v2.NamespacedReference `json:"groupIdsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	GroupIdsSelector *v1.NamespacedSelector `json:"groupIdsSelector,omitempty" tf:"-"`
+	GroupIdsSelector *v2.NamespacedSelector `json:"groupIdsSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
@@ -77,11 +76,11 @@ type DefaultGroupsParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // DefaultGroupsSpec defines the desired state of DefaultGroups
@@ -103,8 +102,8 @@ type DefaultGroupsSpec struct {
 
 // DefaultGroupsStatus defines the observed state of DefaultGroups.
 type DefaultGroupsStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        DefaultGroupsObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               DefaultGroupsObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

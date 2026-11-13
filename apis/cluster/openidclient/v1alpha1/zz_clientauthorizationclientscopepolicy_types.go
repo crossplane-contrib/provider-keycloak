@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ClientAuthorizationClientScopePolicyInitParameters struct {
@@ -33,11 +33,11 @@ type ClientAuthorizationClientScopePolicyInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
@@ -46,11 +46,11 @@ type ClientAuthorizationClientScopePolicyInitParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
 	// An client scope to add client scope. At least one should be defined.
 	Scope []ScopeInitParameters `json:"scope,omitempty" tf:"scope,omitempty"`
@@ -108,11 +108,11 @@ type ClientAuthorizationClientScopePolicyParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
@@ -122,11 +122,11 @@ type ClientAuthorizationClientScopePolicyParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
 	// An client scope to add client scope. At least one should be defined.
 	// +kubebuilder:validation:Optional
@@ -142,11 +142,11 @@ type ScopeInitParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate id.
 	// +kubebuilder:validation:Optional
-	IDRef *v1.Reference `json:"idRef,omitempty" tf:"-"`
+	IDRef *v2.Reference `json:"idRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate id.
 	// +kubebuilder:validation:Optional
-	IDSelector *v1.Selector `json:"idSelector,omitempty" tf:"-"`
+	IDSelector *v2.Selector `json:"idSelector,omitempty" tf:"-"`
 
 	// When true, then this client scope will be set as required. Defaults to false.
 	Required *bool `json:"required,omitempty" tf:"required,omitempty"`
@@ -171,11 +171,11 @@ type ScopeParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate id.
 	// +kubebuilder:validation:Optional
-	IDRef *v1.Reference `json:"idRef,omitempty" tf:"-"`
+	IDRef *v2.Reference `json:"idRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate id.
 	// +kubebuilder:validation:Optional
-	IDSelector *v1.Selector `json:"idSelector,omitempty" tf:"-"`
+	IDSelector *v2.Selector `json:"idSelector,omitempty" tf:"-"`
 
 	// When true, then this client scope will be set as required. Defaults to false.
 	// +kubebuilder:validation:Optional
@@ -184,8 +184,8 @@ type ScopeParameters struct {
 
 // ClientAuthorizationClientScopePolicySpec defines the desired state of ClientAuthorizationClientScopePolicy
 type ClientAuthorizationClientScopePolicySpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     ClientAuthorizationClientScopePolicyParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   ClientAuthorizationClientScopePolicyParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -201,8 +201,8 @@ type ClientAuthorizationClientScopePolicySpec struct {
 
 // ClientAuthorizationClientScopePolicyStatus defines the observed state of ClientAuthorizationClientScopePolicy.
 type ClientAuthorizationClientScopePolicyStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ClientAuthorizationClientScopePolicyObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ClientAuthorizationClientScopePolicyObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

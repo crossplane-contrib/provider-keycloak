@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type FederatedIdentityInitParameters struct {
@@ -57,14 +57,26 @@ type InitialPasswordInitParameters struct {
 	// If set to true, the initial password is set up for renewal on first use. Default to false.
 	Temporary *bool `json:"temporary,omitempty" tf:"temporary,omitempty"`
 
-	// The initial password.
-	ValueSecretRef v1.SecretKeySelector `json:"valueSecretRef" tf:"-"`
+	// The initial password. This argument is only respected during initial user creation; later changes to it are ignored. Conflicts with value_wo and value_wo_version.
+	ValueSecretRef *v2.SecretKeySelector `json:"valueSecretRef,omitempty" tf:"-"`
+
+	// The initial password. Conflicts with value. Required when using value_wo_version. Must not be an empty string.
+	// The initial password as write-only argument
+	ValueWoSecretRef *v2.SecretKeySelector `json:"valueWoSecretRef,omitempty" tf:"-"`
+
+	// The value of this argument is stored in the state and plan files. Changing it resets the password of an existing user. Conflicts with value. Required when using value_wo. Must not be an empty string.
+	// Version of the initial password write-only argument
+	ValueWoVersion *string `json:"valueWoVersion,omitempty" tf:"value_wo_version,omitempty"`
 }
 
 type InitialPasswordObservation struct {
 
 	// If set to true, the initial password is set up for renewal on first use. Default to false.
 	Temporary *bool `json:"temporary,omitempty" tf:"temporary,omitempty"`
+
+	// The value of this argument is stored in the state and plan files. Changing it resets the password of an existing user. Conflicts with value. Required when using value_wo. Must not be an empty string.
+	// Version of the initial password write-only argument
+	ValueWoVersion *string `json:"valueWoVersion,omitempty" tf:"value_wo_version,omitempty"`
 }
 
 type InitialPasswordParameters struct {
@@ -73,9 +85,19 @@ type InitialPasswordParameters struct {
 	// +kubebuilder:validation:Optional
 	Temporary *bool `json:"temporary,omitempty" tf:"temporary,omitempty"`
 
-	// The initial password.
+	// The initial password. This argument is only respected during initial user creation; later changes to it are ignored. Conflicts with value_wo and value_wo_version.
 	// +kubebuilder:validation:Optional
-	ValueSecretRef v1.SecretKeySelector `json:"valueSecretRef" tf:"-"`
+	ValueSecretRef *v2.SecretKeySelector `json:"valueSecretRef,omitempty" tf:"-"`
+
+	// The initial password. Conflicts with value. Required when using value_wo_version. Must not be an empty string.
+	// The initial password as write-only argument
+	// +kubebuilder:validation:Optional
+	ValueWoSecretRef *v2.SecretKeySelector `json:"valueWoSecretRef,omitempty" tf:"-"`
+
+	// The value of this argument is stored in the state and plan files. Changing it resets the password of an existing user. Conflicts with value. Required when using value_wo. Must not be an empty string.
+	// Version of the initial password write-only argument
+	// +kubebuilder:validation:Optional
+	ValueWoVersion *string `json:"valueWoVersion,omitempty" tf:"value_wo_version,omitempty"`
 }
 
 type UserInitParameters struct {
@@ -102,7 +124,7 @@ type UserInitParameters struct {
 	// When true, the user with the specified username is assumed to already exist, and it will be imported into state instead of being created. This attribute is useful when dealing with users that Keycloak creates automatically during realm creation, such as admin. Note, that the user will not be removed during destruction if import is true.
 	Import *bool `json:"import,omitempty" tf:"import,omitempty"`
 
-	// When given, the user's initial password will be set. This attribute is only respected during initial user creation.
+	// When given, the user's initial password will be set. Exactly one of value and value_wo must be given.
 	InitialPassword []InitialPasswordInitParameters `json:"initialPassword,omitempty" tf:"initial_password,omitempty"`
 
 	// The user's last name.
@@ -114,11 +136,11 @@ type UserInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of required user actions.
 	// +listType=set
@@ -154,7 +176,7 @@ type UserObservation struct {
 	// When true, the user with the specified username is assumed to already exist, and it will be imported into state instead of being created. This attribute is useful when dealing with users that Keycloak creates automatically during realm creation, such as admin. Note, that the user will not be removed during destruction if import is true.
 	Import *bool `json:"import,omitempty" tf:"import,omitempty"`
 
-	// When given, the user's initial password will be set. This attribute is only respected during initial user creation.
+	// When given, the user's initial password will be set. Exactly one of value and value_wo must be given.
 	InitialPassword []InitialPasswordObservation `json:"initialPassword,omitempty" tf:"initial_password,omitempty"`
 
 	// The user's last name.
@@ -202,7 +224,7 @@ type UserParameters struct {
 	// +kubebuilder:validation:Optional
 	Import *bool `json:"import,omitempty" tf:"import,omitempty"`
 
-	// When given, the user's initial password will be set. This attribute is only respected during initial user creation.
+	// When given, the user's initial password will be set. Exactly one of value and value_wo must be given.
 	// +kubebuilder:validation:Optional
 	InitialPassword []InitialPasswordParameters `json:"initialPassword,omitempty" tf:"initial_password,omitempty"`
 
@@ -217,11 +239,11 @@ type UserParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// A list of required user actions.
 	// +kubebuilder:validation:Optional
@@ -235,8 +257,8 @@ type UserParameters struct {
 
 // UserSpec defines the desired state of User
 type UserSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     UserParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   UserParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -252,8 +274,8 @@ type UserSpec struct {
 
 // UserStatus defines the observed state of User.
 type UserStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        UserObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               UserObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

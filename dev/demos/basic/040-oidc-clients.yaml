@@ -69,3 +69,21 @@ spec:
     description: "Role that svc account uses"
   providerConfigRef:
     name: "keycloak-provider-config"  # Reference to the provider configuration
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: realm-management
+spec:
+  # Internal admin client: observe only. Since Keycloak 26.8 reading its
+  # secret always returns 403 (#769); observing it must still succeed.
+  managementPolicies: ["Observe"]
+  forProvider:
+    import: true
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    clientId: "realm-management"
+  providerConfigRef:
+    name: "keycloak-provider-config"

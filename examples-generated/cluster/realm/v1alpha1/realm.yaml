@@ -29,6 +29,7 @@ spec:
       - failureResetTimeSeconds: 43200
         maxFailureWaitSeconds: 900
         maxLoginFailures: 30
+        maxSecondaryAuthFailures: 0
         minimumQuickLoginWaitSeconds: 60
         permanentLockout: false
         quickLoginCheckMilliSeconds: 1000

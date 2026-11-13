@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type FacebookIdentityProviderInitParameters struct {
@@ -32,11 +32,11 @@ type FacebookIdentityProviderInitParameters struct {
 
 	// The client or client identifier registered within the identity provider.
 	// The client identifier registered with the Facebook identity provider.
-	ClientIDSecretRef v1.SecretKeySelector `json:"clientIdSecretRef" tf:"-"`
+	ClientIDSecretRef v2.SecretKeySelector `json:"clientIdSecretRef" tf:"-"`
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
 	// The client secret registered with the Facebook identity provider.
-	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef v2.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
 
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid profile email.
 	// The scopes to be sent when asking for authorization. See the documentation for possible values, separator and default value'. Default: 'openid profile email'
@@ -70,11 +70,11 @@ type FacebookIdentityProviderInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasRef *v1.Reference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasRef *v2.Reference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasSelector *v1.Selector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasSelector *v2.Selector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// A number defining the order of this identity provider in the GUI.
 	// GUI Order
@@ -98,11 +98,11 @@ type FacebookIdentityProviderInitParameters struct {
 
 	// Reference to a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDRef *v1.Reference `json:"organizationIdRef,omitempty" tf:"-"`
+	OrganizationIDRef *v2.Reference `json:"organizationIdRef,omitempty" tf:"-"`
 
 	// Selector for a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDSelector *v1.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
+	OrganizationIDSelector *v2.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -119,11 +119,11 @@ type FacebookIdentityProviderInitParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// When true, tokens will be stored after authenticating users. Defaults to true.
 	// Enable/disable if tokens must be stored after authenticating users.
@@ -257,12 +257,12 @@ type FacebookIdentityProviderParameters struct {
 	// The client or client identifier registered within the identity provider.
 	// The client identifier registered with the Facebook identity provider.
 	// +kubebuilder:validation:Optional
-	ClientIDSecretRef v1.SecretKeySelector `json:"clientIdSecretRef" tf:"-"`
+	ClientIDSecretRef v2.SecretKeySelector `json:"clientIdSecretRef" tf:"-"`
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
 	// The client secret registered with the Facebook identity provider.
 	// +kubebuilder:validation:Optional
-	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef v2.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
 
 	// The scopes to be sent when asking for authorization. It can be a space-separated list of scopes. Defaults to openid profile email.
 	// The scopes to be sent when asking for authorization. See the documentation for possible values, separator and default value'. Default: 'openid profile email'
@@ -303,11 +303,11 @@ type FacebookIdentityProviderParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasRef *v1.Reference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasRef *v2.Reference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasSelector *v1.Selector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasSelector *v2.Selector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// A number defining the order of this identity provider in the GUI.
 	// GUI Order
@@ -337,11 +337,11 @@ type FacebookIdentityProviderParameters struct {
 
 	// Reference to a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDRef *v1.Reference `json:"organizationIdRef,omitempty" tf:"-"`
+	OrganizationIDRef *v2.Reference `json:"organizationIdRef,omitempty" tf:"-"`
 
 	// Selector for a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDSelector *v1.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
+	OrganizationIDSelector *v2.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -361,11 +361,11 @@ type FacebookIdentityProviderParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// When true, tokens will be stored after authenticating users. Defaults to true.
 	// Enable/disable if tokens must be stored after authenticating users.
@@ -385,8 +385,8 @@ type FacebookIdentityProviderParameters struct {
 
 // FacebookIdentityProviderSpec defines the desired state of FacebookIdentityProvider
 type FacebookIdentityProviderSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     FacebookIdentityProviderParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   FacebookIdentityProviderParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -402,8 +402,8 @@ type FacebookIdentityProviderSpec struct {
 
 // FacebookIdentityProviderStatus defines the observed state of FacebookIdentityProvider.
 type FacebookIdentityProviderStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        FacebookIdentityProviderObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               FacebookIdentityProviderObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

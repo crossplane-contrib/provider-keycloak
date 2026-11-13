@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type GroupsInitParameters struct {
@@ -25,11 +25,11 @@ type GroupsInitParameters struct {
 
 	// References to Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	GroupIdsRefs []v1.Reference `json:"groupIdsRefs,omitempty" tf:"-"`
+	GroupIdsRefs []v2.Reference `json:"groupIdsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	GroupIdsSelector *v1.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
+	GroupIdsSelector *v2.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
@@ -37,11 +37,11 @@ type GroupsInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the user this resource should manage groups for.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha1.User
@@ -49,11 +49,11 @@ type GroupsInitParameters struct {
 
 	// Reference to a User in user to populate userId.
 	// +kubebuilder:validation:Optional
-	UserIDRef *v1.Reference `json:"userIdRef,omitempty" tf:"-"`
+	UserIDRef *v2.Reference `json:"userIdRef,omitempty" tf:"-"`
 
 	// Selector for a User in user to populate userId.
 	// +kubebuilder:validation:Optional
-	UserIDSelector *v1.Selector `json:"userIdSelector,omitempty" tf:"-"`
+	UserIDSelector *v2.Selector `json:"userIdSelector,omitempty" tf:"-"`
 }
 
 type GroupsObservation struct {
@@ -88,11 +88,11 @@ type GroupsParameters struct {
 
 	// References to Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	GroupIdsRefs []v1.Reference `json:"groupIdsRefs,omitempty" tf:"-"`
+	GroupIdsRefs []v2.Reference `json:"groupIdsRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Group in group to populate groupIds.
 	// +kubebuilder:validation:Optional
-	GroupIdsSelector *v1.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
+	GroupIdsSelector *v2.Selector `json:"groupIdsSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
@@ -101,11 +101,11 @@ type GroupsParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the user this resource should manage groups for.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha1.User
@@ -114,17 +114,17 @@ type GroupsParameters struct {
 
 	// Reference to a User in user to populate userId.
 	// +kubebuilder:validation:Optional
-	UserIDRef *v1.Reference `json:"userIdRef,omitempty" tf:"-"`
+	UserIDRef *v2.Reference `json:"userIdRef,omitempty" tf:"-"`
 
 	// Selector for a User in user to populate userId.
 	// +kubebuilder:validation:Optional
-	UserIDSelector *v1.Selector `json:"userIdSelector,omitempty" tf:"-"`
+	UserIDSelector *v2.Selector `json:"userIdSelector,omitempty" tf:"-"`
 }
 
 // GroupsSpec defines the desired state of Groups
 type GroupsSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     GroupsParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   GroupsParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -140,8 +140,8 @@ type GroupsSpec struct {
 
 // GroupsStatus defines the observed state of Groups.
 type GroupsStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        GroupsObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               GroupsObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

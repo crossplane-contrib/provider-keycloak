@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type FlowInitParameters struct {
@@ -19,10 +18,14 @@ type FlowInitParameters struct {
 	// The alias for this authentication flow.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow. Changing this attribute will force creation of a new resource.
+	// The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow, which - unlike a built-in flow - can then be freely modified.
+	CopyFrom *string `json:"copyFrom,omitempty" tf:"copy_from,omitempty"`
+
 	// A description for the authentication flow.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// The type of authentication flow to create. Valid choices include basic-flow and client-flow. Defaults to basic-flow.
+	// The type of authentication flow to create. Valid choices include basic-flow and client-flow. Defaults to basic-flow. Ignored when copy_from is set, since the copy inherits its type from the source flow.
 	ProviderID *string `json:"providerId,omitempty" tf:"provider_id,omitempty"`
 
 	// The realm that the authentication flow exists in.
@@ -31,11 +34,11 @@ type FlowInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type FlowObservation struct {
@@ -43,12 +46,16 @@ type FlowObservation struct {
 	// The alias for this authentication flow.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow. Changing this attribute will force creation of a new resource.
+	// The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow, which - unlike a built-in flow - can then be freely modified.
+	CopyFrom *string `json:"copyFrom,omitempty" tf:"copy_from,omitempty"`
+
 	// A description for the authentication flow.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// The type of authentication flow to create. Valid choices include basic-flow and client-flow. Defaults to basic-flow.
+	// The type of authentication flow to create. Valid choices include basic-flow and client-flow. Defaults to basic-flow. Ignored when copy_from is set, since the copy inherits its type from the source flow.
 	ProviderID *string `json:"providerId,omitempty" tf:"provider_id,omitempty"`
 
 	// The realm that the authentication flow exists in.
@@ -61,11 +68,16 @@ type FlowParameters struct {
 	// +kubebuilder:validation:Optional
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow. Changing this attribute will force creation of a new resource.
+	// The alias of an existing authentication flow (built-in or custom) to copy. All executions and subflows of the source flow are duplicated into this flow, which - unlike a built-in flow - can then be freely modified.
+	// +kubebuilder:validation:Optional
+	CopyFrom *string `json:"copyFrom,omitempty" tf:"copy_from,omitempty"`
+
 	// A description for the authentication flow.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// The type of authentication flow to create. Valid choices include basic-flow and client-flow. Defaults to basic-flow.
+	// The type of authentication flow to create. Valid choices include basic-flow and client-flow. Defaults to basic-flow. Ignored when copy_from is set, since the copy inherits its type from the source flow.
 	// +kubebuilder:validation:Optional
 	ProviderID *string `json:"providerId,omitempty" tf:"provider_id,omitempty"`
 
@@ -76,11 +88,11 @@ type FlowParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // FlowSpec defines the desired state of Flow
@@ -102,8 +114,8 @@ type FlowSpec struct {
 
 // FlowStatus defines the observed state of Flow.
 type FlowStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        FlowObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               FlowObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

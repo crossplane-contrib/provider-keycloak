@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type HardcodedRoleProtocolMapperInitParameters struct {
@@ -23,11 +23,11 @@ type HardcodedRoleProtocolMapperInitParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.Reference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client scope. Cannot be used at the same time as client_id.
@@ -36,11 +36,11 @@ type HardcodedRoleProtocolMapperInitParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// The display name of this protocol mapper in the GUI.
 	// A human-friendly name that will appear in the Keycloak console.
@@ -53,11 +53,11 @@ type HardcodedRoleProtocolMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the role to map to an access token.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/role/v1alpha1.Role
@@ -66,11 +66,11 @@ type HardcodedRoleProtocolMapperInitParameters struct {
 
 	// Reference to a Role in role to populate roleId.
 	// +kubebuilder:validation:Optional
-	RoleIDRef *v1.Reference `json:"roleIdRef,omitempty" tf:"-"`
+	RoleIDRef *v2.Reference `json:"roleIdRef,omitempty" tf:"-"`
 
 	// Selector for a Role in role to populate roleId.
 	// +kubebuilder:validation:Optional
-	RoleIDSelector *v1.Selector `json:"roleIdSelector,omitempty" tf:"-"`
+	RoleIDSelector *v2.Selector `json:"roleIdSelector,omitempty" tf:"-"`
 }
 
 type HardcodedRoleProtocolMapperObservation struct {
@@ -108,11 +108,11 @@ type HardcodedRoleProtocolMapperParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.Reference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.Reference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.Selector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The client scope this protocol mapper should be attached to. Conflicts with client_id. One of client_id or client_scope_id must be specified.
 	// The mapper's associated client scope. Cannot be used at the same time as client_id.
@@ -122,11 +122,11 @@ type HardcodedRoleProtocolMapperParameters struct {
 
 	// Reference to a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDRef *v1.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
+	ClientScopeIDRef *v2.Reference `json:"clientScopeIdRef,omitempty" tf:"-"`
 
 	// Selector for a ClientScope in openidclient to populate clientScopeId.
 	// +kubebuilder:validation:Optional
-	ClientScopeIDSelector *v1.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
+	ClientScopeIDSelector *v2.Selector `json:"clientScopeIdSelector,omitempty" tf:"-"`
 
 	// The display name of this protocol mapper in the GUI.
 	// A human-friendly name that will appear in the Keycloak console.
@@ -141,11 +141,11 @@ type HardcodedRoleProtocolMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the role to map to an access token.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/role/v1alpha1.Role
@@ -155,17 +155,17 @@ type HardcodedRoleProtocolMapperParameters struct {
 
 	// Reference to a Role in role to populate roleId.
 	// +kubebuilder:validation:Optional
-	RoleIDRef *v1.Reference `json:"roleIdRef,omitempty" tf:"-"`
+	RoleIDRef *v2.Reference `json:"roleIdRef,omitempty" tf:"-"`
 
 	// Selector for a Role in role to populate roleId.
 	// +kubebuilder:validation:Optional
-	RoleIDSelector *v1.Selector `json:"roleIdSelector,omitempty" tf:"-"`
+	RoleIDSelector *v2.Selector `json:"roleIdSelector,omitempty" tf:"-"`
 }
 
 // HardcodedRoleProtocolMapperSpec defines the desired state of HardcodedRoleProtocolMapper
 type HardcodedRoleProtocolMapperSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     HardcodedRoleProtocolMapperParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   HardcodedRoleProtocolMapperParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -181,8 +181,8 @@ type HardcodedRoleProtocolMapperSpec struct {
 
 // HardcodedRoleProtocolMapperStatus defines the observed state of HardcodedRoleProtocolMapper.
 type HardcodedRoleProtocolMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        HardcodedRoleProtocolMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               HardcodedRoleProtocolMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

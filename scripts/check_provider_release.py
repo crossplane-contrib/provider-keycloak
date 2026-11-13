@@ -37,7 +37,7 @@ for --mode issue (and for looking up the release in --mode bump), unless
 
 Exit codes:
   0  Ran successfully (regardless of whether a new version was found)
-  1  (--mode bump only) a new version was found and processed
+  10 (--mode bump only) a new version was found and processed
   2  Error (missing files, invalid JSON/semver, gh/go/make failure, etc.)
 """
 
@@ -53,6 +53,7 @@ GO_MODULE = "github.com/keycloak/terraform-provider-keycloak"
 MAKEFILE = "Makefile"
 SCHEMA_JSON = "config/schema.json"
 GENERATED_LST = "config/generated.lst"
+BUMPED_EXIT_CODE = 10
 
 MAKEFILE_VERSION_RE = re.compile(
     r"^(export TERRAFORM_PROVIDER_VERSION\s*\?=\s*)(\S+)\s*$", re.MULTILINE
@@ -121,6 +122,17 @@ def get_latest_release(repo=UPSTREAM_REPO):
     )
     data = json.loads(out)
     return data["tag_name"], data["html_url"], data.get("body") or ""
+
+
+def get_release_commit(tag, repo=UPSTREAM_REPO):
+    """Return the commit SHA for an upstream release tag."""
+    return run_gh(["api", f"repos/{repo}/commits/{tag}", "--jq", ".sha"]).strip()
+
+
+def update_go_module(tag):
+    """Update the provider module using its release commit, not its semver tag."""
+    commit = get_release_commit(tag)
+    run(["go", "get", f"{GO_MODULE}@{commit}"])
 
 
 def fetch_open_issues(repo):
@@ -284,7 +296,7 @@ def cmd_bump(args):
 
     if args.dry_run:
         print(f"[dry-run] would bump {current_version} -> {latest_version}")
-        return 1
+        return BUMPED_EXIT_CODE
 
     old_schema = None
     schema_path = Path(SCHEMA_JSON)
@@ -294,12 +306,16 @@ def cmd_bump(args):
     print(f"Bumping TERRAFORM_PROVIDER_VERSION: {current_version} -> {latest_version}")
     set_makefile_version(latest_version)
 
-    print(f"Updating go.mod dependency on {GO_MODULE}@v{latest_version}...")
-    run(["go", "get", f"{GO_MODULE}@v{latest_version}"])
-    run(["go", "mod", "tidy"])
+    print(f"Updating go.mod dependency on {GO_MODULE} at v{latest_version}...")
+    try:
+        update_go_module(latest_tag)
+        run(["go", "mod", "tidy"])
 
-    print("Regenerating provider schema and CRDs (make generate)...")
-    run(["make", "generate"])
+        print("Regenerating provider schema and CRDs (make generate)...")
+        run(["make", "generate"])
+    except RuntimeError as e:
+        print(f"Error updating provider: {e}", file=sys.stderr)
+        return 2
 
     breaking_summary = "No previous schema.json snapshot available to diff against."
     if old_schema is not None:
@@ -344,7 +360,7 @@ _This PR was generated automatically by the `provider-release-check` workflow._
         print(pr_body)
 
     print(f"Bump complete: v{current_version} -> v{latest_version}")
-    return 1
+    return BUMPED_EXIT_CODE
 
 
 def main():

@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type RoleInitParameters struct {
@@ -27,11 +26,11 @@ type RoleInitParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role
@@ -41,11 +40,11 @@ type RoleInitParameters struct {
 
 	// References to Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
-	CompositeRolesRefs []v1.NamespacedReference `json:"compositeRolesRefs,omitempty" tf:"-"`
+	CompositeRolesRefs []v2.NamespacedReference `json:"compositeRolesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
-	CompositeRolesSelector *v1.NamespacedSelector `json:"compositeRolesSelector,omitempty" tf:"-"`
+	CompositeRolesSelector *v2.NamespacedSelector `json:"compositeRolesSelector,omitempty" tf:"-"`
 
 	// The description of the role
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
@@ -62,11 +61,11 @@ type RoleInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// When specified, this role will be created as a client role attached to the client with the provided ID
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
@@ -75,11 +74,11 @@ type RoleInitParameters struct {
 
 	// Reference to a Client in samlclient to populate samlClientId.
 	// +kubebuilder:validation:Optional
-	SAMLClientIDRef *v1.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
+	SAMLClientIDRef *v2.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in samlclient to populate samlClientId.
 	// +kubebuilder:validation:Optional
-	SAMLClientIDSelector *v1.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
+	SAMLClientIDSelector *v2.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
 }
 
 type RoleObservation struct {
@@ -128,11 +127,11 @@ type RoleParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// When specified, this role will be a composite role, composed of all roles that have an ID present within this list.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role
@@ -143,11 +142,11 @@ type RoleParameters struct {
 
 	// References to Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
-	CompositeRolesRefs []v1.NamespacedReference `json:"compositeRolesRefs,omitempty" tf:"-"`
+	CompositeRolesRefs []v2.NamespacedReference `json:"compositeRolesRefs,omitempty" tf:"-"`
 
 	// Selector for a list of Role in role to populate compositeRoles.
 	// +kubebuilder:validation:Optional
-	CompositeRolesSelector *v1.NamespacedSelector `json:"compositeRolesSelector,omitempty" tf:"-"`
+	CompositeRolesSelector *v2.NamespacedSelector `json:"compositeRolesSelector,omitempty" tf:"-"`
 
 	// The description of the role
 	// +kubebuilder:validation:Optional
@@ -168,11 +167,11 @@ type RoleParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// When specified, this role will be created as a client role attached to the client with the provided ID
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
@@ -182,11 +181,11 @@ type RoleParameters struct {
 
 	// Reference to a Client in samlclient to populate samlClientId.
 	// +kubebuilder:validation:Optional
-	SAMLClientIDRef *v1.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
+	SAMLClientIDRef *v2.NamespacedReference `json:"samlClientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in samlclient to populate samlClientId.
 	// +kubebuilder:validation:Optional
-	SAMLClientIDSelector *v1.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
+	SAMLClientIDSelector *v2.NamespacedSelector `json:"samlClientIdSelector,omitempty" tf:"-"`
 }
 
 // RoleSpec defines the desired state of Role
@@ -208,8 +207,8 @@ type RoleSpec struct {
 
 // RoleStatus defines the observed state of Role.
 type RoleStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        RoleObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               RoleObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

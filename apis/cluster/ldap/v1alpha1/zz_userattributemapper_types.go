@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type UserAttributeMapperInitParameters struct {
@@ -46,11 +46,11 @@ type UserAttributeMapperInitParameters struct {
 
 	// Reference to a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDRef *v1.Reference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
+	LdapUserFederationIDRef *v2.Reference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
 
 	// Selector for a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDSelector *v1.Selector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
+	LdapUserFederationIDSelector *v2.Selector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
 
 	// Display name of this mapper when displayed in the console.
 	// Display name of the mapper when displayed in the console.
@@ -67,11 +67,11 @@ type UserAttributeMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Name of the user property or attribute you want to map the LDAP attribute into.
 	// Name of the UserModel property or attribute you want to map the LDAP attribute into.
@@ -167,11 +167,11 @@ type UserAttributeMapperParameters struct {
 
 	// Reference to a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDRef *v1.Reference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
+	LdapUserFederationIDRef *v2.Reference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
 
 	// Selector for a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDSelector *v1.Selector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
+	LdapUserFederationIDSelector *v2.Selector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
 
 	// Display name of this mapper when displayed in the console.
 	// Display name of the mapper when displayed in the console.
@@ -191,11 +191,11 @@ type UserAttributeMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// Name of the user property or attribute you want to map the LDAP attribute into.
 	// Name of the UserModel property or attribute you want to map the LDAP attribute into.
@@ -205,8 +205,8 @@ type UserAttributeMapperParameters struct {
 
 // UserAttributeMapperSpec defines the desired state of UserAttributeMapper
 type UserAttributeMapperSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     UserAttributeMapperParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   UserAttributeMapperParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -222,8 +222,8 @@ type UserAttributeMapperSpec struct {
 
 // UserAttributeMapperStatus defines the observed state of UserAttributeMapper.
 type UserAttributeMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        UserAttributeMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               UserAttributeMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

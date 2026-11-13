@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ClientAuthorizationScopeInitParameters struct {
@@ -31,11 +30,11 @@ type ClientAuthorizationScopeInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
@@ -44,11 +43,11 @@ type ClientAuthorizationScopeInitParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 }
 
 type ClientAuthorizationScopeObservation struct {
@@ -93,11 +92,11 @@ type ClientAuthorizationScopeParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
@@ -107,11 +106,11 @@ type ClientAuthorizationScopeParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 }
 
 // ClientAuthorizationScopeSpec defines the desired state of ClientAuthorizationScope
@@ -133,8 +132,8 @@ type ClientAuthorizationScopeSpec struct {
 
 // ClientAuthorizationScopeStatus defines the observed state of ClientAuthorizationScope.
 type ClientAuthorizationScopeStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ClientAuthorizationScopeObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ClientAuthorizationScopeObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

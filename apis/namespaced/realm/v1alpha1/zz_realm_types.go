@@ -10,14 +10,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type AuthInitParameters struct {
 
 	// The SMTP server password.
-	PasswordSecretRef v1.LocalSecretKeySelector `json:"passwordSecretRef" tf:"-"`
+	PasswordSecretRef v2.LocalSecretKeySelector `json:"passwordSecretRef" tf:"-"`
 
 	// The SMTP server username.
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
@@ -33,7 +32,7 @@ type AuthParameters struct {
 
 	// The SMTP server password.
 	// +kubebuilder:validation:Optional
-	PasswordSecretRef v1.LocalSecretKeySelector `json:"passwordSecretRef" tf:"-"`
+	PasswordSecretRef v2.LocalSecretKeySelector `json:"passwordSecretRef" tf:"-"`
 
 	// The SMTP server username.
 	// +kubebuilder:validation:Optional
@@ -50,6 +49,9 @@ type BruteForceDetectionInitParameters struct {
 
 	// How many failures before wait is triggered.
 	MaxLoginFailures *float64 `json:"maxLoginFailures,omitempty" tf:"max_login_failures,omitempty"`
+
+	// How many failures of the secondary authentication factor (e.g. OTP) are permitted before the wait is triggered. Defaults to 0. Requires Keycloak 26.6 or higher.
+	MaxSecondaryAuthFailures *float64 `json:"maxSecondaryAuthFailures,omitempty" tf:"max_secondary_auth_failures,omitempty"`
 
 	// How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0
 	MaxTemporaryLockouts *float64 `json:"maxTemporaryLockouts,omitempty" tf:"max_temporary_lockouts,omitempty"`
@@ -77,6 +79,9 @@ type BruteForceDetectionObservation struct {
 
 	// How many failures before wait is triggered.
 	MaxLoginFailures *float64 `json:"maxLoginFailures,omitempty" tf:"max_login_failures,omitempty"`
+
+	// How many failures of the secondary authentication factor (e.g. OTP) are permitted before the wait is triggered. Defaults to 0. Requires Keycloak 26.6 or higher.
+	MaxSecondaryAuthFailures *float64 `json:"maxSecondaryAuthFailures,omitempty" tf:"max_secondary_auth_failures,omitempty"`
 
 	// How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0
 	MaxTemporaryLockouts *float64 `json:"maxTemporaryLockouts,omitempty" tf:"max_temporary_lockouts,omitempty"`
@@ -109,6 +114,10 @@ type BruteForceDetectionParameters struct {
 	// How many failures before wait is triggered.
 	// +kubebuilder:validation:Optional
 	MaxLoginFailures *float64 `json:"maxLoginFailures,omitempty" tf:"max_login_failures,omitempty"`
+
+	// How many failures of the secondary authentication factor (e.g. OTP) are permitted before the wait is triggered. Defaults to 0. Requires Keycloak 26.6 or higher.
+	// +kubebuilder:validation:Optional
+	MaxSecondaryAuthFailures *float64 `json:"maxSecondaryAuthFailures,omitempty" tf:"max_secondary_auth_failures,omitempty"`
 
 	// How many temporary lockouts are permitted before a user is permanently locked out. permanent_lockout needs to be true. Defaults to 0
 	// +kubebuilder:validation:Optional
@@ -1128,7 +1137,7 @@ type TokenAuthInitParameters struct {
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
 	// The auth token client secret.
-	ClientSecretSecretRef v1.LocalSecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef v2.LocalSecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
 
 	// The auth token scope.
 	Scope *string `json:"scope,omitempty" tf:"scope,omitempty"`
@@ -1163,7 +1172,7 @@ type TokenAuthParameters struct {
 
 	// The auth token client secret.
 	// +kubebuilder:validation:Optional
-	ClientSecretSecretRef v1.LocalSecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef v2.LocalSecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
 
 	// The auth token scope.
 	// +kubebuilder:validation:Optional
@@ -1522,8 +1531,8 @@ type RealmSpec struct {
 
 // RealmStatus defines the observed state of Realm.
 type RealmStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        RealmObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               RealmObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

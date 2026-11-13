@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ClientOptionalScopesInitParameters struct {
@@ -23,11 +22,11 @@ type ClientOptionalScopesInitParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// An array of client scope names to attach to this client as optional scopes.
 	// +listType=set
@@ -39,11 +38,11 @@ type ClientOptionalScopesInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type ClientOptionalScopesObservation struct {
@@ -71,11 +70,11 @@ type ClientOptionalScopesParameters struct {
 
 	// Reference to a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDRef *v1.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
+	ClientIDRef *v2.NamespacedReference `json:"clientIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate clientId.
 	// +kubebuilder:validation:Optional
-	ClientIDSelector *v1.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
+	ClientIDSelector *v2.NamespacedSelector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// An array of client scope names to attach to this client as optional scopes.
 	// +kubebuilder:validation:Optional
@@ -89,11 +88,11 @@ type ClientOptionalScopesParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // ClientOptionalScopesSpec defines the desired state of ClientOptionalScopes
@@ -115,8 +114,8 @@ type ClientOptionalScopesSpec struct {
 
 // ClientOptionalScopesStatus defines the observed state of ClientOptionalScopes.
 type ClientOptionalScopesStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ClientOptionalScopesObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ClientOptionalScopesObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type FullNameMapperInitParameters struct {
@@ -25,11 +25,11 @@ type FullNameMapperInitParameters struct {
 
 	// Reference to a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDRef *v1.Reference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
+	LdapUserFederationIDRef *v2.Reference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
 
 	// Selector for a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDSelector *v1.Selector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
+	LdapUserFederationIDSelector *v2.Selector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
 
 	// Display name of this mapper when displayed in the console.
 	// Display name of the mapper when displayed in the console.
@@ -45,11 +45,11 @@ type FullNameMapperInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// When true, this mapper will only be used to write updates to LDAP. Defaults to false.
 	WriteOnly *bool `json:"writeOnly,omitempty" tf:"write_only,omitempty"`
@@ -94,11 +94,11 @@ type FullNameMapperParameters struct {
 
 	// Reference to a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDRef *v1.Reference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
+	LdapUserFederationIDRef *v2.Reference `json:"ldapUserFederationIdRef,omitempty" tf:"-"`
 
 	// Selector for a UserFederation in ldap to populate ldapUserFederationId.
 	// +kubebuilder:validation:Optional
-	LdapUserFederationIDSelector *v1.Selector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
+	LdapUserFederationIDSelector *v2.Selector `json:"ldapUserFederationIdSelector,omitempty" tf:"-"`
 
 	// Display name of this mapper when displayed in the console.
 	// Display name of the mapper when displayed in the console.
@@ -117,11 +117,11 @@ type FullNameMapperParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// When true, this mapper will only be used to write updates to LDAP. Defaults to false.
 	// +kubebuilder:validation:Optional
@@ -130,8 +130,8 @@ type FullNameMapperParameters struct {
 
 // FullNameMapperSpec defines the desired state of FullNameMapper
 type FullNameMapperSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     FullNameMapperParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   FullNameMapperParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -147,8 +147,8 @@ type FullNameMapperSpec struct {
 
 // FullNameMapperStatus defines the observed state of FullNameMapper.
 type FullNameMapperStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        FullNameMapperObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               FullNameMapperObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

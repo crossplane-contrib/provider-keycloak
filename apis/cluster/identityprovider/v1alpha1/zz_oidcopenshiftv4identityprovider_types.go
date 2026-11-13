@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type OidcOpenShiftV4IdentityProviderInitParameters struct {
@@ -36,7 +36,7 @@ type OidcOpenShiftV4IdentityProviderInitParameters struct {
 
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
 	// Client Secret.
-	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef v2.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
 
 	// The scopes to be sent when asking for authorization. Defaults to user:full.
 	// The scopes to be sent when asking for authorization. Defaults to 'user:full'.
@@ -62,11 +62,11 @@ type OidcOpenShiftV4IdentityProviderInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasRef *v1.Reference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasRef *v2.Reference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasSelector *v1.Selector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasSelector *v2.Selector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// A number defining the order of this identity provider in the GUI.
 	// GUI Order
@@ -90,11 +90,11 @@ type OidcOpenShiftV4IdentityProviderInitParameters struct {
 
 	// Reference to a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDRef *v1.Reference `json:"organizationIdRef,omitempty" tf:"-"`
+	OrganizationIDRef *v2.Reference `json:"organizationIdRef,omitempty" tf:"-"`
 
 	// Selector for a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDSelector *v1.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
+	OrganizationIDSelector *v2.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -104,11 +104,11 @@ type OidcOpenShiftV4IdentityProviderInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate postBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	PostBrokerLoginFlowAliasRef *v1.Reference `json:"postBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+	PostBrokerLoginFlowAliasRef *v2.Reference `json:"postBrokerLoginFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate postBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	PostBrokerLoginFlowAliasSelector *v1.Selector `json:"postBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
+	PostBrokerLoginFlowAliasSelector *v2.Selector `json:"postBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// The ID of the identity provider to use. Defaults to openshift-v4, which should be used unless you have extended Keycloak and provided your own implementation.
 	// Provider ID; always openshift-v4 unless you have an extended custom implementation.
@@ -121,11 +121,11 @@ type OidcOpenShiftV4IdentityProviderInitParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// When true, tokens will be stored after authenticating users. Defaults to true.
 	// Enable/disable if tokens must be stored after authenticating users.
@@ -260,7 +260,7 @@ type OidcOpenShiftV4IdentityProviderParameters struct {
 	// The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format.
 	// Client Secret.
 	// +kubebuilder:validation:Optional
-	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
+	ClientSecretSecretRef v2.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
 
 	// The scopes to be sent when asking for authorization. Defaults to user:full.
 	// The scopes to be sent when asking for authorization. Defaults to 'user:full'.
@@ -291,11 +291,11 @@ type OidcOpenShiftV4IdentityProviderParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasRef *v1.Reference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasRef *v2.Reference `json:"firstBrokerLoginFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate firstBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	FirstBrokerLoginFlowAliasSelector *v1.Selector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
+	FirstBrokerLoginFlowAliasSelector *v2.Selector `json:"firstBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// A number defining the order of this identity provider in the GUI.
 	// GUI Order
@@ -325,11 +325,11 @@ type OidcOpenShiftV4IdentityProviderParameters struct {
 
 	// Reference to a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDRef *v1.Reference `json:"organizationIdRef,omitempty" tf:"-"`
+	OrganizationIDRef *v2.Reference `json:"organizationIdRef,omitempty" tf:"-"`
 
 	// Selector for a Organization in organization to populate organizationId.
 	// +kubebuilder:validation:Optional
-	OrganizationIDSelector *v1.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
+	OrganizationIDSelector *v2.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
@@ -340,11 +340,11 @@ type OidcOpenShiftV4IdentityProviderParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate postBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	PostBrokerLoginFlowAliasRef *v1.Reference `json:"postBrokerLoginFlowAliasRef,omitempty" tf:"-"`
+	PostBrokerLoginFlowAliasRef *v2.Reference `json:"postBrokerLoginFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate postBrokerLoginFlowAlias.
 	// +kubebuilder:validation:Optional
-	PostBrokerLoginFlowAliasSelector *v1.Selector `json:"postBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
+	PostBrokerLoginFlowAliasSelector *v2.Selector `json:"postBrokerLoginFlowAliasSelector,omitempty" tf:"-"`
 
 	// The ID of the identity provider to use. Defaults to openshift-v4, which should be used unless you have extended Keycloak and provided your own implementation.
 	// Provider ID; always openshift-v4 unless you have an extended custom implementation.
@@ -359,11 +359,11 @@ type OidcOpenShiftV4IdentityProviderParameters struct {
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmRef *v1.Reference `json:"realmRef,omitempty" tf:"-"`
+	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
-	RealmSelector *v1.Selector `json:"realmSelector,omitempty" tf:"-"`
+	RealmSelector *v2.Selector `json:"realmSelector,omitempty" tf:"-"`
 
 	// When true, tokens will be stored after authenticating users. Defaults to true.
 	// Enable/disable if tokens must be stored after authenticating users.
@@ -383,8 +383,8 @@ type OidcOpenShiftV4IdentityProviderParameters struct {
 
 // OidcOpenShiftV4IdentityProviderSpec defines the desired state of OidcOpenShiftV4IdentityProvider
 type OidcOpenShiftV4IdentityProviderSpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     OidcOpenShiftV4IdentityProviderParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   OidcOpenShiftV4IdentityProviderParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -400,8 +400,8 @@ type OidcOpenShiftV4IdentityProviderSpec struct {
 
 // OidcOpenShiftV4IdentityProviderStatus defines the observed state of OidcOpenShiftV4IdentityProvider.
 type OidcOpenShiftV4IdentityProviderStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        OidcOpenShiftV4IdentityProviderObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               OidcOpenShiftV4IdentityProviderObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

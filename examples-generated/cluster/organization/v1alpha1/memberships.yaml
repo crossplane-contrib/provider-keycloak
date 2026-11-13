@@ -1,0 +1,89 @@
+apiVersion: organization.keycloak.crossplane.io/v1alpha1
+kind: Memberships
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/memberships
+  labels:
+    testing.upbound.io/example-name: org_members
+  name: org-members
+spec:
+  forProvider:
+    membersRefs:
+    - name: alice
+    - name: bob
+    organizationIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: org
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: organization.keycloak.crossplane.io/v1alpha1
+kind: Organization
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/memberships
+  labels:
+    testing.upbound.io/example-name: org
+  name: org
+spec:
+  forProvider:
+    domain:
+    - name: example.com
+    name: my-org
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/memberships
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
+
+---
+
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/memberships
+  labels:
+    testing.upbound.io/example-name: alice
+  name: alice
+spec:
+  forProvider:
+    email: alice@example.com
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    username: alice
+
+---
+
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/memberships
+  labels:
+    testing.upbound.io/example-name: bob
+  name: bob
+spec:
+  forProvider:
+    email: bob@example.com
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    username: bob

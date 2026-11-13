@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type BindingsInitParameters struct {
@@ -26,11 +25,11 @@ type BindingsInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate browserFlow.
 	// +kubebuilder:validation:Optional
-	BrowserFlowRef *v1.NamespacedReference `json:"browserFlowRef,omitempty" tf:"-"`
+	BrowserFlowRef *v2.NamespacedReference `json:"browserFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate browserFlow.
 	// +kubebuilder:validation:Optional
-	BrowserFlowSelector *v1.NamespacedSelector `json:"browserFlowSelector,omitempty" tf:"-"`
+	BrowserFlowSelector *v2.NamespacedSelector `json:"browserFlowSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm ClientAuthenticationFlow.
 	// Which flow should be used for ClientAuthenticationFlow
@@ -42,11 +41,11 @@ type BindingsInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate clientAuthenticationFlow.
 	// +kubebuilder:validation:Optional
-	ClientAuthenticationFlowRef *v1.NamespacedReference `json:"clientAuthenticationFlowRef,omitempty" tf:"-"`
+	ClientAuthenticationFlowRef *v2.NamespacedReference `json:"clientAuthenticationFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate clientAuthenticationFlow.
 	// +kubebuilder:validation:Optional
-	ClientAuthenticationFlowSelector *v1.NamespacedSelector `json:"clientAuthenticationFlowSelector,omitempty" tf:"-"`
+	ClientAuthenticationFlowSelector *v2.NamespacedSelector `json:"clientAuthenticationFlowSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm DirectGrantFlow.
 	// Which flow should be used for DirectGrantFlow
@@ -58,11 +57,11 @@ type BindingsInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate directGrantFlow.
 	// +kubebuilder:validation:Optional
-	DirectGrantFlowRef *v1.NamespacedReference `json:"directGrantFlowRef,omitempty" tf:"-"`
+	DirectGrantFlowRef *v2.NamespacedReference `json:"directGrantFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate directGrantFlow.
 	// +kubebuilder:validation:Optional
-	DirectGrantFlowSelector *v1.NamespacedSelector `json:"directGrantFlowSelector,omitempty" tf:"-"`
+	DirectGrantFlowSelector *v2.NamespacedSelector `json:"directGrantFlowSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm DockerAuthenticationFlow.
 	// Which flow should be used for DockerAuthenticationFlow
@@ -74,11 +73,11 @@ type BindingsInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate dockerAuthenticationFlow.
 	// +kubebuilder:validation:Optional
-	DockerAuthenticationFlowRef *v1.NamespacedReference `json:"dockerAuthenticationFlowRef,omitempty" tf:"-"`
+	DockerAuthenticationFlowRef *v2.NamespacedReference `json:"dockerAuthenticationFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate dockerAuthenticationFlow.
 	// +kubebuilder:validation:Optional
-	DockerAuthenticationFlowSelector *v1.NamespacedSelector `json:"dockerAuthenticationFlowSelector,omitempty" tf:"-"`
+	DockerAuthenticationFlowSelector *v2.NamespacedSelector `json:"dockerAuthenticationFlowSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm FirstBrokerLoginFlow (since Keycloak 24).
 	// Which flow should be used for FirstBrokerLoginFlow
@@ -90,11 +89,11 @@ type BindingsInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm RegistrationFlow.
 	// Which flow should be used for RegistrationFlow
@@ -106,11 +105,11 @@ type BindingsInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate registrationFlow.
 	// +kubebuilder:validation:Optional
-	RegistrationFlowRef *v1.NamespacedReference `json:"registrationFlowRef,omitempty" tf:"-"`
+	RegistrationFlowRef *v2.NamespacedReference `json:"registrationFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate registrationFlow.
 	// +kubebuilder:validation:Optional
-	RegistrationFlowSelector *v1.NamespacedSelector `json:"registrationFlowSelector,omitempty" tf:"-"`
+	RegistrationFlowSelector *v2.NamespacedSelector `json:"registrationFlowSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm ResetCredentialsFlow.
 	// Which flow should be used for ResetCredentialsFlow
@@ -122,11 +121,11 @@ type BindingsInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate resetCredentialsFlow.
 	// +kubebuilder:validation:Optional
-	ResetCredentialsFlowRef *v1.NamespacedReference `json:"resetCredentialsFlowRef,omitempty" tf:"-"`
+	ResetCredentialsFlowRef *v2.NamespacedReference `json:"resetCredentialsFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate resetCredentialsFlow.
 	// +kubebuilder:validation:Optional
-	ResetCredentialsFlowSelector *v1.NamespacedSelector `json:"resetCredentialsFlowSelector,omitempty" tf:"-"`
+	ResetCredentialsFlowSelector *v2.NamespacedSelector `json:"resetCredentialsFlowSelector,omitempty" tf:"-"`
 }
 
 type BindingsObservation struct {
@@ -178,11 +177,11 @@ type BindingsParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate browserFlow.
 	// +kubebuilder:validation:Optional
-	BrowserFlowRef *v1.NamespacedReference `json:"browserFlowRef,omitempty" tf:"-"`
+	BrowserFlowRef *v2.NamespacedReference `json:"browserFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate browserFlow.
 	// +kubebuilder:validation:Optional
-	BrowserFlowSelector *v1.NamespacedSelector `json:"browserFlowSelector,omitempty" tf:"-"`
+	BrowserFlowSelector *v2.NamespacedSelector `json:"browserFlowSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm ClientAuthenticationFlow.
 	// Which flow should be used for ClientAuthenticationFlow
@@ -195,11 +194,11 @@ type BindingsParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate clientAuthenticationFlow.
 	// +kubebuilder:validation:Optional
-	ClientAuthenticationFlowRef *v1.NamespacedReference `json:"clientAuthenticationFlowRef,omitempty" tf:"-"`
+	ClientAuthenticationFlowRef *v2.NamespacedReference `json:"clientAuthenticationFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate clientAuthenticationFlow.
 	// +kubebuilder:validation:Optional
-	ClientAuthenticationFlowSelector *v1.NamespacedSelector `json:"clientAuthenticationFlowSelector,omitempty" tf:"-"`
+	ClientAuthenticationFlowSelector *v2.NamespacedSelector `json:"clientAuthenticationFlowSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm DirectGrantFlow.
 	// Which flow should be used for DirectGrantFlow
@@ -212,11 +211,11 @@ type BindingsParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate directGrantFlow.
 	// +kubebuilder:validation:Optional
-	DirectGrantFlowRef *v1.NamespacedReference `json:"directGrantFlowRef,omitempty" tf:"-"`
+	DirectGrantFlowRef *v2.NamespacedReference `json:"directGrantFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate directGrantFlow.
 	// +kubebuilder:validation:Optional
-	DirectGrantFlowSelector *v1.NamespacedSelector `json:"directGrantFlowSelector,omitempty" tf:"-"`
+	DirectGrantFlowSelector *v2.NamespacedSelector `json:"directGrantFlowSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm DockerAuthenticationFlow.
 	// Which flow should be used for DockerAuthenticationFlow
@@ -229,11 +228,11 @@ type BindingsParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate dockerAuthenticationFlow.
 	// +kubebuilder:validation:Optional
-	DockerAuthenticationFlowRef *v1.NamespacedReference `json:"dockerAuthenticationFlowRef,omitempty" tf:"-"`
+	DockerAuthenticationFlowRef *v2.NamespacedReference `json:"dockerAuthenticationFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate dockerAuthenticationFlow.
 	// +kubebuilder:validation:Optional
-	DockerAuthenticationFlowSelector *v1.NamespacedSelector `json:"dockerAuthenticationFlowSelector,omitempty" tf:"-"`
+	DockerAuthenticationFlowSelector *v2.NamespacedSelector `json:"dockerAuthenticationFlowSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm FirstBrokerLoginFlow (since Keycloak 24).
 	// Which flow should be used for FirstBrokerLoginFlow
@@ -247,11 +246,11 @@ type BindingsParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm RegistrationFlow.
 	// Which flow should be used for RegistrationFlow
@@ -264,11 +263,11 @@ type BindingsParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate registrationFlow.
 	// +kubebuilder:validation:Optional
-	RegistrationFlowRef *v1.NamespacedReference `json:"registrationFlowRef,omitempty" tf:"-"`
+	RegistrationFlowRef *v2.NamespacedReference `json:"registrationFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate registrationFlow.
 	// +kubebuilder:validation:Optional
-	RegistrationFlowSelector *v1.NamespacedSelector `json:"registrationFlowSelector,omitempty" tf:"-"`
+	RegistrationFlowSelector *v2.NamespacedSelector `json:"registrationFlowSelector,omitempty" tf:"-"`
 
 	// The alias of the flow to assign to the realm ResetCredentialsFlow.
 	// Which flow should be used for ResetCredentialsFlow
@@ -281,11 +280,11 @@ type BindingsParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate resetCredentialsFlow.
 	// +kubebuilder:validation:Optional
-	ResetCredentialsFlowRef *v1.NamespacedReference `json:"resetCredentialsFlowRef,omitempty" tf:"-"`
+	ResetCredentialsFlowRef *v2.NamespacedReference `json:"resetCredentialsFlowRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate resetCredentialsFlow.
 	// +kubebuilder:validation:Optional
-	ResetCredentialsFlowSelector *v1.NamespacedSelector `json:"resetCredentialsFlowSelector,omitempty" tf:"-"`
+	ResetCredentialsFlowSelector *v2.NamespacedSelector `json:"resetCredentialsFlowSelector,omitempty" tf:"-"`
 }
 
 // BindingsSpec defines the desired state of Bindings
@@ -307,8 +306,8 @@ type BindingsSpec struct {
 
 // BindingsStatus defines the observed state of Bindings.
 type BindingsStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        BindingsObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               BindingsObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

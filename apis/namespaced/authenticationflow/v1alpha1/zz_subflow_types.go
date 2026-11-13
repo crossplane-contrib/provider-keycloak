@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type SubflowInitParameters struct {
@@ -36,11 +35,11 @@ type SubflowInitParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate parentFlowAlias.
 	// +kubebuilder:validation:Optional
-	ParentFlowAliasRef *v1.NamespacedReference `json:"parentFlowAliasRef,omitempty" tf:"-"`
+	ParentFlowAliasRef *v2.NamespacedReference `json:"parentFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate parentFlowAlias.
 	// +kubebuilder:validation:Optional
-	ParentFlowAliasSelector *v1.NamespacedSelector `json:"parentFlowAliasSelector,omitempty" tf:"-"`
+	ParentFlowAliasSelector *v2.NamespacedSelector `json:"parentFlowAliasSelector,omitempty" tf:"-"`
 
 	// The authenticator priority. Lower values will be executed prior higher values (Only supported by Keycloak >= 25).
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
@@ -55,11 +54,11 @@ type SubflowInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The requirement setting, which can be one of REQUIRED, ALTERNATIVE, OPTIONAL, CONDITIONAL,
 	// or DISABLED. Defaults to DISABLED.
@@ -125,11 +124,11 @@ type SubflowParameters struct {
 
 	// Reference to a Flow in authenticationflow to populate parentFlowAlias.
 	// +kubebuilder:validation:Optional
-	ParentFlowAliasRef *v1.NamespacedReference `json:"parentFlowAliasRef,omitempty" tf:"-"`
+	ParentFlowAliasRef *v2.NamespacedReference `json:"parentFlowAliasRef,omitempty" tf:"-"`
 
 	// Selector for a Flow in authenticationflow to populate parentFlowAlias.
 	// +kubebuilder:validation:Optional
-	ParentFlowAliasSelector *v1.NamespacedSelector `json:"parentFlowAliasSelector,omitempty" tf:"-"`
+	ParentFlowAliasSelector *v2.NamespacedSelector `json:"parentFlowAliasSelector,omitempty" tf:"-"`
 
 	// The authenticator priority. Lower values will be executed prior higher values (Only supported by Keycloak >= 25).
 	// +kubebuilder:validation:Optional
@@ -147,11 +146,11 @@ type SubflowParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The requirement setting, which can be one of REQUIRED, ALTERNATIVE, OPTIONAL, CONDITIONAL,
 	// or DISABLED. Defaults to DISABLED.
@@ -178,8 +177,8 @@ type SubflowSpec struct {
 
 // SubflowStatus defines the observed state of Subflow.
 type SubflowStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        SubflowObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               SubflowObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

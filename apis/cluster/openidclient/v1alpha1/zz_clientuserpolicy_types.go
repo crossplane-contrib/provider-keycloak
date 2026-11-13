@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ClientUserPolicyInitParameters struct {
@@ -33,11 +33,11 @@ type ClientUserPolicyInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
@@ -46,11 +46,11 @@ type ClientUserPolicyInitParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
 	// A list of user IDs that this policy applies to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha1.User
@@ -60,11 +60,11 @@ type ClientUserPolicyInitParameters struct {
 
 	// References to User in user to populate users.
 	// +kubebuilder:validation:Optional
-	UsersRefs []v1.Reference `json:"usersRefs,omitempty" tf:"-"`
+	UsersRefs []v2.Reference `json:"usersRefs,omitempty" tf:"-"`
 
 	// Selector for a list of User in user to populate users.
 	// +kubebuilder:validation:Optional
-	UsersSelector *v1.Selector `json:"usersSelector,omitempty" tf:"-"`
+	UsersSelector *v2.Selector `json:"usersSelector,omitempty" tf:"-"`
 }
 
 type ClientUserPolicyObservation struct {
@@ -120,11 +120,11 @@ type ClientUserPolicyParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.Reference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.Reference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
@@ -134,11 +134,11 @@ type ClientUserPolicyParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.Reference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.Selector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 
 	// A list of user IDs that this policy applies to.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha1.User
@@ -149,17 +149,17 @@ type ClientUserPolicyParameters struct {
 
 	// References to User in user to populate users.
 	// +kubebuilder:validation:Optional
-	UsersRefs []v1.Reference `json:"usersRefs,omitempty" tf:"-"`
+	UsersRefs []v2.Reference `json:"usersRefs,omitempty" tf:"-"`
 
 	// Selector for a list of User in user to populate users.
 	// +kubebuilder:validation:Optional
-	UsersSelector *v1.Selector `json:"usersSelector,omitempty" tf:"-"`
+	UsersSelector *v2.Selector `json:"usersSelector,omitempty" tf:"-"`
 }
 
 // ClientUserPolicySpec defines the desired state of ClientUserPolicy
 type ClientUserPolicySpec struct {
-	v1.ResourceSpec `json:",inline"`
-	ForProvider     ClientUserPolicyParameters `json:"forProvider"`
+	v2.ClusterManagedResourceSpec `json:",inline"`
+	ForProvider                   ClientUserPolicyParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -175,8 +175,8 @@ type ClientUserPolicySpec struct {
 
 // ClientUserPolicyStatus defines the observed state of ClientUserPolicy.
 type ClientUserPolicyStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ClientUserPolicyObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ClientUserPolicyObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

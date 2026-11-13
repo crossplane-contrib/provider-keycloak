@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type KeystoreRsaInitParameters struct {
@@ -24,9 +23,17 @@ type KeystoreRsaInitParameters struct {
 	// Intended algorithm for the key
 	Algorithm *string `json:"algorithm,omitempty" tf:"algorithm,omitempty"`
 
-	// X509 Certificate encoded in PEM format.
+	// X509 Certificate encoded in PEM format. Required without certificate_wo and certificate_wo_version.
 	// X509 Certificate encoded in PEM format
-	CertificateSecretRef v1.LocalSecretKeySelector `json:"certificateSecretRef" tf:"-"`
+	CertificateSecretRef *v2.LocalSecretKeySelector `json:"certificateSecretRef,omitempty" tf:"-"`
+
+	// X509 Certificate encoded in PEM format. Not stored in state or plan files. Requires certificate_wo_version. The certificate is sent on every update, since Keycloak requires it.
+	// X509 Certificate encoded in PEM format as write-only argument
+	CertificateWoSecretRef *v2.LocalSecretKeySelector `json:"certificateWoSecretRef,omitempty" tf:"-"`
+
+	// Version of the certificate_wo argument. Stored in state.
+	// Version of the certificate write-only argument
+	CertificateWoVersion *string `json:"certificateWoVersion,omitempty" tf:"certificate_wo_version,omitempty"`
 
 	// When false, key is not accessible in this realm. Defaults to true.
 	// Set if the keys are enabled
@@ -44,9 +51,17 @@ type KeystoreRsaInitParameters struct {
 	// Priority for the provider
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
 
-	// Private RSA Key encoded in PEM format.
+	// Private RSA Key encoded in PEM format. Required without private_key_wo and private_key_wo_version.
 	// Private RSA Key encoded in PEM format
-	PrivateKeySecretRef v1.LocalSecretKeySelector `json:"privateKeySecretRef" tf:"-"`
+	PrivateKeySecretRef *v2.LocalSecretKeySelector `json:"privateKeySecretRef,omitempty" tf:"-"`
+
+	// Private RSA Key encoded in PEM format. Not stored in state or plan files. Requires private_key_wo_version.
+	// Private RSA Key encoded in PEM format as write-only argument
+	PrivateKeyWoSecretRef *v2.LocalSecretKeySelector `json:"privateKeyWoSecretRef,omitempty" tf:"-"`
+
+	// Trigger for private_key_wo: the key is only sent to Keycloak when this value changes. Stored in state.
+	// Version of the private_key write-only argument
+	PrivateKeyWoVersion *string `json:"privateKeyWoVersion,omitempty" tf:"private_key_wo_version,omitempty"`
 
 	// Use rsa for signing keys, rsa-enc for encryption keys
 	// RSA key provider id
@@ -58,11 +73,11 @@ type KeystoreRsaInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 type KeystoreRsaObservation struct {
@@ -74,6 +89,10 @@ type KeystoreRsaObservation struct {
 	// Intended algorithm for the key. Defaults to RS256. Use RSA-OAEP for encryption keys
 	// Intended algorithm for the key
 	Algorithm *string `json:"algorithm,omitempty" tf:"algorithm,omitempty"`
+
+	// Version of the certificate_wo argument. Stored in state.
+	// Version of the certificate write-only argument
+	CertificateWoVersion *string `json:"certificateWoVersion,omitempty" tf:"certificate_wo_version,omitempty"`
 
 	// When false, key is not accessible in this realm. Defaults to true.
 	// Set if the keys are enabled
@@ -92,6 +111,10 @@ type KeystoreRsaObservation struct {
 	// Priority for the provider. Defaults to 0
 	// Priority for the provider
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
+
+	// Trigger for private_key_wo: the key is only sent to Keycloak when this value changes. Stored in state.
+	// Version of the private_key write-only argument
+	PrivateKeyWoVersion *string `json:"privateKeyWoVersion,omitempty" tf:"private_key_wo_version,omitempty"`
 
 	// Use rsa for signing keys, rsa-enc for encryption keys
 	// RSA key provider id
@@ -113,10 +136,20 @@ type KeystoreRsaParameters struct {
 	// +kubebuilder:validation:Optional
 	Algorithm *string `json:"algorithm,omitempty" tf:"algorithm,omitempty"`
 
-	// X509 Certificate encoded in PEM format.
+	// X509 Certificate encoded in PEM format. Required without certificate_wo and certificate_wo_version.
 	// X509 Certificate encoded in PEM format
 	// +kubebuilder:validation:Optional
-	CertificateSecretRef v1.LocalSecretKeySelector `json:"certificateSecretRef" tf:"-"`
+	CertificateSecretRef *v2.LocalSecretKeySelector `json:"certificateSecretRef,omitempty" tf:"-"`
+
+	// X509 Certificate encoded in PEM format. Not stored in state or plan files. Requires certificate_wo_version. The certificate is sent on every update, since Keycloak requires it.
+	// X509 Certificate encoded in PEM format as write-only argument
+	// +kubebuilder:validation:Optional
+	CertificateWoSecretRef *v2.LocalSecretKeySelector `json:"certificateWoSecretRef,omitempty" tf:"-"`
+
+	// Version of the certificate_wo argument. Stored in state.
+	// Version of the certificate write-only argument
+	// +kubebuilder:validation:Optional
+	CertificateWoVersion *string `json:"certificateWoVersion,omitempty" tf:"certificate_wo_version,omitempty"`
 
 	// When false, key is not accessible in this realm. Defaults to true.
 	// Set if the keys are enabled
@@ -138,10 +171,20 @@ type KeystoreRsaParameters struct {
 	// +kubebuilder:validation:Optional
 	Priority *float64 `json:"priority,omitempty" tf:"priority,omitempty"`
 
-	// Private RSA Key encoded in PEM format.
+	// Private RSA Key encoded in PEM format. Required without private_key_wo and private_key_wo_version.
 	// Private RSA Key encoded in PEM format
 	// +kubebuilder:validation:Optional
-	PrivateKeySecretRef v1.LocalSecretKeySelector `json:"privateKeySecretRef" tf:"-"`
+	PrivateKeySecretRef *v2.LocalSecretKeySelector `json:"privateKeySecretRef,omitempty" tf:"-"`
+
+	// Private RSA Key encoded in PEM format. Not stored in state or plan files. Requires private_key_wo_version.
+	// Private RSA Key encoded in PEM format as write-only argument
+	// +kubebuilder:validation:Optional
+	PrivateKeyWoSecretRef *v2.LocalSecretKeySelector `json:"privateKeyWoSecretRef,omitempty" tf:"-"`
+
+	// Trigger for private_key_wo: the key is only sent to Keycloak when this value changes. Stored in state.
+	// Version of the private_key write-only argument
+	// +kubebuilder:validation:Optional
+	PrivateKeyWoVersion *string `json:"privateKeyWoVersion,omitempty" tf:"private_key_wo_version,omitempty"`
 
 	// Use rsa for signing keys, rsa-enc for encryption keys
 	// RSA key provider id
@@ -155,11 +198,11 @@ type KeystoreRsaParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 }
 
 // KeystoreRsaSpec defines the desired state of KeystoreRsa
@@ -181,8 +224,8 @@ type KeystoreRsaSpec struct {
 
 // KeystoreRsaStatus defines the observed state of KeystoreRsa.
 type KeystoreRsaStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        KeystoreRsaObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               KeystoreRsaObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
@@ -198,9 +241,7 @@ type KeystoreRsaStatus struct {
 type KeystoreRsa struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.certificateSecretRef)",message="spec.forProvider.certificateSecretRef is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.privateKeySecretRef)",message="spec.forProvider.privateKeySecretRef is a required parameter"
 	Spec   KeystoreRsaSpec   `json:"spec"`
 	Status KeystoreRsaStatus `json:"status,omitempty"`
 }

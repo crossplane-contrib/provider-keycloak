@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.20.0
+    controller-gen.kubebuilder.io/version: v0.23.0
   name: clients.openidclient.keycloak.crossplane.io
 spec:
   conversion:
@@ -1639,6 +1639,13 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              lastHandledReconcileAt:
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile-requested-at annotation token that the controller has
+                  processed. Users can compare this to the annotation to determine
+                  whether a reconcile request has been handled.
+                type: string
               observedGeneration:
                 description: |-
                   ObservedGeneration is the latest metadata.generation
@@ -2120,7 +2127,7 @@ spec:
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
-                      “.
+                      ``.
                     type: string
                   realmId:
                     description: The realm this client is attached to.
@@ -2684,7 +2691,7 @@ spec:
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
-                      “.
+                      ``.
                     type: string
                   realmId:
                     description: The realm this client is attached to.
@@ -3146,7 +3153,7 @@ spec:
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
-                      “.
+                      ``.
                     type: string
                   realmId:
                     description: The realm this client is attached to.
@@ -3267,6 +3274,13 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              lastHandledReconcileAt:
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile-requested-at annotation token that the controller has
+                  processed. Users can compare this to the annotation to determine
+                  whether a reconcile request has been handled.
+                type: string
               observedGeneration:
                 description: |-
                   ObservedGeneration is the latest metadata.generation

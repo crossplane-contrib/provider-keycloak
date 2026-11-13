@@ -10,8 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
-	v2 "github.com/crossplane/crossplane-runtime/v2/apis/common/v2"
+	v2 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
 
 type ClientGroupPolicyInitParameters struct {
@@ -40,11 +39,11 @@ type ClientGroupPolicyInitParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
@@ -53,11 +52,11 @@ type ClientGroupPolicyInitParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 }
 
 type ClientGroupPolicyObservation struct {
@@ -123,11 +122,11 @@ type ClientGroupPolicyParameters struct {
 
 	// Reference to a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDRef *v1.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
+	RealmIDRef *v2.NamespacedReference `json:"realmIdRef,omitempty" tf:"-"`
 
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
-	RealmIDSelector *v1.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
@@ -137,11 +136,11 @@ type ClientGroupPolicyParameters struct {
 
 	// Reference to a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDRef *v1.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
+	ResourceServerIDRef *v2.NamespacedReference `json:"resourceServerIdRef,omitempty" tf:"-"`
 
 	// Selector for a Client in openidclient to populate resourceServerId.
 	// +kubebuilder:validation:Optional
-	ResourceServerIDSelector *v1.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
+	ResourceServerIDSelector *v2.NamespacedSelector `json:"resourceServerIdSelector,omitempty" tf:"-"`
 }
 
 type GroupsInitParameters struct {
@@ -156,11 +155,11 @@ type GroupsInitParameters struct {
 
 	// Reference to a Group in group to populate id.
 	// +kubebuilder:validation:Optional
-	IDRef *v1.NamespacedReference `json:"idRef,omitempty" tf:"-"`
+	IDRef *v2.NamespacedReference `json:"idRef,omitempty" tf:"-"`
 
 	// Selector for a Group in group to populate id.
 	// +kubebuilder:validation:Optional
-	IDSelector *v1.NamespacedSelector `json:"idSelector,omitempty" tf:"-"`
+	IDSelector *v2.NamespacedSelector `json:"idSelector,omitempty" tf:"-"`
 
 	// The path of the group.
 	Path *string `json:"path,omitempty" tf:"path,omitempty"`
@@ -192,11 +191,11 @@ type GroupsParameters struct {
 
 	// Reference to a Group in group to populate id.
 	// +kubebuilder:validation:Optional
-	IDRef *v1.NamespacedReference `json:"idRef,omitempty" tf:"-"`
+	IDRef *v2.NamespacedReference `json:"idRef,omitempty" tf:"-"`
 
 	// Selector for a Group in group to populate id.
 	// +kubebuilder:validation:Optional
-	IDSelector *v1.NamespacedSelector `json:"idSelector,omitempty" tf:"-"`
+	IDSelector *v2.NamespacedSelector `json:"idSelector,omitempty" tf:"-"`
 
 	// The path of the group.
 	// +kubebuilder:validation:Optional
@@ -222,8 +221,8 @@ type ClientGroupPolicySpec struct {
 
 // ClientGroupPolicyStatus defines the observed state of ClientGroupPolicy.
 type ClientGroupPolicyStatus struct {
-	v1.ResourceStatus `json:",inline"`
-	AtProvider        ClientGroupPolicyObservation `json:"atProvider,omitempty"`
+	v2.ManagedResourceStatus `json:",inline"`
+	AtProvider               ClientGroupPolicyObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
