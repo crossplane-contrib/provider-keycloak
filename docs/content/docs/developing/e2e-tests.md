@@ -123,6 +123,12 @@ returns an empty `systemInfo.version`.
    `000-init.yaml`.
 4. Reference prerequisites via `*Ref` blocks, never by literal name — the
    selection DAG derives its edges from those refs.
+5. If you need to check more than Ready/Synced (for example that a field is
+   not late-initialized, or that an update keeps a value), annotate a resource
+   with `uptest.upbound.io/post-assert-hook: <script>.sh`. The path is relative
+   to the demo file, and the script must be executable. uptest runs it right
+   after that resource's conditions pass. Example:
+   `dev/demos/*/075-realm-flow-bindings-ownership.yaml` (#751).
 
 ## Why Tests Get Stuck
 
