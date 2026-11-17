@@ -23,6 +23,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -39,10 +40,29 @@ import (
 const RecoveryAtGenerationAnnotation = "provider-keycloak.crossplane.io/stale-ref-recovery-at-generation"
 
 // RecoveredValuesAnnotation records a fingerprint of the reference-resolved
-// values the last recovery cleared. MaybeRecover does not clear the same
-// values twice: if the resolver puts back exactly what was cleared, the
-// references were not stale.
+// values the last recovery cleared and when ("<fingerprint>@<RFC3339>").
+// MaybeRecover does not clear the same values again within
+// ValuesRecoveryBackoff: if the resolver puts back exactly what was cleared,
+// either the references were not stale or the referenced resource has not
+// observed its replacement yet. Both can change, so the marker expires.
 const RecoveredValuesAnnotation = "provider-keycloak.crossplane.io/stale-ref-recovery-values"
+
+// ValuesRecoveryBackoff is how long MaybeRecover waits before clearing the
+// same values again. It bounds a recovery loop to one clearing per interval
+// instead of one per reconcile, and lets recovery retry once a referenced
+// resource has caught up with a recreated Keycloak object.
+const ValuesRecoveryBackoff = 10 * time.Minute
+
+// Upjet's async client records a failed create only in this condition (see
+// upjet pkg/resource.LastAsyncOperationCondition); it does not set
+// crossplane.io/external-create-failed.
+const (
+	typeLastAsyncOperation   xpv1.ConditionType   = "LastAsyncOperation"
+	reasonAsyncCreateFailure xpv1.ConditionReason = "AsyncCreateFailure"
+)
+
+// now is replaced in tests.
+var now = time.Now
 
 // Managed is the minimum subset of resource.Managed that MaybeRecover needs.
 // Narrowing the interface keeps the package independently testable.
@@ -97,16 +117,55 @@ func MaybeRecover(ctx context.Context, kube client.Client, mg Managed) (bool, er
 //
 // With upjet's async external client, crossplane-runtime sets
 // external-create-succeeded as soon as Create returns, i.e. when the async
-// operation starts, not when Keycloak accepted the object. A failed async
-// create is recorded later as external-create-failed. A failure newer than
-// the last "success" therefore means the resource was never created.
+// operation starts, not when Keycloak accepted the object. So the annotation
+// alone does not confirm creation:
+//   - an observed ID (status.atProvider.id) confirms it: Keycloak returned
+//     the object at least once;
+//   - otherwise a failed async create (LastAsyncOperation=False,
+//     AsyncCreateFailure) or an external-create-failed newer than the last
+//     "success" means the resource was never created.
 func wasCreatedExternally(mg Managed) bool {
 	succeeded := meta.GetExternalCreateSucceeded(mg)
 	if succeeded.IsZero() {
 		return false
 	}
+	if hasObservedID(mg) {
+		return true
+	}
+	if c := mg.GetCondition(typeLastAsyncOperation); c.Status == corev1.ConditionFalse && c.Reason == reasonAsyncCreateFailure {
+		return false
+	}
 	failed := meta.GetExternalCreateFailed(mg)
 	return failed.IsZero() || succeeded.After(failed)
+}
+
+// hasObservedID reports whether status.atProvider.id is set. Upjet fills it
+// from the Terraform state once Keycloak has returned the object, and every
+// generated resource observation carries it.
+func hasObservedID(mg Managed) bool {
+	v := reflect.ValueOf(mg)
+	for v.Kind() == reflect.Pointer {
+		if v.IsNil() {
+			return false
+		}
+		v = v.Elem()
+	}
+	if v.Kind() != reflect.Struct {
+		return false
+	}
+	for _, name := range []string{"Status", "AtProvider", "ID"} {
+		v = v.FieldByName(name)
+		if !v.IsValid() {
+			return false
+		}
+		if v.Kind() == reflect.Pointer {
+			if v.IsNil() {
+				return false
+			}
+			v = v.Elem()
+		}
+	}
+	return v.Kind() == reflect.String && v.Len() > 0
 }
 
 // alreadyRecoveredForCurrentGeneration returns true when a prior reconcile
@@ -126,24 +185,33 @@ func alreadyRecoveredForCurrentGeneration(mg Managed) bool {
 	return n >= mg.GetGeneration()
 }
 
-// alreadyRecoveredForValues returns true when the last recovery cleared
-// exactly the values the resolver has put back since. The generation guard
-// alone cannot stop a loop: the resolver writes the re-resolved values into
-// spec.forProvider, which bumps the generation past the recorded one. If the
-// resolver yields the same values again, the references were not stale and
-// clearing them again cannot help.
+// alreadyRecoveredForValues returns true when, less than
+// ValuesRecoveryBackoff ago, a recovery cleared exactly the values the
+// resolver has put back since. The generation guard alone cannot stop a loop:
+// the resolver writes the re-resolved values into spec.forProvider, which
+// bumps the generation past the recorded one. Clearing the same values again
+// right away cannot help; after the backoff it may (the referenced resource
+// may have observed a recreated object by then, or a new incident started).
 func alreadyRecoveredForValues(mg Managed, fingerprint string) bool {
 	if fingerprint == "" {
 		return false
 	}
-	return mg.GetAnnotations()[RecoveredValuesAnnotation] == fingerprint
+	fp, at, ok := strings.Cut(mg.GetAnnotations()[RecoveredValuesAnnotation], "@")
+	if !ok || fp != fingerprint {
+		return false
+	}
+	t, err := time.Parse(time.RFC3339, at)
+	if err != nil {
+		return false
+	}
+	return now().Sub(t) < ValuesRecoveryBackoff
 }
 
 // setRecoveryAnnotations marks the resource as recovered at its post-Update
-// generation and records a fingerprint of the values that were cleared.
-// Clearing spec.forProvider increments the spec generation by one, so we
-// record the predicted post-Update value (mg.GetGeneration()+1) to match what
-// a subsequent reconcile will observe.
+// generation and records a fingerprint of the values that were cleared, with
+// the time. Clearing spec.forProvider increments the spec generation by one,
+// so we record the predicted post-Update value (mg.GetGeneration()+1) to
+// match what a subsequent reconcile will observe.
 func setRecoveryAnnotations(mg Managed, fingerprint string) {
 	a := mg.GetAnnotations()
 	if a == nil {
@@ -151,19 +219,18 @@ func setRecoveryAnnotations(mg Managed, fingerprint string) {
 	}
 	a[RecoveryAtGenerationAnnotation] = strconv.FormatInt(mg.GetGeneration()+1, 10)
 	if fingerprint != "" {
-		a[RecoveredValuesAnnotation] = fingerprint
+		a[RecoveredValuesAnnotation] = fingerprint + "@" + now().UTC().Format(time.RFC3339)
 	}
 	mg.SetAnnotations(a)
 }
 
-// notFoundStatus matches a standalone 404 status code, e.g. the "404 Not Found"
-// that terraform-provider-keycloak puts into its ApiError message ("error
-// sending GET request to <path>: 404 Not Found. Response body: ..."). The
-// digits must not be part of a longer token: the message also carries the
-// request path, whose UUIDs regularly contain "404" (e.g. ".../mappers/
-// 0a65e744-e648-4040-b257-ed2492a33d35"), and a 401 or 500 for such a path
-// must not be taken for a stale reference.
-var notFoundStatus = regexp.MustCompile(`(^|[^0-9A-Za-z-])404([^0-9A-Za-z-]|$)`)
+// notFoundStatus matches the HTTP status that terraform-provider-keycloak
+// puts into its ApiError message: "error sending GET request to <path>: 404
+// Not Found. Response body: ...". Only that signature counts. The message
+// also carries the request path, which may contain "404" anywhere: in UUIDs
+// (".../mappers/0a65e744-e648-4040-b257-ed2492a33d35") or as a whole segment
+// (a realm named "404"). A 401 or 500 for such a path is not a stale reference.
+var notFoundStatus = regexp.MustCompile(`(^|: )404 Not Found\b`)
 
 // isStaleRefCondition reports whether c looks like a 404 from
 // terraform-provider-keycloak. keycloak.ApiError.Error() returns only its
