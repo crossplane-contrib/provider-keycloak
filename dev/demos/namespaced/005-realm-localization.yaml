@@ -6,7 +6,7 @@ metadata:
 spec:
   # The parent realm is removed during namespaced test cleanup; avoid racing a
   # localization DELETE against that removal.
-  deletionPolicy: Orphan
+  managementPolicies: ["Create", "Update", "Observe", "LateInitialize"]
   forProvider:
     realmIdRef:
       name: "dev-ns"
