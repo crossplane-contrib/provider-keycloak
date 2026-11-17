@@ -15,7 +15,12 @@ package stalerefs
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
 	"reflect"
+	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -33,6 +38,12 @@ import (
 // bumps the spec, recovery becomes eligible again.
 const RecoveryAtGenerationAnnotation = "provider-keycloak.crossplane.io/stale-ref-recovery-at-generation"
 
+// RecoveredValuesAnnotation records a fingerprint of the reference-resolved
+// values the last recovery cleared. MaybeRecover does not clear the same
+// values twice: if the resolver puts back exactly what was cleared, the
+// references were not stale.
+const RecoveredValuesAnnotation = "provider-keycloak.crossplane.io/stale-ref-recovery-values"
+
 // Managed is the minimum subset of resource.Managed that MaybeRecover needs.
 // Narrowing the interface keeps the package independently testable.
 type Managed interface {
@@ -47,6 +58,11 @@ type Managed interface {
 // It returns true when a clearing was attempted (regardless of whether the
 // update raced with another writer).
 func MaybeRecover(ctx context.Context, kube client.Client, mg Managed) (bool, error) {
+	// The reference resolver does not run for deleted resources, so values
+	// cleared now would never come back and the delete could never finish.
+	if meta.WasDeleted(mg) {
+		return false, nil
+	}
 	if !isStaleRefCondition(mg.GetCondition(xpv1.TypeSynced)) {
 		return false, nil
 	}
@@ -56,10 +72,14 @@ func MaybeRecover(ctx context.Context, kube client.Client, mg Managed) (bool, er
 	if alreadyRecoveredForCurrentGeneration(mg) {
 		return false, nil
 	}
+	fingerprint := resolvedValuesFingerprint(mg)
+	if alreadyRecoveredForValues(mg, fingerprint) {
+		return false, nil
+	}
 	if !clearResolvedRefs(mg) {
 		return false, nil
 	}
-	setRecoveryAnnotation(mg)
+	setRecoveryAnnotations(mg, fingerprint)
 	if err := kube.Update(ctx, mg); err != nil {
 		if apierrors.IsConflict(err) {
 			return true, nil
@@ -74,15 +94,26 @@ func MaybeRecover(ctx context.Context, kube client.Client, mg Managed) (bool, er
 // via the external-create-succeeded annotation. A resource that has never
 // been created cannot hold a stale UUID; any 404 during cold start is a
 // transient parent-not-ready race and must not trigger destructive clearing.
+//
+// With upjet's async external client, crossplane-runtime sets
+// external-create-succeeded as soon as Create returns, i.e. when the async
+// operation starts, not when Keycloak accepted the object. A failed async
+// create is recorded later as external-create-failed. A failure newer than
+// the last "success" therefore means the resource was never created.
 func wasCreatedExternally(mg Managed) bool {
-	return !meta.GetExternalCreateSucceeded(mg).IsZero()
+	succeeded := meta.GetExternalCreateSucceeded(mg)
+	if succeeded.IsZero() {
+		return false
+	}
+	failed := meta.GetExternalCreateFailed(mg)
+	return failed.IsZero() || succeeded.After(failed)
 }
 
 // alreadyRecoveredForCurrentGeneration returns true when a prior reconcile
-// already cleared stale references at the current spec generation. Without
-// this guard, a referenced K8s resource that is itself stuck stale would
-// cause MaybeRecover to clear, watch the runtime resolver repopulate the
-// same stale UUID, clear again, ad infinitum.
+// already cleared stale references at the current spec generation, i.e. the
+// resolver has not written the values back yet. It does not stop a loop on
+// its own: once the resolver repopulates the values, the generation moves
+// past the recorded one. alreadyRecoveredForValues covers that case.
 func alreadyRecoveredForCurrentGeneration(mg Managed) bool {
 	v, ok := mg.GetAnnotations()[RecoveryAtGenerationAnnotation]
 	if !ok {
@@ -95,29 +126,54 @@ func alreadyRecoveredForCurrentGeneration(mg Managed) bool {
 	return n >= mg.GetGeneration()
 }
 
-// setRecoveryAnnotation marks the resource as recovered at its post-Update
-// generation. Clearing spec.forProvider increments the spec generation by
-// one, so we record the predicted post-Update value (mg.GetGeneration()+1)
-// to match what a subsequent reconcile will observe.
-func setRecoveryAnnotation(mg Managed) {
+// alreadyRecoveredForValues returns true when the last recovery cleared
+// exactly the values the resolver has put back since. The generation guard
+// alone cannot stop a loop: the resolver writes the re-resolved values into
+// spec.forProvider, which bumps the generation past the recorded one. If the
+// resolver yields the same values again, the references were not stale and
+// clearing them again cannot help.
+func alreadyRecoveredForValues(mg Managed, fingerprint string) bool {
+	if fingerprint == "" {
+		return false
+	}
+	return mg.GetAnnotations()[RecoveredValuesAnnotation] == fingerprint
+}
+
+// setRecoveryAnnotations marks the resource as recovered at its post-Update
+// generation and records a fingerprint of the values that were cleared.
+// Clearing spec.forProvider increments the spec generation by one, so we
+// record the predicted post-Update value (mg.GetGeneration()+1) to match what
+// a subsequent reconcile will observe.
+func setRecoveryAnnotations(mg Managed, fingerprint string) {
 	a := mg.GetAnnotations()
 	if a == nil {
 		a = map[string]string{}
 	}
 	a[RecoveryAtGenerationAnnotation] = strconv.FormatInt(mg.GetGeneration()+1, 10)
+	if fingerprint != "" {
+		a[RecoveredValuesAnnotation] = fingerprint
+	}
 	mg.SetAnnotations(a)
 }
 
+// notFoundStatus matches a standalone 404 status code, e.g. the "404 Not Found"
+// that terraform-provider-keycloak puts into its ApiError message ("error
+// sending GET request to <path>: 404 Not Found. Response body: ..."). The
+// digits must not be part of a longer token: the message also carries the
+// request path, whose UUIDs regularly contain "404" (e.g. ".../mappers/
+// 0a65e744-e648-4040-b257-ed2492a33d35"), and a 401 or 500 for such a path
+// must not be taken for a stale reference.
+var notFoundStatus = regexp.MustCompile(`(^|[^0-9A-Za-z-])404([^0-9A-Za-z-]|$)`)
+
 // isStaleRefCondition reports whether c looks like a 404 from
-// terraform-provider-keycloak. The terraform-provider-keycloak HTTP client
-// returns a *keycloak.ApiError whose Error() includes both the "ApiError"
-// type name and the "404" status code, so either substring is a reliable
-// hit when wrapped through upjet into the Synced condition message.
+// terraform-provider-keycloak. keycloak.ApiError.Error() returns only its
+// message (no type name), so the status code in that message is the only
+// reliable signal.
 func isStaleRefCondition(c xpv1.Condition) bool {
 	if c.Status != corev1.ConditionFalse {
 		return false
 	}
-	return strings.Contains(c.Message, "404") || strings.Contains(c.Message, "ApiError")
+	return notFoundStatus.MatchString(c.Message)
 }
 
 // clearResolvedRefs walks Spec.ForProvider and Spec.InitProvider; for each
@@ -125,28 +181,90 @@ func isStaleRefCondition(c xpv1.Condition) bool {
 // selector sibling is non-nil, it zeroes the value field X. Returns true
 // if at least one value was cleared.
 func clearResolvedRefs(mg Managed) bool {
+	cleared := false
+	for _, params := range parameterStructs(mg) {
+		if clearRefsInStruct(params.value) {
+			cleared = true
+		}
+	}
+	return cleared
+}
+
+type namedParams struct {
+	name  string
+	value reflect.Value
+}
+
+// parameterStructs returns Spec.ForProvider and Spec.InitProvider of mg, if
+// present.
+func parameterStructs(mg Managed) []namedParams {
 	v := reflect.ValueOf(mg)
 	for v.Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
 	if v.Kind() != reflect.Struct {
-		return false
+		return nil
 	}
 	spec := v.FieldByName("Spec")
 	if !spec.IsValid() || spec.Kind() != reflect.Struct {
-		return false
+		return nil
 	}
-	cleared := false
+	var out []namedParams
 	for _, name := range []string{"ForProvider", "InitProvider"} {
 		params := spec.FieldByName(name)
-		if !params.IsValid() {
-			continue
-		}
-		if clearRefsInStruct(params) {
-			cleared = true
+		if params.IsValid() && params.Kind() == reflect.Struct {
+			out = append(out, namedParams{name: name, value: params})
 		}
 	}
-	return cleared
+	return out
+}
+
+// resolvedValuesFingerprint returns a short hash over every value field that
+// clearResolvedRefs would clear (same pairing rules), or "" if there is none.
+func resolvedValuesFingerprint(mg Managed) string {
+	var entries []string
+	for _, params := range parameterStructs(mg) {
+		t := params.value.Type()
+		seen := map[string]bool{}
+		for i := 0; i < params.value.NumField(); i++ {
+			valueName, ok := valueFieldName(t.Field(i).Name)
+			if !ok || seen[valueName] || isNilOrEmpty(params.value.Field(i)) {
+				continue
+			}
+			value := params.value.FieldByName(valueName)
+			if !value.IsValid() || isNilOrEmpty(value) {
+				continue
+			}
+			seen[valueName] = true
+			entries = append(entries, params.name+"."+valueName+"="+describeValue(value))
+		}
+	}
+	if len(entries) == 0 {
+		return ""
+	}
+	sort.Strings(entries)
+	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
+	return hex.EncodeToString(sum[:8])
+}
+
+// describeValue renders the reference-resolved value types upjet generates
+// (*string, []*string, string, ...) as a stable string.
+func describeValue(v reflect.Value) string {
+	switch v.Kind() { //nolint:exhaustive // pointers and slices need unwrapping, everything else prints as is
+	case reflect.Pointer, reflect.Interface:
+		if v.IsNil() {
+			return "<nil>"
+		}
+		return describeValue(v.Elem())
+	case reflect.Slice, reflect.Array:
+		parts := make([]string, v.Len())
+		for i := range parts {
+			parts[i] = describeValue(v.Index(i))
+		}
+		return "[" + strings.Join(parts, ",") + "]"
+	default:
+		return fmt.Sprint(v.Interface())
+	}
 }
 
 // refSuffixes are the field-name suffixes that mark a field as a reference
