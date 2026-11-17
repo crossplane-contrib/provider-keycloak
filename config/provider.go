@@ -27,6 +27,7 @@ import (
 	"github.com/crossplane-contrib/provider-keycloak/config/role"
 	"github.com/crossplane-contrib/provider-keycloak/config/saml"
 	"github.com/crossplane-contrib/provider-keycloak/config/samlclient"
+	"github.com/crossplane-contrib/provider-keycloak/config/singletonlist"
 	"github.com/crossplane-contrib/provider-keycloak/config/user"
 	"github.com/crossplane-contrib/provider-keycloak/config/workflow"
 	"github.com/crossplane-contrib/provider-keycloak/internal/tfconcurrency"
@@ -96,6 +97,7 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 		ujconfig.WithDefaultResourceOptions(
 			ExternalNameConfigurations(),
 			KnownReferencers(),
+			singletonlist.Validate(),
 		),
 		ujconfig.WithRootGroup(rootGroup))
 
@@ -150,6 +152,7 @@ func GetProviderNamespaced(generationProvider bool) (*ujconfig.Provider, error) 
 		ujconfig.WithDefaultResourceOptions(
 			ExternalNameConfigurations(),
 			KnownReferencers(),
+			singletonlist.Validate(),
 		),
 		ujconfig.WithRootGroup(rootGroupNamespaced))
 
