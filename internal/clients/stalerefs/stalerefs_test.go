@@ -65,11 +65,21 @@ type fakeSpec struct {
 	InitProvider fakeParams
 }
 
+// fakeObservation mirrors the ID every upjet-generated observation carries.
+type fakeObservation struct {
+	ID *string
+}
+
+type fakeStatus struct {
+	xpv1.ConditionedStatus
+	AtProvider fakeObservation
+}
+
 type fakeManaged struct {
 	metav1.TypeMeta
 	metav1.ObjectMeta
 	Spec   fakeSpec
-	Status xpv1.ConditionedStatus
+	Status fakeStatus
 }
 
 func (f *fakeManaged) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
@@ -109,6 +119,16 @@ func TestIsStaleRefCondition(t *testing.T) {
 		{
 			name: "401 for a path whose UUID contains 404 → not stale",
 			cond: xpv1.Condition{Status: corev1.ConditionFalse, Message: `connect failed: cannot get ID: error sending GET request to /admin/realms/infoma/identity-provider/instances/acme/mappers/0a65e744-e648-4040-b257-ed2492a33d35: 401 Unauthorized. Response body: {"error":"HTTP 401 Unauthorized"}`},
+			want: false,
+		},
+		{
+			name: "401 for a path with a segment named 404 → not stale",
+			cond: xpv1.Condition{Status: corev1.ConditionFalse, Message: "error sending GET request to /admin/realms/404/clients/a: 401 Unauthorized."},
+			want: false,
+		},
+		{
+			name: "lower-case or bare 404 without the status text → not stale",
+			cond: xpv1.Condition{Status: corev1.ConditionFalse, Message: "observe failed: keycloak.ApiError: 404 not found"},
 			want: false,
 		},
 		{
@@ -296,7 +316,7 @@ func TestMaybeRecover(t *testing.T) {
 		Type:    xpv1.TypeSynced,
 		Status:  corev1.ConditionFalse,
 		Reason:  xpv1.ReasonReconcileError,
-		Message: "observe failed: keycloak.ApiError: 404 not found",
+		Message: "connect failed: cannot get ID: error sending GET request to /admin/realms/r/clients/x: 404 Not Found. Response body: {}",
 	}
 	healthyCond := xpv1.Condition{
 		Type:   xpv1.TypeSynced,
@@ -731,6 +751,137 @@ func TestMaybeRecover(t *testing.T) {
 		recovered, err := MaybeRecover(context.Background(), kube, mg)
 		if err != nil || !recovered {
 			t.Fatalf("second MaybeRecover() = (%v,%v), want (true,nil) for changed values", recovered, err)
+		}
+	})
+
+	// upjet's async callback records a failed create only in the
+	// LastAsyncOperation condition; external-create-failed is not set.
+	asyncCreateFailed := xpv1.Condition{
+		Type:    typeLastAsyncOperation,
+		Status:  corev1.ConditionFalse,
+		Reason:  reasonAsyncCreateFailure,
+		Message: "async create failed: failed to create the resource: [{0 error sending POST request to /admin/realms/r/identity-provider/instances/acme/mappers: 404 Not Found. Response body: {}  []}]",
+	}
+
+	t.Run("async create failed, only the start annotation set → never created, skip", func(t *testing.T) {
+		mg := &fakeManaged{
+			ObjectMeta: createdExternally(),
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:    ptr("uuid"),
+				ClientIDRef: &xpv1.Reference{Name: "c"},
+			}},
+		}
+		mg.SetConditions(staleCond, asyncCreateFailed)
+
+		kube := &test.MockClient{
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
+				t.Errorf("kube.Update was called for a failed async create")
+				return nil
+			},
+		}
+		recovered, err := MaybeRecover(context.Background(), kube, mg)
+		if err != nil || recovered {
+			t.Fatalf("MaybeRecover() = (%v,%v), want (false,nil)", recovered, err)
+		}
+	})
+
+	// A resource Keycloak returned before (observed ID) that fails to be
+	// re-created because a referenced UUID is stale is exactly the case
+	// recovery exists for.
+	t.Run("async create failed but an ID was observed before → created, recover", func(t *testing.T) {
+		mg := &fakeManaged{
+			ObjectMeta: createdExternally(),
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:    ptr("uuid"),
+				ClientIDRef: &xpv1.Reference{Name: "c"},
+			}},
+		}
+		mg.Status.AtProvider.ID = ptr("3357aaeb-6461-40cc-96e6-7e0b6d3a02e5")
+		mg.SetConditions(staleCond, asyncCreateFailed)
+
+		kube := &test.MockClient{
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
+		}
+		recovered, err := MaybeRecover(context.Background(), kube, mg)
+		if err != nil || !recovered {
+			t.Fatalf("MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
+		}
+	})
+
+	// The resolver may restore the old UUID because the referenced resource
+	// has not observed its recreated Keycloak object yet. The values guard
+	// must not block that for good.
+	t.Run("same values restored, backoff elapsed → recover again", func(t *testing.T) {
+		t0 := time.Date(2026, 11, 16, 15, 0, 0, 0, time.UTC)
+		clock := t0
+		now = func() time.Time { return clock }
+		t.Cleanup(func() { now = time.Now })
+
+		mg := &fakeManaged{
+			ObjectMeta: metav1.ObjectMeta{
+				Generation:  4,
+				Annotations: map[string]string{meta.AnnotationKeyExternalCreateSucceeded: t0.Format(time.RFC3339)},
+			},
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:    ptr("same-uuid"),
+				ClientIDRef: &xpv1.Reference{Name: "c"},
+			}},
+		}
+		mg.SetConditions(staleCond)
+
+		updates := 0
+		kube := &test.MockClient{
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
+				updates++
+				return nil
+			},
+		}
+		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
+			t.Fatalf("first MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
+		}
+
+		restore := func(gen int64) {
+			mg.SetGeneration(gen)
+			mg.Spec.ForProvider.ClientID = ptr("same-uuid")
+		}
+
+		restore(6)
+		clock = t0.Add(ValuesRecoveryBackoff - time.Second)
+		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || recovered {
+			t.Fatalf("within backoff: MaybeRecover() = (%v,%v), want (false,nil)", recovered, err)
+		}
+
+		clock = t0.Add(ValuesRecoveryBackoff + time.Second)
+		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
+			t.Fatalf("after backoff: MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
+		}
+		if updates != 2 {
+			t.Errorf("kube.Update called %d times, want 2", updates)
+		}
+	})
+
+	t.Run("values annotation malformed → recover (defensive)", func(t *testing.T) {
+		mg := &fakeManaged{
+			ObjectMeta: metav1.ObjectMeta{
+				Generation: 4,
+				Annotations: map[string]string{
+					meta.AnnotationKeyExternalCreateSucceeded: time.Now().Format(time.RFC3339),
+					RecoveredValuesAnnotation:                 "no-timestamp",
+				},
+			},
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:    ptr("uuid"),
+				ClientIDRef: &xpv1.Reference{Name: "c"},
+			}},
+		}
+		mg.SetConditions(staleCond)
+
+		kube := &test.MockClient{
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
+		}
+		recovered, err := MaybeRecover(context.Background(), kube, mg)
+		if err != nil || !recovered {
+			t.Fatalf("MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
 		}
 	})
 
