@@ -160,6 +160,27 @@
         "major"
       ],
       "automerge": false
+    },
+    {
+      "description": "e2e Keycloak matrix: patches of all entries in one PR, a new minor for latest in another; never automerged (a new Keycloak release is the run worth looking at)",
+      "groupName": "e2e Keycloak versions",
+      "matchDepNames": [
+        "keycloak-e2e-latest",
+        "keycloak-e2e-supported"
+      ],
+      "separateMinorPatch": true,
+      "automerge": false
+    },
+    {
+      "description": "Drop the jump of a supported entry to a newer minor (latest covers new minors)",
+      "matchDepNames": [
+        "keycloak-e2e-supported"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "major"
+      ],
+      "enabled": false
     }
   ],
   "customManagers": [
@@ -330,6 +351,33 @@
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "crossplane/crossplane",
       "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "e2e Keycloak matrix: newest release (minor and patch updates)",
+      "managerFilePatterns": [
+        "/^\\.github/e2e-keycloak-versions\\.json$/"
+      ],
+      "matchStrings": [
+        "\"latest\":\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "depNameTemplate": "keycloak-e2e-latest",
+      "packageNameTemplate": "quay.io/keycloak/keycloak",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "e2e Keycloak matrix: latest patch of every supported minor",
+      "managerFilePatterns": [
+        "/^\\.github/e2e-keycloak-versions\\.json$/"
+      ],
+      "matchStrings": [
+        "[\\[,]\\s*\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
+      ],
+      "matchStringsStrategy": "any",
+      "depNameTemplate": "keycloak-e2e-supported",
+      "packageNameTemplate": "quay.io/keycloak/keycloak",
+      "datasourceTemplate": "docker"
     }
   ]
 }
