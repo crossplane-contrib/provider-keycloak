@@ -4,10 +4,11 @@
 #
 # What it proves:
 #   When a Keycloak object referenced by another managed resource is deleted
-#   and recreated out-of-band (so its UUID changes), the provider clears the
-#   stored stale UUID on spec.forProvider and the runtime resolver
-#   repopulates it with the new one. Without this fix, the dependent resource
-#   stays Synced=False with a 404 from Keycloak forever.
+#   and recreated out-of-band (so its UUID changes), the provider re-resolves
+#   the reference in memory and replaces the stored stale UUID on
+#   spec.forProvider with the new one in a single update. Without this fix,
+#   the dependent resource stays Synced=False with a 404 from Keycloak
+#   forever.
 #
 # Scenario (self-contained — creates its own Realm, Client, Role, RoleMapper):
 #   1. Apply Realm, Client, target Role and a RoleMapper that references both.
