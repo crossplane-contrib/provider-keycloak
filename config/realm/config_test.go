@@ -2,6 +2,9 @@ package realm
 
 import (
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/keycloak/terraform-provider-keycloak/keycloak"
 )
 
 func TestValidateDurationString(t *testing.T) {
@@ -35,4 +38,51 @@ func TestValidateDurationString(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestPreserveUnconfiguredFlowBindings(t *testing.T) {
+	flowFields := []string{
+		"browser_flow",
+		"registration_flow",
+		"direct_grant_flow",
+		"reset_credentials_flow",
+		"client_authentication_flow",
+		"docker_authentication_flow",
+		"first_broker_login_flow",
+	}
+	resourceSchema := make(map[string]*schema.Schema, len(flowFields))
+	observedValues := make(map[string]string, len(flowFields))
+	for _, name := range flowFields {
+		resourceSchema[name] = &schema.Schema{Type: schema.TypeString, Optional: true, Computed: true}
+		observedValues[name] = "observed-" + name
+	}
+	resourceData := schema.TestResourceDataRaw(t, resourceSchema, map[string]interface{}{
+		"browser_flow": "configured-browser",
+	})
+	observed := &keycloak.Realm{
+		BrowserFlow:              stringPointer(observedValues["browser_flow"]),
+		RegistrationFlow:         stringPointer(observedValues["registration_flow"]),
+		DirectGrantFlow:          stringPointer(observedValues["direct_grant_flow"]),
+		ResetCredentialsFlow:     stringPointer(observedValues["reset_credentials_flow"]),
+		ClientAuthenticationFlow: stringPointer(observedValues["client_authentication_flow"]),
+		DockerAuthenticationFlow: stringPointer(observedValues["docker_authentication_flow"]),
+		FirstBrokerLoginFlow:     stringPointer(observedValues["first_broker_login_flow"]),
+	}
+
+	if err := preserveUnconfiguredFlowBindings(resourceData, observed); err != nil {
+		t.Fatalf("preserveUnconfiguredFlowBindings() error = %v", err)
+	}
+
+	if got := resourceData.Get("browser_flow"); got != "configured-browser" {
+		t.Errorf("configured browser_flow = %v, want configured-browser", got)
+	}
+	for _, name := range flowFields[1:] {
+		if got, want := resourceData.Get(name), observedValues[name]; got != want {
+			t.Errorf("%s = %v, want observed value %s", name, got, want)
+		}
+	}
+}
+
+func stringPointer(value string) *string {
+	return &value
 }
