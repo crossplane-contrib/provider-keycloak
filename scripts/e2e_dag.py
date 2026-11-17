@@ -31,7 +31,7 @@ Tier logic (highest wins)
 --------------------------
   full     : go.mod | go.sum | Makefile | internal/ (except generated
              controllers) | cmd/ | build/ | .github/workflows/ci.yml |
-             non-PR event
+             .github/e2e-keycloak-versions.json | non-PR event
   targeted : apis/<group>/ | config/<group>/ | package/crds/ |
              dev/demos/ | cluster/test/ | generated internal/controller code
   skip     : docs/ | scripts/ | *.md | *.png | *.jpg only
@@ -100,6 +100,7 @@ CLASSIFICATION_RULES: list[tuple[str, str, re.Pattern]] = [
     ("full", "build system", re.compile(r"^(Makefile$|build/)")),
     ("full", "provider runtime code", re.compile(r"^(internal/|cmd/)")),
     ("full", "CI workflow", re.compile(r"^\.github/workflows/ci\.yml$")),
+    ("full", "e2e Keycloak versions", re.compile(r"^\.github/e2e-keycloak-versions\.json$")),
     ("full", "e2e environment", re.compile(r"^dev/(?!demos/)")),
     # skip — other workflows do not influence the e2e run
     ("skip", "unrelated workflow", re.compile(r"^\.github/")),

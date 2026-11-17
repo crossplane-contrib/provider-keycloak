@@ -40,6 +40,8 @@ jobs:
       # recomputed in the e2e-tests job so it is visible per run)
       e2e-tier: ${{ steps.e2e-scope.outputs.tier }}
       e2e-keycloak-versions: ${{ steps.e2e-scope.outputs.keycloak_versions }}
+      # Newest Keycloak release; the version-specific suites run only there
+      e2e-keycloak-latest: ${{ steps.e2e-scope.outputs.keycloak_latest }}
       # FGAPv2 suite runs in its own cluster and is selected independently
       e2e-fgapv2: ${{ steps.e2e-scope.outputs.fgapv2 }}
     steps:
@@ -59,9 +61,18 @@ jobs:
       - name: Compute E2E scope via DAG
         id: e2e-scope
         run: |
-          # Full Keycloak version matrix (all supported releases)
-          ALL_VERSIONS='["26.8.2","26.8.1","26.8.0","26.7.0","26.6.2","26.5.1","26.4.4","26.3.5","26.2.5","26.1.5","26.0.8"]'
-          LATEST_VERSION='["26.8.2"]'
+          # Keycloak version matrix, maintained by Renovate in
+          # .github/e2e-keycloak-versions.json: "supported" holds the latest
+          # patch of every supported minor, "latest" the newest release.
+          VERSIONS_FILE=.github/e2e-keycloak-versions.json
+          ALL_VERSIONS=$(jq -c '.supported' "$VERSIONS_FILE")
+          LATEST=$(jq -r '.latest' "$VERSIONS_FILE")
+          LATEST_VERSION=$(jq -cn --arg v "$LATEST" '[$v]')
+          if ! jq -e --arg v "$LATEST" '.supported | index($v)' "$VERSIONS_FILE" >/dev/null; then
+            echo "::error file=${VERSIONS_FILE}::latest ${LATEST} is not in supported"
+            exit 1
+          fi
+          echo "keycloak_latest=${LATEST}" >> "$GITHUB_OUTPUT"
 
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
           if echo "$COMMIT_MESSAGE" | grep -iq "\[skip e2e\]"; then
@@ -584,7 +595,7 @@ jobs:
 
       - name: Running CRD Conversion Webhook Tests
         id: conversionTests
-        if: matrix.keycloak-version == '26.8.2'
+        if: matrix.keycloak-version == needs.detect-noop.outputs.e2e-keycloak-latest
         continue-on-error: true
         shell: bash
         run: |
@@ -594,7 +605,7 @@ jobs:
 
       - name: Running Restricted Single-Realm ProviderConfig Tests
         id: restrictedRealmProviderTests
-        if: matrix.keycloak-version == '26.8.2'
+        if: matrix.keycloak-version == needs.detect-noop.outputs.e2e-keycloak-latest
         continue-on-error: true
         shell: bash
         run: |
