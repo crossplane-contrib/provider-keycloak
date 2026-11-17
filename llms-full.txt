@@ -888,7 +888,7 @@ resulting tier wins:
 |------|-------------------------------|-------|
 | `skip` | `documentation` (`docs/`), `markdown/images` (`*.md`, `*.png`, `*.jpg`, `*.svg`), `unrelated workflow` (any `.github/` file other than `ci.yml`), `helper script` (`scripts/`) | no e2e |
 | `targeted` | `generated controller` (`internal/controller/**/zz_*.go`), `API types` (`apis/`), `resource config` (`config/`), `CRD schema` (`package/crds/`), `generated example` / `example manifest`, `demo manifest` (`dev/demos/`), `e2e harness` (`cluster/test/`), plus any unclassified path as a safe fallback | resource-focused DAG slice (falling back to API groups only when the path is too broad) × latest Keycloak only |
-| `full` | `go module` (`go.mod`, `go.sum`), `build system` (`Makefile`, `build/`), `provider runtime code` (`internal/`, `cmd/` — excluding generated controllers), `CI workflow` (`.github/workflows/ci.yml`), `e2e environment` (`dev/` outside `dev/demos/`), or any non-PR event | all demos × all Keycloak versions |
+| `full` | `go module` (`go.mod`, `go.sum`), `build system` (`Makefile`, `build/`), `provider runtime code` (`internal/`, `cmd/` — excluding generated controllers), `CI workflow` (`.github/workflows/ci.yml`), `e2e Keycloak versions` (`.github/e2e-keycloak-versions.json`), `e2e environment` (`dev/` outside `dev/demos/`), or any non-PR event | all demos × all Keycloak versions |
 
 Generated per-resource controller code (`internal/controller/<scope>/<group>/<resource>/zz_controller.go`
 and `zz_setup.go`) is deliberately **not** full-tier: it belongs to a single API
@@ -898,6 +898,19 @@ code forces a full run.
 The `detect-noop` job determines the tier (and therefore the Keycloak version
 matrix). The `e2e-tests` job then has a **Calculate E2E test selection** step
 that resolves the concrete demo list for the run.
+
+The Keycloak versions come from `.github/e2e-keycloak-versions.json`:
+`supported` holds the latest patch of every supported minor (the full
+matrix), `latest` the newest release (targeted runs, plus the conversion
+and restricted single-realm suites, which run on that version only).
+Renovate keeps the file current with up to two PRs ("e2e Keycloak versions"),
+never automerged:
+
+- a patch PR that moves every entry (`supported` and `latest`) to the latest
+  patch of its minor;
+- a minor PR that moves `latest` to a new minor. Add the new version to
+  `supported` in that PR: the `Compute E2E scope` step fails while `latest`
+  is missing from `supported`.
 
 Both steps compute the changed files against `main` (`git merge-base
 origin/main HEAD`), never against the pull request's recorded base SHA, so the
