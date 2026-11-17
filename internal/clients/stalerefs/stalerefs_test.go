@@ -97,9 +97,24 @@ func TestIsStaleRefCondition(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "false status with ApiError message → stale",
+			name: "false status with ApiError message but no 404 → not stale",
 			cond: xpv1.Condition{Status: corev1.ConditionFalse, Message: "create failed: keycloak.ApiError: not found"},
+			want: false,
+		},
+		{
+			name: "real terraform-provider-keycloak 404 → stale",
+			cond: xpv1.Condition{Status: corev1.ConditionFalse, Message: `connect failed: cannot get ID: error sending GET request to /admin/realms/infoma/clients/71d068fb-bc7c-4e48-ad02-bfac716b8076: 404 Not Found. Response body: {"error":"Could not find client"}`},
 			want: true,
+		},
+		{
+			name: "401 for a path whose UUID contains 404 → not stale",
+			cond: xpv1.Condition{Status: corev1.ConditionFalse, Message: `connect failed: cannot get ID: error sending GET request to /admin/realms/infoma/identity-provider/instances/acme/mappers/0a65e744-e648-4040-b257-ed2492a33d35: 401 Unauthorized. Response body: {"error":"HTTP 401 Unauthorized"}`},
+			want: false,
+		},
+		{
+			name: "404 inside a hex token only → not stale",
+			cond: xpv1.Condition{Status: corev1.ConditionFalse, Message: "error sending GET request to /admin/realms/r/clients/a404b: 500 Internal Server Error."},
+			want: false,
 		},
 		{
 			name: "false status with 404 message → stale",
@@ -554,6 +569,171 @@ func TestMaybeRecover(t *testing.T) {
 		}
 	})
 
+	// The reference resolver skips deleted resources, so values cleared during
+	// a delete never come back and the delete hangs on "required param ...
+	// not set".
+	t.Run("being deleted → skip", func(t *testing.T) {
+		now := metav1.Now()
+		om := createdExternally()
+		om.DeletionTimestamp = &now
+		mg := &fakeManaged{
+			ObjectMeta: om,
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:    ptr("uuid"),
+				ClientIDRef: &xpv1.Reference{Name: "c"},
+			}},
+		}
+		mg.SetConditions(staleCond)
+
+		updateCalled := false
+		kube := &test.MockClient{
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
+				updateCalled = true
+				return nil
+			},
+		}
+		recovered, err := MaybeRecover(context.Background(), kube, mg)
+		if err != nil || recovered {
+			t.Fatalf("MaybeRecover() = (%v,%v), want (false,nil) for a deleted resource", recovered, err)
+		}
+		if updateCalled || mg.Spec.ForProvider.ClientID == nil {
+			t.Errorf("references were cleared on a deleted resource")
+		}
+	})
+
+	// upjet's async client: external-create-succeeded is set when the async
+	// create starts; the 404 of a parent that does not exist yet arrives later
+	// as external-create-failed.
+	t.Run("async create failed after it started → never created, skip", func(t *testing.T) {
+		started := time.Now().Add(-30 * time.Second)
+		mg := &fakeManaged{
+			ObjectMeta: metav1.ObjectMeta{Annotations: map[string]string{
+				meta.AnnotationKeyExternalCreateSucceeded: started.Format(time.RFC3339),
+				meta.AnnotationKeyExternalCreateFailed:    started.Add(29 * time.Second).Format(time.RFC3339),
+			}},
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:    ptr("uuid"),
+				ClientIDRef: &xpv1.Reference{Name: "c"},
+			}},
+		}
+		mg.SetConditions(staleCond)
+
+		kube := &test.MockClient{
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
+				t.Errorf("kube.Update was called for a failed async create")
+				return nil
+			},
+		}
+		recovered, err := MaybeRecover(context.Background(), kube, mg)
+		if err != nil || recovered {
+			t.Fatalf("MaybeRecover() = (%v,%v), want (false,nil)", recovered, err)
+		}
+	})
+
+	t.Run("create succeeded after an earlier failure → created, recover", func(t *testing.T) {
+		failed := time.Now().Add(-time.Hour)
+		mg := &fakeManaged{
+			ObjectMeta: metav1.ObjectMeta{Annotations: map[string]string{
+				meta.AnnotationKeyExternalCreateFailed:    failed.Format(time.RFC3339),
+				meta.AnnotationKeyExternalCreateSucceeded: failed.Add(time.Minute).Format(time.RFC3339),
+			}},
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:    ptr("uuid"),
+				ClientIDRef: &xpv1.Reference{Name: "c"},
+			}},
+		}
+		mg.SetConditions(staleCond)
+
+		kube := &test.MockClient{
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
+		}
+		recovered, err := MaybeRecover(context.Background(), kube, mg)
+		if err != nil || !recovered {
+			t.Fatalf("MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
+		}
+	})
+
+	// Regression for the loop the generation guard cannot stop: recovery
+	// clears (gen N -> N+1, annotation N+1), the resolver writes the same
+	// value back (gen N+2), the error persists, recovery clears again, ...
+	// Observed as generation 79 on a mapper during a 401 outage.
+	t.Run("resolver restored the same values → do not clear again", func(t *testing.T) {
+		mg := &fakeManaged{
+			ObjectMeta: metav1.ObjectMeta{
+				Generation: 4,
+				Annotations: map[string]string{
+					meta.AnnotationKeyExternalCreateSucceeded: time.Now().Format(time.RFC3339),
+				},
+			},
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:    ptr("same-uuid"),
+				ClientIDRef: &xpv1.Reference{Name: "c"},
+			}},
+		}
+		mg.SetConditions(staleCond)
+
+		updates := 0
+		kube := &test.MockClient{
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
+				updates++
+				return nil
+			},
+		}
+		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
+			t.Fatalf("first MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
+		}
+		if mg.GetAnnotations()[RecoveredValuesAnnotation] == "" {
+			t.Fatalf("fingerprint annotation not set")
+		}
+
+		// The API server bumps the generation for the clearing update, the
+		// resolver writes the same value back and bumps it again.
+		mg.SetGeneration(6)
+		mg.Spec.ForProvider.ClientID = ptr("same-uuid")
+
+		recovered, err := MaybeRecover(context.Background(), kube, mg)
+		if err != nil || recovered {
+			t.Fatalf("second MaybeRecover() = (%v,%v), want (false,nil)", recovered, err)
+		}
+		if updates != 1 {
+			t.Errorf("kube.Update called %d times, want 1", updates)
+		}
+		if mg.Spec.ForProvider.ClientID == nil {
+			t.Errorf("ClientID was cleared again although the resolver restored the same value")
+		}
+	})
+
+	t.Run("resolver produced new values → recover again", func(t *testing.T) {
+		mg := &fakeManaged{
+			ObjectMeta: metav1.ObjectMeta{
+				Generation: 4,
+				Annotations: map[string]string{
+					meta.AnnotationKeyExternalCreateSucceeded: time.Now().Format(time.RFC3339),
+				},
+			},
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:    ptr("old-uuid"),
+				ClientIDRef: &xpv1.Reference{Name: "c"},
+			}},
+		}
+		mg.SetConditions(staleCond)
+
+		kube := &test.MockClient{
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
+		}
+		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
+			t.Fatalf("first MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
+		}
+
+		mg.SetGeneration(6)
+		mg.Spec.ForProvider.ClientID = ptr("new-uuid")
+
+		recovered, err := MaybeRecover(context.Background(), kube, mg)
+		if err != nil || !recovered {
+			t.Fatalf("second MaybeRecover() = (%v,%v), want (true,nil) for changed values", recovered, err)
+		}
+	})
+
 	t.Run("update non-conflict error → returned", func(t *testing.T) {
 		mg := &fakeManaged{
 			ObjectMeta: createdExternally(),
@@ -583,3 +763,42 @@ func TestMaybeRecover(t *testing.T) {
 // Compile-time check: ensure fakeManaged satisfies the narrow Managed
 // interface used by MaybeRecover.
 var _ Managed = (*fakeManaged)(nil)
+
+func TestResolvedValuesFingerprint(t *testing.T) {
+	withRefs := func(clientID string, roles ...string) *fakeManaged {
+		mg := &fakeManaged{Spec: fakeSpec{ForProvider: fakeParams{
+			ClientID:    ptr(clientID),
+			ClientIDRef: &xpv1.Reference{Name: "c"},
+			Name:        ptr("not-a-ref"),
+		}}}
+		for _, r := range roles {
+			mg.Spec.ForProvider.RoleIds = append(mg.Spec.ForProvider.RoleIds, ptr(r))
+		}
+		if len(roles) > 0 {
+			mg.Spec.ForProvider.RoleIdsRefs = []xpv1.Reference{{Name: "r"}}
+		}
+		return mg
+	}
+
+	if got := resolvedValuesFingerprint(&fakeManaged{}); got != "" {
+		t.Errorf("no resolved values: fingerprint = %q, want empty", got)
+	}
+	a := resolvedValuesFingerprint(withRefs("u1", "r1", "r2"))
+	if a == "" {
+		t.Fatalf("fingerprint is empty")
+	}
+	if b := resolvedValuesFingerprint(withRefs("u1", "r1", "r2")); a != b {
+		t.Errorf("same values: %q != %q", a, b)
+	}
+	if b := resolvedValuesFingerprint(withRefs("u2", "r1", "r2")); a == b {
+		t.Errorf("changed singular value did not change the fingerprint")
+	}
+	if b := resolvedValuesFingerprint(withRefs("u1", "r1", "r3")); a == b {
+		t.Errorf("changed slice value did not change the fingerprint")
+	}
+	plain := withRefs("u1", "r1", "r2")
+	plain.Spec.ForProvider.Name = ptr("changed")
+	if b := resolvedValuesFingerprint(plain); a != b {
+		t.Errorf("field without ref sibling changed the fingerprint")
+	}
+}
