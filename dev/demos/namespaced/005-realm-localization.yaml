@@ -4,6 +4,9 @@ metadata:
   name: realm-localization-de
   namespace: dev-ns
 spec:
+  # The parent realm is removed during namespaced test cleanup; avoid racing a
+  # localization DELETE against that removal.
+  managementPolicies: ["Create", "Update", "Observe", "LateInitialize"]
   forProvider:
     realmIdRef:
       name: "dev-ns"
