@@ -40,18 +40,25 @@ import (
 const RecoveryAtGenerationAnnotation = "provider-keycloak.crossplane.io/stale-ref-recovery-at-generation"
 
 // RecoveredValuesAnnotation records a fingerprint of the reference-resolved
-// values the last recovery cleared and when ("<fingerprint>@<RFC3339>").
-// MaybeRecover does not clear the same values again within
-// ValuesRecoveryBackoff: if the resolver puts back exactly what was cleared,
-// either the references were not stale or the referenced resource has not
-// observed its replacement yet. Both can change, so the marker expires.
+// values the last recovery cleared, when, and how many times in a row the
+// same values were cleared ("<fingerprint>@<RFC3339>@<attempt>"). If the
+// resolver puts back exactly what was cleared, either the references were not
+// stale or the referenced resource has not observed its replacement yet (e.g.
+// a Role recreated out-of-band whose MR still carries the old UUID). Both can
+// change, so MaybeRecover clears the same values again only after an
+// exponential backoff (see valuesRecoveryBackoff).
 const RecoveredValuesAnnotation = "provider-keycloak.crossplane.io/stale-ref-recovery-values"
 
-// ValuesRecoveryBackoff is how long MaybeRecover waits before clearing the
-// same values again. It bounds a recovery loop to one clearing per interval
-// instead of one per reconcile, and lets recovery retry once a referenced
-// resource has caught up with a recreated Keycloak object.
-const ValuesRecoveryBackoff = 10 * time.Minute
+const (
+	// ValuesRecoveryInitialBackoff is the wait before the same values are
+	// cleared a second time. Short enough that a referenced resource catching
+	// up with a recreated Keycloak object is picked up within a minute or two.
+	ValuesRecoveryInitialBackoff = 30 * time.Second
+	// ValuesRecoveryMaxBackoff caps the backoff: a recovery that keeps
+	// restoring the same values (the references were not stale) clears them
+	// at most once per interval instead of once per reconcile.
+	ValuesRecoveryMaxBackoff = 10 * time.Minute
+)
 
 // Upjet's async client records a failed create only in this condition (see
 // upjet pkg/resource.LastAsyncOperationCondition); it does not set
@@ -185,33 +192,66 @@ func alreadyRecoveredForCurrentGeneration(mg Managed) bool {
 	return n >= mg.GetGeneration()
 }
 
-// alreadyRecoveredForValues returns true when, less than
-// ValuesRecoveryBackoff ago, a recovery cleared exactly the values the
-// resolver has put back since. The generation guard alone cannot stop a loop:
-// the resolver writes the re-resolved values into spec.forProvider, which
-// bumps the generation past the recorded one. Clearing the same values again
-// right away cannot help; after the backoff it may (the referenced resource
-// may have observed a recreated object by then, or a new incident started).
+// valuesRecoveryBackoff returns the wait after the attempt-th clearing of the
+// same values: ValuesRecoveryInitialBackoff, doubled per attempt, capped at
+// ValuesRecoveryMaxBackoff.
+func valuesRecoveryBackoff(attempt int) time.Duration {
+	d := ValuesRecoveryInitialBackoff
+	for i := 1; i < attempt && d < ValuesRecoveryMaxBackoff; i++ {
+		d *= 2
+	}
+	return min(d, ValuesRecoveryMaxBackoff)
+}
+
+// recoveredValues is the parsed RecoveredValuesAnnotation.
+type recoveredValues struct {
+	fingerprint string
+	at          time.Time
+	attempt     int
+}
+
+// parseRecoveredValues parses "<fingerprint>@<RFC3339>@<attempt>". ok is
+// false for a missing or malformed annotation.
+func parseRecoveredValues(v string) (recoveredValues, bool) {
+	parts := strings.Split(v, "@")
+	if len(parts) != 3 || parts[0] == "" {
+		return recoveredValues{}, false
+	}
+	at, err := time.Parse(time.RFC3339, parts[1])
+	if err != nil {
+		return recoveredValues{}, false
+	}
+	attempt, err := strconv.Atoi(parts[2])
+	if err != nil || attempt < 1 {
+		return recoveredValues{}, false
+	}
+	return recoveredValues{fingerprint: parts[0], at: at, attempt: attempt}, true
+}
+
+// alreadyRecoveredForValues returns true when a recovery cleared exactly the
+// values the resolver has put back since, and the backoff for that attempt
+// has not elapsed yet. The generation guard alone cannot stop a loop: the
+// resolver writes the re-resolved values into spec.forProvider, which bumps
+// the generation past the recorded one. Clearing the same values again right
+// away cannot help; after the backoff it may (the referenced resource may
+// have observed a recreated object by then, or a new incident started).
 func alreadyRecoveredForValues(mg Managed, fingerprint string) bool {
 	if fingerprint == "" {
 		return false
 	}
-	fp, at, ok := strings.Cut(mg.GetAnnotations()[RecoveredValuesAnnotation], "@")
-	if !ok || fp != fingerprint {
+	r, ok := parseRecoveredValues(mg.GetAnnotations()[RecoveredValuesAnnotation])
+	if !ok || r.fingerprint != fingerprint {
 		return false
 	}
-	t, err := time.Parse(time.RFC3339, at)
-	if err != nil {
-		return false
-	}
-	return now().Sub(t) < ValuesRecoveryBackoff
+	return now().Sub(r.at) < valuesRecoveryBackoff(r.attempt)
 }
 
 // setRecoveryAnnotations marks the resource as recovered at its post-Update
 // generation and records a fingerprint of the values that were cleared, with
-// the time. Clearing spec.forProvider increments the spec generation by one,
-// so we record the predicted post-Update value (mg.GetGeneration()+1) to
-// match what a subsequent reconcile will observe.
+// the time and the attempt count (reset to 1 when the values changed).
+// Clearing spec.forProvider increments the spec generation by one, so we
+// record the predicted post-Update value (mg.GetGeneration()+1) to match what
+// a subsequent reconcile will observe.
 func setRecoveryAnnotations(mg Managed, fingerprint string) {
 	a := mg.GetAnnotations()
 	if a == nil {
@@ -219,7 +259,11 @@ func setRecoveryAnnotations(mg Managed, fingerprint string) {
 	}
 	a[RecoveryAtGenerationAnnotation] = strconv.FormatInt(mg.GetGeneration()+1, 10)
 	if fingerprint != "" {
-		a[RecoveredValuesAnnotation] = fingerprint + "@" + now().UTC().Format(time.RFC3339)
+		attempt := 1
+		if r, ok := parseRecoveredValues(a[RecoveredValuesAnnotation]); ok && r.fingerprint == fingerprint {
+			attempt = r.attempt + 1
+		}
+		a[RecoveredValuesAnnotation] = fingerprint + "@" + now().UTC().Format(time.RFC3339) + "@" + strconv.Itoa(attempt)
 	}
 	mg.SetAnnotations(a)
 }

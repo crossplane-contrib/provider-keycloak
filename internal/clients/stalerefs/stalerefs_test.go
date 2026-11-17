@@ -808,10 +808,11 @@ func TestMaybeRecover(t *testing.T) {
 		}
 	})
 
-	// The resolver may restore the old UUID because the referenced resource
-	// has not observed its recreated Keycloak object yet. The values guard
-	// must not block that for good.
-	t.Run("same values restored, backoff elapsed → recover again", func(t *testing.T) {
+	// dev/test/stale-ref-recovery.sh: a Role is recreated out-of-band. The
+	// RoleMapper's recovery can run before the Role MR has observed the new
+	// UUID, so the resolver restores the old one. Recovery must retry within
+	// the script's 3-minute window and pick up the new UUID.
+	t.Run("old UUID restored, referenced MR catches up → recovered within a minute", func(t *testing.T) {
 		t0 := time.Date(2026, 11, 16, 15, 0, 0, 0, time.UTC)
 		clock := t0
 		now = func() time.Time { return clock }
@@ -823,40 +824,84 @@ func TestMaybeRecover(t *testing.T) {
 				Annotations: map[string]string{meta.AnnotationKeyExternalCreateSucceeded: t0.Format(time.RFC3339)},
 			},
 			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("same-uuid"),
+				ClientID:    ptr("old-uuid"),
 				ClientIDRef: &xpv1.Reference{Name: "c"},
 			}},
 		}
+		mg.Status.AtProvider.ID = ptr("mapper-id")
 		mg.SetConditions(staleCond)
 
-		updates := 0
 		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				updates++
-				return nil
-			},
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
 		}
 		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
 			t.Fatalf("first MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
 		}
 
-		restore := func(gen int64) {
-			mg.SetGeneration(gen)
-			mg.Spec.ForProvider.ClientID = ptr("same-uuid")
+		// The Role MR has not caught up: the resolver restores the old UUID.
+		mg.SetGeneration(6)
+		mg.Spec.ForProvider.ClientID = ptr("old-uuid")
+		clock = t0.Add(10 * time.Second)
+		if recovered, _ := MaybeRecover(context.Background(), kube, mg); recovered {
+			t.Fatalf("cleared the same values again before the initial backoff")
 		}
 
-		restore(6)
-		clock = t0.Add(ValuesRecoveryBackoff - time.Second)
-		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || recovered {
-			t.Fatalf("within backoff: MaybeRecover() = (%v,%v), want (false,nil)", recovered, err)
-		}
-
-		clock = t0.Add(ValuesRecoveryBackoff + time.Second)
+		// After the initial backoff the same values are cleared once more.
+		clock = t0.Add(ValuesRecoveryInitialBackoff + time.Second)
 		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
-			t.Fatalf("after backoff: MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
+			t.Fatalf("after initial backoff: MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
 		}
-		if updates != 2 {
-			t.Errorf("kube.Update called %d times, want 2", updates)
+
+		// Meanwhile the Role MR observed the recreated role: the resolver
+		// yields the new UUID, which is a new fingerprint.
+		mg.SetGeneration(8)
+		mg.Spec.ForProvider.ClientID = ptr("new-uuid")
+		clock = t0.Add(ValuesRecoveryInitialBackoff + 5*time.Second)
+		if r, ok := parseRecoveredValues(mg.GetAnnotations()[RecoveredValuesAnnotation]); !ok || r.attempt != 2 {
+			t.Fatalf("annotation = %q, want attempt 2", mg.GetAnnotations()[RecoveredValuesAnnotation])
+		}
+		if alreadyRecoveredForValues(mg, resolvedValuesFingerprint(mg)) {
+			t.Errorf("new values must not be blocked by the backoff of the old ones")
+		}
+	})
+
+	// A recovery that keeps restoring the same values (the references were not
+	// stale) slows down exponentially and settles at one clearing per
+	// ValuesRecoveryMaxBackoff.
+	t.Run("same values keep coming back → exponential backoff up to the cap", func(t *testing.T) {
+		t0 := time.Date(2026, 11, 16, 15, 0, 0, 0, time.UTC)
+		clock := t0
+		now = func() time.Time { return clock }
+		t.Cleanup(func() { now = time.Now })
+
+		mg := &fakeManaged{
+			ObjectMeta: metav1.ObjectMeta{
+				Generation:  2,
+				Annotations: map[string]string{meta.AnnotationKeyExternalCreateSucceeded: t0.Format(time.RFC3339)},
+			},
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:    ptr("same-uuid"),
+				ClientIDRef: &xpv1.Reference{Name: "c"},
+			}},
+		}
+		mg.SetConditions(staleCond)
+		kube := &test.MockClient{
+			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
+		}
+
+		for attempt := 1; attempt <= 8; attempt++ {
+			if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
+				t.Fatalf("attempt %d: MaybeRecover() = (%v,%v), want (true,nil)", attempt, recovered, err)
+			}
+			wait := valuesRecoveryBackoff(attempt)
+			mg.SetGeneration(mg.GetGeneration() + 2)
+			mg.Spec.ForProvider.ClientID = ptr("same-uuid")
+
+			clock = clock.Add(wait - time.Second)
+			if recovered, _ := MaybeRecover(context.Background(), kube, mg); recovered {
+				t.Fatalf("attempt %d: cleared again %v before its backoff of %v elapsed", attempt, wait-time.Second, wait)
+			}
+			clock = clock.Add(2 * time.Second)
 		}
 	})
 
@@ -951,5 +996,38 @@ func TestResolvedValuesFingerprint(t *testing.T) {
 	plain.Spec.ForProvider.Name = ptr("changed")
 	if b := resolvedValuesFingerprint(plain); a != b {
 		t.Errorf("field without ref sibling changed the fingerprint")
+	}
+}
+
+func TestValuesRecoveryBackoff(t *testing.T) {
+	cases := []struct {
+		attempt int
+		want    time.Duration
+	}{
+		{0, 30 * time.Second},
+		{1, 30 * time.Second},
+		{2, time.Minute},
+		{3, 2 * time.Minute},
+		{4, 4 * time.Minute},
+		{5, 8 * time.Minute},
+		{6, 10 * time.Minute},
+		{100, 10 * time.Minute},
+	}
+	for _, tc := range cases {
+		if got := valuesRecoveryBackoff(tc.attempt); got != tc.want {
+			t.Errorf("valuesRecoveryBackoff(%d) = %v, want %v", tc.attempt, got, tc.want)
+		}
+	}
+}
+
+func TestParseRecoveredValues(t *testing.T) {
+	at := time.Date(2026, 11, 16, 15, 0, 0, 0, time.UTC)
+	if r, ok := parseRecoveredValues("abc@" + at.Format(time.RFC3339) + "@3"); !ok || r.fingerprint != "abc" || !r.at.Equal(at) || r.attempt != 3 {
+		t.Errorf("valid annotation: got (%+v, %v)", r, ok)
+	}
+	for _, bad := range []string{"", "abc", "abc@" + at.Format(time.RFC3339), "@" + at.Format(time.RFC3339) + "@1", "abc@not-a-time@1", "abc@" + at.Format(time.RFC3339) + "@0", "abc@" + at.Format(time.RFC3339) + "@x"} {
+		if _, ok := parseRecoveredValues(bad); ok {
+			t.Errorf("parseRecoveredValues(%q) ok, want malformed", bad)
+		}
 	}
 }
