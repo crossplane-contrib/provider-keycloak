@@ -265,6 +265,18 @@ create_resource \
   "{\"clientId\":\"${CLIENT_ID}\",\"serviceAccountsEnabled\":true,\"secret\":\"${CLIENT_SECRET}\",\"protocol\":\"openid-connect\",\"publicClient\":false}" \
   "client ${CLIENT_ID} in realm ${REALM}"
 
+# Keycloak >= 26.8.2 (CVE-2026-19688) rejects admin API tokens without the kc-admin-api
+# scope with 401 before any role check. Assign it so this test keeps asserting the
+# missing-roles 403 rather than the missing-audience 401.
+ADMIN_API_SCOPE_ID=$(curl -sf "${KC_BASE}/admin/realms/${REALM}/client-scopes" -H "${AUTH_HEADER}" \
+  | jq -r '.[] | select(.name == "kc-admin-api") | .id')
+if [[ -n "${ADMIN_API_SCOPE_ID}" ]]; then
+  echo "* Assigning kc-admin-api client scope to ${CLIENT_ID} (Keycloak >= 26.8.2)..."
+  CLIENT_UUID=$(curl -sf "${KC_BASE}/admin/realms/${REALM}/clients?clientId=${CLIENT_ID}" -H "${AUTH_HEADER}" | jq -er '.[0].id')
+  curl -sf -o /dev/null -X PUT "${KC_BASE}/admin/realms/${REALM}/clients/${CLIENT_UUID}/default-client-scopes/${ADMIN_API_SCOPE_ID}" \
+    -H "${AUTH_HEADER}"
+fi
+
 echo "* Publishing credentials as a Kubernetes Secret..."
 ${KUBECTL} create secret generic restrictedrealmprovider742-credentials \
   -n crossplane-system \

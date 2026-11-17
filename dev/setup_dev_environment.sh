@@ -471,6 +471,19 @@ curl -s -o /dev/null -X POST "${KC_BASE_URL}/admin/realms/provider-e2e-realm/use
   -H "Content-Type: application/json" \
   -d "[${NM_REALM_ADMIN_ROLE}]" || true
 
+# Keycloak >= 26.8.2 (CVE-2026-19688) only accepts admin API tokens that carry the
+# kc-admin-api scope and audience. The upgrade/realm creation assigns the scope to
+# admin-cli and security-admin-console only, so every other admin client needs it.
+echo "* Assigning kc-admin-api client scope to the service account (Keycloak >= 26.8.2)..."
+NM_ADMIN_API_SCOPE_ID=$(curl -sf "${KC_BASE_URL}/admin/realms/provider-e2e-realm/client-scopes" \
+  -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" | jq -r '.[] | select(.name == "kc-admin-api") | .id')
+if [[ -n "${NM_ADMIN_API_SCOPE_ID}" ]]; then
+  curl -s -o /dev/null -X PUT "${KC_BASE_URL}/admin/realms/provider-e2e-realm/clients/${NM_CLIENT_UUID}/default-client-scopes/${NM_ADMIN_API_SCOPE_ID}" \
+    -H "Authorization: Bearer ${NM_ADMIN_TOKEN}" || true
+else
+  echo "  kc-admin-api scope not present (Keycloak < 26.8.2), skipping"
+fi
+
 echo "* Applying non-master ProviderConfig credentials secret..."
 if [[ "$deploylocalprovider" == "true" ]]; then
   export OLD_KEYCLOAK_IP=${KEYCLOAK_IP}
