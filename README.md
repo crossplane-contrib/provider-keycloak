@@ -172,6 +172,8 @@ The secret `keycloak-credentials` contains the keycloak API server URL, credenti
 - `base_path: "/"` is normalized to empty string to avoid double-slash request paths.
 - Trailing `/` in non-root `base_path` is removed automatically.
 
+With Keycloak 26.8.2 and later, the Admin REST API only accepts tokens with the `kc-admin-api` client scope. `admin-cli` gets it automatically. Any other client used in the credentials (service accounts, clients in a non-master realm) must have `kc-admin-api` as a default client scope, otherwise every request fails with `401 Unauthorized`. See the [credentials reference](docs/content/docs/using/reference/credentials.md#keycloak-2682-and-later-kc-admin-api-client-scope).
+
 As an alternative to using the embedded JSON format shown above, you can also place settings in a plain Kubernetes secret like this:
 
 ```yaml
