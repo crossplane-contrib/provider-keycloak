@@ -41,6 +41,8 @@ stringData:
 | `base_path` | No | URL path prefix (e.g., `/auth` for older Keycloak versions) |
 | `root_ca_certificate` | No | Custom CA certificate for TLS verification |
 
+With Keycloak 26.8.2 and later, any client other than `admin-cli` (for example a service account used with `client_secret`) needs the `kc-admin-api` client scope, otherwise the provider gets `401 Unauthorized`. See [Credentials: Keycloak 26.8.2 and later](../reference/credentials.md#keycloak-2682-and-later-kc-admin-api-client-scope).
+
 ### Alternative: Flat Secret Format
 
 Instead of embedded JSON, you can use plain key-value pairs:
