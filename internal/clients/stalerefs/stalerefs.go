@@ -15,7 +15,10 @@
 // the result only if every field got a value again and at least one changed.
 // Cleared values are never persisted, so a delete arriving at any point
 // cannot find a resource without its required parameters, and a reference
-// that resolves to the same value causes no write at all.
+// that resolves to the same value causes no write at all. That is also what
+// stops a loop: there is no gate per generation, so a resource whose
+// references go stale again later (or whose targets publish their new IDs at
+// different times) is recovered again on a later reconcile.
 package stalerefs
 
 import (
@@ -24,7 +27,6 @@ import (
 	"maps"
 	"reflect"
 	"regexp"
-	"strconv"
 	"strings"
 
 	corev1 "k8s.io/api/core/v1"
@@ -34,12 +36,6 @@ import (
 	"github.com/crossplane/crossplane-runtime/v2/pkg/meta"
 	xpv1 "github.com/crossplane/crossplane/apis/v2/core/v2"
 )
-
-// RecoveryAtGenerationAnnotation records the generation at which we last
-// replaced stale references on a resource. MaybeRecover refuses to recover
-// twice within the same generation; once the user (or another controller)
-// bumps the spec, recovery becomes eligible again.
-const RecoveryAtGenerationAnnotation = "provider-keycloak.crossplane.io/stale-ref-recovery-at-generation"
 
 // Upjet's async client records a failed create only in this condition (see
 // upjet pkg/resource.LastAsyncOperationCondition); it does not set
@@ -82,9 +78,6 @@ func MaybeRecover(ctx context.Context, kube client.Client, mg Managed) (bool, er
 	if !wasCreatedExternally(mg) {
 		return false, nil
 	}
-	if alreadyRecoveredForCurrentGeneration(mg) {
-		return false, nil
-	}
 	before := resolvedValues(mg)
 	if len(before) == 0 {
 		return false, nil
@@ -109,7 +102,6 @@ func MaybeRecover(ctx context.Context, kube client.Client, mg Managed) (bool, er
 		// resolve to what the resource already has: they are not stale.
 		return false, nil
 	}
-	setRecoveryAnnotation(candidate)
 	if err := kube.Update(ctx, candidate); err != nil {
 		if apierrors.IsConflict(err) {
 			return true, nil
@@ -176,33 +168,6 @@ func hasObservedID(mg Managed) bool {
 		}
 	}
 	return v.Kind() == reflect.String && v.Len() > 0
-}
-
-// alreadyRecoveredForCurrentGeneration returns true when a prior reconcile
-// already replaced stale references at the current spec generation.
-func alreadyRecoveredForCurrentGeneration(mg Managed) bool {
-	v, ok := mg.GetAnnotations()[RecoveryAtGenerationAnnotation]
-	if !ok {
-		return false
-	}
-	n, err := strconv.ParseInt(v, 10, 64)
-	if err != nil {
-		return false
-	}
-	return n >= mg.GetGeneration()
-}
-
-// setRecoveryAnnotation marks the resource as recovered at its post-Update
-// generation. Replacing values in spec.forProvider increments the spec
-// generation by one, so we record the predicted post-Update value
-// (mg.GetGeneration()+1) to match what a subsequent reconcile will observe.
-func setRecoveryAnnotation(mg Managed) {
-	a := mg.GetAnnotations()
-	if a == nil {
-		a = map[string]string{}
-	}
-	a[RecoveryAtGenerationAnnotation] = strconv.FormatInt(mg.GetGeneration()+1, 10)
-	mg.SetAnnotations(a)
 }
 
 // notFoundStatus matches the HTTP status that terraform-provider-keycloak

@@ -3,7 +3,6 @@ package stalerefs
 import (
 	"context"
 	"errors"
-	"strconv"
 	"testing"
 	"time"
 
@@ -379,6 +378,8 @@ func TestMaybeRecover(t *testing.T) {
 			MockUpdate: func(_ context.Context, obj client.Object, _ ...client.UpdateOption) error {
 				r.updates++
 				r.persisted = obj.(*fakeManaged)
+				// The API server bumps the generation on a spec change.
+				r.persisted.Generation++
 				return err
 			},
 		}
@@ -508,32 +509,74 @@ func TestMaybeRecover(t *testing.T) {
 		}
 	})
 
-	t.Run("annotation matches current generation → skip", func(t *testing.T) {
+	// Copilot review on #785: recovery is a single update now, so a gate on
+	// the generation it wrote would block every later recovery. A resource
+	// whose target is recreated a second time must recover again.
+	t.Run("target recreated again later → recovered again", func(t *testing.T) {
 		om := createdExternally()
 		om.Generation = 5
-		om.Annotations[RecoveryAtGenerationAnnotation] = "5"
 		var r recorder
-		expect(t, stale(om, "old-uuid", "new-uuid"), recording(&r, nil), false)
-		if r.updates != 0 {
-			t.Errorf("kube.Update was called despite the generation guard")
+		kube := recording(&r, nil)
+		expect(t, stale(om, "old-uuid", "new-uuid"), kube, true)
+
+		again := r.persisted
+		again.SetConditions(staleCond)
+		again.resolve = resolveClientID("newer-uuid")
+		expect(t, again, kube, true)
+		if r.updates != 2 || *r.persisted.Spec.ForProvider.ClientID != "newer-uuid" {
+			t.Errorf("updates = %d, ClientID = %v; want 2, newer-uuid", r.updates, *r.persisted.Spec.ForProvider.ClientID)
 		}
 	})
 
-	t.Run("annotation older than current generation → recover, annotation gen+1", func(t *testing.T) {
+	// Two references whose targets publish their new IDs at different times:
+	// the first one is written as soon as it resolves, the second one on a
+	// later reconcile.
+	t.Run("targets update at different times → each recovered when it resolves", func(t *testing.T) {
 		om := createdExternally()
-		om.Generation = 7
-		om.Annotations[RecoveryAtGenerationAnnotation] = "5"
+		om.Generation = 3
+		groupID := "old-group"
+		mg := &fakeManaged{
+			ObjectMeta: om,
+			Spec: fakeSpec{ForProvider: fakeParams{
+				ClientID:        ptr("old-client"),
+				ClientIDRef:     &xpv1.Reference{Name: "c"},
+				GroupID:         ptr("old-group"),
+				GroupIDSelector: &xpv1.Selector{},
+			}},
+			resolve: func(f *fakeManaged) error {
+				if f.Spec.ForProvider.ClientID == nil {
+					f.Spec.ForProvider.ClientID = ptr("new-client")
+				}
+				if f.Spec.ForProvider.GroupID == nil {
+					f.Spec.ForProvider.GroupID = ptr(groupID)
+				}
+				return nil
+			},
+		}
+		mg.SetConditions(staleCond)
 		var r recorder
-		expect(t, stale(om, "old-uuid", "new-uuid"), recording(&r, nil), true)
-		if got := r.persisted.GetAnnotations()[RecoveryAtGenerationAnnotation]; got != strconv.FormatInt(8, 10) {
-			t.Errorf("annotation = %q, want 8 (current gen + 1)", got)
+		kube := recording(&r, nil)
+		expect(t, mg, kube, true)
+		first := r.persisted
+		if *first.Spec.ForProvider.ClientID != "new-client" || *first.Spec.ForProvider.GroupID != "old-group" {
+			t.Fatalf("first write = (%s,%s), want (new-client,old-group)", *first.Spec.ForProvider.ClientID, *first.Spec.ForProvider.GroupID)
+		}
+
+		first.SetConditions(staleCond)
+		expect(t, first, kube, false) // group target not updated yet: no write
+		groupID = "new-group"
+		expect(t, first, kube, true)
+		if r.updates != 2 || *r.persisted.Spec.ForProvider.GroupID != "new-group" {
+			t.Errorf("updates = %d, GroupID = %s; want 2, new-group", r.updates, *r.persisted.Spec.ForProvider.GroupID)
 		}
 	})
 
-	t.Run("annotation malformed → recover (defensive)", func(t *testing.T) {
+	// Resources recovered by an earlier provider version still carry its
+	// generation annotation; it no longer blocks anything.
+	t.Run("annotation from an earlier provider version → ignored", func(t *testing.T) {
 		om := createdExternally()
-		om.Generation = 1
-		om.Annotations[RecoveryAtGenerationAnnotation] = "not-a-number"
+		om.Generation = 5
+		om.Annotations["provider-keycloak.crossplane.io/stale-ref-recovery-at-generation"] = "5"
 		expect(t, stale(om, "old-uuid", "new-uuid"), recording(&recorder{}, nil), true)
 	})
 
