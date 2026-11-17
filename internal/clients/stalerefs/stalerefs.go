@@ -8,22 +8,24 @@
 // will not retry because the value field is non-empty (default resolve
 // policy: IsNoOp() returns true when the value is set).
 //
-// MaybeRecover detects this state from the Synced condition and clears every
-// reference-resolved value field on spec.forProvider (and spec.initProvider),
-// so that the next reconcile re-resolves them with the new UUIDs.
+// MaybeRecover detects this state from the Synced condition and re-resolves
+// every reference-resolved value field on spec.forProvider (and
+// spec.initProvider) in memory: it clears them on a copy of the resource,
+// runs the resource's generated reference resolver on that copy and persists
+// the result only if every field got a value again and at least one changed.
+// Cleared values are never persisted, so a delete arriving at any point
+// cannot find a resource without its required parameters, and a reference
+// that resolves to the same value causes no write at all.
 package stalerefs
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
+	"maps"
 	"reflect"
 	"regexp"
-	"sort"
 	"strconv"
 	"strings"
-	"time"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -34,31 +36,10 @@ import (
 )
 
 // RecoveryAtGenerationAnnotation records the generation at which we last
-// cleared stale references on a resource. MaybeRecover refuses to clear
+// replaced stale references on a resource. MaybeRecover refuses to recover
 // twice within the same generation; once the user (or another controller)
 // bumps the spec, recovery becomes eligible again.
 const RecoveryAtGenerationAnnotation = "provider-keycloak.crossplane.io/stale-ref-recovery-at-generation"
-
-// RecoveredValuesAnnotation records a fingerprint of the reference-resolved
-// values the last recovery cleared, when, and how many times in a row the
-// same values were cleared ("<fingerprint>@<RFC3339>@<attempt>"). If the
-// resolver puts back exactly what was cleared, either the references were not
-// stale or the referenced resource has not observed its replacement yet (e.g.
-// a Role recreated out-of-band whose MR still carries the old UUID). Both can
-// change, so MaybeRecover clears the same values again only after an
-// exponential backoff (see valuesRecoveryBackoff).
-const RecoveredValuesAnnotation = "provider-keycloak.crossplane.io/stale-ref-recovery-values"
-
-const (
-	// ValuesRecoveryInitialBackoff is the wait before the same values are
-	// cleared a second time. Short enough that a referenced resource catching
-	// up with a recreated Keycloak object is picked up within a minute or two.
-	ValuesRecoveryInitialBackoff = 30 * time.Second
-	// ValuesRecoveryMaxBackoff caps the backoff: a recovery that keeps
-	// restoring the same values (the references were not stale) clears them
-	// at most once per interval instead of once per reconcile.
-	ValuesRecoveryMaxBackoff = 10 * time.Minute
-)
 
 // Upjet's async client records a failed create only in this condition (see
 // upjet pkg/resource.LastAsyncOperationCondition); it does not set
@@ -68,9 +49,6 @@ const (
 	reasonAsyncCreateFailure xpv1.ConditionReason = "AsyncCreateFailure"
 )
 
-// now is replaced in tests.
-var now = time.Now
-
 // Managed is the minimum subset of resource.Managed that MaybeRecover needs.
 // Narrowing the interface keeps the package independently testable.
 type Managed interface {
@@ -78,15 +56,23 @@ type Managed interface {
 	GetCondition(ct xpv1.ConditionType) xpv1.Condition
 }
 
+// referenceResolver is implemented by every generated managed resource that
+// has references (zz_generated.resolvers.go).
+type referenceResolver interface {
+	ResolveReferences(ctx context.Context, c client.Reader) error
+}
+
 // MaybeRecover inspects mg's Synced condition. If it signals a stale-reference
-// 404 AND the resource was previously created in Keycloak, MaybeRecover clears
-// every value field on mg.Spec.ForProvider (and mg.Spec.InitProvider) whose
-// sibling XRef/XRefs/XSelector is non-nil, then persists the update via kube.
-// It returns true when a clearing was attempted (regardless of whether the
-// update raced with another writer).
+// 404 AND the resource was previously created in Keycloak, MaybeRecover
+// re-resolves every value field on mg.Spec.ForProvider (and
+// mg.Spec.InitProvider) whose sibling XRef/XRefs/XSelector is non-nil,
+// ignoring the current values, on a copy of mg. It persists that copy via
+// kube only when every such field resolved to a value again and at least one
+// value changed. It returns true when an update was attempted (regardless of
+// whether the update raced with another writer).
 func MaybeRecover(ctx context.Context, kube client.Client, mg Managed) (bool, error) {
-	// The reference resolver does not run for deleted resources, so values
-	// cleared now would never come back and the delete could never finish.
+	// Never touch a resource that is being deleted: the reference resolver
+	// does not run for it, and Observe/Delete need its parameters as they are.
 	if meta.WasDeleted(mg) {
 		return false, nil
 	}
@@ -99,15 +85,32 @@ func MaybeRecover(ctx context.Context, kube client.Client, mg Managed) (bool, er
 	if alreadyRecoveredForCurrentGeneration(mg) {
 		return false, nil
 	}
-	fingerprint := resolvedValuesFingerprint(mg)
-	if alreadyRecoveredForValues(mg, fingerprint) {
+	before := resolvedValues(mg)
+	if len(before) == 0 {
 		return false, nil
 	}
-	if !clearResolvedRefs(mg) {
+	candidate, ok := mg.DeepCopyObject().(Managed)
+	if !ok {
 		return false, nil
 	}
-	setRecoveryAnnotations(mg, fingerprint)
-	if err := kube.Update(ctx, mg); err != nil {
+	resolver, ok := candidate.(referenceResolver)
+	if !ok {
+		return false, nil
+	}
+	clearResolvedRefs(candidate)
+	if err := resolver.ResolveReferences(ctx, kube); err != nil {
+		// A reference cannot be resolved right now (e.g. its target is not
+		// ready). Keep the current values; the next reconcile tries again.
+		return false, nil //nolint:nilerr // not resolvable yet is not an error of the recovery
+	}
+	after := resolvedValues(candidate)
+	if !sameFields(before, after) || maps.Equal(before, after) {
+		// A field stayed empty (never persist that), or the references
+		// resolve to what the resource already has: they are not stale.
+		return false, nil
+	}
+	setRecoveryAnnotation(candidate)
+	if err := kube.Update(ctx, candidate); err != nil {
 		if apierrors.IsConflict(err) {
 			return true, nil
 		}
@@ -176,10 +179,7 @@ func hasObservedID(mg Managed) bool {
 }
 
 // alreadyRecoveredForCurrentGeneration returns true when a prior reconcile
-// already cleared stale references at the current spec generation, i.e. the
-// resolver has not written the values back yet. It does not stop a loop on
-// its own: once the resolver repopulates the values, the generation moves
-// past the recorded one. alreadyRecoveredForValues covers that case.
+// already replaced stale references at the current spec generation.
 func alreadyRecoveredForCurrentGeneration(mg Managed) bool {
 	v, ok := mg.GetAnnotations()[RecoveryAtGenerationAnnotation]
 	if !ok {
@@ -192,79 +192,16 @@ func alreadyRecoveredForCurrentGeneration(mg Managed) bool {
 	return n >= mg.GetGeneration()
 }
 
-// valuesRecoveryBackoff returns the wait after the attempt-th clearing of the
-// same values: ValuesRecoveryInitialBackoff, doubled per attempt, capped at
-// ValuesRecoveryMaxBackoff.
-func valuesRecoveryBackoff(attempt int) time.Duration {
-	d := ValuesRecoveryInitialBackoff
-	for i := 1; i < attempt && d < ValuesRecoveryMaxBackoff; i++ {
-		d *= 2
-	}
-	return min(d, ValuesRecoveryMaxBackoff)
-}
-
-// recoveredValues is the parsed RecoveredValuesAnnotation.
-type recoveredValues struct {
-	fingerprint string
-	at          time.Time
-	attempt     int
-}
-
-// parseRecoveredValues parses "<fingerprint>@<RFC3339>@<attempt>". ok is
-// false for a missing or malformed annotation.
-func parseRecoveredValues(v string) (recoveredValues, bool) {
-	parts := strings.Split(v, "@")
-	if len(parts) != 3 || parts[0] == "" {
-		return recoveredValues{}, false
-	}
-	at, err := time.Parse(time.RFC3339, parts[1])
-	if err != nil {
-		return recoveredValues{}, false
-	}
-	attempt, err := strconv.Atoi(parts[2])
-	if err != nil || attempt < 1 {
-		return recoveredValues{}, false
-	}
-	return recoveredValues{fingerprint: parts[0], at: at, attempt: attempt}, true
-}
-
-// alreadyRecoveredForValues returns true when a recovery cleared exactly the
-// values the resolver has put back since, and the backoff for that attempt
-// has not elapsed yet. The generation guard alone cannot stop a loop: the
-// resolver writes the re-resolved values into spec.forProvider, which bumps
-// the generation past the recorded one. Clearing the same values again right
-// away cannot help; after the backoff it may (the referenced resource may
-// have observed a recreated object by then, or a new incident started).
-func alreadyRecoveredForValues(mg Managed, fingerprint string) bool {
-	if fingerprint == "" {
-		return false
-	}
-	r, ok := parseRecoveredValues(mg.GetAnnotations()[RecoveredValuesAnnotation])
-	if !ok || r.fingerprint != fingerprint {
-		return false
-	}
-	return now().Sub(r.at) < valuesRecoveryBackoff(r.attempt)
-}
-
-// setRecoveryAnnotations marks the resource as recovered at its post-Update
-// generation and records a fingerprint of the values that were cleared, with
-// the time and the attempt count (reset to 1 when the values changed).
-// Clearing spec.forProvider increments the spec generation by one, so we
-// record the predicted post-Update value (mg.GetGeneration()+1) to match what
-// a subsequent reconcile will observe.
-func setRecoveryAnnotations(mg Managed, fingerprint string) {
+// setRecoveryAnnotation marks the resource as recovered at its post-Update
+// generation. Replacing values in spec.forProvider increments the spec
+// generation by one, so we record the predicted post-Update value
+// (mg.GetGeneration()+1) to match what a subsequent reconcile will observe.
+func setRecoveryAnnotation(mg Managed) {
 	a := mg.GetAnnotations()
 	if a == nil {
 		a = map[string]string{}
 	}
 	a[RecoveryAtGenerationAnnotation] = strconv.FormatInt(mg.GetGeneration()+1, 10)
-	if fingerprint != "" {
-		attempt := 1
-		if r, ok := parseRecoveredValues(a[RecoveredValuesAnnotation]); ok && r.fingerprint == fingerprint {
-			attempt = r.attempt + 1
-		}
-		a[RecoveredValuesAnnotation] = fingerprint + "@" + now().UTC().Format(time.RFC3339) + "@" + strconv.Itoa(attempt)
-	}
 	mg.SetAnnotations(a)
 }
 
@@ -330,32 +267,42 @@ func parameterStructs(mg Managed) []namedParams {
 	return out
 }
 
-// resolvedValuesFingerprint returns a short hash over every value field that
-// clearResolvedRefs would clear (same pairing rules), or "" if there is none.
-func resolvedValuesFingerprint(mg Managed) string {
-	var entries []string
+// resolvedValues returns every value field that clearResolvedRefs would
+// clear (same pairing rules), keyed by "<ForProvider|InitProvider>.<Field>".
+func resolvedValues(mg Managed) map[string]string {
+	out := map[string]string{}
 	for _, params := range parameterStructs(mg) {
 		t := params.value.Type()
-		seen := map[string]bool{}
 		for i := 0; i < params.value.NumField(); i++ {
 			valueName, ok := valueFieldName(t.Field(i).Name)
-			if !ok || seen[valueName] || isNilOrEmpty(params.value.Field(i)) {
+			if !ok || isNilOrEmpty(params.value.Field(i)) {
+				continue
+			}
+			key := params.name + "." + valueName
+			if _, seen := out[key]; seen {
 				continue
 			}
 			value := params.value.FieldByName(valueName)
 			if !value.IsValid() || isNilOrEmpty(value) {
 				continue
 			}
-			seen[valueName] = true
-			entries = append(entries, params.name+"."+valueName+"="+describeValue(value))
+			out[key] = describeValue(value)
 		}
 	}
-	if len(entries) == 0 {
-		return ""
+	return out
+}
+
+// sameFields reports whether a and b hold values for exactly the same fields.
+func sameFields(a, b map[string]string) bool {
+	if len(a) != len(b) {
+		return false
 	}
-	sort.Strings(entries)
-	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
-	return hex.EncodeToString(sum[:8])
+	for k := range a {
+		if _, ok := b[k]; !ok {
+			return false
+		}
+	}
+	return true
 }
 
 // describeValue renders the reference-resolved value types upjet generates

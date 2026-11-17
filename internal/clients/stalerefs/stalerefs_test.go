@@ -80,6 +80,28 @@ type fakeManaged struct {
 	metav1.ObjectMeta
 	Spec   fakeSpec
 	Status fakeStatus
+
+	// resolve stands in for the generated reference resolver.
+	resolve func(*fakeManaged) error
+}
+
+// ResolveReferences mirrors zz_generated.resolvers.go: it only fills fields
+// that are empty (a set value is a no-op for the default resolve policy).
+func (f *fakeManaged) ResolveReferences(_ context.Context, _ client.Reader) error {
+	if f.resolve == nil {
+		return nil
+	}
+	return f.resolve(f)
+}
+
+// resolveClientID returns a resolver that resolves ClientIDRef to id.
+func resolveClientID(id string) func(*fakeManaged) error {
+	return func(f *fakeManaged) error {
+		if f.Spec.ForProvider.ClientID == nil {
+			f.Spec.ForProvider.ClientID = ptr(id)
+		}
+		return nil
+	}
 }
 
 func (f *fakeManaged) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
@@ -323,437 +345,6 @@ func TestMaybeRecover(t *testing.T) {
 		Status: corev1.ConditionTrue,
 		Reason: xpv1.ReasonReconcileSuccess,
 	}
-
-	t.Run("healthy: no-op", func(t *testing.T) {
-		mg := &fakeManaged{Spec: fakeSpec{ForProvider: fakeParams{
-			ClientID:    ptr("uuid"),
-			ClientIDRef: &xpv1.Reference{Name: "c"},
-		}}}
-		mg.SetConditions(healthyCond)
-
-		updateCalled := false
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				updateCalled = true
-				return nil
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (false,nil)", recovered, err)
-		}
-		if updateCalled {
-			t.Errorf("kube.Update was called on a healthy resource")
-		}
-		if mg.Spec.ForProvider.ClientID == nil {
-			t.Errorf("ClientID cleared on a healthy resource")
-		}
-	})
-
-	t.Run("stale: clears and persists", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: createdExternally(),
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		var persisted *fakeManaged
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, obj client.Object, _ ...client.UpdateOption) error {
-				persisted = obj.(*fakeManaged)
-				return nil
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || !recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
-		}
-		if persisted == nil {
-			t.Fatalf("kube.Update was not called")
-		}
-		if persisted.Spec.ForProvider.ClientID != nil {
-			t.Errorf("persisted ClientID was not cleared: %v", *persisted.Spec.ForProvider.ClientID)
-		}
-	})
-
-	t.Run("stale but nothing to clear → no-op", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: createdExternally(),
-			Spec: fakeSpec{ForProvider: fakeParams{
-				Name: ptr("no-refs-here"),
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		updateCalled := false
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				updateCalled = true
-				return nil
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (false,nil)", recovered, err)
-		}
-		if updateCalled {
-			t.Errorf("kube.Update was called when nothing was cleared")
-		}
-	})
-
-	t.Run("update conflict → treated as benign", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: createdExternally(),
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				return apierrors.NewConflict(schema.GroupResource{Group: "x", Resource: "y"}, "name", errors.New("stale"))
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil {
-			t.Fatalf("MaybeRecover() returned unexpected error: %v", err)
-		}
-		if !recovered {
-			t.Fatalf("expected recovered=true even on conflict, got false")
-		}
-	})
-
-	t.Run("annotation matches current generation → skip", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{
-				Generation: 5,
-				Annotations: map[string]string{
-					RecoveryAtGenerationAnnotation:            "5",
-					meta.AnnotationKeyExternalCreateSucceeded: time.Now().Format(time.RFC3339),
-				},
-			},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		updateCalled := false
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				updateCalled = true
-				return nil
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (false,nil) — already recovered this gen", recovered, err)
-		}
-		if updateCalled {
-			t.Errorf("kube.Update was called despite annotation guard")
-		}
-		if mg.Spec.ForProvider.ClientID == nil {
-			t.Errorf("ClientID was cleared despite annotation guard")
-		}
-	})
-
-	t.Run("annotation older than current generation → recover again", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{
-				Generation: 7,
-				Annotations: map[string]string{
-					RecoveryAtGenerationAnnotation:            "5",
-					meta.AnnotationKeyExternalCreateSucceeded: time.Now().Format(time.RFC3339),
-				},
-			},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		var persistedAnno string
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, obj client.Object, _ ...client.UpdateOption) error {
-				persistedAnno = obj.GetAnnotations()[RecoveryAtGenerationAnnotation]
-				return nil
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || !recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
-		}
-		if persistedAnno != "8" {
-			t.Errorf("annotation = %q, want %q (current gen + 1)", persistedAnno, "8")
-		}
-	})
-
-	t.Run("annotation malformed → recover (defensive)", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{
-				Generation: 1,
-				Annotations: map[string]string{
-					RecoveryAtGenerationAnnotation:            "not-a-number",
-					meta.AnnotationKeyExternalCreateSucceeded: time.Now().Format(time.RFC3339),
-				},
-			},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || !recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (true,nil) — malformed annotation should not block recovery", recovered, err)
-		}
-	})
-
-	t.Run("first recovery sets annotation to gen+1", func(t *testing.T) {
-		const gen int64 = 3
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{
-				Generation: gen,
-				Annotations: map[string]string{
-					meta.AnnotationKeyExternalCreateSucceeded: time.Now().Format(time.RFC3339),
-				},
-			},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		var persisted *fakeManaged
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, obj client.Object, _ ...client.UpdateOption) error {
-				persisted = obj.(*fakeManaged)
-				return nil
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || !recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
-		}
-		got := persisted.GetAnnotations()[RecoveryAtGenerationAnnotation]
-		want := strconv.FormatInt(gen+1, 10)
-		if got != want {
-			t.Errorf("annotation = %q, want %q", got, want)
-		}
-	})
-
-	// Regression: a never-created resource that takes a 404 during cold start
-	// (e.g. parent realm not yet in Keycloak) must NOT have its sibling-XRef
-	// value fields cleared. Clearing them strands fields like serviceAccountUserId
-	// — whose resolver pulls from a sibling resource's status — empty, and the
-	// per-generation guard then locks recovery off, leaving the resource stuck
-	// for the full reconcile budget.
-	t.Run("never created externally → skip even with stale-looking condition", func(t *testing.T) {
-		mg := &fakeManaged{Spec: fakeSpec{ForProvider: fakeParams{
-			ClientID:    ptr("uuid"),
-			ClientIDRef: &xpv1.Reference{Name: "c"},
-		}}}
-		mg.SetConditions(staleCond)
-
-		updateCalled := false
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				updateCalled = true
-				return nil
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (false,nil) — cold-start 404 must not trigger clearing", recovered, err)
-		}
-		if updateCalled {
-			t.Errorf("kube.Update was called on a never-created resource")
-		}
-		if mg.Spec.ForProvider.ClientID == nil {
-			t.Errorf("ClientID cleared on a never-created resource")
-		}
-		if _, ok := mg.GetAnnotations()[RecoveryAtGenerationAnnotation]; ok {
-			t.Errorf("recovery annotation was set despite cold-start gate")
-		}
-	})
-
-	// The reference resolver skips deleted resources, so values cleared during
-	// a delete never come back and the delete hangs on "required param ...
-	// not set".
-	t.Run("being deleted → skip", func(t *testing.T) {
-		now := metav1.Now()
-		om := createdExternally()
-		om.DeletionTimestamp = &now
-		mg := &fakeManaged{
-			ObjectMeta: om,
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		updateCalled := false
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				updateCalled = true
-				return nil
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (false,nil) for a deleted resource", recovered, err)
-		}
-		if updateCalled || mg.Spec.ForProvider.ClientID == nil {
-			t.Errorf("references were cleared on a deleted resource")
-		}
-	})
-
-	// upjet's async client: external-create-succeeded is set when the async
-	// create starts; the 404 of a parent that does not exist yet arrives later
-	// as external-create-failed.
-	t.Run("async create failed after it started → never created, skip", func(t *testing.T) {
-		started := time.Now().Add(-30 * time.Second)
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{Annotations: map[string]string{
-				meta.AnnotationKeyExternalCreateSucceeded: started.Format(time.RFC3339),
-				meta.AnnotationKeyExternalCreateFailed:    started.Add(29 * time.Second).Format(time.RFC3339),
-			}},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				t.Errorf("kube.Update was called for a failed async create")
-				return nil
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (false,nil)", recovered, err)
-		}
-	})
-
-	t.Run("create succeeded after an earlier failure → created, recover", func(t *testing.T) {
-		failed := time.Now().Add(-time.Hour)
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{Annotations: map[string]string{
-				meta.AnnotationKeyExternalCreateFailed:    failed.Format(time.RFC3339),
-				meta.AnnotationKeyExternalCreateSucceeded: failed.Add(time.Minute).Format(time.RFC3339),
-			}},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || !recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
-		}
-	})
-
-	// Regression for the loop the generation guard cannot stop: recovery
-	// clears (gen N -> N+1, annotation N+1), the resolver writes the same
-	// value back (gen N+2), the error persists, recovery clears again, ...
-	// Observed as generation 79 on a mapper during a 401 outage.
-	t.Run("resolver restored the same values → do not clear again", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{
-				Generation: 4,
-				Annotations: map[string]string{
-					meta.AnnotationKeyExternalCreateSucceeded: time.Now().Format(time.RFC3339),
-				},
-			},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("same-uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		updates := 0
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				updates++
-				return nil
-			},
-		}
-		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
-			t.Fatalf("first MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
-		}
-		if mg.GetAnnotations()[RecoveredValuesAnnotation] == "" {
-			t.Fatalf("fingerprint annotation not set")
-		}
-
-		// The API server bumps the generation for the clearing update, the
-		// resolver writes the same value back and bumps it again.
-		mg.SetGeneration(6)
-		mg.Spec.ForProvider.ClientID = ptr("same-uuid")
-
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || recovered {
-			t.Fatalf("second MaybeRecover() = (%v,%v), want (false,nil)", recovered, err)
-		}
-		if updates != 1 {
-			t.Errorf("kube.Update called %d times, want 1", updates)
-		}
-		if mg.Spec.ForProvider.ClientID == nil {
-			t.Errorf("ClientID was cleared again although the resolver restored the same value")
-		}
-	})
-
-	t.Run("resolver produced new values → recover again", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{
-				Generation: 4,
-				Annotations: map[string]string{
-					meta.AnnotationKeyExternalCreateSucceeded: time.Now().Format(time.RFC3339),
-				},
-			},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("old-uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
-		}
-		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
-			t.Fatalf("first MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
-		}
-
-		mg.SetGeneration(6)
-		mg.Spec.ForProvider.ClientID = ptr("new-uuid")
-
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || !recovered {
-			t.Fatalf("second MaybeRecover() = (%v,%v), want (true,nil) for changed values", recovered, err)
-		}
-	})
-
 	// upjet's async callback records a failed create only in the
 	// LastAsyncOperation condition; external-create-failed is not set.
 	asyncCreateFailed := xpv1.Condition{
@@ -763,196 +354,242 @@ func TestMaybeRecover(t *testing.T) {
 		Message: "async create failed: failed to create the resource: [{0 error sending POST request to /admin/realms/r/identity-provider/instances/acme/mappers: 404 Not Found. Response body: {}  []}]",
 	}
 
-	t.Run("async create failed, only the start annotation set → never created, skip", func(t *testing.T) {
+	// stale returns a created resource holding oldID whose resolver now
+	// yields newID.
+	stale := func(om metav1.ObjectMeta, oldID, newID string) *fakeManaged {
 		mg := &fakeManaged{
-			ObjectMeta: createdExternally(),
+			ObjectMeta: om,
 			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
+				ClientID:    ptr(oldID),
 				ClientIDRef: &xpv1.Reference{Name: "c"},
 			}},
+			resolve: resolveClientID(newID),
 		}
-		mg.SetConditions(staleCond, asyncCreateFailed)
+		mg.SetConditions(staleCond)
+		return mg
+	}
 
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				t.Errorf("kube.Update was called for a failed async create")
-				return nil
+	// recorder captures what MaybeRecover writes.
+	type recorder struct {
+		updates   int
+		persisted *fakeManaged
+	}
+	recording := func(r *recorder, err error) *test.MockClient {
+		return &test.MockClient{
+			MockUpdate: func(_ context.Context, obj client.Object, _ ...client.UpdateOption) error {
+				r.updates++
+				r.persisted = obj.(*fakeManaged)
+				return err
 			},
 		}
+	}
+
+	expect := func(t *testing.T, mg *fakeManaged, kube client.Client, wantRecovered bool) {
+		t.Helper()
 		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (false,nil)", recovered, err)
+		if err != nil || recovered != wantRecovered {
+			t.Fatalf("MaybeRecover() = (%v,%v), want (%v,nil)", recovered, err, wantRecovered)
 		}
+	}
+
+	t.Run("healthy: no-op", func(t *testing.T) {
+		mg := stale(createdExternally(), "old-uuid", "new-uuid")
+		mg.SetConditions(healthyCond)
+		var r recorder
+		expect(t, mg, recording(&r, nil), false)
+		if r.updates != 0 {
+			t.Errorf("kube.Update was called on a healthy resource")
+		}
+	})
+
+	t.Run("stale: persists the re-resolved value, never an empty one", func(t *testing.T) {
+		mg := stale(createdExternally(), "old-uuid", "new-uuid")
+		var r recorder
+		expect(t, mg, recording(&r, nil), true)
+		if r.updates != 1 || r.persisted == nil {
+			t.Fatalf("kube.Update called %d times, want 1", r.updates)
+		}
+		if got := r.persisted.Spec.ForProvider.ClientID; got == nil || *got != "new-uuid" {
+			t.Errorf("persisted ClientID = %v, want new-uuid", got)
+		}
+		if mg.Spec.ForProvider.ClientID == nil || *mg.Spec.ForProvider.ClientID != "old-uuid" {
+			t.Errorf("the caller's object was modified; only the copy may change")
+		}
+	})
+
+	// Copilot review on #785: with clearing persisted first, a delete that
+	// arrived before the next reconcile left the resource without its
+	// required parameters forever. Nothing empty is ever persisted now.
+	t.Run("delete right after a recovery finds complete parameters", func(t *testing.T) {
+		mg := stale(createdExternally(), "old-uuid", "new-uuid")
+		var r recorder
+		expect(t, mg, recording(&r, nil), true)
+
+		deleted := r.persisted
+		now := metav1.Now()
+		deleted.DeletionTimestamp = &now
+		if deleted.Spec.ForProvider.ClientID == nil {
+			t.Fatalf("the persisted object has no ClientID; its delete would hang")
+		}
+		expect(t, deleted, recording(&recorder{}, nil), false)
+	})
+
+	t.Run("references resolve to the same value → no write", func(t *testing.T) {
+		mg := stale(createdExternally(), "same-uuid", "same-uuid")
+		var r recorder
+		expect(t, mg, recording(&r, nil), false)
+		if r.updates != 0 {
+			t.Errorf("kube.Update called %d times for unchanged values", r.updates)
+		}
+	})
+
+	// dev/test/stale-ref-recovery.sh: a Role is recreated out-of-band. Until
+	// the Role MR has observed the new UUID, the resolver yields the old one:
+	// no write. Once it has, the next reconcile writes the new UUID.
+	t.Run("referenced MR catches up later → recovered then, no churn before", func(t *testing.T) {
+		mg := stale(createdExternally(), "old-uuid", "old-uuid")
+		var r recorder
+		kube := recording(&r, nil)
+		for range 5 {
+			expect(t, mg, kube, false)
+		}
+		mg.resolve = resolveClientID("new-uuid")
+		expect(t, mg, kube, true)
+		if r.updates != 1 {
+			t.Errorf("kube.Update called %d times, want 1", r.updates)
+		}
+	})
+
+	t.Run("resolver fails → keep current values, no write", func(t *testing.T) {
+		mg := stale(createdExternally(), "old-uuid", "new-uuid")
+		mg.resolve = func(*fakeManaged) error { return errors.New("referenced resource not ready") }
+		var r recorder
+		expect(t, mg, recording(&r, nil), false)
+		if r.updates != 0 {
+			t.Errorf("kube.Update was called although resolution failed")
+		}
+	})
+
+	t.Run("resolver leaves a field empty → no write", func(t *testing.T) {
+		mg := stale(createdExternally(), "old-uuid", "new-uuid")
+		mg.resolve = nil
+		var r recorder
+		expect(t, mg, recording(&r, nil), false)
+		if r.updates != 0 {
+			t.Errorf("kube.Update was called with an unresolved field")
+		}
+	})
+
+	t.Run("no reference-resolved fields → no-op", func(t *testing.T) {
+		mg := &fakeManaged{
+			ObjectMeta: createdExternally(),
+			Spec:       fakeSpec{ForProvider: fakeParams{Name: ptr("no-refs-here")}},
+		}
+		mg.SetConditions(staleCond)
+		var r recorder
+		expect(t, mg, recording(&r, nil), false)
+		if r.updates != 0 {
+			t.Errorf("kube.Update was called when nothing was resolvable")
+		}
+	})
+
+	t.Run("update conflict → treated as benign", func(t *testing.T) {
+		mg := stale(createdExternally(), "old-uuid", "new-uuid")
+		conflict := apierrors.NewConflict(schema.GroupResource{Group: "x", Resource: "y"}, "name", errors.New("stale"))
+		expect(t, mg, recording(&recorder{}, conflict), true)
+	})
+
+	t.Run("update non-conflict error → returned", func(t *testing.T) {
+		mg := stale(createdExternally(), "old-uuid", "new-uuid")
+		wantErr := errors.New("nope")
+		recovered, err := MaybeRecover(context.Background(), recording(&recorder{}, wantErr), mg)
+		if !errors.Is(err, wantErr) || recovered {
+			t.Fatalf("MaybeRecover() = (%v,%v), want (false,%v)", recovered, err, wantErr)
+		}
+	})
+
+	t.Run("annotation matches current generation → skip", func(t *testing.T) {
+		om := createdExternally()
+		om.Generation = 5
+		om.Annotations[RecoveryAtGenerationAnnotation] = "5"
+		var r recorder
+		expect(t, stale(om, "old-uuid", "new-uuid"), recording(&r, nil), false)
+		if r.updates != 0 {
+			t.Errorf("kube.Update was called despite the generation guard")
+		}
+	})
+
+	t.Run("annotation older than current generation → recover, annotation gen+1", func(t *testing.T) {
+		om := createdExternally()
+		om.Generation = 7
+		om.Annotations[RecoveryAtGenerationAnnotation] = "5"
+		var r recorder
+		expect(t, stale(om, "old-uuid", "new-uuid"), recording(&r, nil), true)
+		if got := r.persisted.GetAnnotations()[RecoveryAtGenerationAnnotation]; got != strconv.FormatInt(8, 10) {
+			t.Errorf("annotation = %q, want 8 (current gen + 1)", got)
+		}
+	})
+
+	t.Run("annotation malformed → recover (defensive)", func(t *testing.T) {
+		om := createdExternally()
+		om.Generation = 1
+		om.Annotations[RecoveryAtGenerationAnnotation] = "not-a-number"
+		expect(t, stale(om, "old-uuid", "new-uuid"), recording(&recorder{}, nil), true)
+	})
+
+	t.Run("being deleted → skip", func(t *testing.T) {
+		om := createdExternally()
+		now := metav1.Now()
+		om.DeletionTimestamp = &now
+		var r recorder
+		expect(t, stale(om, "old-uuid", "new-uuid"), recording(&r, nil), false)
+		if r.updates != 0 {
+			t.Errorf("kube.Update was called on a deleted resource")
+		}
+	})
+
+	// Regression: a never-created resource that takes a 404 during cold start
+	// (e.g. parent realm not yet in Keycloak) must be left alone.
+	t.Run("never created externally → skip", func(t *testing.T) {
+		var r recorder
+		expect(t, stale(metav1.ObjectMeta{}, "old-uuid", "new-uuid"), recording(&r, nil), false)
+		if r.updates != 0 {
+			t.Errorf("kube.Update was called on a never-created resource")
+		}
+	})
+
+	t.Run("external-create-failed newer than the start annotation → never created, skip", func(t *testing.T) {
+		started := time.Now().Add(-30 * time.Second)
+		om := metav1.ObjectMeta{Annotations: map[string]string{
+			meta.AnnotationKeyExternalCreateSucceeded: started.Format(time.RFC3339),
+			meta.AnnotationKeyExternalCreateFailed:    started.Add(29 * time.Second).Format(time.RFC3339),
+		}}
+		expect(t, stale(om, "old-uuid", "new-uuid"), recording(&recorder{}, nil), false)
+	})
+
+	t.Run("create succeeded after an earlier failure → created, recover", func(t *testing.T) {
+		failed := time.Now().Add(-time.Hour)
+		om := metav1.ObjectMeta{Annotations: map[string]string{
+			meta.AnnotationKeyExternalCreateFailed:    failed.Format(time.RFC3339),
+			meta.AnnotationKeyExternalCreateSucceeded: failed.Add(time.Minute).Format(time.RFC3339),
+		}}
+		expect(t, stale(om, "old-uuid", "new-uuid"), recording(&recorder{}, nil), true)
+	})
+
+	t.Run("async create failed, only the start annotation set → never created, skip", func(t *testing.T) {
+		mg := stale(createdExternally(), "old-uuid", "new-uuid")
+		mg.SetConditions(asyncCreateFailed)
+		expect(t, mg, recording(&recorder{}, nil), false)
 	})
 
 	// A resource Keycloak returned before (observed ID) that fails to be
 	// re-created because a referenced UUID is stale is exactly the case
 	// recovery exists for.
 	t.Run("async create failed but an ID was observed before → created, recover", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: createdExternally(),
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
+		mg := stale(createdExternally(), "old-uuid", "new-uuid")
 		mg.Status.AtProvider.ID = ptr("3357aaeb-6461-40cc-96e6-7e0b6d3a02e5")
-		mg.SetConditions(staleCond, asyncCreateFailed)
-
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || !recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
-		}
-	})
-
-	// dev/test/stale-ref-recovery.sh: a Role is recreated out-of-band. The
-	// RoleMapper's recovery can run before the Role MR has observed the new
-	// UUID, so the resolver restores the old one. Recovery must retry within
-	// the script's 3-minute window and pick up the new UUID.
-	t.Run("old UUID restored, referenced MR catches up → recovered within a minute", func(t *testing.T) {
-		t0 := time.Date(2026, 11, 16, 15, 0, 0, 0, time.UTC)
-		clock := t0
-		now = func() time.Time { return clock }
-		t.Cleanup(func() { now = time.Now })
-
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{
-				Generation:  4,
-				Annotations: map[string]string{meta.AnnotationKeyExternalCreateSucceeded: t0.Format(time.RFC3339)},
-			},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("old-uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.Status.AtProvider.ID = ptr("mapper-id")
-		mg.SetConditions(staleCond)
-
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
-		}
-		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
-			t.Fatalf("first MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
-		}
-
-		// The Role MR has not caught up: the resolver restores the old UUID.
-		mg.SetGeneration(6)
-		mg.Spec.ForProvider.ClientID = ptr("old-uuid")
-		clock = t0.Add(10 * time.Second)
-		if recovered, _ := MaybeRecover(context.Background(), kube, mg); recovered {
-			t.Fatalf("cleared the same values again before the initial backoff")
-		}
-
-		// After the initial backoff the same values are cleared once more.
-		clock = t0.Add(ValuesRecoveryInitialBackoff + time.Second)
-		if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
-			t.Fatalf("after initial backoff: MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
-		}
-
-		// Meanwhile the Role MR observed the recreated role: the resolver
-		// yields the new UUID, which is a new fingerprint.
-		mg.SetGeneration(8)
-		mg.Spec.ForProvider.ClientID = ptr("new-uuid")
-		clock = t0.Add(ValuesRecoveryInitialBackoff + 5*time.Second)
-		if r, ok := parseRecoveredValues(mg.GetAnnotations()[RecoveredValuesAnnotation]); !ok || r.attempt != 2 {
-			t.Fatalf("annotation = %q, want attempt 2", mg.GetAnnotations()[RecoveredValuesAnnotation])
-		}
-		if alreadyRecoveredForValues(mg, resolvedValuesFingerprint(mg)) {
-			t.Errorf("new values must not be blocked by the backoff of the old ones")
-		}
-	})
-
-	// A recovery that keeps restoring the same values (the references were not
-	// stale) slows down exponentially and settles at one clearing per
-	// ValuesRecoveryMaxBackoff.
-	t.Run("same values keep coming back → exponential backoff up to the cap", func(t *testing.T) {
-		t0 := time.Date(2026, 11, 16, 15, 0, 0, 0, time.UTC)
-		clock := t0
-		now = func() time.Time { return clock }
-		t.Cleanup(func() { now = time.Now })
-
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{
-				Generation:  2,
-				Annotations: map[string]string{meta.AnnotationKeyExternalCreateSucceeded: t0.Format(time.RFC3339)},
-			},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("same-uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
-		}
-
-		for attempt := 1; attempt <= 8; attempt++ {
-			if recovered, err := MaybeRecover(context.Background(), kube, mg); err != nil || !recovered {
-				t.Fatalf("attempt %d: MaybeRecover() = (%v,%v), want (true,nil)", attempt, recovered, err)
-			}
-			wait := valuesRecoveryBackoff(attempt)
-			mg.SetGeneration(mg.GetGeneration() + 2)
-			mg.Spec.ForProvider.ClientID = ptr("same-uuid")
-
-			clock = clock.Add(wait - time.Second)
-			if recovered, _ := MaybeRecover(context.Background(), kube, mg); recovered {
-				t.Fatalf("attempt %d: cleared again %v before its backoff of %v elapsed", attempt, wait-time.Second, wait)
-			}
-			clock = clock.Add(2 * time.Second)
-		}
-	})
-
-	t.Run("values annotation malformed → recover (defensive)", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: metav1.ObjectMeta{
-				Generation: 4,
-				Annotations: map[string]string{
-					meta.AnnotationKeyExternalCreateSucceeded: time.Now().Format(time.RFC3339),
-					RecoveredValuesAnnotation:                 "no-timestamp",
-				},
-			},
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error { return nil },
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if err != nil || !recovered {
-			t.Fatalf("MaybeRecover() = (%v,%v), want (true,nil)", recovered, err)
-		}
-	})
-
-	t.Run("update non-conflict error → returned", func(t *testing.T) {
-		mg := &fakeManaged{
-			ObjectMeta: createdExternally(),
-			Spec: fakeSpec{ForProvider: fakeParams{
-				ClientID:    ptr("uuid"),
-				ClientIDRef: &xpv1.Reference{Name: "c"},
-			}},
-		}
-		mg.SetConditions(staleCond)
-
-		wantErr := errors.New("nope")
-		kube := &test.MockClient{
-			MockUpdate: func(_ context.Context, _ client.Object, _ ...client.UpdateOption) error {
-				return wantErr
-			},
-		}
-		recovered, err := MaybeRecover(context.Background(), kube, mg)
-		if !errors.Is(err, wantErr) {
-			t.Fatalf("MaybeRecover() err = %v, want %v", err, wantErr)
-		}
-		if recovered {
-			t.Errorf("expected recovered=false on non-conflict error")
-		}
+		mg.SetConditions(asyncCreateFailed)
+		expect(t, mg, recording(&recorder{}, nil), true)
 	})
 }
 
@@ -960,74 +597,36 @@ func TestMaybeRecover(t *testing.T) {
 // interface used by MaybeRecover.
 var _ Managed = (*fakeManaged)(nil)
 
-func TestResolvedValuesFingerprint(t *testing.T) {
-	withRefs := func(clientID string, roles ...string) *fakeManaged {
-		mg := &fakeManaged{Spec: fakeSpec{ForProvider: fakeParams{
-			ClientID:    ptr(clientID),
+func TestResolvedValues(t *testing.T) {
+	mg := &fakeManaged{Spec: fakeSpec{
+		ForProvider: fakeParams{
+			ClientID:    ptr("u1"),
 			ClientIDRef: &xpv1.Reference{Name: "c"},
+			RoleIds:     []*string{ptr("r1"), ptr("r2")},
+			RoleIdsRefs: []xpv1.Reference{{Name: "r"}},
 			Name:        ptr("not-a-ref"),
-		}}}
-		for _, r := range roles {
-			mg.Spec.ForProvider.RoleIds = append(mg.Spec.ForProvider.RoleIds, ptr(r))
-		}
-		if len(roles) > 0 {
-			mg.Spec.ForProvider.RoleIdsRefs = []xpv1.Reference{{Name: "r"}}
-		}
-		return mg
+			RealmID:     ptr("manual-value-without-ref"),
+		},
+		InitProvider: fakeParams{
+			GroupID:         ptr("g1"),
+			GroupIDSelector: &xpv1.Selector{},
+		},
+	}}
+	want := map[string]string{
+		"ForProvider.ClientID": "u1",
+		"ForProvider.RoleIds":  "[r1,r2]",
+		"InitProvider.GroupID": "g1",
 	}
-
-	if got := resolvedValuesFingerprint(&fakeManaged{}); got != "" {
-		t.Errorf("no resolved values: fingerprint = %q, want empty", got)
+	got := resolvedValues(mg)
+	if len(got) != len(want) {
+		t.Fatalf("resolvedValues() = %v, want %v", got, want)
 	}
-	a := resolvedValuesFingerprint(withRefs("u1", "r1", "r2"))
-	if a == "" {
-		t.Fatalf("fingerprint is empty")
-	}
-	if b := resolvedValuesFingerprint(withRefs("u1", "r1", "r2")); a != b {
-		t.Errorf("same values: %q != %q", a, b)
-	}
-	if b := resolvedValuesFingerprint(withRefs("u2", "r1", "r2")); a == b {
-		t.Errorf("changed singular value did not change the fingerprint")
-	}
-	if b := resolvedValuesFingerprint(withRefs("u1", "r1", "r3")); a == b {
-		t.Errorf("changed slice value did not change the fingerprint")
-	}
-	plain := withRefs("u1", "r1", "r2")
-	plain.Spec.ForProvider.Name = ptr("changed")
-	if b := resolvedValuesFingerprint(plain); a != b {
-		t.Errorf("field without ref sibling changed the fingerprint")
-	}
-}
-
-func TestValuesRecoveryBackoff(t *testing.T) {
-	cases := []struct {
-		attempt int
-		want    time.Duration
-	}{
-		{0, 30 * time.Second},
-		{1, 30 * time.Second},
-		{2, time.Minute},
-		{3, 2 * time.Minute},
-		{4, 4 * time.Minute},
-		{5, 8 * time.Minute},
-		{6, 10 * time.Minute},
-		{100, 10 * time.Minute},
-	}
-	for _, tc := range cases {
-		if got := valuesRecoveryBackoff(tc.attempt); got != tc.want {
-			t.Errorf("valuesRecoveryBackoff(%d) = %v, want %v", tc.attempt, got, tc.want)
+	for k, v := range want {
+		if got[k] != v {
+			t.Errorf("resolvedValues()[%q] = %q, want %q", k, got[k], v)
 		}
 	}
-}
-
-func TestParseRecoveredValues(t *testing.T) {
-	at := time.Date(2026, 11, 16, 15, 0, 0, 0, time.UTC)
-	if r, ok := parseRecoveredValues("abc@" + at.Format(time.RFC3339) + "@3"); !ok || r.fingerprint != "abc" || !r.at.Equal(at) || r.attempt != 3 {
-		t.Errorf("valid annotation: got (%+v, %v)", r, ok)
-	}
-	for _, bad := range []string{"", "abc", "abc@" + at.Format(time.RFC3339), "@" + at.Format(time.RFC3339) + "@1", "abc@not-a-time@1", "abc@" + at.Format(time.RFC3339) + "@0", "abc@" + at.Format(time.RFC3339) + "@x"} {
-		if _, ok := parseRecoveredValues(bad); ok {
-			t.Errorf("parseRecoveredValues(%q) ok, want malformed", bad)
-		}
+	if !sameFields(got, want) || sameFields(got, map[string]string{"ForProvider.ClientID": "u1"}) {
+		t.Errorf("sameFields() does not compare the field sets")
 	}
 }

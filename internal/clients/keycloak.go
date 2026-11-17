@@ -113,7 +113,7 @@ func TerraformSetupBuilder(poolSize int) terraform.SetupFn {
 		if recovered, err := stalerefs.MaybeRecover(ctx, client, mg); err != nil {
 			return terraform.Setup{}, errors.Wrap(err, "stale reference recovery failed")
 		} else if recovered {
-			return terraform.Setup{}, errors.New("cleared stale references; reconciling")
+			return terraform.Setup{}, errors.New("re-resolved stale references; reconciling")
 		}
 
 		pcSpec, err := resolveProviderConfig(ctx, client, mg)
