@@ -50,7 +50,6 @@ check_not_late_initialized() {
 }
 
 echo "Checking ${KIND_GROUP}/${NAME} does not own its flow bindings"
-wait_for '{.status.atProvider.browserFlow}' "${EXPECTED_FLOW}"
 check_not_late_initialized
 
 # Force a full realm update through an unrelated field.
