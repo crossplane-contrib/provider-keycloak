@@ -19,7 +19,7 @@
 #   4. Re-create the Role with the same name (fresh UUID in Keycloak).
 #   5. Wait for the RoleMapper to recover: spec.forProvider.roleId should
 #      transition to the new UUID and Synced=True should return.
-#   6. Assert: new UUID != original, and the recovery annotation is set.
+#   6. Assert: new UUID != original, and the RoleMapper holds it with Synced=True.
 #
 # Prerequisites:
 #   - dev/setup_dev_environment.sh has been run (kind cluster + Keycloak +
@@ -173,13 +173,9 @@ while (( $(date +%s) < deadline )); do
   synced=$(kubectl get rolemapper.client.keycloak.crossplane.io/${RM_NAME} \
     -o jsonpath='{.status.conditions[?(@.type=="Synced")].status}' 2>/dev/null || true)
   if [[ "${current}" == "${NEW_KC_UUID}" && "${synced}" == "True" ]]; then
-    anno=$(kubectl get rolemapper.client.keycloak.crossplane.io/${RM_NAME} \
-      -o jsonpath='{.metadata.annotations.provider-keycloak\.crossplane\.io/stale-ref-recovery-at-generation}' \
-      2>/dev/null || true)
     log "PASS: roleId rewritten and Synced=True"
     log "  before: ${ORIGINAL_ROLE_ID}"
     log "  after:  ${current}"
-    [[ -n "${anno}" ]] && log "  recovery annotation set to generation ${anno}"
     exit 0
   fi
   sleep 5
