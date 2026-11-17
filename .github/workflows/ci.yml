@@ -60,7 +60,7 @@ jobs:
         id: e2e-scope
         run: |
           # Full Keycloak version matrix (all supported releases)
-          ALL_VERSIONS='["26.8.2","26.7.0","26.6.2","26.5.1","26.4.4","26.3.5","26.2.5","26.1.5","26.0.8"]'
+          ALL_VERSIONS='["26.8.2","26.8.1","26.8.0","26.7.0","26.6.2","26.5.1","26.4.4","26.3.5","26.2.5","26.1.5","26.0.8"]'
           LATEST_VERSION='["26.8.2"]'
 
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
