@@ -37,6 +37,8 @@ kind: Realm
 metadata:
   name: flow-bindings-751
   annotations:
+    # Bindings changes Keycloak independently; refresh Realm status before the hook times out.
+    crossplane.io/poll-interval: "10s"
     uptest.upbound.io/post-assert-hook: 075-realm-flow-bindings-ownership.sh
 spec:
   deletionPolicy: Delete
