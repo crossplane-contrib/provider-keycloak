@@ -40,6 +40,8 @@ metadata:
   name: flow-bindings-751-ns
   namespace: dev-ns
   annotations:
+    # Bindings changes Keycloak independently; refresh Realm status before the hook times out.
+    crossplane.io/poll-interval: "10s"
     uptest.upbound.io/post-assert-hook: 075-realm-flow-bindings-ownership.sh
 spec:
   forProvider:
