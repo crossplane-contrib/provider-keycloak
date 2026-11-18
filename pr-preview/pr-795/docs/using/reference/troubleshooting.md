@@ -47,6 +47,33 @@ Look at the `Events` section and `status.conditions` for error messages.
 
 **Solution**: Ensure your spec exactly matches the desired state. Use `kubectl describe` to compare `spec.forProvider` with `status.atProvider`.
 
+### Singleton Block Has Multiple Entries
+
+**Symptoms**: The resource reports `Synced=False` with an error such as
+`attribute[0].permissions has 2 entries but allows at most 1`.
+
+Some Terraform nested blocks are represented as arrays but allow only one
+entry. The provider checks these constraints during reconciliation, including
+parameters merged from `spec.initProvider`, and stops before sending invalid
+configuration to Terraform. This also detects invalid resources already stored
+in Kubernetes; it does not add API admission validation.
+
+**Solution**: Correct the indicated field in `spec.forProvider` or
+`spec.initProvider`. For example, put both UserProfile permission settings in
+one entry, not separate entries:
+
+```yaml
+permissions:
+  - edit:
+      - admin
+    view:
+      - admin
+      - user
+```
+
+Update the source manifest as well so subsequent applies do not restore the
+invalid configuration. The existing list syntax is unchanged.
+
 ### Unexpected `make generate` Diffs
 
 **Symptoms**: `make generate` produces unexpectedly large or stale diffs.
