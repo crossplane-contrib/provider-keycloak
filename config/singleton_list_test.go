@@ -1,6 +1,7 @@
 package config
 
 import (
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
@@ -38,6 +39,16 @@ func TestSingletonListEmbeddingInventory(t *testing.T) {
 				if len(paths) == 0 {
 					continue
 				}
+				hasTerraformConversion := false
+				for _, c := range r.TerraformConversions {
+					if c == ujconfig.NewTFSingletonConversion() {
+						hasTerraformConversion = true
+						break
+					}
+				}
+				if !hasTerraformConversion {
+					t.Errorf("%s: expected singleton-list Terraform conversion", resourceName)
+				}
 				totalPaths += len(paths)
 				for _, tfPath := range r.TFListConversionPaths() {
 					schemaPath := strings.ReplaceAll(strings.ReplaceAll(tfPath, "[*]", ""), "[0]", "")
@@ -46,6 +57,7 @@ func TestSingletonListEmbeddingInventory(t *testing.T) {
 						t.Errorf("%s.%s: expected embedded-object schema option", resourceName, tfPath)
 					}
 				}
+
 				found[resourceName] = r.PreviousVersions
 				expectedCurrentVersion := "v1alpha2"
 				if resourceName == "keycloak_openid_client" {
@@ -75,5 +87,49 @@ func TestSingletonListEmbeddingInventory(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestSingletonListTerraformConversion(t *testing.T) {
+	pc, err := GetProvider(true)
+	if err != nil {
+		t.Fatalf("GetProvider: %v", err)
+	}
+	r := pc.Resources["keycloak_realm"]
+
+	tfState := map[string]any{
+		"smtp_server": []any{
+			map[string]any{
+				"host": "smtp.example.test",
+				"auth": []any{map[string]any{"username": "sender"}},
+			},
+		},
+		"internationalization": []any{},
+	}
+	embedded, err := r.ApplyTFConversions(tfState, ujconfig.FromTerraform)
+	if err != nil {
+		t.Fatalf("convert Terraform state to embedded objects: %v", err)
+	}
+	wantSMTP := map[string]any{
+		"host": "smtp.example.test",
+		"auth": map[string]any{"username": "sender"},
+	}
+	if got := embedded["smtp_server"]; !reflect.DeepEqual(got, wantSMTP) {
+		t.Errorf("smtp_server: want %#v, got %#v", wantSMTP, got)
+	}
+	if got := embedded["internationalization"]; got != nil {
+		t.Errorf("empty internationalization block: want nil, got %#v", got)
+	}
+
+	terraform, err := r.ApplyTFConversions(embedded, ujconfig.ToTerraform)
+	if err != nil {
+		t.Fatalf("convert embedded objects to Terraform state: %v", err)
+	}
+	wantSMTPList := []any{map[string]any{
+		"host": "smtp.example.test",
+		"auth": []any{map[string]any{"username": "sender"}},
+	}}
+	if got := terraform["smtp_server"]; !reflect.DeepEqual(got, wantSMTPList) {
+		t.Errorf("smtp_server: want %#v, got %#v", wantSMTPList, got)
 	}
 }

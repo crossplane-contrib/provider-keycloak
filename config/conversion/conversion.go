@@ -30,6 +30,7 @@ func BumpVersionsForSingletonListEmbedding(p *config.Provider, typeChanges map[s
 		if len(listPaths) == 0 {
 			continue
 		}
+		r.TerraformConversions = append(r.TerraformConversions, config.NewTFSingletonConversion())
 		nextVersion, err := nextAlphaVersion(r.Version)
 		if err != nil {
 			return fmt.Errorf("cannot bump API version for resource %q: %w", name, err)
