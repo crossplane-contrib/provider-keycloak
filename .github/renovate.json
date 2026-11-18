@@ -17,6 +17,9 @@
   "postUpdateOptions": [
     "gomodTidy"
   ],
+  "git-submodules": {
+    "enabled": true
+  },
   "dependencyDashboard": true,
   "recreateWhen": "always",
   "platformAutomerge": true,
