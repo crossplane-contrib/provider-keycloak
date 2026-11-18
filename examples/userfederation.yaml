@@ -1,6 +1,6 @@
 # Example 1: User Federation to integrate LDAP with Keycloak
 # This example integrates OpenLDAP with Keycloak..
-apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+apiVersion: ldap.keycloak.crossplane.io/v1alpha2
 kind: UserFederation
 metadata:
   name: my-realm
@@ -32,7 +32,7 @@ spec:
 
 # Example 2: User Federation to integrate LDAP with Keycloak
 # This example integrates Active Directory with Keycloak.
-apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+apiVersion: ldap.keycloak.crossplane.io/v1alpha2
 kind: UserFederation
 metadata:
   name: my-realm

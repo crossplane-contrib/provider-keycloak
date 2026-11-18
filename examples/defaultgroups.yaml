@@ -1,5 +1,5 @@
 ---
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: my-realm
@@ -10,7 +10,7 @@ spec:
   providerConfigRef:
     name: keycloak-provider-config
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: test

@@ -21,7 +21,7 @@ spec:
   providerConfigRef:
     name: keycloak-provider-config
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: example-grouppolicy-client
@@ -34,7 +34,7 @@ spec:
     realmIdRef:
       name: example-grouppolicy-realm
     authorization:
-      - policyEnforcementMode: PERMISSIVE
+      policyEnforcementMode: PERMISSIVE
   providerConfigRef:
     name: keycloak-provider-config
 ---

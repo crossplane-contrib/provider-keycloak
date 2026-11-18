@@ -1,6 +1,6 @@
 # Example 1: Keep only email and username and add new field field2
 # Generated example does not work because it would remove email and username
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: UserProfile
 metadata:
   name: basic-userprofile
@@ -17,12 +17,12 @@ spec:
       - name: email
         displayName: "${email}"
         permissions:
-          - edit:
-              - admin
-              - user
-            view:
-              - admin
-              - user
+          edit:
+            - admin
+            - user
+          view:
+            - admin
+            - user
         validator:
           - name: length
             config:
@@ -33,12 +33,12 @@ spec:
       - name: username
         displayName: "${username}"
         permissions:
-          - edit:
-              - admin
-              - user
-            view:
-              - admin
-              - user
+          edit:
+            - admin
+            - user
+          view:
+            - admin
+            - user
         validator:
           - name: length
             config:

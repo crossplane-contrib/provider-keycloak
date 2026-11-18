@@ -2064,6 +2064,16 @@ fields, see the generated CRDs in
 or browse all CRDs interactively on the
 [Upbound Marketplace CRD Explorer](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/crds).
 
+## Singleton block API versions
+
+Some Terraform blocks that accept at most one item are represented as objects
+instead of one-item lists in the latest API versions. The previous API versions
+remain served, and Kubernetes converts existing objects between the old list
+and new object shapes. If conversion reports that a stored singleton list has
+multiple items, it does not discard data: use the resource's previous API
+version to reduce that list to one item or remove the block, then retry the
+conversion.
+
 {{< cards >}}
   {{< card link="realms/" title="Realms" icon="template" subtitle="Realm · realm.keycloak.crossplane.io" >}}
   {{< card link="realm-settings/" title="Realm Settings" icon="adjustments" subtitle="RealmEvents · RequiredAction · UserProfile · Keystores · Client Policies" >}}
@@ -2373,7 +2383,7 @@ Use these resources when a client needs Keycloak Authorization Services for fine
 | ClientRolePolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_role_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_role_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientRolePolicy/v1alpha1) |
 | ClientUserPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_user_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_user_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientUserPolicy/v1alpha1) |
 | ClientRegexPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_regex_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_regex_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientRegexPolicy/v1alpha1) |
-| ClientPermissions | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientPermissions/v1alpha1) |
+| ClientPermissions | `openidclient.keycloak.crossplane.io/v1alpha2` | [`keycloak_openid_client_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientPermissions/v1alpha2) |
 
 ## Working YAML Examples
 
@@ -2664,7 +2674,7 @@ spec:
 ### `ClientPermissions`
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: ClientPermissions
 metadata:
   name: my-permission
@@ -2702,7 +2712,7 @@ Use a `Client` when an application or service needs Keycloak to authenticate use
 
 | Kind | API Group | Terraform Resource | CRD Explorer |
 |------|-----------|-------------------|---|
-| Client | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/Client/v1alpha1) |
+| Client | `openidclient.keycloak.crossplane.io/v1alpha3` | [`keycloak_openid_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/Client/v1alpha3) |
 | ClientAdminPermissions | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAdminPermissions/v1alpha1) |
 
 ## Examples
@@ -2710,7 +2720,7 @@ Use a `Client` when an application or service needs Keycloak to authenticate use
 ### Confidential client with authorization
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: test
@@ -2726,7 +2736,7 @@ spec:
     fullScopeAllowed: false
     serviceAccountsEnabled: true
     authorization:
-      - policyEnforcementMode: "PERMISSIVE"
+      policyEnforcementMode: "PERMISSIVE"
   providerConfigRef:
     name: "keycloak-provider-config"
 ```
@@ -2734,7 +2744,7 @@ spec:
 ### Managing a built-in client without deleting it
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: account
@@ -2754,7 +2764,7 @@ spec:
 ### Managing another built-in client (account-console)
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: account-console
@@ -2775,7 +2785,7 @@ spec:
 ### Service account client
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: service-acc-1
@@ -2796,7 +2806,7 @@ spec:
 ### Kubernetes federated JWT client
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: k8s-federated-client
@@ -2966,7 +2976,7 @@ Use groups when multiple users should share the same roles or when you need a hi
 | Group | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Group/v1alpha1) |
 | Memberships | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_memberships`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_memberships) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Memberships/v1alpha1) |
 | Roles | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_roles) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Roles/v1alpha1) |
-| Permissions | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Permissions/v1alpha1) |
+| Permissions | `group.keycloak.crossplane.io/v1alpha2` | [`keycloak_group_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Permissions/v1alpha2) |
 | AdminPermissions | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/AdminPermissions/v1alpha1) |
 
 ## Examples
@@ -3072,7 +3082,7 @@ spec:
 ### Group permissions
 
 ```yaml
-apiVersion: group.keycloak.crossplane.io/v1alpha1
+apiVersion: group.keycloak.crossplane.io/v1alpha2
 kind: Permissions
 metadata:
   name: my-group-permission
@@ -3895,7 +3905,7 @@ Use these resources after a `Realm` exists and you need to shape how that realm 
 
 - **`RealmEvents`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_events`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_events) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RealmEvents/v1alpha1)
 - **`RequiredAction`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_required_action`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/required_action) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RequiredAction/v1alpha1)
-- **`UserProfile`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_user_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_user_profile) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/UserProfile/v1alpha1)
+- **`UserProfile`** — API: `realm.keycloak.crossplane.io/v1alpha2` — Terraform: [`keycloak_realm_user_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_user_profile) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/UserProfile/v1alpha2)
 - **`RealmLocalization`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_localization`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_localization) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RealmLocalization/v1alpha1)
 - **`KeystoreRsa`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_keystore_rsa`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_keystore_rsa) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/KeystoreRsa/v1alpha1)
 - **`KeystoreRsaEncGenerated`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_keystore_rsa_enc_generated`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_keystore_rsa_enc_generated) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/KeystoreRsaEncGenerated/v1alpha1)
@@ -3963,7 +3973,7 @@ spec:
 Use `UserProfile` to define custom user attributes with validation, permissions, and grouping.
 
 ```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: UserProfile
 metadata:
   name: userprofile
@@ -3988,12 +3998,12 @@ spec:
         multiValued: false
         name: field1
         permissions:
-          - edit:
-              - admin
-              - user
-            view:
-              - admin
-              - user
+          edit:
+            - admin
+            - user
+          view:
+            - admin
+            - user
         requiredForRoles:
           - user
         requiredForScopes:
@@ -4226,14 +4236,14 @@ Use a `Realm` when you need an isolated Keycloak boundary for a tenant, environm
 
 ## API Reference
 
-- **`Realm`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/Realm/v1alpha1)
+- **`Realm`** — API: `realm.keycloak.crossplane.io/v1alpha2` — Terraform: [`keycloak_realm`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/Realm/v1alpha2)
 
 ## Working YAML Examples
 
 ### Basic realm
 
 ```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: dev
@@ -4250,7 +4260,7 @@ spec:
 ### Realm with timeouts and lifespans
 
 ```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: dev-durations
@@ -4283,7 +4293,7 @@ spec:
 ### Managing an existing realm without deleting it
 
 ```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: existing-master
@@ -4300,7 +4310,7 @@ spec:
 ### Realm with organizations enabled
 
 ```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: orgs
@@ -4512,7 +4522,7 @@ Use SAML clients when an application or service provider expects SAML 2.0 instea
 
 | Kind | API Group | Terraform | CRD Explorer |
 |------|-----------|-----------|---|
-| `Client` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/samlclient.keycloak.crossplane.io/Client/v1alpha1) |
+| `Client` | `samlclient.keycloak.crossplane.io/v1alpha2` | [`keycloak_saml_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/samlclient.keycloak.crossplane.io/Client/v1alpha2) |
 | `ClientScope` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client_scope`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client_scope) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/samlclient.keycloak.crossplane.io/ClientScope/v1alpha1) |
 | `ClientDefaultScopes` | `samlclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_saml_client_default_scopes`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/saml_client_default_scopes) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/samlclient.keycloak.crossplane.io/ClientDefaultScopes/v1alpha1) |
 
@@ -4523,7 +4533,7 @@ Use SAML clients when an application or service provider expects SAML 2.0 instea
 Use a SAML client to represent the service provider that trusts Keycloak for SSO.
 
 ```yaml
-apiVersion: samlclient.keycloak.crossplane.io/v1alpha1
+apiVersion: samlclient.keycloak.crossplane.io/v1alpha2
 kind: Client
 metadata:
   name: saml-client
@@ -4718,7 +4728,7 @@ Use user federation when Keycloak should authenticate users against an external 
 
 | Kind | API Group | Terraform | CRD Explorer |
 |------|-----------|-----------|---|
-| `UserFederation` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_user_federation) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/UserFederation/v1alpha1) |
+| `UserFederation` | `ldap.keycloak.crossplane.io/v1alpha2` | [`keycloak_ldap_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_user_federation) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/UserFederation/v1alpha2) |
 | `UserAttributeMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_user_attribute_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_user_attribute_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/UserAttributeMapper/v1alpha1) |
 | `FullNameMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_full_name_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_full_name_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/FullNameMapper/v1alpha1) |
 | `GroupMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_group_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_group_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/GroupMapper/v1alpha1) |
@@ -4736,7 +4746,7 @@ Use user federation when Keycloak should authenticate users against an external 
 ### LDAP UserFederation
 
 ```yaml
-apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+apiVersion: ldap.keycloak.crossplane.io/v1alpha2
 kind: UserFederation
 metadata:
   name: ldap-user-federation
@@ -4752,9 +4762,9 @@ spec:
     connectionUrl: ldap://openldap
     enabled: false
     kerberos:
-      - kerberosRealm: FOO.LOCAL
-        keyTab: /etc/host.keytab
-        serverPrincipal: HTTP/host.foo.com@FOO.LOCAL
+      kerberosRealm: FOO.LOCAL
+      keyTab: /etc/host.keytab
+      serverPrincipal: HTTP/host.foo.com@FOO.LOCAL
     name: openldap
     rdnLdapAttribute: cn
     readTimeout: 10s
@@ -5075,10 +5085,10 @@ Use `User` to declaratively manage people who can authenticate to Keycloak. Use 
 
 | Kind | API Group | Terraform Resource | CRD Explorer |
 |------|-----------|-------------------|---|
-| User | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/User/v1alpha1) |
+| User | `user.keycloak.crossplane.io/v1alpha2` | [`keycloak_user`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/User/v1alpha2) |
 | Groups | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user_groups`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user_groups) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Groups/v1alpha1) |
 | Roles | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user_roles) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Roles/v1alpha1) |
-| Permissions | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_users_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/users_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Permissions/v1alpha1) |
+| Permissions | `user.keycloak.crossplane.io/v1alpha2` | [`keycloak_users_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/users_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Permissions/v1alpha2) |
 | AdminPermissions | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_users_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/users_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/AdminPermissions/v1alpha1) |
 | UserFederation | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_custom_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/custom_user_federation) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/UserFederation/v1alpha1) |
 
@@ -5087,7 +5097,7 @@ Use `User` to declaratively manage people who can authenticate to Keycloak. Use 
 ### Basic user
 
 ```yaml
-apiVersion: user.keycloak.crossplane.io/v1alpha1
+apiVersion: user.keycloak.crossplane.io/v1alpha2
 kind: User
 metadata:
   name: bree
@@ -5155,7 +5165,7 @@ spec:
 ### User permissions
 
 ```yaml
-apiVersion: user.keycloak.crossplane.io/v1alpha1
+apiVersion: user.keycloak.crossplane.io/v1alpha2
 kind: Permissions
 metadata:
   name: my-user-permission
@@ -5272,14 +5282,14 @@ Use workflows when you want Keycloak 26.5+ to react automatically to realm event
 
 | Kind | API Group | Terraform | CRD Explorer |
 |------|-----------|-----------|---|
-| `Workflow` | `workflow.keycloak.crossplane.io/v1alpha1` | [`keycloak_workflow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/workflow) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/workflow.keycloak.crossplane.io/Workflow/v1alpha1) |
+| `Workflow` | `workflow.keycloak.crossplane.io/v1alpha2` | [`keycloak_workflow`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/workflow) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/workflow.keycloak.crossplane.io/Workflow/v1alpha2) |
 
 ## Working YAML examples
 
 ### Workflow
 
 ```yaml
-apiVersion: workflow.keycloak.crossplane.io/v1alpha1
+apiVersion: workflow.keycloak.crossplane.io/v1alpha2
 kind: Workflow
 metadata:
   name: onboarding

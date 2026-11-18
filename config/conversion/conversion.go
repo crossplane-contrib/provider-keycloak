@@ -26,7 +26,8 @@ type FieldTypeChange struct {
 // objects in the next API version.
 func BumpVersionsForSingletonListEmbedding(p *config.Provider, typeChanges map[string][]FieldTypeChange) error {
 	for name, r := range p.Resources {
-		if len(r.CRDListConversionPaths()) == 0 {
+		listPaths := r.CRDListConversionPaths()
+		if len(listPaths) == 0 {
 			continue
 		}
 		nextVersion, err := nextAlphaVersion(r.Version)
@@ -35,6 +36,41 @@ func BumpVersionsForSingletonListEmbedding(p *config.Provider, typeChanges map[s
 		}
 		previousVersion := r.Version
 		bumpVersion(r, nextVersion)
+		excludedPaths := append([]string(nil), listPaths...)
+		for _, change := range typeChanges[name] {
+			excludedPaths = append(excludedPaths, change.FieldPath)
+		}
+		identity := ujconversion.NewIdentityConversionExpandPaths(
+			ujconversion.AllVersions,
+			ujconversion.AllVersions,
+			ujconversion.DefaultPathPrefixes(),
+			excludedPaths...,
+		)
+		if len(r.Conversions) == 0 {
+			r.Conversions = []ujconversion.Conversion{identity}
+		} else {
+			r.Conversions[0] = identity
+		}
+
+		for _, oldVersion := range r.PreviousVersions {
+			r.Conversions = append(r.Conversions,
+				ujconversion.NewSingletonListConversion(
+					oldVersion,
+					nextVersion,
+					ujconversion.DefaultPathPrefixes(),
+					listPaths,
+					ujconversion.ToEmbeddedObject,
+				),
+				ujconversion.NewSingletonListConversion(
+					nextVersion,
+					oldVersion,
+					ujconversion.DefaultPathPrefixes(),
+					listPaths,
+					ujconversion.ToSingletonList,
+				),
+			)
+		}
+
 		for _, change := range typeChanges[name] {
 			for _, prefix := range ujconversion.DefaultPathPrefixes() {
 				path := fmt.Sprintf("%s.%s", prefix, change.FieldPath)

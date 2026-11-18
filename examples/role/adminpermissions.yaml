@@ -8,7 +8,7 @@
 #
 # Each AdminPermissions resource is exactly one permission. It either applies
 # to all roles of the realm, or only to the roles listed in `roleIdsRefs`.
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: example-roleadminpermissions-realm

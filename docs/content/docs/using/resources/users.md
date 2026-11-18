@@ -10,10 +10,10 @@ Use `User` to declaratively manage people who can authenticate to Keycloak. Use 
 
 | Kind | API Group | Terraform Resource | CRD Explorer |
 |------|-----------|-------------------|---|
-| User | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/User/v1alpha1) |
+| User | `user.keycloak.crossplane.io/v1alpha2` | [`keycloak_user`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/User/v1alpha2) |
 | Groups | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user_groups`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user_groups) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Groups/v1alpha1) |
 | Roles | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_user_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/user_roles) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Roles/v1alpha1) |
-| Permissions | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_users_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/users_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Permissions/v1alpha1) |
+| Permissions | `user.keycloak.crossplane.io/v1alpha2` | [`keycloak_users_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/users_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/Permissions/v1alpha2) |
 | AdminPermissions | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_users_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/users_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/AdminPermissions/v1alpha1) |
 | UserFederation | `user.keycloak.crossplane.io/v1alpha1` | [`keycloak_custom_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/custom_user_federation) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/user.keycloak.crossplane.io/UserFederation/v1alpha1) |
 
@@ -22,7 +22,7 @@ Use `User` to declaratively manage people who can authenticate to Keycloak. Use 
 ### Basic user
 
 ```yaml
-apiVersion: user.keycloak.crossplane.io/v1alpha1
+apiVersion: user.keycloak.crossplane.io/v1alpha2
 kind: User
 metadata:
   name: bree
@@ -90,7 +90,7 @@ spec:
 ### User permissions
 
 ```yaml
-apiVersion: user.keycloak.crossplane.io/v1alpha1
+apiVersion: user.keycloak.crossplane.io/v1alpha2
 kind: Permissions
 metadata:
   name: my-user-permission
