@@ -29,7 +29,7 @@ type DefaultGroupsInitParameters struct {
 	GroupIdsSelector *v2.NamespacedSelector `json:"groupIdsSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -70,7 +70,7 @@ type DefaultGroupsParameters struct {
 	GroupIdsSelector *v2.NamespacedSelector `json:"groupIdsSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

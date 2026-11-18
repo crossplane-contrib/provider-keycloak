@@ -31,7 +31,7 @@ type ClientAdminPermissionsInitParameters struct {
 
 	// Set of client UUIDs (keycloak_openid_client.xxx.id) this permission applies to. When omitted or empty, the permission applies to all clients in the realm.
 	// Client UUIDs (keycloak_openid_client.xxx.id) this permission applies to. Leave empty to target all clients in the realm.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
 	ClientIds []*string `json:"clientIds,omitempty" tf:"client_ids,omitempty"`
@@ -114,7 +114,7 @@ type ClientAdminPermissionsInitParameters struct {
 	Policies []*string `json:"policies,omitempty" tf:"policies,omitempty"`
 
 	// The realm in which to manage this permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -155,7 +155,7 @@ type ClientAdminPermissionsInitParameters struct {
 
 	// Set of client UUIDs (keycloak_openid_client.xxx.id) this permission applies to. When omitted or empty, the permission applies to all clients in the realm.
 	// Client UUIDs (keycloak_openid_client.xxx.id) this permission applies to. Leave empty to target all clients in the realm.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +listType=set
 	SAMLClientIds []*string `json:"samlClientIds,omitempty" tf:"saml_client_ids,omitempty"`
@@ -301,7 +301,7 @@ type ClientAdminPermissionsParameters struct {
 
 	// Set of client UUIDs (keycloak_openid_client.xxx.id) this permission applies to. When omitted or empty, the permission applies to all clients in the realm.
 	// Client UUIDs (keycloak_openid_client.xxx.id) this permission applies to. Leave empty to target all clients in the realm.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set
@@ -393,7 +393,7 @@ type ClientAdminPermissionsParameters struct {
 	Policies []*string `json:"policies,omitempty" tf:"policies,omitempty"`
 
 	// The realm in which to manage this permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -437,7 +437,7 @@ type ClientAdminPermissionsParameters struct {
 
 	// Set of client UUIDs (keycloak_openid_client.xxx.id) this permission applies to. When omitted or empty, the permission applies to all clients in the realm.
 	// Client UUIDs (keycloak_openid_client.xxx.id) this permission applies to. Leave empty to target all clients in the realm.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	// +listType=set

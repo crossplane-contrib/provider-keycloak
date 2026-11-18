@@ -84,7 +84,7 @@ type BindingsInitParameters struct {
 	FirstBrokerLoginFlow *string `json:"firstBrokerLoginFlow,omitempty" tf:"first_broker_login_flow,omitempty"`
 
 	// The realm the authentication flow binding exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -240,7 +240,7 @@ type BindingsParameters struct {
 	FirstBrokerLoginFlow *string `json:"firstBrokerLoginFlow,omitempty" tf:"first_broker_login_flow,omitempty"`
 
 	// The realm the authentication flow binding exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

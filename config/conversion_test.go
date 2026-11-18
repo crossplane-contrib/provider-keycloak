@@ -11,6 +11,7 @@ import (
 	oidcv1alpha2 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha2"
 	clientv1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1"
 	clientv1alpha2 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2"
+	clientv1alpha3 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha3"
 )
 
 // storedV1Alpha1Client is a Client as it is persisted in etcd by
@@ -55,13 +56,14 @@ func TestStoredV1Alpha1ObjectsRequireAConversionWebhook(t *testing.T) {
 
 // TestClientSecretWoVersionConversion exercises the very same code path the
 // conversion webhook uses at runtime (upjet's conversion registry + RoundTrip)
-// for both the upgrade (v1alpha1 -> v1alpha2) and the downgrade
-// (v1alpha2 -> v1alpha1) direction.
+// for both the upgrade (v1alpha1 -> v1alpha3) and the downgrade
+// (v1alpha3 -> v1alpha1) direction.
 func TestClientSecretWoVersionConversion(t *testing.T) {
 	scheme := runtime.NewScheme()
 	for _, add := range []func(*runtime.Scheme) error{
 		clientv1alpha1.SchemeBuilder.AddToScheme,
 		clientv1alpha2.SchemeBuilder.AddToScheme,
+		clientv1alpha3.SchemeBuilder.AddToScheme,
 		oidcv1alpha1.SchemeBuilder.AddToScheme,
 		oidcv1alpha2.SchemeBuilder.AddToScheme,
 	} {
@@ -87,9 +89,9 @@ func TestClientSecretWoVersionConversion(t *testing.T) {
 		if err := json.Unmarshal([]byte(storedV1Alpha1Client), src); err != nil {
 			t.Fatalf("cannot decode the stored object: %v", err)
 		}
-		dst := &clientv1alpha2.Client{}
+		dst := &clientv1alpha3.Client{}
 		if err := src.ConvertTo(dst); err != nil {
-			t.Fatalf("cannot convert v1alpha1 to v1alpha2: %v", err)
+			t.Fatalf("cannot convert v1alpha1 to v1alpha3: %v", err)
 		}
 		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != "202605192" {
 			t.Errorf("spec.forProvider.clientSecretWoVersion: want %q, got %v", "202605192", got)
@@ -104,20 +106,50 @@ func TestClientSecretWoVersionConversion(t *testing.T) {
 
 	t.Run("Downgrade", func(t *testing.T) {
 		version := "202605192"
-		src := &clientv1alpha2.Client{}
+		src := &clientv1alpha3.Client{}
 		src.Name = "client"
 		src.Spec.ForProvider.ClientSecretWoVersion = &version
 		src.Status.AtProvider.ClientSecretWoVersion = &version
 
 		dst := &clientv1alpha1.Client{}
 		if err := dst.ConvertFrom(src); err != nil {
-			t.Fatalf("cannot convert v1alpha2 to v1alpha1: %v", err)
+			t.Fatalf("cannot convert v1alpha3 to v1alpha1: %v", err)
 		}
 		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != 202605192 {
 			t.Errorf("spec.forProvider.clientSecretWoVersion: want %v, got %v", 202605192, got)
 		}
 		if got := dst.Status.AtProvider.ClientSecretWoVersion; got == nil || *got != 202605192 {
 			t.Errorf("status.atProvider.clientSecretWoVersion: want %v, got %v", 202605192, got)
+		}
+	})
+
+	t.Run("StringVersionIdentityConversion", func(t *testing.T) {
+		version := "202605192"
+		src := &clientv1alpha2.Client{}
+		src.Name = "client"
+		src.Spec.ForProvider.ClientSecretWoVersion = &version
+		src.Status.AtProvider.ClientSecretWoVersion = &version
+
+		hub := &clientv1alpha3.Client{}
+		if err := src.ConvertTo(hub); err != nil {
+			t.Fatalf("cannot convert v1alpha2 to v1alpha3: %v", err)
+		}
+		if got := hub.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != version {
+			t.Errorf("spec.forProvider.clientSecretWoVersion: want %q, got %v", version, got)
+		}
+		if got := hub.Status.AtProvider.ClientSecretWoVersion; got == nil || *got != version {
+			t.Errorf("status.atProvider.clientSecretWoVersion: want %q, got %v", version, got)
+		}
+
+		dst := &clientv1alpha2.Client{}
+		if err := dst.ConvertFrom(hub); err != nil {
+			t.Fatalf("cannot convert v1alpha3 to v1alpha2: %v", err)
+		}
+		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != version {
+			t.Errorf("spec.forProvider.clientSecretWoVersion: want %q, got %v", version, got)
+		}
+		if got := dst.Status.AtProvider.ClientSecretWoVersion; got == nil || *got != version {
+			t.Errorf("status.atProvider.clientSecretWoVersion: want %q, got %v", version, got)
 		}
 	})
 
@@ -139,7 +171,7 @@ func TestClientSecretWoVersionConversion(t *testing.T) {
 	// Pre-v3.0.0 development builds persisted a string clientSecretWoVersion at
 	// v1alpha1 (crossplane-contrib/provider-keycloak#669). The conversion
 	// webhook's typed decode must tolerate that encoding and the upgrade must
-	// still yield the v1alpha2 string.
+	// still yield the v1alpha3 string.
 	t.Run("StringEncodedV1Alpha1Upgrade", func(t *testing.T) {
 		src := &clientv1alpha1.Client{}
 		if err := json.Unmarshal([]byte(storedStringV1Alpha1Client), src); err != nil {
@@ -148,9 +180,9 @@ func TestClientSecretWoVersionConversion(t *testing.T) {
 		if got := src.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != 202605192 {
 			t.Fatalf("spec.forProvider.clientSecretWoVersion: want %v, got %v", 202605192, got)
 		}
-		dst := &clientv1alpha2.Client{}
+		dst := &clientv1alpha3.Client{}
 		if err := src.ConvertTo(dst); err != nil {
-			t.Fatalf("cannot convert v1alpha1 to v1alpha2: %v", err)
+			t.Fatalf("cannot convert v1alpha1 to v1alpha3: %v", err)
 		}
 		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != "202605192" {
 			t.Errorf("spec.forProvider.clientSecretWoVersion: want %q, got %v", "202605192", got)

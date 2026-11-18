@@ -16,7 +16,7 @@ import (
 type ClientServiceAccountRoleInitParameters struct {
 
 	// The id of the client that provides the role.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -29,7 +29,7 @@ type ClientServiceAccountRoleInitParameters struct {
 	ClientIDSelector *v2.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The realm the clients and roles belong to.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -62,7 +62,7 @@ type ClientServiceAccountRoleInitParameters struct {
 	ServiceAccountUserClientIDSelector *v2.Selector `json:"serviceAccountUserClientIdSelector,omitempty" tf:"-"`
 
 	// The id of the service account that is assigned the role (the service account of the client that "consumes" the role).
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.ServiceAccountRoleIDExtractor()
 	// +crossplane:generate:reference:refFieldName=ServiceAccountUserClientIDRef
 	// +crossplane:generate:reference:selectorFieldName=ServiceAccountUserClientIDSelector
@@ -89,7 +89,7 @@ type ClientServiceAccountRoleObservation struct {
 type ClientServiceAccountRoleParameters struct {
 
 	// The id of the client that provides the role.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
@@ -103,7 +103,7 @@ type ClientServiceAccountRoleParameters struct {
 	ClientIDSelector *v2.Selector `json:"clientIdSelector,omitempty" tf:"-"`
 
 	// The realm the clients and roles belong to.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -138,7 +138,7 @@ type ClientServiceAccountRoleParameters struct {
 	ServiceAccountUserClientIDSelector *v2.Selector `json:"serviceAccountUserClientIdSelector,omitempty" tf:"-"`
 
 	// The id of the service account that is assigned the role (the service account of the client that "consumes" the role).
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.ServiceAccountRoleIDExtractor()
 	// +crossplane:generate:reference:refFieldName=ServiceAccountUserClientIDRef
 	// +crossplane:generate:reference:selectorFieldName=ServiceAccountUserClientIDSelector

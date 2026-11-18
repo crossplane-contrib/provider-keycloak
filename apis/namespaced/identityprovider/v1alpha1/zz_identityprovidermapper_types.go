@@ -127,7 +127,7 @@ type IdentityProviderMapperInitParameters struct {
 
 	// The name of the realm.
 	// Realm Name
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
 	// Reference to a Realm in realm to populate realm.
@@ -348,7 +348,7 @@ type IdentityProviderMapperParameters struct {
 
 	// The name of the realm.
 	// Realm Name
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 

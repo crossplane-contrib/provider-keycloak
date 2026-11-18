@@ -19,7 +19,7 @@ type RolesInitParameters struct {
 	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
 
 	// The realm this user exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -45,7 +45,7 @@ type RolesInitParameters struct {
 	RoleIdsSelector *v2.Selector `json:"roleIdsSelector,omitempty" tf:"-"`
 
 	// The ID of the user this resource should manage roles for.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha1.User
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha2.User
 	UserID *string `json:"userId,omitempty" tf:"user_id,omitempty"`
 
 	// Reference to a User in user to populate userId.
@@ -82,7 +82,7 @@ type RolesParameters struct {
 	Exhaustive *bool `json:"exhaustive,omitempty" tf:"exhaustive,omitempty"`
 
 	// The realm this user exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -110,7 +110,7 @@ type RolesParameters struct {
 	RoleIdsSelector *v2.Selector `json:"roleIdsSelector,omitempty" tf:"-"`
 
 	// The ID of the user this resource should manage roles for.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha1.User
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha2.User
 	// +kubebuilder:validation:Optional
 	UserID *string `json:"userId,omitempty" tf:"user_id,omitempty"`
 
