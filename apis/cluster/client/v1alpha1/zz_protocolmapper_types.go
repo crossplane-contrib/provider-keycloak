@@ -71,6 +71,9 @@ type ProtocolMapperInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.Client
@@ -130,6 +133,9 @@ type ProtocolMapperObservation struct {
 	// The realm this protocol mapper exists within.
 	// The realm id where the associated client or client scope exists.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
@@ -204,6 +210,10 @@ type ProtocolMapperParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The ID of the client this protocol mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.

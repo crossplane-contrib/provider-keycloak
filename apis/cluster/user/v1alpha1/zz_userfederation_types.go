@@ -62,6 +62,9 @@ type UserFederationInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type UserFederationObservation struct {
@@ -106,6 +109,9 @@ type UserFederationObservation struct {
 	// The realm that this provider will provide user federation for.
 	// The realm (name) this provider will provide user federation for.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type UserFederationParameters struct {
@@ -167,6 +173,10 @@ type UserFederationParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 // UserFederationSpec defines the desired state of UserFederation

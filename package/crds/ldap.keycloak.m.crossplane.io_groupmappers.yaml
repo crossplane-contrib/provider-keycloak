@@ -298,6 +298,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   userRolesRetrieveStrategy:
                     description: Can be one of LOAD_GROUPS_BY_MEMBER_ATTRIBUTE, GET_GROUPS_FROM_USER_MEMBEROF_ATTRIBUTE,
                       or LOAD_GROUPS_BY_MEMBER_ATTRIBUTE_RECURSIVELY. Defaults to
@@ -557,6 +562,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   userRolesRetrieveStrategy:
                     description: Can be one of LOAD_GROUPS_BY_MEMBER_ATTRIBUTE, GET_GROUPS_FROM_USER_MEMBEROF_ATTRIBUTE,
                       or LOAD_GROUPS_BY_MEMBER_ATTRIBUTE_RECURSIVELY. Defaults to
@@ -731,6 +741,11 @@ spec:
                     description: |-
                       The realm that this LDAP mapper will exist in.
                       The realm in which the ldap user federation provider exists.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   userRolesRetrieveStrategy:
                     description: Can be one of LOAD_GROUPS_BY_MEMBER_ATTRIBUTE, GET_GROUPS_FROM_USER_MEMBEROF_ATTRIBUTE,

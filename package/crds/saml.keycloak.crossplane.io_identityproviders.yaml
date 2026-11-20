@@ -82,6 +82,11 @@ spec:
                       The unique name of identity provider.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
                     type: string
+                  allowAdminRoleMapping:
+                    description: |-
+                      When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+                      Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+                    type: boolean
                   authenticateByDefault:
                     description: |-
                       Authenticate users by default. Defaults to false.
@@ -298,6 +303,11 @@ spec:
                     description: |-
                       The name of the realm. This is unique across Keycloak.
                       Realm Name
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   realmRef:
                     description: Reference to a Realm in realm to populate realm.
@@ -457,6 +467,11 @@ spec:
                       The unique name of identity provider.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
                     type: string
+                  allowAdminRoleMapping:
+                    description: |-
+                      When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+                      Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+                    type: boolean
                   authenticateByDefault:
                     description: |-
                       Authenticate users by default. Defaults to false.
@@ -673,6 +688,11 @@ spec:
                     description: |-
                       The name of the realm. This is unique across Keycloak.
                       Realm Name
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   realmRef:
                     description: Reference to a Realm in realm to populate realm.
@@ -923,6 +943,11 @@ spec:
                       The unique name of identity provider.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
                     type: string
+                  allowAdminRoleMapping:
+                    description: |-
+                      When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+                      Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+                    type: boolean
                   authenticateByDefault:
                     description: |-
                       Authenticate users by default. Defaults to false.
@@ -1068,6 +1093,11 @@ spec:
                     description: |-
                       The name of the realm. This is unique across Keycloak.
                       Realm Name
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   signatureAlgorithm:
                     description: |-

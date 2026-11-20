@@ -519,6 +519,11 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RequireDpopBoundTokens != nil {
 		in, out := &in.RequireDpopBoundTokens, &out.RequireDpopBoundTokens
 		*out = new(bool)
@@ -875,6 +880,11 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RequireDpopBoundTokens != nil {
 		in, out := &in.RequireDpopBoundTokens, &out.RequireDpopBoundTokens
 		*out = new(bool)
@@ -1223,6 +1233,11 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.RequireDpopBoundTokens != nil {
 		in, out := &in.RequireDpopBoundTokens, &out.RequireDpopBoundTokens

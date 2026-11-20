@@ -74,6 +74,7 @@ spec:
               forProvider:
                 properties:
                   description:
+                    description: The description of the profile.
                     type: string
                   executor:
                     description: An ordered list of executors
@@ -86,12 +87,12 @@ spec:
                           type: object
                           x-kubernetes-map-type: granular
                         name:
-                          description: The name of the attribute.
+                          description: The name of the profile.
                           type: string
                       type: object
                     type: array
                   name:
-                    description: The name of the attribute.
+                    description: The name of the profile.
                     type: string
                   realmId:
                     description: The realm id.
@@ -170,6 +171,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -185,6 +191,7 @@ spec:
                   autoscaler.
                 properties:
                   description:
+                    description: The description of the profile.
                     type: string
                   executor:
                     description: An ordered list of executors
@@ -197,12 +204,12 @@ spec:
                           type: object
                           x-kubernetes-map-type: granular
                         name:
-                          description: The name of the attribute.
+                          description: The name of the profile.
                           type: string
                       type: object
                     type: array
                   name:
-                    description: The name of the attribute.
+                    description: The name of the profile.
                     type: string
                   realmId:
                     description: The realm id.
@@ -281,6 +288,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -379,6 +391,7 @@ spec:
               atProvider:
                 properties:
                   description:
+                    description: The description of the profile.
                     type: string
                   executor:
                     description: An ordered list of executors
@@ -391,17 +404,22 @@ spec:
                           type: object
                           x-kubernetes-map-type: granular
                         name:
-                          description: The name of the attribute.
+                          description: The name of the profile.
                           type: string
                       type: object
                     type: array
                   id:
                     type: string
                   name:
-                    description: The name of the attribute.
+                    description: The name of the profile.
                     type: string
                   realmId:
                     description: The realm id.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                 type: object
               conditions:

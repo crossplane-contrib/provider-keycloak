@@ -317,6 +317,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   requirement:
                     description: The requirement setting, which can be one of REQUIRED,
                       ALTERNATIVE, OPTIONAL, CONDITIONAL, or DISABLED. Defaults to
@@ -581,6 +586,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   requirement:
                     description: The requirement setting, which can be one of REQUIRED,
                       ALTERNATIVE, OPTIONAL, CONDITIONAL, or DISABLED. Defaults to
@@ -703,6 +713,11 @@ spec:
                     type: number
                   realmId:
                     description: The realm the authentication execution exists in.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   requirement:
                     description: The requirement setting, which can be one of REQUIRED,

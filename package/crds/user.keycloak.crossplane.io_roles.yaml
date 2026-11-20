@@ -154,6 +154,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   roleIds:
                     description: A list of role IDs to map to the user
                     items:
@@ -411,6 +416,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   roleIds:
                     description: A list of role IDs to map to the user
                     items:
@@ -673,6 +683,11 @@ spec:
                     type: string
                   realmId:
                     description: The realm this user exists in.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   roleIds:
                     description: A list of role IDs to map to the user

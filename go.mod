@@ -13,7 +13,7 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/terraform-json v0.29.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.1
-	github.com/keycloak/terraform-provider-keycloak v0.0.0-20261103112630-f4e597d240e1
+	github.com/keycloak/terraform-provider-keycloak v0.0.0-20261120122921-2ca2e76f8542
 	github.com/pkg/errors v0.9.1
 	k8s.io/api v0.37.2
 	k8s.io/apiextensions-apiserver v0.37.2

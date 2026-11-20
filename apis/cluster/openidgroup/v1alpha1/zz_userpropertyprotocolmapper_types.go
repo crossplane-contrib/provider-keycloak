@@ -78,6 +78,9 @@ type UserPropertyProtocolMapperInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The built-in user property (such as email) to map a claim for.
 	UserProperty *string `json:"userProperty,omitempty" tf:"user_property,omitempty"`
 }
@@ -120,6 +123,9 @@ type UserPropertyProtocolMapperObservation struct {
 	// The realm this protocol mapper exists within.
 	// The realm id where the associated client or client scope exists.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The built-in user property (such as email) to map a claim for.
 	UserProperty *string `json:"userProperty,omitempty" tf:"user_property,omitempty"`
@@ -198,6 +204,10 @@ type UserPropertyProtocolMapperParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The built-in user property (such as email) to map a claim for.
 	// +kubebuilder:validation:Optional

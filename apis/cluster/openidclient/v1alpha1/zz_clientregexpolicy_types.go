@@ -42,6 +42,10 @@ type ClientRegexPolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// Policy ID representing the Regex policy.
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
@@ -84,6 +88,10 @@ type ClientRegexPolicyObservation struct {
 
 	// The realm this policy exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// Policy ID representing the Regex policy.
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The ID of the resource server.
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
@@ -129,6 +137,11 @@ type ClientRegexPolicyParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// Policy ID representing the Regex policy.
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The ID of the resource server.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client

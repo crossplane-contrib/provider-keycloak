@@ -15,7 +15,7 @@ import (
 
 type ManageMembersScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -28,7 +28,7 @@ type ManageMembersScopeInitParameters struct {
 
 type ManageMembersScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -41,7 +41,7 @@ type ManageMembersScopeObservation struct {
 
 type ManageMembersScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -57,7 +57,7 @@ type ManageMembersScopeParameters struct {
 
 type ManageMembershipScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -70,7 +70,7 @@ type ManageMembershipScopeInitParameters struct {
 
 type ManageMembershipScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -83,7 +83,7 @@ type ManageMembershipScopeObservation struct {
 
 type ManageMembershipScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -99,7 +99,7 @@ type ManageMembershipScopeParameters struct {
 
 type ManageScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -112,7 +112,7 @@ type ManageScopeInitParameters struct {
 
 type ManageScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -125,7 +125,7 @@ type ManageScopeObservation struct {
 
 type ManageScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -162,6 +162,18 @@ type PermissionsInitParameters struct {
 	// Policies that decide if the admin can manage the configuration of the group.
 	ManageScope []ManageScopeInitParameters `json:"manageScope,omitempty" tf:"manage_scope,omitempty"`
 
+	// Not supported by this resource. This is the Fine-Grained Admin Permissions v1 resource, whose REST API is realm-scoped and cannot manage organization groups; setting a non-empty value returns an error. To manage an organization group's fine-grained permissions, use keycloak_group_admin_permissions (FGA v2).
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/organization/v1alpha1.Organization
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
+	// Reference to a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDRef *v2.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
+
+	// Selector for a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDSelector *v2.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
+
 	// The realm in which to manage fine-grained role permissions.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -173,6 +185,9 @@ type PermissionsInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Policies that decide if the admin can view the user details of members of the group.
 	ViewMembersScope []ViewMembersScopeInitParameters `json:"viewMembersScope,omitempty" tf:"view_members_scope,omitempty"`
@@ -204,8 +219,14 @@ type PermissionsObservation struct {
 	// Policies that decide if the admin can manage the configuration of the group.
 	ManageScope []ManageScopeObservation `json:"manageScope,omitempty" tf:"manage_scope,omitempty"`
 
+	// Not supported by this resource. This is the Fine-Grained Admin Permissions v1 resource, whose REST API is realm-scoped and cannot manage organization groups; setting a non-empty value returns an error. To manage an organization group's fine-grained permissions, use keycloak_group_admin_permissions (FGA v2).
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
 	// The realm in which to manage fine-grained role permissions.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Policies that decide if the admin can view the user details of members of the group.
 	ViewMembersScope []ViewMembersScopeObservation `json:"viewMembersScope,omitempty" tf:"view_members_scope,omitempty"`
@@ -241,6 +262,19 @@ type PermissionsParameters struct {
 	// +kubebuilder:validation:Optional
 	ManageScope []ManageScopeParameters `json:"manageScope,omitempty" tf:"manage_scope,omitempty"`
 
+	// Not supported by this resource. This is the Fine-Grained Admin Permissions v1 resource, whose REST API is realm-scoped and cannot manage organization groups; setting a non-empty value returns an error. To manage an organization group's fine-grained permissions, use keycloak_group_admin_permissions (FGA v2).
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/organization/v1alpha1.Organization
+	// +kubebuilder:validation:Optional
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
+	// Reference to a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDRef *v2.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
+
+	// Selector for a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDSelector *v2.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
+
 	// The realm in which to manage fine-grained role permissions.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
@@ -254,6 +288,10 @@ type PermissionsParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Policies that decide if the admin can view the user details of members of the group.
 	// +kubebuilder:validation:Optional
 	ViewMembersScope []ViewMembersScopeParameters `json:"viewMembersScope,omitempty" tf:"view_members_scope,omitempty"`
@@ -265,7 +303,7 @@ type PermissionsParameters struct {
 
 type ViewMembersScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -278,7 +316,7 @@ type ViewMembersScopeInitParameters struct {
 
 type ViewMembersScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -291,7 +329,7 @@ type ViewMembersScopeObservation struct {
 
 type ViewMembersScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -307,7 +345,7 @@ type ViewMembersScopeParameters struct {
 
 type ViewScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -320,7 +358,7 @@ type ViewScopeInitParameters struct {
 
 type ViewScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -333,7 +371,7 @@ type ViewScopeObservation struct {
 
 type ViewScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 

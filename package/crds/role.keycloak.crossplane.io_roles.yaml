@@ -336,6 +336,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   samlClientId:
                     description: When specified, this role will be created as a client
                       role attached to the client with the provided ID
@@ -692,6 +697,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   samlClientId:
                     description: When specified, this role will be created as a client
                       role attached to the client with the provided ID
@@ -905,6 +915,11 @@ spec:
                     type: string
                   realmId:
                     description: The realm this role exists within.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   samlClientId:
                     description: When specified, this role will be created as a client

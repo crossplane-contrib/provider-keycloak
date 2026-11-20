@@ -95,6 +95,9 @@ type BindingsInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The alias of the flow to assign to the realm RegistrationFlow.
 	// Which flow should be used for RegistrationFlow
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/authenticationflow/v1alpha1.Flow
@@ -154,6 +157,9 @@ type BindingsObservation struct {
 
 	// The realm the authentication flow binding exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The alias of the flow to assign to the realm RegistrationFlow.
 	// Which flow should be used for RegistrationFlow
@@ -251,6 +257,10 @@ type BindingsParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The alias of the flow to assign to the realm RegistrationFlow.
 	// Which flow should be used for RegistrationFlow

@@ -245,6 +245,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   writeOnly:
                     description: When true, this mapper will only be used to write
                       updates to LDAP. Defaults to false.
@@ -436,6 +441,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   writeOnly:
                     description: When true, this mapper will only be used to write
                       updates to LDAP. Defaults to false.
@@ -565,6 +575,11 @@ spec:
                     description: |-
                       The realm that this LDAP mapper will exist in.
                       The realm in which the ldap user federation provider exists.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   writeOnly:
                     description: When true, this mapper will only be used to write

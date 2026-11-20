@@ -70,6 +70,9 @@ type GenericClientProtocolMapperInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The client this protocol mapper is attached to.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1.Client
@@ -127,6 +130,9 @@ type GenericClientProtocolMapperObservation struct {
 	// The realm this protocol mapper exists within.
 	// The realm id where the associated client or client scope exists.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The client this protocol mapper is attached to.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.
@@ -199,6 +205,10 @@ type GenericClientProtocolMapperParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The client this protocol mapper is attached to.
 	// The mapper's associated client. Cannot be used at the same time as client_scope_id.

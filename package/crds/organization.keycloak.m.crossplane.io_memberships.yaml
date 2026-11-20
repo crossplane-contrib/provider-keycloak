@@ -60,7 +60,7 @@ spec:
                 properties:
                   members:
                     description: |-
-                      A set of usernames to assign as members of the organization.
+                      A set of usernames to assign as members of the organization. Managed members may be listed, but are never removed.
                       The set of usernames to assign to the organization.
                     items:
                       type: string
@@ -321,6 +321,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -337,7 +342,7 @@ spec:
                 properties:
                   members:
                     description: |-
-                      A set of usernames to assign as members of the organization.
+                      A set of usernames to assign as members of the organization. Managed members may be listed, but are never removed.
                       The set of usernames to assign to the organization.
                     items:
                       type: string
@@ -598,6 +603,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -666,7 +676,7 @@ spec:
                     type: string
                   members:
                     description: |-
-                      A set of usernames to assign as members of the organization.
+                      A set of usernames to assign as members of the organization. Managed members may be listed, but are never removed.
                       The set of usernames to assign to the organization.
                     items:
                       type: string
@@ -681,6 +691,11 @@ spec:
                     description: |-
                       The realm the organization belongs to.
                       The realm this organization exists in.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                 type: object
               conditions:

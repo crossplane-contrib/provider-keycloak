@@ -73,6 +73,9 @@ type UserAttributeMapperInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Name of the user property or attribute you want to map the LDAP attribute into.
 	// Name of the UserModel property or attribute you want to map the LDAP attribute into.
 	UserModelAttribute *string `json:"userModelAttribute,omitempty" tf:"user_model_attribute,omitempty"`
@@ -121,6 +124,9 @@ type UserAttributeMapperObservation struct {
 	// The realm that this LDAP mapper will exist in.
 	// The realm in which the ldap user federation provider exists.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Name of the user property or attribute you want to map the LDAP attribute into.
 	// Name of the UserModel property or attribute you want to map the LDAP attribute into.
@@ -196,6 +202,10 @@ type UserAttributeMapperParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Name of the user property or attribute you want to map the LDAP attribute into.
 	// Name of the UserModel property or attribute you want to map the LDAP attribute into.
