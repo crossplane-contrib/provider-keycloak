@@ -7,6 +7,9 @@ name: Provider Release Check
 #   - opens a draft PR that performs the mechanical part of the bump
 #     (Makefile, go.mod, `make generate`) and calls out any potential
 #     breaking changes found in the regenerated schema.json
+# A release is only acted on once it ships the provider zips the build
+# downloads (one per Makefile PLATFORMS entry); otherwise it is retried on
+# the next run.
 #
 # Note: Renovate already auto-merges minor/patch/digest bumps of this
 # dependency on a weekly schedule (see .github/renovate.json); this workflow
@@ -22,6 +25,7 @@ on:
   pull_request:
     paths:
       - 'scripts/check_provider_release.py'
+      - 'scripts/test_check_provider_release.py'
       - 'scripts/version_diff.py'
       - '.github/workflows/provider-release-check.yml'
   schedule:
@@ -63,6 +67,9 @@ jobs:
           else
             echo "dry_run=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Run unit tests
+        run: python3 -m unittest discover -s scripts -p 'test_check_provider_release.py'
 
       - name: File tracking issue for new release
         env:

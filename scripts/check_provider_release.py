@@ -8,8 +8,11 @@ release?" check:
 
   --mode issue (default)
       Compares the latest upstream release against the version pinned in
-      `Makefile` (`TERRAFORM_PROVIDER_VERSION`). If a newer version is found
-      and no open issue already tracks it, files a tracking issue with a
+      `Makefile` (`TERRAFORM_PROVIDER_VERSION`). If a newer version is found,
+      its release ships all provider artifacts the build downloads
+      (`terraform-provider-keycloak_<version>_<platform>.zip` for every
+      platform in the Makefile `PLATFORMS`), and no open issue already
+      tracks it, files a tracking issue with a
       checklist of everything a version bump requires (Makefile, go.mod,
       schema/CRD regeneration, breaking-change review, etc).
 
@@ -36,7 +39,8 @@ for --mode issue (and for looking up the release in --mode bump), unless
 --dry-run is used together with --skip-issue-lookup.
 
 Exit codes:
-  0  Ran successfully (regardless of whether a new version was found)
+  0  Ran successfully (regardless of whether a new version was found; a new
+     release whose artifacts are not published yet is skipped)
   10 (--mode bump only) a new version was found and processed
   2  Error (missing files, invalid JSON/semver, gh/go/make failure, etc.)
 """
@@ -55,6 +59,10 @@ SCHEMA_JSON = "config/schema.json"
 GENERATED_LST = "config/generated.lst"
 BUMPED_EXIT_CODE = 10
 
+DOWNLOAD_NAME = "terraform-provider-keycloak"
+DEFAULT_PLATFORMS = ["linux_amd64", "linux_arm64"]
+
+MAKEFILE_PLATFORMS_RE = re.compile(r"^PLATFORMS\s*\?=\s*(.+?)\s*$", re.MULTILINE)
 MAKEFILE_VERSION_RE = re.compile(
     r"^(export TERRAFORM_PROVIDER_VERSION\s*\?=\s*)(\S+)\s*$", re.MULTILINE
 )
@@ -101,6 +109,24 @@ def get_current_version(makefile_path=MAKEFILE):
     return m.group(2)
 
 
+def get_platforms(makefile_path=MAKEFILE):
+    """Read the build PLATFORMS from the Makefile (falls back to the defaults)."""
+    m = MAKEFILE_PLATFORMS_RE.search(Path(makefile_path).read_text())
+    return m.group(1).split() if m else list(DEFAULT_PLATFORMS)
+
+
+def required_assets(version, platforms):
+    """Release artifacts the build downloads for version (see Makefile
+    `download-tf-provider-platform`)."""
+    return [f"{DOWNLOAD_NAME}_{version}_{platform}.zip" for platform in platforms]
+
+
+def missing_assets(version, assets, platforms):
+    """Return the required release artifacts not present in assets."""
+    present = set(assets)
+    return [a for a in required_assets(version, platforms) if a not in present]
+
+
 def set_makefile_version(new_version, makefile_path=MAKEFILE):
     """Rewrite TERRAFORM_PROVIDER_VERSION in the Makefile to new_version."""
     text = Path(makefile_path).read_text()
@@ -111,17 +137,22 @@ def set_makefile_version(new_version, makefile_path=MAKEFILE):
 
 
 def get_latest_release(repo=UPSTREAM_REPO):
-    """Return (tag_name, html_url, body) for the latest release of repo."""
+    """Return (tag_name, html_url, body, asset_names) for the latest release of repo."""
     out = run_gh(
         [
             "api",
             f"repos/{repo}/releases/latest",
             "--jq",
-            "{tag_name: .tag_name, html_url: .html_url, body: .body}",
+            "{tag_name: .tag_name, html_url: .html_url, body: .body, assets: [.assets[].name]}",
         ]
     )
     data = json.loads(out)
-    return data["tag_name"], data["html_url"], data.get("body") or ""
+    return (
+        data["tag_name"],
+        data["html_url"],
+        data.get("body") or "",
+        data.get("assets") or [],
+    )
 
 
 def get_release_commit(tag, repo=UPSTREAM_REPO):
@@ -204,6 +235,18 @@ _This issue was filed automatically by the `provider-release-check` workflow._
 """
 
 
+def release_assets_ready(version, assets):
+    """Report and return whether the release ships every required artifact."""
+    missing = missing_assets(version, assets, get_platforms())
+    if missing:
+        print(
+            f"[skip] v{version} release does not ship the required artifacts yet: "
+            + ", ".join(missing)
+        )
+        return False
+    return True
+
+
 def cmd_issue(args):
     try:
         current_version = get_current_version()
@@ -212,7 +255,7 @@ def cmd_issue(args):
         return 2
 
     try:
-        latest_tag, release_url, release_notes = get_latest_release()
+        latest_tag, release_url, release_notes, assets = get_latest_release()
     except (RuntimeError, json.JSONDecodeError) as e:
         print(f"Error fetching latest release: {e}", file=sys.stderr)
         return 2
@@ -229,6 +272,9 @@ def cmd_issue(args):
 
     if not is_newer:
         print("No newer version available.")
+        return 0
+
+    if not release_assets_ready(latest_version, assets):
         return 0
 
     try:
@@ -275,7 +321,7 @@ def cmd_bump(args):
         return 2
 
     try:
-        latest_tag, release_url, _ = get_latest_release()
+        latest_tag, release_url, _, assets = get_latest_release()
     except (RuntimeError, json.JSONDecodeError) as e:
         print(f"Error fetching latest release: {e}", file=sys.stderr)
         return 2
@@ -292,6 +338,9 @@ def cmd_bump(args):
 
     if not is_newer:
         print("No newer version available; nothing to bump.")
+        return 0
+
+    if not release_assets_ready(latest_version, assets):
         return 0
 
     if args.dry_run:
