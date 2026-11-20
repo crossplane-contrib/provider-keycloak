@@ -59,13 +59,20 @@ spec:
               forProvider:
                 properties:
                   consentScreenText:
-                    description: When set, a consent screen will be displayed to users
-                      authenticating to clients with this scope attached. The consent
-                      screen will display the string value of this attribute.
+                    description: The text that is displayed on the consent screen
+                      for this client scope. If not set, the consent screen displays
+                      the name of the client scope.
                     type: string
                   description:
                     description: The description of this client scope in the GUI.
                     type: string
+                  displayOnConsentScreen:
+                    description: When true, this client scope is displayed on the
+                      consent screen of clients that require consent. When false,
+                      it is not displayed, and existing consents remain valid if the
+                      scope is added to a client later. If not set, it is true when
+                      consent_screen_text is set and false otherwise.
+                    type: boolean
                   extraConfig:
                     additionalProperties:
                       type: string
@@ -179,6 +186,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -194,13 +206,20 @@ spec:
                   autoscaler.
                 properties:
                   consentScreenText:
-                    description: When set, a consent screen will be displayed to users
-                      authenticating to clients with this scope attached. The consent
-                      screen will display the string value of this attribute.
+                    description: The text that is displayed on the consent screen
+                      for this client scope. If not set, the consent screen displays
+                      the name of the client scope.
                     type: string
                   description:
                     description: The description of this client scope in the GUI.
                     type: string
+                  displayOnConsentScreen:
+                    description: When true, this client scope is displayed on the
+                      consent screen of clients that require consent. When false,
+                      it is not displayed, and existing consents remain valid if the
+                      scope is added to a client later. If not set, it is true when
+                      consent_screen_text is set and false otherwise.
+                    type: boolean
                   extraConfig:
                     additionalProperties:
                       type: string
@@ -314,6 +333,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -384,13 +408,20 @@ spec:
               atProvider:
                 properties:
                   consentScreenText:
-                    description: When set, a consent screen will be displayed to users
-                      authenticating to clients with this scope attached. The consent
-                      screen will display the string value of this attribute.
+                    description: The text that is displayed on the consent screen
+                      for this client scope. If not set, the consent screen displays
+                      the name of the client scope.
                     type: string
                   description:
                     description: The description of this client scope in the GUI.
                     type: string
+                  displayOnConsentScreen:
+                    description: When true, this client scope is displayed on the
+                      consent screen of clients that require consent. When false,
+                      it is not displayed, and existing consents remain valid if the
+                      scope is added to a client later. If not set, it is true when
+                      consent_screen_text is set and false otherwise.
+                    type: boolean
                   extraConfig:
                     additionalProperties:
                       type: string
@@ -425,6 +456,11 @@ spec:
                     type: string
                   realmId:
                     description: The realm this client scope belongs to.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                 type: object
               conditions:

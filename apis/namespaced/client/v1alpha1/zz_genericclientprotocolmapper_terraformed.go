@@ -121,6 +121,8 @@ func (tr *GenericClientProtocolMapper) LateInitialize(attrs []byte) (bool, error
 	opts = append(opts, resource.WithNameFilter("ClientID"))
 	opts = append(opts, resource.WithNameFilter("ClientScopeID"))
 	opts = append(opts, resource.WithNameFilter("Config"))
+	opts = append(opts, resource.WithNameFilter("RealmID"))
+	opts = append(opts, resource.WithNameFilter("RealmInternalID"))
 
 	li := resource.NewGenericLateInitializer(opts...)
 	return li.LateInitialize(&tr.Spec.ForProvider, params)

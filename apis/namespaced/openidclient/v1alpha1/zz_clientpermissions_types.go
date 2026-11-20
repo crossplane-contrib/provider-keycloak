@@ -50,6 +50,9 @@ type ClientPermissionsInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	TokenExchangeScope []TokenExchangeScopeInitParameters `json:"tokenExchangeScope,omitempty" tf:"token_exchange_scope,omitempty"`
 
 	ViewScope []ViewScopeInitParameters `json:"viewScope,omitempty" tf:"view_scope,omitempty"`
@@ -81,6 +84,9 @@ type ClientPermissionsObservation struct {
 
 	// The realm this group exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	TokenExchangeScope []TokenExchangeScopeObservation `json:"tokenExchangeScope,omitempty" tf:"token_exchange_scope,omitempty"`
 
@@ -131,6 +137,10 @@ type ClientPermissionsParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// +kubebuilder:validation:Optional
 	TokenExchangeScope []TokenExchangeScopeParameters `json:"tokenExchangeScope,omitempty" tf:"token_exchange_scope,omitempty"`
 
@@ -140,7 +150,7 @@ type ClientPermissionsParameters struct {
 
 type ConfigureScopeInitParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -153,7 +163,7 @@ type ConfigureScopeInitParameters struct {
 
 type ConfigureScopeObservation struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -166,7 +176,7 @@ type ConfigureScopeObservation struct {
 
 type ConfigureScopeParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -182,7 +192,7 @@ type ConfigureScopeParameters struct {
 
 type ManageScopeInitParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -195,7 +205,7 @@ type ManageScopeInitParameters struct {
 
 type ManageScopeObservation struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -208,7 +218,7 @@ type ManageScopeObservation struct {
 
 type ManageScopeParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -224,7 +234,7 @@ type ManageScopeParameters struct {
 
 type MapRolesClientScopeScopeInitParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -237,7 +247,7 @@ type MapRolesClientScopeScopeInitParameters struct {
 
 type MapRolesClientScopeScopeObservation struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -250,7 +260,7 @@ type MapRolesClientScopeScopeObservation struct {
 
 type MapRolesClientScopeScopeParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -266,7 +276,7 @@ type MapRolesClientScopeScopeParameters struct {
 
 type MapRolesCompositeScopeInitParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -279,7 +289,7 @@ type MapRolesCompositeScopeInitParameters struct {
 
 type MapRolesCompositeScopeObservation struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -292,7 +302,7 @@ type MapRolesCompositeScopeObservation struct {
 
 type MapRolesCompositeScopeParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -308,7 +318,7 @@ type MapRolesCompositeScopeParameters struct {
 
 type MapRolesScopeInitParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -321,7 +331,7 @@ type MapRolesScopeInitParameters struct {
 
 type MapRolesScopeObservation struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -334,7 +344,7 @@ type MapRolesScopeObservation struct {
 
 type MapRolesScopeParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -350,7 +360,7 @@ type MapRolesScopeParameters struct {
 
 type TokenExchangeScopeInitParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -363,7 +373,7 @@ type TokenExchangeScopeInitParameters struct {
 
 type TokenExchangeScopeObservation struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -376,7 +386,7 @@ type TokenExchangeScopeObservation struct {
 
 type TokenExchangeScopeParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -392,7 +402,7 @@ type TokenExchangeScopeParameters struct {
 
 type ViewScopeInitParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -405,7 +415,7 @@ type ViewScopeInitParameters struct {
 
 type ViewScopeObservation struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// A description for the permission scope
@@ -418,7 +428,7 @@ type ViewScopeObservation struct {
 
 type ViewScopeParameters struct {
 
-	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.
+	// The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 

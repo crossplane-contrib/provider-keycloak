@@ -56,6 +56,10 @@ func TestLateInitIgnoredFields(t *testing.T) {
 			"client_authentication_flow",
 			"docker_authentication_flow",
 			"first_broker_login_flow",
+			"web_authn_policy.signature_algorithms",
+			"web_authn_policy.signature_algorithms_ordered",
+			"web_authn_passwordless_policy.signature_algorithms",
+			"web_authn_passwordless_policy.signature_algorithms_ordered",
 		},
 		"keycloak_generic_protocol_mapper": {
 			"config",
@@ -86,6 +90,45 @@ func TestLateInitIgnoredFields(t *testing.T) {
 							tfName, f, got)
 					}
 				}
+			}
+		})
+	}
+}
+
+// TestRealmReferenceLateInitIgnored ensures that no realm-scoped resource
+// late-initializes realm_id/realm or realm_internal_id. They are mutually
+// exclusive (ExactlyOneOf) and both Optional+Computed, so late-initializing
+// the unconfigured one would make every subsequent apply fail.
+func TestRealmReferenceLateInitIgnored(t *testing.T) {
+	flavours := map[string]func() (*ujconfig.Provider, error){
+		"cluster":    func() (*ujconfig.Provider, error) { return GetProvider(true) },
+		"namespaced": func() (*ujconfig.Provider, error) { return GetProviderNamespaced(true) },
+	}
+
+	for flavourName, get := range flavours {
+		t.Run(flavourName, func(t *testing.T) {
+			p, err := get()
+			if err != nil {
+				t.Fatalf("loading provider: %v", err)
+			}
+			checked := 0
+			for tfName, r := range p.Resources {
+				if _, ok := r.TerraformResource.Schema["realm_internal_id"]; !ok {
+					continue
+				}
+				checked++
+				realmField := "realm_id"
+				if _, ok := r.TerraformResource.Schema[realmField]; !ok {
+					realmField = "realm"
+				}
+				for _, f := range []string{"realm_internal_id", realmField} {
+					if !slices.Contains(r.LateInitializer.IgnoredFields, f) {
+						t.Errorf("%s: LateInitializer.IgnoredFields missing %q (got %v)", tfName, f, r.LateInitializer.IgnoredFields)
+					}
+				}
+			}
+			if checked == 0 {
+				t.Fatal("no resource with realm_internal_id found")
 			}
 		})
 	}

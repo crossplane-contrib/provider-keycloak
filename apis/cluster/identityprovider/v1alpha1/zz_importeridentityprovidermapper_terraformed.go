@@ -119,6 +119,8 @@ func (tr *ImporterIdentityProviderMapper) LateInitialize(attrs []byte) (bool, er
 	}
 	opts := []resource.GenericLateInitializerOption{resource.WithZeroValueJSONOmitEmptyFilter(resource.CNameWildcard)}
 	opts = append(opts, resource.WithNameFilter("IdentityProviderAlias"))
+	opts = append(opts, resource.WithNameFilter("Realm"))
+	opts = append(opts, resource.WithNameFilter("RealmInternalID"))
 
 	li := resource.NewGenericLateInitializer(opts...)
 	return li.LateInitialize(&tr.Spec.ForProvider, params)

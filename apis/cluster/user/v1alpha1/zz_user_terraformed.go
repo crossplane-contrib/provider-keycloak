@@ -121,6 +121,8 @@ func (tr *User) LateInitialize(attrs []byte) (bool, error) {
 	opts = append(opts, resource.WithNameFilter("InitialPassword.Temporary"))
 	opts = append(opts, resource.WithNameFilter("InitialPassword.Value"))
 	opts = append(opts, resource.WithNameFilter("InitialPassword.Value"))
+	opts = append(opts, resource.WithNameFilter("RealmID"))
+	opts = append(opts, resource.WithNameFilter("RealmInternalID"))
 	opts = append(opts, resource.WithNameFilter("RequiredActions"))
 
 	li := resource.NewGenericLateInitializer(opts...)

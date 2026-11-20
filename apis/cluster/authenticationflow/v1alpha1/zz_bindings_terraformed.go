@@ -123,6 +123,8 @@ func (tr *Bindings) LateInitialize(attrs []byte) (bool, error) {
 	opts = append(opts, resource.WithNameFilter("DirectGrantFlow"))
 	opts = append(opts, resource.WithNameFilter("DockerAuthenticationFlow"))
 	opts = append(opts, resource.WithNameFilter("FirstBrokerLoginFlow"))
+	opts = append(opts, resource.WithNameFilter("RealmID"))
+	opts = append(opts, resource.WithNameFilter("RealmInternalID"))
 	opts = append(opts, resource.WithNameFilter("RegistrationFlow"))
 	opts = append(opts, resource.WithNameFilter("ResetCredentialsFlow"))
 

@@ -118,6 +118,8 @@ func (tr *OidcOpenShiftV4IdentityProvider) LateInitialize(attrs []byte) (bool, e
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}
 	opts := []resource.GenericLateInitializerOption{resource.WithZeroValueJSONOmitEmptyFilter(resource.CNameWildcard)}
+	opts = append(opts, resource.WithNameFilter("Realm"))
+	opts = append(opts, resource.WithNameFilter("RealmInternalID"))
 
 	li := resource.NewGenericLateInitializer(opts...)
 	return li.LateInitialize(&tr.Spec.ForProvider, params)

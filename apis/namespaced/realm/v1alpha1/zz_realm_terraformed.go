@@ -21,7 +21,7 @@ func (mg *Realm) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this Realm
 func (tr *Realm) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"smtp_server[*].auth[*].password": "smtpServer[*].auth[*].passwordSecretRef", "smtp_server[*].token_auth[*].client_secret": "smtpServer[*].tokenAuth[*].clientSecretSecretRef"}
+	return map[string]string{"smtp_server[*].auth[*].password": "smtpServer[*].auth[*].passwordSecretRef", "smtp_server[*].auth[*].password_wo": "smtpServer[*].auth[*].passwordWoSecretRef", "smtp_server[*].token_auth[*].client_secret": "smtpServer[*].tokenAuth[*].clientSecretSecretRef"}
 }
 
 // GetObservation of this Realm
@@ -125,6 +125,10 @@ func (tr *Realm) LateInitialize(attrs []byte) (bool, error) {
 	opts = append(opts, resource.WithNameFilter("FirstBrokerLoginFlow"))
 	opts = append(opts, resource.WithNameFilter("RegistrationFlow"))
 	opts = append(opts, resource.WithNameFilter("ResetCredentialsFlow"))
+	opts = append(opts, resource.WithNameFilter("WebAuthnPasswordlessPolicy.SignatureAlgorithms"))
+	opts = append(opts, resource.WithNameFilter("WebAuthnPasswordlessPolicy.SignatureAlgorithmsOrdered"))
+	opts = append(opts, resource.WithNameFilter("WebAuthnPolicy.SignatureAlgorithms"))
+	opts = append(opts, resource.WithNameFilter("WebAuthnPolicy.SignatureAlgorithmsOrdered"))
 
 	li := resource.NewGenericLateInitializer(opts...)
 	return li.LateInitialize(&tr.Spec.ForProvider, params)

@@ -51,6 +51,9 @@ type FullNameMapperInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// When true, this mapper will only be used to write updates to LDAP. Defaults to false.
 	WriteOnly *bool `json:"writeOnly,omitempty" tf:"write_only,omitempty"`
 }
@@ -75,6 +78,9 @@ type FullNameMapperObservation struct {
 	// The realm that this LDAP mapper will exist in.
 	// The realm in which the ldap user federation provider exists.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// When true, this mapper will only be used to write updates to LDAP. Defaults to false.
 	WriteOnly *bool `json:"writeOnly,omitempty" tf:"write_only,omitempty"`
@@ -122,6 +128,10 @@ type FullNameMapperParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// When true, this mapper will only be used to write updates to LDAP. Defaults to false.
 	// +kubebuilder:validation:Optional

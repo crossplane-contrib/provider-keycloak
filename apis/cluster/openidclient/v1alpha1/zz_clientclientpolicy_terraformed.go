@@ -119,6 +119,8 @@ func (tr *ClientClientPolicy) LateInitialize(attrs []byte) (bool, error) {
 	}
 	opts := []resource.GenericLateInitializerOption{resource.WithZeroValueJSONOmitEmptyFilter(resource.CNameWildcard)}
 	opts = append(opts, resource.WithNameFilter("Clients"))
+	opts = append(opts, resource.WithNameFilter("RealmID"))
+	opts = append(opts, resource.WithNameFilter("RealmInternalID"))
 
 	li := resource.NewGenericLateInitializer(opts...)
 	return li.LateInitialize(&tr.Spec.ForProvider, params)

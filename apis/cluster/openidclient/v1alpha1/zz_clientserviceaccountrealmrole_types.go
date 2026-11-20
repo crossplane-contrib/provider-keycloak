@@ -27,6 +27,9 @@ type ClientServiceAccountRealmRoleInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The name of the role that is assigned.
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 
@@ -52,6 +55,9 @@ type ClientServiceAccountRealmRoleObservation struct {
 	// The realm that the client and role belong to.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The name of the role that is assigned.
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 
@@ -73,6 +79,10 @@ type ClientServiceAccountRealmRoleParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The name of the role that is assigned.
 	// +kubebuilder:validation:Optional

@@ -163,6 +163,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: |-
+                      Policy ID representing the user policy.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+                    type: string
                   resourceServerId:
                     description: The ID of the resource server.
                     type: string
@@ -430,6 +435,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: |-
+                      Policy ID representing the user policy.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+                    type: string
                   resourceServerId:
                     description: The ID of the resource server.
                     type: string
@@ -716,6 +726,11 @@ spec:
                     type: string
                   realmId:
                     description: The realm this policy exists in.
+                    type: string
+                  realmInternalId:
+                    description: |-
+                      Policy ID representing the user policy.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
                     type: string
                   resourceServerId:
                     description: The ID of the resource server.

@@ -352,6 +352,11 @@ func (in *WorkflowInitParameters) DeepCopyInto(out *WorkflowInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -463,6 +468,11 @@ func (in *WorkflowObservation) DeepCopyInto(out *WorkflowObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RestartInProgress != nil {
 		in, out := &in.RestartInProgress, &out.RestartInProgress
 		*out = new(string)
@@ -531,6 +541,11 @@ func (in *WorkflowParameters) DeepCopyInto(out *WorkflowParameters) {
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}

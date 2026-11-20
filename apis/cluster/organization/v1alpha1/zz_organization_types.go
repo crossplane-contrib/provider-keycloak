@@ -70,6 +70,9 @@ type OrganizationInitParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
 	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
@@ -112,6 +115,9 @@ type OrganizationObservation struct {
 	// Realm ID.
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.
 	// Landing page after successful login.
 	RedirectURL *string `json:"redirectUrl,omitempty" tf:"redirect_url,omitempty"`
@@ -151,6 +157,10 @@ type OrganizationParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional

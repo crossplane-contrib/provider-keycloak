@@ -15,6 +15,10 @@ import (
 
 type MsadUserAccountControlMapperInitParameters struct {
 
+	// When true, the enabled/disabled state of the user is always read from the userAccountControl attribute in AD, instead of the value stored in Keycloak. Defaults to false.
+	// When true, the enabled/disabled state of the user is always read from the userAccountControl attribute in MSAD.
+	AlwaysReadEnabledValueFromLdap *bool `json:"alwaysReadEnabledValueFromLdap,omitempty" tf:"always_read_enabled_value_from_ldap,omitempty"`
+
 	// When true, advanced password policies, such as password hints and previous password history will be used when writing new passwords to AD. Defaults to false.
 	LdapPasswordPolicyHintsEnabled *bool `json:"ldapPasswordPolicyHintsEnabled,omitempty" tf:"ldap_password_policy_hints_enabled,omitempty"`
 
@@ -47,9 +51,17 @@ type MsadUserAccountControlMapperInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type MsadUserAccountControlMapperObservation struct {
+
+	// When true, the enabled/disabled state of the user is always read from the userAccountControl attribute in AD, instead of the value stored in Keycloak. Defaults to false.
+	// When true, the enabled/disabled state of the user is always read from the userAccountControl attribute in MSAD.
+	AlwaysReadEnabledValueFromLdap *bool `json:"alwaysReadEnabledValueFromLdap,omitempty" tf:"always_read_enabled_value_from_ldap,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// When true, advanced password policies, such as password hints and previous password history will be used when writing new passwords to AD. Defaults to false.
@@ -66,9 +78,17 @@ type MsadUserAccountControlMapperObservation struct {
 	// The realm that this LDAP mapper will exist in.
 	// The realm in which the ldap user federation provider exists.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type MsadUserAccountControlMapperParameters struct {
+
+	// When true, the enabled/disabled state of the user is always read from the userAccountControl attribute in AD, instead of the value stored in Keycloak. Defaults to false.
+	// When true, the enabled/disabled state of the user is always read from the userAccountControl attribute in MSAD.
+	// +kubebuilder:validation:Optional
+	AlwaysReadEnabledValueFromLdap *bool `json:"alwaysReadEnabledValueFromLdap,omitempty" tf:"always_read_enabled_value_from_ldap,omitempty"`
 
 	// When true, advanced password policies, such as password hints and previous password history will be used when writing new passwords to AD. Defaults to false.
 	// +kubebuilder:validation:Optional
@@ -106,6 +126,10 @@ type MsadUserAccountControlMapperParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 // MsadUserAccountControlMapperSpec defines the desired state of MsadUserAccountControlMapper

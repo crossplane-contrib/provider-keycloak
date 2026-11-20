@@ -5,6 +5,8 @@ Copyright 2021 Upbound Inc.
 package config
 
 import (
+	"slices"
+
 	ujconfig "github.com/crossplane/upjet/v2/pkg/config"
 	conversiontfjson "github.com/crossplane/upjet/v2/pkg/types/conversion/tfjson"
 	tfjson "github.com/hashicorp/terraform-json"
@@ -124,6 +126,7 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 	}
 
 	pc.ConfigureResources()
+	ignoreRealmReferenceLateInit(pc)
 	return pc, nil
 }
 
@@ -179,11 +182,32 @@ func GetProviderNamespaced(generationProvider bool) (*ujconfig.Provider, error) 
 	}
 
 	pc.ConfigureResources()
+	ignoreRealmReferenceLateInit(pc)
 
 	// unset reference, this as reference - it is not reference and it creates import cycle
 	delete(pc.Resources["keycloak_openid_client"].References, "client_id")
 
 	return pc, nil
+}
+
+// ignoreRealmReferenceLateInit excludes the realm reference of realm-scoped
+// resources from late-initialization. Since terraform-provider-keycloak v5.11.0
+// these resources accept either realm_id (or realm) or realm_internal_id
+// (ExactlyOneOf), and both are Optional+Computed. Late-initializing the one
+// that was not configured would put both into spec.forProvider and every
+// subsequent apply would fail validation. It runs after ConfigureResources so
+// that resource configurators assigning r.LateInitializer do not drop it.
+func ignoreRealmReferenceLateInit(pc *ujconfig.Provider) {
+	for _, r := range pc.Resources {
+		if _, ok := r.TerraformResource.Schema["realm_internal_id"]; !ok {
+			continue
+		}
+		for _, field := range []string{"realm_internal_id", "realm_id", "realm"} {
+			if _, ok := r.TerraformResource.Schema[field]; ok && !slices.Contains(r.LateInitializer.IgnoredFields, field) {
+				r.LateInitializer.IgnoredFields = append(r.LateInitializer.IgnoredFields, field)
+			}
+		}
+	}
 }
 
 // KnownReferencers adds referencers for fields that are known and common among

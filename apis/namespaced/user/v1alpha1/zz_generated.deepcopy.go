@@ -199,6 +199,11 @@ func (in *AdminPermissionsInitParameters) DeepCopyInto(out *AdminPermissionsInit
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
 		*out = make([]*string, len(*in))
@@ -455,6 +460,11 @@ func (in *AdminPermissionsObservation) DeepCopyInto(out *AdminPermissionsObserva
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
 		*out = make([]*string, len(*in))
@@ -680,6 +690,11 @@ func (in *AdminPermissionsParameters) DeepCopyInto(out *AdminPermissionsParamete
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
@@ -994,6 +1009,11 @@ func (in *GroupsInitParameters) DeepCopyInto(out *GroupsInitParameters) {
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.UserID != nil {
 		in, out := &in.UserID, &out.UserID
 		*out = new(string)
@@ -1082,6 +1102,11 @@ func (in *GroupsObservation) DeepCopyInto(out *GroupsObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.UserID != nil {
 		in, out := &in.UserID, &out.UserID
 		*out = new(string)
@@ -1144,6 +1169,11 @@ func (in *GroupsParameters) DeepCopyInto(out *GroupsParameters) {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.UserID != nil {
 		in, out := &in.UserID, &out.UserID
@@ -1807,6 +1837,11 @@ func (in *PermissionsInitParameters) DeepCopyInto(out *PermissionsInitParameters
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.UserImpersonatedScope != nil {
 		in, out := &in.UserImpersonatedScope, &out.UserImpersonatedScope
 		*out = make([]UserImpersonatedScopeInitParameters, len(*in))
@@ -1916,6 +1951,11 @@ func (in *PermissionsObservation) DeepCopyInto(out *PermissionsObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.UserImpersonatedScope != nil {
 		in, out := &in.UserImpersonatedScope, &out.UserImpersonatedScope
 		*out = make([]UserImpersonatedScopeObservation, len(*in))
@@ -1987,6 +2027,11 @@ func (in *PermissionsParameters) DeepCopyInto(out *PermissionsParameters) {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.UserImpersonatedScope != nil {
 		in, out := &in.UserImpersonatedScope, &out.UserImpersonatedScope
@@ -2099,6 +2144,11 @@ func (in *RolesInitParameters) DeepCopyInto(out *RolesInitParameters) {
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RoleIds != nil {
 		in, out := &in.RoleIds, &out.RoleIds
 		*out = make([]*string, len(*in))
@@ -2199,6 +2249,11 @@ func (in *RolesObservation) DeepCopyInto(out *RolesObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RoleIds != nil {
 		in, out := &in.RoleIds, &out.RoleIds
 		*out = make([]*string, len(*in))
@@ -2249,6 +2304,11 @@ func (in *RolesParameters) DeepCopyInto(out *RolesParameters) {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.RoleIds != nil {
 		in, out := &in.RoleIds, &out.RoleIds
@@ -2463,6 +2523,11 @@ func (in *UserFederationInitParameters) DeepCopyInto(out *UserFederationInitPara
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 }
 
 // DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new UserFederationInitParameters.
@@ -2576,6 +2641,11 @@ func (in *UserFederationObservation) DeepCopyInto(out *UserFederationObservation
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 }
 
 // DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new UserFederationObservation.
@@ -2661,6 +2731,11 @@ func (in *UserFederationParameters) DeepCopyInto(out *UserFederationParameters) 
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 }
 
@@ -2895,6 +2970,11 @@ func (in *UserInitParameters) DeepCopyInto(out *UserInitParameters) {
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RequiredActions != nil {
 		in, out := &in.RequiredActions, &out.RequiredActions
 		*out = make([]*string, len(*in))
@@ -3028,6 +3108,11 @@ func (in *UserObservation) DeepCopyInto(out *UserObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RequiredActions != nil {
 		in, out := &in.RequiredActions, &out.RequiredActions
 		*out = make([]*string, len(*in))
@@ -3133,6 +3218,11 @@ func (in *UserParameters) DeepCopyInto(out *UserParameters) {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.RequiredActions != nil {
 		in, out := &in.RequiredActions, &out.RequiredActions

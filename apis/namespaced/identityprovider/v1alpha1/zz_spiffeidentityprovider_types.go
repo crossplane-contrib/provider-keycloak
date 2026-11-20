@@ -22,6 +22,9 @@ type SpiffeIdentityProviderInitParameters struct {
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
+
 	// Enable/disable authenticate users by default.
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
 
@@ -96,6 +99,9 @@ type SpiffeIdentityProviderInitParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
 	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
@@ -126,6 +132,9 @@ type SpiffeIdentityProviderObservation struct {
 	// The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
+
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
 
 	// Enable/disable authenticate users by default.
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
@@ -179,6 +188,9 @@ type SpiffeIdentityProviderObservation struct {
 	// Realm Name
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Enable/disable if tokens must be stored after authenticating users.
 	StoreToken *bool `json:"storeToken,omitempty" tf:"store_token,omitempty"`
 
@@ -203,6 +215,10 @@ type SpiffeIdentityProviderParameters struct {
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	// +kubebuilder:validation:Optional
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
+
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	// +kubebuilder:validation:Optional
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
 
 	// Enable/disable authenticate users by default.
 	// +kubebuilder:validation:Optional
@@ -291,6 +307,10 @@ type SpiffeIdentityProviderParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional

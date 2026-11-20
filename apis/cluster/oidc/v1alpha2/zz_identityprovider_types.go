@@ -27,11 +27,15 @@ type IdentityProviderInitParameters struct {
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
+
 	// Enable/disable authenticate users by default.
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
 
-	// The Authorization Url.
-	// OIDC authorization URL.
+	// The Authorization Url. Required when provider_id is oidc or keycloak-oidc.
+	// OIDC authorization URL. Required for the provider ids oidc and keycloak-oidc.
 	AuthorizationURL *string `json:"authorizationUrl,omitempty" tf:"authorization_url,omitempty"`
 
 	// Does the external IDP support backchannel logout? Defaults to true.
@@ -143,7 +147,7 @@ type IdentityProviderInitParameters struct {
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
 	PostBrokerLoginFlowAlias *string `json:"postBrokerLoginFlowAlias,omitempty" tf:"post_broker_login_flow_alias,omitempty"`
 
-	// The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation.
+	// The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation. Changing this forces a new resource, because Keycloak does not change the provider of an existing identity provider.
 	// provider id, is always oidc, unless you have a custom implementation
 	ProviderID *string `json:"providerId,omitempty" tf:"provider_id,omitempty"`
 
@@ -151,6 +155,10 @@ type IdentityProviderInitParameters struct {
 	// Realm Name
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
@@ -168,8 +176,8 @@ type IdentityProviderInitParameters struct {
 	// Sync Mode
 	SyncMode *string `json:"syncMode,omitempty" tf:"sync_mode,omitempty"`
 
-	// The Token URL.
-	// Token URL.
+	// The Token URL. Required when provider_id is oidc or keycloak-oidc.
+	// Token URL. Required for the provider ids oidc and keycloak-oidc.
 	TokenURL *string `json:"tokenUrl,omitempty" tf:"token_url,omitempty"`
 
 	// When true, email addresses for users in this provider will automatically be verified regardless of the realm's email verification policy. Defaults to false.
@@ -203,11 +211,15 @@ type IdentityProviderObservation struct {
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
+
 	// Enable/disable authenticate users by default.
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
 
-	// The Authorization Url.
-	// OIDC authorization URL.
+	// The Authorization Url. Required when provider_id is oidc or keycloak-oidc.
+	// OIDC authorization URL. Required for the provider ids oidc and keycloak-oidc.
 	AuthorizationURL *string `json:"authorizationUrl,omitempty" tf:"authorization_url,omitempty"`
 
 	// Does the external IDP support backchannel logout? Defaults to true.
@@ -294,13 +306,17 @@ type IdentityProviderObservation struct {
 	// Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this empty if you don't want any additional authenticators to be triggered after login with this identity provider. Also note, that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
 	PostBrokerLoginFlowAlias *string `json:"postBrokerLoginFlowAlias,omitempty" tf:"post_broker_login_flow_alias,omitempty"`
 
-	// The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation.
+	// The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation. Changing this forces a new resource, because Keycloak does not change the provider of an existing identity provider.
 	// provider id, is always oidc, unless you have a custom implementation
 	ProviderID *string `json:"providerId,omitempty" tf:"provider_id,omitempty"`
 
 	// The name of the realm. This is unique across Keycloak.
 	// Realm Name
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// When true, tokens will be stored after authenticating users. Defaults to true.
 	// Enable/disable if tokens must be stored after authenticating users.
@@ -310,8 +326,8 @@ type IdentityProviderObservation struct {
 	// Sync Mode
 	SyncMode *string `json:"syncMode,omitempty" tf:"sync_mode,omitempty"`
 
-	// The Token URL.
-	// Token URL.
+	// The Token URL. Required when provider_id is oidc or keycloak-oidc.
+	// Token URL. Required for the provider ids oidc and keycloak-oidc.
 	TokenURL *string `json:"tokenUrl,omitempty" tf:"token_url,omitempty"`
 
 	// When true, email addresses for users in this provider will automatically be verified regardless of the realm's email verification policy. Defaults to false.
@@ -348,12 +364,17 @@ type IdentityProviderParameters struct {
 	// +kubebuilder:validation:Optional
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	// +kubebuilder:validation:Optional
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
+
 	// Enable/disable authenticate users by default.
 	// +kubebuilder:validation:Optional
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
 
-	// The Authorization Url.
-	// OIDC authorization URL.
+	// The Authorization Url. Required when provider_id is oidc or keycloak-oidc.
+	// OIDC authorization URL. Required for the provider ids oidc and keycloak-oidc.
 	// +kubebuilder:validation:Optional
 	AuthorizationURL *string `json:"authorizationUrl,omitempty" tf:"authorization_url,omitempty"`
 
@@ -489,7 +510,7 @@ type IdentityProviderParameters struct {
 	// +kubebuilder:validation:Optional
 	PostBrokerLoginFlowAlias *string `json:"postBrokerLoginFlowAlias,omitempty" tf:"post_broker_login_flow_alias,omitempty"`
 
-	// The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation.
+	// The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation. Changing this forces a new resource, because Keycloak does not change the provider of an existing identity provider.
 	// provider id, is always oidc, unless you have a custom implementation
 	// +kubebuilder:validation:Optional
 	ProviderID *string `json:"providerId,omitempty" tf:"provider_id,omitempty"`
@@ -499,6 +520,11 @@ type IdentityProviderParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
@@ -518,8 +544,8 @@ type IdentityProviderParameters struct {
 	// +kubebuilder:validation:Optional
 	SyncMode *string `json:"syncMode,omitempty" tf:"sync_mode,omitempty"`
 
-	// The Token URL.
-	// Token URL.
+	// The Token URL. Required when provider_id is oidc or keycloak-oidc.
+	// Token URL. Required for the provider ids oidc and keycloak-oidc.
 	// +kubebuilder:validation:Optional
 	TokenURL *string `json:"tokenUrl,omitempty" tf:"token_url,omitempty"`
 
@@ -581,9 +607,7 @@ type IdentityProvider struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.alias) || (has(self.initProvider) && has(self.initProvider.alias))",message="spec.forProvider.alias is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.authorizationUrl) || (has(self.initProvider) && has(self.initProvider.authorizationUrl))",message="spec.forProvider.authorizationUrl is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clientIdSecretRef)",message="spec.forProvider.clientIdSecretRef is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.tokenUrl) || (has(self.initProvider) && has(self.initProvider.tokenUrl))",message="spec.forProvider.tokenUrl is a required parameter"
 	Spec   IdentityProviderSpec   `json:"spec"`
 	Status IdentityProviderStatus `json:"status,omitempty"`
 }

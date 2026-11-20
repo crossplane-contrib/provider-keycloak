@@ -92,6 +92,13 @@ func Configure(p *config.Provider) {
 				"client_authentication_flow",
 				"docker_authentication_flow",
 				"first_broker_login_flow",
+				// signature_algorithms and signature_algorithms_ordered are
+				// both Optional+Computed and conflict with each other, so
+				// late-initializing the unconfigured one breaks every apply.
+				"web_authn_policy.signature_algorithms",
+				"web_authn_policy.signature_algorithms_ordered",
+				"web_authn_passwordless_policy.signature_algorithms",
+				"web_authn_passwordless_policy.signature_algorithms_ordered",
 			},
 		}
 

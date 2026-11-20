@@ -30,6 +30,18 @@ type RolesInitParameters struct {
 	// +kubebuilder:validation:Optional
 	GroupIDSelector *v2.NamespacedSelector `json:"groupIdSelector,omitempty" tf:"-"`
 
+	// The ID of the organization this group belongs to. Requires Keycloak 26.7 or newer. Omit for realm-level groups.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/organization/v1alpha1.Organization
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
+	// Reference to a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDRef *v2.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
+
+	// Selector for a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDSelector *v2.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
+
 	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
@@ -41,6 +53,9 @@ type RolesInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// A list of role IDs to map to the group.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role
@@ -67,8 +82,14 @@ type RolesObservation struct {
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// The ID of the organization this group belongs to. Requires Keycloak 26.7 or newer. Omit for realm-level groups.
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
 	// The realm this group exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// A list of role IDs to map to the group.
 	// +listType=set
@@ -94,6 +115,19 @@ type RolesParameters struct {
 	// +kubebuilder:validation:Optional
 	GroupIDSelector *v2.NamespacedSelector `json:"groupIdSelector,omitempty" tf:"-"`
 
+	// The ID of the organization this group belongs to. Requires Keycloak 26.7 or newer. Omit for realm-level groups.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/organization/v1alpha1.Organization
+	// +kubebuilder:validation:Optional
+	OrganizationID *string `json:"organizationId,omitempty" tf:"organization_id,omitempty"`
+
+	// Reference to a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDRef *v2.NamespacedReference `json:"organizationIdRef,omitempty" tf:"-"`
+
+	// Selector for a Organization in organization to populate organizationId.
+	// +kubebuilder:validation:Optional
+	OrganizationIDSelector *v2.NamespacedSelector `json:"organizationIdSelector,omitempty" tf:"-"`
+
 	// The realm this group exists in.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
@@ -106,6 +140,10 @@ type RolesParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// A list of role IDs to map to the group.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role

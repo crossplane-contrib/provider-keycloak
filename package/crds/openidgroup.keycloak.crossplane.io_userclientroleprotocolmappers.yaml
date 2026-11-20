@@ -434,6 +434,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -808,6 +813,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -969,6 +979,11 @@ spec:
                     description: |-
                       The realm this protocol mapper exists within.
                       The realm id where the associated client or client scope exists.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                 type: object
               conditions:

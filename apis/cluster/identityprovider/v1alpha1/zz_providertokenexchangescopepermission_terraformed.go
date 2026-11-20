@@ -119,6 +119,8 @@ func (tr *ProviderTokenExchangeScopePermission) LateInitialize(attrs []byte) (bo
 	}
 	opts := []resource.GenericLateInitializerOption{resource.WithZeroValueJSONOmitEmptyFilter(resource.CNameWildcard)}
 	opts = append(opts, resource.WithNameFilter("ProviderAlias"))
+	opts = append(opts, resource.WithNameFilter("RealmID"))
+	opts = append(opts, resource.WithNameFilter("RealmInternalID"))
 
 	li := resource.NewGenericLateInitializer(opts...)
 	return li.LateInitialize(&tr.Spec.ForProvider, params)
