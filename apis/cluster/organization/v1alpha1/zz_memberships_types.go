@@ -15,7 +15,7 @@ import (
 
 type MembershipsInitParameters struct {
 
-	// A set of usernames to assign as members of the organization.
+	// A set of usernames to assign as members of the organization. Managed members may be listed, but are never removed.
 	// The set of usernames to assign to the organization.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha2.User
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("username", false)
@@ -55,12 +55,15 @@ type MembershipsInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type MembershipsObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// A set of usernames to assign as members of the organization.
+	// A set of usernames to assign as members of the organization. Managed members may be listed, but are never removed.
 	// The set of usernames to assign to the organization.
 	// +listType=set
 	Members []*string `json:"members,omitempty" tf:"members,omitempty"`
@@ -72,11 +75,14 @@ type MembershipsObservation struct {
 	// The realm the organization belongs to.
 	// The realm this organization exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type MembershipsParameters struct {
 
-	// A set of usernames to assign as members of the organization.
+	// A set of usernames to assign as members of the organization. Managed members may be listed, but are never removed.
 	// The set of usernames to assign to the organization.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha2.User
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("username", false)
@@ -119,6 +125,10 @@ type MembershipsParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 // MembershipsSpec defines the desired state of Memberships

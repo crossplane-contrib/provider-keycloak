@@ -184,6 +184,11 @@ func (in *AttributeIdentityProviderMapperInitParameters) DeepCopyInto(out *Attri
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -349,6 +354,11 @@ func (in *AttributeIdentityProviderMapperObservation) DeepCopyInto(out *Attribut
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -520,6 +530,11 @@ func (in *AttributeIdentityProviderMapperParameters) DeepCopyInto(out *Attribute
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -781,6 +796,11 @@ func (in *GroupIdentityProviderMapperInitParameters) DeepCopyInto(out *GroupIden
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -936,6 +956,11 @@ func (in *GroupIdentityProviderMapperObservation) DeepCopyInto(out *GroupIdentit
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -1097,6 +1122,11 @@ func (in *GroupIdentityProviderMapperParameters) DeepCopyInto(out *GroupIdentity
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -1353,6 +1383,11 @@ func (in *IdentityProviderMapperInitParameters) DeepCopyInto(out *IdentityProvid
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -1508,6 +1543,11 @@ func (in *IdentityProviderMapperObservation) DeepCopyInto(out *IdentityProviderM
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -1669,6 +1709,11 @@ func (in *IdentityProviderMapperParameters) DeepCopyInto(out *IdentityProviderMa
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -1935,6 +1980,11 @@ func (in *ImporterIdentityProviderMapperInitParameters) DeepCopyInto(out *Import
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -2105,6 +2155,11 @@ func (in *ImporterIdentityProviderMapperObservation) DeepCopyInto(out *ImporterI
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -2284,6 +2339,11 @@ func (in *ImporterIdentityProviderMapperParameters) DeepCopyInto(out *ImporterId
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -2416,6 +2476,11 @@ func (in *KubernetesIdentityProviderInitParameters) DeepCopyInto(out *Kubernetes
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticateByDefault != nil {
 		in, out := &in.AuthenticateByDefault, &out.AuthenticateByDefault
 		*out = new(bool)
@@ -2517,6 +2582,11 @@ func (in *KubernetesIdentityProviderInitParameters) DeepCopyInto(out *Kubernetes
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -2597,6 +2667,11 @@ func (in *KubernetesIdentityProviderObservation) DeepCopyInto(out *KubernetesIde
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -2695,6 +2770,11 @@ func (in *KubernetesIdentityProviderObservation) DeepCopyInto(out *KubernetesIde
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.StoreToken != nil {
 		in, out := &in.StoreToken, &out.StoreToken
 		*out = new(bool)
@@ -2733,6 +2813,11 @@ func (in *KubernetesIdentityProviderParameters) DeepCopyInto(out *KubernetesIden
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -2833,6 +2918,11 @@ func (in *KubernetesIdentityProviderParameters) DeepCopyInto(out *KubernetesIden
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -2948,6 +3038,11 @@ func (in *OidcOpenShiftV4IdentityProviderInitParameters) DeepCopyInto(out *OidcO
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticateByDefault != nil {
 		in, out := &in.AuthenticateByDefault, &out.AuthenticateByDefault
 		*out = new(bool)
@@ -3075,6 +3170,11 @@ func (in *OidcOpenShiftV4IdentityProviderInitParameters) DeepCopyInto(out *OidcO
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -3155,6 +3255,11 @@ func (in *OidcOpenShiftV4IdentityProviderObservation) DeepCopyInto(out *OidcOpen
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -3263,6 +3368,11 @@ func (in *OidcOpenShiftV4IdentityProviderObservation) DeepCopyInto(out *OidcOpen
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.StoreToken != nil {
 		in, out := &in.StoreToken, &out.StoreToken
 		*out = new(bool)
@@ -3301,6 +3411,11 @@ func (in *OidcOpenShiftV4IdentityProviderParameters) DeepCopyInto(out *OidcOpenS
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -3427,6 +3542,11 @@ func (in *OidcOpenShiftV4IdentityProviderParameters) DeepCopyInto(out *OidcOpenS
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -3680,6 +3800,11 @@ func (in *ProviderTokenExchangeScopePermissionInitParameters) DeepCopyInto(out *
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.SAMLProviderAlias != nil {
 		in, out := &in.SAMLProviderAlias, &out.SAMLProviderAlias
 		*out = new(string)
@@ -3835,6 +3960,11 @@ func (in *ProviderTokenExchangeScopePermissionObservation) DeepCopyInto(out *Pro
 	}
 	if in.RealmID != nil {
 		in, out := &in.RealmID, &out.RealmID
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -4010,6 +4140,11 @@ func (in *ProviderTokenExchangeScopePermissionParameters) DeepCopyInto(out *Prov
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.SAMLProviderAlias != nil {
 		in, out := &in.SAMLProviderAlias, &out.SAMLProviderAlias
@@ -4249,6 +4384,11 @@ func (in *RoleIdentityProviderMapperInitParameters) DeepCopyInto(out *RoleIdenti
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -4404,6 +4544,11 @@ func (in *RoleIdentityProviderMapperObservation) DeepCopyInto(out *RoleIdentityP
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -4568,6 +4713,11 @@ func (in *RoleIdentityProviderMapperParameters) DeepCopyInto(out *RoleIdentityPr
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -4700,6 +4850,11 @@ func (in *SpiffeIdentityProviderInitParameters) DeepCopyInto(out *SpiffeIdentity
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticateByDefault != nil {
 		in, out := &in.AuthenticateByDefault, &out.AuthenticateByDefault
 		*out = new(bool)
@@ -4811,6 +4966,11 @@ func (in *SpiffeIdentityProviderInitParameters) DeepCopyInto(out *SpiffeIdentity
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -4896,6 +5056,11 @@ func (in *SpiffeIdentityProviderObservation) DeepCopyInto(out *SpiffeIdentityPro
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -4994,6 +5159,11 @@ func (in *SpiffeIdentityProviderObservation) DeepCopyInto(out *SpiffeIdentityPro
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.StoreToken != nil {
 		in, out := &in.StoreToken, &out.StoreToken
 		*out = new(bool)
@@ -5037,6 +5207,11 @@ func (in *SpiffeIdentityProviderParameters) DeepCopyInto(out *SpiffeIdentityProv
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -5147,6 +5322,11 @@ func (in *SpiffeIdentityProviderParameters) DeepCopyInto(out *SpiffeIdentityProv
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -5388,6 +5568,11 @@ func (in *TemplateImporterIdentityProviderMapperInitParameters) DeepCopyInto(out
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -5543,6 +5728,11 @@ func (in *TemplateImporterIdentityProviderMapperObservation) DeepCopyInto(out *T
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -5704,6 +5894,11 @@ func (in *TemplateImporterIdentityProviderMapperParameters) DeepCopyInto(out *Te
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -5985,6 +6180,11 @@ func (in *ToRoleIdentityProviderMapperInitParameters) DeepCopyInto(out *ToRoleId
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -6165,6 +6365,11 @@ func (in *ToRoleIdentityProviderMapperObservation) DeepCopyInto(out *ToRoleIdent
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -6351,6 +6556,11 @@ func (in *ToRoleIdentityProviderMapperParameters) DeepCopyInto(out *ToRoleIdenti
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}

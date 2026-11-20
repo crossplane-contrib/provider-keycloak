@@ -62,6 +62,9 @@ type ExecutionInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The requirement setting, which can be one of REQUIRED, ALTERNATIVE, OPTIONAL, CONDITIONAL, or DISABLED. Defaults to DISABLED.
 	Requirement *string `json:"requirement,omitempty" tf:"requirement,omitempty"`
 }
@@ -83,6 +86,9 @@ type ExecutionObservation struct {
 
 	// The realm the authentication execution exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The requirement setting, which can be one of REQUIRED, ALTERNATIVE, OPTIONAL, CONDITIONAL, or DISABLED. Defaults to DISABLED.
 	Requirement *string `json:"requirement,omitempty" tf:"requirement,omitempty"`
@@ -141,6 +147,10 @@ type ExecutionParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The requirement setting, which can be one of REQUIRED, ALTERNATIVE, OPTIONAL, CONDITIONAL, or DISABLED. Defaults to DISABLED.
 	// +kubebuilder:validation:Optional

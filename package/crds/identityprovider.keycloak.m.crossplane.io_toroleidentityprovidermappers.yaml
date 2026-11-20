@@ -712,6 +712,11 @@ spec:
                       The name of the realm.
                       Realm Name
                     type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   realmRef:
                     description: Reference to a Realm in realm to populate realm.
                     properties:
@@ -1637,6 +1642,11 @@ spec:
                       The name of the realm.
                       Realm Name
                     type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   realmRef:
                     description: Reference to a Realm in realm to populate realm.
                     properties:
@@ -2049,6 +2059,11 @@ spec:
                     description: |-
                       The name of the realm.
                       Realm Name
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   role:
                     description: |-

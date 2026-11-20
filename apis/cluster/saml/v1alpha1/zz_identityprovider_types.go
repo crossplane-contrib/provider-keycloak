@@ -23,6 +23,10 @@ type IdentityProviderInitParameters struct {
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
+
 	// Authenticate users by default. Defaults to false.
 	// Enable/disable authenticate users by default.
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
@@ -138,6 +142,9 @@ type IdentityProviderInitParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
 	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
@@ -204,6 +211,10 @@ type IdentityProviderObservation struct {
 	// The unique name of identity provider.
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
+
+	// When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
 
 	// Authenticate users by default. Defaults to false.
 	// Enable/disable authenticate users by default.
@@ -315,6 +326,9 @@ type IdentityProviderObservation struct {
 	// Realm Name
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Signing Algorithm. Defaults to empty.
 	// Signing Algorithm.
 	SignatureAlgorithm *string `json:"signatureAlgorithm,omitempty" tf:"signature_algorithm,omitempty"`
@@ -375,6 +389,11 @@ type IdentityProviderParameters struct {
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 	// +kubebuilder:validation:Optional
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
+
+	// When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	// +kubebuilder:validation:Optional
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
 
 	// Authenticate users by default. Defaults to false.
 	// Enable/disable authenticate users by default.
@@ -517,6 +536,10 @@ type IdentityProviderParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional

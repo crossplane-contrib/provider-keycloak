@@ -237,6 +237,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -415,6 +420,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -523,6 +533,11 @@ spec:
                     x-kubernetes-list-type: set
                   realmId:
                     description: The realm this client and scopes exists in.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                 type: object
               conditions:

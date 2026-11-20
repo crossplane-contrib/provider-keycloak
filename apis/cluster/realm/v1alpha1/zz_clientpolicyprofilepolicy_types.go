@@ -18,13 +18,16 @@ type ClientPolicyProfilePolicyInitParameters struct {
 	// An ordered list of condition
 	Condition []ConditionInitParameters `json:"condition,omitempty" tf:"condition,omitempty"`
 
+	// The description of the policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// When false, the policy is not applied. Defaults to true.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
-	// The name of the attribute.
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The names of the client policy profiles that are applied when the conditions of this policy match.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.ClientPolicyProfile
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.NameExtractor()
 	// +listType=set
@@ -49,6 +52,9 @@ type ClientPolicyProfilePolicyInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type ClientPolicyProfilePolicyObservation struct {
@@ -56,20 +62,26 @@ type ClientPolicyProfilePolicyObservation struct {
 	// An ordered list of condition
 	Condition []ConditionObservation `json:"condition,omitempty" tf:"condition,omitempty"`
 
+	// The description of the policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// When false, the policy is not applied. Defaults to true.
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// The name of the attribute.
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The names of the client policy profiles that are applied when the conditions of this policy match.
 	// +listType=set
 	Profiles []*string `json:"profiles,omitempty" tf:"profiles,omitempty"`
 
 	// The realm id.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type ClientPolicyProfilePolicyParameters struct {
@@ -78,16 +90,19 @@ type ClientPolicyProfilePolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	Condition []ConditionParameters `json:"condition,omitempty" tf:"condition,omitempty"`
 
+	// The description of the policy.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// When false, the policy is not applied. Defaults to true.
 	// +kubebuilder:validation:Optional
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
-	// The name of the attribute.
+	// The name of the policy.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The names of the client policy profiles that are applied when the conditions of this policy match.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.ClientPolicyProfile
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.NameExtractor()
 	// +kubebuilder:validation:Optional
@@ -114,6 +129,10 @@ type ClientPolicyProfilePolicyParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type ConditionInitParameters struct {
@@ -122,7 +141,7 @@ type ConditionInitParameters struct {
 	// +mapType=granular
 	Configuration map[string]*string `json:"configuration,omitempty" tf:"configuration,omitempty"`
 
-	// The name of the attribute.
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 }
 
@@ -132,7 +151,7 @@ type ConditionObservation struct {
 	// +mapType=granular
 	Configuration map[string]*string `json:"configuration,omitempty" tf:"configuration,omitempty"`
 
-	// The name of the attribute.
+	// The name of the policy.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 }
 
@@ -143,7 +162,7 @@ type ConditionParameters struct {
 	// +mapType=granular
 	Configuration map[string]*string `json:"configuration,omitempty" tf:"configuration,omitempty"`
 
-	// The name of the attribute.
+	// The name of the policy.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name" tf:"name,omitempty"`
 }

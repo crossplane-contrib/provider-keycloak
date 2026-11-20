@@ -15,10 +15,10 @@ spec:
       name: client-type
     - configuration:
         attributes: '${jsonencode([{ "key" : "test-key", "value" : "test-value" }])}'
-        is-negative-logic: false
+        is_negative_logic: false
       name: client-attributes
     description: Some desc
-    name: my-profile
+    name: my-policy
     profilesRefs:
     - name: profile
     realmIdSelector:

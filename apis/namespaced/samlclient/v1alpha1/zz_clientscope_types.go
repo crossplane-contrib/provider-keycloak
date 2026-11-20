@@ -15,11 +15,14 @@ import (
 
 type ClientScopeInitParameters struct {
 
-	// When set, a consent screen will be displayed to users authenticating to clients with this scope attached. The consent screen will display the string value of this attribute.
+	// The text that is displayed on the consent screen for this client scope. If not set, the consent screen displays the name of the client scope.
 	ConsentScreenText *string `json:"consentScreenText,omitempty" tf:"consent_screen_text,omitempty"`
 
 	// The description of this client scope in the GUI.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
+	// When true, this client scope is displayed on the consent screen of clients that require consent. When false, it is not displayed, and existing consents remain valid if the scope is added to a client later. If not set, it is true when consent_screen_text is set and false otherwise.
+	DisplayOnConsentScreen *bool `json:"displayOnConsentScreen,omitempty" tf:"display_on_consent_screen,omitempty"`
 
 	// A map of key/value pairs to add extra configuration attributes to this client scope. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates.
 	// extra_config = {
@@ -45,15 +48,21 @@ type ClientScopeInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type ClientScopeObservation struct {
 
-	// When set, a consent screen will be displayed to users authenticating to clients with this scope attached. The consent screen will display the string value of this attribute.
+	// The text that is displayed on the consent screen for this client scope. If not set, the consent screen displays the name of the client scope.
 	ConsentScreenText *string `json:"consentScreenText,omitempty" tf:"consent_screen_text,omitempty"`
 
 	// The description of this client scope in the GUI.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
+	// When true, this client scope is displayed on the consent screen of clients that require consent. When false, it is not displayed, and existing consents remain valid if the scope is added to a client later. If not set, it is true when consent_screen_text is set and false otherwise.
+	DisplayOnConsentScreen *bool `json:"displayOnConsentScreen,omitempty" tf:"display_on_consent_screen,omitempty"`
 
 	// A map of key/value pairs to add extra configuration attributes to this client scope. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates.
 	// extra_config = {
@@ -72,17 +81,24 @@ type ClientScopeObservation struct {
 
 	// The realm this client scope belongs to.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type ClientScopeParameters struct {
 
-	// When set, a consent screen will be displayed to users authenticating to clients with this scope attached. The consent screen will display the string value of this attribute.
+	// The text that is displayed on the consent screen for this client scope. If not set, the consent screen displays the name of the client scope.
 	// +kubebuilder:validation:Optional
 	ConsentScreenText *string `json:"consentScreenText,omitempty" tf:"consent_screen_text,omitempty"`
 
 	// The description of this client scope in the GUI.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
+	// When true, this client scope is displayed on the consent screen of clients that require consent. When false, it is not displayed, and existing consents remain valid if the scope is added to a client later. If not set, it is true when consent_screen_text is set and false otherwise.
+	// +kubebuilder:validation:Optional
+	DisplayOnConsentScreen *bool `json:"displayOnConsentScreen,omitempty" tf:"display_on_consent_screen,omitempty"`
 
 	// A map of key/value pairs to add extra configuration attributes to this client scope. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates.
 	// extra_config = {
@@ -112,6 +128,10 @@ type ClientScopeParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 // ClientScopeSpec defines the desired state of ClientScope

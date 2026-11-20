@@ -126,6 +126,9 @@ type RoleIdentityProviderMapperInitParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
 	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
@@ -210,6 +213,9 @@ type RoleIdentityProviderMapperObservation struct {
 	// The realm ID that this mapper will exist in.
 	// Realm Name
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The name of the role which should be assigned to the users.
 	// Role Name
@@ -346,6 +352,10 @@ type RoleIdentityProviderMapperParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional

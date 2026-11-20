@@ -10,9 +10,9 @@ metadata:
 spec:
   forProvider:
     extraConfig:
-      Claim: my-email-claim
-      UserAttribute: email
+      claim: my-email-claim
       syncMode: INHERIT
+      user.attribute: email
     identityProviderAliasSelector:
       matchLabels:
         testing.upbound.io/example-name: oidc

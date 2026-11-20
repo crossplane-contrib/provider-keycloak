@@ -263,6 +263,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   requiredActions:
                     description: A list of required user actions.
                     items:
@@ -469,6 +474,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   requiredActions:
                     description: A list of required user actions.
                     items:
@@ -647,6 +657,11 @@ spec:
                     type: string
                   realmId:
                     description: The realm this user belongs to.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   requiredActions:
                     description: A list of required user actions.

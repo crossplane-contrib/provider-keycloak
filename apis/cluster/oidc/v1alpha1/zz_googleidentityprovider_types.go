@@ -27,6 +27,9 @@ type GoogleIdentityProviderInitParameters struct {
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri. In case of google this is computed and always google
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
 
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
+
 	// Enable/disable authenticate users by default.
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
 
@@ -121,6 +124,10 @@ type GoogleIdentityProviderInitParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
+	// (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
 	RealmRef *v2.Reference `json:"realmRef,omitempty" tf:"-"`
@@ -163,6 +170,9 @@ type GoogleIdentityProviderObservation struct {
 	// The alias for the Google identity provider.
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri. In case of google this is computed and always google
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
+
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
 
 	// Enable/disable authenticate users by default.
 	AuthenticateByDefault *bool `json:"authenticateByDefault,omitempty" tf:"authenticate_by_default,omitempty"`
@@ -236,6 +246,10 @@ type GoogleIdentityProviderObservation struct {
 	// Realm Name
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
+	// (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Sets the "access_type" query parameter to "offline" when redirecting to google authorization endpoint,to get a refresh token back. This is useful for using Token Exchange to retrieve a Google token to access Google APIs when the user is offline.
 	// Set 'access_type' query parameter to 'offline' when redirecting to google authorization endpoint, to get a refresh token back. Useful if planning to use Token Exchange to retrieve Google token to access Google APIs when the user is not at the browser.
 	RequestRefreshToken *bool `json:"requestRefreshToken,omitempty" tf:"request_refresh_token,omitempty"`
@@ -273,6 +287,10 @@ type GoogleIdentityProviderParameters struct {
 	// The alias uniquely identifies an identity provider and it is also used to build the redirect uri. In case of google this is computed and always google
 	// +kubebuilder:validation:Optional
 	Alias *string `json:"alias,omitempty" tf:"alias,omitempty"`
+
+	// Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+	// +kubebuilder:validation:Optional
+	AllowAdminRoleMapping *bool `json:"allowAdminRoleMapping,omitempty" tf:"allow_admin_role_mapping,omitempty"`
 
 	// Enable/disable authenticate users by default.
 	// +kubebuilder:validation:Optional
@@ -387,6 +405,11 @@ type GoogleIdentityProviderParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional

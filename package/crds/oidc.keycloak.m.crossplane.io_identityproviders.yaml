@@ -1381,13 +1381,18 @@ spec:
                       The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
                     type: string
+                  allowAdminRoleMapping:
+                    description: |-
+                      When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+                      Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+                    type: boolean
                   authenticateByDefault:
                     description: Enable/disable authenticate users by default.
                     type: boolean
                   authorizationUrl:
                     description: |-
-                      The Authorization Url.
-                      OIDC authorization URL.
+                      The Authorization Url. Required when provider_id is oidc or keycloak-oidc.
+                      OIDC authorization URL. Required for the provider ids oidc and keycloak-oidc.
                     type: string
                   backchannelSupported:
                     description: |-
@@ -1701,13 +1706,18 @@ spec:
                     type: string
                   providerId:
                     description: |-
-                      The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation.
+                      The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation. Changing this forces a new resource, because Keycloak does not change the provider of an existing identity provider.
                       provider id, is always oidc, unless you have a custom implementation
                     type: string
                   realm:
                     description: |-
                       The name of the realm. This is unique across Keycloak.
                       Realm Name
+                    type: string
+                  realmInternalId:
+                    description: |-
+                      (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
                     type: string
                   realmRef:
                     description: Reference to a Realm in realm to populate realm.
@@ -1801,8 +1811,8 @@ spec:
                     type: string
                   tokenUrl:
                     description: |-
-                      The Token URL.
-                      Token URL.
+                      The Token URL. Required when provider_id is oidc or keycloak-oidc.
+                      Token URL. Required for the provider ids oidc and keycloak-oidc.
                     type: string
                   trustEmail:
                     description: |-
@@ -1853,13 +1863,18 @@ spec:
                       The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
                     type: string
+                  allowAdminRoleMapping:
+                    description: |-
+                      When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+                      Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+                    type: boolean
                   authenticateByDefault:
                     description: Enable/disable authenticate users by default.
                     type: boolean
                   authorizationUrl:
                     description: |-
-                      The Authorization Url.
-                      OIDC authorization URL.
+                      The Authorization Url. Required when provider_id is oidc or keycloak-oidc.
+                      OIDC authorization URL. Required for the provider ids oidc and keycloak-oidc.
                     type: string
                   backchannelSupported:
                     description: |-
@@ -2173,13 +2188,18 @@ spec:
                     type: string
                   providerId:
                     description: |-
-                      The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation.
+                      The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation. Changing this forces a new resource, because Keycloak does not change the provider of an existing identity provider.
                       provider id, is always oidc, unless you have a custom implementation
                     type: string
                   realm:
                     description: |-
                       The name of the realm. This is unique across Keycloak.
                       Realm Name
+                    type: string
+                  realmInternalId:
+                    description: |-
+                      (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
                     type: string
                   realmRef:
                     description: Reference to a Realm in realm to populate realm.
@@ -2273,8 +2293,8 @@ spec:
                     type: string
                   tokenUrl:
                     description: |-
-                      The Token URL.
-                      Token URL.
+                      The Token URL. Required when provider_id is oidc or keycloak-oidc.
+                      Token URL. Required for the provider ids oidc and keycloak-oidc.
                     type: string
                   trustEmail:
                     description: |-
@@ -2362,17 +2382,9 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.alias)
                 || (has(self.initProvider) && has(self.initProvider.alias))'
-            - message: spec.forProvider.authorizationUrl is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.authorizationUrl)
-                || (has(self.initProvider) && has(self.initProvider.authorizationUrl))'
             - message: spec.forProvider.clientIdSecretRef is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.clientIdSecretRef)'
-            - message: spec.forProvider.tokenUrl is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.tokenUrl)
-                || (has(self.initProvider) && has(self.initProvider.tokenUrl))'
           status:
             description: IdentityProviderStatus defines the observed state of IdentityProvider.
             properties:
@@ -2393,13 +2405,18 @@ spec:
                       The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
                     type: string
+                  allowAdminRoleMapping:
+                    description: |-
+                      When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.
+                      Allow identity provider mappers to grant administrative roles, either directly or through group membership. Requires Keycloak 26.8 or later, and the manage-realm permission to enable.
+                    type: boolean
                   authenticateByDefault:
                     description: Enable/disable authenticate users by default.
                     type: boolean
                   authorizationUrl:
                     description: |-
-                      The Authorization Url.
-                      OIDC authorization URL.
+                      The Authorization Url. Required when provider_id is oidc or keycloak-oidc.
+                      OIDC authorization URL. Required for the provider ids oidc and keycloak-oidc.
                     type: string
                   backchannelSupported:
                     description: |-
@@ -2514,13 +2531,18 @@ spec:
                     type: string
                   providerId:
                     description: |-
-                      The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation.
+                      The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation. Changing this forces a new resource, because Keycloak does not change the provider of an existing identity provider.
                       provider id, is always oidc, unless you have a custom implementation
                     type: string
                   realm:
                     description: |-
                       The name of the realm. This is unique across Keycloak.
                       Realm Name
+                    type: string
+                  realmInternalId:
+                    description: |-
+                      (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
                     type: string
                   storeToken:
                     description: |-
@@ -2534,8 +2556,8 @@ spec:
                     type: string
                   tokenUrl:
                     description: |-
-                      The Token URL.
-                      Token URL.
+                      The Token URL. Required when provider_id is oidc or keycloak-oidc.
+                      Token URL. Required for the provider ids oidc and keycloak-oidc.
                     type: string
                   trustEmail:
                     description: |-

@@ -15,7 +15,7 @@ import (
 
 type KeystoreHMACGeneratedInitParameters struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
 
@@ -47,6 +47,9 @@ type KeystoreHMACGeneratedInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Size in bytes for the generated secret. Defaults to 64.
 	// Size in bytes for the generated secret
 	SecretSize *float64 `json:"secretSize,omitempty" tf:"secret_size,omitempty"`
@@ -54,7 +57,7 @@ type KeystoreHMACGeneratedInitParameters struct {
 
 type KeystoreHMACGeneratedObservation struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
 
@@ -79,6 +82,9 @@ type KeystoreHMACGeneratedObservation struct {
 	// The realm this keystore exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Size in bytes for the generated secret. Defaults to 64.
 	// Size in bytes for the generated secret
 	SecretSize *float64 `json:"secretSize,omitempty" tf:"secret_size,omitempty"`
@@ -86,7 +92,7 @@ type KeystoreHMACGeneratedObservation struct {
 
 type KeystoreHMACGeneratedParameters struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	// +kubebuilder:validation:Optional
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
@@ -123,6 +129,10 @@ type KeystoreHMACGeneratedParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Size in bytes for the generated secret. Defaults to 64.
 	// Size in bytes for the generated secret

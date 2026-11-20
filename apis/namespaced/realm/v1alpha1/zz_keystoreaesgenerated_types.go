@@ -15,7 +15,7 @@ import (
 
 type KeystoreAesGeneratedInitParameters struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
 
@@ -43,6 +43,9 @@ type KeystoreAesGeneratedInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Size in bytes for the generated AES Key. Size 16 is for AES-128, Size 24 for AES-192 and Size 32 for AES-256. WARN: Bigger keys then 128 bits are not allowed on some JDK implementations. Defaults to 16.
 	// Size in bytes for the generated AES Key. Size 16 is for AES-128, Size 24 for AES-192 and Size 32 for AES-256. WARN: Bigger keys then 128 bits are not allowed on some JDK implementations
 	SecretSize *float64 `json:"secretSize,omitempty" tf:"secret_size,omitempty"`
@@ -50,7 +53,7 @@ type KeystoreAesGeneratedInitParameters struct {
 
 type KeystoreAesGeneratedObservation struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
 
@@ -71,6 +74,9 @@ type KeystoreAesGeneratedObservation struct {
 	// The realm this keystore exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Size in bytes for the generated AES Key. Size 16 is for AES-128, Size 24 for AES-192 and Size 32 for AES-256. WARN: Bigger keys then 128 bits are not allowed on some JDK implementations. Defaults to 16.
 	// Size in bytes for the generated AES Key. Size 16 is for AES-128, Size 24 for AES-192 and Size 32 for AES-256. WARN: Bigger keys then 128 bits are not allowed on some JDK implementations
 	SecretSize *float64 `json:"secretSize,omitempty" tf:"secret_size,omitempty"`
@@ -78,7 +84,7 @@ type KeystoreAesGeneratedObservation struct {
 
 type KeystoreAesGeneratedParameters struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	// +kubebuilder:validation:Optional
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
@@ -110,6 +116,10 @@ type KeystoreAesGeneratedParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Size in bytes for the generated AES Key. Size 16 is for AES-128, Size 24 for AES-192 and Size 32 for AES-256. WARN: Bigger keys then 128 bits are not allowed on some JDK implementations. Defaults to 16.
 	// Size in bytes for the generated AES Key. Size 16 is for AES-128, Size 24 for AES-192 and Size 32 for AES-256. WARN: Bigger keys then 128 bits are not allowed on some JDK implementations

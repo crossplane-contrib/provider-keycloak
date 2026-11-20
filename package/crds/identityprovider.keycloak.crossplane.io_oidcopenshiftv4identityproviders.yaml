@@ -84,6 +84,11 @@ spec:
                       The alias for the OpenShift v4 identity provider. Defaults to openshift-v4.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri. Defaults to openshift-v4 if not set.
                     type: string
+                  allowAdminRoleMapping:
+                    description: Allow identity provider mappers to grant administrative
+                      roles, either directly or through group membership. Requires
+                      Keycloak 26.8 or later, and the manage-realm permission to enable.
+                    type: boolean
                   authenticateByDefault:
                     description: Enable/disable authenticate users by default.
                     type: boolean
@@ -409,6 +414,11 @@ spec:
                     description: |-
                       The name of the realm. This is unique across Keycloak.
                       Realm Name
+                    type: string
+                  realmInternalId:
+                    description: |-
+                      (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
                     type: string
                   realmRef:
                     description: Reference to a Realm in realm to populate realm.
@@ -523,6 +533,11 @@ spec:
                       The alias for the OpenShift v4 identity provider. Defaults to openshift-v4.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri. Defaults to openshift-v4 if not set.
                     type: string
+                  allowAdminRoleMapping:
+                    description: Allow identity provider mappers to grant administrative
+                      roles, either directly or through group membership. Requires
+                      Keycloak 26.8 or later, and the manage-realm permission to enable.
+                    type: boolean
                   authenticateByDefault:
                     description: Enable/disable authenticate users by default.
                     type: boolean
@@ -848,6 +863,11 @@ spec:
                     description: |-
                       The name of the realm. This is unique across Keycloak.
                       Realm Name
+                    type: string
+                  realmInternalId:
+                    description: |-
+                      (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
                     type: string
                   realmRef:
                     description: Reference to a Realm in realm to populate realm.
@@ -1055,6 +1075,11 @@ spec:
                       The alias for the OpenShift v4 identity provider. Defaults to openshift-v4.
                       The alias uniquely identifies an identity provider and it is also used to build the redirect uri. Defaults to openshift-v4 if not set.
                     type: string
+                  allowAdminRoleMapping:
+                    description: Allow identity provider mappers to grant administrative
+                      roles, either directly or through group membership. Requires
+                      Keycloak 26.8 or later, and the manage-realm permission to enable.
+                    type: boolean
                   authenticateByDefault:
                     description: Enable/disable authenticate users by default.
                     type: boolean
@@ -1140,6 +1165,11 @@ spec:
                     description: |-
                       The name of the realm. This is unique across Keycloak.
                       Realm Name
+                    type: string
+                  realmInternalId:
+                    description: |-
+                      (Computed) The unique ID that Keycloak assigns to the identity provider upon creation.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
                     type: string
                   storeToken:
                     description: |-

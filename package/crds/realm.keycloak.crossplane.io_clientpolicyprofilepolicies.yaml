@@ -85,18 +85,23 @@ spec:
                           type: object
                           x-kubernetes-map-type: granular
                         name:
-                          description: The name of the attribute.
+                          description: The name of the policy.
                           type: string
                       type: object
                     type: array
                   description:
+                    description: The description of the policy.
                     type: string
                   enabled:
+                    description: When false, the policy is not applied. Defaults to
+                      true.
                     type: boolean
                   name:
-                    description: The name of the attribute.
+                    description: The name of the policy.
                     type: string
                   profiles:
+                    description: The names of the client policy profiles that are
+                      applied when the conditions of this policy match.
                     items:
                       type: string
                     type: array
@@ -257,6 +262,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -282,18 +292,23 @@ spec:
                           type: object
                           x-kubernetes-map-type: granular
                         name:
-                          description: The name of the attribute.
+                          description: The name of the policy.
                           type: string
                       type: object
                     type: array
                   description:
+                    description: The description of the policy.
                     type: string
                   enabled:
+                    description: When false, the policy is not applied. Defaults to
+                      true.
                     type: boolean
                   name:
-                    description: The name of the attribute.
+                    description: The name of the policy.
                     type: string
                   profiles:
+                    description: The names of the client policy profiles that are
+                      applied when the conditions of this policy match.
                     items:
                       type: string
                     type: array
@@ -454,6 +469,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -563,26 +583,36 @@ spec:
                           type: object
                           x-kubernetes-map-type: granular
                         name:
-                          description: The name of the attribute.
+                          description: The name of the policy.
                           type: string
                       type: object
                     type: array
                   description:
+                    description: The description of the policy.
                     type: string
                   enabled:
+                    description: When false, the policy is not applied. Defaults to
+                      true.
                     type: boolean
                   id:
                     type: string
                   name:
-                    description: The name of the attribute.
+                    description: The name of the policy.
                     type: string
                   profiles:
+                    description: The names of the client policy profiles that are
+                      applied when the conditions of this policy match.
                     items:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
                   realmId:
                     description: The realm id.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                 type: object
               conditions:

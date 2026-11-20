@@ -14,12 +14,14 @@ import (
 )
 
 type ClientPolicyProfileInitParameters struct {
+
+	// The description of the profile.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	// An ordered list of executors
 	Executor []ExecutorInitParameters `json:"executor,omitempty" tf:"executor,omitempty"`
 
-	// The name of the attribute.
+	// The name of the profile.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The realm id.
@@ -33,9 +35,14 @@ type ClientPolicyProfileInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type ClientPolicyProfileObservation struct {
+
+	// The description of the profile.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	// An ordered list of executors
@@ -43,15 +50,19 @@ type ClientPolicyProfileObservation struct {
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// The name of the attribute.
+	// The name of the profile.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The realm id.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type ClientPolicyProfileParameters struct {
 
+	// The description of the profile.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
@@ -59,7 +70,7 @@ type ClientPolicyProfileParameters struct {
 	// +kubebuilder:validation:Optional
 	Executor []ExecutorParameters `json:"executor,omitempty" tf:"executor,omitempty"`
 
-	// The name of the attribute.
+	// The name of the profile.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
@@ -75,6 +86,10 @@ type ClientPolicyProfileParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type ExecutorInitParameters struct {
@@ -83,7 +98,7 @@ type ExecutorInitParameters struct {
 	// +mapType=granular
 	Configuration map[string]*string `json:"configuration,omitempty" tf:"configuration,omitempty"`
 
-	// The name of the attribute.
+	// The name of the profile.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 }
 
@@ -93,7 +108,7 @@ type ExecutorObservation struct {
 	// +mapType=granular
 	Configuration map[string]*string `json:"configuration,omitempty" tf:"configuration,omitempty"`
 
-	// The name of the attribute.
+	// The name of the profile.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 }
 
@@ -104,7 +119,7 @@ type ExecutorParameters struct {
 	// +mapType=granular
 	Configuration map[string]*string `json:"configuration,omitempty" tf:"configuration,omitempty"`
 
-	// The name of the attribute.
+	// The name of the profile.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name" tf:"name,omitempty"`
 }

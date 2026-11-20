@@ -469,6 +469,11 @@ func (in *ClientAdminPermissionsInitParameters) DeepCopyInto(out *ClientAdminPer
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
 		*out = make([]*string, len(*in))
@@ -759,6 +764,11 @@ func (in *ClientAdminPermissionsObservation) DeepCopyInto(out *ClientAdminPermis
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
 		*out = make([]*string, len(*in))
@@ -1018,6 +1028,11 @@ func (in *ClientAdminPermissionsParameters) DeepCopyInto(out *ClientAdminPermiss
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
@@ -1395,6 +1410,11 @@ func (in *ClientAggregatePolicyInitParameters) DeepCopyInto(out *ClientAggregate
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
 		*out = make([]*string, len(*in))
@@ -1656,6 +1676,11 @@ func (in *ClientAggregatePolicyObservation) DeepCopyInto(out *ClientAggregatePol
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
 		*out = make([]*string, len(*in))
@@ -1893,6 +1918,11 @@ func (in *ClientAggregatePolicyParameters) DeepCopyInto(out *ClientAggregatePoli
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
 		*out = make([]*string, len(*in))
@@ -2112,6 +2142,11 @@ func (in *ClientAuthorizationClientScopePolicyInitParameters) DeepCopyInto(out *
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -2211,6 +2246,11 @@ func (in *ClientAuthorizationClientScopePolicyObservation) DeepCopyInto(out *Cli
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -2272,6 +2312,11 @@ func (in *ClientAuthorizationClientScopePolicyParameters) DeepCopyInto(out *Clie
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
@@ -2504,6 +2549,11 @@ func (in *ClientAuthorizationPermissionInitParameters) DeepCopyInto(out *ClientA
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
@@ -2760,6 +2810,11 @@ func (in *ClientAuthorizationPermissionObservation) DeepCopyInto(out *ClientAuth
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
 		*out = make([]*string, len(*in))
@@ -2977,6 +3032,11 @@ func (in *ClientAuthorizationPermissionParameters) DeepCopyInto(out *ClientAutho
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.RegexPolicies != nil {
 		in, out := &in.RegexPolicies, &out.RegexPolicies
@@ -3234,6 +3294,11 @@ func (in *ClientAuthorizationPolicyInitParameters) DeepCopyInto(out *ClientAutho
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -3347,6 +3412,11 @@ func (in *ClientAuthorizationPolicyObservation) DeepCopyInto(out *ClientAuthoriz
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -3422,6 +3492,11 @@ func (in *ClientAuthorizationPolicyParameters) DeepCopyInto(out *ClientAuthoriza
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
@@ -3571,6 +3646,11 @@ func (in *ClientAuthorizationResourceInitParameters) DeepCopyInto(out *ClientAut
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -3706,6 +3786,11 @@ func (in *ClientAuthorizationResourceObservation) DeepCopyInto(out *ClientAuthor
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -3803,6 +3888,11 @@ func (in *ClientAuthorizationResourceParameters) DeepCopyInto(out *ClientAuthori
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
@@ -3953,6 +4043,11 @@ func (in *ClientAuthorizationScopeInitParameters) DeepCopyInto(out *ClientAuthor
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -4040,6 +4135,11 @@ func (in *ClientAuthorizationScopeObservation) DeepCopyInto(out *ClientAuthoriza
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -4089,6 +4189,11 @@ func (in *ClientAuthorizationScopeParameters) DeepCopyInto(out *ClientAuthorizat
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
@@ -4240,6 +4345,11 @@ func (in *ClientClientPolicyInitParameters) DeepCopyInto(out *ClientClientPolicy
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -4366,6 +4476,11 @@ func (in *ClientClientPolicyObservation) DeepCopyInto(out *ClientClientPolicyObs
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -4454,6 +4569,11 @@ func (in *ClientClientPolicyParameters) DeepCopyInto(out *ClientClientPolicyPara
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
@@ -4611,6 +4731,11 @@ func (in *ClientDefaultScopesInitParameters) DeepCopyInto(out *ClientDefaultScop
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 }
 
 // DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientDefaultScopesInitParameters.
@@ -4684,6 +4809,11 @@ func (in *ClientDefaultScopesObservation) DeepCopyInto(out *ClientDefaultScopesO
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 }
 
 // DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientDefaultScopesObservation.
@@ -4739,6 +4869,11 @@ func (in *ClientDefaultScopesParameters) DeepCopyInto(out *ClientDefaultScopesPa
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 }
 
@@ -4864,6 +4999,11 @@ func (in *ClientGroupPolicyInitParameters) DeepCopyInto(out *ClientGroupPolicyIn
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -4968,6 +5108,11 @@ func (in *ClientGroupPolicyObservation) DeepCopyInto(out *ClientGroupPolicyObser
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -5034,6 +5179,11 @@ func (in *ClientGroupPolicyParameters) DeepCopyInto(out *ClientGroupPolicyParame
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
@@ -5506,6 +5656,11 @@ func (in *ClientJsPolicyInitParameters) DeepCopyInto(out *ClientJsPolicyInitPara
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -5608,6 +5763,11 @@ func (in *ClientJsPolicyObservation) DeepCopyInto(out *ClientJsPolicyObservation
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -5672,6 +5832,11 @@ func (in *ClientJsPolicyParameters) DeepCopyInto(out *ClientJsPolicyParameters) 
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
@@ -6177,6 +6342,11 @@ func (in *ClientOptionalScopesInitParameters) DeepCopyInto(out *ClientOptionalSc
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 }
 
 // DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientOptionalScopesInitParameters.
@@ -6250,6 +6420,11 @@ func (in *ClientOptionalScopesObservation) DeepCopyInto(out *ClientOptionalScope
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 }
 
 // DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientOptionalScopesObservation.
@@ -6305,6 +6480,11 @@ func (in *ClientOptionalScopesParameters) DeepCopyInto(out *ClientOptionalScopes
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 }
 
@@ -6787,6 +6967,11 @@ func (in *ClientPermissionsInitParameters) DeepCopyInto(out *ClientPermissionsIn
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.TokenExchangeScope != nil {
 		in, out := &in.TokenExchangeScope, &out.TokenExchangeScope
 		*out = make([]TokenExchangeScopeInitParameters, len(*in))
@@ -6908,6 +7093,11 @@ func (in *ClientPermissionsObservation) DeepCopyInto(out *ClientPermissionsObser
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.TokenExchangeScope != nil {
 		in, out := &in.TokenExchangeScope, &out.TokenExchangeScope
 		*out = make([]TokenExchangeScopeObservation, len(*in))
@@ -7001,6 +7191,11 @@ func (in *ClientPermissionsParameters) DeepCopyInto(out *ClientPermissionsParame
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.TokenExchangeScope != nil {
 		in, out := &in.TokenExchangeScope, &out.TokenExchangeScope
@@ -7133,6 +7328,11 @@ func (in *ClientRegexPolicyInitParameters) DeepCopyInto(out *ClientRegexPolicyIn
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -7240,6 +7440,11 @@ func (in *ClientRegexPolicyObservation) DeepCopyInto(out *ClientRegexPolicyObser
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -7309,6 +7514,11 @@ func (in *ClientRegexPolicyParameters) DeepCopyInto(out *ClientRegexPolicyParame
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
@@ -7452,6 +7662,11 @@ func (in *ClientRolePolicyInitParameters) DeepCopyInto(out *ClientRolePolicyInit
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -7561,6 +7776,11 @@ func (in *ClientRolePolicyObservation) DeepCopyInto(out *ClientRolePolicyObserva
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -7632,6 +7852,11 @@ func (in *ClientRolePolicyParameters) DeepCopyInto(out *ClientRolePolicyParamete
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
@@ -7747,6 +7972,11 @@ func (in *ClientScopeInitParameters) DeepCopyInto(out *ClientScopeInitParameters
 		*out = new(string)
 		**out = **in
 	}
+	if in.DisplayOnConsentScreen != nil {
+		in, out := &in.DisplayOnConsentScreen, &out.DisplayOnConsentScreen
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ExtraConfig != nil {
 		in, out := &in.ExtraConfig, &out.ExtraConfig
 		*out = make(map[string]*string, len(*in))
@@ -7797,6 +8027,11 @@ func (in *ClientScopeInitParameters) DeepCopyInto(out *ClientScopeInitParameters
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 }
 
@@ -7855,6 +8090,11 @@ func (in *ClientScopeObservation) DeepCopyInto(out *ClientScopeObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.DisplayOnConsentScreen != nil {
+		in, out := &in.DisplayOnConsentScreen, &out.DisplayOnConsentScreen
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ExtraConfig != nil {
 		in, out := &in.ExtraConfig, &out.ExtraConfig
 		*out = make(map[string]*string, len(*in))
@@ -7901,6 +8141,11 @@ func (in *ClientScopeObservation) DeepCopyInto(out *ClientScopeObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 }
 
 // DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new ClientScopeObservation.
@@ -7924,6 +8169,11 @@ func (in *ClientScopeParameters) DeepCopyInto(out *ClientScopeParameters) {
 	if in.Description != nil {
 		in, out := &in.Description, &out.Description
 		*out = new(string)
+		**out = **in
+	}
+	if in.DisplayOnConsentScreen != nil {
+		in, out := &in.DisplayOnConsentScreen, &out.DisplayOnConsentScreen
+		*out = new(bool)
 		**out = **in
 	}
 	if in.ExtraConfig != nil {
@@ -7976,6 +8226,11 @@ func (in *ClientScopeParameters) DeepCopyInto(out *ClientScopeParameters) {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 }
 
@@ -8069,6 +8324,11 @@ func (in *ClientServiceAccountRealmRoleInitParameters) DeepCopyInto(out *ClientS
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.Role != nil {
 		in, out := &in.Role, &out.Role
 		*out = new(string)
@@ -8146,6 +8406,11 @@ func (in *ClientServiceAccountRealmRoleObservation) DeepCopyInto(out *ClientServ
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.Role != nil {
 		in, out := &in.Role, &out.Role
 		*out = new(string)
@@ -8185,6 +8450,11 @@ func (in *ClientServiceAccountRealmRoleParameters) DeepCopyInto(out *ClientServi
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.Role != nil {
 		in, out := &in.Role, &out.Role
@@ -8313,6 +8583,11 @@ func (in *ClientServiceAccountRoleInitParameters) DeepCopyInto(out *ClientServic
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.Role != nil {
 		in, out := &in.Role, &out.Role
 		*out = new(string)
@@ -8405,6 +8680,11 @@ func (in *ClientServiceAccountRoleObservation) DeepCopyInto(out *ClientServiceAc
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.Role != nil {
 		in, out := &in.Role, &out.Role
 		*out = new(string)
@@ -8459,6 +8739,11 @@ func (in *ClientServiceAccountRoleParameters) DeepCopyInto(out *ClientServiceAcc
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.Role != nil {
 		in, out := &in.Role, &out.Role
@@ -8687,6 +8972,11 @@ func (in *ClientTimePolicyInitParameters) DeepCopyInto(out *ClientTimePolicyInit
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -8839,6 +9129,11 @@ func (in *ClientTimePolicyObservation) DeepCopyInto(out *ClientTimePolicyObserva
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -8953,6 +9248,11 @@ func (in *ClientTimePolicyParameters) DeepCopyInto(out *ClientTimePolicyParamete
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
@@ -9091,6 +9391,11 @@ func (in *ClientUserPolicyInitParameters) DeepCopyInto(out *ClientUserPolicyInit
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -9206,6 +9511,11 @@ func (in *ClientUserPolicyObservation) DeepCopyInto(out *ClientUserPolicyObserva
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID
 		*out = new(string)
@@ -9271,6 +9581,11 @@ func (in *ClientUserPolicyParameters) DeepCopyInto(out *ClientUserPolicyParamete
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ResourceServerID != nil {
 		in, out := &in.ResourceServerID, &out.ResourceServerID

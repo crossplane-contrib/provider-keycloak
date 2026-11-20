@@ -615,6 +615,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   regexPolicies:
                     description: Set of policy IDs to attach to the permission.
                     items:
@@ -1648,6 +1653,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   regexPolicies:
                     description: Set of policy IDs to attach to the permission.
                     items:
@@ -2247,6 +2257,11 @@ spec:
                     x-kubernetes-list-type: set
                   realmId:
                     description: The realm in which to manage this permission.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   regexPolicies:
                     description: Set of policy IDs to attach to the permission.
