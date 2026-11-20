@@ -63,7 +63,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -83,7 +84,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -102,7 +104,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -121,7 +124,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -218,13 +222,19 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   userImpersonatedScope:
                     description: When specified, set the scope based user_impersonated
                       permission.
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -243,7 +253,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -276,7 +287,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -296,7 +308,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -315,7 +328,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -334,7 +348,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -431,13 +446,19 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   userImpersonatedScope:
                     description: When specified, set the scope based user_impersonated
                       permission.
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -456,7 +477,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -550,7 +572,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -570,7 +593,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -589,7 +613,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -608,7 +633,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -625,13 +651,19 @@ spec:
                   realmId:
                     description: The realm in which to manage fine-grained user permissions.
                     type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   userImpersonatedScope:
                     description: When specified, set the scope based user_impersonated
                       permission.
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.
@@ -650,7 +682,8 @@ spec:
                     items:
                       properties:
                         decisionStrategy:
-                          description: Decision strategy of the permission.
+                          description: Decision strategy of the permission. Defaults
+                            to UNANIMOUS.
                           type: string
                         description:
                           description: Description of the permission.

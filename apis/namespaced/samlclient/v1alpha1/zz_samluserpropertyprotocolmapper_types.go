@@ -58,6 +58,9 @@ type SamlUserPropertyProtocolMapperInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The name of the SAML attribute.
 	SAMLAttributeName *string `json:"samlAttributeName,omitempty" tf:"saml_attribute_name,omitempty"`
 
@@ -86,6 +89,9 @@ type SamlUserPropertyProtocolMapperObservation struct {
 
 	// The realm this protocol mapper exists within.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The name of the SAML attribute.
 	SAMLAttributeName *string `json:"samlAttributeName,omitempty" tf:"saml_attribute_name,omitempty"`
@@ -146,6 +152,10 @@ type SamlUserPropertyProtocolMapperParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The name of the SAML attribute.
 	// +kubebuilder:validation:Optional

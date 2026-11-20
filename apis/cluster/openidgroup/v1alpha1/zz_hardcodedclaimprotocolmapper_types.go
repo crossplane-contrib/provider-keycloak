@@ -80,6 +80,9 @@ type HardcodedClaimProtocolMapperInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type HardcodedClaimProtocolMapperObservation struct {
@@ -123,6 +126,9 @@ type HardcodedClaimProtocolMapperObservation struct {
 	// The realm this protocol mapper exists within.
 	// The realm id where the associated client or client scope exists.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type HardcodedClaimProtocolMapperParameters struct {
@@ -202,6 +208,10 @@ type HardcodedClaimProtocolMapperParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 // HardcodedClaimProtocolMapperSpec defines the desired state of HardcodedClaimProtocolMapper

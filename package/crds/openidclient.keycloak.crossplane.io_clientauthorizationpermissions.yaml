@@ -512,6 +512,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: |-
+                      Permission ID representing the permission.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+                    type: string
                   regexPolicies:
                     description: A list of policy IDs that must be applied to the
                       scopes defined by this permission.
@@ -1402,6 +1407,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: |-
+                      Permission ID representing the permission.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+                    type: string
                   regexPolicies:
                     description: A list of policy IDs that must be applied to the
                       scopes defined by this permission.
@@ -1988,6 +1998,11 @@ spec:
                     x-kubernetes-list-type: set
                   realmId:
                     description: The realm this group exists in.
+                    type: string
+                  realmInternalId:
+                    description: |-
+                      Permission ID representing the permission.
+                      The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
                     type: string
                   regexPolicies:
                     description: A list of policy IDs that must be applied to the

@@ -238,6 +238,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   role:
                     description: |-
                       The name of the role which should be assigned to the users. Client roles should use the format {{client_id}}.{{client_role_name}}.
@@ -496,6 +501,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   role:
                     description: |-
                       The name of the role which should be assigned to the users. Client roles should use the format {{client_id}}.{{client_role_name}}.
@@ -688,6 +698,11 @@ spec:
                     description: |-
                       The realm that this LDAP mapper will exist in.
                       The realm in which the ldap user federation provider exists.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   role:
                     description: |-

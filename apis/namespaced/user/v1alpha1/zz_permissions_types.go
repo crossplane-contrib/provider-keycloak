@@ -15,7 +15,7 @@ import (
 
 type ImpersonateScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -28,7 +28,7 @@ type ImpersonateScopeInitParameters struct {
 
 type ImpersonateScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -41,7 +41,7 @@ type ImpersonateScopeObservation struct {
 
 type ImpersonateScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -57,7 +57,7 @@ type ImpersonateScopeParameters struct {
 
 type ManageGroupMembershipScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -70,7 +70,7 @@ type ManageGroupMembershipScopeInitParameters struct {
 
 type ManageGroupMembershipScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -83,7 +83,7 @@ type ManageGroupMembershipScopeObservation struct {
 
 type ManageGroupMembershipScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -99,7 +99,7 @@ type ManageGroupMembershipScopeParameters struct {
 
 type ManageScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -112,7 +112,7 @@ type ManageScopeInitParameters struct {
 
 type ManageScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -125,7 +125,7 @@ type ManageScopeObservation struct {
 
 type ManageScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -141,7 +141,7 @@ type ManageScopeParameters struct {
 
 type MapRolesScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -154,7 +154,7 @@ type MapRolesScopeInitParameters struct {
 
 type MapRolesScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -167,7 +167,7 @@ type MapRolesScopeObservation struct {
 
 type MapRolesScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -207,6 +207,9 @@ type PermissionsInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// When specified, set the scope based user_impersonated permission.
 	UserImpersonatedScope []UserImpersonatedScopeInitParameters `json:"userImpersonatedScope,omitempty" tf:"user_impersonated_scope,omitempty"`
 
@@ -239,6 +242,9 @@ type PermissionsObservation struct {
 
 	// The realm in which to manage fine-grained user permissions.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// When specified, set the scope based user_impersonated permission.
 	UserImpersonatedScope []UserImpersonatedScopeObservation `json:"userImpersonatedScope,omitempty" tf:"user_impersonated_scope,omitempty"`
@@ -278,6 +284,10 @@ type PermissionsParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// When specified, set the scope based user_impersonated permission.
 	// +kubebuilder:validation:Optional
 	UserImpersonatedScope []UserImpersonatedScopeParameters `json:"userImpersonatedScope,omitempty" tf:"user_impersonated_scope,omitempty"`
@@ -289,7 +299,7 @@ type PermissionsParameters struct {
 
 type UserImpersonatedScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -302,7 +312,7 @@ type UserImpersonatedScopeInitParameters struct {
 
 type UserImpersonatedScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -315,7 +325,7 @@ type UserImpersonatedScopeObservation struct {
 
 type UserImpersonatedScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
@@ -331,7 +341,7 @@ type UserImpersonatedScopeParameters struct {
 
 type ViewScopeInitParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -344,7 +354,7 @@ type ViewScopeInitParameters struct {
 
 type ViewScopeObservation struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 
 	// Description of the permission.
@@ -357,7 +367,7 @@ type ViewScopeObservation struct {
 
 type ViewScopeParameters struct {
 
-	// Decision strategy of the permission.
+	// Decision strategy of the permission. Defaults to UNANIMOUS.
 	// +kubebuilder:validation:Optional
 	DecisionStrategy *string `json:"decisionStrategy,omitempty" tf:"decision_strategy,omitempty"`
 

@@ -58,6 +58,11 @@ func (in *FacebookIdentityProviderInitParameters) DeepCopyInto(out *FacebookIden
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticateByDefault != nil {
 		in, out := &in.AuthenticateByDefault, &out.AuthenticateByDefault
 		*out = new(bool)
@@ -176,6 +181,11 @@ func (in *FacebookIdentityProviderInitParameters) DeepCopyInto(out *FacebookIden
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.NamespacedReference)
@@ -261,6 +271,11 @@ func (in *FacebookIdentityProviderObservation) DeepCopyInto(out *FacebookIdentit
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -369,6 +384,11 @@ func (in *FacebookIdentityProviderObservation) DeepCopyInto(out *FacebookIdentit
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.StoreToken != nil {
 		in, out := &in.StoreToken, &out.StoreToken
 		*out = new(bool)
@@ -412,6 +432,11 @@ func (in *FacebookIdentityProviderParameters) DeepCopyInto(out *FacebookIdentity
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -529,6 +554,11 @@ func (in *FacebookIdentityProviderParameters) DeepCopyInto(out *FacebookIdentity
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -649,6 +679,11 @@ func (in *GithubIdentityProviderInitParameters) DeepCopyInto(out *GithubIdentity
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticateByDefault != nil {
 		in, out := &in.AuthenticateByDefault, &out.AuthenticateByDefault
 		*out = new(bool)
@@ -767,6 +802,11 @@ func (in *GithubIdentityProviderInitParameters) DeepCopyInto(out *GithubIdentity
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.NamespacedReference)
@@ -852,6 +892,11 @@ func (in *GithubIdentityProviderObservation) DeepCopyInto(out *GithubIdentityPro
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -960,6 +1005,11 @@ func (in *GithubIdentityProviderObservation) DeepCopyInto(out *GithubIdentityPro
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.StoreToken != nil {
 		in, out := &in.StoreToken, &out.StoreToken
 		*out = new(bool)
@@ -1003,6 +1053,11 @@ func (in *GithubIdentityProviderParameters) DeepCopyInto(out *GithubIdentityProv
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -1120,6 +1175,11 @@ func (in *GithubIdentityProviderParameters) DeepCopyInto(out *GithubIdentityProv
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -1240,6 +1300,11 @@ func (in *GoogleIdentityProviderInitParameters) DeepCopyInto(out *GoogleIdentity
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticateByDefault != nil {
 		in, out := &in.AuthenticateByDefault, &out.AuthenticateByDefault
 		*out = new(bool)
@@ -1363,6 +1428,11 @@ func (in *GoogleIdentityProviderInitParameters) DeepCopyInto(out *GoogleIdentity
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.NamespacedReference)
@@ -1458,6 +1528,11 @@ func (in *GoogleIdentityProviderObservation) DeepCopyInto(out *GoogleIdentityPro
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -1571,6 +1646,11 @@ func (in *GoogleIdentityProviderObservation) DeepCopyInto(out *GoogleIdentityPro
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RequestRefreshToken != nil {
 		in, out := &in.RequestRefreshToken, &out.RequestRefreshToken
 		*out = new(bool)
@@ -1624,6 +1704,11 @@ func (in *GoogleIdentityProviderParameters) DeepCopyInto(out *GoogleIdentityProv
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -1746,6 +1831,11 @@ func (in *GoogleIdentityProviderParameters) DeepCopyInto(out *GoogleIdentityProv
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -2650,6 +2740,11 @@ func (in *MicrosoftIdentityProviderInitParameters) DeepCopyInto(out *MicrosoftId
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticateByDefault != nil {
 		in, out := &in.AuthenticateByDefault, &out.AuthenticateByDefault
 		*out = new(bool)
@@ -2768,6 +2863,11 @@ func (in *MicrosoftIdentityProviderInitParameters) DeepCopyInto(out *MicrosoftId
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.NamespacedReference)
@@ -2858,6 +2958,11 @@ func (in *MicrosoftIdentityProviderObservation) DeepCopyInto(out *MicrosoftIdent
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -2966,6 +3071,11 @@ func (in *MicrosoftIdentityProviderObservation) DeepCopyInto(out *MicrosoftIdent
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.StoreToken != nil {
 		in, out := &in.StoreToken, &out.StoreToken
 		*out = new(bool)
@@ -3014,6 +3124,11 @@ func (in *MicrosoftIdentityProviderParameters) DeepCopyInto(out *MicrosoftIdenti
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -3131,6 +3246,11 @@ func (in *MicrosoftIdentityProviderParameters) DeepCopyInto(out *MicrosoftIdenti
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}

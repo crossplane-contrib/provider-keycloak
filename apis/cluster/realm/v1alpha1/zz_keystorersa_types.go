@@ -15,7 +15,7 @@ import (
 
 type KeystoreRsaInitParameters struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
 
@@ -78,11 +78,14 @@ type KeystoreRsaInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type KeystoreRsaObservation struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
 
@@ -122,11 +125,14 @@ type KeystoreRsaObservation struct {
 
 	// The realm this keystore exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type KeystoreRsaParameters struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	// +kubebuilder:validation:Optional
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
@@ -203,6 +209,10 @@ type KeystoreRsaParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 // KeystoreRsaSpec defines the desired state of KeystoreRsa

@@ -58,6 +58,11 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
+		**out = **in
+	}
 	if in.AuthenticateByDefault != nil {
 		in, out := &in.AuthenticateByDefault, &out.AuthenticateByDefault
 		*out = new(bool)
@@ -220,6 +225,11 @@ func (in *IdentityProviderInitParameters) DeepCopyInto(out *IdentityProviderInit
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmRef != nil {
 		in, out := &in.RealmRef, &out.RealmRef
 		*out = new(v2.Reference)
@@ -325,6 +335,11 @@ func (in *IdentityProviderObservation) DeepCopyInto(out *IdentityProviderObserva
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -468,6 +483,11 @@ func (in *IdentityProviderObservation) DeepCopyInto(out *IdentityProviderObserva
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.StoreToken != nil {
 		in, out := &in.StoreToken, &out.StoreToken
 		*out = new(bool)
@@ -531,6 +551,11 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 	if in.Alias != nil {
 		in, out := &in.Alias, &out.Alias
 		*out = new(string)
+		**out = **in
+	}
+	if in.AllowAdminRoleMapping != nil {
+		in, out := &in.AllowAdminRoleMapping, &out.AllowAdminRoleMapping
+		*out = new(bool)
 		**out = **in
 	}
 	if in.AuthenticateByDefault != nil {
@@ -692,6 +717,11 @@ func (in *IdentityProviderParameters) DeepCopyInto(out *IdentityProviderParamete
 	}
 	if in.Realm != nil {
 		in, out := &in.Realm, &out.Realm
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}

@@ -15,7 +15,7 @@ import (
 
 type KeystoreJavaKeystoreInitParameters struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
 
@@ -65,11 +65,14 @@ type KeystoreJavaKeystoreInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type KeystoreJavaKeystoreObservation struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
 
@@ -106,11 +109,14 @@ type KeystoreJavaKeystoreObservation struct {
 
 	// The realm this keystore exists in.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 type KeystoreJavaKeystoreParameters struct {
 
-	// When false, key in not used for signing. Defaults to true.
+	// When false, key is not used for signing. Defaults to true.
 	// Set if the keys can be used for signing
 	// +kubebuilder:validation:Optional
 	Active *bool `json:"active,omitempty" tf:"active,omitempty"`
@@ -171,6 +177,10 @@ type KeystoreJavaKeystoreParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 }
 
 // KeystoreJavaKeystoreSpec defines the desired state of KeystoreJavaKeystore

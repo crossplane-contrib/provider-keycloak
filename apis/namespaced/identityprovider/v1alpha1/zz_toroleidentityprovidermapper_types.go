@@ -146,6 +146,9 @@ type ToRoleIdentityProviderMapperInitParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional
 	RealmRef *v2.NamespacedReference `json:"realmRef,omitempty" tf:"-"`
@@ -250,6 +253,9 @@ type ToRoleIdentityProviderMapperObservation struct {
 	// The name of the realm.
 	// Realm Name
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Role Name.
 	// Role Name
@@ -411,6 +417,10 @@ type ToRoleIdentityProviderMapperParameters struct {
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realm.
 	// +kubebuilder:validation:Optional

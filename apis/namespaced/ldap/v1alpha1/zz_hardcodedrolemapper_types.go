@@ -45,6 +45,9 @@ type HardcodedRoleMapperInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// The name of the role which should be assigned to the users. Client roles should use the format {{client_id}}.{{client_role_name}}.
 	// Role to grant to user.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/role/v1alpha1.Role
@@ -74,6 +77,9 @@ type HardcodedRoleMapperObservation struct {
 	// The realm that this LDAP mapper will exist in.
 	// The realm in which the ldap user federation provider exists.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The name of the role which should be assigned to the users. Client roles should use the format {{client_id}}.{{client_role_name}}.
 	// Role to grant to user.
@@ -114,6 +120,10 @@ type HardcodedRoleMapperParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.NamespacedSelector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The name of the role which should be assigned to the users. Client roles should use the format {{client_id}}.{{client_role_name}}.
 	// Role to grant to user.

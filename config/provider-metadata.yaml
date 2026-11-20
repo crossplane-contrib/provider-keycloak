@@ -346,6 +346,94 @@ resources:
                 - (Optional) The requirement setting, which can be one of REQUIRED, ALTERNATIVE, OPTIONAL, CONDITIONAL,
                 or DISABLED. Defaults to DISABLED.
         importStatements: []
+    keycloak_client_scope_assignments:
+        subCategory: ""
+        name: keycloak_client_scope_assignments
+        title: keycloak_client_scope_assignments Resource
+        examples:
+            - name: web_client
+              manifest: |-
+                {
+                  "client_id": "${keycloak_openid_client.web.id}",
+                  "default_scopes": [
+                    "profile",
+                    "email",
+                    "roles",
+                    "web-origins",
+                    "acr",
+                    "basic"
+                  ],
+                  "optional_scopes": [
+                    "${keycloak_openid_client_scope.groups.name}"
+                  ],
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                client_id: keycloak_openid_client.web.id
+                optional_scopes: keycloak_openid_client_scope.groups.name
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_openid_client.web: |-
+                    {
+                      "access_type": "CONFIDENTIAL",
+                      "client_id": "web",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_openid_client_scope.groups: |-
+                    {
+                      "name": "groups",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "enabled": true,
+                      "realm": "my-realm"
+                    }
+            - name: web_client
+              manifest: |-
+                {
+                  "lifecycle": [
+                    {
+                      "prevent_destroy": true
+                    }
+                  ]
+                }
+            - name: web_client
+              manifest: |-
+                {
+                  "client_id": "${keycloak_openid_client.web.id}",
+                  "default_scopes": [
+                    "profile",
+                    "email",
+                    "roles",
+                    "web-origins",
+                    "acr",
+                    "basic"
+                  ],
+                  "lifecycle": [
+                    {
+                      "replace_triggered_by": [
+                        "${keycloak_openid_client_scope.groups.id}"
+                      ]
+                    }
+                  ],
+                  "optional_scopes": [
+                    "${keycloak_openid_client_scope.groups.name}"
+                  ],
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                client_id: keycloak_openid_client.web.id
+                lifecycle.replace_triggered_by: keycloak_openid_client_scope.groups.id
+                optional_scopes: keycloak_openid_client_scope.groups.name
+                realm_id: keycloak_realm.realm.id
+        argumentDocs:
+            client_id: '- (Optional, ForceNew) The Keycloak-generated ID of the client. If omitted, assignments apply to the realm. Must not be empty when set.'
+            default_scopes: '- (Required) Set of client-scope names assigned as defaults.'
+            optional_scopes: '- (Required) Set of client-scope names assigned as optional.'
+            realm_id: '- (Required) The target realm.'
+        importStatements:
+            - terraform import keycloak_client_scope_assignments.web_client client/my-realm/8e8f7fe1-df9b-40ed-bed3-4597aa0dac52
     keycloak_custom_identity_provider_mapper:
         subCategory: ""
         name: keycloak_custom_identity_provider_mapper
@@ -355,9 +443,9 @@ resources:
               manifest: |-
                 {
                   "extra_config": {
-                    "Claim": "my-email-claim",
-                    "UserAttribute": "email",
-                    "syncMode": "INHERIT"
+                    "claim": "my-email-claim",
+                    "syncMode": "INHERIT",
+                    "user.attribute": "email"
                   },
                   "identity_provider_alias": "${keycloak_oidc_identity_provider.oidc.alias}",
                   "identity_provider_mapper": "%s-user-attribute-idp-mapper",
@@ -1295,9 +1383,53 @@ resources:
                       "realm_id": "${keycloak_realm.realm.id}",
                       "username": "my-user"
                     }
+            - name: organization_group_members
+              manifest: |-
+                {
+                  "depends_on": [
+                    "${keycloak_organization_memberships.organization_members}"
+                  ],
+                  "group_id": "${keycloak_group.organization_group.id}",
+                  "members": [
+                    "${keycloak_user.user.username}"
+                  ],
+                  "organization_id": "${keycloak_organization.organization.id}",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                group_id: keycloak_group.organization_group.id
+                members: keycloak_user.user.username
+                organization_id: keycloak_organization.organization.id
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_group.organization_group: |-
+                    {
+                      "name": "my-organization-group",
+                      "organization_id": "${keycloak_organization.organization.id}",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_organization.organization: |-
+                    {
+                      "domain": [
+                        {
+                          "name": "organization.example.com"
+                        }
+                      ],
+                      "name": "my-organization",
+                      "realm": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_organization_memberships.organization_members: |-
+                    {
+                      "members": [
+                        "${keycloak_user.user.username}"
+                      ],
+                      "organization_id": "${keycloak_organization.organization.id}",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
         argumentDocs:
             group_id: '- (Required) The ID of the group this resource should manage memberships for.'
             members: '- (Required) A list of usernames that belong to this group.'
+            organization_id: '- (Optional) The ID of the organization this group belongs to. Omit for realm-level groups.'
             realm_id: '- (Required) The realm this group exists in.'
         importStatements: []
     keycloak_group_permissions:
@@ -1359,13 +1491,14 @@ resources:
                     }
         argumentDocs:
             authorization_resource_server_id: '- Resource server id representing the realm management client on which these permissions are managed.'
-            decision_strategy: '- (Optional) Decision strategy of the permission.'
+            decision_strategy: '- (Optional) Decision strategy of the permission. Defaults to UNANIMOUS.'
             description: '- (Optional) Description of the permission.'
             enabled: '- When true, this indicates that fine-grained role permissions are enabled. This will always be true.'
             group_id: '- (Required) The id of the group.'
             manage_members_scope: '- (Optional) Policies that decide if the admin can manage the users that belong to this group.'
             manage_membership_scope: '- (Optional) Policies that decide if an admin can change the membership of the group. Add or remove members from the group.'
             manage_scope: '- (Optional) Policies that decide if the admin can manage the configuration of the group.'
+            organization_id: '- (Optional) Not supported by this resource. This is the Fine-Grained Admin Permissions v1 resource, whose REST API is realm-scoped and cannot manage organization groups; setting a non-empty value returns an error. To manage an organization group''s fine-grained permissions, use keycloak_group_admin_permissions (FGA v2).'
             policies: '- (Optional) Assigned policies to the permission. Each element within this list should be a policy ID.'
             realm_id: '- (Required) The realm in which to manage fine-grained role permissions.'
             view_members_scope: '- (Optional) Policies that decide if the admin can view the user details of members of the group.'
@@ -1514,9 +1647,42 @@ resources:
                       "name": "my-realm-role",
                       "realm_id": "${keycloak_realm.realm.id}"
                     }
+            - name: organization_group_roles
+              manifest: |-
+                {
+                  "group_id": "${keycloak_group.organization_group.id}",
+                  "organization_id": "${keycloak_organization.organization.id}",
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "role_ids": [
+                    "${keycloak_role.realm_role.id}"
+                  ]
+                }
+              references:
+                group_id: keycloak_group.organization_group.id
+                organization_id: keycloak_organization.organization.id
+                realm_id: keycloak_realm.realm.id
+                role_ids: keycloak_role.realm_role.id
+              dependencies:
+                keycloak_group.organization_group: |-
+                    {
+                      "name": "my-organization-group",
+                      "organization_id": "${keycloak_organization.organization.id}",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_organization.organization: |-
+                    {
+                      "domain": [
+                        {
+                          "name": "organization.example.com"
+                        }
+                      ],
+                      "name": "my-organization",
+                      "realm": "${keycloak_realm.realm.id}"
+                    }
         argumentDocs:
             exhaustive: '- (Optional) Indicates if the list of roles is exhaustive. In this case, roles that are manually added to the group will be removed. Defaults to true.'
             group_id: '- (Required) The ID of the group this resource should manage roles for.'
+            organization_id: '- (Optional) The ID of the organization this group belongs to. Requires Keycloak 26.7 or newer. Omit for realm-level groups.'
             realm_id: '- (Required) The realm this group exists in.'
             role_ids: '- (Required) A list of role IDs to map to the group.'
         importStatements: []
@@ -2276,6 +2442,7 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
+            always_read_enabled_value_from_ldap: '- (Optional) When true, the enabled/disabled state of the user is always read from the userAccountControl attribute in AD, instead of the value stored in Keycloak. Defaults to false.'
             ldap_password_policy_hints_enabled: '- (Optional) When true, advanced password policies, such as password hints and previous password history will be used when writing new passwords to AD. Defaults to false.'
             ldap_user_federation_id: '- (Required) The ID of the LDAP user federation provider to attach this mapper to.'
             name: '- (Required) Display name of this mapper when displayed in the console.'
@@ -2464,7 +2631,9 @@ resources:
             eviction_hour: '- (Optional) Hour of day the entry will become invalid on.'
             eviction_minute: '- (Optional) Minute of day the entry will become invalid on.'
             "false": ': Will disable logging for Krb5LoginModule.'
+            follow: ': follow LDAP referrals returned by the server, which may be a security risk if they point to untrusted endpoints.'
             full_sync_period: '- (Optional) How frequently Keycloak should sync all LDAP users, in seconds. Omit this property to disable periodic full sync.'
+            ignore: ': default mode.'
             import_enabled: '- (Optional) When true, LDAP users will be imported into the Keycloak database. Defaults to true.'
             kerberos: '- (Optional) A block containing the kerberos settings.'
             kerberos_realm: '- (Required) The name of the kerberos realm, e.g. FOO.LOCAL.'
@@ -2478,6 +2647,7 @@ resources:
             rdn_ldap_attribute: '- (Required) Name of the LDAP attribute to use as the relative distinguished name.'
             read_timeout: '- (Optional) LDAP read timeout in the format of a Go duration string.'
             realm_id: '- (Required) The realm that this provider will provide user federation for.'
+            referral: '- (Optional) Specifies if LDAP referrals should be followed or ignored. Can be one of ignore or follow:'
             relative_create_dn: '- (Optional) Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user''s DN.'
             search_scope: '- (Optional) Can be one of ONE_LEVEL or SUBTREE:'
             server_principal: '- (Required) The kerberos server principal, e.g. ''HTTP/host.foo.com@FOO.LOCAL''.'
@@ -2703,11 +2873,23 @@ resources:
                       "enabled": true,
                       "realm": "my-realm"
                     }
+            - name: custom_identity_provider
+              manifest: |-
+                {
+                  "alias": "my-custom-idp",
+                  "client_id": "clientID",
+                  "client_secret": "clientSecret",
+                  "provider_id": "my-custom-oidc",
+                  "realm": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm: keycloak_realm.realm.id
         argumentDocs:
             accepts_prompt_none_forward_from_client: (Optional) When true, the IDP will accept forwarded authentication requests that contain the prompt=none query parameter. Defaults to false.
             add_read_token_role_on_create: '- (Optional) When true, new users will be able to read stored tokens. This will automatically assign the broker.read-token role. Defaults to false.'
             alias: '- (Required) The alias uniquely identifies an identity provider, and it is also used to build the redirect uri.'
-            authorization_url: '- (Required) The Authorization Url.'
+            allow_admin_role_mapping: '- (Optional) When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.'
+            authorization_url: '- (Optional) The Authorization Url. Required when provider_id is oidc or keycloak-oidc.'
             backchannel_supported: '- (Optional) Does the external IDP support backchannel logout? Defaults to true.'
             client_id: '- (Required) The client or client identifier registered within the identity provider.'
             client_secret: '- (Optional) The client or client secret registered within the identity provider. This field is able to obtain its value from vault, use $${vault.ID} format. Required without client_secret_wo and client_secret_wo_version.'
@@ -2733,11 +2915,11 @@ resources:
             org_redirect_mode_email_matches: '- (Optional) Indicates whether to automatically redirect user to this identity provider when email domain matches domain.'
             organization_id: '- (Optional) The ID of the organization to link this identity provider to.'
             post_broker_login_flow_alias: '- (Optional) The authentication flow to use after users have successfully logged in, which can be used to perform additional user verification (such as OTP checking). Defaults to an empty string, which means no post login flow will be used.'
-            provider_id: '- (Optional) The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation.'
+            provider_id: '- (Optional) The ID of the identity provider to use. Defaults to oidc, which should be used unless you have extended Keycloak and provided your own implementation. Changing this forces a new resource, because Keycloak does not change the provider of an existing identity provider.'
             realm: '- (Required) The name of the realm. This is unique across Keycloak.'
             store_token: '- (Optional) When true, tokens will be stored after authenticating users. Defaults to true.'
             sync_mode: '- (Optional) The default sync mode to use for all mappers attached to this identity provider. Can be once of IMPORT, FORCE, or LEGACY.'
-            token_url: '- (Required) The Token URL.'
+            token_url: '- (Optional) The Token URL. Required when provider_id is oidc or keycloak-oidc.'
             trust_email: '- (Optional) When true, email addresses for users in this provider will automatically be verified regardless of the realm''s email verification policy. Defaults to false.'
             ui_locales: '- (Optional) Pass current locale to identity provider. Defaults to false.'
             user_info_url: '- (Optional) User Info URL.'
@@ -4038,7 +4220,7 @@ resources:
                 - Resource server id representing the realm management client on which this
                 permission is managed.
             client_id: '- (Required) The id of the client that provides the role.'
-            decision_strategy: '- (Optional) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS.'
+            decision_strategy: '- (Optional) The decision strategy, can be one of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.'
             description: '- (Optional) A description for the permission scope'
             policies: '- (Optional) A list of policy IDs'
             realm_id: '- (Required) The realm this group exists in.'
@@ -4187,8 +4369,9 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
-            consent_screen_text: '- (Optional) When set, a consent screen will be displayed to users authenticating to clients with this scope attached. The consent screen will display the string value of this attribute.'
+            consent_screen_text: '- (Optional) The text that is displayed on the consent screen for this client scope. If not set, the consent screen displays the name of the client scope.'
             description: '- (Optional) The description of this client scope in the GUI.'
+            display_on_consent_screen: '- (Optional) When true, this client scope is displayed on the consent screen of clients that require consent. When false, it is not displayed, and existing consents remain valid if the scope is added to a client later. If not set, it is true when consent_screen_text is set and false otherwise.'
             extra_config: |-
                 - (Optional) A map of key/value pairs to add extra configuration attributes to this client scope. This can be used for custom attributes or to add configuration attributes that are not yet supported by this Terraform provider. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates.
                 extra_config = {
@@ -5219,6 +5402,136 @@ resources:
             redirect_url: '- (Optional) The landing page after user completes registration or accepts an invitation to the organization. If left empty, the user will be redirected to the account console by default.'
             verified: '- (Optional) Whether domain is verified or not. Default is false.'
         importStatements: []
+    keycloak_organization_admin_permissions:
+        subCategory: ""
+        name: keycloak_organization_admin_permissions
+        title: keycloak_organization_admin_permissions Resource
+        examples:
+            - name: org_admins_manage_acme
+              manifest: |-
+                {
+                  "decision_strategy": "UNANIMOUS",
+                  "description": "Org admins can view and manage acme",
+                  "name": "org-admins-manage-acme",
+                  "organization_ids": [
+                    "${keycloak_organization.acme.id}"
+                  ],
+                  "policies": [
+                    "${keycloak_openid_client_group_policy.org_admins_policy.id}"
+                  ],
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "scopes": [
+                    "view",
+                    "manage"
+                  ]
+                }
+              references:
+                organization_ids: keycloak_organization.acme.id
+                policies: keycloak_openid_client_group_policy.org_admins_policy.id
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_group.org_admins: |-
+                    {
+                      "name": "org-admins",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_openid_client_group_policy.org_admins_policy: |-
+                    {
+                      "decision_strategy": "UNANIMOUS",
+                      "groups": [
+                        {
+                          "extend_children": false,
+                          "id": "${keycloak_group.org_admins.id}",
+                          "path": "${keycloak_group.org_admins.path}"
+                        }
+                      ],
+                      "logic": "POSITIVE",
+                      "name": "org-admins-policy",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "resource_server_id": "${data.keycloak_openid_client.admin_permissions.id}"
+                    }
+                keycloak_organization.acme: |-
+                    {
+                      "domain": [
+                        {
+                          "name": "acme.example.com"
+                        }
+                      ],
+                      "name": "acme",
+                      "realm": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "admin_permissions_enabled": true,
+                      "organizations_enabled": true,
+                      "realm": "my-realm"
+                    }
+            - name: org_admins_view_all_organizations
+              manifest: |-
+                {
+                  "name": "org-admins-can-view-all-organizations",
+                  "policies": [
+                    "${keycloak_openid_client_group_policy.org_admins_policy.id}"
+                  ],
+                  "realm_id": "${keycloak_realm.realm.id}",
+                  "scopes": [
+                    "view"
+                  ]
+                }
+              references:
+                policies: keycloak_openid_client_group_policy.org_admins_policy.id
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_group.org_admins: |-
+                    {
+                      "name": "org-admins",
+                      "realm_id": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_openid_client_group_policy.org_admins_policy: |-
+                    {
+                      "decision_strategy": "UNANIMOUS",
+                      "groups": [
+                        {
+                          "extend_children": false,
+                          "id": "${keycloak_group.org_admins.id}",
+                          "path": "${keycloak_group.org_admins.path}"
+                        }
+                      ],
+                      "logic": "POSITIVE",
+                      "name": "org-admins-policy",
+                      "realm_id": "${keycloak_realm.realm.id}",
+                      "resource_server_id": "${data.keycloak_openid_client.admin_permissions.id}"
+                    }
+                keycloak_organization.acme: |-
+                    {
+                      "domain": [
+                        {
+                          "name": "acme.example.com"
+                        }
+                      ],
+                      "name": "acme",
+                      "realm": "${keycloak_realm.realm.id}"
+                    }
+                keycloak_realm.realm: |-
+                    {
+                      "admin_permissions_enabled": true,
+                      "organizations_enabled": true,
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            authorization_resource_server_id: '- The ID of the admin-permissions client, which acts as the resource server for these permissions.'
+            decision_strategy: '- (Optional) Decision strategy. One of UNANIMOUS, AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.'
+            description: '- (Optional) Description of the permission.'
+            enabled: '- Always true when the resource exists.'
+            manage: — manage the organization, including updating and deleting it
+            name: '- (Required) The name of the permission. Must be unique within the admin-permissions resource server. On first apply, if a permission with this name already exists it is adopted; otherwise a new one is created.'
+            organization_ids: '- (Optional) Set of organization UUIDs (keycloak_organization.xxx.id) this permission applies to. When omitted or empty, the permission applies to all organizations in the realm.'
+            permission_id: '- The internal Keycloak UUID of the permission.'
+            policies: '- (Optional) Set of policy IDs to attach to the permission.'
+            realm_id: '- (Required, ForceNew) The realm in which to manage this permission.'
+            scopes: '- (Required) Set of scopes this permission grants. Valid values: view, manage.'
+            view: — view the organization; also what makes organizations appear in queries
+        importStatements: []
     keycloak_organization_memberships:
         subCategory: ""
         name: keycloak_organization_memberships
@@ -5267,7 +5580,7 @@ resources:
                       "username": "bob"
                     }
         argumentDocs:
-            members: '- (Required) A set of usernames to assign as members of the organization.'
+            members: '- (Required) A set of usernames to assign as members of the organization. Managed members may be listed, but are never removed.'
             organization_id: '- (Required) The ID of the organization to manage memberships for.'
             realm_id: '- (Required) The realm the organization belongs to.'
         importStatements: []
@@ -5350,7 +5663,41 @@ resources:
                     }
                   ]
                 }
+            - name: realm
+              manifest: |-
+                {
+                  "realm": "my-realm",
+                  "smtp_server": [
+                    {
+                      "auth": [
+                        {
+                          "password_wo": "${var.smtp_password}",
+                          "password_wo_version": "v1",
+                          "username": "smtp-user"
+                        }
+                      ],
+                      "from": "admin@example.com",
+                      "host": "smtp.example.com"
+                    }
+                  ]
+                }
+              references:
+                smtp_server.auth.password_wo: var.smtp_password
+            - name: realm
+              manifest: |-
+                {
+                  "realm": "my-realm"
+                }
+              dependencies:
+                keycloak_group.group: |-
+                    {
+                      "name": "group",
+                      "realm_internal_id": "${keycloak_realm.realm.internal_id}"
+                    }
         argumentDocs:
+            a: |-
+                to b its id a stays taken, so creating a new realm
+                called a with internal_id = "a" fails. Leave internal_id unset so that Keycloak generates a UUID.
             acceptable_aaguids: '- (Optional) A set of AAGUIDs for which an authenticator can be registered.'
             access_code_lifespan: '- (Optional) The maximum amount of time a client has to finish the authorization code flow.'
             access_code_lifespan_login: '- (Optional) The maximum amount of time a user is permitted to stay on the login page before the authentication process must be restarted.'
@@ -5382,8 +5729,8 @@ resources:
             client_session_idle_timeout: '- (Optional) The amount of time a session can be idle before it expires. Users can override it for individual clients.'
             client_session_max_lifespan: '- (Optional) The maximum amount of time before a session expires regardless of activity. Users can override it for individual clients.'
             create_timeout: '- (Optional) The timeout value for creating a user''s public key credential in seconds. When set to 0, this timeout option is not adapted. Defaults to 0.'
-            default_default_client_scopes: '- (Optional) A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak''s built-in default default client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_default_client_scopes.'
-            default_optional_client_scopes: '- (Optional) A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak''s built-in default optional client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_optional_client_scopes.'
+            default_default_client_scopes: '- (Optional) A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak''s built-in default default client-scopes. Alternatively, manage both assignment sets with keycloak_client_scope_assignments and omit both scope-assignment fields from this realm resource.'
+            default_optional_client_scopes: '- (Optional) A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak''s built-in default optional client-scopes. Do not configure this field or default_default_client_scopes alongside a realm-level keycloak_client_scope_assignments resource; they manage the same assignments and will conflict.'
             default_signature_algorithm: '- (Optional) Default algorithm used to sign tokens for the realm.'
             direct_grant_flow: '- (Optional) The desired flow for direct access authentication. Defaults to direct grant.'
             discoverable_credential: '- (Optional) The extent to which the authenticator should create a client-side discoverable credential (resident key). Valid options are not specified, required, preferred, or discouraged. Defaults to not specified. Replaces and takes precedence over the deprecated require_resident_key attribute. Requires Keycloak 26.7 or higher.'
@@ -5404,9 +5751,12 @@ resources:
             headers.x_frame_options: '- (Optional) Sets the x-frame-option, which can be used to prevent pages from being included by non-origin iframes. More information can be found in the RFC7034'
             headers.x_robots_tag: '- (Optional) Prevent pages from appearing in search engines.'
             headers.x_xss_protection: '- (Optional) This header configures the Cross-site scripting (XSS) filter in your browser.'
-            internal_id: '- (Optional) When specified, this will be used as the realm''s internal ID within Keycloak. When not specified, the realm''s internal ID will be set to the realm''s name.'
+            internal_id: '- (Optional) When specified, this will be used as the realm''s internal ID within Keycloak. When not specified, Keycloak generates a UUID. Realms created by earlier versions of this provider may still have the realm''s name as internal ID.'
             internationalization.default_locale: '- (Required) The locale to use by default. This locale code must be present within the supported_locales list.'
             internationalization.supported_locales: '- (Required) A list of ISO 639-1 locale codes that the realm should support.'
+            keycloak_default_groups: |-
+                ) get the new name in their id on
+                the next refresh.
             login_theme: '- (Optional) Used for the login, forgot password, and registration pages.'
             login_with_email_allowed: '- (Optional) When true, users may log in with their email address.'
             oauth2_device_code_lifespan: '- (Optional) The maximum amount of time a client has to finish the device code flow before it expires.'
@@ -5422,10 +5772,18 @@ resources:
             otp_policy.look_ahead_window: '- (Optional) How far ahead should the server look just in case the token generator and server are out of time sync or counter sync. Defaults to 1.'
             otp_policy.period: '- (Optional) How many seconds should an OTP token be valid. Defaults to 30.'
             otp_policy.type: '- (Optional) One Time Password Type, supported Values are totp for Time-Based One Time Password and hotp for Counter Based. Defaults to totp.'
-            password: '- (Required) The SMTP server password.'
+            password: '- (Optional) The SMTP server password. Stored in Terraform state. Exactly one of password or password_wo must be set.'
             password_policy: '- (Optional) The password policy for users within the realm.'
+            password_wo: '- (Optional, Write-Only) The SMTP server password. Accepts ephemeral values and is not stored in Terraform plan or state. Requires Terraform 1.11 or later and password_wo_version. Conflicts with password.'
+            password_wo_version: '- (Optional) A non-empty string identifying the password version. Required with password_wo. Change this value to rotate the password; changing only password_wo does not trigger rotation. Conflicts with password.'
             passwordless_passkeys_enabled: '- (Optional) When true, Keycloak will enable passwordless passkey support. This attribute is only valid inside a web_authn_passwordless_policy block and requires a Keycloak version that supports passwordless passkeys. Defaults to false.'
-            realm: '- (Required) The name of the realm. This is unique across Keycloak. This will also be used as the realm''s internal ID within Keycloak.'
+            realm: '- (Required) The name of the realm. This is unique across Keycloak. This will also be used as the realm''s internal ID within Keycloak. Changing it renames the realm in place; see Renaming a realm. The master realm cannot be renamed.'
+            realm_id: |-
+                (the realm name) depends on where the name comes from. If it comes from
+                keycloak_realm.x.realm, the plan of the rename already shows the new name, so the resource is replaced in that
+                apply. If it comes from keycloak_realm.x.id, the plan of the rename still shows the old name, because the id only
+                changes while the realm is updated. The next refresh then brings the resource up to date, so it is not replaced, but
+                adding or changing such a resource in the same apply as the rename fails with Provider produced inconsistent final plan, after the realm has already been renamed. Use realm_internal_id for all resources of a realm that you want to rename.
             refresh_token_max_reuse: '- (Optional) Maximum number of times a refresh token can be reused before they are revoked. If unspecified and ''revoke_refresh_token'' is enabled the default value is 0 and refresh tokens can not be reused.'
             registration_allowed: '- (Optional) When true, user registration will be enabled, and a link for registration will be displayed on the login page.'
             registration_email_as_username: '- (Optional) When true, the user''s email will be used as their username during registration.'
@@ -5438,7 +5796,8 @@ resources:
             reset_password_allowed: '- (Optional) When true, a "forgot password" link will be displayed on the login page.'
             revoke_refresh_token: '- (Optional) If enabled a refresh token can only be used number of times specified in ''refresh_token_max_reuse'' before they are revoked. If unspecified, refresh tokens can be reused.'
             scope: '- (Required) The auth token scope.'
-            signature_algorithms: '- (Optional) A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.'
+            signature_algorithms: '- (Optional) An unordered set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.'
+            signature_algorithms_ordered: '- (Optional) A list of signature algorithms in WebAuthn preference order. Use this instead of signature_algorithms when order matters; the two arguments cannot be configured together. Keycloak preserves this order, and Terraform detects changes to it. When omitted, this field only reports the server order in state. Legacy signature_algorithms writes remain unordered and can reorder algorithms during other realm updates. To adopt an existing order, replace signature_algorithms with this argument using the exact order returned by Keycloak. Available in both WebAuthn policy blocks.'
             smtp_server.allow_utf8: '- (Optional) When true, allows UTF-8 in the local part of the email address. Defaults to false.'
             smtp_server.auth: '- (Optional) Enables authentication to the SMTP server. Cannot be set alongside token_auth. This block supports the following arguments:'
             smtp_server.envelope_from: '- (Optional) The email address uses for bounces.'
@@ -5496,8 +5855,9 @@ resources:
                     }
         argumentDocs:
             configuration: '- (Optional) - A map of configuration values'
+            description: '- (Optional) The description of the profile.'
             executor: '- (Optional) An ordered list of executors'
-            name: '- (Required) The name of the attribute.'
+            name: '- (Required) The name of the profile.'
             realm_id: '- (Required) The realm id.'
         importStatements: []
     keycloak_realm_client_policy_profile_policy:
@@ -5518,13 +5878,13 @@ resources:
                     {
                       "configuration": {
                         "attributes": "${jsonencode([{ \"key\" : \"test-key\", \"value\" : \"test-value\" }])}",
-                        "is-negative-logic": false
+                        "is_negative_logic": false
                       },
                       "name": "client-attributes"
                     }
                   ],
                   "description": "Some desc",
-                  "name": "my-profile",
+                  "name": "my-policy",
                   "profiles": [
                     "${keycloak_realm_client_policy_profile.profile.name}"
                   ],
@@ -5563,7 +5923,10 @@ resources:
         argumentDocs:
             condition: '- (Optional) An ordered list of condition'
             configuration: '- (Optional) - A map of configuration values'
-            name: '- (Required) The name of the attribute.'
+            description: '- (Optional) The description of the policy.'
+            enabled: '- (Optional) When false, the policy is not applied. Defaults to true.'
+            name: '- (Required) The name of the policy.'
+            profiles: '- (Required) The names of the client policy profiles that are applied when the conditions of this policy match.'
             realm_id: '- (Required) The realm id.'
         importStatements: []
     keycloak_realm_client_registration_policy:
@@ -5708,12 +6071,97 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
-            active: '- (Optional) When false, key in not used for signing. Defaults to true.'
+            active: '- (Optional) When false, key is not used for signing. Defaults to true.'
             enabled: '- (Optional) When false, key is not accessible in this realm. Defaults to true.'
             name: '- (Required) Display name of provider when linked in admin console.'
             priority: '- (Optional) Priority for the provider. Defaults to 0'
             realm_id: '- (Required) The realm this keystore exists in.'
             secret_size: '- (Optional) Size in bytes for the generated AES Key. Size 16 is for AES-128, Size 24 for AES-192 and Size 32 for AES-256. WARN: Bigger keys then 128 bits are not allowed on some JDK implementations. Defaults to 16.'
+        importStatements: []
+    keycloak_realm_keystore_custom:
+        subCategory: ""
+        name: keycloak_realm_keystore_custom
+        title: keycloak_realm_keystore_custom Resources
+        examples:
+            - name: hsm
+              manifest: |-
+                {
+                  "config": {
+                    "endpoint": "hsm.example.com:50051",
+                    "keyId": "token-signing-es256",
+                    "priority": "200"
+                  },
+                  "name": "hsm-token-signing",
+                  "provider_id": "my-hsm-key-provider",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "realm": "my-realm"
+                    }
+            - name: eddsa
+              manifest: |-
+                {
+                  "config": {
+                    "active": "true",
+                    "eddsaEllipticCurveKey": "Ed25519",
+                    "enabled": "true",
+                    "priority": "100"
+                  },
+                  "name": "eddsa-generated",
+                  "provider_id": "eddsa-generated",
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+        argumentDocs:
+            /admin/serverinfo: endpoint under componentTypes["org.keycloak.keys.KeyProvider"].
+            '{{realmId}}/{{keystoreId}}': ', you can find the keystore id in the web UI.'
+            '{{realmId}}/{{name}}/{{providerId}}': |-
+                , which lets you import keystores with static values in an import block.
+                The import fails if more than one keystore of the realm has this name and provider id.
+            config: '- (Optional, Sensitive) A map of config keys and values of the key provider. Common keys are priority, enabled and active, the other keys depend on the key provider.'
+            name: '- (Required) Display name of provider when linked in admin console.'
+            provider_id: '- (Required) The id of the key provider, as returned by the getId implementation of its KeyProviderFactory. Changing this forces a new resource.'
+            realm_id: '- (Required) The realm this keystore exists in.'
+            rsa: |-
+                key provider generates a certificate
+                if none is given. Keys that are not in config are ignored.
+        importStatements: []
+    keycloak_realm_keystore_ecdh_generated:
+        subCategory: ""
+        name: keycloak_realm_keystore_ecdh_generated
+        title: keycloak_realm_keystore_ecdh_generated Resources
+        examples:
+            - name: keystore_ecdh_generated
+              manifest: |-
+                {
+                  "active": true,
+                  "algorithm": "ECDH-ES",
+                  "elliptic_curve_key": "P-256",
+                  "enabled": true,
+                  "name": "my-ecdh-generated-key",
+                  "priority": 100,
+                  "realm_id": "${keycloak_realm.realm.id}"
+                }
+              references:
+                realm_id: keycloak_realm.realm.id
+              dependencies:
+                keycloak_realm.realm: |-
+                    {
+                      "realm": "my-realm"
+                    }
+        argumentDocs:
+            active: '- (Optional) When false, key is not used for encryption. Defaults to true.'
+            algorithm: '- (Optional) Algorithm for processing the Content Encryption Key. Possible values are ECDH-ES, ECDH-ES+A128KW, ECDH-ES+A192KW and ECDH-ES+A256KW. Defaults to ECDH-ES.'
+            elliptic_curve_key: '- (Optional) Elliptic Curve used in ECDH. Possible values are P-256, P-384 and P-521. Defaults to P-256.'
+            enabled: '- (Optional) When false, key is not accessible in this realm. Defaults to true.'
+            name: '- (Required) Display name of provider when linked in admin console.'
+            priority: '- (Optional) Priority for the provider. Defaults to 0.'
+            realm_id: '- (Required) The realm this keystore exists in.'
         importStatements: []
     keycloak_realm_keystore_ecdsa_generated:
         subCategory: ""
@@ -5738,7 +6186,7 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
-            active: '- (Optional) When false, key in not used for signing. Defaults to true.'
+            active: '- (Optional) When false, key is not used for signing. Defaults to true.'
             elliptic_curve_key: '- (Optional) Elliptic Curve used in ECDSA. Defaults to P-256.'
             enabled: '- (Optional) When false, key is not accessible in this realm. Defaults to true.'
             name: '- (Required) Display name of provider when linked in admin console.'
@@ -5769,7 +6217,7 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
-            active: '- (Optional) When false, key in not used for signing. Defaults to true.'
+            active: '- (Optional) When false, key is not used for signing. Defaults to true.'
             algorithm: '- (Optional) Intended algorithm for the key. Defaults to HS256'
             enabled: '- (Optional) When false, key is not accessible in this realm. Defaults to true.'
             name: '- (Required) Display name of provider when linked in admin console.'
@@ -5804,7 +6252,7 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
-            active: '- (Optional) When false, key in not used for signing. Defaults to true.'
+            active: '- (Optional) When false, key is not used for signing. Defaults to true.'
             algorithm: '- (Optional) Intended algorithm for the key. Defaults to RS256'
             enabled: '- (Optional) When false, key is not accessible in this realm. Defaults to true.'
             key_alias: '- (Required) Alias for the private key.'
@@ -5861,7 +6309,7 @@ resources:
                 private_key_wo_version: ephemeral.azurerm_key_vault_certificate.my-cert.expiration_date
                 realm_id: keycloak_realm.realm.id
         argumentDocs:
-            active: '- (Optional) When false, key in not used for signing. Defaults to true.'
+            active: '- (Optional) When false, key is not used for signing. Defaults to true.'
             algorithm: '- (Optional) Intended algorithm for the key. Defaults to RS256. Use RSA-OAEP for encryption keys'
             certificate: '- (Optional) X509 Certificate encoded in PEM format. Required without certificate_wo and certificate_wo_version.'
             certificate_wo: '- (Optional, Write-Only) X509 Certificate encoded in PEM format. Not stored in state or plan files. Requires certificate_wo_version. The certificate is sent on every update, since Keycloak requires it.'
@@ -5933,7 +6381,7 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
-            active: '- (Optional) When false, key in not used for signing. Defaults to true.'
+            active: '- (Optional) When false, key is not used for signing. Defaults to true.'
             algorithm: '- (Optional) Intended algorithm for the key. Defaults to RS256'
             enabled: '- (Optional) When false, key is not accessible in this realm. Defaults to true.'
             key_size: '- (Optional) Size for the generated keys. Defaults to 2048.'
@@ -6658,8 +7106,9 @@ resources:
                       "realm": "my-realm"
                     }
         argumentDocs:
-            consent_screen_text: '- (Optional) When set, a consent screen will be displayed to users authenticating to clients with this scope attached. The consent screen will display the string value of this attribute.'
+            consent_screen_text: '- (Optional) The text that is displayed on the consent screen for this client scope. If not set, the consent screen displays the name of the client scope.'
             description: '- (Optional) The description of this client scope in the GUI.'
+            display_on_consent_screen: '- (Optional) When true, this client scope is displayed on the consent screen of clients that require consent. When false, it is not displayed, and existing consents remain valid if the scope is added to a client later. If not set, it is true when consent_screen_text is set and false otherwise.'
             extra_config: |-
                 - (Optional) A map of key/value pairs to add extra configuration attributes to this client scope. This can be used for custom attributes or to add configuration attributes that are not yet supported by this Terraform provider. Use this attribute at your own risk, as it may conflict with top-level configuration attributes in future provider updates.
                 extra_config = {
@@ -6701,6 +7150,7 @@ resources:
         argumentDocs:
             add_read_token_role_on_create: '- (Optional) When true, new users will be able to read stored tokens. This will automatically assign the broker.read-token role. Defaults to false.'
             alias: '- (Optional) The unique name of identity provider.'
+            allow_admin_role_mapping: '- (Optional) When true, mappers of this identity provider may grant administrative roles, either directly or through membership of groups that carry administrative roles. Defaults to false. Requires Keycloak 26.8 or later, where mappers that grant admin roles are rejected unless this is enabled. Enabling it requires the manage-realm permission.'
             authenticate_by_default: '- (Optional) Authenticate users by default. Defaults to false.'
             authn_context_class_refs: '- (Optional) Ordered list of requested AuthnContext ClassRefs.'
             authn_context_comparison_type: '- (Optional) Specifies the comparison method used to evaluate the requested context classes or statements.'
@@ -7316,7 +7766,8 @@ resources:
             permission_id: '- The internal Keycloak UUID of the permission.'
             policies: '- (Optional) Set of policy IDs to attach to the permission.'
             realm_id: '- (Required, ForceNew) The realm in which to manage this permission.'
-            scopes: '- (Required) Set of scopes this permission grants. Valid values: view, manage, map-roles, manage-group-membership, impersonate.'
+            reset-password: — reset user passwords
+            scopes: '- (Required) Set of scopes this permission grants. Valid values: view, manage, map-roles, manage-group-membership, impersonate, reset-password.'
             view: — list and view user details
         importStatements: []
     keycloak_users_permissions:
@@ -7426,7 +7877,7 @@ resources:
                     }
         argumentDocs:
             authorization_resource_server_id: '- Resource server id representing the realm management client on which these permissions are managed.'
-            decision_strategy: '- (Optional) Decision strategy of the permission.'
+            decision_strategy: '- (Optional) Decision strategy of the permission. Defaults to UNANIMOUS.'
             description: '- (Optional) Description of the permission.'
             enabled: '- When true, this indicates that fine-grained user permissions are enabled. This will always be true.'
             impersonate_scope: '- (Optional) When specified, set the scope based impersonate permission.'
