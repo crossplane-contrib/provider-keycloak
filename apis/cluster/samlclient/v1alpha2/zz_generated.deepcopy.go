@@ -299,6 +299,11 @@ func (in *ClientInitParameters) DeepCopyInto(out *ClientInitParameters) {
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RootURL != nil {
 		in, out := &in.RootURL, &out.RootURL
 		*out = new(string)
@@ -568,6 +573,11 @@ func (in *ClientObservation) DeepCopyInto(out *ClientObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RootURL != nil {
 		in, out := &in.RootURL, &out.RootURL
 		*out = new(string)
@@ -809,6 +819,11 @@ func (in *ClientParameters) DeepCopyInto(out *ClientParameters) {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.Selector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.RootURL != nil {
 		in, out := &in.RootURL, &out.RootURL

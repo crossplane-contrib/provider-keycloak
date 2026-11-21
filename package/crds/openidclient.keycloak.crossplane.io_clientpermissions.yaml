@@ -1113,7 +1113,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1129,7 +1129,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1145,7 +1145,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1161,7 +1161,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1177,7 +1177,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1266,11 +1266,16 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   tokenExchangeScope:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1286,7 +1291,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1395,7 +1400,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1411,7 +1416,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1427,7 +1432,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1443,7 +1448,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1459,7 +1464,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1548,11 +1553,16 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   tokenExchangeScope:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1568,7 +1578,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1685,7 +1695,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1705,7 +1715,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1721,7 +1731,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1737,7 +1747,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1753,7 +1763,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1768,11 +1778,16 @@ spec:
                   realmId:
                     description: The realm this group exists in.
                     type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   tokenExchangeScope:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope
@@ -1788,7 +1803,7 @@ spec:
                     properties:
                       decisionStrategy:
                         description: The decision strategy, can be one of UNANIMOUS,
-                          AFFIRMATIVE, or CONSENSUS.
+                          AFFIRMATIVE, or CONSENSUS. Defaults to UNANIMOUS.
                         type: string
                       description:
                         description: A description for the permission scope

@@ -263,7 +263,7 @@ type ClientInitParameters struct {
 
 	Oauth2JwtAuthorizationGrantIdp *string `json:"oauth2JwtAuthorizationGrantIdp,omitempty" tf:"oauth2_jwt_authorization_grant_idp,omitempty"`
 
-	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value ``.
+	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value “.
 	PkceCodeChallengeMethod *string `json:"pkceCodeChallengeMethod,omitempty" tf:"pkce_code_challenge_method,omitempty"`
 
 	// The realm this client is attached to.
@@ -277,6 +277,9 @@ type ClientInitParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Enable support for Demonstrating Proof-of-Possession (DPoP) bound tokens.
 	RequireDpopBoundTokens *bool `json:"requireDpopBoundTokens,omitempty" tf:"require_dpop_bound_tokens,omitempty"`
@@ -441,11 +444,14 @@ type ClientObservation struct {
 
 	Oauth2JwtAuthorizationGrantIdp *string `json:"oauth2JwtAuthorizationGrantIdp,omitempty" tf:"oauth2_jwt_authorization_grant_idp,omitempty"`
 
-	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value ``.
+	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value “.
 	PkceCodeChallengeMethod *string `json:"pkceCodeChallengeMethod,omitempty" tf:"pkce_code_challenge_method,omitempty"`
 
 	// The realm this client is attached to.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Enable support for Demonstrating Proof-of-Possession (DPoP) bound tokens.
 	RequireDpopBoundTokens *bool `json:"requireDpopBoundTokens,omitempty" tf:"require_dpop_bound_tokens,omitempty"`
@@ -663,7 +669,7 @@ type ClientParameters struct {
 	// +kubebuilder:validation:Optional
 	Oauth2JwtAuthorizationGrantIdp *string `json:"oauth2JwtAuthorizationGrantIdp,omitempty" tf:"oauth2_jwt_authorization_grant_idp,omitempty"`
 
-	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value ``.
+	// The challenge method to use for Proof Key for Code Exchange. Can be either plain or S256 or set to empty value “.
 	// +kubebuilder:validation:Optional
 	PkceCodeChallengeMethod *string `json:"pkceCodeChallengeMethod,omitempty" tf:"pkce_code_challenge_method,omitempty"`
 
@@ -679,6 +685,10 @@ type ClientParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Enable support for Demonstrating Proof-of-Possession (DPoP) bound tokens.
 	// +kubebuilder:validation:Optional

@@ -71,6 +71,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_openid_client_service_account_role":                config.IdentifierFromProvider,                                             // {serviceAccountUserId.UUid}/{role.UUid}
 	"keycloak_organization":                                      config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_organization_memberships":                          config.IdentifierFromProvider,                                             // {realm}/organization-memberships/{Organization.UUid}
+	"keycloak_organization_admin_permissions":                    config.IdentifierFromProvider,                                             // {realm}/{Permission.UUid}
 	"keycloak_realm":                                             realm.RealmIdentifierFromIdentifyingProperties,                            // {realm}
 	"keycloak_required_action":                                   config.IdentifierFromProvider,                                             // {realm}/{alias}
 	"keycloak_role":                                              role.IdentifierFromIdentifyingProperties,                                  // {UUid}
@@ -106,14 +107,17 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_realm_keystore_rsa":                                realm.KeystoreRsaIdentifierFromIdentifyingProperties,                      // {UUid}
 	"keycloak_realm_keystore_aes_generated":                      config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_realm_keystore_ecdsa_generated":                    config.IdentifierFromProvider,                                             // {UUid}
+	"keycloak_realm_keystore_ecdh_generated":                     config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_realm_keystore_hmac_generated":                     config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_realm_keystore_rsa_generated":                      config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_realm_keystore_rsa_enc_generated":                  config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_realm_keystore_java_keystore":                      config.IdentifierFromProvider,                                             // {UUid}
+	"keycloak_realm_keystore_custom":                             config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_realm_user_profile":                                config.IdentifierFromProvider,                                             // {realm}
 	"keycloak_realm_localization":                                config.IdentifierFromProvider,                                             // {realm}/{locale}
 	"keycloak_realm_default_client_scopes":                       config.IdentifierFromProvider,                                             // {realm}
 	"keycloak_realm_optional_client_scopes":                      config.IdentifierFromProvider,                                             // {realm}
+	"keycloak_client_scope_assignments":                          config.IdentifierFromProvider,                                             // realm/{realm} or client/{realm}/{Client.UUid}
 	"keycloak_realm_events":                                      realm.EventsRealmIdentifierFromIdentifyingProperties,                      // {realm}
 	"keycloak_realm_client_policy_profile":                       config.IdentifierFromProvider,                                             // {realm}/realm-client-policy-profiles/{name}
 	"keycloak_realm_client_policy_profile_policy":                config.IdentifierFromProvider,                                             // {realm}/realm-client-policy-profile-policies/{name}

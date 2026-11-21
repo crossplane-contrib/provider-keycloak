@@ -1,0 +1,43 @@
+# Organization used as the target of the organization admin permission below.
+apiVersion: organization.keycloak.crossplane.io/v1alpha1
+kind: Organization
+metadata:
+  name: fgapv2-managed-org
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmRef:
+      name: "my-realm"
+      policy:
+        resolve: Always
+    name: fgapv2-managed-org
+    enabled: true
+    domain:
+      - name: fgapv2.example.com
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+# Fine-grained admin permission (FGAPv2) controlling who can view and manage a
+# specific organization. Requires Keycloak >= 26.7 and a realm with
+# organizationsEnabled.
+apiVersion: organization.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  name: manage-organizations
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    name: manage-organizations
+    description: Controls who can view and manage the managed organization
+    decisionStrategy: UNANIMOUS
+    realmIdRef:
+      name: "my-realm"
+      policy:
+        resolve: Always
+    organizationIdsRefs:
+      - name: "fgapv2-managed-org"
+    scopes:
+      - view
+      - manage
+  providerConfigRef:
+    name: "keycloak-provider-config"

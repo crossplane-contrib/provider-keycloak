@@ -397,6 +397,21 @@ func (in *PermissionsInitParameters) DeepCopyInto(out *PermissionsInitParameters
 		*out = new(ManageScopeInitParameters)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrganizationIDRef != nil {
+		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
+		*out = new(v2.NamespacedReference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.OrganizationIDSelector != nil {
+		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
+		*out = new(v2.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.RealmID != nil {
 		in, out := &in.RealmID, &out.RealmID
 		*out = new(string)
@@ -411,6 +426,11 @@ func (in *PermissionsInitParameters) DeepCopyInto(out *PermissionsInitParameters
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ViewMembersScope != nil {
 		in, out := &in.ViewMembersScope, &out.ViewMembersScope
@@ -504,8 +524,18 @@ func (in *PermissionsObservation) DeepCopyInto(out *PermissionsObservation) {
 		*out = new(ManageScopeObservation)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
+		*out = new(string)
+		**out = **in
+	}
 	if in.RealmID != nil {
 		in, out := &in.RealmID, &out.RealmID
+		*out = new(string)
+		**out = **in
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
 		*out = new(string)
 		**out = **in
 	}
@@ -564,6 +594,21 @@ func (in *PermissionsParameters) DeepCopyInto(out *PermissionsParameters) {
 		*out = new(ManageScopeParameters)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.OrganizationID != nil {
+		in, out := &in.OrganizationID, &out.OrganizationID
+		*out = new(string)
+		**out = **in
+	}
+	if in.OrganizationIDRef != nil {
+		in, out := &in.OrganizationIDRef, &out.OrganizationIDRef
+		*out = new(v2.NamespacedReference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.OrganizationIDSelector != nil {
+		in, out := &in.OrganizationIDSelector, &out.OrganizationIDSelector
+		*out = new(v2.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.RealmID != nil {
 		in, out := &in.RealmID, &out.RealmID
 		*out = new(string)
@@ -578,6 +623,11 @@ func (in *PermissionsParameters) DeepCopyInto(out *PermissionsParameters) {
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.ViewMembersScope != nil {
 		in, out := &in.ViewMembersScope, &out.ViewMembersScope

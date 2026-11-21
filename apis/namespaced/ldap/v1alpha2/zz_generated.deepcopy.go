@@ -403,6 +403,16 @@ func (in *UserFederationInitParameters) DeepCopyInto(out *UserFederationInitPara
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
+	if in.Referral != nil {
+		in, out := &in.Referral, &out.Referral
+		*out = new(string)
+		**out = **in
+	}
 	if in.RelativeCreateDn != nil {
 		in, out := &in.RelativeCreateDn, &out.RelativeCreateDn
 		*out = new(string)
@@ -641,6 +651,16 @@ func (in *UserFederationObservation) DeepCopyInto(out *UserFederationObservation
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
+	if in.Referral != nil {
+		in, out := &in.Referral, &out.Referral
+		*out = new(string)
+		**out = **in
+	}
 	if in.RelativeCreateDn != nil {
 		in, out := &in.RelativeCreateDn, &out.RelativeCreateDn
 		*out = new(string)
@@ -861,6 +881,16 @@ func (in *UserFederationParameters) DeepCopyInto(out *UserFederationParameters) 
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
+	if in.Referral != nil {
+		in, out := &in.Referral, &out.Referral
+		*out = new(string)
+		**out = **in
 	}
 	if in.RelativeCreateDn != nil {
 		in, out := &in.RelativeCreateDn, &out.RelativeCreateDn

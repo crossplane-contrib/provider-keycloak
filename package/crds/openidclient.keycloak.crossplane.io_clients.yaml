@@ -3773,7 +3773,7 @@ spec:
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
-                      ``.
+                      “.
                     type: string
                   realmId:
                     description: The realm this client is attached to.
@@ -3852,6 +3852,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   requireDpopBoundTokens:
                     description: Enable support for Demonstrating Proof-of-Possession
                       (DPoP) bound tokens.
@@ -4333,7 +4338,7 @@ spec:
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
-                      ``.
+                      “.
                     type: string
                   realmId:
                     description: The realm this client is attached to.
@@ -4412,6 +4417,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   requireDpopBoundTokens:
                     description: Enable support for Demonstrating Proof-of-Possession
                       (DPoP) bound tokens.
@@ -4791,10 +4801,15 @@ spec:
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
-                      ``.
+                      “.
                     type: string
                   realmId:
                     description: The realm this client is attached to.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   requireDpopBoundTokens:
                     description: Enable support for Demonstrating Proof-of-Possession

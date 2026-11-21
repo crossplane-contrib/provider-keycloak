@@ -1,6 +1,8 @@
 # find ./dev/demos/ '(' -path '**/basic/**' -o -path '**/namespaced/**' ')' '(' -name '*yaml' -a '!' -name '000-init.yaml' ')' | sort -r
 # Use this as prefix for comments
 # We need to order those test cases, so that they are deleted in order!
+./dev/demos/namespaced/101-realm-keystore-ecdh-generated.yaml
+./dev/demos/namespaced/100-realm-keystore-custom.yaml
 ./dev/demos/namespaced/099-ldap-user-model-hardcoded-attribute-mapper.yaml
 ./dev/demos/namespaced/098-microsoft-identity-provider.yaml
 ./dev/demos/namespaced/097-ldap-custom-mapper.yaml
@@ -22,6 +24,7 @@
 ./dev/demos/namespaced/071-authentication-subflow.yaml
 ./dev/demos/namespaced/070-authentication-flows.yaml
 ./dev/demos/namespaced/063-saml-client-policies.yaml
+./dev/demos/namespaced/066-client-scope-assignments.yaml
 ./dev/demos/namespaced/065-saml-generic-mappers.yaml
 ./dev/demos/namespaced/064-oidc-authz-policies.yaml
 ./dev/demos/namespaced/062-saml-client-default-scopes.yaml
@@ -72,6 +75,8 @@
 ./dev/demos/namespaced/002-realm-clientscopes.yaml
 ./dev/demos/namespaced/001-realm.yaml
 ./dev/demos/namespaced/001-realm-durations.yaml
+./dev/demos/basic/101-realm-keystore-ecdh-generated.yaml
+./dev/demos/basic/100-realm-keystore-custom.yaml
 ./dev/demos/basic/099-ldap-user-model-hardcoded-attribute-mapper.yaml
 ./dev/demos/basic/098-microsoft-identity-provider.yaml
 ./dev/demos/basic/097-ldap-custom-mapper.yaml
@@ -93,6 +98,7 @@
 ./dev/demos/basic/071-authentication-subflow.yaml
 ./dev/demos/basic/070-authentication-flows.yaml
 ./dev/demos/basic/063-saml-client-policies.yaml
+./dev/demos/basic/066-client-scope-assignments.yaml
 ./dev/demos/basic/065-saml-generic-mappers.yaml
 ./dev/demos/basic/064-oidc-authz-policies.yaml
 ./dev/demos/basic/062-saml-client-default-scopes.yaml

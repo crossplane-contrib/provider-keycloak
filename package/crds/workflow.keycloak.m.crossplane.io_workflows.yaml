@@ -748,6 +748,11 @@ spec:
                       The realm this workflow exists in. Changing this forces a new resource.
                       The realm this workflow belongs to.
                     type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   realmRef:
                     description: Reference to a Realm in realm to populate realm.
                     properties:
@@ -923,6 +928,11 @@ spec:
                     description: |-
                       The realm this workflow exists in. Changing this forces a new resource.
                       The realm this workflow belongs to.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   realmRef:
                     description: Reference to a Realm in realm to populate realm.
@@ -1164,6 +1174,11 @@ spec:
                     description: |-
                       The realm this workflow exists in. Changing this forces a new resource.
                       The realm this workflow belongs to.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   restartInProgress:
                     description: |-

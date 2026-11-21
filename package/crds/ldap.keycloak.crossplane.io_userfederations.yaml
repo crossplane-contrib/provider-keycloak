@@ -1557,6 +1557,16 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
+                  referral:
+                    description: |-
+                      Specifies if LDAP referrals should be followed or ignored. Can be one of ignore or follow:
+                      Specifies if LDAP referrals should be followed or ignored. Please note that enabling referrals can slow down authentication as it allows the LDAP server to decide which other LDAP servers to use. This could potentially include untrusted servers.
+                    type: string
                   relativeCreateDn:
                     description: |-
                       Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
@@ -1909,6 +1919,16 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
+                  referral:
+                    description: |-
+                      Specifies if LDAP referrals should be followed or ignored. Can be one of ignore or follow:
+                      Specifies if LDAP referrals should be followed or ignored. Please note that enabling referrals can slow down authentication as it allows the LDAP server to decide which other LDAP servers to use. This could potentially include untrusted servers.
+                    type: string
                   relativeCreateDn:
                     description: |-
                       Relative DN of LDAP tree where new users will be created. Keycloak will use the Users DN as the base for the new user's DN.
@@ -2257,6 +2277,16 @@ spec:
                     description: |-
                       The realm that this provider will provide user federation for.
                       The realm this provider will provide user federation for.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
+                  referral:
+                    description: |-
+                      Specifies if LDAP referrals should be followed or ignored. Can be one of ignore or follow:
+                      Specifies if LDAP referrals should be followed or ignored. Please note that enabling referrals can slow down authentication as it allows the LDAP server to decide which other LDAP servers to use. This could potentially include untrusted servers.
                     type: string
                   relativeCreateDn:
                     description: |-

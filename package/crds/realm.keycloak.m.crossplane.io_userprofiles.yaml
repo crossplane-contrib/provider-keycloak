@@ -977,6 +977,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   unmanagedAttributePolicy:
                     description: Unmanaged attributes are user attributes not explicitly
                       defined in the user profile configuration. By default, unmanaged
@@ -1188,6 +1193,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   unmanagedAttributePolicy:
                     description: Unmanaged attributes are user attributes not explicitly
                       defined in the user profile configuration. By default, unmanaged
@@ -1370,6 +1380,11 @@ spec:
                     type: string
                   realmId:
                     description: The ID of the realm the user profile applies to.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   unmanagedAttributePolicy:
                     description: Unmanaged attributes are user attributes not explicitly

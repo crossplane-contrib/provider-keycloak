@@ -86,14 +86,18 @@ import (
 	userpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/userpropertyprotocolmapper"
 	userrealmroleprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/userrealmroleprotocolmapper"
 	usersessionnoteprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/usersessionnoteprotocolmapper"
+	adminpermissionsorganization "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/organization/adminpermissions"
 	membershipsorganization "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/organization/memberships"
 	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/organization/organization"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/providerconfig"
 	clientpolicyprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/clientpolicyprofile"
 	clientpolicyprofilepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/clientpolicyprofilepolicy"
 	clientregistrationpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/clientregistrationpolicy"
+	clientscopeassignments "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/clientscopeassignments"
 	defaultclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/defaultclientscopes"
 	keystoreaesgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystoreaesgenerated"
+	keystorecustom "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystorecustom"
+	keystoreecdhgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystoreecdhgenerated"
 	keystoreecdsagenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystoreecdsagenerated"
 	keystorehmacgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystorehmacgenerated"
 	keystorejavakeystore "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystorejavakeystore"
@@ -204,14 +208,18 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		userpropertyprotocolmapper.Setup,
 		userrealmroleprotocolmapper.Setup,
 		usersessionnoteprotocolmapper.Setup,
+		adminpermissionsorganization.Setup,
 		membershipsorganization.Setup,
 		organization.Setup,
 		providerconfig.Setup,
 		clientpolicyprofile.Setup,
 		clientpolicyprofilepolicy.Setup,
 		clientregistrationpolicy.Setup,
+		clientscopeassignments.Setup,
 		defaultclientscopes.Setup,
 		keystoreaesgenerated.Setup,
+		keystorecustom.Setup,
+		keystoreecdhgenerated.Setup,
 		keystoreecdsagenerated.Setup,
 		keystorehmacgenerated.Setup,
 		keystorejavakeystore.Setup,
@@ -328,14 +336,18 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		userpropertyprotocolmapper.SetupGated,
 		userrealmroleprotocolmapper.SetupGated,
 		usersessionnoteprotocolmapper.SetupGated,
+		adminpermissionsorganization.SetupGated,
 		membershipsorganization.SetupGated,
 		organization.SetupGated,
 		providerconfig.SetupGated,
 		clientpolicyprofile.SetupGated,
 		clientpolicyprofilepolicy.SetupGated,
 		clientregistrationpolicy.SetupGated,
+		clientscopeassignments.SetupGated,
 		defaultclientscopes.SetupGated,
 		keystoreaesgenerated.SetupGated,
+		keystorecustom.SetupGated,
+		keystoreecdhgenerated.SetupGated,
 		keystoreecdsagenerated.SetupGated,
 		keystorehmacgenerated.SetupGated,
 		keystorejavakeystore.SetupGated,
@@ -451,14 +463,18 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		userpropertyprotocolmapper.SetupWebhookWithManager,
 		userrealmroleprotocolmapper.SetupWebhookWithManager,
 		usersessionnoteprotocolmapper.SetupWebhookWithManager,
+		adminpermissionsorganization.SetupWebhookWithManager,
 		membershipsorganization.SetupWebhookWithManager,
 		organization.SetupWebhookWithManager,
 		providerconfig.SetupWebhookWithManager,
 		clientpolicyprofile.SetupWebhookWithManager,
 		clientpolicyprofilepolicy.SetupWebhookWithManager,
 		clientregistrationpolicy.SetupWebhookWithManager,
+		clientscopeassignments.SetupWebhookWithManager,
 		defaultclientscopes.SetupWebhookWithManager,
 		keystoreaesgenerated.SetupWebhookWithManager,
+		keystorecustom.SetupWebhookWithManager,
+		keystoreecdhgenerated.SetupWebhookWithManager,
 		keystoreecdsagenerated.SetupWebhookWithManager,
 		keystorehmacgenerated.SetupWebhookWithManager,
 		keystorejavakeystore.SetupWebhookWithManager,

@@ -1,0 +1,103 @@
+apiVersion: organization.keycloak.crossplane.io/v1alpha1
+kind: AdminPermissions
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/adminpermissions
+  labels:
+    testing.upbound.io/example-name: org_admins_manage_acme
+  name: org-admins-manage-acme
+spec:
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    description: Org admins can view and manage acme
+    name: org-admins-manage-acme
+    organizationIdsRefs:
+    - name: acme
+    policies:
+    - ${keycloak_openid_client_group_policy.org_admins_policy.id}
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    scopes:
+    - view
+    - manage
+
+---
+
+apiVersion: group.keycloak.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/adminpermissions
+  labels:
+    testing.upbound.io/example-name: org_admins
+  name: org-admins
+spec:
+  forProvider:
+    name: org-admins
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientGroupPolicy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/adminpermissions
+  labels:
+    testing.upbound.io/example-name: org_admins_policy
+  name: org-admins-policy
+spec:
+  forProvider:
+    decisionStrategy: UNANIMOUS
+    groups:
+    - extendChildren: false
+      idSelector:
+        matchLabels:
+          testing.upbound.io/example-name: org_admins
+      path: ${keycloak_group.org_admins.path}
+    logic: POSITIVE
+    name: org-admins-policy
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+    resourceServerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: keycloak_openid_client
+
+---
+
+apiVersion: organization.keycloak.crossplane.io/v1alpha1
+kind: Organization
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/adminpermissions
+  labels:
+    testing.upbound.io/example-name: acme
+  name: acme
+spec:
+  forProvider:
+    domain:
+    - name: acme.example.com
+    name: acme
+    realmSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: organization/v1alpha1/adminpermissions
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    adminPermissionsEnabled: true
+    organizationsEnabled: true
+    realm: my-realm

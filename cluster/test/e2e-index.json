@@ -265,6 +265,16 @@
         "dev/demos/namespaced/061-saml-client-scopes.yaml"
       ]
     },
+    "ClientScopeAssignments (realm)": {
+      "defined_in": [
+        "dev/demos/basic/066-client-scope-assignments.yaml",
+        "dev/demos/namespaced/066-client-scope-assignments.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/066-client-scope-assignments.yaml",
+        "dev/demos/namespaced/066-client-scope-assignments.yaml"
+      ]
+    },
     "ClientServiceAccountRealmRole (openidclient)": {
       "defined_in": [
         "dev/demos/basic/045-oidc-service-account-roles.yaml",
@@ -613,6 +623,26 @@
       "used_by": [
         "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
         "dev/demos/namespaced/005-realm-keystores-comprehensive.yaml"
+      ]
+    },
+    "KeystoreCustom (realm)": {
+      "defined_in": [
+        "dev/demos/basic/100-realm-keystore-custom.yaml",
+        "dev/demos/namespaced/100-realm-keystore-custom.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/100-realm-keystore-custom.yaml",
+        "dev/demos/namespaced/100-realm-keystore-custom.yaml"
+      ]
+    },
+    "KeystoreEcdhGenerated (realm)": {
+      "defined_in": [
+        "dev/demos/basic/101-realm-keystore-ecdh-generated.yaml",
+        "dev/demos/namespaced/101-realm-keystore-ecdh-generated.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/101-realm-keystore-ecdh-generated.yaml",
+        "dev/demos/namespaced/101-realm-keystore-ecdh-generated.yaml"
       ]
     },
     "KeystoreEcdsaGenerated (realm)": {
@@ -1177,6 +1207,7 @@
         "dev/demos/basic/063-saml-client-policies.yaml",
         "dev/demos/basic/064-oidc-authz-policies.yaml",
         "dev/demos/basic/065-saml-generic-mappers.yaml",
+        "dev/demos/basic/066-client-scope-assignments.yaml",
         "dev/demos/basic/070-authentication-flows.yaml",
         "dev/demos/basic/071-authentication-subflow.yaml",
         "dev/demos/basic/072-authentication-execution-subflow-ref.yaml",
@@ -1196,7 +1227,9 @@
         "dev/demos/basic/096-ldap-full-name-mapper.yaml",
         "dev/demos/basic/097-ldap-custom-mapper.yaml",
         "dev/demos/basic/098-microsoft-identity-provider.yaml",
-        "dev/demos/basic/099-ldap-user-model-hardcoded-attribute-mapper.yaml"
+        "dev/demos/basic/099-ldap-user-model-hardcoded-attribute-mapper.yaml",
+        "dev/demos/basic/100-realm-keystore-custom.yaml",
+        "dev/demos/basic/101-realm-keystore-ecdh-generated.yaml"
       ]
     },
     "dev/demos/basic/002-realm-clientscopes.yaml": {
@@ -1800,6 +1833,16 @@
       ],
       "rdeps": []
     },
+    "dev/demos/basic/066-client-scope-assignments.yaml": {
+      "groups": [
+        "openidclient",
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
     "dev/demos/basic/070-authentication-flows.yaml": {
       "groups": [
         "authenticationflow"
@@ -2051,6 +2094,24 @@
       ],
       "rdeps": []
     },
+    "dev/demos/basic/100-realm-keystore-custom.yaml": {
+      "groups": [
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/basic/101-realm-keystore-ecdh-generated.yaml": {
+      "groups": [
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
     "dev/demos/namespaced/001-realm-durations.yaml": {
       "groups": [
         "realm"
@@ -2111,6 +2172,7 @@
         "dev/demos/namespaced/063-saml-client-policies.yaml",
         "dev/demos/namespaced/064-oidc-authz-policies.yaml",
         "dev/demos/namespaced/065-saml-generic-mappers.yaml",
+        "dev/demos/namespaced/066-client-scope-assignments.yaml",
         "dev/demos/namespaced/070-authentication-flows.yaml",
         "dev/demos/namespaced/071-authentication-subflow.yaml",
         "dev/demos/namespaced/072-authentication-execution-subflow-ref.yaml",
@@ -2130,7 +2192,9 @@
         "dev/demos/namespaced/096-ldap-full-name-mapper.yaml",
         "dev/demos/namespaced/097-ldap-custom-mapper.yaml",
         "dev/demos/namespaced/098-microsoft-identity-provider.yaml",
-        "dev/demos/namespaced/099-ldap-user-model-hardcoded-attribute-mapper.yaml"
+        "dev/demos/namespaced/099-ldap-user-model-hardcoded-attribute-mapper.yaml",
+        "dev/demos/namespaced/100-realm-keystore-custom.yaml",
+        "dev/demos/namespaced/101-realm-keystore-ecdh-generated.yaml"
       ]
     },
     "dev/demos/namespaced/002-realm-clientscopes.yaml": {
@@ -2734,6 +2798,16 @@
       ],
       "rdeps": []
     },
+    "dev/demos/namespaced/066-client-scope-assignments.yaml": {
+      "groups": [
+        "openidclient",
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
     "dev/demos/namespaced/070-authentication-flows.yaml": {
       "groups": [
         "authenticationflow"
@@ -2982,6 +3056,24 @@
       "deps": [
         "dev/demos/namespaced/001-realm.yaml",
         "dev/demos/namespaced/090-ldap-user-federation.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/100-realm-keystore-custom.yaml": {
+      "groups": [
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/101-realm-keystore-ecdh-generated.yaml": {
+      "groups": [
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml"
       ],
       "rdeps": []
     },

@@ -1,0 +1,43 @@
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  name: scope-assignments-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    accessType: "CONFIDENTIAL"
+    clientId: "scope-assignments-client"
+    standardFlowEnabled: false
+    serviceAccountsEnabled: true
+  providerConfigRef:
+    name: "keycloak-provider-config"
+---
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: ClientScopeAssignments
+metadata:
+  name: scope-assignments-client
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    realmIdRef:
+      name: "dev"
+      policy:
+        resolve: Always
+    clientIdRef:
+      name: scope-assignments-client
+      policy:
+        resolve: Always
+    defaultScopes:
+      - profile
+      - roles
+      - basic
+    optionalScopes:
+      - email
+      - phone
+  providerConfigRef:
+    name: "keycloak-provider-config"

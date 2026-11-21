@@ -1404,6 +1404,11 @@ func (in *ClientPermissionsInitParameters) DeepCopyInto(out *ClientPermissionsIn
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.TokenExchangeScope != nil {
 		in, out := &in.TokenExchangeScope, &out.TokenExchangeScope
 		*out = new(TokenExchangeScopeInitParameters)
@@ -1511,6 +1516,11 @@ func (in *ClientPermissionsObservation) DeepCopyInto(out *ClientPermissionsObser
 		*out = new(string)
 		**out = **in
 	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
+	}
 	if in.TokenExchangeScope != nil {
 		in, out := &in.TokenExchangeScope, &out.TokenExchangeScope
 		*out = new(TokenExchangeScopeObservation)
@@ -1590,6 +1600,11 @@ func (in *ClientPermissionsParameters) DeepCopyInto(out *ClientPermissionsParame
 		in, out := &in.RealmIDSelector, &out.RealmIDSelector
 		*out = new(v2.NamespacedSelector)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.RealmInternalID != nil {
+		in, out := &in.RealmInternalID, &out.RealmInternalID
+		*out = new(string)
+		**out = **in
 	}
 	if in.TokenExchangeScope != nil {
 		in, out := &in.TokenExchangeScope, &out.TokenExchangeScope

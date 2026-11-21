@@ -251,6 +251,9 @@ type UserProfileInitParameters struct {
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
 
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
+
 	// Unmanaged attributes are user attributes not explicitly defined in the user profile configuration. By default, unmanaged attributes are not enabled. Value could be one of DISABLED, ENABLED, ADMIN_EDIT or ADMIN_VIEW. If value is not specified it means DISABLED
 	UnmanagedAttributePolicy *string `json:"unmanagedAttributePolicy,omitempty" tf:"unmanaged_attribute_policy,omitempty"`
 }
@@ -267,6 +270,9 @@ type UserProfileObservation struct {
 
 	// The ID of the realm the user profile applies to.
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Unmanaged attributes are user attributes not explicitly defined in the user profile configuration. By default, unmanaged attributes are not enabled. Value could be one of DISABLED, ENABLED, ADMIN_EDIT or ADMIN_VIEW. If value is not specified it means DISABLED
 	UnmanagedAttributePolicy *string `json:"unmanagedAttributePolicy,omitempty" tf:"unmanaged_attribute_policy,omitempty"`
@@ -294,6 +300,10 @@ type UserProfileParameters struct {
 	// Selector for a Realm in realm to populate realmId.
 	// +kubebuilder:validation:Optional
 	RealmIDSelector *v2.Selector `json:"realmIdSelector,omitempty" tf:"-"`
+
+	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
+	// +kubebuilder:validation:Optional
+	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// Unmanaged attributes are user attributes not explicitly defined in the user profile configuration. By default, unmanaged attributes are not enabled. Value could be one of DISABLED, ENABLED, ADMIN_EDIT or ADMIN_VIEW. If value is not specified it means DISABLED
 	// +kubebuilder:validation:Optional

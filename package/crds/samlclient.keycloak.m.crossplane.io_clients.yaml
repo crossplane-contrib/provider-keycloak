@@ -1272,6 +1272,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   rootUrl:
                     description: When specified, this value is prepended to all relative
                       URLs.
@@ -1574,6 +1579,11 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   rootUrl:
                     description: When specified, this value is prepended to all relative
                       URLs.
@@ -1844,6 +1854,11 @@ spec:
                     type: string
                   realmId:
                     description: The realm this client is attached to.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   rootUrl:
                     description: When specified, this value is prepended to all relative

@@ -15,8 +15,16 @@ import (
 
 type AuthInitParameters struct {
 
-	// The SMTP server password.
-	PasswordSecretRef v2.LocalSecretKeySelector `json:"passwordSecretRef" tf:"-"`
+	// The SMTP server password. Exactly one of password or password_wo must be set.
+	PasswordSecretRef *v2.LocalSecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
+
+	// The SMTP server password.11 or later and password_wo_version. Conflicts with password.
+	// The SMTP server password as a write-only argument
+	PasswordWoSecretRef *v2.LocalSecretKeySelector `json:"passwordWoSecretRef,omitempty" tf:"-"`
+
+	// A non-empty string identifying the password version. Required with password_wo. Change this value to rotate the password; changing only password_wo does not trigger rotation. Conflicts with password.
+	// Change this value to update the SMTP server write-only password
+	PasswordWoVersion *string `json:"passwordWoVersion,omitempty" tf:"password_wo_version,omitempty"`
 
 	// The SMTP server username.
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
@@ -24,15 +32,29 @@ type AuthInitParameters struct {
 
 type AuthObservation struct {
 
+	// A non-empty string identifying the password version. Required with password_wo. Change this value to rotate the password; changing only password_wo does not trigger rotation. Conflicts with password.
+	// Change this value to update the SMTP server write-only password
+	PasswordWoVersion *string `json:"passwordWoVersion,omitempty" tf:"password_wo_version,omitempty"`
+
 	// The SMTP server username.
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
 }
 
 type AuthParameters struct {
 
-	// The SMTP server password.
+	// The SMTP server password. Exactly one of password or password_wo must be set.
 	// +kubebuilder:validation:Optional
-	PasswordSecretRef v2.LocalSecretKeySelector `json:"passwordSecretRef" tf:"-"`
+	PasswordSecretRef *v2.LocalSecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
+
+	// The SMTP server password.11 or later and password_wo_version. Conflicts with password.
+	// The SMTP server password as a write-only argument
+	// +kubebuilder:validation:Optional
+	PasswordWoSecretRef *v2.LocalSecretKeySelector `json:"passwordWoSecretRef,omitempty" tf:"-"`
+
+	// A non-empty string identifying the password version. Required with password_wo. Change this value to rotate the password; changing only password_wo does not trigger rotation. Conflicts with password.
+	// Change this value to update the SMTP server write-only password
+	// +kubebuilder:validation:Optional
+	PasswordWoVersion *string `json:"passwordWoVersion,omitempty" tf:"password_wo_version,omitempty"`
 
 	// The SMTP server username.
 	// +kubebuilder:validation:Optional
@@ -396,11 +418,11 @@ type RealmInitParameters struct {
 	// The maximum amount of time before a session expires regardless of activity. Users can override it for individual clients.
 	ClientSessionMaxLifespan *string `json:"clientSessionMaxLifespan,omitempty" tf:"client_session_max_lifespan,omitempty"`
 
-	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_default_client_scopes.
+	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes. Alternatively, manage both assignment sets with keycloak_client_scope_assignments and omit both scope-assignment fields from this realm resource.
 	// +listType=set
 	DefaultDefaultClientScopes []*string `json:"defaultDefaultClientScopes,omitempty" tf:"default_default_client_scopes,omitempty"`
 
-	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_optional_client_scopes.
+	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes. Do not configure this field or default_default_client_scopes alongside a realm-level keycloak_client_scope_assignments resource; they manage the same assignments and will conflict.
 	// +listType=set
 	DefaultOptionalClientScopes []*string `json:"defaultOptionalClientScopes,omitempty" tf:"default_optional_client_scopes,omitempty"`
 
@@ -437,7 +459,7 @@ type RealmInitParameters struct {
 	// Which flow should be used for FirstBrokerLoginFlow
 	FirstBrokerLoginFlow *string `json:"firstBrokerLoginFlow,omitempty" tf:"first_broker_login_flow,omitempty"`
 
-	// When specified, this will be used as the realm's internal ID within Keycloak. When not specified, the realm's internal ID will be set to the realm's name.
+	// When specified, this will be used as the realm's internal ID within Keycloak. When not specified, Keycloak generates a UUID. Realms created by earlier versions of this provider may still have the realm's name as internal ID.
 	InternalID *string `json:"internalId,omitempty" tf:"internal_id,omitempty"`
 
 	Internationalization *InternationalizationInitParameters `json:"internationalization,omitempty" tf:"internationalization,omitempty"`
@@ -472,7 +494,7 @@ type RealmInitParameters struct {
 	// String that represents the passwordPolicies that are in place. Each policy is separated with " and ". Supported policies can be found in the server-info providers page. example: "upperCase(1) and length(8) and forceExpiredPasswordChange(365) and notUsername(undefined)"
 	PasswordPolicy *string `json:"passwordPolicy,omitempty" tf:"password_policy,omitempty"`
 
-	// The name of the realm. This is unique across Keycloak. This will also be used as the realm's internal ID within Keycloak.
+	// The name of the realm. This is unique across Keycloak. This will also be used as the realm's internal ID within Keycloak. Changing it renames the realm in place; see Renaming a realm. The master realm cannot be renamed.
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
 	// Maximum number of times a refresh token can be reused before they are revoked. If unspecified and 'revoke_refresh_token' is enabled the default value is 0 and refresh tokens can not be reused.
@@ -587,11 +609,11 @@ type RealmObservation struct {
 	// The maximum amount of time before a session expires regardless of activity. Users can override it for individual clients.
 	ClientSessionMaxLifespan *string `json:"clientSessionMaxLifespan,omitempty" tf:"client_session_max_lifespan,omitempty"`
 
-	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_default_client_scopes.
+	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes. Alternatively, manage both assignment sets with keycloak_client_scope_assignments and omit both scope-assignment fields from this realm resource.
 	// +listType=set
 	DefaultDefaultClientScopes []*string `json:"defaultDefaultClientScopes,omitempty" tf:"default_default_client_scopes,omitempty"`
 
-	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_optional_client_scopes.
+	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes. Do not configure this field or default_default_client_scopes alongside a realm-level keycloak_client_scope_assignments resource; they manage the same assignments and will conflict.
 	// +listType=set
 	DefaultOptionalClientScopes []*string `json:"defaultOptionalClientScopes,omitempty" tf:"default_optional_client_scopes,omitempty"`
 
@@ -630,7 +652,7 @@ type RealmObservation struct {
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// When specified, this will be used as the realm's internal ID within Keycloak. When not specified, the realm's internal ID will be set to the realm's name.
+	// When specified, this will be used as the realm's internal ID within Keycloak. When not specified, Keycloak generates a UUID. Realms created by earlier versions of this provider may still have the realm's name as internal ID.
 	InternalID *string `json:"internalId,omitempty" tf:"internal_id,omitempty"`
 
 	Internationalization *InternationalizationObservation `json:"internationalization,omitempty" tf:"internationalization,omitempty"`
@@ -665,7 +687,7 @@ type RealmObservation struct {
 	// String that represents the passwordPolicies that are in place. Each policy is separated with " and ". Supported policies can be found in the server-info providers page. example: "upperCase(1) and length(8) and forceExpiredPasswordChange(365) and notUsername(undefined)"
 	PasswordPolicy *string `json:"passwordPolicy,omitempty" tf:"password_policy,omitempty"`
 
-	// The name of the realm. This is unique across Keycloak. This will also be used as the realm's internal ID within Keycloak.
+	// The name of the realm. This is unique across Keycloak. This will also be used as the realm's internal ID within Keycloak. Changing it renames the realm in place; see Renaming a realm. The master realm cannot be renamed.
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
 	// Maximum number of times a refresh token can be reused before they are revoked. If unspecified and 'revoke_refresh_token' is enabled the default value is 0 and refresh tokens can not be reused.
@@ -795,12 +817,12 @@ type RealmParameters struct {
 	// +kubebuilder:validation:Optional
 	ClientSessionMaxLifespan *string `json:"clientSessionMaxLifespan,omitempty" tf:"client_session_max_lifespan,omitempty"`
 
-	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_default_client_scopes.
+	// A list of default default client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default default client-scopes. Alternatively, manage both assignment sets with keycloak_client_scope_assignments and omit both scope-assignment fields from this realm resource.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	DefaultDefaultClientScopes []*string `json:"defaultDefaultClientScopes,omitempty" tf:"default_default_client_scopes,omitempty"`
 
-	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes. For an alternative, please refer to the dedicated resource keycloak_realm_optional_client_scopes.
+	// A list of default optional client scopes to be used for client definitions. Defaults to [] or keycloak's built-in default optional client-scopes. Do not configure this field or default_default_client_scopes alongside a realm-level keycloak_client_scope_assignments resource; they manage the same assignments and will conflict.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	DefaultOptionalClientScopes []*string `json:"defaultOptionalClientScopes,omitempty" tf:"default_optional_client_scopes,omitempty"`
@@ -848,7 +870,7 @@ type RealmParameters struct {
 	// +kubebuilder:validation:Optional
 	FirstBrokerLoginFlow *string `json:"firstBrokerLoginFlow,omitempty" tf:"first_broker_login_flow,omitempty"`
 
-	// When specified, this will be used as the realm's internal ID within Keycloak. When not specified, the realm's internal ID will be set to the realm's name.
+	// When specified, this will be used as the realm's internal ID within Keycloak. When not specified, Keycloak generates a UUID. Realms created by earlier versions of this provider may still have the realm's name as internal ID.
 	// +kubebuilder:validation:Optional
 	InternalID *string `json:"internalId,omitempty" tf:"internal_id,omitempty"`
 
@@ -895,7 +917,7 @@ type RealmParameters struct {
 	// +kubebuilder:validation:Optional
 	PasswordPolicy *string `json:"passwordPolicy,omitempty" tf:"password_policy,omitempty"`
 
-	// The name of the realm. This is unique across Keycloak. This will also be used as the realm's internal ID within Keycloak.
+	// The name of the realm. This is unique across Keycloak. This will also be used as the realm's internal ID within Keycloak. Changing it renames the realm in place; see Renaming a realm. The master realm cannot be renamed.
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
@@ -1229,10 +1251,14 @@ type WebAuthnPasswordlessPolicyInitParameters struct {
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
-	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
+	// An unordered set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
 	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
+
+	// A list of signature algorithms in WebAuthn preference order. Use this instead of signature_algorithms when order matters; the two arguments cannot be configured together. When omitted, this field only reports the server order in state. Legacy signature_algorithms writes remain unordered and can reorder algorithms during other realm updates. To adopt an existing order, replace signature_algorithms with this argument using the exact order returned by Keycloak. Available in both WebAuthn policy blocks.
+	// Signature algorithms in preference order. Conflicts with signature_algorithms.
+	SignatureAlgorithmsOrdered []*string `json:"signatureAlgorithmsOrdered,omitempty" tf:"signature_algorithms_ordered,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
 	// Either required, preferred or discouraged
@@ -1281,10 +1307,14 @@ type WebAuthnPasswordlessPolicyObservation struct {
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
-	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
+	// An unordered set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
 	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
+
+	// A list of signature algorithms in WebAuthn preference order. Use this instead of signature_algorithms when order matters; the two arguments cannot be configured together. When omitted, this field only reports the server order in state. Legacy signature_algorithms writes remain unordered and can reorder algorithms during other realm updates. To adopt an existing order, replace signature_algorithms with this argument using the exact order returned by Keycloak. Available in both WebAuthn policy blocks.
+	// Signature algorithms in preference order. Conflicts with signature_algorithms.
+	SignatureAlgorithmsOrdered []*string `json:"signatureAlgorithmsOrdered,omitempty" tf:"signature_algorithms_ordered,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
 	// Either required, preferred or discouraged
@@ -1344,11 +1374,16 @@ type WebAuthnPasswordlessPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
-	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
+	// An unordered set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
+
+	// A list of signature algorithms in WebAuthn preference order. Use this instead of signature_algorithms when order matters; the two arguments cannot be configured together. When omitted, this field only reports the server order in state. Legacy signature_algorithms writes remain unordered and can reorder algorithms during other realm updates. To adopt an existing order, replace signature_algorithms with this argument using the exact order returned by Keycloak. Available in both WebAuthn policy blocks.
+	// Signature algorithms in preference order. Conflicts with signature_algorithms.
+	// +kubebuilder:validation:Optional
+	SignatureAlgorithmsOrdered []*string `json:"signatureAlgorithmsOrdered,omitempty" tf:"signature_algorithms_ordered,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
 	// Either required, preferred or discouraged
@@ -1394,10 +1429,14 @@ type WebAuthnPolicyInitParameters struct {
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
-	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
+	// An unordered set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
 	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
+
+	// A list of signature algorithms in WebAuthn preference order. Use this instead of signature_algorithms when order matters; the two arguments cannot be configured together. When omitted, this field only reports the server order in state. Legacy signature_algorithms writes remain unordered and can reorder algorithms during other realm updates. To adopt an existing order, replace signature_algorithms with this argument using the exact order returned by Keycloak. Available in both WebAuthn policy blocks.
+	// Signature algorithms in preference order. Conflicts with signature_algorithms.
+	SignatureAlgorithmsOrdered []*string `json:"signatureAlgorithmsOrdered,omitempty" tf:"signature_algorithms_ordered,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
 	// Either required, preferred or discouraged
@@ -1442,10 +1481,14 @@ type WebAuthnPolicyObservation struct {
 	// Either Yes or No
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
-	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
+	// An unordered set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
 	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
+
+	// A list of signature algorithms in WebAuthn preference order. Use this instead of signature_algorithms when order matters; the two arguments cannot be configured together. When omitted, this field only reports the server order in state. Legacy signature_algorithms writes remain unordered and can reorder algorithms during other realm updates. To adopt an existing order, replace signature_algorithms with this argument using the exact order returned by Keycloak. Available in both WebAuthn policy blocks.
+	// Signature algorithms in preference order. Conflicts with signature_algorithms.
+	SignatureAlgorithmsOrdered []*string `json:"signatureAlgorithmsOrdered,omitempty" tf:"signature_algorithms_ordered,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
 	// Either required, preferred or discouraged
@@ -1500,11 +1543,16 @@ type WebAuthnPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RequireResidentKey *string `json:"requireResidentKey,omitempty" tf:"require_resident_key,omitempty"`
 
-	// A set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
+	// An unordered set of signature algorithms that should be used for the authentication assertion. Valid options at the time these docs were written are ES256, ES384, ES512, RS256, RS384, RS512, and RS1.
 	// Keycloak lists ES256, ES384, ES512, RS256, RS384, RS512, RS1 at the time of writing
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	SignatureAlgorithms []*string `json:"signatureAlgorithms,omitempty" tf:"signature_algorithms,omitempty"`
+
+	// A list of signature algorithms in WebAuthn preference order. Use this instead of signature_algorithms when order matters; the two arguments cannot be configured together. When omitted, this field only reports the server order in state. Legacy signature_algorithms writes remain unordered and can reorder algorithms during other realm updates. To adopt an existing order, replace signature_algorithms with this argument using the exact order returned by Keycloak. Available in both WebAuthn policy blocks.
+	// Signature algorithms in preference order. Conflicts with signature_algorithms.
+	// +kubebuilder:validation:Optional
+	SignatureAlgorithmsOrdered []*string `json:"signatureAlgorithmsOrdered,omitempty" tf:"signature_algorithms_ordered,omitempty"`
 
 	// Specifies the policy for verifying a user logging in via WebAuthn. Valid options are not specified, required, preferred, or discouraged. Defaults to not specified.
 	// Either required, preferred or discouraged

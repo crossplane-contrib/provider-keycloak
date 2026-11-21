@@ -1219,7 +1219,8 @@ spec:
                       users that belong to this group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1237,7 +1238,8 @@ spec:
                       of the group. Add or remove members from the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1255,7 +1257,8 @@ spec:
                       configuration of the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1267,6 +1270,89 @@ spec:
                           type: string
                         type: array
                         x-kubernetes-list-type: set
+                    type: object
+                  organizationId:
+                    description: Not supported by this resource. This is the Fine-Grained
+                      Admin Permissions v1 resource, whose REST API is realm-scoped
+                      and cannot manage organization groups; setting a non-empty value
+                      returns an error. To manage an organization group's fine-grained
+                      permissions, use keycloak_group_admin_permissions (FGA v2).
+                    type: string
+                  organizationIdRef:
+                    description: Reference to a Organization in organization to populate
+                      organizationId.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  organizationIdSelector:
+                    description: Selector for a Organization in organization to populate
+                      organizationId.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
                     type: object
                   realmId:
                     description: The realm in which to manage fine-grained role permissions.
@@ -1345,12 +1431,18 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   viewMembersScope:
                     description: Policies that decide if the admin can view the user
                       details of members of the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1368,7 +1460,8 @@ spec:
                       about the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1477,7 +1570,8 @@ spec:
                       users that belong to this group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1495,7 +1589,8 @@ spec:
                       of the group. Add or remove members from the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1513,7 +1608,8 @@ spec:
                       configuration of the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1525,6 +1621,89 @@ spec:
                           type: string
                         type: array
                         x-kubernetes-list-type: set
+                    type: object
+                  organizationId:
+                    description: Not supported by this resource. This is the Fine-Grained
+                      Admin Permissions v1 resource, whose REST API is realm-scoped
+                      and cannot manage organization groups; setting a non-empty value
+                      returns an error. To manage an organization group's fine-grained
+                      permissions, use keycloak_group_admin_permissions (FGA v2).
+                    type: string
+                  organizationIdRef:
+                    description: Reference to a Organization in organization to populate
+                      organizationId.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  organizationIdSelector:
+                    description: Selector for a Organization in organization to populate
+                      organizationId.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
                     type: object
                   realmId:
                     description: The realm in which to manage fine-grained role permissions.
@@ -1603,12 +1782,18 @@ spec:
                             type: string
                         type: object
                     type: object
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
+                    type: string
                   viewMembersScope:
                     description: Policies that decide if the admin can view the user
                       details of members of the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1626,7 +1811,8 @@ spec:
                       about the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1750,7 +1936,8 @@ spec:
                       users that belong to this group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1768,7 +1955,8 @@ spec:
                       of the group. Add or remove members from the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1786,7 +1974,8 @@ spec:
                       configuration of the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1799,15 +1988,28 @@ spec:
                         type: array
                         x-kubernetes-list-type: set
                     type: object
+                  organizationId:
+                    description: Not supported by this resource. This is the Fine-Grained
+                      Admin Permissions v1 resource, whose REST API is realm-scoped
+                      and cannot manage organization groups; setting a non-empty value
+                      returns an error. To manage an organization group's fine-grained
+                      permissions, use keycloak_group_admin_permissions (FGA v2).
+                    type: string
                   realmId:
                     description: The realm in which to manage fine-grained role permissions.
+                    type: string
+                  realmInternalId:
+                    description: The internal id of the realm, as an alternative to
+                      realm_id. Unlike the realm name, it does not change when the
+                      realm is renamed.
                     type: string
                   viewMembersScope:
                     description: Policies that decide if the admin can view the user
                       details of members of the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
@@ -1825,7 +2027,8 @@ spec:
                       about the group.
                     properties:
                       decisionStrategy:
-                        description: Decision strategy of the permission.
+                        description: Decision strategy of the permission. Defaults
+                          to UNANIMOUS.
                         type: string
                       description:
                         description: Description of the permission.
