@@ -97,6 +97,7 @@ import (
 	defaultclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/defaultclientscopes"
 	keystoreaesgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystoreaesgenerated"
 	keystorecustom "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystorecustom"
+	keystoreecdhgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystoreecdhgenerated"
 	keystoreecdsagenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystoreecdsagenerated"
 	keystorehmacgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystorehmacgenerated"
 	keystorejavakeystore "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/realm/keystorejavakeystore"
@@ -218,6 +219,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		defaultclientscopes.Setup,
 		keystoreaesgenerated.Setup,
 		keystorecustom.Setup,
+		keystoreecdhgenerated.Setup,
 		keystoreecdsagenerated.Setup,
 		keystorehmacgenerated.Setup,
 		keystorejavakeystore.Setup,
@@ -345,6 +347,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		defaultclientscopes.SetupGated,
 		keystoreaesgenerated.SetupGated,
 		keystorecustom.SetupGated,
+		keystoreecdhgenerated.SetupGated,
 		keystoreecdsagenerated.SetupGated,
 		keystorehmacgenerated.SetupGated,
 		keystorejavakeystore.SetupGated,
@@ -471,6 +474,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		defaultclientscopes.SetupWebhookWithManager,
 		keystoreaesgenerated.SetupWebhookWithManager,
 		keystorecustom.SetupWebhookWithManager,
+		keystoreecdhgenerated.SetupWebhookWithManager,
 		keystoreecdsagenerated.SetupWebhookWithManager,
 		keystorehmacgenerated.SetupWebhookWithManager,
 		keystorejavakeystore.SetupWebhookWithManager,

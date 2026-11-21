@@ -107,6 +107,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_realm_keystore_rsa":                                realm.KeystoreRsaIdentifierFromIdentifyingProperties,                      // {UUid}
 	"keycloak_realm_keystore_aes_generated":                      config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_realm_keystore_ecdsa_generated":                    config.IdentifierFromProvider,                                             // {UUid}
+	"keycloak_realm_keystore_ecdh_generated":                     config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_realm_keystore_hmac_generated":                     config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_realm_keystore_rsa_generated":                      config.IdentifierFromProvider,                                             // {UUid}
 	"keycloak_realm_keystore_rsa_enc_generated":                  config.IdentifierFromProvider,                                             // {UUid}

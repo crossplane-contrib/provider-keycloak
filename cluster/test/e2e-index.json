@@ -635,6 +635,16 @@
         "dev/demos/namespaced/100-realm-keystore-custom.yaml"
       ]
     },
+    "KeystoreEcdhGenerated (realm)": {
+      "defined_in": [
+        "dev/demos/basic/101-realm-keystore-ecdh-generated.yaml",
+        "dev/demos/namespaced/101-realm-keystore-ecdh-generated.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/101-realm-keystore-ecdh-generated.yaml",
+        "dev/demos/namespaced/101-realm-keystore-ecdh-generated.yaml"
+      ]
+    },
     "KeystoreEcdsaGenerated (realm)": {
       "defined_in": [
         "dev/demos/basic/005-realm-keystores-comprehensive.yaml",
@@ -1218,7 +1228,8 @@
         "dev/demos/basic/097-ldap-custom-mapper.yaml",
         "dev/demos/basic/098-microsoft-identity-provider.yaml",
         "dev/demos/basic/099-ldap-user-model-hardcoded-attribute-mapper.yaml",
-        "dev/demos/basic/100-realm-keystore-custom.yaml"
+        "dev/demos/basic/100-realm-keystore-custom.yaml",
+        "dev/demos/basic/101-realm-keystore-ecdh-generated.yaml"
       ]
     },
     "dev/demos/basic/002-realm-clientscopes.yaml": {
@@ -2092,6 +2103,15 @@
       ],
       "rdeps": []
     },
+    "dev/demos/basic/101-realm-keystore-ecdh-generated.yaml": {
+      "groups": [
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
     "dev/demos/namespaced/001-realm-durations.yaml": {
       "groups": [
         "realm"
@@ -2173,7 +2193,8 @@
         "dev/demos/namespaced/097-ldap-custom-mapper.yaml",
         "dev/demos/namespaced/098-microsoft-identity-provider.yaml",
         "dev/demos/namespaced/099-ldap-user-model-hardcoded-attribute-mapper.yaml",
-        "dev/demos/namespaced/100-realm-keystore-custom.yaml"
+        "dev/demos/namespaced/100-realm-keystore-custom.yaml",
+        "dev/demos/namespaced/101-realm-keystore-ecdh-generated.yaml"
       ]
     },
     "dev/demos/namespaced/002-realm-clientscopes.yaml": {
@@ -3039,6 +3060,15 @@
       "rdeps": []
     },
     "dev/demos/namespaced/100-realm-keystore-custom.yaml": {
+      "groups": [
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/101-realm-keystore-ecdh-generated.yaml": {
       "groups": [
         "realm"
       ],

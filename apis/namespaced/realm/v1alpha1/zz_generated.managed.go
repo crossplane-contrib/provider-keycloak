@@ -287,6 +287,46 @@ func (mg *KeystoreCustom) SetWriteConnectionSecretToReference(r *xpv2.LocalSecre
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) GetManagementPolicies() xpv2.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) GetProviderConfigReference() *xpv2.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) GetWriteConnectionSecretToReference() *xpv2.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) SetConditions(c ...xpv2.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) SetManagementPolicies(r xpv2.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) SetProviderConfigReference(r *xpv2.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) SetWriteConnectionSecretToReference(r *xpv2.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this KeystoreEcdsaGenerated.
 func (mg *KeystoreEcdsaGenerated) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
