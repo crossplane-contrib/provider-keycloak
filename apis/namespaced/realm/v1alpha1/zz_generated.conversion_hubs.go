@@ -28,6 +28,9 @@ func (tr *KeystoreAesGenerated) Hub() {}
 func (tr *KeystoreCustom) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *KeystoreEcdhGenerated) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *KeystoreEcdsaGenerated) Hub() {}
 
 // Hub marks this type as a conversion hub.

@@ -357,6 +357,56 @@ func (mg *KeystoreCustom) SetWriteConnectionSecretToReference(r *xpv2.SecretRefe
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) GetDeletionPolicy() xpv2.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) GetManagementPolicies() xpv2.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) GetProviderConfigReference() *xpv2.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) SetConditions(c ...xpv2.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) SetDeletionPolicy(r xpv2.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) SetManagementPolicies(r xpv2.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) SetProviderConfigReference(r *xpv2.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this KeystoreEcdhGenerated.
+func (mg *KeystoreEcdhGenerated) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this KeystoreEcdsaGenerated.
 func (mg *KeystoreEcdsaGenerated) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
