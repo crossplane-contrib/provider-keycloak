@@ -86,6 +86,7 @@ import (
 	userpropertyprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/userpropertyprotocolmapper"
 	userrealmroleprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/userrealmroleprotocolmapper"
 	usersessionnoteprotocolmapper "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/openidgroup/usersessionnoteprotocolmapper"
+	adminpermissionsorganization "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/organization/adminpermissions"
 	membershipsorganization "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/organization/memberships"
 	organization "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/organization/organization"
 	providerconfig "github.com/crossplane-contrib/provider-keycloak/internal/controller/cluster/providerconfig"
@@ -205,6 +206,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		userpropertyprotocolmapper.Setup,
 		userrealmroleprotocolmapper.Setup,
 		usersessionnoteprotocolmapper.Setup,
+		adminpermissionsorganization.Setup,
 		membershipsorganization.Setup,
 		organization.Setup,
 		providerconfig.Setup,
@@ -330,6 +332,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		userpropertyprotocolmapper.SetupGated,
 		userrealmroleprotocolmapper.SetupGated,
 		usersessionnoteprotocolmapper.SetupGated,
+		adminpermissionsorganization.SetupGated,
 		membershipsorganization.SetupGated,
 		organization.SetupGated,
 		providerconfig.SetupGated,
@@ -454,6 +457,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		userpropertyprotocolmapper.SetupWebhookWithManager,
 		userrealmroleprotocolmapper.SetupWebhookWithManager,
 		usersessionnoteprotocolmapper.SetupWebhookWithManager,
+		adminpermissionsorganization.SetupWebhookWithManager,
 		membershipsorganization.SetupWebhookWithManager,
 		organization.SetupWebhookWithManager,
 		providerconfig.SetupWebhookWithManager,

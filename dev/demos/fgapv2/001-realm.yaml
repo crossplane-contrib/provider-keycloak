@@ -12,5 +12,7 @@ spec:
     realm: "fgapv2"
     enabled: true
     adminPermissionsEnabled: true
+    # Required by the organization admin permission demo.
+    organizationsEnabled: true
   providerConfigRef:
     name: "keycloak-provider-config"
