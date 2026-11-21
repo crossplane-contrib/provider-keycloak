@@ -22,6 +22,7 @@
 ./dev/demos/namespaced/071-authentication-subflow.yaml
 ./dev/demos/namespaced/070-authentication-flows.yaml
 ./dev/demos/namespaced/063-saml-client-policies.yaml
+./dev/demos/namespaced/066-client-scope-assignments.yaml
 ./dev/demos/namespaced/065-saml-generic-mappers.yaml
 ./dev/demos/namespaced/064-oidc-authz-policies.yaml
 ./dev/demos/namespaced/062-saml-client-default-scopes.yaml
@@ -93,6 +94,7 @@
 ./dev/demos/basic/071-authentication-subflow.yaml
 ./dev/demos/basic/070-authentication-flows.yaml
 ./dev/demos/basic/063-saml-client-policies.yaml
+./dev/demos/basic/066-client-scope-assignments.yaml
 ./dev/demos/basic/065-saml-generic-mappers.yaml
 ./dev/demos/basic/064-oidc-authz-policies.yaml
 ./dev/demos/basic/062-saml-client-default-scopes.yaml

@@ -12,6 +12,7 @@ import (
 
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
 	"github.com/crossplane-contrib/provider-keycloak/config/lookup"
+	"github.com/crossplane-contrib/provider-keycloak/config/multitypes"
 )
 
 // Group is the short group name for the resources in this package
@@ -142,6 +143,28 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("keycloak_realm_optional_client_scopes", func(r *config.Resource) {
 		r.ShortGroup = Group
+	})
+
+	p.AddResourceConfigurator("keycloak_client_scope_assignments", func(r *config.Resource) {
+		r.ShortGroup = Group
+		r.Kind = "ClientScopeAssignments"
+		multitypes.ApplyToWithOptions(r, "client_id",
+			&multitypes.Options{KeepOriginalField: true},
+			multitypes.Instance{
+				Name: "client_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_openid_client",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+			multitypes.Instance{
+				Name: "saml_client_id",
+				Reference: config.Reference{
+					TerraformName: "keycloak_saml_client",
+					Extractor:     common.PathUUIDExtractor,
+				},
+			},
+		)
 	})
 
 	p.AddResourceConfigurator("keycloak_realm_events", func(r *config.Resource) {

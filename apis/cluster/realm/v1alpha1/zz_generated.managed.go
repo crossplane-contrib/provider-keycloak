@@ -157,6 +157,56 @@ func (mg *ClientRegistrationPolicy) SetWriteConnectionSecretToReference(r *xpv2.
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this ClientScopeAssignments.
+func (mg *ClientScopeAssignments) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this ClientScopeAssignments.
+func (mg *ClientScopeAssignments) GetDeletionPolicy() xpv2.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this ClientScopeAssignments.
+func (mg *ClientScopeAssignments) GetManagementPolicies() xpv2.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this ClientScopeAssignments.
+func (mg *ClientScopeAssignments) GetProviderConfigReference() *xpv2.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this ClientScopeAssignments.
+func (mg *ClientScopeAssignments) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this ClientScopeAssignments.
+func (mg *ClientScopeAssignments) SetConditions(c ...xpv2.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this ClientScopeAssignments.
+func (mg *ClientScopeAssignments) SetDeletionPolicy(r xpv2.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this ClientScopeAssignments.
+func (mg *ClientScopeAssignments) SetManagementPolicies(r xpv2.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this ClientScopeAssignments.
+func (mg *ClientScopeAssignments) SetProviderConfigReference(r *xpv2.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this ClientScopeAssignments.
+func (mg *ClientScopeAssignments) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this DefaultClientScopes.
 func (mg *DefaultClientScopes) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)

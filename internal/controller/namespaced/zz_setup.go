@@ -92,6 +92,7 @@ import (
 	clientpolicyprofile "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofile"
 	clientpolicyprofilepolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientpolicyprofilepolicy"
 	clientregistrationpolicy "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientregistrationpolicy"
+	clientscopeassignments "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/clientscopeassignments"
 	defaultclientscopes "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/defaultclientscopes"
 	keystoreaesgenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/keystoreaesgenerated"
 	keystoreecdsagenerated "github.com/crossplane-contrib/provider-keycloak/internal/controller/namespaced/realm/keystoreecdsagenerated"
@@ -210,6 +211,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		clientpolicyprofile.Setup,
 		clientpolicyprofilepolicy.Setup,
 		clientregistrationpolicy.Setup,
+		clientscopeassignments.Setup,
 		defaultclientscopes.Setup,
 		keystoreaesgenerated.Setup,
 		keystoreecdsagenerated.Setup,
@@ -334,6 +336,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		clientpolicyprofile.SetupGated,
 		clientpolicyprofilepolicy.SetupGated,
 		clientregistrationpolicy.SetupGated,
+		clientscopeassignments.SetupGated,
 		defaultclientscopes.SetupGated,
 		keystoreaesgenerated.SetupGated,
 		keystoreecdsagenerated.SetupGated,
@@ -457,6 +460,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		clientpolicyprofile.SetupWebhookWithManager,
 		clientpolicyprofilepolicy.SetupWebhookWithManager,
 		clientregistrationpolicy.SetupWebhookWithManager,
+		clientscopeassignments.SetupWebhookWithManager,
 		defaultclientscopes.SetupWebhookWithManager,
 		keystoreaesgenerated.SetupWebhookWithManager,
 		keystoreecdsagenerated.SetupWebhookWithManager,

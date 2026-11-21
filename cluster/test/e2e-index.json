@@ -265,6 +265,16 @@
         "dev/demos/namespaced/061-saml-client-scopes.yaml"
       ]
     },
+    "ClientScopeAssignments (realm)": {
+      "defined_in": [
+        "dev/demos/basic/066-client-scope-assignments.yaml",
+        "dev/demos/namespaced/066-client-scope-assignments.yaml"
+      ],
+      "used_by": [
+        "dev/demos/basic/066-client-scope-assignments.yaml",
+        "dev/demos/namespaced/066-client-scope-assignments.yaml"
+      ]
+    },
     "ClientServiceAccountRealmRole (openidclient)": {
       "defined_in": [
         "dev/demos/basic/045-oidc-service-account-roles.yaml",
@@ -1177,6 +1187,7 @@
         "dev/demos/basic/063-saml-client-policies.yaml",
         "dev/demos/basic/064-oidc-authz-policies.yaml",
         "dev/demos/basic/065-saml-generic-mappers.yaml",
+        "dev/demos/basic/066-client-scope-assignments.yaml",
         "dev/demos/basic/070-authentication-flows.yaml",
         "dev/demos/basic/071-authentication-subflow.yaml",
         "dev/demos/basic/072-authentication-execution-subflow-ref.yaml",
@@ -1800,6 +1811,16 @@
       ],
       "rdeps": []
     },
+    "dev/demos/basic/066-client-scope-assignments.yaml": {
+      "groups": [
+        "openidclient",
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/basic/001-realm.yaml"
+      ],
+      "rdeps": []
+    },
     "dev/demos/basic/070-authentication-flows.yaml": {
       "groups": [
         "authenticationflow"
@@ -2111,6 +2132,7 @@
         "dev/demos/namespaced/063-saml-client-policies.yaml",
         "dev/demos/namespaced/064-oidc-authz-policies.yaml",
         "dev/demos/namespaced/065-saml-generic-mappers.yaml",
+        "dev/demos/namespaced/066-client-scope-assignments.yaml",
         "dev/demos/namespaced/070-authentication-flows.yaml",
         "dev/demos/namespaced/071-authentication-subflow.yaml",
         "dev/demos/namespaced/072-authentication-execution-subflow-ref.yaml",
@@ -2731,6 +2753,16 @@
         "dev/demos/namespaced/001-realm.yaml",
         "dev/demos/namespaced/010-roles.yaml",
         "dev/demos/namespaced/060-saml-client.yaml"
+      ],
+      "rdeps": []
+    },
+    "dev/demos/namespaced/066-client-scope-assignments.yaml": {
+      "groups": [
+        "openidclient",
+        "realm"
+      ],
+      "deps": [
+        "dev/demos/namespaced/001-realm.yaml"
       ],
       "rdeps": []
     },

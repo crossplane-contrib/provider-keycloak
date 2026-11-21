@@ -1,0 +1,75 @@
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: ClientScopeAssignments
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/clientscopeassignments
+  labels:
+    testing.upbound.io/example-name: web_client
+  name: web-client
+spec:
+  forProvider:
+    clientIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: web
+    defaultScopes:
+    - profile
+    - email
+    - roles
+    - web-origins
+    - acr
+    - basic
+    optionalScopes:
+    - ${keycloak_openid_client_scope.groups.name}
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+kind: Client
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/clientscopeassignments
+  labels:
+    testing.upbound.io/example-name: web
+  name: web
+spec:
+  forProvider:
+    accessType: CONFIDENTIAL
+    clientId: web
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientScope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/clientscopeassignments
+  labels:
+    testing.upbound.io/example-name: groups
+  name: groups
+spec:
+  forProvider:
+    name: groups
+    realmIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: realm
+
+---
+
+apiVersion: realm.keycloak.crossplane.io/v1alpha1
+kind: Realm
+metadata:
+  annotations:
+    meta.upbound.io/example-id: realm/v1alpha1/clientscopeassignments
+  labels:
+    testing.upbound.io/example-name: realm
+  name: realm
+spec:
+  forProvider:
+    enabled: true
+    realm: my-realm
