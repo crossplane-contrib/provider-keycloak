@@ -14,6 +14,7 @@ import (
 
 	"github.com/crossplane-contrib/provider-keycloak/config/authentication"
 	"github.com/crossplane-contrib/provider-keycloak/config/common"
+	"github.com/crossplane-contrib/provider-keycloak/config/conversion"
 	"github.com/crossplane-contrib/provider-keycloak/config/defaults"
 	"github.com/crossplane-contrib/provider-keycloak/config/group"
 	"github.com/crossplane-contrib/provider-keycloak/config/identityprovider"
@@ -99,6 +100,7 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 			KnownReferencers(),
 			singletonlist.Validate(),
 		),
+		ujconfig.WithSchemaTraversers(&ujconfig.SingletonListEmbedder{}),
 		ujconfig.WithRootGroup(rootGroup))
 
 	for _, configure := range []func(provider *ujconfig.Provider){
@@ -124,6 +126,9 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 	}
 
 	pc.ConfigureResources()
+	if err := conversion.BumpVersionsForSingletonListEmbedding(pc, singletonListTypeChanges()); err != nil {
+		return nil, err
+	}
 	return pc, nil
 }
 
@@ -154,6 +159,7 @@ func GetProviderNamespaced(generationProvider bool) (*ujconfig.Provider, error) 
 			KnownReferencers(),
 			singletonlist.Validate(),
 		),
+		ujconfig.WithSchemaTraversers(&ujconfig.SingletonListEmbedder{}),
 		ujconfig.WithRootGroup(rootGroupNamespaced))
 
 	for _, configure := range []func(provider *ujconfig.Provider){
@@ -179,11 +185,22 @@ func GetProviderNamespaced(generationProvider bool) (*ujconfig.Provider, error) 
 	}
 
 	pc.ConfigureResources()
+	if err := conversion.BumpVersionsForSingletonListEmbedding(pc, singletonListTypeChanges()); err != nil {
+		return nil, err
+	}
 
 	// unset reference, this as reference - it is not reference and it creates import cycle
 	delete(pc.Resources["keycloak_openid_client"].References, "client_id")
 
 	return pc, nil
+}
+
+func singletonListTypeChanges() map[string][]conversion.FieldTypeChange {
+	return map[string][]conversion.FieldTypeChange{
+		"keycloak_openid_client": {
+			{SourceVersion: "v1alpha1", FieldPath: "clientSecretWoVersion"},
+		},
+	}
 }
 
 // KnownReferencers adds referencers for fields that are known and common among

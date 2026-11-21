@@ -31,7 +31,7 @@ type HardcodedGroupMapperInitParameters struct {
 
 	// The ID of the LDAP user federation provider to attach this mapper to.
 	// The ldap user federation provider to attach this mapper to.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/ldap/v1alpha1.UserFederation
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/ldap/v1alpha2.UserFederation
 	LdapUserFederationID *string `json:"ldapUserFederationId,omitempty" tf:"ldap_user_federation_id,omitempty"`
 
 	// Reference to a UserFederation in ldap to populate ldapUserFederationId.
@@ -48,7 +48,7 @@ type HardcodedGroupMapperInitParameters struct {
 
 	// The realm that this LDAP mapper will exist in.
 	// The realm in which the ldap user federation provider exists.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -106,7 +106,7 @@ type HardcodedGroupMapperParameters struct {
 
 	// The ID of the LDAP user federation provider to attach this mapper to.
 	// The ldap user federation provider to attach this mapper to.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/ldap/v1alpha1.UserFederation
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/ldap/v1alpha2.UserFederation
 	// +kubebuilder:validation:Optional
 	LdapUserFederationID *string `json:"ldapUserFederationId,omitempty" tf:"ldap_user_federation_id,omitempty"`
 
@@ -125,7 +125,7 @@ type HardcodedGroupMapperParameters struct {
 
 	// The realm that this LDAP mapper will exist in.
 	// The realm in which the ldap user federation provider exists.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

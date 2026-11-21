@@ -17,7 +17,7 @@ type GenericClientRoleMapperInitParameters struct {
 
 	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The destination client of the role. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -44,7 +44,7 @@ type GenericClientRoleMapperInitParameters struct {
 
 	// The realm this role mapper exists within.
 	// The realm id where the associated client or client scope exists.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -73,7 +73,7 @@ type GenericClientRoleMapperInitParameters struct {
 
 	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The destination client of the role. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
 
@@ -135,7 +135,7 @@ type GenericClientRoleMapperParameters struct {
 
 	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The destination client of the role. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
@@ -164,7 +164,7 @@ type GenericClientRoleMapperParameters struct {
 
 	// The realm this role mapper exists within.
 	// The realm id where the associated client or client scope exists.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -196,7 +196,7 @@ type GenericClientRoleMapperParameters struct {
 
 	// The ID of the client this role mapper should be added to. Conflicts with client_scope_id. This argument is required if client_scope_id is not set.
 	// The destination client of the role. Cannot be used at the same time as client_scope_id.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`

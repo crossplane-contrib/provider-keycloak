@@ -52,9 +52,6 @@ func (tr *KeystoreRsaGenerated) Hub() {}
 func (tr *OptionalClientScopes) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *Realm) Hub() {}
-
-// Hub marks this type as a conversion hub.
 func (tr *RealmEvents) Hub() {}
 
 // Hub marks this type as a conversion hub.
@@ -62,6 +59,3 @@ func (tr *RealmLocalization) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *RequiredAction) Hub() {}
-
-// Hub marks this type as a conversion hub.
-func (tr *UserProfile) Hub() {}

@@ -67,7 +67,7 @@ type OrganizationInitParameters struct {
 
 	// The realm this organization exists in.
 	// Realm ID.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
 	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
@@ -154,7 +154,7 @@ type OrganizationParameters struct {
 
 	// The realm this organization exists in.
 	// Realm ID.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 

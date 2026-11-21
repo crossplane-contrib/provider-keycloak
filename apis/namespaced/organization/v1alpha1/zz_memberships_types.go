@@ -17,7 +17,7 @@ type MembershipsInitParameters struct {
 
 	// A set of usernames to assign as members of the organization. Managed members may be listed, but are never removed.
 	// The set of usernames to assign to the organization.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/user/v1alpha1.User
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/user/v1alpha2.User
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("username", false)
 	// +listType=set
 	Members []*string `json:"members,omitempty" tf:"members,omitempty"`
@@ -45,7 +45,7 @@ type MembershipsInitParameters struct {
 
 	// The realm the organization belongs to.
 	// The realm this organization exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -84,7 +84,7 @@ type MembershipsParameters struct {
 
 	// A set of usernames to assign as members of the organization. Managed members may be listed, but are never removed.
 	// The set of usernames to assign to the organization.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/user/v1alpha1.User
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/user/v1alpha2.User
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/v2/pkg/resource.ExtractParamPath("username", false)
 	// +kubebuilder:validation:Optional
 	// +listType=set
@@ -114,7 +114,7 @@ type MembershipsParameters struct {
 
 	// The realm the organization belongs to.
 	// The realm this organization exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

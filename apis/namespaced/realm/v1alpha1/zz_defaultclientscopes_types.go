@@ -20,7 +20,7 @@ type DefaultClientScopesInitParameters struct {
 	DefaultScopes []*string `json:"defaultScopes,omitempty" tf:"default_scopes,omitempty"`
 
 	// The realm this client and scopes exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -58,7 +58,7 @@ type DefaultClientScopesParameters struct {
 	DefaultScopes []*string `json:"defaultScopes,omitempty" tf:"default_scopes,omitempty"`
 
 	// The realm this client and scopes exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

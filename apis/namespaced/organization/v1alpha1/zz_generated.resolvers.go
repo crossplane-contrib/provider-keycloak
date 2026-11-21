@@ -147,7 +147,7 @@ func (mg *AdminPermissions) ResolveReferences( // ResolveReferences of this Admi
 	mg.Spec.ForProvider.OrganizationIds = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.ForProvider.OrganizationIdsRefs = mrsp.ResolvedReferences
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -367,7 +367,7 @@ func (mg *AdminPermissions) ResolveReferences( // ResolveReferences of this Admi
 	mg.Spec.InitProvider.OrganizationIds = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.InitProvider.OrganizationIdsRefs = mrsp.ResolvedReferences
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -480,7 +480,7 @@ func (mg *Memberships) ResolveReferences(ctx context.Context, c client.Reader) e
 	var mrsp reference.MultiNamespacedResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("user.keycloak.m.crossplane.io", "v1alpha1", "User", "UserList")
+		m, l, err = apisresolver.GetManagedResource("user.keycloak.m.crossplane.io", "v1alpha2", "User", "UserList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -520,7 +520,7 @@ func (mg *Memberships) ResolveReferences(ctx context.Context, c client.Reader) e
 	mg.Spec.ForProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.OrganizationIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -540,7 +540,7 @@ func (mg *Memberships) ResolveReferences(ctx context.Context, c client.Reader) e
 	mg.Spec.ForProvider.RealmID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("user.keycloak.m.crossplane.io", "v1alpha1", "User", "UserList")
+		m, l, err = apisresolver.GetManagedResource("user.keycloak.m.crossplane.io", "v1alpha2", "User", "UserList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -580,7 +580,7 @@ func (mg *Memberships) ResolveReferences(ctx context.Context, c client.Reader) e
 	mg.Spec.InitProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.OrganizationIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -612,7 +612,7 @@ func (mg *Organization) ResolveReferences(ctx context.Context, c client.Reader) 
 	var rsp reference.NamespacedResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -632,7 +632,7 @@ func (mg *Organization) ResolveReferences(ctx context.Context, c client.Reader) 
 	mg.Spec.ForProvider.Realm = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.RealmRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}

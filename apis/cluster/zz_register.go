@@ -14,22 +14,29 @@ import (
 	v1alpha1client "github.com/crossplane-contrib/provider-keycloak/apis/cluster/client/v1alpha1"
 	v1alpha1defaults "github.com/crossplane-contrib/provider-keycloak/apis/cluster/defaults/v1alpha1"
 	v1alpha1group "github.com/crossplane-contrib/provider-keycloak/apis/cluster/group/v1alpha1"
+	v1alpha2 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/group/v1alpha2"
 	v1alpha1identityprovider "github.com/crossplane-contrib/provider-keycloak/apis/cluster/identityprovider/v1alpha1"
 	v1alpha1ldap "github.com/crossplane-contrib/provider-keycloak/apis/cluster/ldap/v1alpha1"
+	v1alpha2ldap "github.com/crossplane-contrib/provider-keycloak/apis/cluster/ldap/v1alpha2"
 	v1alpha1oidc "github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha1"
-	v1alpha2 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha2"
+	v1alpha2oidc "github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha2"
 	v1alpha1openidclient "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1"
 	v1alpha2openidclient "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2"
+	v1alpha3 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha3"
 	v1alpha1openidgroup "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidgroup/v1alpha1"
 	v1alpha1organization "github.com/crossplane-contrib/provider-keycloak/apis/cluster/organization/v1alpha1"
 	v1alpha1realm "github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1"
+	v1alpha2realm "github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2"
 	v1alpha1role "github.com/crossplane-contrib/provider-keycloak/apis/cluster/role/v1alpha1"
 	v1alpha1saml "github.com/crossplane-contrib/provider-keycloak/apis/cluster/saml/v1alpha1"
 	v1alpha1samlclient "github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha1"
+	v1alpha2samlclient "github.com/crossplane-contrib/provider-keycloak/apis/cluster/samlclient/v1alpha2"
 	v1alpha1user "github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha1"
+	v1alpha2user "github.com/crossplane-contrib/provider-keycloak/apis/cluster/user/v1alpha2"
 	v1alpha1cluster "github.com/crossplane-contrib/provider-keycloak/apis/cluster/v1alpha1"
 	v1beta1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/v1beta1"
 	v1alpha1workflow "github.com/crossplane-contrib/provider-keycloak/apis/cluster/workflow/v1alpha1"
+	v1alpha2workflow "github.com/crossplane-contrib/provider-keycloak/apis/cluster/workflow/v1alpha2"
 )
 
 func init() {
@@ -39,22 +46,29 @@ func init() {
 		v1alpha1client.SchemeBuilder.AddToScheme,
 		v1alpha1defaults.SchemeBuilder.AddToScheme,
 		v1alpha1group.SchemeBuilder.AddToScheme,
+		v1alpha2.SchemeBuilder.AddToScheme,
 		v1alpha1identityprovider.SchemeBuilder.AddToScheme,
 		v1alpha1ldap.SchemeBuilder.AddToScheme,
+		v1alpha2ldap.SchemeBuilder.AddToScheme,
 		v1alpha1oidc.SchemeBuilder.AddToScheme,
-		v1alpha2.SchemeBuilder.AddToScheme,
+		v1alpha2oidc.SchemeBuilder.AddToScheme,
 		v1alpha1openidclient.SchemeBuilder.AddToScheme,
 		v1alpha2openidclient.SchemeBuilder.AddToScheme,
+		v1alpha3.SchemeBuilder.AddToScheme,
 		v1alpha1openidgroup.SchemeBuilder.AddToScheme,
 		v1alpha1organization.SchemeBuilder.AddToScheme,
 		v1alpha1realm.SchemeBuilder.AddToScheme,
+		v1alpha2realm.SchemeBuilder.AddToScheme,
 		v1alpha1role.SchemeBuilder.AddToScheme,
 		v1alpha1saml.SchemeBuilder.AddToScheme,
 		v1alpha1samlclient.SchemeBuilder.AddToScheme,
+		v1alpha2samlclient.SchemeBuilder.AddToScheme,
 		v1alpha1user.SchemeBuilder.AddToScheme,
+		v1alpha2user.SchemeBuilder.AddToScheme,
 		v1alpha1cluster.SchemeBuilder.AddToScheme,
 		v1beta1.SchemeBuilder.AddToScheme,
 		v1alpha1workflow.SchemeBuilder.AddToScheme,
+		v1alpha2workflow.SchemeBuilder.AddToScheme,
 	)
 }
 

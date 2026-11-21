@@ -13,13 +13,7 @@ func (tr *AdminPermissions) Hub() {}
 func (tr *Groups) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *Permissions) Hub() {}
-
-// Hub marks this type as a conversion hub.
 func (tr *Roles) Hub() {}
-
-// Hub marks this type as a conversion hub.
-func (tr *User) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *UserFederation) Hub() {}

@@ -13,7 +13,7 @@ Use groups when multiple users should share the same roles or when you need a hi
 | Group | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Group/v1alpha1) |
 | Memberships | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_memberships`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_memberships) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Memberships/v1alpha1) |
 | Roles | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_roles`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_roles) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Roles/v1alpha1) |
-| Permissions | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Permissions/v1alpha1) |
+| Permissions | `group.keycloak.crossplane.io/v1alpha2` | [`keycloak_group_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/Permissions/v1alpha2) |
 | AdminPermissions | `group.keycloak.crossplane.io/v1alpha1` | [`keycloak_group_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/group.keycloak.crossplane.io/AdminPermissions/v1alpha1) |
 
 ## Examples
@@ -120,7 +120,7 @@ spec:
 ### Group permissions
 
 ```yaml
-apiVersion: group.keycloak.crossplane.io/v1alpha1
+apiVersion: group.keycloak.crossplane.io/v1alpha2
 kind: Permissions
 metadata:
   name: my-group-permission

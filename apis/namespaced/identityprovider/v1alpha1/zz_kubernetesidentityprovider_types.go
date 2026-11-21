@@ -86,7 +86,7 @@ type KubernetesIdentityProviderInitParameters struct {
 
 	// The name of the realm. This is unique across Keycloak.
 	// Realm Name
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 
 	// The internal id of the realm, as an alternative to realm_id. Unlike the realm name, it does not change when the realm is renamed.
@@ -276,7 +276,7 @@ type KubernetesIdentityProviderParameters struct {
 
 	// The name of the realm. This is unique across Keycloak.
 	// Realm Name
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	Realm *string `json:"realm,omitempty" tf:"realm,omitempty"`
 

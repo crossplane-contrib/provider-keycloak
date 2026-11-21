@@ -16,7 +16,7 @@ import (
 type RoleMapperInitParameters struct {
 
 	// When specified, LDAP role mappings will be mapped to client role mappings tied to this client ID. Can only be set if use_realm_roles_mapping is false.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -33,7 +33,7 @@ type RoleMapperInitParameters struct {
 
 	// The ID of the LDAP user federation provider to attach this mapper to.
 	// The ldap user federation provider to attach this mapper to.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/ldap/v1alpha1.UserFederation
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/ldap/v1alpha2.UserFederation
 	LdapUserFederationID *string `json:"ldapUserFederationId,omitempty" tf:"ldap_user_federation_id,omitempty"`
 
 	// Reference to a UserFederation in ldap to populate ldapUserFederationId.
@@ -65,7 +65,7 @@ type RoleMapperInitParameters struct {
 
 	// The realm that this LDAP mapper will exist in.
 	// The realm in which the ldap user federation provider exists.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -154,7 +154,7 @@ type RoleMapperObservation struct {
 type RoleMapperParameters struct {
 
 	// When specified, LDAP role mappings will be mapped to client role mappings tied to this client ID. Can only be set if use_realm_roles_mapping is false.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
@@ -173,7 +173,7 @@ type RoleMapperParameters struct {
 
 	// The ID of the LDAP user federation provider to attach this mapper to.
 	// The ldap user federation provider to attach this mapper to.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/ldap/v1alpha1.UserFederation
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/ldap/v1alpha2.UserFederation
 	// +kubebuilder:validation:Optional
 	LdapUserFederationID *string `json:"ldapUserFederationId,omitempty" tf:"ldap_user_federation_id,omitempty"`
 
@@ -212,7 +212,7 @@ type RoleMapperParameters struct {
 
 	// The realm that this LDAP mapper will exist in.
 	// The realm in which the ldap user federation provider exists.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

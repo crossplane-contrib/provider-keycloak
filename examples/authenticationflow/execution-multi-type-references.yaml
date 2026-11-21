@@ -6,7 +6,7 @@ metadata:
 ---
 # Example demonstrating issue #163 fix: Execution resources can now reference both Flow and Subflow resources
 # This showcases the multi-type reference capability where parentFlowAlias can reference either a Flow or Subflow
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: example-realm
