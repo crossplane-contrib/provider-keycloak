@@ -23,7 +23,7 @@ spec:
 
 ---
 
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   annotations:
@@ -44,7 +44,7 @@ spec:
 
 ---
 
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   annotations:
@@ -59,7 +59,7 @@ spec:
 
 ---
 
-apiVersion: user.keycloak.crossplane.io/v1alpha1
+apiVersion: user.keycloak.crossplane.io/v1alpha2
 kind: User
 metadata:
   annotations:
@@ -80,7 +80,7 @@ spec:
 
 ---
 
-apiVersion: user.keycloak.crossplane.io/v1alpha1
+apiVersion: user.keycloak.crossplane.io/v1alpha2
 kind: User
 metadata:
   annotations:

@@ -46,7 +46,7 @@ func (mg *DefaultGroups) ResolveReferences( // ResolveReferences of this Default
 	mg.Spec.ForProvider.GroupIds = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.ForProvider.GroupIdsRefs = mrsp.ResolvedReferences
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -86,7 +86,7 @@ func (mg *DefaultGroups) ResolveReferences( // ResolveReferences of this Default
 	mg.Spec.InitProvider.GroupIds = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.InitProvider.GroupIdsRefs = mrsp.ResolvedReferences
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -139,7 +139,7 @@ func (mg *Roles) ResolveReferences(ctx context.Context, c client.Reader) error {
 	mg.Spec.ForProvider.DefaultRoles = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.ForProvider.DefaultRolesRefs = mrsp.ResolvedReferences
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -179,7 +179,7 @@ func (mg *Roles) ResolveReferences(ctx context.Context, c client.Reader) error {
 	mg.Spec.InitProvider.DefaultRoles = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.InitProvider.DefaultRolesRefs = mrsp.ResolvedReferences
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}

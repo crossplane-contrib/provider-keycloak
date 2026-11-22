@@ -16,7 +16,7 @@ import (
 type ClientScopeAssignmentsInitParameters struct {
 
 	// The Keycloak-generated ID of the client. If omitted, assignments apply to the realm. Must not be empty when set.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
 
@@ -37,7 +37,7 @@ type ClientScopeAssignmentsInitParameters struct {
 	OptionalScopes []*string `json:"optionalScopes,omitempty" tf:"optional_scopes,omitempty"`
 
 	// The target realm.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -52,7 +52,7 @@ type ClientScopeAssignmentsInitParameters struct {
 	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The Keycloak-generated ID of the client. If omitted, assignments apply to the realm. Must not be empty when set.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`
 
@@ -93,7 +93,7 @@ type ClientScopeAssignmentsObservation struct {
 type ClientScopeAssignmentsParameters struct {
 
 	// The Keycloak-generated ID of the client. If omitted, assignments apply to the realm. Must not be empty when set.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
@@ -117,7 +117,7 @@ type ClientScopeAssignmentsParameters struct {
 	OptionalScopes []*string `json:"optionalScopes,omitempty" tf:"optional_scopes,omitempty"`
 
 	// The target realm.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -134,7 +134,7 @@ type ClientScopeAssignmentsParameters struct {
 	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The Keycloak-generated ID of the client. If omitted, assignments apply to the realm. Must not be empty when set.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha1.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/samlclient/v1alpha2.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	SAMLClientID *string `json:"samlClientId,omitempty" tf:"saml_client_id,omitempty"`

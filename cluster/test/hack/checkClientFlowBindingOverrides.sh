@@ -49,7 +49,7 @@ wait_for() {
 
 check_spec() {
   local ref realm
-  ref="$(get "${CLIENT_KG}/${CLIENT}" '{.spec.forProvider.authenticationFlowBindingOverrides[0].browserIdRef.name}')"
+  ref="$(get "${CLIENT_KG}/${CLIENT}" '{.spec.forProvider.authenticationFlowBindingOverrides.browserIdRef.name}')"
   if [[ "${ref}" != "${FLOW}" ]]; then
     echo "spec.forProvider.authenticationFlowBindingOverrides was pruned from ${CLIENT_KG}/${CLIENT} (browserIdRef.name: '${ref}')"
     return 1
@@ -82,7 +82,7 @@ spec:
           name: ${FLOW}
 EOF
 
-wait_for "${CLIENT_KG}/${CLIENT}" '{.status.atProvider.authenticationFlowBindingOverrides[0].browserId}' "${flow_id}"
+wait_for "${CLIENT_KG}/${CLIENT}" '{.status.atProvider.authenticationFlowBindingOverrides.browserId}' "${flow_id}"
 wait_for "${CLIENT_KG}/${CLIENT}" '{.status.conditions[?(@.type=="Synced")].status}' "True"
 check_spec
 
@@ -90,7 +90,7 @@ check_spec
 # that nothing was pruned in the meantime.
 sleep 30
 check_spec
-actual="$(get "${CLIENT_KG}/${CLIENT}" '{.status.atProvider.authenticationFlowBindingOverrides[0].browserId}')"
+actual="$(get "${CLIENT_KG}/${CLIENT}" '{.status.atProvider.authenticationFlowBindingOverrides.browserId}')"
 if [[ "${actual}" != "${flow_id}" ]]; then
   echo "browser flow override drifted to '${actual}', expected '${flow_id}'"
   exit 1

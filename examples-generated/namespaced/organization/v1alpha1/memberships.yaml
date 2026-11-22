@@ -41,7 +41,7 @@ spec:
 
 ---
 
-apiVersion: realm.keycloak.m.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.m.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   annotations:
@@ -57,7 +57,7 @@ spec:
 
 ---
 
-apiVersion: user.keycloak.m.crossplane.io/v1alpha1
+apiVersion: user.keycloak.m.crossplane.io/v1alpha2
 kind: User
 metadata:
   annotations:
@@ -76,7 +76,7 @@ spec:
 
 ---
 
-apiVersion: user.keycloak.m.crossplane.io/v1alpha1
+apiVersion: user.keycloak.m.crossplane.io/v1alpha2
 kind: User
 metadata:
   annotations:

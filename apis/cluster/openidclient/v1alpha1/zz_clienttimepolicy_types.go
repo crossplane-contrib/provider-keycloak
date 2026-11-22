@@ -58,7 +58,7 @@ type ClientTimePolicyInitParameters struct {
 	NotOnOrAfter *string `json:"notOnOrAfter,omitempty" tf:"not_on_or_after,omitempty"`
 
 	// The realm this policy exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -74,7 +74,7 @@ type ClientTimePolicyInitParameters struct {
 	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The ID of the resource server.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`
 
@@ -216,7 +216,7 @@ type ClientTimePolicyParameters struct {
 	NotOnOrAfter *string `json:"notOnOrAfter,omitempty" tf:"not_on_or_after,omitempty"`
 
 	// The realm this policy exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
@@ -234,7 +234,7 @@ type ClientTimePolicyParameters struct {
 	RealmInternalID *string `json:"realmInternalId,omitempty" tf:"realm_internal_id,omitempty"`
 
 	// The ID of the resource server.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2.Client
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha3.Client
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-keycloak/config/common.UUIDExtractor()
 	// +kubebuilder:validation:Optional
 	ResourceServerID *string `json:"resourceServerId,omitempty" tf:"resource_server_id,omitempty"`

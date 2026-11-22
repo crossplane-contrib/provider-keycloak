@@ -9,7 +9,7 @@
 # Each AdminPermissions resource is exactly one permission. It either applies
 # to all clients of the realm, or only to the clients listed in `clientIdsRefs`
 # / `samlClientIdsRefs`.
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: example-clientadminpermissions-realm
@@ -22,7 +22,7 @@ spec:
     name: keycloak-provider-config
 
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: example-clientadminpermissions-client

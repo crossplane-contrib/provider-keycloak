@@ -21,7 +21,7 @@ type RealmLocalizationInitParameters struct {
 
 	// The ID of the realm the localization texts apply to.
 	// The realm in which the texts exists.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -70,7 +70,7 @@ type RealmLocalizationParameters struct {
 
 	// The ID of the realm the localization texts apply to.
 	// The realm in which the texts exists.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

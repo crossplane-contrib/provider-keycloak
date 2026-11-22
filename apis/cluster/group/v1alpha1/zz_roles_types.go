@@ -43,7 +43,7 @@ type RolesInitParameters struct {
 	OrganizationIDSelector *v2.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -129,7 +129,7 @@ type RolesParameters struct {
 	OrganizationIDSelector *v2.Selector `json:"organizationIdSelector,omitempty" tf:"-"`
 
 	// The realm this group exists in.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

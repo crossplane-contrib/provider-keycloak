@@ -8,14 +8,14 @@ Use a `Realm` when you need an isolated Keycloak boundary for a tenant, environm
 
 ## API Reference
 
-- **`Realm`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/Realm/v1alpha1)
+- **`Realm`** — API: `realm.keycloak.crossplane.io/v1alpha2` — Terraform: [`keycloak_realm`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/Realm/v1alpha2)
 
 ## Working YAML Examples
 
 ### Basic realm
 
 ```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: dev
@@ -32,7 +32,7 @@ spec:
 ### Realm with timeouts and lifespans
 
 ```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: dev-durations
@@ -65,7 +65,7 @@ spec:
 ### Managing an existing realm without deleting it
 
 ```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: existing-master
@@ -82,7 +82,7 @@ spec:
 ### Realm with organizations enabled
 
 ```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: orgs

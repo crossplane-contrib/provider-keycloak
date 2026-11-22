@@ -37,7 +37,4 @@ func (tr *RoleMapper) Hub() {}
 func (tr *UserAttributeMapper) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *UserFederation) Hub() {}
-
-// Hub marks this type as a conversion hub.
 func (tr *UserModelHardcodedAttributeMapper) Hub() {}

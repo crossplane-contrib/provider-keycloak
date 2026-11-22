@@ -26,7 +26,7 @@ spec:
 
 ---
 
-apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+apiVersion: ldap.keycloak.crossplane.io/v1alpha2
 kind: UserFederation
 metadata:
   annotations:
@@ -56,7 +56,7 @@ spec:
 
 ---
 
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   annotations:

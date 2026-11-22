@@ -99,7 +99,7 @@ type AdminPermissionsInitParameters struct {
 	Policies []*string `json:"policies,omitempty" tf:"policies,omitempty"`
 
 	// The realm in which to manage this permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 
 	// Reference to a Realm in realm to populate realmId.
@@ -343,7 +343,7 @@ type AdminPermissionsParameters struct {
 	Policies []*string `json:"policies,omitempty" tf:"policies,omitempty"`
 
 	// The realm in which to manage this permission.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha1.Realm
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-keycloak/apis/namespaced/realm/v1alpha2.Realm
 	// +kubebuilder:validation:Optional
 	RealmID *string `json:"realmId,omitempty" tf:"realm_id,omitempty"`
 

@@ -8,7 +8,7 @@
 #
 # Each AdminPermissions resource is exactly one permission. User permissions
 # are always realm wide, they apply to all users of the realm.
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: example-adminpermissions-realm

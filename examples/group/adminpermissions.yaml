@@ -8,7 +8,7 @@
 #
 # Each AdminPermissions resource is exactly one permission. It either applies
 # to all groups of the realm, or only to the groups listed in `groupIdsRefs`.
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: example-groupadminpermissions-realm

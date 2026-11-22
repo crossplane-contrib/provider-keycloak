@@ -165,7 +165,7 @@ func (mg *AttributeIdentityProviderMapper) ResolveReferences( // ResolveReferenc
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -365,7 +365,7 @@ func (mg *AttributeIdentityProviderMapper) ResolveReferences( // ResolveReferenc
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -577,7 +577,7 @@ func (mg *GroupIdentityProviderMapper) ResolveReferences(ctx context.Context, c 
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -777,7 +777,7 @@ func (mg *GroupIdentityProviderMapper) ResolveReferences(ctx context.Context, c 
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -989,7 +989,7 @@ func (mg *IdentityProviderMapper) ResolveReferences(ctx context.Context, c clien
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1189,7 +1189,7 @@ func (mg *IdentityProviderMapper) ResolveReferences(ctx context.Context, c clien
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1401,7 +1401,7 @@ func (mg *ImporterIdentityProviderMapper) ResolveReferences(ctx context.Context,
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1601,7 +1601,7 @@ func (mg *ImporterIdentityProviderMapper) ResolveReferences(ctx context.Context,
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1713,7 +1713,7 @@ func (mg *KubernetesIdentityProvider) ResolveReferences(ctx context.Context, c c
 	mg.Spec.ForProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.OrganizationIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1773,7 +1773,7 @@ func (mg *KubernetesIdentityProvider) ResolveReferences(ctx context.Context, c c
 	mg.Spec.InitProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.OrganizationIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1865,7 +1865,7 @@ func (mg *OidcOpenShiftV4IdentityProvider) ResolveReferences(ctx context.Context
 	mg.Spec.ForProvider.PostBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.PostBrokerLoginFlowAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1945,7 +1945,7 @@ func (mg *OidcOpenShiftV4IdentityProvider) ResolveReferences(ctx context.Context
 	mg.Spec.InitProvider.PostBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.PostBrokerLoginFlowAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -1978,7 +1978,7 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	var mrsp reference.MultiNamespacedResolutionResponse
 	var err error
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha2", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha3", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -2138,7 +2138,7 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	mg.Spec.ForProvider.ProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.ProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -2198,7 +2198,7 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	mg.Spec.ForProvider.SpiffeProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.SpiffeProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha2", "Client", "ClientList")
+		m, l, err = apisresolver.GetManagedResource("openidclient.keycloak.m.crossplane.io", "v1alpha3", "Client", "ClientList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -2358,7 +2358,7 @@ func (mg *ProviderTokenExchangeScopePermission) ResolveReferences(ctx context.Co
 	mg.Spec.InitProvider.ProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.ProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -2570,7 +2570,7 @@ func (mg *RoleIdentityProviderMapper) ResolveReferences(ctx context.Context, c c
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -2770,7 +2770,7 @@ func (mg *RoleIdentityProviderMapper) ResolveReferences(ctx context.Context, c c
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -2902,7 +2902,7 @@ func (mg *SpiffeIdentityProvider) ResolveReferences(ctx context.Context, c clien
 	mg.Spec.ForProvider.PostBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.PostBrokerLoginFlowAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -2982,7 +2982,7 @@ func (mg *SpiffeIdentityProvider) ResolveReferences(ctx context.Context, c clien
 	mg.Spec.InitProvider.PostBrokerLoginFlowAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.PostBrokerLoginFlowAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -3154,7 +3154,7 @@ func (mg *TemplateImporterIdentityProviderMapper) ResolveReferences(ctx context.
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -3354,7 +3354,7 @@ func (mg *TemplateImporterIdentityProviderMapper) ResolveReferences(ctx context.
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -3566,7 +3566,7 @@ func (mg *ToRoleIdentityProviderMapper) ResolveReferences(ctx context.Context, c
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -3766,7 +3766,7 @@ func (mg *ToRoleIdentityProviderMapper) ResolveReferences(ctx context.Context, c
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAlias = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.OpenshiftV4IdentityProviderAliasRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}

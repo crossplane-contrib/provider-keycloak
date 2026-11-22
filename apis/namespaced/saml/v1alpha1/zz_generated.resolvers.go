@@ -44,7 +44,7 @@ func (mg *IdentityProvider) ResolveReferences( // ResolveReferences of this Iden
 	mg.Spec.ForProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.OrganizationIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}
@@ -84,7 +84,7 @@ func (mg *IdentityProvider) ResolveReferences( // ResolveReferences of this Iden
 	mg.Spec.InitProvider.OrganizationID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.OrganizationIDRef = rsp.ResolvedReference
 	{
-		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha1", "Realm", "RealmList")
+		m, l, err = apisresolver.GetManagedResource("realm.keycloak.m.crossplane.io", "v1alpha2", "Realm", "RealmList")
 		if err != nil {
 			return errors.Wrap(err, "failed to get the reference target managed resource and its list for reference resolution")
 		}

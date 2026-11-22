@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"github.com/crossplane/upjet/v2/pkg/controller/conversion"
@@ -11,6 +12,9 @@ import (
 	oidcv1alpha2 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/oidc/v1alpha2"
 	clientv1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha1"
 	clientv1alpha2 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha2"
+	clientv1alpha3 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/openidclient/v1alpha3"
+	realmv1alpha1 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha1"
+	realmv1alpha2 "github.com/crossplane-contrib/provider-keycloak/apis/cluster/realm/v1alpha2"
 )
 
 // storedV1Alpha1Client is a Client as it is persisted in etcd by
@@ -55,13 +59,16 @@ func TestStoredV1Alpha1ObjectsRequireAConversionWebhook(t *testing.T) {
 
 // TestClientSecretWoVersionConversion exercises the very same code path the
 // conversion webhook uses at runtime (upjet's conversion registry + RoundTrip)
-// for both the upgrade (v1alpha1 -> v1alpha2) and the downgrade
-// (v1alpha2 -> v1alpha1) direction.
+// for both the upgrade (v1alpha1 -> v1alpha3) and the downgrade
+// (v1alpha3 -> v1alpha1) direction.
 func TestClientSecretWoVersionConversion(t *testing.T) {
 	scheme := runtime.NewScheme()
 	for _, add := range []func(*runtime.Scheme) error{
 		clientv1alpha1.SchemeBuilder.AddToScheme,
 		clientv1alpha2.SchemeBuilder.AddToScheme,
+		clientv1alpha3.SchemeBuilder.AddToScheme,
+		realmv1alpha1.SchemeBuilder.AddToScheme,
+		realmv1alpha2.SchemeBuilder.AddToScheme,
 		oidcv1alpha1.SchemeBuilder.AddToScheme,
 		oidcv1alpha2.SchemeBuilder.AddToScheme,
 	} {
@@ -87,9 +94,9 @@ func TestClientSecretWoVersionConversion(t *testing.T) {
 		if err := json.Unmarshal([]byte(storedV1Alpha1Client), src); err != nil {
 			t.Fatalf("cannot decode the stored object: %v", err)
 		}
-		dst := &clientv1alpha2.Client{}
+		dst := &clientv1alpha3.Client{}
 		if err := src.ConvertTo(dst); err != nil {
-			t.Fatalf("cannot convert v1alpha1 to v1alpha2: %v", err)
+			t.Fatalf("cannot convert v1alpha1 to v1alpha3: %v", err)
 		}
 		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != "202605192" {
 			t.Errorf("spec.forProvider.clientSecretWoVersion: want %q, got %v", "202605192", got)
@@ -104,20 +111,222 @@ func TestClientSecretWoVersionConversion(t *testing.T) {
 
 	t.Run("Downgrade", func(t *testing.T) {
 		version := "202605192"
-		src := &clientv1alpha2.Client{}
+		src := &clientv1alpha3.Client{}
 		src.Name = "client"
 		src.Spec.ForProvider.ClientSecretWoVersion = &version
 		src.Status.AtProvider.ClientSecretWoVersion = &version
 
 		dst := &clientv1alpha1.Client{}
 		if err := dst.ConvertFrom(src); err != nil {
-			t.Fatalf("cannot convert v1alpha2 to v1alpha1: %v", err)
+			t.Fatalf("cannot convert v1alpha3 to v1alpha1: %v", err)
 		}
 		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != 202605192 {
 			t.Errorf("spec.forProvider.clientSecretWoVersion: want %v, got %v", 202605192, got)
 		}
 		if got := dst.Status.AtProvider.ClientSecretWoVersion; got == nil || *got != 202605192 {
 			t.Errorf("status.atProvider.clientSecretWoVersion: want %v, got %v", 202605192, got)
+		}
+	})
+
+	t.Run("StringVersionIdentityConversion", func(t *testing.T) {
+		version := "202605192"
+		src := &clientv1alpha2.Client{}
+		src.Name = "client"
+		src.Spec.ForProvider.ClientSecretWoVersion = &version
+		src.Status.AtProvider.ClientSecretWoVersion = &version
+
+		hub := &clientv1alpha3.Client{}
+		if err := src.ConvertTo(hub); err != nil {
+			t.Fatalf("cannot convert v1alpha2 to v1alpha3: %v", err)
+		}
+		if got := hub.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != version {
+			t.Errorf("spec.forProvider.clientSecretWoVersion: want %q, got %v", version, got)
+		}
+		if got := hub.Status.AtProvider.ClientSecretWoVersion; got == nil || *got != version {
+			t.Errorf("status.atProvider.clientSecretWoVersion: want %q, got %v", version, got)
+		}
+
+		dst := &clientv1alpha2.Client{}
+		if err := dst.ConvertFrom(hub); err != nil {
+			t.Fatalf("cannot convert v1alpha3 to v1alpha2: %v", err)
+		}
+		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != version {
+			t.Errorf("spec.forProvider.clientSecretWoVersion: want %q, got %v", version, got)
+		}
+		if got := dst.Status.AtProvider.ClientSecretWoVersion; got == nil || *got != version {
+			t.Errorf("status.atProvider.clientSecretWoVersion: want %q, got %v", version, got)
+		}
+	})
+
+	t.Run("SingletonListsRoundTrip", func(t *testing.T) {
+		const stored = `{
+  "apiVersion": "openidclient.keycloak.crossplane.io/v1alpha2",
+  "kind": "Client",
+  "metadata": {"name": "client"},
+  "spec": {
+    "forProvider": {
+      "authenticationFlowBindingOverrides": [{"browserId": "browser-flow", "directGrantId": "direct-flow"}],
+      "authorization": [{"policyEnforcementMode": "PERMISSIVE"}]
+    },
+    "initProvider": {
+      "authorization": [{"policyEnforcementMode": "DISABLED"}]
+    }
+  },
+  "status": {
+    "atProvider": {
+      "authenticationFlowBindingOverrides": [{"browserId": "observed-browser-flow", "directGrantId": "observed-direct-flow"}],
+      "authorization": [{"policyEnforcementMode": "ENFORCING"}]
+    }
+  }
+}`
+		src := &clientv1alpha2.Client{}
+		if err := json.Unmarshal([]byte(stored), src); err != nil {
+			t.Fatalf("cannot decode the stored object: %v", err)
+		}
+
+		hub := &clientv1alpha3.Client{}
+		if err := src.ConvertTo(hub); err != nil {
+			t.Fatalf("cannot convert v1alpha2 to v1alpha3: %v", err)
+		}
+		if got := hub.Spec.ForProvider.Authorization; got == nil || got.PolicyEnforcementMode == nil || *got.PolicyEnforcementMode != "PERMISSIVE" {
+			t.Errorf("spec.forProvider.authorization: want embedded PERMISSIVE block, got %#v", got)
+		}
+		if got := hub.Spec.ForProvider.AuthenticationFlowBindingOverrides; got == nil || got.BrowserID == nil || *got.BrowserID != "browser-flow" {
+			t.Errorf("spec.forProvider.authenticationFlowBindingOverrides: want embedded browser flow, got %#v", got)
+		}
+		if got := hub.Spec.InitProvider.Authorization; got == nil || got.PolicyEnforcementMode == nil || *got.PolicyEnforcementMode != "DISABLED" {
+			t.Errorf("spec.initProvider.authorization: want embedded DISABLED block, got %#v", got)
+		}
+		if got := hub.Status.AtProvider.Authorization; got == nil || got.PolicyEnforcementMode == nil || *got.PolicyEnforcementMode != "ENFORCING" {
+			t.Errorf("status.atProvider.authorization: want embedded ENFORCING block, got %#v", got)
+		}
+
+		dst := &clientv1alpha2.Client{}
+		if err := dst.ConvertFrom(hub); err != nil {
+			t.Fatalf("cannot convert v1alpha3 to v1alpha2: %v", err)
+		}
+		if got := dst.Spec.ForProvider.Authorization; len(got) != 1 || got[0].PolicyEnforcementMode == nil || *got[0].PolicyEnforcementMode != "PERMISSIVE" {
+			t.Errorf("spec.forProvider.authorization: want one PERMISSIVE list item, got %#v", got)
+		}
+		if got := dst.Spec.InitProvider.Authorization; len(got) != 1 || got[0].PolicyEnforcementMode == nil || *got[0].PolicyEnforcementMode != "DISABLED" {
+			t.Errorf("spec.initProvider.authorization: want one DISABLED list item, got %#v", got)
+		}
+		if got := dst.Status.AtProvider.AuthenticationFlowBindingOverrides; len(got) != 1 || got[0].BrowserID == nil || *got[0].BrowserID != "observed-browser-flow" {
+			t.Errorf("status.atProvider.authenticationFlowBindingOverrides: want one observed list item, got %#v", got)
+		}
+	})
+
+	t.Run("OldestClientVersionPreservesBothConversions", func(t *testing.T) {
+		const stored = `{
+  "apiVersion": "openidclient.keycloak.crossplane.io/v1alpha1",
+  "kind": "Client",
+  "metadata": {"name": "client"},
+  "spec": {
+    "forProvider": {
+      "clientSecretWoVersion": 202605192,
+      "authorization": [{"policyEnforcementMode": "PERMISSIVE"}]
+    },
+    "initProvider": {}
+  },
+  "status": {"atProvider": {}}
+}`
+		src := &clientv1alpha1.Client{}
+		if err := json.Unmarshal([]byte(stored), src); err != nil {
+			t.Fatalf("cannot decode the stored v1alpha1 object: %v", err)
+		}
+
+		hub := &clientv1alpha3.Client{}
+		if err := src.ConvertTo(hub); err != nil {
+			t.Fatalf("cannot convert v1alpha1 to v1alpha3: %v", err)
+		}
+		if got := hub.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != "202605192" {
+			t.Errorf("clientSecretWoVersion: want string \"202605192\", got %#v", got)
+		}
+		if got := hub.Spec.ForProvider.Authorization; got == nil || got.PolicyEnforcementMode == nil || *got.PolicyEnforcementMode != "PERMISSIVE" {
+			t.Errorf("authorization: want embedded PERMISSIVE block, got %#v", got)
+		}
+
+		dst := &clientv1alpha1.Client{}
+		if err := dst.ConvertFrom(hub); err != nil {
+			t.Fatalf("cannot convert v1alpha3 to v1alpha1: %v", err)
+		}
+		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != 202605192 {
+			t.Errorf("clientSecretWoVersion: want integer 202605192, got %#v", got)
+		}
+		if got := dst.Spec.ForProvider.Authorization; len(got) != 1 || got[0].PolicyEnforcementMode == nil || *got[0].PolicyEnforcementMode != "PERMISSIVE" {
+			t.Errorf("authorization: want one PERMISSIVE list item, got %#v", got)
+		}
+	})
+
+	t.Run("NestedSingletonListsRoundTrip", func(t *testing.T) {
+		const stored = `{
+  "apiVersion": "realm.keycloak.crossplane.io/v1alpha1",
+  "kind": "Realm",
+  "metadata": {"name": "realm"},
+  "spec": {
+    "forProvider": {
+      "realm": "realm",
+      "smtpServer": [{"host": "smtp.example.test", "auth": [{"username": "sender"}]}]
+    },
+    "initProvider": {}
+  },
+  "status": {
+    "atProvider": {
+      "smtpServer": [{"host": "observed.example.test", "auth": [{"username": "observed-sender"}]}]
+    }
+  }
+}`
+		src := &realmv1alpha1.Realm{}
+		if err := json.Unmarshal([]byte(stored), src); err != nil {
+			t.Fatalf("cannot decode the stored Realm: %v", err)
+		}
+
+		hub := &realmv1alpha2.Realm{}
+		if err := src.ConvertTo(hub); err != nil {
+			t.Fatalf("cannot convert Realm v1alpha1 to v1alpha2: %v", err)
+		}
+		if got := hub.Spec.ForProvider.SMTPServer; got == nil || got.Auth == nil || got.Auth.Username == nil || *got.Auth.Username != "sender" {
+			t.Errorf("spec.forProvider.smtpServer.auth: want embedded sender, got %#v", got)
+		}
+
+		dst := &realmv1alpha1.Realm{}
+		if err := dst.ConvertFrom(hub); err != nil {
+			t.Fatalf("cannot convert Realm v1alpha2 to v1alpha1: %v", err)
+		}
+		if got := dst.Spec.ForProvider.SMTPServer; len(got) != 1 || len(got[0].Auth) != 1 || got[0].Auth[0].Username == nil || *got[0].Auth[0].Username != "sender" {
+			t.Errorf("spec.forProvider.smtpServer.auth: want nested singleton lists, got %#v", got)
+		}
+		if got := dst.Status.AtProvider.SMTPServer; len(got) != 1 || len(got[0].Auth) != 1 || got[0].Auth[0].Username == nil || *got[0].Auth[0].Username != "observed-sender" {
+			t.Errorf("status.atProvider.smtpServer.auth: want nested singleton lists, got %#v", got)
+		}
+	})
+
+	t.Run("MultiItemStoredListRequiresRepair", func(t *testing.T) {
+		const stored = `{
+  "apiVersion": "openidclient.keycloak.crossplane.io/v1alpha2",
+  "kind": "Client",
+  "metadata": {"name": "client"},
+  "spec": {
+    "forProvider": {
+      "authorization": [
+        {"policyEnforcementMode": "PERMISSIVE"},
+        {"policyEnforcementMode": "ENFORCING"}
+      ]
+    },
+    "initProvider": {}
+  },
+  "status": {"atProvider": {}}
+}`
+		src := &clientv1alpha2.Client{}
+		if err := json.Unmarshal([]byte(stored), src); err != nil {
+			t.Fatalf("cannot decode the stored object: %v", err)
+		}
+		err := src.ConvertTo(&clientv1alpha3.Client{})
+		if err == nil {
+			t.Fatal("expected a descriptive error for a stored singleton list with multiple items")
+		}
+		if !strings.Contains(err.Error(), "authorization") || !strings.Contains(err.Error(), "length of at most 1") {
+			t.Errorf("expected a field-specific repair error, got %v", err)
 		}
 	})
 
@@ -139,7 +348,7 @@ func TestClientSecretWoVersionConversion(t *testing.T) {
 	// Pre-v3.0.0 development builds persisted a string clientSecretWoVersion at
 	// v1alpha1 (crossplane-contrib/provider-keycloak#669). The conversion
 	// webhook's typed decode must tolerate that encoding and the upgrade must
-	// still yield the v1alpha2 string.
+	// still yield the v1alpha3 string.
 	t.Run("StringEncodedV1Alpha1Upgrade", func(t *testing.T) {
 		src := &clientv1alpha1.Client{}
 		if err := json.Unmarshal([]byte(storedStringV1Alpha1Client), src); err != nil {
@@ -148,9 +357,9 @@ func TestClientSecretWoVersionConversion(t *testing.T) {
 		if got := src.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != 202605192 {
 			t.Fatalf("spec.forProvider.clientSecretWoVersion: want %v, got %v", 202605192, got)
 		}
-		dst := &clientv1alpha2.Client{}
+		dst := &clientv1alpha3.Client{}
 		if err := src.ConvertTo(dst); err != nil {
-			t.Fatalf("cannot convert v1alpha1 to v1alpha2: %v", err)
+			t.Fatalf("cannot convert v1alpha1 to v1alpha3: %v", err)
 		}
 		if got := dst.Spec.ForProvider.ClientSecretWoVersion; got == nil || *got != "202605192" {
 			t.Errorf("spec.forProvider.clientSecretWoVersion: want %q, got %v", "202605192", got)

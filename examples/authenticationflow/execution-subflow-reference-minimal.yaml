@@ -3,7 +3,7 @@
 #
 # This example shows the simplest case of the fix - an Execution referencing a Subflow
 # which was not possible before the fix.
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: minimal-example-realm

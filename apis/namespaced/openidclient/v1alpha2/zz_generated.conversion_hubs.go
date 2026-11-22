@@ -7,4 +7,4 @@ Copyright 2022 Upbound Inc.
 package v1alpha2
 
 // Hub marks this type as a conversion hub.
-func (tr *Client) Hub() {}
+func (tr *ClientPermissions) Hub() {}

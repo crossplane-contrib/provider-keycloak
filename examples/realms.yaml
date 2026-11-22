@@ -1,6 +1,6 @@
 # Example 1: Basic Realm Configuration
 # This example demonstrates the minimum required fields to create a realm.
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: basic-realm  # The name of the realm in Kubernetes
@@ -13,7 +13,7 @@ spec:
 ---
 # Example 2: Realm with Advanced Settings
 # This example includes additional fields like 'enabled', 'displayName', and 'attributes'.
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: advanced-realm
@@ -30,7 +30,7 @@ spec:
 ---
 # Example 3: Realm with Security Policies
 # This example demonstrates how to configure security policies like password policies and OTP.
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: secure-realm
@@ -39,16 +39,16 @@ spec:
     realm: "secure-realm"
     passwordPolicy: "length(8) and digits(2)"  # Password policy
     otpPolicy:
-      - algorithm: "HOTP"
-        digits: 6
-        type: "totp"
+      algorithm: "HOTP"
+      digits: 6
+      type: "totp"
   providerConfigRef:
     name: "keycloak-provider-config"
 
 ---
 # Example 4: Realm with SMTP Server Configuration
 # This example shows how to configure an SMTP server for the realm.
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: Realm
 metadata:
   name: smtp-realm
@@ -56,9 +56,9 @@ spec:
   forProvider:
     realm: "smtp-realm"
     smtpServer:
-      - host: "smtp.example.com"
-        port: "587"
-        from: "noreply@example.com"
+      host: "smtp.example.com"
+      port: "587"
+      from: "noreply@example.com"
   providerConfigRef:
     name: "keycloak-provider-config"
 
