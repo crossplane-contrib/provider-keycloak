@@ -14,6 +14,16 @@ fields, see the generated CRDs in
 or browse all CRDs interactively on the
 [Upbound Marketplace CRD Explorer](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/crds).
 
+## Singleton block API versions
+
+Some Terraform blocks that accept at most one item are represented as objects
+instead of one-item lists in the latest API versions. The previous API versions
+remain served, and Kubernetes converts existing objects between the old list
+and new object shapes. If conversion reports that a stored singleton list has
+multiple items, it does not discard data: use the resource's previous API
+version to reduce that list to one item or remove the block, then retry the
+conversion.
+
 
   
   - [Realms](https://crossplane-contrib.github.io/provider-keycloak/docs/using/resources/realms.md): Realm · realm.keycloak.crossplane.io

@@ -9,7 +9,7 @@ Use user federation when Keycloak should authenticate users against an external 
 
 | Kind | API Group | Terraform | CRD Explorer |
 |------|-----------|-----------|---|
-| `UserFederation` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_user_federation) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/UserFederation/v1alpha1) |
+| `UserFederation` | `ldap.keycloak.crossplane.io/v1alpha2` | [`keycloak_ldap_user_federation`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_user_federation) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/UserFederation/v1alpha2) |
 | `UserAttributeMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_user_attribute_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_user_attribute_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/UserAttributeMapper/v1alpha1) |
 | `FullNameMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_full_name_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_full_name_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/FullNameMapper/v1alpha1) |
 | `GroupMapper` | `ldap.keycloak.crossplane.io/v1alpha1` | [`keycloak_ldap_group_mapper`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/ldap_group_mapper) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/ldap.keycloak.crossplane.io/GroupMapper/v1alpha1) |
@@ -27,7 +27,7 @@ Use user federation when Keycloak should authenticate users against an external 
 ### LDAP UserFederation
 
 ```yaml
-apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+apiVersion: ldap.keycloak.crossplane.io/v1alpha2
 kind: UserFederation
 metadata:
   name: ldap-user-federation
@@ -43,9 +43,9 @@ spec:
     connectionUrl: ldap://openldap
     enabled: false
     kerberos:
-      - kerberosRealm: FOO.LOCAL
-        keyTab: /etc/host.keytab
-        serverPrincipal: HTTP/host.foo.com@FOO.LOCAL
+      kerberosRealm: FOO.LOCAL
+      keyTab: /etc/host.keytab
+      serverPrincipal: HTTP/host.foo.com@FOO.LOCAL
     name: openldap
     rdnLdapAttribute: cn
     readTimeout: 10s

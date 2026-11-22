@@ -9,7 +9,7 @@ Use a `Client` when an application or service needs Keycloak to authenticate use
 
 | Kind | API Group | Terraform Resource | CRD Explorer |
 |------|-----------|-------------------|---|
-| Client | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/Client/v1alpha1) |
+| Client | `openidclient.keycloak.crossplane.io/v1alpha3` | [`keycloak_openid_client`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/Client/v1alpha3) |
 | ClientAdminPermissions | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_admin_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_admin_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientAdminPermissions/v1alpha1) |
 
 ## Examples
@@ -17,7 +17,7 @@ Use a `Client` when an application or service needs Keycloak to authenticate use
 ### Confidential client with authorization
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: test
@@ -33,7 +33,7 @@ spec:
     fullScopeAllowed: false
     serviceAccountsEnabled: true
     authorization:
-      - policyEnforcementMode: "PERMISSIVE"
+      policyEnforcementMode: "PERMISSIVE"
   providerConfigRef:
     name: "keycloak-provider-config"
 ```
@@ -41,7 +41,7 @@ spec:
 ### Managing a built-in client without deleting it
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: account
@@ -61,7 +61,7 @@ spec:
 ### Managing another built-in client (account-console)
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: account-console
@@ -82,7 +82,7 @@ spec:
 ### Service account client
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: service-acc-1
@@ -103,7 +103,7 @@ spec:
 ### Kubernetes federated JWT client
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha3
 kind: Client
 metadata:
   name: k8s-federated-client

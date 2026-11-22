@@ -17,7 +17,7 @@ Use these resources when a client needs Keycloak Authorization Services for fine
 | ClientRolePolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_role_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_role_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientRolePolicy/v1alpha1) |
 | ClientUserPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_user_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_user_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientUserPolicy/v1alpha1) |
 | ClientRegexPolicy | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_regex_policy`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_regex_policy) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientRegexPolicy/v1alpha1) |
-| ClientPermissions | `openidclient.keycloak.crossplane.io/v1alpha1` | [`keycloak_openid_client_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientPermissions/v1alpha1) |
+| ClientPermissions | `openidclient.keycloak.crossplane.io/v1alpha2` | [`keycloak_openid_client_permissions`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/openid_client_permissions) | [View CRD Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/openidclient.keycloak.crossplane.io/ClientPermissions/v1alpha2) |
 
 ## Working YAML Examples
 
@@ -308,7 +308,7 @@ spec:
 ### `ClientPermissions`
 
 ```yaml
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha2
 kind: ClientPermissions
 metadata:
   name: my-permission

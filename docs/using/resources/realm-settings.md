@@ -9,7 +9,7 @@ Use these resources after a `Realm` exists and you need to shape how that realm 
 
 - **`RealmEvents`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_events`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_events) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RealmEvents/v1alpha1)
 - **`RequiredAction`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_required_action`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/required_action) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RequiredAction/v1alpha1)
-- **`UserProfile`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_user_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_user_profile) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/UserProfile/v1alpha1)
+- **`UserProfile`** — API: `realm.keycloak.crossplane.io/v1alpha2` — Terraform: [`keycloak_realm_user_profile`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_user_profile) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/UserProfile/v1alpha2)
 - **`RealmLocalization`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_localization`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_localization) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/RealmLocalization/v1alpha1)
 - **`KeystoreRsa`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_keystore_rsa`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_keystore_rsa) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/KeystoreRsa/v1alpha1)
 - **`KeystoreRsaEncGenerated`** — API: `realm.keycloak.crossplane.io/v1alpha1` — Terraform: [`keycloak_realm_keystore_rsa_enc_generated`](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/realm_keystore_rsa_enc_generated) — CRD Explorer: [View Schema](https://marketplace.upbound.io/providers/crossplane-contrib/provider-keycloak/latest/resources/realm.keycloak.crossplane.io/KeystoreRsaEncGenerated/v1alpha1)
@@ -77,7 +77,7 @@ spec:
 Use `UserProfile` to define custom user attributes with validation, permissions, and grouping.
 
 ```yaml
-apiVersion: realm.keycloak.crossplane.io/v1alpha1
+apiVersion: realm.keycloak.crossplane.io/v1alpha2
 kind: UserProfile
 metadata:
   name: userprofile
@@ -102,12 +102,12 @@ spec:
         multiValued: false
         name: field1
         permissions:
-          - edit:
-              - admin
-              - user
-            view:
-              - admin
-              - user
+          edit:
+            - admin
+            - user
+          view:
+            - admin
+            - user
         requiredForRoles:
           - user
         requiredForScopes:
