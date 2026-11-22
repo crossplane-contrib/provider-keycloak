@@ -3773,7 +3773,7 @@ spec:
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
-                      “.
+                      ``.
                     type: string
                   realmId:
                     description: The realm this client is attached to.
@@ -4338,7 +4338,7 @@ spec:
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
-                      “.
+                      ``.
                     type: string
                   realmId:
                     description: The realm this client is attached to.
@@ -4801,7 +4801,7 @@ spec:
                   pkceCodeChallengeMethod:
                     description: The challenge method to use for Proof Key for Code
                       Exchange. Can be either plain or S256 or set to empty value
-                      “.
+                      ``.
                     type: string
                   realmId:
                     description: The realm this client is attached to.
