@@ -50,6 +50,9 @@ var providerSchema string
 //go:embed provider-metadata.yaml
 var providerMetadata string
 
+//go:embed templates/controller.go.tmpl
+var controllerTemplate string
+
 // workaround for the TF Azure v3.57.0-based no-fork release: We would like to
 // keep the types in the generated CRDs intact
 // (prevent number->int type replacements).
@@ -101,6 +104,7 @@ func GetProvider(generationProvider bool) (*ujconfig.Provider, error) {
 			singletonlist.Validate(),
 		),
 		ujconfig.WithSchemaTraversers(&ujconfig.SingletonListEmbedder{}),
+		ujconfig.WithControllerTemplate(controllerTemplate),
 		ujconfig.WithRootGroup(rootGroup))
 
 	for _, configure := range []func(provider *ujconfig.Provider){
@@ -160,6 +164,7 @@ func GetProviderNamespaced(generationProvider bool) (*ujconfig.Provider, error) 
 			singletonlist.Validate(),
 		),
 		ujconfig.WithSchemaTraversers(&ujconfig.SingletonListEmbedder{}),
+		ujconfig.WithControllerTemplate(controllerTemplate),
 		ujconfig.WithRootGroup(rootGroupNamespaced))
 
 	for _, configure := range []func(provider *ujconfig.Provider){

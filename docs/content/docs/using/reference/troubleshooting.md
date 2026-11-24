@@ -23,6 +23,23 @@ Look at the `Events` section and `status.conditions` for error messages.
 - Network connectivity — the provider pod cannot reach the Keycloak URL
 - Invalid field values — check the resource spec against Keycloak's requirements
 
+### Cannot Determine Creation Result
+
+**Symptoms**: `Synced=False` with `cannot determine creation result - remove the crossplane.io/external-create-pending annotation if it is safe to proceed`.
+
+The resource was created in Keycloak, but the provider could not record it
+on the Kubernetes object (e.g. an update conflict). Crossplane stops to avoid
+creating a duplicate. Check in Keycloak that the object exists, then run:
+
+```bash
+kubectl annotate <resource-type> <resource-name> crossplane.io/external-create-pending-
+```
+
+Resources whose ID is derived from spec and whose create is idempotent
+(currently `DefaultGroups`) recover on their own; they are opted in via
+`managed.WithDeterministicExternalName(true)` in
+`config/templates/controller.go.tmpl`.
+
 ### Authentication Failures
 
 **Symptoms**: Events show `401 Unauthorized` or `403 Forbidden`.

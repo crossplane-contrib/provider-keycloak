@@ -317,6 +317,12 @@ consuming individual pages.
   are not auto-merged since upgrading requires deliberate schema migration.
 - **E2E tests only cover resources in `cluster/test/cases.txt`.** New resources
   are not automatically e2e tested.
+- **Generated controllers use `config/templates/controller.go.tmpl`** (a copy
+  of upjet's default, wired via `ujconfig.WithControllerTemplate`). Keep it in
+  sync on upjet bumps. Only add a resource to its
+  `WithDeterministicExternalName` condition if its Terraform ID is derived from
+  spec and its create is idempotent; `config/deterministic_external_name_test.go`
+  guards this.
 - **Upjet does not support `+nullable` markers.** Do not add nullable annotations
   to generated types; the `kubebuilder` Options struct only supports Required,
   Minimum, Maximum, Default.
@@ -1942,6 +1948,23 @@ Look at the `Events` section and `status.conditions` for error messages.
 - Incorrect credentials — verify username/password or client secret
 - Network connectivity — the provider pod cannot reach the Keycloak URL
 - Invalid field values — check the resource spec against Keycloak's requirements
+
+### Cannot Determine Creation Result
+
+**Symptoms**: `Synced=False` with `cannot determine creation result - remove the crossplane.io/external-create-pending annotation if it is safe to proceed`.
+
+The resource was created in Keycloak, but the provider could not record it
+on the Kubernetes object (e.g. an update conflict). Crossplane stops to avoid
+creating a duplicate. Check in Keycloak that the object exists, then run:
+
+```bash
+kubectl annotate <resource-type> <resource-name> crossplane.io/external-create-pending-
+```
+
+Resources whose ID is derived from spec and whose create is idempotent
+(currently `DefaultGroups`) recover on their own; they are opted in via
+`managed.WithDeterministicExternalName(true)` in
+`config/templates/controller.go.tmpl`.
 
 ### Authentication Failures
 
