@@ -64,6 +64,7 @@ func Setup(mgr ctrl.Manager, o tjcontroller.Options) error {
 		managed.WithTimeout(3 * time.Minute),
 		managed.WithInitializers(initializers),
 		managed.WithPollInterval(o.PollInterval),
+		managed.WithDeterministicExternalName(true),
 	}
 	if o.PollJitter != 0 {
 		opts = append(opts, managed.WithPollJitterHook(o.PollJitter))

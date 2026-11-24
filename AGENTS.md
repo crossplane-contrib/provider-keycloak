@@ -337,6 +337,12 @@ make docs-freshness-check             # CI: verify llms.txt is current
 - **No hacks or workarounds.** Prefer an explicit, documented pattern over
   a special case; if a constraint forces a deviation, document the
   constraint instead of working around it.
+- **Generated controllers use `config/templates/controller.go.tmpl`** (a copy
+  of upjet's default, wired via `ujconfig.WithControllerTemplate`). Keep it in
+  sync on upjet bumps. Only add a resource to its
+  `WithDeterministicExternalName` condition if its Terraform ID is derived from
+  spec and its create is idempotent; `config/deterministic_external_name_test.go`
+  guards this.
 - **Upjet does not support `+nullable` markers.** The kubebuilder Options struct
   only supports Required, Minimum, Maximum, Default.
 - **Membership ownership:** Avoid managing the same group's membership with both

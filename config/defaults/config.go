@@ -1,6 +1,10 @@
 package defaults
 
-import "github.com/crossplane/upjet/v2/pkg/config"
+import (
+	"context"
+
+	"github.com/crossplane/upjet/v2/pkg/config"
+)
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
@@ -25,3 +29,18 @@ func Configure(p *config.Provider) {
 
 	})
 }
+
+// DefaultGroupsIdentifier derives the Terraform ID {realm}/default-groups from
+// spec.forProvider.realmId, so it is known before creation and an interrupted
+// create can be retried safely. With realmInternalId instead of realmId, the
+// ID is taken from the provider like with config.IdentifierFromProvider.
+var DefaultGroupsIdentifier = func() config.ExternalName {
+	e := config.IdentifierFromProvider
+	e.GetIDFn = func(_ context.Context, externalName string, parameters map[string]any, _ map[string]any) (string, error) {
+		if realmID, ok := parameters["realm_id"].(string); ok && realmID != "" {
+			return realmID + "/default-groups", nil
+		}
+		return externalName, nil
+	}
+	return e
+}()

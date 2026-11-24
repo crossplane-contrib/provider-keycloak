@@ -8,6 +8,7 @@ import (
 	"github.com/crossplane/upjet/v2/pkg/config"
 
 	"github.com/crossplane-contrib/provider-keycloak/config/authentication"
+	"github.com/crossplane-contrib/provider-keycloak/config/defaults"
 	"github.com/crossplane-contrib/provider-keycloak/config/group"
 	"github.com/crossplane-contrib/provider-keycloak/config/identityprovider"
 	"github.com/crossplane-contrib/provider-keycloak/config/ldap"
@@ -128,7 +129,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"keycloak_authentication_execution_config":                   authentication.ExecutionConfigIdentifierFromIdentifyingProperties,         // {UUid}
 	"keycloak_authentication_bindings":                           config.IdentifierFromProvider,                                             // {realm}
 	"keycloak_default_roles":                                     config.IdentifierFromProvider,                                             // {UUid}
-	"keycloak_default_groups":                                    config.IdentifierFromProvider,                                             // {realm}/default-groups
+	"keycloak_default_groups":                                    defaults.DefaultGroupsIdentifier,                                          // {realm}/default-groups
 	"keycloak_ldap_user_federation":                              ldap.UserFederationIdentifierFromIdentifyingProperties,                    // {UUid}
 	"keycloak_ldap_user_attribute_mapper":                        ldap.UserAttributeMapperIdentifierFromIdentifyingProperties,               // {UUid}
 	"keycloak_ldap_role_mapper":                                  ldap.RoleMapperIdentifierFromIdentifyingProperties,                        // {UUid}

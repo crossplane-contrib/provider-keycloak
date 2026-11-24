@@ -264,6 +264,12 @@ consuming individual pages.
   are not auto-merged since upgrading requires deliberate schema migration.
 - **E2E tests only cover resources in `cluster/test/cases.txt`.** New resources
   are not automatically e2e tested.
+- **Generated controllers use `config/templates/controller.go.tmpl`** (a copy
+  of upjet's default, wired via `ujconfig.WithControllerTemplate`). Keep it in
+  sync on upjet bumps. Only add a resource to its
+  `WithDeterministicExternalName` condition if its Terraform ID is derived from
+  spec and its create is idempotent; `config/deterministic_external_name_test.go`
+  guards this.
 - **Upjet does not support `+nullable` markers.** Do not add nullable annotations
   to generated types; the `kubebuilder` Options struct only supports Required,
   Minimum, Maximum, Default.
