@@ -105,28 +105,45 @@ func LogoutConfig(config map[string]any) map[string]any {
 // RefreshToken field, we only need unsafe to cross the unexported
 // pointer boundary. If the struct layout changes in a future version
 // the function silently returns "".
-func ExtractRefreshToken(kcClient *keycloak.KeycloakClient) (token string) {
-	if kcClient == nil {
+func ExtractRefreshToken(kcClient *keycloak.KeycloakClient) string {
+	creds := extractClientCredentials(kcClient)
+	if creds == nil {
 		return ""
+	}
+	return creds.RefreshToken
+}
+
+// ExtractAccessToken reads the current access token from a
+// KeycloakClient instance, using the same mechanism as
+// ExtractRefreshToken. It returns "" when the token cannot be obtained.
+func ExtractAccessToken(kcClient *keycloak.KeycloakClient) string {
+	creds := extractClientCredentials(kcClient)
+	if creds == nil {
+		return ""
+	}
+	return creds.AccessToken
+}
+
+// extractClientCredentials returns the client's unexported
+// clientCredentials pointer, or nil if it cannot be obtained.
+func extractClientCredentials(kcClient *keycloak.KeycloakClient) (creds *keycloak.ClientCredentials) {
+	if kcClient == nil {
+		return nil
 	}
 	defer func() {
 		if r := recover(); r != nil {
-			token = ""
+			creds = nil
 		}
 	}()
 
 	v := reflect.ValueOf(kcClient).Elem()
 	credsField := v.FieldByName("clientCredentials")
 	if !credsField.IsValid() || credsField.IsNil() {
-		return ""
+		return nil
 	}
 	// credsField is an unexported *ClientCredentials pointer.
-	// ClientCredentials and its RefreshToken field are exported.
-	creds := *(**keycloak.ClientCredentials)(unsafe.Pointer(credsField.UnsafeAddr())) //nolint:gosec // required to access unexported pointer field for session cleanup
-	if creds == nil {
-		return ""
-	}
-	return creds.RefreshToken
+	// ClientCredentials and its token fields are exported.
+	return *(**keycloak.ClientCredentials)(unsafe.Pointer(credsField.UnsafeAddr())) //nolint:gosec // required to access unexported pointer field for token handling
 }
 
 // LogoutSession ends the Keycloak session associated with the given

@@ -6,6 +6,9 @@ package tfconcurrency
 
 import (
 	"context"
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -162,4 +165,79 @@ func TestWrapResourceNoRaceUnderConcurrentLogin(t *testing.T) {
 		}()
 	}
 	wg.Wait()
+}
+
+// TestWrapResourceRefreshesTokenBeforeExpiry proves that a borrowed client's
+// access token is refreshed before it expires, so routine token expiry never
+// produces a 401 from Keycloak (the upstream refresh-on-401 stays a fallback).
+func TestWrapResourceRefreshesTokenBeforeExpiry(t *testing.T) {
+	const lifetime = time.Second
+	var tokenRequests, unauthorized int32
+	enc := base64.RawURLEncoding
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.URL.Path, "/protocol/openid-connect/token") {
+			n := atomic.AddInt32(&tokenRequests, 1)
+			iat := float64(time.Now().UnixNano()) / float64(time.Second)
+			claims := fmt.Sprintf(`{"jti":"%d","iat":%f,"exp":%f}`, n, iat, iat+lifetime.Seconds())
+			token := enc.EncodeToString([]byte(`{"alg":"none"}`)) + "." + enc.EncodeToString([]byte(claims)) + ".sig"
+			_, _ = fmt.Fprintf(w, `{"access_token":%q,"token_type":"bearer","expires_in":1}`, token)
+			return
+		}
+		// Reject expired tokens like Keycloak does.
+		var claims struct {
+			Exp float64 `json:"exp"`
+		}
+		parts := strings.Split(strings.TrimPrefix(r.Header.Get("Authorization"), "bearer "), ".")
+		payload, err := enc.DecodeString(parts[min(1, len(parts)-1)])
+		if err != nil || json.Unmarshal(payload, &claims) != nil || float64(time.Now().UnixNano())/float64(time.Second) > claims.Exp {
+			atomic.AddInt32(&unauthorized, 1)
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		_, _ = w.Write([]byte(`{"systemInfo":{"version":"26.0.0"}}`))
+	}))
+	defer srv.Close()
+
+	factory := func(ctx context.Context) (*keycloak.KeycloakClient, error) {
+		return keycloak.NewKeycloakClient(
+			ctx,
+			srv.URL, "", "", "admin-cli", "", "master",
+			"admin", "admin", "", "", "", "", "",
+			true, 5, "", true, "", "", "test", false, nil, "",
+		)
+	}
+
+	primary, err := factory(context.Background())
+	if err != nil {
+		t.Fatalf("factory: %v", err)
+	}
+	pool := NewPool(1, factory)
+	pool.Seed(primary)
+	Register(primary, pool)
+	defer Unregister(primary)
+
+	r := &schema.Resource{
+		ReadContext: func(ctx context.Context, _ *schema.ResourceData, meta any) diag.Diagnostics {
+			if _, err := meta.(*keycloak.KeycloakClient).GetServerInfo(ctx); err != nil {
+				return diag.FromErr(err)
+			}
+			return nil
+		},
+	}
+	WrapResource(r)
+
+	for i := 0; i < 3; i++ {
+		if diags := r.ReadContext(context.Background(), nil, primary); diags.HasError() {
+			t.Fatalf("read %d: %v", i, diags)
+		}
+		// Let the current token expire on the server side.
+		time.Sleep(lifetime + 100*time.Millisecond)
+	}
+
+	if got := atomic.LoadInt32(&unauthorized); got != 0 {
+		t.Fatalf("got %d 401 responses, want 0 (token should be refreshed proactively)", got)
+	}
+	if got := atomic.LoadInt32(&tokenRequests); got != 3 {
+		t.Fatalf("token requests = %d, want 3 (initial login + 2 proactive refreshes)", got)
+	}
 }
